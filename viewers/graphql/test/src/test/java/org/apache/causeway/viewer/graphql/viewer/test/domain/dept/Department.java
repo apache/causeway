@@ -42,6 +42,7 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -81,7 +82,9 @@ public class Department implements Comparable<Department> {
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(
             named = "Rename department",
-            describedAs = "Changes the department display name")
+            describedAs = "Changes the department display name",
+            cssClassFa = "pen-to-square",
+            cssClassFaPosition = CssClassFaPosition.RIGHT)
     public class changeName {
 
         public Department act(

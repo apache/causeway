@@ -374,11 +374,13 @@ cw-field-editor[data-widget-state="fallback"]::after {
   transform: translateY(0);
   visibility: visible;
 }
-.causeway-member-tooltip {
+.causeway-member-tooltip,
+.causeway-action-control-tooltip {
   cursor: help;
   position: relative;
 }
-.causeway-member-tooltip::after {
+.causeway-member-tooltip::after,
+.causeway-action-control-tooltip::after {
   background: CanvasText;
   border-radius: 0.25rem;
   color: Canvas;
@@ -400,10 +402,29 @@ cw-field-editor[data-widget-state="fallback"]::after {
   z-index: 20;
 }
 .causeway-member-tooltip:hover::after,
-.causeway-member-tooltip:focus-visible::after {
+.causeway-member-tooltip:focus-visible::after,
+.causeway-action-control-tooltip:hover::after,
+.causeway-action-control-tooltip:focus-visible::after,
+.causeway-action-control-tooltip:focus-within::after {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
+}
+.causeway-action [data-causeway-action-control],
+.causeway-service-action-control,
+.causeway-menubar-item-label {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--causeway-action-icon-gap, 0.4rem);
+}
+.causeway-action-icon {
+  flex: 0 0 auto;
+}
+.causeway-action-prompt-description {
+  color: var(--causeway-muted, GrayText);
+  font-size: var(--causeway-action-description-font-size, 0.82em);
+  line-height: 1.35;
+  margin: 0;
 }
 .causeway-breadcrumbs-list {
   align-items: center;

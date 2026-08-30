@@ -31,7 +31,7 @@ test('action widget defaults enabled and preserves a native loading fallback', (
   assert.match(html, /<cw-action-control/);
   assert.match(html, /data-label="Inspect"/);
   assert.match(html, /data-control-testid="inspect-control"/);
-  assert.match(html, /<button type="button" data-causeway-action-control aria-describedby="inspect-description" data-testid="inspect-control">Inspect<\/button>/);
+  assert.match(html, /<button type="button" data-causeway-action-control aria-describedby="inspect-description" data-testid="inspect-control"><span class="causeway-action-label">Inspect<\/span><\/button>/);
 });
 
 test('native action markup retains disabled semantics', () => {

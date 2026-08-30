@@ -30,6 +30,7 @@ const {
   CausewayCollectionElement,
   CausewayObjectContextElement,
   CausewayPropertyElement,
+  CausewaySemanticEvent,
   CausewayValueRendererRegistry,
   configureCausewayFieldWidgets,
   defineCausewayWebComponents
@@ -342,6 +343,48 @@ test('property presentation selects every qualified field family and preserves d
     assert.match(property.innerHTML, new RegExp(`data-control="${control}"`), id);
     assert.match(property.innerHTML, /data-describedby=/, id);
   }
+});
+
+test('action names descriptions disabled reasons and Font Awesome hints share one presentation', () => {
+  const action = new CausewayActionElement();
+  action.id = 'placeOrder';
+  action.label = 'Legacy order label';
+  action.named = 'Place a new order';
+  action.context = {identity: {logicalTypeName: 'example.Order', id: '42'}};
+  action.acceptComponentState(state({
+    descriptor: {id: 'placeOrder', description: 'Schema fallback'},
+    data: {
+      hidden: false,
+      disabled: 'Ordering is unavailable.',
+      metadata: {
+        friendlyName: 'Canonical order name',
+        description: 'Creates an order for this customer.',
+        cssClassFa: 'cart-shopping',
+        cssClassFaPosition: 'RIGHT'
+      }
+    }
+  }));
+
+  assert.match(action.innerHTML, /Place a new order/);
+  assert.doesNotMatch(action.innerHTML, /Legacy order label|Canonical order name/);
+  assert.match(action.innerHTML, /causeway-action-label">Place a new order<\/span><i class="causeway-action-icon fa-solid fa-cart-shopping"/);
+  assert.match(action.innerHTML, /data-tooltip="Creates an order for this customer\.\n\nOrdering is unavailable\."/);
+  assert.match(action.innerHTML, /aria-describedby="causeway-action-description-\d+ causeway-action-reason-\d+"/);
+  assert.equal(action.activate(), false);
+
+  let request;
+  action.addEventListener(CausewaySemanticEvent.ACTION_REQUEST, event => { request = event.detail; });
+  action.acceptComponentState(state({
+    descriptor: {id: 'placeOrder'},
+    data: {
+      hidden: false,
+      disabled: null,
+      metadata: {friendlyName: 'Canonical order name', description: 'Creates an order for this customer.'}
+    }
+  }));
+  assert.equal(action.activate(), true);
+  assert.equal(request.presentation.name, 'Place a new order');
+  assert.equal(request.presentation.description, 'Creates an order for this customer.');
 });
 
 test('member-bearing elements use native identifiers without a member compatibility API', () => {

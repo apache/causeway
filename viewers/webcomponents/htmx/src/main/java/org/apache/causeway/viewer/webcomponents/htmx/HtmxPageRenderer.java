@@ -24,6 +24,7 @@ import java.util.Optional;
 final class HtmxPageRenderer {
 
     private static final String HTMX_VERSION = "2.0.6";
+    private static final String FONT_AWESOME_VERSION = "7.3.0";
 
     private final HtmxRouteCodec routeCodec;
     private final HtmxViewerProperties properties;
@@ -116,6 +117,7 @@ final class HtmxPageRenderer {
                   <meta name="htmx-config" content='{"historyCacheSize":0,"historyRestoreAsHxRequest":false,"includeIndicatorStyles":false}'>
                   %s
                   <title>%s</title>
+                  <link rel="stylesheet" href="%s/webjars/font-awesome/%s/css/all.min.css">
                   <link rel="stylesheet" href="%s/causeway-webcomponents/component-styles.css">
                   <link rel="stylesheet" href="%s/causeway-webcomponents/theme.css">
                   <link rel="stylesheet" href="%s/causeway-htmx/causeway-htmx.css">
@@ -156,6 +158,8 @@ final class HtmxPageRenderer {
                         widgetAttributes(context),
                         authenticationMetadata,
                         escape(properties.getBrand()),
+                        escape(context),
+                        FONT_AWESOME_VERSION,
                         escape(context),
                         escape(context),
                         escape(context),

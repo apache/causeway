@@ -23,6 +23,10 @@ import {
   renderNativeCausewayActionButton,
   useCausewayActionWidget
 } from './action-widget.mjs';
+import {
+  composeActionTooltip,
+  normalizeActionPresentation
+} from './action-presentation.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
@@ -32,7 +36,7 @@ let actionSequence = 0;
 
 export class CausewayActionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'label', 'data-testid'];
+    return ['id', 'named', 'label', 'data-testid'];
   }
 
   constructor() {
@@ -65,12 +69,22 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     super.disconnectedCallback();
   }
 
+  get named() {
+    return this.getAttribute('named') || '';
+  }
+
+  set named(value) {
+    if (value == null) this.removeAttribute('named');
+    else this.setAttribute('named', value);
+  }
+
   get label() {
     return this.getAttribute('label') || '';
   }
 
   set label(value) {
-    this.setAttribute('label', value);
+    if (value == null) this.removeAttribute('label');
+    else this.setAttribute('label', value);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -102,7 +116,8 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
       Object.freeze({
         actionId: this.id,
         identity: context?.identity ?? null,
-        context
+        context,
+        presentation: this.actionPresentation(state)
       }),
       {cancelable: true}
     ));
@@ -112,11 +127,9 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     if (!state) {
       return;
     }
-    const label = this.label || humanize(this.id);
-    const candidateDescription = state.descriptor?.description || '';
-    const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
-      ? ''
-      : candidateDescription;
+    const presentation = this.actionPresentation(state);
+    const label = presentation.name;
+    const description = presentation.description;
     const descriptionMarkup = description
       ? `<span id="${this.descriptionId}" class="causeway-action-description">${escapeHtml(description)}</span>`
       : '';
@@ -142,16 +155,36 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     const describedBy = [description ? this.descriptionId : '', disabledReason ? this.reasonId : '']
       .filter(Boolean)
       .join(' ');
+    const tooltip = composeActionTooltip(description, disabledReason);
     const testId = this.getAttribute('data-testid');
-    const control = {label, describedBy, disabled: Boolean(disabledReason), testId: testId ? `${testId}-control` : ''};
+    const control = {
+      label,
+      describedBy,
+      disabled: Boolean(disabledReason),
+      testId: testId ? `${testId}-control` : '',
+      icon: presentation.icon
+    };
     const controlMarkup = useCausewayActionWidget()
       ? renderCausewayActionWidget(control)
       : renderNativeCausewayActionButton(control);
+    const tooltipAttributes = tooltip
+      ? ` class="causeway-action-control-tooltip" data-tooltip="${escapeHtml(tooltip)}"${disabledReason ? ' tabindex="0"' : ''}`
+      : '';
     this.innerHTML = `<div class="causeway-action${disabledReason ? ' causeway-disabled' : ''}">
-  ${controlMarkup}
+  <span${tooltipAttributes}>${controlMarkup}</span>
   ${descriptionMarkup}
-  ${disabledReason ? `<span id="${this.reasonId}" class="causeway-action-disabled-reason">${escapeHtml(disabledReason)}</span>` : ''}
+  ${disabledReason ? `<span id="${this.reasonId}" class="causeway-action-disabled-reason causeway-visually-hidden">${escapeHtml(disabledReason)}</span>` : ''}
 </div>`;
+  }
+
+  actionPresentation(state = this.componentState) {
+    const metadata = state?.data?.metadata ?? {};
+    return normalizeActionPresentation({
+      name: this.named || this.label || metadata.friendlyName || humanize(this.id),
+      description: metadata.description || state?.descriptor?.description || '',
+      cssClassFa: metadata.cssClassFa,
+      cssClassFaPosition: metadata.cssClassFaPosition
+    });
   }
 }
 

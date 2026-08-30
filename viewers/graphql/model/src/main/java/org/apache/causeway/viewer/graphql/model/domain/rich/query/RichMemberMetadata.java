@@ -27,6 +27,9 @@ import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLNonNull;
 import graphql.schema.GraphQLObjectType;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -65,6 +68,10 @@ final class RichMemberMetadata extends Element {
                         GraphQLNonNull.nonNull(Scalars.GraphQLString)))
                 .field(field("description", "Canonical translated description, or null.",
                         Scalars.GraphQLString))
+                .field(field("cssClassFa", "Static action Font Awesome quick notation, or null.",
+                        Scalars.GraphQLString))
+                .field(field("cssClassFaPosition", "Static action Font Awesome LEFT or RIGHT position, or null.",
+                        Scalars.GraphQLString))
                 .field(field("maxLength", "Finite maximum input length, or null.",
                         Scalars.GraphQLInt))
                 .field(field("pattern", "Java regular-expression text, or null.",
@@ -98,6 +105,11 @@ final class RichMemberMetadata extends Element {
         var values = new LinkedHashMap<String, Object>();
         values.put("friendlyName", feature.getCanonicalFriendlyName());
         values.put("description", feature.getCanonicalDescription().orElse(null));
+        var staticIcon = staticActionIcon(feature);
+        values.put("cssClassFa", staticIcon == null ? null : staticIcon.toQuickNotation());
+        values.put("cssClassFaPosition", staticIcon == null || staticIcon.position() == null
+                ? null
+                : staticIcon.position().name());
         values.put("maxLength", includeEditorConstraints
                 ? RichScalarMetadataField.finiteMaxLength(feature)
                 : null);
@@ -115,5 +127,15 @@ final class RichMemberMetadata extends Element {
                 ? RichScalarMetadataField.typicalLength(feature)
                 : null);
         return values;
+    }
+
+    private static FontAwesomeLayers staticActionIcon(final ObjectFeature feature) {
+        if (!(feature instanceof ObjectAction action)) {
+            return null;
+        }
+        return action.lookupFacet(FaFacet.class)
+                .flatMap(facet -> facet.getSpecialization().left())
+                .map(staticFacet -> staticFacet.getLayers())
+                .orElse(null);
     }
 }

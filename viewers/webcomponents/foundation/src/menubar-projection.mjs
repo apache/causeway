@@ -51,6 +51,7 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
               label: boundedText(action?.label || actionId),
               description: boundedText(action?.description),
               iconHint: boundedText(action?.iconHint, 128),
+              iconPosition: action?.iconPosition === 'RIGHT' ? 'RIGHT' : 'LEFT',
               disabled: Boolean(action?.disabled),
               disabledReason: boundedText(action?.disabled),
               generation
@@ -111,11 +112,13 @@ export function createVaadinMenuItems(projection) {
     children: Object.freeze(menu.sections.flatMap(section => {
       const leaves = section.actions.map(action => Object.freeze({
         text: action.label,
-        title: action.description || action.disabledReason,
+        title: boundedTooltip(action.description, action.disabledReason),
+        description: action.description,
         disabled: action.disabled,
         causewayKind: 'action',
         causewayKey: action.key,
         causewayIconHint: action.iconHint,
+        causewayIconPosition: action.iconPosition,
         causewayDisabledReason: action.disabledReason
       }));
       if (!section.label) return leaves;
@@ -149,6 +152,10 @@ function projectionError(code) {
   const error = new Error(code);
   error.code = code;
   return error;
+}
+
+function boundedTooltip(description, disabledReason) {
+  return [boundedText(description), boundedText(disabledReason)].filter(Boolean).join('\n\n');
 }
 
 function boundedIdentity(value) {

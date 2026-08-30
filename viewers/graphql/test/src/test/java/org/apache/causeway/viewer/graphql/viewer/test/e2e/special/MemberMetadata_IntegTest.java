@@ -53,6 +53,8 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                 .containsExactlyInAnyOrder(
                         "friendlyName",
                         "description",
+                        "cssClassFa",
+                        "cssClassFaPosition",
                         "maxLength",
                         "pattern",
                         "patternFlags",
@@ -121,8 +123,14 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                 .isEqualTo("Rename department");
         assertThat(action.get("metadata").get("description").stringValue())
                 .isEqualTo("Changes the department display name");
+        assertThat(action.get("metadata").get("cssClassFa").stringValue())
+                .isEqualTo("pen-to-square");
+        assertThat(action.get("metadata").get("cssClassFaPosition").stringValue())
+                .isEqualTo("RIGHT");
         assertThat(parameter.get("friendlyName").stringValue()).isEqualTo("Replacement name");
         assertThat(parameter.get("description").stringValue()).isEqualTo("New name for the department");
+        assertThat(parameter.get("cssClassFa").isNull()).isTrue();
+        assertThat(parameter.get("cssClassFaPosition").isNull()).isTrue();
         assertThat(parameter.get("maxLength").intValue()).isEqualTo(50);
         assertThat(parameter.get("pattern").stringValue()).isEqualTo("[A-Za-z !]+");
         assertThat(parameter.get("patternFlags").intValue()).isEqualTo(2);
@@ -132,10 +140,14 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
         assertThat(collection.get("friendlyName").stringValue()).isEqualTo("Department staff");
         assertThat(collection.get("description").stringValue())
                 .isEqualTo("Staff assigned to this department");
+        assertThat(collection.get("cssClassFa").isNull()).isTrue();
+        assertThat(collection.get("cssClassFaPosition").isNull()).isTrue();
         assertThat(collection.get("maxLength").isNull()).isTrue();
 
         assertThat(property.get("friendlyName").stringValue()).isEqualTo("Staff display name");
         assertThat(property.get("description").stringValue()).isEqualTo("Name shown for the staff member");
+        assertThat(property.get("cssClassFa").isNull()).isTrue();
+        assertThat(property.get("cssClassFaPosition").isNull()).isTrue();
         assertThat(property.get("maxLength").intValue()).isEqualTo(40);
         assertThat(property.get("pattern").stringValue()).isEqualTo("[A-Za-z .!'-]+");
         assertThat(property.get("patternFlags").intValue()).isEqualTo(2);

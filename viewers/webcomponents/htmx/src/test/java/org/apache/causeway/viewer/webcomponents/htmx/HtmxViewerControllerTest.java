@@ -48,6 +48,8 @@ class HtmxViewerControllerTest {
                 .contains("data-page-kind=\"generic\"")
                 .contains("data-page-source=\"generic\"")
                 .contains("<cw-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">")
+                .contains("<link rel=\"stylesheet\" href=\"/app/webjars/font-awesome/7.3.0/css/all.min.css\">")
+                .doesNotContain("cdnjs.cloudflare.com", "use.fontawesome.com")
                 .contains("<cw-object editable>")
                 .contains("<cw-interaction-controller data-causeway-route-interactions>");
         assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
@@ -117,7 +119,8 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-application-menubar=\"native\"")
                 .contains("data-causeway-menubar-family=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
-                .contains("data-causeway-field-families=\"\"");
+                .contains("data-causeway-field-families=\"\"")
+                .contains("<link rel=\"stylesheet\" href=\"/webjars/font-awesome/7.3.0/css/all.min.css\">");
     }
 
     @Test

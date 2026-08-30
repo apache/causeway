@@ -58,7 +58,9 @@ Applications upgrading across this breaking change must replace each former open
 Semantic `causeway-*` events, CSS classes, `data-causeway-*` attributes, `--causeway-*` variables, and `/causeway-*` asset paths keep their existing spelling.
 
 Properties, actions, collections, and collection columns use the standard `id` attribute and native reflected `id` property to identify their Causeway member.
-Properties, actions, and collection columns accept an optional `label` override.
+Properties and collection columns accept an optional `label` override.
+Actions accept `named` and the existing compatible `label` override, with `named` taking precedence over `label`, canonical `metadata.friendlyName`, and the humanized action ID.
+For example, `<cw-action id="placeOrder" named="Place a new order"></cw-action>` changes presentation only and continues to invoke the semantic `placeOrder` action.
 Collections accept `named` and `described-as` heading overrides; the existing `label` name override remains compatible, with `named` taking precedence.
 The former `member` attribute and custom `member` property are not compatibility aliases.
 Applications must keep authored IDs unique according to ordinary HTML identifier rules.
@@ -67,6 +69,9 @@ Object links use `logical-type`, `object-id`, `title`, and `disabled`.
 Collections use `active` and declarative collection-column children.
 Without HTML heading overrides, collections use canonical `metadata.friendlyName` and `metadata.description`, followed by a humanized member-id name and no-description fallback.
 Collection-level disabled or unmodifiable reasons are not presented as explanatory text or tooltips; individual cells and associated actions retain their own usability semantics.
+Actions use canonical metadata descriptions as bounded accessible tooltips and as introductory text in parameter prompts.
+When an action is disabled, its tooltip retains the description and adds the current disabled reason as a separate section.
+Static Font Awesome action metadata is rendered decoratively on the configured left or right side after conservative class-token validation; missing, dynamic, or malformed hints render no icon.
 
 The corresponding JavaScript properties support programmatic composition.
 A property or collection accepts a `rendererRegistry`.
@@ -224,12 +229,14 @@ The menu parser accepts the Causeway bootstrap menu-bars namespace and the docum
 It shares the object-grid parser's one-mebibyte input limit, depth limit of 64, element limit of 4,096, and diagnostic limit of 20.
 Document types, entity declarations and references, CDATA, non-XML processing instructions, scripts, styles, executable attributes, malformed nesting, wrong namespaces, and oversized content are rejected.
 Resource markup is never inserted into the page.
-Labels and descriptions are escaped text, while CSS and icon hints are exposed only as inert documented `data-*` attributes.
+Labels and descriptions are escaped text, while CSS hints remain inert documented `data-*` attributes.
+Static Font Awesome action hints are token-bounded and rendered decoratively on the effective left or right side.
 
 Entries identify rich service-action wrappers by public logical service type and semantic action ID.
 Current hidden and disabled state is grouped into one read per logical service type for a generation rather than one operation per menu entry.
 Hidden actions expose no entry or presentation metadata.
 Disabled actions remain visible and counted, cannot be invoked, and associate their established reason accessibly.
+Action descriptions provide accessible tooltips for native and Vaadin controls, and disabled reasons are composed as a separate tooltip section rather than replacing those descriptions.
 Empty sections, menus, and bars collapse after current state has been applied.
 
 Service-bound adapters reuse the standard parameter editors, defaults, choices, autocomplete, validation, prompt, cancellation, stale-response, and typed-result behavior.

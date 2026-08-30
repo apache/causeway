@@ -17,6 +17,11 @@
  * under the License.
  */
 
+import {
+  composeActionTooltip,
+  normalizeActionPresentation,
+  renderActionContent
+} from './action-presentation.mjs';
 import {CausewayElementName, CausewaySemanticEvent} from './component-contracts.mjs';
 import {
   createSemanticEvent,
@@ -246,7 +251,11 @@ export class CausewayMenubarElement extends HTMLElementBase {
       control.presentation = Object.freeze({
         projection,
         overflowLabel: overflowLabel(globalThis.document?.documentElement?.lang),
-        activate: descriptor => this.#activateServiceAction(descriptor.serviceLogicalTypeName, descriptor.actionId, control)
+        activate: descriptor => this.#activateServiceAction(
+          descriptor.serviceLogicalTypeName,
+          descriptor.actionId,
+          control,
+          descriptor)
       });
       this.#restoreSemanticFocus(renderRoot, control);
     }
@@ -333,10 +342,14 @@ export class CausewayMenubarElement extends HTMLElementBase {
     if (disclosure) {
       this.#closeMenu(disclosure, {focus: true});
     }
-    this.#activateServiceAction(serviceLogicalTypeName, actionId, actionButton);
+    this.#activateServiceAction(
+      serviceLogicalTypeName,
+      actionId,
+      actionButton,
+      findServiceAction(this._currentBar, serviceLogicalTypeName, actionId));
   }
 
-  #activateServiceAction(serviceLogicalTypeName, actionId, origin) {
+  #activateServiceAction(serviceLogicalTypeName, actionId, origin, descriptor = null) {
     if (!serviceLogicalTypeName || !actionId || !this._context) return;
     const context = this._context.serviceContext(serviceLogicalTypeName);
     this._semanticFocusIntent = Object.freeze({role: this.role, actionId, serviceLogicalTypeName, generation: this._currentState?.generation ?? 0});
@@ -345,7 +358,13 @@ export class CausewayMenubarElement extends HTMLElementBase {
       serviceLogicalTypeName,
       target: context.interactionTarget,
       identity: null,
-      context
+      context,
+      presentation: normalizeActionPresentation({
+        name: descriptor?.label || humanize(actionId),
+        description: descriptor?.description,
+        cssClassFa: descriptor?.iconHint,
+        cssClassFaPosition: descriptor?.iconPosition
+      })
     }), {cancelable: true}));
   }
 
@@ -517,16 +536,29 @@ function renderSection(section, sequence, role, menuIndex, sectionIndex) {
 }
 
 function renderAction(action, sequence, role, menuIndex, sectionIndex, actionIndex) {
-  const label = action.label || humanize(action.actionId);
+  const presentation = normalizeActionPresentation({
+    name: action.label || humanize(action.actionId),
+    description: action.description,
+    cssClassFa: action.iconHint,
+    cssClassFaPosition: action.iconPosition
+  });
+  const descriptionId = `causeway-service-action-description-${sequence}-${role}-${menuIndex}-${sectionIndex}-${actionIndex}`;
   const reasonId = `causeway-service-action-reason-${sequence}-${role}-${menuIndex}-${sectionIndex}-${actionIndex}`;
-  const describedBy = action.disabled ? ` aria-describedby="${reasonId}"` : '';
+  const describedByIds = [presentation.description ? descriptionId : '', action.disabled ? reasonId : ''].filter(Boolean);
+  const describedBy = describedByIds.length ? ` aria-describedby="${describedByIds.join(' ')}"` : '';
   const disabled = action.disabled ? ' disabled aria-disabled="true"' : '';
-  const title = action.description ? ` title="${escapeHtml(action.description)}"` : '';
+  const tooltip = composeActionTooltip(presentation.description, action.disabled);
+  const tooltipAttributes = tooltip
+    ? ` data-tooltip="${escapeHtml(tooltip)}"${action.disabled ? ' tabindex="0"' : ''}`
+    : '';
+  const description = presentation.description
+    ? `<span class="causeway-action-description causeway-visually-hidden" id="${descriptionId}">${escapeHtml(presentation.description)}</span>`
+    : '';
   const reason = action.disabled
     ? `<span class="causeway-disabled-reason causeway-visually-hidden" id="${reasonId}">${escapeHtml(action.disabled)}</span>`
     : '';
-  return `<div class="causeway-service-action" data-causeway-service-action-region${dataHint('css-hint', action.cssHint)}${dataHint('icon-hint', action.iconHint)}>
-  <button class="causeway-service-action-control" type="button" data-causeway-service-action data-service-logical-type="${escapeHtml(action.serviceLogicalTypeName)}" data-action-id="${escapeHtml(action.actionId)}"${disabled}${describedBy}${title}>${renderIcon(action.iconHint)}${escapeHtml(label)}</button>${reason}
+  return `<div class="causeway-service-action${tooltip ? ' causeway-action-control-tooltip' : ''}" data-causeway-service-action-region${dataHint('css-hint', action.cssHint)}${dataHint('icon-hint', action.iconHint)}${tooltipAttributes}>
+  <button class="causeway-service-action-control" type="button" data-causeway-service-action data-service-logical-type="${escapeHtml(action.serviceLogicalTypeName)}" data-action-id="${escapeHtml(action.actionId)}"${disabled}${describedBy}>${renderActionContent(presentation.name, presentation.icon)}</button>${description}${reason}
 </div>`;
 }
 
@@ -538,6 +570,17 @@ function renderIcon(iconHint) {
 
 function dataHint(name, value) {
   return value ? ` data-${name}="${escapeHtml(value)}"` : '';
+}
+
+function findServiceAction(bar, serviceLogicalTypeName, actionId) {
+  for (const menu of bar?.menus ?? []) {
+    for (const section of menu.sections ?? []) {
+      const action = section.actions?.find(candidate => candidate.serviceLogicalTypeName === serviceLogicalTypeName
+        && candidate.actionId === actionId);
+      if (action) return action;
+    }
+  }
+  return null;
 }
 
 function isLoading(status) {

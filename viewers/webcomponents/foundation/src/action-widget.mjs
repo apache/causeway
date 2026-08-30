@@ -6,6 +6,7 @@
  * to you under the Apache License, Version 2.0.
  */
 
+import {appendActionContent, renderActionContent} from './action-presentation.mjs';
 import {escapeHtml} from './rendering.mjs';
 
 export const CAUSEWAY_ACTION_CONTROL = 'cw-action-control';
@@ -41,7 +42,7 @@ export function useCausewayActionWidget() {
   return configuration.enabled && !failed;
 }
 
-export function renderCausewayActionWidget({label, describedBy = '', disabled = false, testId = ''} = {}) {
+export function renderCausewayActionWidget({label, describedBy = '', disabled = false, testId = '', icon = null} = {}) {
   const attributes = [
     `data-label="${escapeHtml(label ?? '')}"`,
     'data-causeway-action-control'
@@ -49,12 +50,16 @@ export function renderCausewayActionWidget({label, describedBy = '', disabled = 
   if (describedBy) attributes.push(`data-describedby="${escapeHtml(describedBy)}"`);
   if (testId) attributes.push(`data-control-testid="${escapeHtml(testId)}"`);
   if (disabled) attributes.push('disabled');
-  const native = nativeButtonMarkup(label, describedBy, disabled, testId);
+  if (icon) {
+    attributes.push(`data-icon-classes="${escapeHtml(icon.classes.join(' '))}"`);
+    attributes.push(`data-icon-position="${escapeHtml(icon.position)}"`);
+  }
+  const native = nativeButtonMarkup(label, describedBy, disabled, testId, icon);
   return `<${CAUSEWAY_ACTION_CONTROL} ${attributes.join(' ')}>${native}</${CAUSEWAY_ACTION_CONTROL}>`;
 }
 
-export function renderNativeCausewayActionButton({label, describedBy = '', disabled = false, testId = ''} = {}) {
-  return nativeButtonMarkup(label, describedBy, disabled, testId);
+export function renderNativeCausewayActionButton({label, describedBy = '', disabled = false, testId = '', icon = null} = {}) {
+  return nativeButtonMarkup(label, describedBy, disabled, testId, icon);
 }
 
 export class CausewayActionControlElement extends HTMLElement {
@@ -94,7 +99,11 @@ export class CausewayActionControlElement extends HTMLElement {
       await globalThis.customElements.whenDefined('vaadin-button');
       if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
       const control = document.createElement('vaadin-button');
-      control.textContent = this.dataset.label ?? '';
+      const iconClasses = String(this.dataset.iconClasses ?? '').split(/\s+/).filter(Boolean);
+      const icon = iconClasses.length > 0
+        ? Object.freeze({classes: Object.freeze(iconClasses), position: this.dataset.iconPosition === 'RIGHT' ? 'RIGHT' : 'LEFT'})
+        : null;
+      appendActionContent(control, this.dataset.label ?? '', icon);
       control.setAttribute('theme', 'primary');
       control.disabled = this.hasAttribute('disabled');
       if (this.dataset.describedby) control.setAttribute('aria-describedby', this.dataset.describedby);
@@ -121,8 +130,8 @@ export class CausewayActionControlElement extends HTMLElement {
   }
 }
 
-function nativeButtonMarkup(label, describedBy, disabled, testId) {
-  return `<button type="button" data-causeway-action-control${disabled ? ' disabled aria-disabled="true"' : ''}${describedBy ? ` aria-describedby="${escapeHtml(describedBy)}"` : ''}${testId ? ` data-testid="${escapeHtml(testId)}"` : ''}>${escapeHtml(label ?? '')}</button>`;
+function nativeButtonMarkup(label, describedBy, disabled, testId, icon) {
+  return `<button type="button" data-causeway-action-control${disabled ? ' disabled aria-disabled="true"' : ''}${describedBy ? ` aria-describedby="${escapeHtml(describedBy)}"` : ''}${testId ? ` data-testid="${escapeHtml(testId)}"` : ''}>${renderActionContent(label, icon)}</button>`;
 }
 
 function announcePolicyChange(detail) {

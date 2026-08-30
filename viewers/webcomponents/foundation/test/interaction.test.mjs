@@ -747,8 +747,14 @@ test('standard action controller renders prompts, blocks invalid input, invokes 
   document.body.appendChild(controller);
   let semanticResult;
   controller.addEventListener('causeway-action-result', event => { semanticResult = event.detail; });
-  assert.equal(await controller.beginAction('changeName', context), true);
+  assert.equal(await controller.beginAction('changeName', context, null, {
+    name: 'Rename this object',
+    description: 'Changes the display name.'
+  }), true);
   assert.match(controller.innerHTML, /data-testid="action-prompt"/);
+  assert.match(controller.innerHTML, /<h2[^>]*>Rename this object<\/h2>/);
+  assert.match(controller.innerHTML, /causeway-action-prompt-description">Changes the display name\.<\/p>/);
+  assert.match(controller.innerHTML, /aria-describedby="causeway-action-prompt-description-\d+"/);
   assert.match(controller.innerHTML, /action-prompt-parameter-newName/);
   assert.equal((controller.innerHTML.match(/>New name</gi) ?? []).length, 1);
   await controller.setParameterValue('newName', 'Invalid', {recompute: false});

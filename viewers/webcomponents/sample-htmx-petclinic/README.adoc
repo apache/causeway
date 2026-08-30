@@ -12,6 +12,8 @@ The Wicket viewer is a side-by-side presentation reference rather than a depende
 The sample uses the supported default route-lazy Vaadin free-core reference adapter and qualified basic, numeric, and local-temporal field families without an application opt-in.
 Its strict CSP adds only the pinned deduplicated hashes for reviewed closures, preserves `style-src-attr 'none'`, and makes no Vaadin request until an eligible editor opens.
 Causeway elements, codecs, GraphQL interactions, and semantic events remain authoritative, and the common native toolkit policy provides immediate rollback.
+The owner page demonstrates page-local action names such as `Change the owner's name`, `Register a pet`, and `Remove this owner` without changing semantic action IDs.
+Owner and service actions demonstrate canonical descriptions, parameter-prompt descriptions, disabled-reason tooltip composition, and static Font Awesome icons in native and Vaadin presentations.
 
 == Run
 

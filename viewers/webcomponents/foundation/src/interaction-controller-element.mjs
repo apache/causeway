@@ -17,6 +17,7 @@
  * under the License.
  */
 
+import {normalizeActionPresentation} from './action-presentation.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {createSemanticEvent} from './context-events.mjs';
 import {defaultEditorRegistry, parseCausewayEditorValue, renderCausewayEditor} from './editor-registry.mjs';
@@ -32,6 +33,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     super();
     const sequence = ++controllerSequence;
     this.titleId = `causeway-action-prompt-title-${sequence}`;
+    this.descriptionId = `causeway-action-prompt-description-${sequence}`;
     this.errorId = `causeway-action-prompt-error-${sequence}`;
     this._editorRegistry = defaultEditorRegistry;
     this.promptState = null;
@@ -47,10 +49,11 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.onActionRequest = event => {
       const actionId = event.detail?.actionId;
       const context = event.detail?.context;
+      const presentation = event.detail?.presentation;
       const source = focusRestoreTarget(event.target);
       queueMicrotask(() => {
         if (!event.defaultPrevented && actionId && context) {
-          void this.beginAction(actionId, context, source);
+          void this.beginAction(actionId, context, source, presentation);
         }
       });
     };
@@ -161,7 +164,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.generation += 1;
   }
 
-  async beginAction(actionId, context, source = null) {
+  async beginAction(actionId, context, source = null, presentation = null) {
     if (this.promptState?.status === InteractionStatus.INVOKING) {
       return false;
     }
@@ -173,6 +176,12 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       actionId,
       context,
       source,
+      presentation: normalizeActionPresentation({
+        name: presentation?.name || humanize(actionId),
+        description: presentation?.description,
+        cssClassFa: presentation?.icon?.classes?.join(' '),
+        cssClassFaPosition: presentation?.icon?.position
+      }),
       values: Object.freeze({}),
       parameters: Object.freeze([]),
       error: null
@@ -604,7 +613,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return `<div class="causeway-action-prompt causeway-loading" role="status" data-testid="action-prompt">Preparing action…</div>`;
     }
     if (state.parameters.length === 0 && state.status === InteractionStatus.INVOKING) {
-      return `<div class="causeway-action-prompt causeway-loading" role="status" data-testid="action-prompt">Invoking ${escapeHtml(humanize(state.actionId))}…</div>`;
+      return `<div class="causeway-action-prompt causeway-loading" role="status" data-testid="action-prompt">Invoking ${escapeHtml(state.presentation?.name || humanize(state.actionId))}…</div>`;
     }
     const parameterMarkup = state.parameters.map(parameter => this.#parameterMarkup(parameter)).join('');
     const busy = [InteractionStatus.VALIDATING, InteractionStatus.INVOKING].includes(state.status);
@@ -612,9 +621,15 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     const errorMarkup = publicError
       ? `<div id="${this.errorId}" class="causeway-action-prompt-error" role="alert">${escapeHtml(publicError)}</div>`
       : '';
-    return `<dialog open class="causeway-action-prompt" role="dialog" aria-modal="true" aria-labelledby="${this.titleId}"${state.error ? ` aria-describedby="${this.errorId}"` : ''} data-testid="action-prompt">
+    const description = state.presentation?.description || '';
+    const descriptionMarkup = description
+      ? `<p id="${this.descriptionId}" class="causeway-action-prompt-description">${escapeHtml(description)}</p>`
+      : '';
+    const describedBy = [description ? this.descriptionId : '', state.error ? this.errorId : ''].filter(Boolean).join(' ');
+    return `<dialog open class="causeway-action-prompt" role="dialog" aria-modal="true" aria-labelledby="${this.titleId}"${describedBy ? ` aria-describedby="${describedBy}"` : ''} data-testid="action-prompt">
   <form method="dialog" novalidate>
-    <h2 id="${this.titleId}">${escapeHtml(humanize(state.actionId))}</h2>
+    <h2 id="${this.titleId}">${escapeHtml(state.presentation?.name || humanize(state.actionId))}</h2>
+    ${descriptionMarkup}
     ${parameterMarkup}
     ${errorMarkup}
     <div class="causeway-action-prompt-actions">

@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.microsoft.playwright.Browser;
@@ -300,6 +301,21 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(1);
         assertThat(page.locator("cw-collection[id='visits'] > cw-action[id='bookVisit']").count())
                 .isEqualTo(1);
+        final var deleteAction = page.locator("cw-action[id='delete']");
+        assertThat(deleteAction.locator(".causeway-action-label").first().textContent())
+                .isEqualTo("Remove this owner");
+        assertThat(deleteAction.locator(".causeway-action-icon.fa-trash-can").count()).isGreaterThan(0);
+        assertThat(deleteAction.locator(".causeway-action-control-tooltip").getAttribute("data-tooltip"))
+                .isEqualTo("Deletes this pet owner and their related pets and visits.\n\n"
+                        + "The fixture owner is retained for the presentation demonstration.");
+        assertThat(objectAction("updateName").textContent()).contains("Change the owner's name");
+        assertThat(page.locator("cw-action[id='updateName'] .causeway-action-label + .causeway-action-icon.fa-pen-to-square").count())
+                .isGreaterThan(0);
+        assertThat(objectAction("addPet").textContent()).contains("Register a pet");
+        assertThat(page.locator("cw-action[id='addPet'] .causeway-action-icon.fa-paw + .causeway-action-label").count())
+                .isGreaterThan(0);
+        assertThat(objectAction("removePet").textContent()).contains("Remove Pet");
+        assertThat(objectAction("bookVisit").textContent()).contains("Book Visit");
         assertDefaultOrNativeMemberPresentation("name", "delete");
         assertSingleToolkitFieldBoundary("name");
         assertSingleToolkitFieldBoundary("telephoneNumber");
@@ -413,6 +429,22 @@ class PetClinicHtmxPlaywrightTest {
         }
         assertThat(petclinicServiceActionIds()).containsExactlyInAnyOrder(
                 "create", "findByName", "findByNameLike", "listAll", "count", "listUpcoming");
+        if (nativeToolkit()) {
+            final var listAllPresentation = serviceActionPresentation("listAll");
+            listAllPresentation.waitFor();
+            assertThat(listAllPresentation.locator(".causeway-action-icon.fa-users").count()).isGreaterThan(0);
+            assertThat(listAllPresentation.getAttribute("data-tooltip"))
+                    .isEqualTo("Lists every registered pet owner.");
+        } else {
+            final var listAllDescriptor = (Map<?, ?>) page.evaluate("""
+                    () => Object.values(document.querySelector('cw-menubar-primary')._projection.actions)
+                      .find(action => action.actionId === 'listAll')
+                    """);
+            assertThat(String.valueOf(listAllDescriptor.get("iconHint"))).endsWith("users");
+            assertThat(listAllDescriptor.get("iconPosition")).isEqualTo("LEFT");
+            assertThat(listAllDescriptor.get("description"))
+                    .isEqualTo("Lists every registered pet owner.");
+        }
 
         activateServiceAction("listAll");
         waitForShellResult("listAll", "4 results");
@@ -453,6 +485,8 @@ class PetClinicHtmxPlaywrightTest {
         openMenu("Pet Owners");
         activateServiceAction("create");
         waitForPrompt("create");
+        assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
+                .isEqualTo("Registers a new pet owner.");
         cancelPrompt();
         assertMenuClosedAndFocused("Pet Owners");
 
@@ -555,7 +589,9 @@ class PetClinicHtmxPlaywrightTest {
 
         final var updateName = objectAction("updateName");
         updateName.click();
-        waitForPrompt("updateName");
+        waitForPrompt("updateName", "Change the owner's name");
+        assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
+                .isEqualTo("Updates the owner's full name.");
         assertFocused(parameter("name"));
         fillParameter("name", "Invalid % name");
         submitPrompt();
@@ -565,7 +601,7 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
 
         updateName.click();
-        waitForPrompt("updateName");
+        waitForPrompt("updateName", "Change the owner's name");
         resolveEditor(parameter("name")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
         assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
@@ -593,7 +629,7 @@ class PetClinicHtmxPlaywrightTest {
 
         final var updateNameMutations = graphQLMutationCount("updateName");
         objectAction("updateName").click();
-        waitForPrompt("updateName");
+        waitForPrompt("updateName", "Change the owner's name");
         fillParameter("name", "Playwright Owner Updated");
         submitPromptExpectingNavigation();
         waitForObjectTitle("Playwright Owner Updated");
@@ -603,7 +639,9 @@ class PetClinicHtmxPlaywrightTest {
 
         final var addPetMutations = graphQLMutationCount("addPet");
         objectAction("addPet").click();
-        waitForPrompt("addPet");
+        waitForPrompt("addPet", "Register a pet");
+        assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
+                .isEqualTo("Adds a pet to this owner's household.");
         assertThat(page.locator(PROMPT + " .causeway-action-parameter-reason").count()).isZero();
         final var preparationsBeforeName = graphQLOperationCount("CausewayPrepareAction");
         tabOutOfParameter("name");
@@ -820,6 +858,10 @@ class PetClinicHtmxPlaywrightTest {
         return page.locator("[data-service-logical-type^='petclinic.'][data-action-id='" + actionId + "']").first();
     }
 
+    private Locator serviceActionPresentation(final String actionId) {
+        return serviceAction(actionId).locator("xpath=..");
+    }
+
     private Set<String> petclinicServiceActionIds() {
         if (!nativeToolkit()) {
             final var values = (List<?>) page.evaluate("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].flatMap(host => Object.values(host._projection?.actions ?? {}).filter(action => action.serviceLogicalTypeName.startsWith('petclinic.')).map(action => action.actionId))");
@@ -886,8 +928,12 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForPrompt(final String actionId) {
+        waitForPrompt(actionId, humanize(actionId));
+    }
+
+    private void waitForPrompt(final String actionId, final String expectedTitle) {
         page.locator(PROMPT).waitFor();
-        assertThat(page.locator(PROMPT + " h2").textContent()).isEqualTo(humanize(actionId));
+        assertThat(page.locator(PROMPT + " h2").textContent()).isEqualTo(expectedTitle);
     }
 
     private void fillParameter(final String parameterId, final String value) {

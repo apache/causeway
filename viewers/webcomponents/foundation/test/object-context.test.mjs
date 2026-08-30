@@ -133,6 +133,43 @@ test('property reads remain compatible when member metadata is unavailable', asy
   assert.equal(propertyState.data.get, 'Classics');
 });
 
+test('action reads select available canonical presentation metadata', async () => {
+  const executor = createRichSchemaFixtureExecutor();
+  const context = createContext(executor);
+  let actionState;
+  context.registerRequirement({kind: 'action', member: 'changeName'}, state => { actionState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  const actionDocument = executor.readCalls[0].document;
+  assert.match(actionDocument, /changeName\s*\{[\s\S]*metadata\s*\{/);
+  for (const field of ['friendlyName', 'description', 'cssClassFa', 'cssClassFaPosition']) {
+    assert.match(actionDocument, new RegExp(`\\b${field}\\b`));
+  }
+  assert.deepEqual(actionState.data.metadata, {
+    friendlyName: 'Rename department',
+    description: 'Changes the department display name.',
+    cssClassFa: 'pen-to-square',
+    cssClassFaPosition: 'RIGHT'
+  });
+});
+
+test('action reads remain compatible when presentation metadata is unavailable', async () => {
+  const types = createRichSchemaTypes();
+  for (const [name, type] of types) {
+    if (name.endsWith('__gqlv_action')) {
+      types.set(name, {...type, fields: type.fields.filter(field => field.name !== 'metadata')});
+    }
+  }
+  const executor = createRichSchemaFixtureExecutor({types});
+  const context = createContext(executor);
+  let actionState;
+  context.registerRequirement({kind: 'action', member: 'changeName'}, state => { actionState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  assert.doesNotMatch(executor.readCalls[0].document, /metadata\s*\{/);
+  assert.equal(actionState.status, 'ready');
+});
+
 test('collection reads include only supported canonical heading metadata', async () => {
   const executor = createRichSchemaFixtureExecutor();
   const context = createContext(executor);
