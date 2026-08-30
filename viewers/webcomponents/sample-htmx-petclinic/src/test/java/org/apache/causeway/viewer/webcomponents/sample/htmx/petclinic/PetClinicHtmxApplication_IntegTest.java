@@ -375,7 +375,7 @@ class PetClinicHtmxApplication_IntegTest {
                     petclinic_PetOwners {
                       listAll {
                         hidden disabled
-                        metadata { friendlyName description cssClassFa cssClassFaPosition }
+                        metadata { friendlyName description cssClassFa cssClassFaPosition areYouSure }
                         invoke { results { _meta { id logicalTypeName title } } }
                       }
                       findByName { hidden disabled }
@@ -395,6 +395,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo("users");
         assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/cssClassFaPosition").asText())
                 .isEqualTo("LEFT");
+        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/areYouSure").asBoolean()).isFalse();
         assertThat(service.at("/data/rich/petclinic_PetOwners/create/metadata/cssClassFa").asText())
                 .isEqualTo("user-plus");
         assertThat(service.at("/data/rich/petclinic_Visits/listUpcoming/invoke/results").size()).isEqualTo(3);
@@ -420,7 +421,7 @@ class PetClinicHtmxApplication_IntegTest {
                         params { name { validity datatype } }
                       }
                       updateName { metadata { description cssClassFa cssClassFaPosition } }
-                      delete { hidden disabled metadata { description cssClassFa cssClassFaPosition } }
+                      delete { hidden disabled metadata { description cssClassFa cssClassFaPosition areYouSure } }
                       bookVisit { hidden disabled }
                     }
                   }
@@ -449,8 +450,25 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo("LEFT");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/updateName/metadata/cssClassFaPosition").asText())
                 .isEqualTo("RIGHT");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/delete/metadata/areYouSure").asBoolean()).isTrue();
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/delete/metadata/description").asText())
+                .isEqualTo("Deletes this pet owner and their related pets.");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/delete/disabled").asText())
-                .isEqualTo("The fixture owner is retained for the presentation demonstration.");
+                .isEqualTo("This owner has 2 visits");
+
+        final var eligibleOwner = graphQL("""
+                query PetClinicEligibleOwnerDelete {
+                  rich {
+                    petclinic_PetOwner(object: {id: "s_owner-peter"}) {
+                      delete { hidden disabled metadata { areYouSure } }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(eligibleOwner);
+        assertThat(eligibleOwner.at("/data/rich/petclinic_PetOwner/delete/hidden").asBoolean()).isFalse();
+        assertThat(eligibleOwner.at("/data/rich/petclinic_PetOwner/delete/disabled").isNull()).isTrue();
+        assertThat(eligibleOwner.at("/data/rich/petclinic_PetOwner/delete/metadata/areYouSure").asBoolean()).isTrue();
     }
 
     @Test

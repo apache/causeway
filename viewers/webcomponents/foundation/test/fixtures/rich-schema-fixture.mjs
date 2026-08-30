@@ -89,6 +89,7 @@ export function createRichSchemaTypes() {
       field('description', null, scalar('String')),
       field('cssClassFa', null, scalar('String')),
       field('cssClassFaPosition', null, scalar('String')),
+      field('areYouSure', null, scalar('Boolean')),
       field('multiLine', null, scalar('Int')),
       field('labelPosition', null, scalar('String'))
     ])],
@@ -366,7 +367,8 @@ export function departmentObjectData({
         friendlyName: 'Rename department',
         description: 'Changes the department display name.',
         cssClassFa: 'pen-to-square',
-        cssClassFaPosition: 'RIGHT'
+        cssClassFaPosition: 'RIGHT',
+        areYouSure: false
       }
     }
   };

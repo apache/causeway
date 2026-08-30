@@ -85,6 +85,10 @@ export class ServiceActionContextController {
       if (descriptor.fields.has('disabled')) {
         actionSelection.disabled = true;
       }
+      const metadataFields = ['areYouSure'].filter(fieldName => descriptor.metadata?.fields.has(fieldName));
+      if (metadataFields.length > 0) {
+        actionSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
+      }
       if (Object.keys(actionSelection).length > 0) {
         selection[actionId] = actionSelection;
       } else {
@@ -106,7 +110,8 @@ export class ServiceActionContextController {
       states.set(actionId, Object.freeze({
         hidden: data == null || data.hidden === true,
         disabled: typeof data?.disabled === 'string' && data.disabled.length > 0 ? data.disabled : null,
-        error: error ? 'SERVICE_ACTION_STATE_FAILED' : null
+        error: error ? 'SERVICE_ACTION_STATE_FAILED' : null,
+        metadata: data?.metadata ?? null
       }));
     }
     return Object.freeze({states, errors: result.errors ?? Object.freeze([]), operation: result.operation});

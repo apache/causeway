@@ -222,6 +222,7 @@ export const InteractionStatus = Object.freeze({
   PREPARING: 'preparing',
   EDITING: 'editing',
   VALIDATING: 'validating',
+  CONFIRMING: 'confirming',
   SAVING: 'saving',
   INVOKING: 'invoking',
   SUCCESS: 'success',

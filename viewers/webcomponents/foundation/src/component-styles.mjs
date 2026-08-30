@@ -293,6 +293,17 @@ cw-field-editor[data-widget-state="fallback"]::after {
   max-inline-size: min(36rem, calc(100vw - 2rem));
   padding: 1rem;
 }
+.causeway-action-confirmation {
+  border-color: var(--causeway-danger, #b42318);
+}
+.causeway-action-confirmation-message {
+  margin: 0;
+}
+.causeway-action-confirm {
+  background: var(--causeway-danger, #b42318);
+  border-color: var(--causeway-danger, #b42318);
+  color: var(--causeway-danger-contrast, #fff);
+}
 .causeway-action-parameter {
   display: grid;
   gap: 0.25rem;

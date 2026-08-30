@@ -23,9 +23,12 @@ test('normalizes bounded distinct action presentation', () => {
   }), {
     name: 'Place order',
     description: 'Creates an order',
+    areYouSure: false,
     icon: {classes: ['fa-solid', 'fa-cart-shopping'], position: 'RIGHT'}
   });
   assert.equal(normalizeActionPresentation({name: 'Delete', description: 'delete'}).description, '');
+  assert.equal(normalizeActionPresentation({name: 'Delete', areYouSure: true}).areYouSure, true);
+  assert.equal(normalizeActionPresentation({name: 'Delete', areYouSure: 'true'}).areYouSure, false);
 });
 
 test('rejects malformed Font Awesome hints and normalizes accepted classes and position', () => {

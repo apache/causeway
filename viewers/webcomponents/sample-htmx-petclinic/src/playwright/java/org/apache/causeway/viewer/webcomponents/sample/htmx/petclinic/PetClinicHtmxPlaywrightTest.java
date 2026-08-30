@@ -306,8 +306,8 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo("Remove this owner");
         assertThat(deleteAction.locator(".causeway-action-icon.fa-trash-can").count()).isGreaterThan(0);
         assertThat(deleteAction.locator(".causeway-action-control-tooltip").getAttribute("data-tooltip"))
-                .isEqualTo("Deletes this pet owner and their related pets and visits.\n\n"
-                        + "The fixture owner is retained for the presentation demonstration.");
+                .isEqualTo("Deletes this pet owner and their related pets.\n\n"
+                        + "This owner has 2 visits");
         assertThat(objectAction("updateName").textContent()).contains("Change the owner's name");
         assertThat(page.locator("cw-action[id='updateName'] .causeway-action-label + .causeway-action-icon.fa-pen-to-square").count())
                 .isGreaterThan(0);
@@ -764,11 +764,64 @@ class PetClinicHtmxPlaywrightTest {
         waitForCollectionRows("visits", 0);
         assertThat(graphQLMutationCount("removePet") - removePetMutations).isEqualTo(1);
 
+        final var deleteMutations = graphQLMutationCount("delete");
         objectAction("delete").click();
+        final var confirmation = page.locator("[data-testid='action-confirmation']");
+        confirmation.waitFor();
+        assertThat(confirmation.getAttribute("role")).isEqualTo("alertdialog");
+        assertThat(confirmation.textContent()).contains("Confirm Remove this owner", "This action cannot be undone");
+        assertFocused("[data-testid='action-confirmation-confirm']");
+        page.locator("[data-testid='action-confirmation-cancel']").click();
+        confirmation.waitFor(new Locator.WaitForOptions()
+                .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
+        assertThat(ownerRepository.findById("owner-5")).isNotNull();
+        assertThat(graphQLMutationCount("delete") - deleteMutations).isZero();
+        assertFocused("cw-action[id='delete'] [data-causeway-action-control]");
+
+        objectAction("delete").click();
+        confirmation.waitFor();
+        page.locator("[data-testid='action-confirmation-confirm']").click();
         page.waitForFunction("() => location.pathname.includes('/object/petclinic.HomePage/')");
         waitForLogicalType("petclinic.HomePage");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
         assertThat(ownerRepository.findById("owner-5")).isNull();
+        assertThat(graphQLMutationCount("delete") - deleteMutations).isEqualTo(1);
+    }
+
+    @Test
+    @Order(5)
+    void destructiveOwnerDeletionRequiresConfirmation() {
+        page.navigate(url("/htmx/object/petclinic.PetOwner/s_owner-peter"),
+                new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+        waitForPageKind("custom");
+        waitForLogicalType("petclinic.PetOwner");
+        waitForObjectTitle("Peter McTavish");
+
+        final var deleteMutations = graphQLMutationCount("delete");
+        final var deleteAction = objectAction("delete");
+        assertThat(deleteAction.isEnabled()).isTrue();
+        deleteAction.click();
+        final var confirmation = page.locator("[data-testid='action-confirmation']");
+        confirmation.waitFor();
+        assertThat(confirmation.getAttribute("role")).isEqualTo("alertdialog");
+        assertThat(confirmation.textContent()).contains("Confirm Remove this owner", "This action cannot be undone");
+        assertFocused("[data-testid='action-confirmation-confirm']");
+
+        page.locator("[data-testid='action-confirmation-cancel']").click();
+        confirmation.waitFor(new Locator.WaitForOptions()
+                .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
+        assertThat(ownerRepository.findById("owner-peter")).isNotNull();
+        assertThat(graphQLMutationCount("delete") - deleteMutations).isZero();
+        assertFocused("cw-action[id='delete'] [data-causeway-action-control]");
+
+        objectAction("delete").click();
+        confirmation.waitFor();
+        page.locator("[data-testid='action-confirmation-confirm']").click();
+        page.waitForFunction("() => location.pathname.includes('/object/petclinic.HomePage/')");
+        waitForLogicalType("petclinic.HomePage");
+        assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
+        assertThat(ownerRepository.findById("owner-peter")).isNull();
+        assertThat(graphQLMutationCount("delete") - deleteMutations).isEqualTo(1);
     }
 
     @SuppressWarnings("unchecked")

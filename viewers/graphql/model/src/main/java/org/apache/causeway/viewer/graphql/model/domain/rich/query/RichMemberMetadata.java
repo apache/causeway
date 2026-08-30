@@ -72,6 +72,8 @@ final class RichMemberMetadata extends Element {
                         Scalars.GraphQLString))
                 .field(field("cssClassFaPosition", "Static action Font Awesome LEFT or RIGHT position, or null.",
                         Scalars.GraphQLString))
+                .field(field("areYouSure", "Whether canonical action semantics require confirmation, or null.",
+                        Scalars.GraphQLBoolean))
                 .field(field("maxLength", "Finite maximum input length, or null.",
                         Scalars.GraphQLInt))
                 .field(field("pattern", "Java regular-expression text, or null.",
@@ -110,6 +112,7 @@ final class RichMemberMetadata extends Element {
         values.put("cssClassFaPosition", staticIcon == null || staticIcon.position() == null
                 ? null
                 : staticIcon.position().name());
+        values.put("areYouSure", actionAreYouSure(feature));
         values.put("maxLength", includeEditorConstraints
                 ? RichScalarMetadataField.finiteMaxLength(feature)
                 : null);
@@ -127,6 +130,13 @@ final class RichMemberMetadata extends Element {
                 ? RichScalarMetadataField.typicalLength(feature)
                 : null);
         return values;
+    }
+
+    private static Boolean actionAreYouSure(final ObjectFeature feature) {
+        if (!(feature instanceof ObjectAction action)) {
+            return null;
+        }
+        return action.getSemantics() != null && action.getSemantics().isAreYouSure();
     }
 
     private static FontAwesomeLayers staticActionIcon(final ObjectFeature feature) {

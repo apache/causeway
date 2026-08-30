@@ -142,15 +142,31 @@ test('action reads select available canonical presentation metadata', async () =
 
   const actionDocument = executor.readCalls[0].document;
   assert.match(actionDocument, /changeName\s*\{[\s\S]*metadata\s*\{/);
-  for (const field of ['friendlyName', 'description', 'cssClassFa', 'cssClassFaPosition']) {
+  for (const field of ['friendlyName', 'description', 'cssClassFa', 'cssClassFaPosition', 'areYouSure']) {
     assert.match(actionDocument, new RegExp(`\\b${field}\\b`));
   }
   assert.deepEqual(actionState.data.metadata, {
     friendlyName: 'Rename department',
     description: 'Changes the department display name.',
     cssClassFa: 'pen-to-square',
-    cssClassFaPosition: 'RIGHT'
+    cssClassFaPosition: 'RIGHT',
+    areYouSure: false
   });
+});
+
+test('action reads remain compatible when confirmation metadata is unavailable', async () => {
+  const types = createRichSchemaTypes();
+  const metadata = types.get('RichMemberMetadata');
+  types.set('RichMemberMetadata', {...metadata, fields: metadata.fields.filter(field => field.name !== 'areYouSure')});
+  const executor = createRichSchemaFixtureExecutor({types});
+  const context = createContext(executor);
+  let actionState;
+  context.registerRequirement({kind: 'action', member: 'changeName'}, state => { actionState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  assert.doesNotMatch(executor.readCalls[0].document, /\bareYouSure\b/);
+  assert.equal(actionState.status, 'ready');
+  assert.equal(actionState.data.metadata.areYouSure, false);
 });
 
 test('action reads remain compatible when presentation metadata is unavailable', async () => {

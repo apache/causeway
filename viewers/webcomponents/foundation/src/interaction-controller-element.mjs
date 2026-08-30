@@ -68,6 +68,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         this.cancelPrompt();
       } else if (action === 'submit') {
         void this.submitPrompt();
+      } else if (action === 'confirm') {
+        void this.confirmPrompt();
       } else if (action === 'dismiss-result') {
         this.dismissResult();
       }
@@ -184,6 +186,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       presentation: normalizeActionPresentation({
         name: presentation?.name || humanize(actionId),
         description: presentation?.description,
+        areYouSure: presentation?.areYouSure,
         cssClassFa: presentation?.icon?.classes?.join(' '),
         cssClassFaPosition: presentation?.icon?.position
       }),
@@ -210,7 +213,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
     let parameters = prepared.data.parameters ?? [];
     if (parameters.length === 0) {
-      return this.#invoke(actionId, context, {}, source, generation);
+      return this.promptState.presentation.areYouSure
+        ? this.#requestConfirmation()
+        : this.#invoke(actionId, context, {}, source, generation);
     }
     const values = {};
     for (const parameter of parameters) {
@@ -413,6 +418,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       this.#focusFirstInvalidControl();
       return false;
     }
+    if (this.promptState.presentation.areYouSure) {
+      return this.#requestConfirmation();
+    }
     return this.#invoke(
       this.promptState.actionId,
       this.promptState.context,
@@ -422,9 +430,30 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     );
   }
 
+  confirmPrompt() {
+    if (!this.promptState || this.promptState.status !== InteractionStatus.CONFIRMING) {
+      return false;
+    }
+    return this.#invoke(
+      this.promptState.actionId,
+      this.promptState.context,
+      this.promptState.values,
+      this.promptState.source,
+      this.generation
+    );
+  }
+
   cancelPrompt() {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
+    }
+    if (this.promptState.status === InteractionStatus.CONFIRMING
+        && this.promptState.parameters.length > 0) {
+      this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.EDITING, error: null});
+      this.#publishPromptState();
+      this.render();
+      this.#focusFirstControl();
+      return true;
     }
     clearTimeout(this.parameterTimer);
     this.autoCompleteController?.abort();
@@ -465,6 +494,17 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     } finally {
       this.renderingPrompt = false;
     }
+  }
+
+  #requestConfirmation() {
+    if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
+      return false;
+    }
+    this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.CONFIRMING, error: null});
+    this.#publishPromptState();
+    this.render();
+    this.#focusFirstControl();
+    return true;
   }
 
   async #invoke(actionId, context, values, source, generation) {
@@ -621,6 +661,20 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     if (state.parameters.length === 0 && state.status === InteractionStatus.INVOKING) {
       return `<div class="causeway-action-prompt causeway-loading" role="status" data-testid="action-prompt">Invoking ${escapeHtml(state.presentation?.name || humanize(state.actionId))}…</div>`;
     }
+    if (state.status === InteractionStatus.CONFIRMING) {
+      const actionName = state.presentation?.name || humanize(state.actionId);
+      return `<dialog open class="causeway-action-prompt causeway-action-confirmation" role="alertdialog" aria-modal="true" aria-labelledby="${this.titleId}" aria-describedby="${this.descriptionId}" data-testid="action-confirmation">
+  <form method="dialog">
+    <h2 id="${this.titleId}">Confirm ${escapeHtml(actionName)}</h2>
+    <p id="${this.descriptionId}" class="causeway-action-confirmation-message">Are you sure you want to invoke ${escapeHtml(actionName)}? This action cannot be undone.</p>
+    <div class="causeway-action-prompt-actions">
+      <button type="button" class="causeway-action-confirm" data-causeway-action="confirm" data-testid="action-confirmation-confirm">Confirm</button>
+      <button type="button" data-causeway-action="cancel" data-testid="action-confirmation-cancel">Cancel</button>
+    </div>
+    <span class="causeway-action-prompt-status" role="status">${escapeHtml(promptStatusLabel(state.status))}</span>
+  </form>
+</dialog>`;
+    }
     const parameterMarkup = state.parameters.map(parameter => this.#parameterMarkup(parameter)).join('');
     const busy = [InteractionStatus.VALIDATING, InteractionStatus.INVOKING].includes(state.status);
     const publicError = protectedPromptText(state, state.error);
@@ -747,7 +801,11 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   }
 
   #focusFirstControl() {
-    queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+    queueMicrotask(() => (
+      this.querySelector?.('[data-causeway-editor]')
+      ?? this.querySelector?.('[data-causeway-action="confirm"]')
+      ?? this.querySelector?.('[data-causeway-action="submit"]')
+    )?.focus?.());
   }
 
   #focusFirstInvalidControl() {
@@ -910,6 +968,7 @@ function promptStatusLabel(status) {
   return {
     [InteractionStatus.EDITING]: 'Enter action parameters',
     [InteractionStatus.VALIDATING]: 'Validating action',
+    [InteractionStatus.CONFIRMING]: 'Confirmation required',
     [InteractionStatus.INVOKING]: 'Invoking action',
     [InteractionStatus.FAILED]: 'Correction required',
     [InteractionStatus.UNSUPPORTED]: 'Action unsupported'
