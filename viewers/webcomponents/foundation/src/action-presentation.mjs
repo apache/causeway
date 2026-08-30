@@ -20,6 +20,11 @@ import {escapeHtml} from './rendering.mjs';
 const MAX_ACTION_NAME = 512;
 const MAX_ACTION_DESCRIPTION = 2_048;
 const MAX_ICON_NOTATION = 256;
+export const ActionPromptStyle = Object.freeze({
+  INLINE: 'INLINE',
+  DIALOG_MODAL: 'DIALOG_MODAL',
+  DIALOG_SIDEBAR: 'DIALOG_SIDEBAR'
+});
 const FONT_AWESOME_TOKEN = /^(?:fa-)?[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const STYLE_TOKENS = new Set([
   'fa-brands', 'fa-duotone', 'fa-light', 'fa-regular', 'fa-sharp',
@@ -33,8 +38,30 @@ export function normalizeActionPresentation(value = {}) {
     name,
     description: normalizedDistinctDescription(description, name),
     areYouSure: value.areYouSure === true,
+    promptStyle: normalizeActionPromptStyle(value.promptStyle),
     icon: normalizeFontAwesomeIcon(value.cssClassFa, value.cssClassFaPosition)
   });
+}
+
+export function normalizeActionPromptStyle(value, fallback = ActionPromptStyle.DIALOG_MODAL) {
+  const token = String(value ?? '').trim().replaceAll('-', '_').toUpperCase();
+  if (token === ActionPromptStyle.INLINE || token === 'INLINE_AS_IF_EDIT') {
+    return ActionPromptStyle.INLINE;
+  }
+  if (token === ActionPromptStyle.DIALOG_SIDEBAR) {
+    return ActionPromptStyle.DIALOG_SIDEBAR;
+  }
+  if (token === ActionPromptStyle.DIALOG_MODAL || token === 'DIALOG') {
+    return ActionPromptStyle.DIALOG_MODAL;
+  }
+  return fallback;
+}
+
+export function normalizeAuthoredActionPromptStyle(value) {
+  const token = String(value ?? '').trim().replaceAll('-', '_').toUpperCase();
+  return [ActionPromptStyle.INLINE, ActionPromptStyle.DIALOG_MODAL, ActionPromptStyle.DIALOG_SIDEBAR].includes(token)
+    ? token
+    : null;
 }
 
 export function composeActionTooltip(description, disabledReason) {

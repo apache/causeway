@@ -90,6 +90,7 @@ export function createRichSchemaTypes() {
       field('cssClassFa', null, scalar('String')),
       field('cssClassFaPosition', null, scalar('String')),
       field('areYouSure', null, scalar('Boolean')),
+      field('promptStyle', null, scalar('String')),
       field('multiLine', null, scalar('Int')),
       field('labelPosition', null, scalar('String'))
     ])],
@@ -368,7 +369,8 @@ export function departmentObjectData({
         description: 'Changes the department display name.',
         cssClassFa: 'pen-to-square',
         cssClassFaPosition: 'RIGHT',
-        areYouSure: false
+        areYouSure: false,
+        promptStyle: 'DIALOG_MODAL'
       }
     }
   };

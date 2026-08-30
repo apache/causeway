@@ -96,11 +96,12 @@ test('service descriptions and current action state use one logical-service quer
 
   assert.equal(state.states.get('welcomeMessage').hidden, false);
   assert.equal(state.states.get('welcomeMessage').metadata.areYouSure, false);
+  assert.equal(state.states.get('welcomeMessage').metadata.promptStyle, 'DIALOG_MODAL');
   assert.equal(state.states.get('disabledAction').disabled, 'Available to administrators only.');
   assert.equal(state.states.get('hiddenAction').hidden, true);
   assert.equal(executor.serviceCalls.length, 1);
   assert.match(executor.serviceCalls[0].document, /causeway_webcomponents_sample_SampleMenu\s*\{/);
-  assert.match(executor.serviceCalls[0].document, /metadata\s*\{\s*areYouSure/);
+  assert.match(executor.serviceCalls[0].document, /metadata\s*\{\s*areYouSure\s+promptStyle/);
   assert.doesNotMatch(executor.serviceCalls[0].document, /\$object|object:/);
   assert.deepEqual(executor.serviceCalls[0].variables, {});
 });

@@ -74,6 +74,8 @@ final class RichMemberMetadata extends Element {
                         Scalars.GraphQLString))
                 .field(field("areYouSure", "Whether canonical action semantics require confirmation, or null.",
                         Scalars.GraphQLBoolean))
+                .field(field("promptStyle", "Resolved canonical action prompt-style enum name, or null.",
+                        Scalars.GraphQLString))
                 .field(field("maxLength", "Finite maximum input length, or null.",
                         Scalars.GraphQLInt))
                 .field(field("pattern", "Java regular-expression text, or null.",
@@ -113,6 +115,7 @@ final class RichMemberMetadata extends Element {
                 ? null
                 : staticIcon.position().name());
         values.put("areYouSure", actionAreYouSure(feature));
+        values.put("promptStyle", actionPromptStyle(feature));
         values.put("maxLength", includeEditorConstraints
                 ? RichScalarMetadataField.finiteMaxLength(feature)
                 : null);
@@ -137,6 +140,14 @@ final class RichMemberMetadata extends Element {
             return null;
         }
         return action.getSemantics() != null && action.getSemantics().isAreYouSure();
+    }
+
+    private static String actionPromptStyle(final ObjectFeature feature) {
+        if (!(feature instanceof ObjectAction action)) {
+            return null;
+        }
+        var promptStyle = action.getPromptStyle();
+        return promptStyle == null ? null : promptStyle.name();
     }
 
     private static FontAwesomeLayers staticActionIcon(final ObjectFeature feature) {
