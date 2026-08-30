@@ -107,6 +107,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.loadAbortController = null;
     this.loadedGeneration = -1;
     this.sortCriterion = null;
+    this._gridOrderingBasis = null;
     this.searchText = '';
     this.searchTimer = null;
     this.criteriaFocusIntent = null;
@@ -398,6 +399,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.#disconnectRangeBroker();
       this.authoritativeResult = null;
       this.sortCriterion = null;
+      this._gridOrderingBasis = null;
       this.searchText = '';
       this.criteriaFocusIntent = null;
       this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
@@ -492,6 +494,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.loadedGeneration = this.componentState.generation;
       this.gridHostRevision += 1;
       this.authoritativeResult = result;
+      if (!this.sortCriterion) {
+        this._gridOrderingBasis = result.window?.ordering ?? null;
+      }
       this.collectionState = Object.freeze({
         status: result.errors.length > 0 ? 'partial-error' : 'ready',
         data: result.data,
@@ -779,10 +784,10 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const ariaSort = currentDirection === 'ASCENDING'
       ? 'ascending'
       : currentDirection === 'DESCENDING' ? 'descending' : 'none';
-    const direction = currentDirection === 'ASCENDING' ? ' ↑' : currentDirection === 'DESCENDING' ? ' ↓' : '';
+    const direction = currentDirection === 'ASCENDING' ? '↑' : currentDirection === 'DESCENDING' ? '↓' : '↕';
     const testId = column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : '';
     return sortable
-      ? `<th scope="col" aria-sort="${ariaSort}"${testId}><button type="button" data-causeway-collection-sort="${escapeHtml(column.member)}" aria-label="Sort ${escapeHtml(label)}${currentDirection === 'ASCENDING' ? ' descending' : currentDirection === 'DESCENDING' ? ' off' : ' ascending'}">${escapeHtml(label)}<span aria-hidden="true">${direction}</span></button></th>`
+      ? `<th scope="col" aria-sort="${ariaSort}"${testId}><button type="button" data-causeway-collection-sort="${escapeHtml(column.member)}" aria-label="Sort ${escapeHtml(label)}${currentDirection === 'ASCENDING' ? ' descending' : currentDirection === 'DESCENDING' ? ' off' : ' ascending'}">${escapeHtml(label)}<span class="causeway-collection-sort-indicator" aria-hidden="true">${direction}</span></button></th>`
       : `<th scope="col"${testId}>${escapeHtml(label)}</th>`;
   }
 
@@ -900,6 +905,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         && rows.some(row => row?._meta?.logicalTypeName && row?._meta?.id),
       renderersSupported: this._gridProjection.supported,
       bounded: this.paged != null,
+      orderingBasis: this.sortCriterion ? this._gridOrderingBasis : null,
       rows,
       window: this.collectionState.window,
       lifecycle: {

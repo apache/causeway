@@ -721,6 +721,16 @@ Petclinic HTML resource pages SHALL demonstrate server-backed collection sorting
 - **THEN** matching owners and filtered paging metadata are returned by the authoritative GraphQL window
 - **AND** clearing search restores the unfiltered owner list from offset zero
 
+#### Scenario: Upcoming visits are filtered
+- **WHEN** the Petclinic home page composes its upcoming-visit collection
+- **THEN** its HTML override opts into filtering backed by a `Visit` collection filter service
+- **AND** bounded search covers the visible pet name, visit time, reason, and notes tokens before window selection
+
+#### Scenario: An owner's pets are filtered
+- **WHEN** a Petclinic owner page composes its pet collection
+- **THEN** its HTML override opts into filtering while retaining sortable behavior and associated actions
+- **AND** bounded search covers the visible pet name, species, and notes tokens before window selection
+
 #### Scenario: Unselected collections render
 - **WHEN** Petclinic composes a collection without `sortable` or `filterable`
 - **THEN** it retains established paging, ordering, Grid qualification, rows, and associated actions

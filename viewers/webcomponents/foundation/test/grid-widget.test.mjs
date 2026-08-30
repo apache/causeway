@@ -98,6 +98,7 @@ test('bounded Grid upgrades lazily with immutable rows columns and relationships
   assert.equal(control.localName, 'vaadin-grid');
   assert.equal(control.items.length, 2);
   assert.equal(control.pageSize, 2);
+  assert.equal(control.allRowsVisible, true);
   assert.equal(control.getAttribute('aria-labelledby'), 'people-label');
   assert.equal(control.getAttribute('aria-describedby'), 'people-description');
   assert.equal(control.getAttribute('data-testid'), 'people-grid');
@@ -142,6 +143,18 @@ test('Grid renders Causeway-owned sort headers without enabling toolkit sorting'
   assert.match(button.textContent, /↑/);
   button.dispatchEvent(new Event('click'));
   assert.deepEqual(requests, ['name']);
+
+  adapter.presentation = {
+    ...boundedPresentation(),
+    columns: [{...column, member: 'name'}],
+    sortableMembers: ['name'],
+    sortCriterion: null,
+    sortCallback: member => requests.push(member)
+  };
+  const unsortedColumn = adapter.childNodes[0].childNodes[0];
+  const unsortedRoot = document.createElement('div');
+  unsortedColumn.headerRenderer(unsortedRoot);
+  assert.match(unsortedRoot.childNodes[0].textContent, /↕/);
   document.body.removeChild(adapter);
 });
 
@@ -161,6 +174,7 @@ test('virtual Grid maps page callbacks to bounded range provider', async () => {
   };
   await connect(adapter);
   const control = adapter.childNodes[0];
+  assert.equal(control.allRowsVisible, false);
   let callbackRows;
   let callbackTotal;
   control.dataProvider({page: 2, pageSize: 3}, (rows, total) => {

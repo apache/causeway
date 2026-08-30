@@ -216,7 +216,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
-                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active sortable>")
+                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active sortable filterable>")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
                 .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
@@ -230,7 +230,7 @@ class PetClinicHtmxApplication_IntegTest {
             homeHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(homeHtml)
-                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\" active>")
+                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\" active filterable>")
                 .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\" active paged=\"2\" sortable filterable>")
                 .doesNotContain("id=\"petOwners\" named=", "id=\"petOwners\" described-as=", " offset=", " size=");
         assertThat(ownerHtml.indexOf("id=\"addPet\""))
@@ -288,6 +288,12 @@ class PetClinicHtmxApplication_IntegTest {
                           rows { name { get } }
                         }
                       }
+                      futureVisits {
+                        window(search: "vaccination", size: 5) {
+                          totalCount searchSupported searchPrompt
+                          rows { reason { get } }
+                        }
+                      }
                     }
                   }
                 }
@@ -303,6 +309,14 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("\"name\"");
         assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/rows/0/name/get").asText())
                 .isEqualTo("Mary Smith");
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/totalCount").asInt())
+                .isEqualTo(1);
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/searchSupported").asBoolean())
+                .isTrue();
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/searchPrompt").asText())
+                .isEqualTo("Search visits");
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/rows/0/reason/get").asText())
+                .isEqualTo("Vaccination");
 
         final var menuHref = application.at("/data/rich/application/menuBars/href").asText();
         final var menuBars = get(menuHref);
@@ -356,7 +370,14 @@ class PetClinicHtmxApplication_IntegTest {
                     petclinic_PetOwner(object: {id: "s_owner-mary"}) {
                       _meta { id logicalTypeName title grid }
                       name { get }
-                      pets { metadata { friendlyName description } get { _meta { id logicalTypeName title } } }
+                      pets {
+                        metadata { friendlyName description }
+                        get { _meta { id logicalTypeName title } }
+                        window(search: "cat", size: 5) {
+                          totalCount searchSupported searchPrompt
+                          rows { name { get } species { get } }
+                        }
+                      }
                       visits { metadata { friendlyName description } get { _meta { id logicalTypeName title } } }
                       addPet { hidden disabled params { name { validity datatype } } }
                       bookVisit { hidden disabled }
@@ -372,6 +393,12 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/metadata/friendlyName").asText()).isEqualTo("Visits");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/metadata/description").isNull()).isTrue();
         assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/get").size()).isEqualTo(2);
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/window/totalCount").asInt()).isEqualTo(1);
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/window/searchSupported").asBoolean()).isTrue();
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/window/searchPrompt").asText())
+                .isEqualTo("Search pets");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/window/rows/0/name/get").asText())
+                .isEqualTo("Samantha");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/get").size()).isEqualTo(2);
     }
 
