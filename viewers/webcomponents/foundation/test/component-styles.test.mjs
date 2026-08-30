@@ -103,6 +103,16 @@ test('direct member associations wrap in semantic source and keyboard order', ()
   assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
 });
 
+test('property-associated actions align with the effective field column responsively', async () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\] \{[\s\S]*?display: grid;[\s\S]*?grid-template-columns: var\(--causeway-property-label-column/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 2;/);
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(theme, /cw-property\[data-causeway-action-group\] \{\s+grid-template-columns: minmax\(7rem, var\(--causeway-label-width\)\) minmax\(0, 1fr\) auto;/);
+  assert.match(theme, /cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 2 \/ -1;/);
+  assert.match(theme, /@container \(max-width: 32rem\)[\s\S]*?cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 1 \/ -1;/);
+  assert.match(theme, /@media \(max-width: 48rem\)[\s\S]*?cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 1 \/ -1;/);
+});
+
 test('standard theme gives effective multiline properties explicit responsive placement', async () => {
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
   const effectiveMultiline = '\\.causeway-property\\[data-multi-line\\]\\[data-label-position="LEFT"\\]';

@@ -112,11 +112,30 @@
   font-size: 1rem;
 }
 
-.petclinic-page-toolbar {
+.petclinic-object-heading {
+  align-items: center;
+  border-block-end: 1px solid var(--causeway-border);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--causeway-space-2);
+  gap: var(--causeway-space-4);
+  min-width: 0;
+}
+
+.petclinic-object-heading > cw-object-header {
+  flex: 0 1 auto;
+}
+
+.petclinic-object-heading .causeway-object-header {
+  border-block-end: 0;
+  margin-block-end: 0;
+}
+
+.petclinic-page-toolbar {
   align-items: center;
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  gap: var(--causeway-space-2);
 }
 
 body > nav > div > a > img,
