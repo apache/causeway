@@ -25,7 +25,7 @@ const HTMLElementBase = globalThis.HTMLElement ?? class extends EventTarget {};
 
 export class CausewayObjectLinkElement extends HTMLElementBase {
   static get observedAttributes() {
-    return ['logical-type', 'object-id', 'title', 'disabled'];
+    return ['logical-type', 'object-id', 'title', 'icon', 'disabled'];
   }
 
   constructor() {
@@ -49,6 +49,18 @@ export class CausewayObjectLinkElement extends HTMLElementBase {
     this.setAttribute('logical-type', value?.logicalTypeName ?? '');
     this.setAttribute('object-id', value?.id ?? '');
     this.setAttribute('title', value?.title ?? value?.id ?? '');
+  }
+
+  get icon() {
+    return this.getAttribute('icon') || '';
+  }
+
+  set icon(value) {
+    if (value == null || String(value).trim() === '') {
+      this.removeAttribute('icon');
+    } else {
+      this.setAttribute('icon', String(value));
+    }
   }
 
   get disabled() {
@@ -88,9 +100,16 @@ export class CausewayObjectLinkElement extends HTMLElementBase {
   render() {
     const target = this.target;
     const disabled = this.disabled || !target.logicalTypeName || !target.id;
+    const icon = this.icon;
     this.innerHTML = `<button type="button" class="causeway-object-link" role="link"${disabled ? ' disabled aria-disabled="true"' : ''}>
+  ${icon ? `<img class="causeway-object-link-icon" src="${escapeHtml(icon)}" alt="" aria-hidden="true">` : ''}
   <span class="causeway-object-link-title">${escapeHtml(target.title)}</span>
   <span class="causeway-object-link-identity">${escapeHtml(target.logicalTypeName)}:${escapeHtml(target.id)}</span>
 </button>`;
+    const image = this.querySelector?.('.causeway-object-link-icon');
+    image?.addEventListener?.('error', () => {
+      image.hidden = true;
+      image.setAttribute('aria-hidden', 'true');
+    }, {once: true});
   }
 }

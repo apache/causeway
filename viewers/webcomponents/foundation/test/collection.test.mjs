@@ -48,7 +48,13 @@ const {
 
 function row({id = 'staff-1', name = 'Dr Ada', code = 'ADA', version = '3'} = {}) {
   return {
-    _meta: {id, logicalTypeName: STAFF_LOGICAL_TYPE, ...(version == null ? {} : {version}), title: name},
+    _meta: {
+      id,
+      logicalTypeName: STAFF_LOGICAL_TYPE,
+      ...(version == null ? {} : {version}),
+      title: name,
+      icon: `/graphql/object/${STAFF_LOGICAL_TYPE}:${id}/_meta/icon`
+    },
     name: {
       hidden: false,
       disabled: null,
@@ -993,6 +999,10 @@ test('collection host owns immutable Grid qualification diagnostics policy recov
   assert.equal(gridAdapter.presentation.mode, 'virtual');
   assert.deepEqual(gridAdapter.presentation.columns.map(column => column.member), ['_meta', 'name']);
   assert.equal(gridAdapter.presentation.rows[0].identity.id, 'staff-1');
+  assert.equal(
+    gridAdapter.presentation.rows[0].identity.icon,
+    '/graphql/object/university.staff.StaffMember:staff-1/_meta/icon');
+  assert.match(gridAdapter.presentation.rows[0].cells[0].html, / icon="\/graphql\/object\/university\.staff\.StaffMember:staff-1\/_meta\/icon"/);
   assert.equal(gridAdapter.presentation.totalCount, 40);
   assert.equal(gridAdapter.presentation.resizableColumns, false);
   assert.equal(gridAdapter.presentation.reorderableColumns, false);
@@ -1121,6 +1131,7 @@ test('collection component renders default object links, empty and partial-error
   collection.collectionState = {status: 'ready', data: {get: [row()]}, errors: []};
   collection.renderComponentState(baseState);
   assert.match(collection.innerHTML, /cw-object-link/);
+  assert.match(collection.innerHTML, /icon="\/graphql\/object\/university\.staff\.StaffMember:staff-1\/_meta\/icon"/);
 
   collection.collectionState = {status: 'ready', data: {get: []}, errors: []};
   collection.renderComponentState(baseState);

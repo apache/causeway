@@ -248,7 +248,7 @@ export function metadataSelectionForType(typeRef, types) {
   const metadataType = metadataField ? types.get(namedType(metadataField.type)) ?? null : null;
   const metadataFields = fieldsByName(metadataType);
   const selection = Object.fromEntries(
-    ['id', 'logicalTypeName', 'title', 'version']
+    ['id', 'logicalTypeName', 'title', 'version', 'icon']
       .filter(fieldName => metadataFields.has(fieldName))
       .map(fieldName => [fieldName, true]));
   return Object.keys(selection).length > 0 ? {_meta: selection} : null;

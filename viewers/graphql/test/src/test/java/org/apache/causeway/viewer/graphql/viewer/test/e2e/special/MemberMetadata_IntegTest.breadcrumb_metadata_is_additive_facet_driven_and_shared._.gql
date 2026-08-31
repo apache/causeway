@@ -19,6 +19,7 @@
                 logicalTypeName
                 id
                 title
+                icon
               }
             }
           }

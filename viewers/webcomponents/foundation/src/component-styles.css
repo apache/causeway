@@ -508,7 +508,8 @@ cw-action-control > vaadin-button > .causeway-action-icon:last-child {
 .causeway-breadcrumbs-current {
   font-weight: 600;
 }
-.causeway-breadcrumbs .causeway-object-link-identity {
+.causeway-breadcrumbs .causeway-object-link-identity,
+.causeway-object-header-link .causeway-object-link-identity {
   display: none;
 }
 .causeway-object-link {
@@ -521,6 +522,13 @@ cw-action-control > vaadin-button > .causeway-action-icon:last-child {
   gap: 0.5rem;
   padding: 0;
   text-decoration: underline;
+}
+.causeway-object-link-icon {
+  align-self: center;
+  block-size: var(--causeway-object-icon-size, 1.5rem);
+  flex: 0 0 var(--causeway-object-icon-size, 1.5rem);
+  inline-size: var(--causeway-object-icon-size, 1.5rem);
+  object-fit: var(--causeway-object-icon-fit, contain);
 }
 .causeway-object-link-identity {
   font-size: 0.8em;

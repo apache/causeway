@@ -86,7 +86,7 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                 .isTrue();
         assertThat(root.at("/data/breadcrumbType/fields"))
                 .extracting(node -> node.get("name").stringValue())
-                .containsExactlyInAnyOrder("logicalTypeName", "id", "title");
+                .containsExactlyInAnyOrder("logicalTypeName", "id", "title", "icon");
         assertThat(metadata.get("title").stringValue()).isEqualTo("Untitled Staff Member");
         assertThat(metadata.get("breadcrumbs"))
                 .singleElement()
@@ -95,6 +95,8 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                             .isEqualTo("university.dept.Department");
                     assertThat(node.get("id").stringValue()).isNotBlank();
                     assertThat(node.get("title").stringValue()).isEqualTo("Untitled Department");
+                    assertThat(node.get("icon").stringValue())
+                            .matches("/graphql/object/university.dept.Department:(\\d+)/_meta/icon");
                 });
         assertThat(StaffMember.departmentReadCount())
                 .as("selected breadcrumb metadata evaluates the navigable parent")
