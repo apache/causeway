@@ -20,6 +20,7 @@ const {
   causewayFieldWidgetConfiguration,
   configureCausewayFieldWidgets,
   qualifyCausewayCalendarTrigger,
+  qualifyCausewayTimeTrigger,
   renderCausewayFieldWidget,
   renderCausewayReadOnlyField,
   resolveCausewayDateLocale,
@@ -29,6 +30,7 @@ const {
 const {renderCausewayEditor} = await import('../src/editor-registry.mjs');
 
 const fakeBasicModule = new URL('./fixtures/fake-vaadin-basic.mjs', import.meta.url).href;
+const fakeLocalTemporalModule = new URL('./fixtures/fake-vaadin-local-temporal.mjs', import.meta.url).href;
 
 function context(overrides = {}) {
   return {
@@ -143,7 +145,7 @@ test('local date presentation follows bounded document and browser locales rever
   assert.equal(causewayDatePickerI18n('%%%').formatDate({year: 2026, month: 7, day: 30}), '8/30/2026');
 });
 
-test('calendar trigger gains bounded button semantics and keyboard activation only when operable', () => {
+test('calendar trigger gains bounded button semantics and keyboard activation only when operable', async () => {
   const trigger = document.createElement('div');
   trigger.setAttribute('aria-hidden', 'true');
   let activations = 0;
@@ -152,6 +154,7 @@ test('calendar trigger gains bounded button semantics and keyboard activation on
   const picker = {
     disabled: false,
     readOnly: false,
+    opened: false,
     inputElement: input,
     shadowRoot: {querySelector: selector => selector === '[part~="toggle-button"]' ? trigger : null}
   };
@@ -174,14 +177,139 @@ test('calendar trigger gains bounded button semantics and keyboard activation on
   assert.equal(reverseTab.defaultPrevented, true);
   assert.equal(document.activeElement, input);
   for (const key of ['Enter', ' ']) {
-    const event = new Event('keydown', {cancelable: true});
-    event.key = key;
-    trigger.dispatchEvent(event);
-    assert.equal(event.defaultPrevented, true);
+    const keydown = new Event('keydown', {cancelable: true});
+    keydown.key = key;
+    trigger.dispatchEvent(keydown);
+    assert.equal(keydown.defaultPrevented, true);
+    const keyup = new Event('keyup', {cancelable: true});
+    keyup.key = key;
+    trigger.dispatchEvent(keyup);
+    assert.equal(keyup.defaultPrevented, true);
   }
-  assert.equal(activations, 2);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(picker.opened, true);
+  assert.equal(activations, 0);
+  trigger.click();
+  assert.equal(activations, 1);
   assert.equal(qualifyCausewayCalendarTrigger({...picker, readOnly: true}, 'Last Visit'), null);
   assert.equal(qualifyCausewayCalendarTrigger({...picker, disabled: true}, 'Last Visit'), null);
+});
+
+test('time trigger gains bounded button semantics and keyboard and pointer activation only when operable', async () => {
+  const trigger = document.createElement('div');
+  trigger.setAttribute('aria-hidden', 'true');
+  let activations = 0;
+  trigger.click = () => { activations += 1; };
+  const input = document.createElement('input');
+  const picker = {
+    disabled: false,
+    readOnly: false,
+    opened: false,
+    inputElement: input,
+    shadowRoot: {querySelector: selector => selector === '[part~="toggle-button"]' ? trigger : null}
+  };
+  assert.equal(qualifyCausewayTimeTrigger(picker, 'Visit At'), trigger);
+  assert.equal(trigger.getAttribute('aria-hidden'), null);
+  assert.equal(trigger.getAttribute('role'), 'button');
+  assert.equal(trigger.getAttribute('tabindex'), '0');
+  assert.equal(trigger.getAttribute('aria-label'), 'Open Visit At time picker');
+  assert.equal(trigger.hasAttribute('data-causeway-time-trigger'), true);
+
+  input.focus();
+  const forwardTab = new Event('keydown', {cancelable: true});
+  forwardTab.key = 'Tab';
+  input.dispatchEvent(forwardTab);
+  assert.equal(forwardTab.defaultPrevented, true);
+  assert.equal(document.activeElement, trigger);
+
+  const reverseTab = new Event('keydown', {cancelable: true});
+  reverseTab.key = 'Tab';
+  reverseTab.shiftKey = true;
+  trigger.dispatchEvent(reverseTab);
+  assert.equal(reverseTab.defaultPrevented, true);
+  assert.equal(document.activeElement, input);
+
+  for (const key of ['Enter', ' ']) {
+    const keydown = new Event('keydown', {cancelable: true});
+    keydown.key = key;
+    trigger.dispatchEvent(keydown);
+    assert.equal(keydown.defaultPrevented, true);
+    const keyup = new Event('keyup', {cancelable: true});
+    keyup.key = key;
+    trigger.dispatchEvent(keyup);
+    assert.equal(keyup.defaultPrevented, true);
+  }
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(picker.opened, true);
+  assert.equal(activations, 0);
+  trigger.click();
+  assert.equal(activations, 1);
+  assert.equal(qualifyCausewayTimeTrigger({...picker, readOnly: true}, 'Visit At'), null);
+  assert.equal(qualifyCausewayTimeTrigger({...picker, disabled: true}, 'Visit At'), null);
+  assert.equal(qualifyCausewayTimeTrigger({...picker, shadowRoot: {querySelector: () => null}}, 'Visit At'), null);
+});
+
+test('editable temporal adapters use minute steps and qualify standalone and composite clock triggers', async () => {
+  configureCausewayFieldWidgets({
+    families: ['local-temporal'],
+    moduleUrls: {'local-temporal': fakeLocalTemporalModule}
+  });
+  const timeEditor = new CausewayFieldEditorElement();
+  timeEditor.setAttribute('id', 'visit-time');
+  timeEditor.setAttribute('data-family', 'local-temporal');
+  timeEditor.setAttribute('data-control', 'time-picker');
+  timeEditor.setAttribute('data-causeway-editor', 'visitAt');
+  timeEditor.setAttribute('data-label', 'Visit At');
+  timeEditor.setAttribute('data-value', '13:14:15.123');
+  document.body.appendChild(timeEditor);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const timeControl = timeEditor.childNodes[0];
+  assert.equal(timeControl.step, 60);
+  assert.equal(timeControl.value, '13:14:15.123');
+  assert.equal(timeControl._trigger.getAttribute('aria-label'), 'Open Visit At time picker');
+  assert.equal(timeControl._trigger.hasAttribute('data-causeway-time-trigger'), true);
+
+  const dateTimeEditor = new CausewayFieldEditorElement();
+  dateTimeEditor.setAttribute('id', 'visit-date-time');
+  dateTimeEditor.setAttribute('data-family', 'local-temporal');
+  dateTimeEditor.setAttribute('data-control', 'date-time-picker');
+  dateTimeEditor.setAttribute('data-causeway-editor', 'visitAt');
+  dateTimeEditor.setAttribute('data-label', 'Visit At');
+  dateTimeEditor.setAttribute('data-value', '2026-08-24T13:14:15.123');
+  document.body.appendChild(dateTimeEditor);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const dateTimeControl = dateTimeEditor.childNodes[0];
+  assert.equal(dateTimeControl.step, 60);
+  assert.equal(dateTimeControl.value, '2026-08-24T13:14:15.123');
+  assert.equal(dateTimeControl._datePicker._trigger.hasAttribute('data-causeway-calendar-trigger'), true);
+  assert.equal(dateTimeControl._timePicker._trigger.hasAttribute('data-causeway-time-trigger'), true);
+  assert.equal(dateTimeControl._timePicker._trigger.getAttribute('aria-label'), 'Open Visit At time picker');
+
+  document.body.removeChild(timeEditor);
+  document.body.removeChild(dateTimeEditor);
+});
+
+test('read-only temporal adapters preserve millisecond steps and hide operable triggers', async () => {
+  configureCausewayFieldWidgets({
+    families: ['local-temporal'],
+    presentation: true,
+    moduleUrls: {'local-temporal': fakeLocalTemporalModule}
+  });
+  const view = new CausewayFieldEditorElement();
+  view.setAttribute('id', 'visit-time-view');
+  view.setAttribute('data-mode', 'view');
+  view.setAttribute('data-family', 'local-temporal');
+  view.setAttribute('data-control', 'time-picker');
+  view.setAttribute('data-label', 'Visit At');
+  view.setAttribute('data-value', '13:14:15.123');
+  document.body.appendChild(view);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const control = view.childNodes[0];
+  assert.equal(control.step, 0.001);
+  assert.equal(control.value, '13:14:15.123');
+  assert.equal(control._trigger.getAttribute('aria-hidden'), 'true');
+  assert.equal(control._trigger.hasAttribute('data-causeway-time-trigger'), false);
+  document.body.removeChild(view);
 });
 
 test('keeps protected values out of adapter markup', () => {

@@ -30,7 +30,7 @@ let configuration = Object.freeze({
 });
 const familyModules = new Map();
 const failedFamilies = new Set();
-const qualifiedCalendarTriggers = new WeakSet();
+const qualifiedPickerTriggers = new WeakSet();
 const BIDI_CONTROL_PATTERN = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/gu;
 let configurationRevision = 0;
 
@@ -109,34 +109,17 @@ export function causewayDatePickerI18n(locale = resolveCausewayDateLocale()) {
 }
 
 export function qualifyCausewayCalendarTrigger(datePicker, label, operable = true) {
-  const trigger = datePicker?.shadowRoot?.querySelector?.('[part~="toggle-button"]');
-  if (!trigger || !operable || datePicker.disabled || datePicker.readOnly || datePicker.readonly) return null;
-  trigger.removeAttribute('aria-hidden');
-  trigger.setAttribute('role', 'button');
-  trigger.setAttribute('tabindex', '0');
-  trigger.setAttribute('aria-label', `Open ${boundedLabel(label)} calendar`);
-  trigger.setAttribute('data-causeway-calendar-trigger', '');
-  if (!qualifiedCalendarTriggers.has(trigger)) {
-    const input = datePicker.inputElement;
-    input?.addEventListener?.('keydown', event => {
-      if (event.key !== 'Tab' || event.shiftKey) return;
-      event.preventDefault();
-      trigger.focus();
-    }, {capture: true});
-    trigger.addEventListener('keydown', event => {
-      if (event.key === 'Tab' && event.shiftKey && input?.focus) {
-        event.preventDefault();
-        input.focus();
-        return;
-      }
-      if (!['Enter', ' '].includes(event.key)) return;
-      event.preventDefault();
-      event.stopPropagation();
-      trigger.click();
-    });
-    qualifiedCalendarTriggers.add(trigger);
-  }
-  return trigger;
+  return qualifyCausewayPickerTrigger(datePicker, label, operable, {
+    accessibleSuffix: 'calendar',
+    marker: 'data-causeway-calendar-trigger'
+  });
+}
+
+export function qualifyCausewayTimeTrigger(timePicker, label, operable = true) {
+  return qualifyCausewayPickerTrigger(timePicker, label, operable, {
+    accessibleSuffix: 'time picker',
+    marker: 'data-causeway-time-trigger'
+  });
 }
 
 export function failCausewayFieldFamily(family, {announce = true} = {}) {
@@ -400,7 +383,9 @@ export class CausewayFieldEditorElement extends HTMLElement {
         control.checked = this.dataset.value === 'true';
       } else {
         if (this.dataset.control === 'select') control.items = this.#items();
-        if (['time-picker', 'date-time-picker'].includes(this.dataset.control)) control.step = 0.001;
+        if (['time-picker', 'date-time-picker'].includes(this.dataset.control)) {
+          control.step = viewMode ? 0.001 : 60;
+        }
         control.value = this.dataset.value ?? '';
         if (this.dataset.rows && 'maxRows' in control) {
           control.minRows = Math.min(2, Number(this.dataset.rows));
@@ -424,14 +409,18 @@ export class CausewayFieldEditorElement extends HTMLElement {
         const suffix = field.localName === 'vaadin-date-picker' ? 'date' : 'time';
         field.accessibleName = `${this.dataset.label ?? ''} ${suffix}`.trim();
       }
-      const datePickers = datePickerControls(control);
+      const datePickers = pickerControls(control, 'vaadin-date-picker');
+      const timePickers = pickerControls(control, 'vaadin-time-picker');
       for (const field of datePickers) {
         if (dateI18n && field !== control) field.i18n = {...field.i18n, ...dateI18n};
       }
       await Promise.all(compositeFields.map(field => field.updateComplete));
       if (!viewMode) {
         for (const field of datePickers) {
-          scheduleCausewayCalendarTrigger(field, this.dataset.label, !control.disabled);
+          scheduleCausewayPickerTrigger(field, this.dataset.label, !control.disabled, qualifyCausewayCalendarTrigger);
+        }
+        for (const field of timePickers) {
+          scheduleCausewayPickerTrigger(field, this.dataset.label, !control.disabled, qualifyCausewayTimeTrigger);
         }
       }
       if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
@@ -572,22 +561,65 @@ function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 }
 
-function scheduleCausewayCalendarTrigger(datePicker, label, operable) {
-  if (qualifyCausewayCalendarTrigger(datePicker, label, operable) || !operable || !datePicker?.shadowRoot) return;
+function qualifyCausewayPickerTrigger(picker, label, operable, {accessibleSuffix, marker}) {
+  const trigger = picker?.shadowRoot?.querySelector?.('[part~="toggle-button"]');
+  if (!trigger || !operable || picker.disabled || picker.readOnly || picker.readonly) return null;
+  trigger.removeAttribute('aria-hidden');
+  trigger.setAttribute('role', 'button');
+  trigger.setAttribute('tabindex', '0');
+  trigger.setAttribute('aria-label', `Open ${boundedLabel(label)} ${accessibleSuffix}`);
+  trigger.setAttribute(marker, '');
+  if (!qualifiedPickerTriggers.has(trigger)) {
+    const input = picker.inputElement;
+    input?.addEventListener?.('keydown', event => {
+      if (event.key !== 'Tab' || event.shiftKey) return;
+      event.preventDefault();
+      event.stopPropagation();
+      trigger.focus();
+    }, {capture: true});
+    trigger.addEventListener('keydown', event => {
+      if (event.key === 'Tab' && event.shiftKey && input?.focus) {
+        event.preventDefault();
+        event.stopPropagation();
+        input.focus();
+        return;
+      }
+      if (!['Enter', ' '].includes(event.key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+    });
+    trigger.addEventListener('keyup', event => {
+      if (!['Enter', ' '].includes(event.key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setTimeout(() => {
+        if (trigger.isConnected === false && picker.isConnected === false) return;
+        picker.inputElement?.focus?.();
+        if (typeof picker.open === 'function') picker.open();
+        else picker.opened = true;
+      }, 0);
+    });
+    qualifiedPickerTriggers.add(trigger);
+  }
+  return trigger;
+}
+
+function scheduleCausewayPickerTrigger(picker, label, operable, qualify) {
+  if (qualify(picker, label, operable) || !operable || !picker?.shadowRoot) return;
   const observer = new MutationObserver(() => {
-    if (qualifyCausewayCalendarTrigger(datePicker, label, operable)) observer.disconnect();
+    if (qualify(picker, label, operable)) observer.disconnect();
   });
-  observer.observe(datePicker.shadowRoot, {childList: true, subtree: true});
+  observer.observe(picker.shadowRoot, {childList: true, subtree: true});
   queueMicrotask(() => {
-    if (qualifyCausewayCalendarTrigger(datePicker, label, operable)) observer.disconnect();
+    if (qualify(picker, label, operable)) observer.disconnect();
   });
   setTimeout(() => observer.disconnect(), 1000);
 }
 
-function datePickerControls(control) {
-  const fields = control?.localName === 'vaadin-date-picker' ? [control] : [];
+function pickerControls(control, localName) {
+  const fields = control?.localName === localName ? [control] : [];
   for (const root of [control, control?.shadowRoot]) {
-    fields.push(...(root?.querySelectorAll?.('vaadin-date-picker') ?? []));
+    fields.push(...(root?.querySelectorAll?.(localName) ?? []));
   }
   return [...new Set(fields)];
 }

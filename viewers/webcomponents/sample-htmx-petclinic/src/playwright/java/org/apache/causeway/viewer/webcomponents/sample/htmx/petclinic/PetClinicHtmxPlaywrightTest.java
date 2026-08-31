@@ -620,6 +620,9 @@ class PetClinicHtmxPlaywrightTest {
         final var notesEditor = resolveEditor("cw-property[id='notes'] [data-causeway-editor='notes']");
         assertThat(notesEditor.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
                 .isEqualTo(5);
+        if (!nativeToolkit()) {
+            assertSingleVaadinMultilineFocus(notesEditor);
+        }
         fillEditor(notesEditor, "First line\nSecond line");
         notes.locator("[data-causeway-action='cancel']").click();
 
@@ -779,6 +782,39 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(1);
         assertThat(String.valueOf(visitAt.evaluate("element => element.value"))).isNotBlank();
         assertThat(reason.evaluate("element => element.value")).isEqualTo("Routine check-up");
+        if (!nativeToolkit()) {
+            assertSingleVaadinMultilineFocus(reason);
+            assertThat(visitAt.evaluate("element => element.step")).isEqualTo(60);
+            final var timePicker = visitAt.locator("vaadin-time-picker");
+            assertThat(timePicker.count()).isEqualTo(1);
+            assertThat(timePicker.evaluate("element => element.step")).isEqualTo(60);
+            assertThat(String.valueOf(timePicker.evaluate("element => element.inputElement?.value")))
+                    .doesNotMatch(".*:[0-9]{2}:[0-9]{2}.*")
+                    .doesNotContain(".");
+            final var timeTrigger = timePicker.locator("[data-causeway-time-trigger]");
+            assertThat(timeTrigger.getAttribute("role")).isEqualTo("button");
+            assertThat(timeTrigger.getAttribute("aria-label")).isEqualTo("Open Visit At time picker");
+            timePicker.evaluate("element => element.inputElement.focus()");
+            page.waitForTimeout(750);
+            final var mutationsBeforePickerUse = graphQLMutationCount("bookVisit");
+            timePicker.evaluate("element => element.inputElement.focus()");
+            assertThat(timePicker.evaluate("element => element.inputElement.matches(':focus')")).isEqualTo(true);
+            page.keyboard().press("Tab");
+            assertThat(timeTrigger.evaluate("element => element.matches(':focus')"))
+                    .as("Tab should move focus from the time input to its clock trigger")
+                    .isEqualTo(true);
+            timeTrigger.press("Enter");
+            page.waitForFunction("selector => document.querySelector(selector)?.querySelector('vaadin-time-picker')?.opened === true", parameter("visitAt"));
+            timePicker.evaluate("element => element.close()");
+            page.waitForTimeout(50);
+            timeTrigger.click();
+            page.waitForFunction("selector => document.querySelector(selector)?.querySelector('vaadin-time-picker')?.opened === true", parameter("visitAt"));
+            assertThat(graphQLMutationCount("bookVisit") - mutationsBeforePickerUse).isZero();
+            timePicker.evaluate("element => element.close()");
+            page.waitForTimeout(50);
+            page.locator(PROMPT + " [data-causeway-action='submit']").focus();
+            page.waitForTimeout(750);
+        }
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);
         waitForCollectionRows("visits", 1);
@@ -1292,6 +1328,21 @@ class PetClinicHtmxPlaywrightTest {
                 .isLessThanOrEqualTo(1.0);
         assertThat(geometry.get(5).doubleValue()).isLessThan(160.0);
         assertThat(geometry.get(6).doubleValue()).isLessThanOrEqualTo(geometry.get(7).doubleValue() + 1.0);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertSingleVaadinMultilineFocus(final Locator editor) {
+        editor.evaluate("element => element.inputElement.focus()");
+        final var focusStyles = (List<String>) editor.evaluate("""
+                element => {
+                  const host = getComputedStyle(element);
+                  const field = getComputedStyle(element.shadowRoot.querySelector('[part~="input-field"]'));
+                  return [host.outlineStyle, host.outlineWidth, field.outlineStyle, field.outlineWidth];
+                }
+                """);
+        assertThat(focusStyles.get(0)).isEqualTo("none");
+        assertThat(focusStyles.get(2)).isEqualTo("solid");
+        assertThat(Double.parseDouble(focusStyles.get(3).replace("px", ""))).isGreaterThan(0.0);
     }
 
     private void waitForShellResult(final String actionId, final String value) {
