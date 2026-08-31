@@ -5,7 +5,7 @@ The Petclinic browser profile SHALL verify user-visible keyboard time selection,
 
 #### Scenario: Visit time overlay is keyboard opened
 - **WHEN** the browser tabs from the visit time input to its clock trigger and presses Enter or Space
-- **THEN** the real Vaadin time overlay is visibly open with minute-resolution choices
+- **THEN** the real Vaadin time overlay is visibly open with quarter-hour choices formatted to minutes
 - **AND** no booking mutation occurs until the user invokes the action
 
 #### Scenario: Visit reason has one boundary

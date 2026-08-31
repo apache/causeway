@@ -1,3 +1,28 @@
+## MODIFIED Requirements
+
+### Requirement: Minute-resolution local-time entry
+Each editable qualified Vaadin `LocalTime` or `LocalDateTime` control SHALL present time without seconds or fractional seconds and SHALL use the toolkit-supported 15-minute dropdown interval.
+The adapter MUST use the public step contract, MUST NOT fabricate private dropdown items, and MUST NOT mutate authoritative state merely by entering edit mode.
+
+#### Scenario: User edits a local time
+- **WHEN** a property or action parameter opens an editable qualified `LocalTime` control
+- **THEN** the visible entry omits seconds and fractional seconds
+- **AND** the picker offers quarter-hour choices through Vaadin's supported overlay
+
+#### Scenario: User edits a local date-time
+- **WHEN** a property or action parameter opens an editable qualified `LocalDateTime` control
+- **THEN** its integrated time field uses the same 15-minute dropdown interval
+- **AND** the local date, local time, and absence of browser timezone conversion remain authoritative
+
+#### Scenario: User cancels a precise existing value
+- **WHEN** an authoritative value contains accepted seconds, fractional seconds, or a minute outside a quarter-hour choice and the user cancels without committing a changed picker value
+- **THEN** the authoritative value remains unchanged
+- **AND** no rounded or truncated value is submitted
+
+#### Scenario: Value is read-only or uses native fallback
+- **WHEN** the value is presented read-only or the Vaadin family is ineligible or disabled
+- **THEN** its established precision and native semantic behavior remain unchanged
+
 ## ADDED Requirements
 
 ### Requirement: Visibly presented keyboard time overlay
@@ -7,7 +32,7 @@ The qualification contract MUST verify visible overlay presentation and MUST NOT
 #### Scenario: User opens time choices with Enter
 - **WHEN** keyboard focus is on the current clock trigger and the user presses Enter
 - **THEN** focus returns to the associated time input and the Vaadin overlay is visibly presented
-- **AND** minute-resolution choices are available without committing or cancelling the Causeway interaction
+- **AND** quarter-hour choices formatted to minutes are available without committing or cancelling the Causeway interaction
 
 #### Scenario: User opens time choices with Space
 - **WHEN** keyboard focus is on the current clock trigger and the user presses Space

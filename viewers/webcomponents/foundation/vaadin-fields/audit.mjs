@@ -39,7 +39,7 @@ console.log(JSON.stringify(results, null, 2));
 if (!writePolicy && Object.values(results).some(result => result.cspViolations.length || result.axeViolations.length
     || result.consoleErrors.length || result.pageErrors.length || result.externalRequests.length || result.overflow
     || result.readOnlyState.some(state => state.changed || state.opened || !state.named || !state.described || !state.readOnly)
-    || result.timePickerState.some(state => !state.minuteStep || !state.hasToggle || !state.pointerOperable))) {
+    || result.timePickerState.some(state => !state.quarterHourStep || !state.hasToggle || !state.pointerOperable || !state.visibleOverlay))) {
   process.exitCode = 1;
 }
 
@@ -96,29 +96,34 @@ async function auditFamily(family, controls, hashes) {
       control.blur();
     });
   }
-  const timePickerState = family === 'local-temporal' ? await page.evaluate(() => {
-    const states = [];
-    for (const control of document.querySelectorAll('[id^="control-"]')) {
-      const pickers = control.localName === 'vaadin-time-picker' ? [control] : [];
-      for (const root of [control, control.shadowRoot]) {
-        pickers.push(...(root?.querySelectorAll?.('vaadin-time-picker') ?? []));
-      }
-      for (const picker of new Set(pickers)) {
-        const trigger = picker.shadowRoot?.querySelector('[part~="toggle-button"]');
-        const before = Boolean(picker.opened);
-        trigger?.click();
-        const pointerOperable = !before && Boolean(picker.opened);
-        picker.close?.();
-        states.push({
-          owner: control.id,
-          minuteStep: picker.step === 60,
-          hasToggle: Boolean(trigger),
-          pointerOperable
-        });
-      }
+  const timePickerState = [];
+  if (family === 'local-temporal') {
+    for (const [index, tag] of controls.entries()) {
+      if (!['vaadin-time-picker', 'vaadin-date-time-picker'].includes(tag)) continue;
+      const owner = `control-${index}`;
+      const picker = page.locator(tag === 'vaadin-time-picker' ? `#${owner}` : `#${owner} vaadin-time-picker`);
+      const trigger = picker.locator('[part~="toggle-button"]');
+      const hasToggle = await trigger.count() === 1;
+      await picker.evaluate(control => control.inputElement?.focus());
+      if (hasToggle) await trigger.click();
+      const state = await picker.evaluate(async control => {
+        const overlay = control.$?.overlay ?? control.shadowRoot?.querySelector('vaadin-time-picker-overlay');
+        for (let frame = 0; frame < 10 && !overlay?.matches?.(':popover-open'); frame += 1) {
+          await new Promise(resolve => requestAnimationFrame(resolve));
+        }
+        const bounds = overlay?.getBoundingClientRect?.();
+        return {
+          quarterHourStep: control.step === 900,
+          pointerOperable: Boolean(control.opened),
+          visibleOverlay: Boolean(overlay?.matches?.(':popover-open')
+            && bounds?.width > 0
+            && bounds?.height > 0)
+        };
+      });
+      await picker.evaluate(control => control.close?.());
+      timePickerState.push({owner, hasToggle, ...state});
     }
-    return states;
-  }) : [];
+  }
   const readOnlyState = [];
   for (const [index, tag] of controls.entries()) {
     const locator = page.locator(`#view-${index}`);
@@ -220,9 +225,9 @@ function fixture(family, controls) {
     control.id = 'control-${index}';
     control.required = ${index === 0};
     if ('items' in control) control.items = [{label: 'One', value: 'one'}, {label: 'Two', value: 'two'}];
-    if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') control.step = 60;
+    if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') control.step = 900;
     if ('${tag}' === 'vaadin-checkbox') control.checked = true;
-    else if ('value' in control) control.value = ${JSON.stringify(initialValue(family, tag))};
+    else if ('value' in control) control.value = ${JSON.stringify(initialValue(family, tag, true))};
     fixture.append(control);
     await control.updateComplete;
     for (const field of control.querySelectorAll('vaadin-date-picker, vaadin-time-picker')) {
@@ -244,7 +249,7 @@ function fixture(family, controls) {
     if ('items' in view) view.items = [{label: 'One', value: 'one'}, {label: 'Two', value: 'two'}];
     if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') view.step = 0.001;
     if ('${tag}' === 'vaadin-checkbox') view.checked = true;
-    else if ('value' in view) view.value = ${JSON.stringify(initialValue(family, tag))};
+    else if ('value' in view) view.value = ${JSON.stringify(initialValue(family, tag, false))};
     fixture.append(label, description, view);
     await view.updateComplete;
     const compositeFields = [...view.querySelectorAll('vaadin-date-picker, vaadin-time-picker')];
@@ -268,12 +273,12 @@ await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(r
 document.body.dataset.ready = 'true';`;
 }
 
-function initialValue(family, tag) {
+function initialValue(family, tag, editable) {
   if (tag === 'vaadin-checkbox') return false;
   if (tag === 'vaadin-select') return 'one';
   if (tag === 'vaadin-date-picker') return '2026-08-24';
-  if (tag === 'vaadin-time-picker') return '13:14:15.123';
-  if (tag === 'vaadin-date-time-picker') return '2026-08-24T13:14:15.123';
+  if (tag === 'vaadin-time-picker') return editable ? '13:15' : '13:14:15.123';
+  if (tag === 'vaadin-date-time-picker') return editable ? '2026-08-24T13:15' : '2026-08-24T13:14:15.123';
   if (family === 'numeric') return '12';
   return tag === 'vaadin-password-field' ? '' : 'initial';
 }
