@@ -88,6 +88,8 @@ export class CausewayReferenceEditorElement extends HTMLElement {
     this._searchTimer = null;
     this._syncing = false;
     this._value = null;
+    this._focusRequested = false;
+    this._focusOptions = undefined;
     this._filterGeneration = 0;
     this._activeFilter = null;
     this.addEventListener('keydown', event => {
@@ -108,6 +110,8 @@ export class CausewayReferenceEditorElement extends HTMLElement {
     this._generation += 1;
     clearTimeout(this._searchTimer);
     this._control = null;
+    this._focusRequested = false;
+    this._focusOptions = undefined;
   }
 
   get value() {
@@ -120,7 +124,14 @@ export class CausewayReferenceEditorElement extends HTMLElement {
   }
 
   focus(options) {
-    this._control?.focus?.(options);
+    if (this._control) {
+      this._focusRequested = false;
+      this._focusOptions = undefined;
+      this._control.focus?.(options);
+      return;
+    }
+    this._focusRequested = true;
+    this._focusOptions = options;
   }
 
   async #upgrade(generation) {
@@ -178,6 +189,7 @@ export class CausewayReferenceEditorElement extends HTMLElement {
       this.#synchronizeSelection();
       queueMicrotask(() => { this._syncing = false; });
       this.dataset.widgetState = 'ready';
+      this.#restoreRequestedFocus();
     } catch (error) {
       if (!this.isConnected || generation !== this._generation) return;
       configuration = Object.freeze({...configuration, enabled: false});
@@ -191,6 +203,19 @@ export class CausewayReferenceEditorElement extends HTMLElement {
       }));
       if (this.isConnected) this.#renderFallback();
     }
+  }
+
+  #restoreRequestedFocus() {
+    if (!this._focusRequested || !this._control) return;
+    const control = this._control;
+    const options = this._focusOptions;
+    this._focusRequested = false;
+    this._focusOptions = undefined;
+    queueMicrotask(() => {
+      if (this.isConnected && control === this._control && control.isConnected) {
+        control.focus?.(options);
+      }
+    });
   }
 
   #items() {
@@ -312,6 +337,7 @@ export class CausewayReferenceEditorElement extends HTMLElement {
     });
     this._control = select;
     this.replaceChildren(select);
+    this.#restoreRequestedFocus();
   }
 }
 
