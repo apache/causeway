@@ -55,6 +55,8 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                         "description",
                         "cssClassFa",
                         "cssClassFaPosition",
+                        "areYouSure",
+                        "promptStyle",
                         "maxLength",
                         "pattern",
                         "patternFlags",
