@@ -41,7 +41,7 @@ Rounding authoritative values on render was rejected because merely entering edi
 
 The existing calendar-trigger qualification will be generalized internally so date and time pickers receive the same bounded behavior while retaining distinct public markers and accessible names.
 An editable time input's trigger will expose `role="button"`, `tabindex="0"`, `aria-label="Open <field> time picker"`, and a stable diagnostic attribute.
-Forward Tab from the input enters the trigger, reverse Tab returns to the input, and Enter or Space activates the existing Vaadin toggle click behavior.
+Forward Tab from the input enters the trigger, reverse Tab returns to the input, and Enter or Space opens the existing Vaadin picker overlay through its bounded `opened` contract.
 Pointer activation remains delegated to Vaadin's existing trigger handler.
 
 A replacement light-DOM button was rejected because it would duplicate toolkit overlay state and styling.

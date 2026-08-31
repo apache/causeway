@@ -107,6 +107,9 @@ test('application native-control chrome does not cross into toolkit-owned slotte
   assert.ok(theme.includes(`${nativeInput},\n${nativeSelect},\n${nativeTextarea} {\n  padding: 0.45rem 0.6rem;`));
   assert.ok(theme.includes(`${nativeTextarea} {\n  min-height: 6rem;\n  resize: vertical;`));
   assert.ok(theme.includes(`:where(a, button, ${nativeInput}, ${nativeSelect}, ${nativeTextarea}, [tabindex]):focus-visible`));
+  assert.match(theme, /cw-field-editor > vaadin-text-area:focus-visible \{\s+outline: none;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-field-editor \{[\s\S]*?--vaadin-focus-ring-color: var\(--causeway-focus, Highlight\);/);
+  assert.doesNotMatch(theme, /cw-field-editor > textarea:focus-visible/);
   assert.doesNotMatch(theme, /\ninput,\nselect,\ntextarea \{\n  max-width:/);
   assert.doesNotMatch(theme, /:where\(a, button, input, select, textarea, \[tabindex\]\):focus-visible/);
 });

@@ -38,7 +38,8 @@ if (outputDirectory) writeFileSync(resolve(outputDirectory, 'field-audit.json'),
 console.log(JSON.stringify(results, null, 2));
 if (!writePolicy && Object.values(results).some(result => result.cspViolations.length || result.axeViolations.length
     || result.consoleErrors.length || result.pageErrors.length || result.externalRequests.length || result.overflow
-    || result.readOnlyState.some(state => state.changed || state.opened || !state.named || !state.described || !state.readOnly))) {
+    || result.readOnlyState.some(state => state.changed || state.opened || !state.named || !state.described || !state.readOnly)
+    || result.timePickerState.some(state => !state.minuteStep || !state.hasToggle || !state.pointerOperable))) {
   process.exitCode = 1;
 }
 
@@ -95,6 +96,29 @@ async function auditFamily(family, controls, hashes) {
       control.blur();
     });
   }
+  const timePickerState = family === 'local-temporal' ? await page.evaluate(() => {
+    const states = [];
+    for (const control of document.querySelectorAll('[id^="control-"]')) {
+      const pickers = control.localName === 'vaadin-time-picker' ? [control] : [];
+      for (const root of [control, control.shadowRoot]) {
+        pickers.push(...(root?.querySelectorAll?.('vaadin-time-picker') ?? []));
+      }
+      for (const picker of new Set(pickers)) {
+        const trigger = picker.shadowRoot?.querySelector('[part~="toggle-button"]');
+        const before = Boolean(picker.opened);
+        trigger?.click();
+        const pointerOperable = !before && Boolean(picker.opened);
+        picker.close?.();
+        states.push({
+          owner: control.id,
+          minuteStep: picker.step === 60,
+          hasToggle: Boolean(trigger),
+          pointerOperable
+        });
+      }
+    }
+    return states;
+  }) : [];
   const readOnlyState = [];
   for (const [index, tag] of controls.entries()) {
     const locator = page.locator(`#view-${index}`);
@@ -176,6 +200,7 @@ async function auditFamily(family, controls, hashes) {
     axeViolations,
     accessibilityState,
     readOnlyState,
+    timePickerState,
     presentation: {narrowDarkReducedMotion: !narrowOverflow, wideForcedColors: !wideOverflow},
     consoleErrors,
     pageErrors,
@@ -195,7 +220,7 @@ function fixture(family, controls) {
     control.id = 'control-${index}';
     control.required = ${index === 0};
     if ('items' in control) control.items = [{label: 'One', value: 'one'}, {label: 'Two', value: 'two'}];
-    if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') control.step = 0.001;
+    if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') control.step = 60;
     if ('${tag}' === 'vaadin-checkbox') control.checked = true;
     else if ('value' in control) control.value = ${JSON.stringify(initialValue(family, tag))};
     fixture.append(control);

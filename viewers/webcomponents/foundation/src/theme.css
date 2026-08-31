@@ -204,6 +204,10 @@ button:disabled,
   outline-offset: 2px;
 }
 
+cw-field-editor > vaadin-text-area:focus-visible {
+  outline: none;
+}
+
 input:not([slot="input"]),
 select:not([slot="input"]),
 textarea:not([slot="input"]) {
