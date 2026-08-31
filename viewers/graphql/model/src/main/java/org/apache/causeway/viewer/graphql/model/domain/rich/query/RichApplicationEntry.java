@@ -196,6 +196,6 @@ public class RichApplicationEntry extends Element {
 
     private static boolean isConcreteObject(final ObjectSpecification specification) {
         return specification.isEntityOrViewModel()
-                && !Modifier.isAbstract(specification.getCorrespondingClass().getModifiers());
+                && !Modifier.isAbstract(specification.correspondingClass().getModifiers());
     }
 }
