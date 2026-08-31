@@ -794,6 +794,18 @@ class PetClinicHtmxPlaywrightTest {
         final var removePetMutations = graphQLMutationCount("removePet");
         objectAction("removePet").click();
         waitForPrompt("removePet");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_MODAL");
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
+        assertFocused(parameter("pet"));
+        resolveEditor(parameter("pet")).press("Escape");
+        page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
+                .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
+        assertThat(graphQLMutationCount("removePet") - removePetMutations).isZero();
+        assertFocused("cw-action[id='removePet'] [data-causeway-action-control]");
+
+        objectAction("removePet").click();
+        waitForPrompt("removePet");
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
         selectFirstAvailableChoice("pet");
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);

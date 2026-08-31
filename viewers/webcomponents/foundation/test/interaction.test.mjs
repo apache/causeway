@@ -607,11 +607,14 @@ test('windowed Vaadin reference adapter requests authoritative later pages', asy
     }
   });
   document.body.appendChild(editor);
+  editor.focus({preventScroll: true});
   for (let index = 0; index < 20 && editor.dataset.widgetState !== 'ready'; index += 1) {
     await new Promise(resolve => setTimeout(resolve, 0));
   }
   assert.equal(editor.dataset.widgetState, 'ready', editor.dataset.widgetError);
   const control = editor.childNodes[0];
+  assert.equal(editor._focusRequested, false);
+  assert.equal(editor._focusOptions, undefined);
   assert.equal(control.pageSize, 2);
   let callbackResult;
 
@@ -640,6 +643,17 @@ test('windowed Vaadin reference adapter requests authoritative later pages', asy
   assert.equal(staleCallback, undefined);
   assert.deepEqual(currentCallback, {items: [{id: 'new', title: 'New'}], total: 1});
   document.body.removeChild(editor);
+
+  const staleEditor = new CausewayReferenceEditorElement();
+  staleEditor.setAttribute('data-causeway-editor', 'stale-owner');
+  staleEditor.setAttribute('data-items', '[]');
+  staleEditor.setAttribute('data-value', 'null');
+  document.body.appendChild(staleEditor);
+  staleEditor.focus();
+  document.body.removeChild(staleEditor);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(staleEditor._focusRequested, false);
+  assert.equal(staleEditor._control, null);
 });
 
 test('default reference module failure is bounded and falls back natively', async () => {
@@ -657,10 +671,14 @@ test('default reference module failure is bounded and falls back natively', asyn
   editor.addEventListener('causeway-reference-load-failed', event => { failure = event.detail; });
 
   document.body.appendChild(editor);
+  editor.focus();
+  await new Promise(resolve => setTimeout(resolve, 0));
   await new Promise(resolve => setTimeout(resolve, 0));
 
   assert.equal(editor.dataset.widgetState, 'fallback');
   assert.equal(editor.childNodes[0].localName, 'select');
+  assert.equal(editor._focusRequested, false);
+  assert.equal(editor._focusOptions, undefined);
   assert.equal(failure.message, 'The configured reference adapter could not be loaded.');
   assert.doesNotMatch(failure.message, /missing-reference-module/);
   document.body.removeChild(editor);
