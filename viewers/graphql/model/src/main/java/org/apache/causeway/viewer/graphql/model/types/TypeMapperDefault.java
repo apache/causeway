@@ -256,7 +256,7 @@ public class TypeMapperDefault implements TypeMapper {
             case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
             case VALUE -> inputTypeFor(elementType.correspondingClass());
             case COLLECTION ->
-                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
+                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.fullIdentifier()));
             default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
         };
     }

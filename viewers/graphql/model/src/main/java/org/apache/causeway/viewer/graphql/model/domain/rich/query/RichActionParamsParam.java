@@ -115,7 +115,7 @@ public class RichActionParamsParam
         addChildFieldFor(this.validate = new RichActionParamsParamValidate(this, context));
         addChildFieldFor(this.datatype = new RichActionParamsParamDatatype(this, context));
 
-        var resourceParameter = ResourceValueTypes.isResourceType(oap.getElementType().getCorrespondingClass());
+        var resourceParameter = ResourceValueTypes.isResourceType(oap.getElementType().correspondingClass());
         addChildFieldFor(this.resourceFileAccept = resourceParameter
                 ? new RichScalarMetadataField(
                         context,
