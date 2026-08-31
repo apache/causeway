@@ -98,7 +98,7 @@ public class RichMutationForAction extends Element {
 
             case COLLECTION:
 
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                TypeOfFacet facet = objectAction.lookupFacet(TypeOfFacet.class).orElse(null);
                 if (facet == null) {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
@@ -107,7 +107,7 @@ public class RichMutationForAction extends Element {
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, SCHEMA_TYPE);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationOfCollectionElement.getFullIdentifier(),
+                            objectSpecificationOfCollectionElement.fullIdentifier(),
                             objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
