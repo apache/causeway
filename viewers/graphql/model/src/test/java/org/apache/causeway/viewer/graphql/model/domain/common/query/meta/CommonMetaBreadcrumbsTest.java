@@ -36,12 +36,13 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CommonMetaBreadcrumbsTest {
 
     @Test
-    void usesOneSharedEntryTypeWithRequiredIdentityAndTitle() {
-        final var context = context();
+    void usesOneSharedEntryTypeWithRequiredIdentityTitleAndOptionalIcon() {
+        final var context = context(CausewayConfiguration.Viewer.Graphql.ResponseType.DIRECT);
         final var first = new CommonMetaBreadcrumbs(context);
         final var second = new CommonMetaBreadcrumbs(context);
 
@@ -55,22 +56,39 @@ class CommonMetaBreadcrumbsTest {
                 CommonMetaBreadcrumbs.ENTRY_TYPE_NAME,
                 graphql.schema.GraphQLObjectType.class).orElseThrow();
         assertThat(entry.getFieldDefinitions())
-                .extracting(field -> field.getName() + ":" + field.getType())
+                .extracting(field -> field.getName() + ":" + graphql.schema.GraphQLTypeUtil.simplePrint(field.getType()))
                 .containsExactly(
                         "logicalTypeName:String!",
                         "id:String!",
-                        "title:String!");
+                        "title:String!",
+                        "icon:String");
     }
 
-    private static Context context() {
+    @Test
+    void omitsIconWhenStructuralMetadataIsForbidden() {
+        final var context = context(CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN);
+        new CommonMetaBreadcrumbs(context);
+
+        final var entry = context.graphQLTypeRegistry.lookup(
+                CommonMetaBreadcrumbs.ENTRY_TYPE_NAME,
+                graphql.schema.GraphQLObjectType.class).orElseThrow();
+        assertThat(entry.getFieldDefinitions())
+                .extracting(field -> field.getName())
+                .containsExactly("logicalTypeName", "id", "title");
+    }
+
+    private static Context context(final CausewayConfiguration.Viewer.Graphql.ResponseType responseType) {
         @SuppressWarnings("unchecked")
         final Provider<Context> contextProvider = mock(Provider.class);
+        final var configuration = mock(CausewayConfiguration.class, Answers.RETURNS_DEEP_STUBS);
+        when(configuration.viewer().graphql().resources().effectiveStructuralMetadataResponseType())
+                .thenReturn(responseType);
         return new Context(
                 mock(BookmarkService.class),
                 mock(SpecificationLoader.class),
                 mock(TypeMapper.class),
                 mock(ServiceRegistry.class),
-                mock(CausewayConfiguration.class, Answers.RETURNS_DEEP_STUBS),
+                configuration,
                 mock(CausewaySystemEnvironment.class),
                 mock(ObjectManager.class),
                 new GraphQLTypeRegistry(contextProvider),

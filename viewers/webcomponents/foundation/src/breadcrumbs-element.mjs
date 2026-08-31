@@ -52,7 +52,7 @@ export class CausewayBreadcrumbsElement extends CausewayContextConsumerElement {
     this.hidden = false;
     const currentTitle = metadata.title || `${metadata.logicalTypeName ?? ''}:${metadata.id ?? ''}`;
     const ancestorItems = ancestors.map(ancestor => `<li class="causeway-breadcrumbs-item">
-    <cw-object-link logical-type="${escapeHtml(ancestor.logicalTypeName)}" object-id="${escapeHtml(ancestor.id)}" title="${escapeHtml(ancestor.title)}"></cw-object-link>
+    <cw-object-link logical-type="${escapeHtml(ancestor.logicalTypeName)}" object-id="${escapeHtml(ancestor.id)}" title="${escapeHtml(ancestor.title)}"${ancestor.icon ? ` icon="${escapeHtml(ancestor.icon)}"` : ''}></cw-object-link>
   </li>`).join('\n  ');
     this.innerHTML = `<nav class="causeway-breadcrumbs" aria-label="Breadcrumb" aria-busy="false">
   <ol class="causeway-breadcrumbs-list">

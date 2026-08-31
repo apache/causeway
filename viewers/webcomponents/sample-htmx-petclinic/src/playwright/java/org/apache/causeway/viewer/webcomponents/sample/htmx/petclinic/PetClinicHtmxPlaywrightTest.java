@@ -202,6 +202,7 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("petOwners", 2);
         waitForCollectionRows("futureVisits", 3);
+        assertObjectLinkIcon(page.locator("cw-collection[id='petOwners'] cw-object-link").first());
         assertThat(page.locator("cw-collection[id='petOwners']").getAttribute("paged")).isEqualTo("2");
         assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-grid-next]").isVisible()).isTrue();
         assertThat(page.locator("cw-collection[id='futureVisits'] .causeway-collection-label").innerText())
@@ -250,6 +251,8 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-owner-page']").isVisible()).isTrue();
+        waitForObjectTitle("Mary Smith (Mary)");
+        assertObjectLinkIcon(page.locator("cw-object-header cw-object-link"));
         waitForNoBreadcrumbs();
         assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] nav").count()).isZero();
         assertThat(page.locator(".petclinic-object-grid").evaluate("""
@@ -262,6 +265,7 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 1);
+        assertObjectLinkIcon(page.locator("cw-collection[id='pets'] cw-object-link").first());
         assertThat(page.locator("cw-collection[id='pets']").getAttribute("sortable")).isEmpty();
         assertThat(page.locator("cw-collection[id='pets']").getAttribute("filterable")).isEmpty();
         final var petSearch = page.locator("cw-collection[id='pets'] [data-causeway-collection-search]");
@@ -353,17 +357,31 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator("[data-testid='petclinic-pet-page']").isVisible()).isTrue();
         waitForObjectTitle("Basil · dog");
         waitForBreadcrumbs(1);
+        assertObjectLinkIcon(page.locator("cw-object-header cw-object-link"));
+        assertObjectLinkIcon(page.locator("cw-property[id='petOwner'] cw-object-link"));
+        assertObjectLinkIcon(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link"));
         assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link").getAttribute("title"))
                 .isEqualTo("Mary Smith (Mary)");
         assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] [aria-current='page']").textContent())
                 .isEqualTo("Basil · dog");
         waitForMenus();
 
+        final var petUrl = page.url();
+        page.locator(ROUTE_PAGE).evaluate("element => { element.dataset.selfLinkProbe = 'old'; }");
+        page.locator("cw-object-header cw-object-link button").click();
+        page.waitForFunction("() => document.querySelector('[data-testid=\"causeway-route-page\"]')?.dataset.selfLinkProbe !== 'old'");
+        waitForRoute("petclinic.Pet", "s_pet-basil");
+        waitForObjectTitle("Basil · dog");
+        assertThat(page.url()).isEqualTo(petUrl);
+        assertObjectLinkIcon(page.locator("cw-object-header cw-object-link"));
+
         page.navigate(url("/htmx/object/petclinic.Visit/s_visit-basil-checkup"),
                 new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         waitForRoute("petclinic.Visit", "s_visit-basil-checkup");
         assertThat(page.locator("[data-testid='petclinic-visit-page']").isVisible()).isTrue();
         waitForBreadcrumbs(2);
+        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link .causeway-object-link-icon").count())
+                .isEqualTo(2);
         assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link")
                 .evaluateAll("elements => elements.map(element => element.getAttribute('title')).join(',')"))
                 .isEqualTo("Mary Smith (Mary),Basil · dog");
@@ -985,6 +1003,18 @@ class PetClinicHtmxPlaywrightTest {
         final var link = links.filter(new Locator.FilterOptions().setHasText(titlePart)).first();
         link.waitFor();
         link.click();
+    }
+
+    private void assertObjectLinkIcon(final Locator objectLink) {
+        objectLink.waitFor();
+        final var icon = objectLink.locator(".causeway-object-link-icon");
+        assertThat(icon.count()).isEqualTo(1);
+        assertThat(icon.getAttribute("alt")).isEmpty();
+        assertThat(icon.getAttribute("aria-hidden")).isEqualTo("true");
+        assertThat(icon.getAttribute("src")).contains("/_meta/icon");
+        assertThat((Boolean) icon.evaluate(
+                "image => image.decode().then(() => image.complete && image.naturalWidth > 0).catch(() => false)"))
+                .isTrue();
     }
 
     private void openMenu(final String name) {

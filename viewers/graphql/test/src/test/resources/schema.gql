@@ -195,8 +195,9 @@ type RichMemberMetadata {
   typicalLength: Int
 }
 
-"Bookmark identity and title for one navigable ancestor."
+"Bookmark identity, title and optional icon for one navigable ancestor."
 type RichNavigableBreadcrumb {
+  icon: String
   id: String!
   logicalTypeName: String!
   title: String!

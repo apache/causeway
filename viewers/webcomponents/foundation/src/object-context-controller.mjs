@@ -1270,6 +1270,10 @@ function translateRequirement(requirement, description) {
       if (!breadcrumbs || requiredFields.some(field => !breadcrumbFields.has(field))) {
         throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks navigable breadcrumb fields.`);
       }
+      const breadcrumbFieldsToSelect = [
+        ...requiredFields,
+        ...(['icon'].filter(field => breadcrumbFields.has(field)))
+      ];
       const currentFields = ['id', 'logicalTypeName', 'title'];
       if (currentFields.some(field => !metadata.fields.has(field))) {
         throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks object identity fields.`);
@@ -1278,12 +1282,12 @@ function translateRequirement(requirement, description) {
         descriptor: metadata,
         selection: {[metadata.id]: {
           ...Object.fromEntries(currentFields.map(field => [field, true])),
-          breadcrumbs: Object.fromEntries(requiredFields.map(field => [field, true]))
+          breadcrumbs: Object.fromEntries(breadcrumbFieldsToSelect.map(field => [field, true]))
         }}
       };
     }
     const requestedFields = requirement.kind === 'header'
-      ? ['id', 'logicalTypeName', 'title', 'version']
+      ? ['id', 'logicalTypeName', 'title', 'version', 'icon']
       : ['grid', 'layout', 'cssClass'];
     const supportedFields = requestedFields.filter(field => metadata.fields.has(field));
     if (requirement.kind === 'header'

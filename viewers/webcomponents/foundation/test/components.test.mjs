@@ -29,6 +29,7 @@ const {
   CausewayCollectionColumnElement,
   CausewayCollectionElement,
   CausewayObjectContextElement,
+  CausewayObjectHeaderElement,
   CausewayParameterElement,
   CausewayPropertyElement,
   CausewaySemanticEvent,
@@ -71,6 +72,26 @@ test('action parameter configuration normalizes optional presentation hints', ()
   });
 });
 
+test('object header renders an icon-bearing semantic self-link in one heading', () => {
+  const header = new CausewayObjectHeaderElement();
+  header.renderComponentState(state({
+    data: {
+      id: 'owner-1',
+      logicalTypeName: 'petclinic.PetOwner',
+      title: 'Mary & family',
+      icon: '/graphql/object/petclinic.PetOwner:owner-1/_meta/icon'
+    }
+  }));
+
+  assert.match(header.innerHTML, /<h1><cw-object-link class="causeway-object-header-link"/);
+  assert.match(header.innerHTML, /logical-type="petclinic\.PetOwner"/);
+  assert.match(header.innerHTML, /object-id="owner-1"/);
+  assert.match(header.innerHTML, /title="Mary &amp; family"/);
+  assert.match(header.innerHTML, /icon="\/graphql\/object\/petclinic\.PetOwner:owner-1\/_meta\/icon"/);
+  assert.equal((header.innerHTML.match(/<h1>/g) ?? []).length, 1);
+  assert.match(header.innerHTML, /class="causeway-object-identity"/);
+});
+
 test('breadcrumbs render accessible ancestor links, escaped current state and local errors', () => {
   const breadcrumbs = new CausewayBreadcrumbsElement();
   breadcrumbs.renderComponentState(state({
@@ -79,7 +100,12 @@ test('breadcrumbs render accessible ancestor links, escaped current state and lo
       logicalTypeName: 'petclinic.Visit',
       title: 'Checkup <today>',
       breadcrumbs: [
-        {logicalTypeName: 'petclinic.PetOwner', id: 'owner-1', title: 'Mary & family'},
+        {
+          logicalTypeName: 'petclinic.PetOwner',
+          id: 'owner-1',
+          title: 'Mary & family',
+          icon: '/graphql/object/petclinic.PetOwner:owner-1/_meta/icon'
+        },
         {logicalTypeName: 'petclinic.Pet', id: 'pet-1', title: 'Basil'},
         {logicalTypeName: '', id: 'invalid', title: 'Malformed'}
       ]
@@ -92,6 +118,7 @@ test('breadcrumbs render accessible ancestor links, escaped current state and lo
   assert.match(breadcrumbs.innerHTML, /logical-type="petclinic\.PetOwner"/);
   assert.match(breadcrumbs.innerHTML, /object-id="owner-1"/);
   assert.match(breadcrumbs.innerHTML, /Mary &amp; family/);
+  assert.match(breadcrumbs.innerHTML, /icon="\/graphql\/object\/petclinic\.PetOwner:owner-1\/_meta\/icon"/);
   assert.match(breadcrumbs.innerHTML, /Basil/);
   assert.match(breadcrumbs.innerHTML, /aria-current="page">Checkup &lt;today&gt;/);
   assert.doesNotMatch(breadcrumbs.innerHTML, /Malformed/);
