@@ -670,10 +670,12 @@ configureCausewayFieldWidgets({families: [], presentation: false});
 `basic` covers reversible text, multiline, protected, Boolean, enum, bounded scalar choice, and URL inputs.
 `numeric` keeps `Long`, `BigInteger`, and `BigDecimal` lexical in text fields while using integer or number controls only for machine numeric codecs.
 `local-temporal` covers `LocalDate`, `LocalTime`, and `LocalDateTime`; values beyond millisecond fractional precision remain native because the picker cannot preserve them.
+Qualified read-only values preserve accepted precision, while editable local-time and local-date-time controls use a sixty-second step for minute-resolution entry through the existing Causeway codec.
 Local dates use the nonblank document `lang`, then the browser locale, then `en` to format and parse the visible date while preserving the ISO value passed to Causeway codecs and GraphQL.
 Localized numeric input and unambiguous ISO `yyyy-MM-dd` input are accepted, and available locale calendar names and first-weekday settings are applied to the picker.
 In an editable Vaadin date picker, Tab moves from the date input to the labelled calendar button, and Enter or Space opens the calendar without committing or cancelling the Causeway interaction.
-Read-only and disabled date controls do not expose that operable calendar button.
+Editable standalone and date-time time inputs expose the equivalent labelled clock button for Tab, reverse Tab, Enter, Space, and pointer use.
+Read-only and disabled date and time controls do not expose those operable picker buttons.
 Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collection, and unsupported values never become eligible field adapters.
 References retain their separate adapter.
 
