@@ -99,7 +99,7 @@ test('object links publish cancelable bubbling and composed semantic navigation'
   assert.equal(link.activate(), false);
 });
 
-test('actions render semantic states and publish requests only while enabled', () => {
+test('actions render semantic states and publish requests only while enabled', async () => {
   let listener;
   const context = {
     identity: Object.freeze({logicalTypeName: 'university.dept.Department', id: '42'}),
@@ -113,6 +113,7 @@ test('actions render semantic states and publish requests only while enabled', (
   action.id = 'changeName';
   action.context = context;
   document.body.appendChild(action);
+  await Promise.resolve();
   let request;
   let requestCount = 0;
   action.addEventListener(ACTION_REQUEST_EVENT, event => {

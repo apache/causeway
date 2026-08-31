@@ -35,7 +35,7 @@ const {associatedActions} = await import('../src/member-composition.mjs');
 
 defineCausewayWebComponents();
 
-test('property preserves direct actions across owner states and ignores descendant actions', () => {
+test('property preserves direct actions across owner states and ignores descendant actions', async () => {
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
@@ -48,6 +48,7 @@ test('property preserves direct actions across owner states and ignores descenda
   property.appendChild(wrapper);
   ownerContext.appendChild(property);
   document.body.appendChild(ownerContext);
+  await Promise.resolve();
 
   assert.equal(property.childNodes[0].getAttribute('data-causeway-member-primary'), '');
   assert.deepEqual(associatedActions(property), [direct]);
@@ -106,7 +107,7 @@ test('property editing and cancellation preserve the associated action node', as
   document.body.removeChild(ownerContext);
 });
 
-test('parser-late direct actions are recognized once in declaration order', () => {
+test('parser-late direct actions are recognized once in declaration order', async () => {
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
@@ -120,6 +121,7 @@ test('parser-late direct actions are recognized once in declaration order', () =
   const second = action('secondAction');
   property.appendChild(first);
   property.appendChild(second);
+  await Promise.resolve();
 
   assert.equal(property.hidden, false);
   assert.equal(property.childNodes[0].hidden, true);
@@ -138,7 +140,7 @@ test('parser-late direct actions are recognized once in declaration order', () =
   document.body.removeChild(ownerContext);
 });
 
-test('nested action activation bypasses property owner controls and publishes one request', () => {
+test('nested action activation bypasses property owner controls and publishes one request', async () => {
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
@@ -147,6 +149,7 @@ test('nested action activation bypasses property owner controls and publishes on
   property.appendChild(nestedAction);
   ownerContext.appendChild(property);
   document.body.appendChild(ownerContext);
+  await Promise.resolve();
   let requests = 0;
   ownerContext.addEventListener(CausewaySemanticEvent.ACTION_REQUEST, event => {
     requests += 1;
