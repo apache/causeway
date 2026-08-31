@@ -5,6 +5,7 @@ Keyboard activation can set time-picker state without presenting a usable visibl
 
 ## What Changes
 
+- Configure editable Vaadin time and date-time controls with the toolkit's minimum supported dropdown interval of 15 minutes while retaining minute-formatted values without seconds.
 - Open the real Vaadin time-picker overlay synchronously from Enter or Space activation while the trusted keyboard event is active, and verify visible popover presentation rather than only the `opened` property.
 - Preserve the clock trigger's Tab and reverse-Tab accessibility without using delayed activation that can lose browser activation context or target a superseded control.
 - Restrict application native textarea styling to unslotted native controls so Vaadin's internal textarea receives only toolkit-owned boundaries and focus indication.
@@ -19,8 +20,8 @@ None.
 
 ### Modified Capabilities
 
-- `vaadin-semantic-editor-families`: Require trusted keyboard activation to present a visible time overlay and prevent native textarea chrome from crossing into Vaadin multiline internals.
-- `domain-web-components`: Require accessible time-picker activation and bounded collection range labels to reflect available authoritative totals.
+- `vaadin-semantic-editor-families`: Use the supported 15-minute dropdown interval, require trusted keyboard activation to present a visible time overlay, and prevent native textarea chrome from crossing into Vaadin multiline internals.
+- `domain-web-components`: Require quarter-hour picker choices with minute-format presentation, accessible time-picker activation, and bounded collection range labels that reflect available authoritative totals.
 - `vaadin-collection-grid-adapter`: Require bounded pager labels to include safe authoritative totals without inventing unavailable counts.
 - `generic-htmx-web-component-viewer`: Qualify the corrected time overlay, multiline boundary, and paged Petclinic collection labels in the executable browser profile.
 

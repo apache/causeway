@@ -169,7 +169,7 @@ a:hover {
 button,
 input:not([slot="input"]),
 select:not([slot="input"]),
-textarea:not([slot="input"]) {
+textarea:not([slot]) {
   max-width: 100%;
   border: 1px solid var(--causeway-border-strong);
   border-radius: var(--causeway-radius-sm);
@@ -199,7 +199,7 @@ button:disabled,
   opacity: 0.62;
 }
 
-:where(a, button, input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot="input"]), [tabindex]):focus-visible {
+:where(a, button, input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot]), [tabindex]):focus-visible {
   outline: 3px solid var(--causeway-focus);
   outline-offset: 2px;
 }
@@ -210,11 +210,11 @@ cw-field-editor > vaadin-text-area:focus-visible {
 
 input:not([slot="input"]),
 select:not([slot="input"]),
-textarea:not([slot="input"]) {
+textarea:not([slot]) {
   padding: 0.45rem 0.6rem;
 }
 
-textarea:not([slot="input"]) {
+textarea:not([slot]) {
   min-height: 6rem;
   resize: vertical;
 }
@@ -446,7 +446,7 @@ cw-property:last-child .causeway-property {
   min-width: 0;
 }
 
-.causeway-property-editor > :where(input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot="input"])) {
+.causeway-property-editor > :where(input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot])) {
   width: 100%;
 }
 
@@ -692,7 +692,7 @@ cw-interaction-controller:has(.causeway-action-prompt-modal, .causeway-action-pr
   gap: var(--causeway-space-1);
 }
 
-.causeway-action-parameter :where(input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot="input"])) {
+.causeway-action-parameter :where(input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot])) {
   width: 100%;
 }
 

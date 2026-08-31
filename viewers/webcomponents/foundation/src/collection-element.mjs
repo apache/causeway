@@ -738,9 +738,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
 
   #renderBoundedPager(window) {
     if (!window) return '';
+    const total = Number.isSafeInteger(window.totalCount) && window.totalCount >= 0
+      ? ` of ${window.totalCount}`
+      : '';
     const range = window.rangeStart == null
       ? 'No items'
-      : `Items ${window.rangeStart}–${window.rangeEnd}`;
+      : `Items ${window.rangeStart}–${window.rangeEnd}${total}`;
     return `<nav class="causeway-collection-pager" aria-label="Collection pages">
       <button type="button" data-causeway-grid-previous${window.hasPrevious ? '' : ' disabled aria-disabled="true"'}>Previous</button>
       <span class="causeway-collection-range" aria-live="polite">${range}</span>
