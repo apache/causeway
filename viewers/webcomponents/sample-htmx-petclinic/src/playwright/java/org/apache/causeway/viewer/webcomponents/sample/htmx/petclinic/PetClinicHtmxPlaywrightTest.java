@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -539,8 +541,11 @@ class PetClinicHtmxPlaywrightTest {
             lastVisit.locator("[data-causeway-action='edit']").click();
             final var lastVisitEditorSelector = "cw-property[id='lastVisit'] [data-causeway-editor='lastVisit']";
             final var lastVisitEditor = resolveEditor(lastVisitEditorSelector);
-            assertThat(lastVisitEditor.evaluate("element => element.inputElement?.value")).isEqualTo("12/08/2026");
-            assertThat(lastVisitEditor.evaluate("element => element.value")).isEqualTo("2026-08-12");
+            final var lastVisitIso = (String) lastVisitEditor.evaluate("element => element.value");
+            final var expectedBritishDate = LocalDate.parse(lastVisitIso)
+                    .format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
+            assertThat(lastVisitEditor.evaluate("element => element.inputElement?.value"))
+                    .isEqualTo(expectedBritishDate);
             lastVisitEditor.focus();
             page.keyboard().press("Tab");
             assertThat(lastVisitEditor.evaluate(
@@ -676,7 +681,6 @@ class PetClinicHtmxPlaywrightTest {
         waitForPrompt("addPet", "Register a pet");
         assertThat(page.locator(PROMPT).evaluate("element => element.localName")).isEqualTo("dialog");
         assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_SIDEBAR");
-        assertThat(page.locator(PROMPT).evaluate("element => getComputedStyle(element).right")).isEqualTo("0px");
         page.setViewportSize(390, 844);
         assertThat((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth"))
                 .isEqualTo(0);

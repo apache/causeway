@@ -460,6 +460,7 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
   assert.match(action.innerHTML, /causeway-action-label">Place a new order<\/span><i class="causeway-action-icon fa-solid fa-cart-shopping"/);
   assert.match(action.innerHTML, /data-tooltip="Creates an order for this customer\.\n\nOrdering is unavailable\."/);
   assert.match(action.innerHTML, /aria-describedby="causeway-action-description-\d+ causeway-action-reason-\d+"/);
+  assert.equal([...action.children].filter(child => child.configuration?.parameter).length, 2);
   assert.equal(action.activate(), false);
 
   let request;
