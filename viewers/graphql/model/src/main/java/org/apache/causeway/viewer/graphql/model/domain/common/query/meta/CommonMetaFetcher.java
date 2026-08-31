@@ -102,7 +102,8 @@ public class CommonMetaFetcher {
                         current.getPojo(),
                         pojo -> objectManager.adapt(pojo).objSpec().getNavigableParent(pojo),
                         bookmarkService::bookmarkFor,
-                        pojo -> objectManager.adapt(pojo).getTitle()))
+                        pojo -> objectManager.adapt(pojo).getTitle(),
+                        this::breadcrumbIcon))
                 .orElseGet(List::of);
     }
 
@@ -111,7 +112,8 @@ public class CommonMetaFetcher {
             final Object currentPojo,
             final Function<Object, Object> parentResolver,
             final Function<Object, Optional<Bookmark>> bookmarkResolver,
-            final Function<Object, String> titleResolver) {
+            final Function<Object, String> titleResolver,
+            final Function<Bookmark, String> iconResolver) {
         final var seen = new HashSet<Bookmark>();
         seen.add(currentBookmark);
         final var ancestors = new ArrayList<Map<String, String>>();
@@ -149,10 +151,15 @@ public class CommonMetaFetcher {
             } catch (RuntimeException ex) {
                 throw breadcrumbFailure("GRAPHQL_BREADCRUMB_TITLE_FAILED", "Navigable parent title resolution failed.");
             }
-            ancestors.add(Map.of(
-                    "logicalTypeName", parentBookmark.get().logicalTypeName(),
-                    "id", parentBookmark.get().identifier(),
-                    "title", title));
+            final var ancestor = new java.util.LinkedHashMap<String, String>();
+            ancestor.put("logicalTypeName", parentBookmark.get().logicalTypeName());
+            ancestor.put("id", parentBookmark.get().identifier());
+            ancestor.put("title", title);
+            final var icon = iconResolver.apply(parentBookmark.get());
+            if (icon != null) {
+                ancestor.put("icon", icon);
+            }
+            ancestors.add(Map.copyOf(ancestor));
             pojo = parentPojo;
         }
         Collections.reverse(ancestors);
@@ -183,6 +190,17 @@ public class CommonMetaFetcher {
 
     public String icon() {
         return resource("icon");
+    }
+
+    private String breadcrumbIcon(final Bookmark ancestor) {
+        if (causewayConfiguration.viewer().graphql().resources().effectiveStructuralMetadataResponseType()
+                == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
+            return null;
+        }
+        return resourcePath.metadata(
+                ancestor,
+                causewayConfiguration.viewer().graphql().metaData().fieldName(),
+                "icon");
     }
 
     private String resource(final String resource) {

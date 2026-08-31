@@ -329,6 +329,8 @@ Causeway retains the visible label, description, disabled reason, authoritative 
 Application renderers, protected values, nulls, references, resources, LOBs, offset, zoned, and legacy temporals, custom values, collections, unsupported values, and unqualified precision retain their established native or application renderer.
 
 `<cw-object-link>` renders title and bookmark identity as a native button with link semantics.
+Its optional `icon` attribute renders a decorative image before the title through the `causeway-object-link-icon` class, with size and fit controlled by `--causeway-object-icon-size` and `--causeway-object-icon-fit`.
+A missing or failed icon leaves the title link usable and does not change its accessible name.
 Enabled activation publishes `causeway-navigation-request` with `{target: {logicalTypeName, id, title}, sourceContext}`.
 The event bubbles, crosses composed component boundaries, and is cancelable.
 The component does not invent a URL or select a router.

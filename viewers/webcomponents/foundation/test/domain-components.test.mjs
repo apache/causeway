@@ -81,12 +81,15 @@ test('registers the complete compact custom-element vocabulary without old alias
 test('object links publish cancelable bubbling and composed semantic navigation', () => {
   const link = new CausewayObjectLinkElement();
   link.target = {logicalTypeName: 'university.staff.StaffMember', id: 'staff-1', title: 'Dr Ada'};
+  link.icon = '/graphql/object/university.staff.StaffMember:staff-1/_meta/icon';
   document.body.appendChild(link);
   let received;
   document.body.addEventListener(NAVIGATION_REQUEST_EVENT, event => {
     received = event;
   });
   assert.match(link.innerHTML, /<button type="button"[^>]*role="link"/);
+  assert.match(link.innerHTML, /<img class="causeway-object-link-icon"[^>]*alt=""[^>]*aria-hidden="true"/);
+  assert.match(link.innerHTML, /src="\/graphql\/object\/university\.staff\.StaffMember:staff-1\/_meta\/icon"/);
   assert.equal(link.activate(), true);
   assert.equal(received.bubbles, true);
   assert.equal(received.composed, true);
@@ -95,8 +98,24 @@ test('object links publish cancelable bubbling and composed semantic navigation'
     id: 'staff-1',
     title: 'Dr Ada'
   });
+  link.icon = null;
+  assert.doesNotMatch(link.innerHTML, /causeway-object-link-icon/);
   link.disabled = true;
   assert.equal(link.activate(), false);
+});
+
+test('object links hide failed decorative icons without changing navigation', () => {
+  const failedImage = document.createElement('img');
+  const link = new CausewayObjectLinkElement();
+  link.target = {logicalTypeName: 'petclinic.Pet', id: 'pet-1', title: 'Basil'};
+  link.icon = '/missing/icon';
+  link.querySelector = selector => selector === '.causeway-object-link-icon' ? failedImage : null;
+  link.render();
+
+  failedImage.dispatchEvent(new Event('error'));
+  assert.equal(failedImage.hidden, true);
+  assert.equal(failedImage.getAttribute('aria-hidden'), 'true');
+  assert.equal(link.activate(), true);
 });
 
 test('actions render semantic states and publish requests only while enabled', async () => {

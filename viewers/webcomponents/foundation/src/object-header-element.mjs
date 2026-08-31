@@ -35,10 +35,13 @@ export class CausewayObjectHeaderElement extends CausewayContextConsumerElement 
       return;
     }
     const metadata = state.data ?? {};
-    const title = metadata.title || `${metadata.logicalTypeName ?? ''}:${metadata.id ?? ''}`;
+    const logicalTypeName = metadata.logicalTypeName ?? '';
+    const id = metadata.id ?? '';
+    const title = metadata.title || `${logicalTypeName}:${id}`;
+    const icon = metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : '';
     this.innerHTML = `<header class="causeway-object-header" aria-busy="false">
-  <h1>${escapeHtml(title)}</h1>
-  <p class="causeway-object-identity" data-logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" data-object-id="${escapeHtml(metadata.id ?? '')}">${escapeHtml(metadata.logicalTypeName ?? '')}:${escapeHtml(metadata.id ?? '')}</p>
+  <h1><cw-object-link class="causeway-object-header-link" logical-type="${escapeHtml(logicalTypeName)}" object-id="${escapeHtml(id)}" title="${escapeHtml(title)}"${icon}></cw-object-link></h1>
+  <p class="causeway-object-identity" data-logical-type="${escapeHtml(logicalTypeName)}" data-object-id="${escapeHtml(id)}">${escapeHtml(logicalTypeName)}:${escapeHtml(id)}</p>
 </header>`;
   }
 }

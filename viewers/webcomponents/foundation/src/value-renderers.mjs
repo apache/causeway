@@ -146,7 +146,8 @@ function innermostType(typeRef) {
 }
 
 function objectLinkMarkup(metadata) {
-  return `<cw-object-link class="causeway-value causeway-value-object-reference" logical-type="${escapeHtml(metadata.logicalTypeName)}" object-id="${escapeHtml(metadata.id)}" title="${escapeHtml(metadata.title ?? metadata.id)}"></cw-object-link>`;
+  const icon = metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : '';
+  return `<cw-object-link class="causeway-value causeway-value-object-reference" logical-type="${escapeHtml(metadata.logicalTypeName)}" object-id="${escapeHtml(metadata.id)}" title="${escapeHtml(metadata.title ?? metadata.id)}"${icon}></cw-object-link>`;
 }
 
 function isLob(value, contentField) {

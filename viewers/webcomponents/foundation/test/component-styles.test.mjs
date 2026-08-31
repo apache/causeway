@@ -50,6 +50,11 @@ test('property editor actions remain compact deterministic icon controls', async
   assert.match(theme, /\.causeway-property-editor-actions button:first-child[\s\S]*?background: var\(--causeway-action-background\)/);
 });
 
+test('object-link icons remain bounded, decorative markup is themeable and header identity is not duplicated', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-object-link-icon \{[\s\S]*?block-size: var\(--causeway-object-icon-size, 1\.5rem\);[\s\S]*?inline-size: var\(--causeway-object-icon-size, 1\.5rem\);[\s\S]*?object-fit: var\(--causeway-object-icon-fit, contain\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-breadcrumbs \.causeway-object-link-identity,\s+\.causeway-object-header-link \.causeway-object-link-identity \{\s+display: none;/);
+});
+
 test('action icons retain component-owned spacing in native and Vaadin controls', () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /gap: var\(--causeway-action-icon-gap, 0\.75rem\);/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-action-control > vaadin-button > \.causeway-action-icon:first-child \{\s+margin-inline-end: var\(--causeway-action-icon-gap, 0\.75rem\);/);

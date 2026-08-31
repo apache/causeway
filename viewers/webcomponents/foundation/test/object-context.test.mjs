@@ -44,6 +44,7 @@ test('coalesces header and property requirements into one initial object read', 
   await waitFor(() => context.state.status === 'ready');
   assert.equal(executor.readCalls.length, 1);
   assert.match(executor.readCalls[0].document, /_meta \{/);
+  assert.match(executor.readCalls[0].document, /\bicon\b/);
   assert.match(executor.readCalls[0].document, /name \{/);
   assert.match(executor.readCalls[0].document, /metadata\s*\{/);
   for (const field of ['friendlyName', 'description', 'multiLine', 'labelPosition']) {
@@ -63,7 +64,12 @@ test('coalesces header and property requirements into one initial object read', 
 
 test('coalesces semantic breadcrumbs and isolates breadcrumb metadata errors', async () => {
   const breadcrumbs = [
-    {logicalTypeName: 'university.University', id: 'u-1', title: 'Example University'},
+    {
+      logicalTypeName: 'university.University',
+      id: 'u-1',
+      title: 'Example University',
+      icon: '/graphql/object/university.University:u-1/_meta/icon'
+    },
     {logicalTypeName: 'university.Faculty', id: 'f-1', title: 'Arts Faculty'}
   ];
   const executor = createRichSchemaFixtureExecutor({
@@ -76,6 +82,7 @@ test('coalesces semantic breadcrumbs and isolates breadcrumb metadata errors', a
   await waitFor(() => context.state.status === 'ready');
 
   assert.equal(executor.readCalls.length, 1);
+  assert.match(executor.readCalls[0].document, /breadcrumbs\s*\{[\s\S]*\bicon\b/);
   assert.match(executor.readCalls[0].document, /breadcrumbs\s*\{[\s\S]*logicalTypeName[\s\S]*id[\s\S]*title/);
   assert.deepEqual(breadcrumbState.data.breadcrumbs, breadcrumbs);
   assert.equal(breadcrumbState.data.title, 'Classics Department');
@@ -99,6 +106,24 @@ test('coalesces semantic breadcrumbs and isolates breadcrumb metadata errors', a
   assert.equal(failingBreadcrumbs.status, 'partial-error');
   assert.equal(successfulHeader.status, 'ready');
   assert.equal(successfulHeader.data.title, 'Classics Department');
+});
+
+test('omits icon selections when object and breadcrumb metadata do not advertise them', async () => {
+  const types = createRichSchemaTypes();
+  for (const [name, type] of types) {
+    types.set(name, {...type, fields: type.fields.filter(field => field.name !== 'icon')});
+  }
+  const executor = createRichSchemaFixtureExecutor({types});
+  const context = createContext(executor);
+  let headerState;
+  let breadcrumbState;
+  context.registerRequirement({kind: 'header'}, state => { headerState = state; });
+  context.registerRequirement({kind: 'breadcrumbs'}, state => { breadcrumbState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  assert.equal(headerState.status, 'ready');
+  assert.equal(breadcrumbState.status, 'ready');
+  assert.doesNotMatch(executor.readCalls[0].document, /\bicon\b/);
 });
 
 test('reports breadcrumbs unsupported when metadata lacks the shared entry field', async () => {
@@ -297,9 +322,13 @@ test('object-valued property projection omits an absent metadata version', async
   assert.match(chairSelection, /_meta\s*\{[\s\S]*?id/);
   assert.match(chairSelection, /logicalTypeName/);
   assert.match(chairSelection, /title/);
+  assert.match(chairSelection, /icon/);
   assert.doesNotMatch(chairSelection, /version/);
   assert.deepEqual(chairState.data.get._meta, {
-    id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', title: 'Dr Ada'
+    id: 'staff-1',
+    logicalTypeName: 'university.staff.StaffMember',
+    title: 'Dr Ada',
+    icon: '/graphql/object/university.staff.StaffMember:staff-1/_meta/icon'
   });
 });
 

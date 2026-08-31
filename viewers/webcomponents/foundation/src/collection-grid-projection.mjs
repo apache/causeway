@@ -100,7 +100,8 @@ function projectRow({row, rowIndex, columns, rowDescription, errors, rendererReg
   const identity = Object.freeze({
     logicalTypeName: String(metadata.logicalTypeName),
     id: String(metadata.id),
-    title: String(metadata.title ?? metadata.id)
+    title: String(metadata.title ?? metadata.id),
+    icon: metadata.icon ? String(metadata.icon) : ''
   });
   const cells = [Object.freeze({
     member: '_meta',
@@ -111,7 +112,7 @@ function projectRow({row, rowIndex, columns, rowDescription, errors, rendererReg
     rendererId: 'object-link',
     standard: true,
     kind: 'reference',
-    html: `<cw-object-link logical-type="${escapeHtml(identity.logicalTypeName)}" object-id="${escapeHtml(identity.id)}" title="${escapeHtml(identity.title)}"></cw-object-link>`
+    html: `<cw-object-link logical-type="${escapeHtml(identity.logicalTypeName)}" object-id="${escapeHtml(identity.id)}" title="${escapeHtml(identity.title)}"${identity.icon ? ` icon="${escapeHtml(identity.icon)}"` : ''}></cw-object-link>`
   })];
   for (const column of columns) {
     const property = row?.[column.member] ?? null;

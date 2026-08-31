@@ -27,6 +27,7 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLNonNull;
 import graphql.schema.GraphQLObjectType;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 
@@ -50,9 +51,9 @@ public class CommonMetaBreadcrumbs extends Element {
         if (existing.isPresent()) {
             return existing.get();
         }
-        final var type = GraphQLObjectType.newObject()
+        final var typeBuilder = GraphQLObjectType.newObject()
                 .name(ENTRY_TYPE_NAME)
-                .description("Bookmark identity and title for one navigable ancestor.")
+                .description("Bookmark identity, title and optional icon for one navigable ancestor.")
                 .field(newFieldDefinition()
                         .name("logicalTypeName")
                         .type(GraphQLNonNull.nonNull(Scalars.GraphQLString)))
@@ -61,8 +62,14 @@ public class CommonMetaBreadcrumbs extends Element {
                         .type(GraphQLNonNull.nonNull(Scalars.GraphQLString)))
                 .field(newFieldDefinition()
                         .name("title")
-                        .type(GraphQLNonNull.nonNull(Scalars.GraphQLString)))
-                .build();
+                        .type(GraphQLNonNull.nonNull(Scalars.GraphQLString)));
+        if (context.causewayConfiguration.viewer().graphql().resources().effectiveStructuralMetadataResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
+            typeBuilder.field(newFieldDefinition()
+                    .name("icon")
+                    .type(Scalars.GraphQLString));
+        }
+        final var type = typeBuilder.build();
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(type);
         return context.graphQLTypeRegistry.lookup(ENTRY_TYPE_NAME, GraphQLObjectType.class).orElse(type);
     }

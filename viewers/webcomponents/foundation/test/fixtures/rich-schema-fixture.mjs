@@ -74,6 +74,7 @@ export function createRichSchemaTypes() {
       field('logicalTypeName', null, scalar('String')),
       field('version', null, scalar('String')),
       field('title', null, scalar('String')),
+      field('icon', null, scalar('String')),
       field('breadcrumbs', null, list(named(BREADCRUMB_TYPE))),
       field('grid', null, scalar('String')),
       field('layout', null, scalar('String')),
@@ -82,7 +83,8 @@ export function createRichSchemaTypes() {
     [BREADCRUMB_TYPE, objectType(BREADCRUMB_TYPE, 'Navigable breadcrumb', [
       field('logicalTypeName', null, scalar('String')),
       field('id', null, scalar('ID')),
-      field('title', null, scalar('String'))
+      field('title', null, scalar('String')),
+      field('icon', null, scalar('String'))
     ])],
     [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, 'Member metadata', [
       field('friendlyName', null, scalar('String')),
@@ -155,6 +157,7 @@ export function createRichSchemaTypes() {
       field('logicalTypeName', null, scalar('String')),
       field('version', null, scalar('String')),
       field('title', null, scalar('String')),
+      field('icon', null, scalar('String')),
       field('breadcrumbs', null, list(named(BREADCRUMB_TYPE)))
     ])],
     [STAFF_NAME_TYPE, propertyType(STAFF_NAME_TYPE)],
@@ -314,6 +317,7 @@ export function departmentObjectData({
       logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
       version,
       title: 'Classics Department',
+      icon: '/graphql/object/university.dept.Department:42/_meta/icon',
       breadcrumbs,
       grid: '/graphql/object/university.dept.Department:42/_meta/grid',
       layout: null,
@@ -338,7 +342,7 @@ export function departmentObjectData({
     chair: {
       hidden: false,
       disabled: null,
-      get: {_meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', version: '3', title: 'Dr Ada'}}
+      get: {_meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', version: '3', title: 'Dr Ada', icon: '/graphql/object/university.staff.StaffMember:staff-1/_meta/icon'}}
     },
     prospectus: {
       hidden: false,

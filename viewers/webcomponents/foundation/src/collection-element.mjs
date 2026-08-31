@@ -758,7 +758,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   #renderDefaultRows(rows) {
     return `<ul class="causeway-collection-rows">${rows.map(row => {
       const metadata = row?._meta ?? {};
-      return `<li><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></cw-object-link></li>`;
+      return `<li><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"${metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : ''}></cw-object-link></li>`;
     }).join('')}</ul>`;
   }
 
@@ -767,7 +767,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const body = rows.map((row, rowIndex) => {
       const metadata = row?._meta ?? {};
       const key = gridRowKey(row);
-      const item = `<td data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_meta" data-causeway-grid-role="object-link"><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></cw-object-link></td>`;
+      const item = `<td data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_meta" data-causeway-grid-role="object-link"><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"${metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : ''}></cw-object-link></td>`;
       const cells = this._columns.map(column => this.#renderCell(row, rowIndex, column)).join('');
       return `<tr data-row-index="${rowIndex}" data-causeway-grid-row-key="${escapeHtml(key)}">${item}${cells}</tr>`;
     }).join('');

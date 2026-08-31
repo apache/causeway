@@ -46,12 +46,18 @@ test('standard value renderers cover scalars, enums, nulls and object references
   assert.match(nullResult.html, /No value/);
 
   const objectResult = renderCausewayValue({
-    value: {_meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', title: 'Dr Ada'}},
+    value: {_meta: {
+      id: 'staff-1',
+      logicalTypeName: 'university.staff.StaffMember',
+      title: 'Dr Ada',
+      icon: '/graphql/object/university.staff.StaffMember:staff-1/_meta/icon'
+    }},
     descriptor: descriptor(object)
   });
   assert.equal(objectResult.rendererId, 'object-reference');
   assert.match(objectResult.html, /cw-object-link/);
   assert.match(objectResult.html, /staff-1/);
+  assert.match(objectResult.html, /icon="\/graphql\/object\/university\.staff\.StaffMember:staff-1\/_meta\/icon"/);
 });
 
 test('standard value renderers cover Blob and Clob resource representations', () => {

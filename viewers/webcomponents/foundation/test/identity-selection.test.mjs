@@ -36,14 +36,14 @@ function typesWithMetadata(metadataFields) {
   ]);
 }
 
-test('metadata selection preserves all advertised versioned identity fields', () => {
-  const types = typesWithMetadata(['id', 'logicalTypeName', 'title', 'version']);
+test('metadata selection preserves all advertised versioned identity and icon fields', () => {
+  const types = typesWithMetadata(['id', 'logicalTypeName', 'title', 'version', 'icon']);
 
   assert.deepEqual(metadataSelectionForType(named('Example'), types), {
-    _meta: {id: true, logicalTypeName: true, title: true, version: true}
+    _meta: {id: true, logicalTypeName: true, title: true, version: true, icon: true}
   });
   assert.deepEqual(resultSelectionForType(named('Example'), types), {
-    _meta: {id: true, logicalTypeName: true, title: true, version: true}
+    _meta: {id: true, logicalTypeName: true, title: true, version: true, icon: true}
   });
 });
 
@@ -72,14 +72,14 @@ test('bounded described unions select concrete metadata through inline fragments
     ['Versioned', type('Versioned', [field('_meta', named('VersionedMeta'))])],
     ['VersionedMeta', type('VersionedMeta', ['id', 'logicalTypeName', 'version'].map(name => field(name, scalar('String'))))],
     ['Versionless', type('Versionless', [field('_meta', named('VersionlessMeta'))])],
-    ['VersionlessMeta', type('VersionlessMeta', ['id', 'logicalTypeName', 'title'].map(name => field(name, scalar('String'))))]
+    ['VersionlessMeta', type('VersionlessMeta', ['id', 'logicalTypeName', 'title', 'icon'].map(name => field(name, scalar('String'))))]
   ]);
 
   assert.deepEqual(resultSelectionForType(named('ExampleUnion', 'UNION'), types), {
     __typename: true,
     __fragments: {
       Versioned: {_meta: {id: true, logicalTypeName: true, version: true}},
-      Versionless: {_meta: {id: true, logicalTypeName: true, title: true}}
+      Versionless: {_meta: {id: true, logicalTypeName: true, title: true, icon: true}}
     }
   });
 });

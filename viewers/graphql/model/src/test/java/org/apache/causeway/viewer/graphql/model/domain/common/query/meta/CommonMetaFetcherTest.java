@@ -49,13 +49,31 @@ class CommonMetaFetcherTest {
     }
 
     @Test
+    void includesAvailableAncestorIconsWithoutMakingThemIdentity() {
+        final var breadcrumbs = CommonMetaFetcher.traverseBreadcrumbs(
+                bookmark("Pet", "pet-1"),
+                "pet",
+                pojo -> "pet".equals(pojo) ? "owner" : null,
+                pojo -> Optional.of(bookmark("Owner", "owner-1")),
+                pojo -> "Owner title",
+                ancestor -> "/graphql/" + ancestor.identifier() + "/_meta/icon");
+
+        assertThat(breadcrumbs).containsExactly(Map.of(
+                "logicalTypeName", "test.Owner",
+                "id", "owner-1",
+                "title", "Owner title",
+                "icon", "/graphql/owner-1/_meta/icon"));
+    }
+
+    @Test
     void stopsBeforeAnUnbookmarkableParent() {
         assertThat(CommonMetaFetcher.traverseBreadcrumbs(
                 bookmark("Child", "child-1"),
                 "child",
                 pojo -> "child".equals(pojo) ? "transient" : null,
                 pojo -> Optional.empty(),
-                pojo -> "secret transient title"))
+                pojo -> "secret transient title",
+                bookmark -> "/icons/" + bookmark.identifier()))
                 .isEmpty();
     }
 
@@ -67,7 +85,8 @@ class CommonMetaFetcherTest {
                 "child",
                 cyclicParents::get,
                 pojo -> Optional.of(bookmark(capitalize((String) pojo), pojo + "-1")),
-                pojo -> "Title " + pojo))
+                pojo -> "Title " + pojo,
+                bookmark -> "/icons/" + bookmark.identifier()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("GRAPHQL_BREADCRUMB_CYCLE");
 
@@ -80,7 +99,8 @@ class CommonMetaFetcherTest {
                 0,
                 parents::get,
                 pojo -> Optional.of(bookmark("Node", pojo.toString())),
-                pojo -> "Node " + pojo))
+                pojo -> "Node " + pojo,
+                bookmark -> "/icons/" + bookmark.identifier()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("GRAPHQL_BREADCRUMB_DEPTH_EXCEEDED")
                 .hasMessageContaining("32");
@@ -92,7 +112,8 @@ class CommonMetaFetcherTest {
                     throw new IllegalArgumentException("secret domain exception");
                 },
                 pojo -> Optional.empty(),
-                Object::toString))
+                Object::toString,
+                bookmark -> "/icons/" + bookmark.identifier()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("GRAPHQL_BREADCRUMB_PARENT_FAILED")
                 .hasMessageNotContaining("secret domain exception");
@@ -107,7 +128,8 @@ class CommonMetaFetcherTest {
                 current,
                 parents::get,
                 pojo -> Optional.ofNullable(bookmarks.get(pojo)),
-                pojo -> "Title " + pojo);
+                pojo -> "Title " + pojo,
+                bookmark -> null);
     }
 
     private static Bookmark bookmark(final String type, final String id) {
