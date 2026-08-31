@@ -169,6 +169,12 @@ type RICHSchema {
 
 "Canonical local metadata shared by known rich member wrappers."
 type RichMemberMetadata {
+  "Whether canonical action semantics require confirmation, or null."
+  areYouSure: Boolean
+  "Static action Font Awesome quick notation, or null."
+  cssClassFa: String
+  "Static action Font Awesome LEFT or RIGHT position, or null."
+  cssClassFaPosition: String
   "Canonical translated description, or null."
   description: String
   "Canonical translated friendly name."
@@ -183,6 +189,8 @@ type RichMemberMetadata {
   pattern: String
   "Java Pattern flags, or null."
   patternFlags: Int
+  "Resolved canonical action prompt-style enum name, or null."
+  promptStyle: String
   "Positive typical input length, or null."
   typicalLength: Int
 }
@@ -569,8 +577,14 @@ type rich__causeway_applib_UserMemento__roles__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_applib_UserMemento__roles__gqlv_collection_window
 }
 
@@ -584,6 +598,9 @@ type rich__causeway_applib_UserMemento__roles__gqlv_collection_window {
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_applib_RoleMemento]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -703,8 +720,14 @@ type rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection_window
 }
 
@@ -718,6 +741,9 @@ type rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection_wi
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_conf_ConfigurationProperty]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -745,8 +771,14 @@ type rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection_window
 }
 
@@ -760,6 +792,9 @@ type rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection_window
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_conf_ConfigurationProperty]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -774,8 +809,14 @@ type rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection_window
 }
 
@@ -789,6 +830,9 @@ type rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection_wind
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_conf_ConfigurationProperty]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -888,8 +932,14 @@ type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection_window
 }
 
@@ -903,6 +953,9 @@ type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection_window 
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -1378,8 +1431,14 @@ type rich__causeway_feat_ApplicationType__actions__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_feat_ApplicationType__actions__gqlv_collection_window
 }
 
@@ -1393,6 +1452,9 @@ type rich__causeway_feat_ApplicationType__actions__gqlv_collection_window {
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_feat_ApplicationTypeAction]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -1407,8 +1469,14 @@ type rich__causeway_feat_ApplicationType__collections__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_feat_ApplicationType__collections__gqlv_collection_window
 }
 
@@ -1422,6 +1490,9 @@ type rich__causeway_feat_ApplicationType__collections__gqlv_collection_window {
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_feat_ApplicationTypeCollection]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -1482,8 +1553,14 @@ type rich__causeway_feat_ApplicationType__properties__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__causeway_feat_ApplicationType__properties__gqlv_collection_window
 }
 
@@ -1497,6 +1574,9 @@ type rich__causeway_feat_ApplicationType__properties__gqlv_collection_window {
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__causeway_feat_ApplicationTypeProperty]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -5717,8 +5797,14 @@ type rich__university_dept_Department__configuredStaffMembers__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__university_dept_Department__configuredStaffMembers__gqlv_collection_window
 }
 
@@ -5732,6 +5818,9 @@ type rich__university_dept_Department__configuredStaffMembers__gqlv_collection_w
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__university_dept_StaffMember]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -5775,8 +5864,14 @@ type rich__university_dept_Department__disabledStaffMembers__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__university_dept_Department__disabledStaffMembers__gqlv_collection_window
 }
 
@@ -5790,6 +5885,9 @@ type rich__university_dept_Department__disabledStaffMembers__gqlv_collection_win
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__university_dept_StaffMember]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -5819,8 +5917,14 @@ type rich__university_dept_Department__hiddenStaffMembers__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__university_dept_Department__hiddenStaffMembers__gqlv_collection_window
 }
 
@@ -5834,6 +5938,9 @@ type rich__university_dept_Department__hiddenStaffMembers__gqlv_collection_windo
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__university_dept_StaffMember]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -5886,8 +5993,14 @@ type rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection_window
 }
 
@@ -5901,6 +6014,9 @@ type rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__university_dept_StaffMember]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -5926,8 +6042,14 @@ type rich__university_dept_Department__people__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__university_dept_Department__people__gqlv_collection_window
 }
 
@@ -5941,6 +6063,9 @@ type rich__university_dept_Department__people__gqlv_collection_window {
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__university_dept_Person__gqlv_union]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -5994,8 +6119,14 @@ type rich__university_dept_Department__staffMembers__gqlv_collection {
   window(
     "Zero-based row offset."
     offset: Int! = 0,
+    "Optional CollectionFilterService quick-search text, bounded to 256 characters."
+    search: String,
     "Positive row count, not exceeding the configured maximum of 100."
-    size: Int! = 20
+    size: Int! = 20,
+    "Optional accepted Causeway table-column member id."
+    sortBy: String,
+    "Direction for an optional sort member."
+    sortDirection: rich__gqlv_collection_window_sort_direction! = ASCENDING
   ): rich__university_dept_Department__staffMembers__gqlv_collection_window
 }
 
@@ -6009,6 +6140,9 @@ type rich__university_dept_Department__staffMembers__gqlv_collection_window {
   requestedSize: Int!
   returnedCount: Int!
   rows: [rich__university_dept_StaffMember]
+  searchPrompt: String
+  searchSupported: Boolean!
+  sortableMembers: [String!]!
   totalCount: Int
 }
 
@@ -7629,6 +7763,14 @@ enum rich__gqlv_collection_window_ordering {
   CONFIGURED
   "The materialized collection encounter order was retained without a cross-request stability guarantee."
   ENCOUNTER
+  "A requested accepted Causeway table-column sort was applied."
+  REQUESTED
+}
+
+"Direction for a requested collection-window sort."
+enum rich__gqlv_collection_window_sort_direction {
+  ASCENDING
+  DESCENDING
 }
 
 enum rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum {

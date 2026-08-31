@@ -64,6 +64,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     this.descriptionId = `causeway-action-description-${sequence}`;
     this.reasonId = `causeway-action-reason-${sequence}`;
     this._parameterPresentations = [];
+    this._connectionGeneration = 0;
     this.addEventListener(CausewaySemanticEvent.ACTION_PARAMETER_CONFIGURATION, event => {
       if (event.target?.parentNode !== this) return;
       event.stopPropagation();
@@ -85,13 +86,20 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
+    const generation = ++this._connectionGeneration;
     captureDeclarativeActionParameters(this);
     this.#captureParameterPresentations();
     document.addEventListener(CAUSEWAY_ACTION_WIDGET_POLICY_EVENT, this._actionWidgetPolicyListener);
-    super.connectedCallback();
+    queueMicrotask(() => {
+      if (!this.isConnected || generation !== this._connectionGeneration) return;
+      captureDeclarativeActionParameters(this);
+      this.#captureParameterPresentations();
+      super.connectedCallback();
+    });
   }
 
   disconnectedCallback() {
+    this._connectionGeneration += 1;
     document.removeEventListener(CAUSEWAY_ACTION_WIDGET_POLICY_EVENT, this._actionWidgetPolicyListener);
     super.disconnectedCallback();
   }
@@ -175,17 +183,17 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
       : '';
     if (['idle', 'schema-loading', 'object-loading'].includes(state.status)) {
       this.hidden = false;
-      this.innerHTML = `<div class="causeway-action causeway-loading" aria-busy="true"><span>${escapeHtml(label)}</span>${descriptionMarkup}<span role="status">Loading action…</span></div>`;
+      this.#renderMarkup(`<div class="causeway-action causeway-loading" aria-busy="true"><span>${escapeHtml(label)}</span>${descriptionMarkup}<span role="status">Loading action…</span></div>`);
       return;
     }
     if (['terminal-error', 'unsupported', 'partial-error'].includes(state.status)) {
       this.hidden = false;
-      this.innerHTML = `<div class="causeway-action causeway-error" role="alert"><span>${escapeHtml(label)}</span>${descriptionMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`;
+      this.#renderMarkup(`<div class="causeway-action causeway-error" role="alert"><span>${escapeHtml(label)}</span>${descriptionMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`);
       return;
     }
     if (state.data?.hidden === true) {
       this.hidden = true;
-      this.innerHTML = '';
+      this.#renderMarkup('');
       return;
     }
     this.hidden = false;
@@ -210,11 +218,11 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     const tooltipAttributes = tooltip
       ? ` class="causeway-action-control-tooltip" data-tooltip="${escapeHtml(tooltip)}"${disabledReason ? ' tabindex="0"' : ''}`
       : '';
-    this.innerHTML = `<div class="causeway-action${disabledReason ? ' causeway-disabled' : ''}">
+    this.#renderMarkup(`<div class="causeway-action${disabledReason ? ' causeway-disabled' : ''}">
   <span${tooltipAttributes}>${controlMarkup}</span>
   ${descriptionMarkup}
   ${disabledReason ? `<span id="${this.reasonId}" class="causeway-action-disabled-reason causeway-visually-hidden">${escapeHtml(disabledReason)}</span>` : ''}
-</div>`;
+</div>`);
   }
 
   actionPresentation(state = this.componentState) {
@@ -234,6 +242,19 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
   #acceptParameterPresentation(configuration) {
     const parameters = normalizeActionParameterConfigurations([...this._parameterPresentations, configuration]);
     this._parameterPresentations = [...parameters];
+  }
+
+  #renderMarkup(markup) {
+    const declarations = [...(this.children ?? this.childNodes ?? [])]
+      .filter(child => child?.localName === 'cw-parameter' || child?.configuration?.parameter);
+    for (const declaration of declarations) {
+      this.#acceptParameterPresentation(declaration.configuration ?? actionParameterConfiguration(declaration));
+      if (declaration.parentNode === this) this.removeChild(declaration);
+    }
+    this.innerHTML = markup;
+    for (const declaration of declarations) {
+      this.appendChild(declaration);
+    }
   }
 
   #captureParameterPresentations() {
