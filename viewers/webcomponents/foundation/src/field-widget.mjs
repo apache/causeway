@@ -384,7 +384,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
       } else {
         if (this.dataset.control === 'select') control.items = this.#items();
         if (['time-picker', 'date-time-picker'].includes(this.dataset.control)) {
-          control.step = viewMode ? 0.001 : 60;
+          control.step = viewMode ? 0.001 : 900;
         }
         control.value = this.dataset.value ?? '';
         if (this.dataset.rows && 'maxRows' in control) {
@@ -592,12 +592,10 @@ function qualifyCausewayPickerTrigger(picker, label, operable, {accessibleSuffix
       if (!['Enter', ' '].includes(event.key)) return;
       event.preventDefault();
       event.stopPropagation();
-      setTimeout(() => {
-        if (trigger.isConnected === false && picker.isConnected === false) return;
-        picker.inputElement?.focus?.();
-        if (typeof picker.open === 'function') picker.open();
-        else picker.opened = true;
-      }, 0);
+      if (trigger.isConnected === false || picker.isConnected === false) return;
+      picker.inputElement?.focus?.();
+      if (typeof picker.open === 'function') picker.open();
+      else picker.opened = true;
     });
     qualifiedPickerTriggers.add(trigger);
   }

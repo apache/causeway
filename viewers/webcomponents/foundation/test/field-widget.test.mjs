@@ -145,17 +145,21 @@ test('local date presentation follows bounded document and browser locales rever
   assert.equal(causewayDatePickerI18n('%%%').formatDate({year: 2026, month: 7, day: 30}), '8/30/2026');
 });
 
-test('calendar trigger gains bounded button semantics and keyboard activation only when operable', async () => {
+test('calendar trigger gains bounded button semantics and synchronous keyboard activation only when operable', () => {
   const trigger = document.createElement('div');
   trigger.setAttribute('aria-hidden', 'true');
+  trigger.isConnected = true;
   let activations = 0;
+  let openCalls = 0;
   trigger.click = () => { activations += 1; };
   const input = document.createElement('input');
   const picker = {
     disabled: false,
     readOnly: false,
     opened: false,
+    isConnected: true,
     inputElement: input,
+    open() { this.opened = true; openCalls += 1; },
     shadowRoot: {querySelector: selector => selector === '[part~="toggle-button"]' ? trigger : null}
   };
   assert.equal(qualifyCausewayCalendarTrigger(picker, 'Last Visit'), trigger);
@@ -185,9 +189,11 @@ test('calendar trigger gains bounded button semantics and keyboard activation on
     keyup.key = key;
     trigger.dispatchEvent(keyup);
     assert.equal(keyup.defaultPrevented, true);
+    assert.equal(picker.opened, true);
+    assert.equal(document.activeElement, input);
+    picker.opened = false;
   }
-  await new Promise(resolve => setTimeout(resolve, 0));
-  assert.equal(picker.opened, true);
+  assert.equal(openCalls, 2);
   assert.equal(activations, 0);
   trigger.click();
   assert.equal(activations, 1);
@@ -195,17 +201,21 @@ test('calendar trigger gains bounded button semantics and keyboard activation on
   assert.equal(qualifyCausewayCalendarTrigger({...picker, disabled: true}, 'Last Visit'), null);
 });
 
-test('time trigger gains bounded button semantics and keyboard and pointer activation only when operable', async () => {
+test('time trigger gains bounded button semantics and synchronous keyboard and pointer activation', () => {
   const trigger = document.createElement('div');
   trigger.setAttribute('aria-hidden', 'true');
+  trigger.isConnected = true;
   let activations = 0;
+  let openCalls = 0;
   trigger.click = () => { activations += 1; };
   const input = document.createElement('input');
   const picker = {
     disabled: false,
     readOnly: false,
     opened: false,
+    isConnected: true,
     inputElement: input,
+    open() { this.opened = true; openCalls += 1; },
     shadowRoot: {querySelector: selector => selector === '[part~="toggle-button"]' ? trigger : null}
   };
   assert.equal(qualifyCausewayTimeTrigger(picker, 'Visit At'), trigger);
@@ -238,18 +248,27 @@ test('time trigger gains bounded button semantics and keyboard and pointer activ
     keyup.key = key;
     trigger.dispatchEvent(keyup);
     assert.equal(keyup.defaultPrevented, true);
+    assert.equal(picker.opened, true);
+    assert.equal(document.activeElement, input);
+    picker.opened = false;
   }
-  await new Promise(resolve => setTimeout(resolve, 0));
-  assert.equal(picker.opened, true);
+  assert.equal(openCalls, 2);
   assert.equal(activations, 0);
   trigger.click();
   assert.equal(activations, 1);
+  trigger.isConnected = false;
+  picker.isConnected = false;
+  const staleKeyup = new Event('keyup', {cancelable: true});
+  staleKeyup.key = 'Enter';
+  trigger.dispatchEvent(staleKeyup);
+  assert.equal(picker.opened, false);
+  assert.equal(openCalls, 2);
   assert.equal(qualifyCausewayTimeTrigger({...picker, readOnly: true}, 'Visit At'), null);
   assert.equal(qualifyCausewayTimeTrigger({...picker, disabled: true}, 'Visit At'), null);
   assert.equal(qualifyCausewayTimeTrigger({...picker, shadowRoot: {querySelector: () => null}}, 'Visit At'), null);
 });
 
-test('editable temporal adapters use minute steps and qualify standalone and composite clock triggers', async () => {
+test('editable temporal adapters use supported quarter-hour dropdown steps and qualify clock triggers', async () => {
   configureCausewayFieldWidgets({
     families: ['local-temporal'],
     moduleUrls: {'local-temporal': fakeLocalTemporalModule}
@@ -264,7 +283,7 @@ test('editable temporal adapters use minute steps and qualify standalone and com
   document.body.appendChild(timeEditor);
   await new Promise(resolve => setTimeout(resolve, 0));
   const timeControl = timeEditor.childNodes[0];
-  assert.equal(timeControl.step, 60);
+  assert.equal(timeControl.step, 900);
   assert.equal(timeControl.value, '13:14:15.123');
   assert.equal(timeControl._trigger.getAttribute('aria-label'), 'Open Visit At time picker');
   assert.equal(timeControl._trigger.hasAttribute('data-causeway-time-trigger'), true);
@@ -279,7 +298,7 @@ test('editable temporal adapters use minute steps and qualify standalone and com
   document.body.appendChild(dateTimeEditor);
   await new Promise(resolve => setTimeout(resolve, 0));
   const dateTimeControl = dateTimeEditor.childNodes[0];
-  assert.equal(dateTimeControl.step, 60);
+  assert.equal(dateTimeControl.step, 900);
   assert.equal(dateTimeControl.value, '2026-08-24T13:14:15.123');
   assert.equal(dateTimeControl._datePicker._trigger.hasAttribute('data-causeway-calendar-trigger'), true);
   assert.equal(dateTimeControl._timePicker._trigger.hasAttribute('data-causeway-time-trigger'), true);

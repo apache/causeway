@@ -237,6 +237,8 @@ class PetClinicHtmxPlaywrightTest {
         page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search-clear]").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.totalCount === 4");
         waitForCollectionRows("petOwners", 2);
+        assertThat(page.locator("cw-collection[id='petOwners'] .causeway-collection-range").textContent())
+                .isEqualTo("Items 1–2 of 4");
         page.locator("cw-collection[id='petOwners'] [data-causeway-collection-sort='name']").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.ordering === 'REQUESTED'");
         assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-collection-sort='name']").getAttribute("aria-label"))
@@ -245,6 +247,8 @@ class PetClinicHtmxPlaywrightTest {
         page.locator("cw-collection[id='petOwners'] [data-causeway-grid-next]").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.offset === 2");
         waitForCollectionRows("petOwners", 2);
+        assertThat(page.locator("cw-collection[id='petOwners'] .causeway-collection-range").textContent())
+                .isEqualTo("Items 3–4 of 4");
         assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-grid-previous]").isVisible()).isTrue();
         clickObjectLink("Mary Smith");
         waitForRoute("petclinic.PetOwner", "s_owner-mary");
@@ -281,14 +285,30 @@ class PetClinicHtmxPlaywrightTest {
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.ordering === 'REQUESTED'");
         assertThat(page.locator("cw-collection[id='pets'] cw-action[id='addPet']").isVisible()).isTrue();
         assertThat(page.locator("cw-collection[id='visits']").getAttribute("paged")).isEqualTo("1");
-        assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").isVisible()).isTrue();
-        page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === 1");
-        waitForCollectionRows("visits", 1);
-        assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-previous]").isVisible()).isTrue();
-        page.locator("cw-collection[id='visits'] [data-causeway-grid-previous]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === 0");
-        waitForCollectionRows("visits", 1);
+        final var visitTotal = ((Number) page.locator("cw-collection[id='visits']")
+                .evaluate("element => element.collectionState.window.totalCount")).intValue();
+        assertThat(visitTotal).isGreaterThan(1);
+        assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
+                .isEqualTo("Items 1–1 of " + visitTotal);
+        for (int offset = 1; offset < visitTotal; offset++) {
+            assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").isVisible()).isTrue();
+            page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").click();
+            final var expectedOffset = offset;
+            page.waitForFunction("offset => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === offset", expectedOffset);
+            waitForCollectionRows("visits", 1);
+            assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
+                    .isEqualTo("Items " + (offset + 1) + "–" + (offset + 1) + " of " + visitTotal);
+        }
+        assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").isDisabled()).isTrue();
+        for (int offset = visitTotal - 2; offset >= 0; offset--) {
+            assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-previous]").isVisible()).isTrue();
+            page.locator("cw-collection[id='visits'] [data-causeway-grid-previous]").click();
+            final var expectedOffset = offset;
+            page.waitForFunction("offset => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === offset", expectedOffset);
+            waitForCollectionRows("visits", 1);
+        }
+        assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
+                .isEqualTo("Items 1–1 of " + visitTotal);
         assertCollectionHeading("pets", "Companion animals", "Pets currently registered to this owner.");
         assertCollectionHeading("visits", "Visit history", "All visits recorded for this owner's pets.");
         final var visitDisabledReason = page.locator("cw-collection[id='visits'] .causeway-visually-hidden");
@@ -784,10 +804,10 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(reason.evaluate("element => element.value")).isEqualTo("Routine check-up");
         if (!nativeToolkit()) {
             assertSingleVaadinMultilineFocus(reason);
-            assertThat(visitAt.evaluate("element => element.step")).isEqualTo(60);
+            assertThat(visitAt.evaluate("element => element.step")).isEqualTo(900);
             final var timePicker = visitAt.locator("vaadin-time-picker");
             assertThat(timePicker.count()).isEqualTo(1);
-            assertThat(timePicker.evaluate("element => element.step")).isEqualTo(60);
+            assertThat(timePicker.evaluate("element => element.step")).isEqualTo(900);
             assertThat(String.valueOf(timePicker.evaluate("element => element.inputElement?.value")))
                     .doesNotMatch(".*:[0-9]{2}:[0-9]{2}.*")
                     .doesNotContain(".");
@@ -797,6 +817,17 @@ class PetClinicHtmxPlaywrightTest {
             timePicker.evaluate("element => element.inputElement.focus()");
             page.waitForTimeout(750);
             final var mutationsBeforePickerUse = graphQLMutationCount("bookVisit");
+            final var visibleTimeOverlay = """
+                    selector => {
+                      const picker = document.querySelector(selector)?.querySelector('vaadin-time-picker');
+                      const overlay = picker?.shadowRoot?.querySelector('vaadin-time-picker-overlay');
+                      const bounds = overlay?.getBoundingClientRect();
+                      return picker?.opened === true
+                        && overlay?.matches(':popover-open')
+                        && bounds?.width > 0
+                        && bounds?.height > 0;
+                    }
+                    """;
             timePicker.evaluate("element => element.inputElement.focus()");
             assertThat(timePicker.evaluate("element => element.inputElement.matches(':focus')")).isEqualTo(true);
             page.keyboard().press("Tab");
@@ -804,11 +835,16 @@ class PetClinicHtmxPlaywrightTest {
                     .as("Tab should move focus from the time input to its clock trigger")
                     .isEqualTo(true);
             timeTrigger.press("Enter");
-            page.waitForFunction("selector => document.querySelector(selector)?.querySelector('vaadin-time-picker')?.opened === true", parameter("visitAt"));
+            page.waitForFunction(visibleTimeOverlay, parameter("visitAt"));
+            timePicker.evaluate("element => element.close()");
+            page.waitForTimeout(50);
+            timeTrigger.focus();
+            timeTrigger.press("Space");
+            page.waitForFunction(visibleTimeOverlay, parameter("visitAt"));
             timePicker.evaluate("element => element.close()");
             page.waitForTimeout(50);
             timeTrigger.click();
-            page.waitForFunction("selector => document.querySelector(selector)?.querySelector('vaadin-time-picker')?.opened === true", parameter("visitAt"));
+            page.waitForFunction(visibleTimeOverlay, parameter("visitAt"));
             assertThat(graphQLMutationCount("bookVisit") - mutationsBeforePickerUse).isZero();
             timePicker.evaluate("element => element.close()");
             page.waitForTimeout(50);
@@ -1337,12 +1373,18 @@ class PetClinicHtmxPlaywrightTest {
                 element => {
                   const host = getComputedStyle(element);
                   const field = getComputedStyle(element.shadowRoot.querySelector('[part~="input-field"]'));
-                  return [host.outlineStyle, host.outlineWidth, field.outlineStyle, field.outlineWidth];
+                  const input = getComputedStyle(element.inputElement);
+                  const inputBorder = ['Top', 'Right', 'Bottom', 'Left']
+                    .reduce((total, side) => total + Number.parseFloat(input[`border${side}Width`]), 0);
+                  return [host.outlineStyle, host.outlineWidth, field.outlineStyle, field.outlineWidth,
+                    String(inputBorder), input.outlineStyle];
                 }
                 """);
         assertThat(focusStyles.get(0)).isEqualTo("none");
         assertThat(focusStyles.get(2)).isEqualTo("solid");
         assertThat(Double.parseDouble(focusStyles.get(3).replace("px", ""))).isGreaterThan(0.0);
+        assertThat(Double.parseDouble(focusStyles.get(4))).isZero();
+        assertThat(focusStyles.get(5)).isEqualTo("none");
     }
 
     private void waitForShellResult(final String actionId, final String value) {

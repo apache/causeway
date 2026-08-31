@@ -4,6 +4,10 @@ The shared picker bridge currently moves focus from a time input to Vaadin's sha
 That delay made a state-based Playwright assertion pass but separates overlay creation from the trusted keyboard event and permits asynchronous prompt replacement to supersede the target.
 A robust browser contract must verify the actual Vaadin overlay is visibly presented, not merely that a Boolean briefly becomes true.
 
+The prior change configured `step=60` to remove seconds and milliseconds.
+Pinned Vaadin 25.2.8 deliberately generates no dropdown items when `step` is below 15 minutes, so `opened=true` can coexist with a closed zero-size overlay.
+The supported minimum dropdown interval is therefore 900 seconds.
+
 The application theme treats `textarea:not([slot="input"])` as native.
 Vaadin Text Area uses an internal `<textarea slot="textarea">`, so the selector applies native border, padding, sizing, and focus rules inside the toolkit control.
 The desired outer orange boundary in the screenshot is Vaadin's own focus ring; the inner textarea boundary is the leaked application-native styling.
@@ -15,6 +19,7 @@ The pager currently renders only `Items rangeStart–rangeEnd`, even when a safe
 
 **Goals:**
 
+- Use Vaadin's supported 15-minute dropdown interval while keeping minute-format presentation without seconds.
 - Make Enter and Space on a focused clock affordance synchronously present the real time overlay.
 - Verify the overlay itself is open and visible in a real browser.
 - Leave exactly the toolkit-owned multiline boundary and focus ring around Vaadin Text Area.
@@ -24,11 +29,22 @@ The pager currently renders only `Items rangeStart–rangeEnd`, even when a safe
 **Non-Goals:**
 
 - Do not replace Vaadin's time overlay or implement a Causeway-owned time list.
+- Do not promise arbitrary one-minute picker choices that pinned Vaadin cannot present.
 - Do not remove focus indication or borders from native fallback textareas.
 - Do not infer collection totals from offsets, page size, navigation flags, or loaded rows.
 - Do not change GraphQL collection window metadata or requests.
 
 ## Decisions
+
+### Use the supported quarter-hour dropdown step
+
+Editable qualified `LocalTime` and `LocalDateTime` controls will use `step=900`.
+This is Vaadin's minimum supported interval for generated dropdown items and yields visible quarter-hour choices formatted to minutes without seconds.
+Read-only controls retain `step=0.001` so authoritative seconds and milliseconds remain displayable, and cancellation continues to preserve the original authoritative value.
+
+Keeping `step=60` was rejected because Vaadin's `__generateDropdownList` intentionally returns no items below 900 seconds.
+Depending on private `_dropdownItems` was rejected because it would bypass the pinned public component contract.
+A custom Causeway-owned minute list was rejected by the selected scope.
 
 ### Open the picker synchronously during keyboard activation
 
@@ -67,6 +83,7 @@ This applies equally to native bounded tables and bounded Grid mode because the 
 
 ## Risks / Trade-offs
 
+- [Quarter-hour choices are coarser than arbitrary minute entry] → Document the Vaadin limitation explicitly and retain minute-formatted read-only values and authoritative cancellation semantics.
 - [Synchronous focus transfer could alter keyboard focus expectations] → Preserve the explicit toggle Tab stop, open only on Enter or Space, and verify reverse Tab and prompt containment separately.
 - [Vaadin changes its overlay implementation] → Keep the browser assertion inside the pinned adapter audit so dependency drift fails qualification.
 - [Changing textarea selectors could affect other slotted controls] → Scope only the textarea selector and verify native fallback and Vaadin multiline controls independently.

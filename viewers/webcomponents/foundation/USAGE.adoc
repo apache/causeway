@@ -577,6 +577,7 @@ The collection's `rowContexts` property exposes the currently hydrated controlle
 
 When targeted introspection finds the additive rich `window(offset, size)` field, collections use bounded secondary window operations and retain the documented legacy-list fallback.
 `paged="N"` requests bounded windows of `N` rows and renders Causeway-owned previous and next controls when the advertised window permits them.
+A non-empty pager displays `Items <start>–<end> of <total>` when the server advertises a valid authoritative total, and omits the `of` suffix rather than inferring an unavailable count.
 The page size must be an integer from 1 through 100; absent, blank, malformed, fractional, zero, negative, and oversized values provide no override.
 Changing the effective page size retires stale collection work and restarts at offset zero.
 Paging remains available in native table presentation.
@@ -670,11 +671,13 @@ configureCausewayFieldWidgets({families: [], presentation: false});
 `basic` covers reversible text, multiline, protected, Boolean, enum, bounded scalar choice, and URL inputs.
 `numeric` keeps `Long`, `BigInteger`, and `BigDecimal` lexical in text fields while using integer or number controls only for machine numeric codecs.
 `local-temporal` covers `LocalDate`, `LocalTime`, and `LocalDateTime`; values beyond millisecond fractional precision remain native because the picker cannot preserve them.
-Qualified read-only values preserve accepted precision, while editable local-time and local-date-time controls use a sixty-second step for minute-resolution entry through the existing Causeway codec.
+Qualified read-only values preserve accepted precision, while editable local-time and local-date-time controls use Vaadin's minimum supported 900-second dropdown interval and present time without seconds through the existing Causeway codec.
 Local dates use the nonblank document `lang`, then the browser locale, then `en` to format and parse the visible date while preserving the ISO value passed to Causeway codecs and GraphQL.
 Localized numeric input and unambiguous ISO `yyyy-MM-dd` input are accepted, and available locale calendar names and first-weekday settings are applied to the picker.
 In an editable Vaadin date picker, Tab moves from the date input to the labelled calendar button, and Enter or Space opens the calendar without committing or cancelling the Causeway interaction.
 Editable standalone and date-time time inputs expose the equivalent labelled clock button for Tab, reverse Tab, Enter, Space, and pointer use.
+Enter and Space synchronously open the visible Vaadin time overlay while the trusted keyboard event is active.
+Application native-textarea styling applies only to unslotted controls, leaving Vaadin's slotted multiline input with one toolkit-owned boundary and focus ring.
 Read-only and disabled date and time controls do not expose those operable picker buttons.
 Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collection, and unsupported values never become eligible field adapters.
 References retain their separate adapter.

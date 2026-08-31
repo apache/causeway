@@ -43,6 +43,7 @@ function row(offset = 0) {
 
 function result(offset = 0, totalCount = 30) {
   const rows = [row(offset)];
+  const knownUpperBound = totalCount ?? 30;
   return {
     descriptor: {id: 'people'},
     data: {window: {rows}},
@@ -55,9 +56,9 @@ function result(offset = 0, totalCount = 30) {
       countAvailable: totalCount != null,
       maximumSize: 20,
       hasPrevious: offset > 0,
-      hasNext: offset + 1 < 30,
+      hasNext: offset + 1 < knownUpperBound,
       previousOffset: offset > 0 ? Math.max(0, offset - 10) : null,
-      nextOffset: offset + 1 < 30 ? offset + 1 : null,
+      nextOffset: offset + 1 < knownUpperBound ? offset + 1 : null,
       rangeStart: offset + 1,
       rangeEnd: offset + 1,
       ordering: 'CONFIGURED'
@@ -136,6 +137,48 @@ test('container observer retains native at 48rem and reuses authoritative rows w
   assert.equal(loads.length, 1);
   document.body.removeChild(collection);
   assert.equal(observers[0].connected, false);
+});
+
+test('bounded pager presents an authoritative total consistently across pages', async () => {
+  configureCausewayGridWidgets({enabled: true});
+  const loads = [];
+  const context = {
+    registerRequirement(_requirement, listener) {
+      listener({status: 'ready', descriptor: {id: 'visits'}, data: {hidden: false}, errors: [], generation: 1});
+      return () => {};
+    },
+    async loadCollection(options) {
+      loads.push(options);
+      return result(options.offset ?? 0, 3);
+    },
+    createHydratedRowContext() {
+      return {disconnect() {}};
+    }
+  };
+  const collection = new CausewayCollectionElement();
+  collection.querySelector = () => ({presentation: null});
+  collection.id = 'visits';
+  collection.columns = [{member: 'name'}];
+  collection.paged = 1;
+  collection.active = true;
+  collection.acceptGridResponsiveState(true);
+  collection.context = context;
+  document.body.appendChild(collection);
+  await waitFor(() => collection.collectionState.status === 'ready');
+  assert.equal(collection.gridQualification.presentation, 'grid-bounded');
+  assert.match(collection.innerHTML, /Items 1–1 of 3/);
+
+  const next = document.createElement('button');
+  next.setAttribute('data-causeway-grid-next', '');
+  collection.appendChild(next);
+  next.dispatchEvent(new Event('click', {bubbles: true}));
+  await waitFor(() => collection.collectionState.window?.offset === 1);
+  assert.match(collection.innerHTML, /Items 2–2 of 3/);
+  next.dispatchEvent(new Event('click', {bubbles: true}));
+  await waitFor(() => collection.collectionState.window?.offset === 2);
+  assert.match(collection.innerHTML, /Items 3–3 of 3/);
+  assert.equal(collection.collectionState.window.hasNext, false);
+  document.body.removeChild(collection);
 });
 
 test('bounded pager uses only normalized offsets and never invents a total', async () => {
