@@ -152,11 +152,10 @@ test('preserves associated actions and bounded multiline hints in semantic membe
   assert.match(html, /id="notes"[^>]*named="Case notes"[^>]*described-as="Extended notes\."[^>]*multi-line="5"[^>]*label-position="TOP"/);
   assert.match(html, /class="causeway-object-associated-actions"/);
   assert.match(html, /data-causeway-associated-member="notes" data-causeway-associated-kind="property"/);
-  assert.match(html, /data-causeway-associated-member="staffMembers" data-causeway-associated-kind="collection"/);
+  assert.doesNotMatch(html, /data-causeway-associated-member="staffMembers" data-causeway-associated-kind="collection"/);
   assert.ok(html.indexOf('<cw-property data-causeway-region="property" id="notes"')
     < html.indexOf('<cw-action data-causeway-region="action" id="changeName"'));
-  assert.ok(html.indexOf('<cw-action data-causeway-region="action" id="addStaff"')
-    < html.indexOf('<cw-collection data-causeway-region="collection" id="staffMembers"'));
+  assert.match(html, /<cw-collection data-causeway-region="collection" id="staffMembers"[^>]*><cw-action data-causeway-region="action" id="addStaff"[^>]*><\/cw-action><\/cw-collection>/);
 });
 
 test('diagnoses invalid multiline hints and caps excessive row counts', () => {

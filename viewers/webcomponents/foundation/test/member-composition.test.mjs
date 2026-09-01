@@ -29,7 +29,8 @@ const {
   CausewayObjectContextElement,
   CausewayPropertyElement,
   CausewaySemanticEvent,
-  defineCausewayWebComponents
+  defineCausewayWebComponents,
+  promoteCollectionHeading
 } = await import('../src/index.mjs');
 const {associatedActions} = await import('../src/member-composition.mjs');
 
@@ -213,6 +214,47 @@ test('collection keeps interleaved columns and actions in separate vocabularies'
   assert.equal(context.releaseCount('action:removePet'), 1);
 });
 
+test('collection promotes replaceable headings without moving stable actions or exposing hidden owners', async () => {
+  const context = recordingContext();
+  const ownerContext = objectContext(context);
+  const collection = new CausewayCollectionElement();
+  collection.id = 'pets';
+  const addPet = action('addPet');
+  collection.appendChild(addPet);
+  ownerContext.appendChild(collection);
+  document.body.appendChild(ownerContext);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const primary = collection.childNodes.at(-1);
+  const registrations = context.count('action:addPet');
+
+  const firstSection = collectionSection('pets-label-1', 'Companion animals');
+  primary.appendChild(firstSection.section);
+  const firstHeading = promoteCollectionHeading(collection, primary);
+  assert.equal(firstHeading, firstSection.heading);
+  assert.deepEqual(collection.childNodes.slice(-3), [firstHeading, addPet, primary]);
+  assert.equal(firstHeading.id, 'pets-label-1');
+  assert.equal(firstSection.section.getAttribute('aria-labelledby'), firstHeading.id);
+  assert.equal(collection.getAttribute('data-causeway-collection-heading-actions'), '');
+  assert.equal(addPet.isConnected, true);
+  assert.equal(context.count('action:addPet'), registrations);
+
+  const secondSection = collectionSection('pets-label-2', 'Current companion animals');
+  primary.appendChild(secondSection.section);
+  const secondHeading = promoteCollectionHeading(collection, primary);
+  assert.equal(firstHeading.isConnected, false);
+  assert.equal(secondHeading, secondSection.heading);
+  assert.deepEqual(collection.childNodes.slice(-3), [secondHeading, addPet, primary]);
+  assert.equal(context.count('action:addPet'), registrations);
+
+  primary.hidden = true;
+  assert.equal(promoteCollectionHeading(collection, primary), null);
+  assert.equal(secondHeading.isConnected, false);
+  assert.equal(collection.hasAttribute('data-causeway-collection-heading-actions'), false);
+  assert.equal(addPet.isConnected, true);
+  assert.equal(context.count('action:addPet'), registrations);
+  document.body.removeChild(ownerContext);
+});
+
 test('parser-late collection actions stay before the stable primary region', async () => {
   const context = recordingContext();
   const ownerContext = objectContext(context);
@@ -256,6 +298,17 @@ test('reconnecting a composition registers each existing semantic child once per
   assert.deepEqual(associatedActions(collection), [nestedAction]);
   document.body.removeChild(ownerContext);
 });
+
+function collectionSection(labelId, label) {
+  const section = document.createElement('section');
+  section.setAttribute('aria-labelledby', labelId);
+  const heading = document.createElement('h2');
+  heading.id = labelId;
+  heading.setAttribute('class', 'causeway-collection-label');
+  heading.innerHTML = label;
+  section.appendChild(heading);
+  return {section, heading};
+}
 
 function objectContext(context) {
   const element = new CausewayObjectContextElement();

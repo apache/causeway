@@ -170,7 +170,7 @@ Fallback mode skips resource retrieval.
 The public `refreshLayout()` method explicitly re-evaluates a changed locale, authorization, or dynamic-layout context; ordinary authoritative object refreshes retain the current layout so active child interactions are not rebuilt.
 
 The safe parser supports Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action order, bounded property `multiLine` hints, `named` labels, and unreferenced actions, properties, and collections.
-Actions nested beneath a property remain immediately after it, while collection-associated actions render in a right-aligned wrapping toolbar immediately before the collection surface and consecutive unassociated actions render in a wrapping top-level action group.
+Actions nested beneath a property remain immediately after it, while collection-associated actions become direct collection children that share a compact responsive header with the effective collection heading and consecutive unassociated actions render in a wrapping top-level action group.
 Explicit valid member references are reserved before unreferenced markers allocate remaining members in targeted-schema order.
 Stale, duplicate, and wrong-kind references never create broken or repeated semantic children.
 A usable explicit grid may intentionally omit members by omitting both their references and the corresponding unreferenced marker.
@@ -542,8 +542,10 @@ Each nested action registers its own GraphQL requirement, retains its own visibi
 A hidden or disabled property or collection does not hide or disable an independently visible or enabled action.
 
 The owner renders its loading, value, editor, validation, collection, paging, and error states into a stable primary region without cloning, moving, or recreating direct action elements.
-Property primary regions precede their associated actions, while a collection maintains its stable primary region after its associated action declarations so visual and sequential keyboard order both encounter the top toolbar first.
-Collection toolbars are right-aligned at wide widths and wrap without overlap or horizontal overflow when space narrows.
+Property primary regions precede their associated actions, while a collection promotes only its replaceable heading before the associated action declarations and keeps its stable primary body after them.
+Visual, DOM, and sequential keyboard order therefore encounter the heading, compact actions in declaration order, and then collection body controls.
+The heading and right-aligned toolbar share one bordered row at wide widths; at narrow widths, the title remains first and the toolbar wraps beneath it within the same header without overlap or horizontal overflow.
+Applications can tune this scoped density with `--causeway-collection-heading-action-height`, `--causeway-collection-heading-action-padding-block`, `--causeway-collection-heading-action-padding-inline`, and `--causeway-collection-heading-action-gap`.
 Action focus, pending prompt state, context generation, cancellation, stale-result protection, and request counts therefore survive owner rerendering.
 Adjacent ordinary HTML action groups remain compatible when semantic nesting is not wanted.
 
