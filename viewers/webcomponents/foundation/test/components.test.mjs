@@ -47,13 +47,17 @@ test('action parameter configuration normalizes optional presentation hints', ()
   parameter.describedAs = 'The given name';
   parameter.descriptionAs = 'ToOlTiP';
   parameter.multiLine = 500;
+  parameter.min = 'today';
+  parameter.max = '2027-12-31';
 
   assert.deepEqual(parameter.configuration, {
     parameter: 'firstName',
     named: 'Given name',
     describedAs: 'The given name',
     descriptionAs: 'tooltip',
-    multiLine: 50
+    multiLine: 50,
+    min: 'today',
+    max: '2027-12-31'
   });
   assert.equal(parameter.hidden, false);
   parameter.connectedCallback();
@@ -63,12 +67,16 @@ test('action parameter configuration normalizes optional presentation hints', ()
   parameter.removeAttribute('described-as');
   parameter.removeAttribute('description-as');
   parameter.setAttribute('multi-line', 'invalid');
+  parameter.min = '';
+  parameter.max = null;
   assert.deepEqual(parameter.configuration, {
     parameter: 'firstName',
     named: null,
     describedAs: null,
     descriptionAs: null,
-    multiLine: null
+    multiLine: null,
+    min: '',
+    max: null
   });
 });
 
@@ -443,6 +451,8 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
   parameter.describedAs = 'Details for fulfilment';
   parameter.descriptionAs = 'tooltip';
   parameter.multiLine = 4;
+  parameter.min = '08:00';
+  parameter.max = '17:00';
   action.appendChild(parameter);
   document.body.appendChild(action);
   assert.deepEqual(action.parameterPresentations, [{
@@ -450,8 +460,12 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
     named: 'Order notes',
     describedAs: 'Details for fulfilment',
     descriptionAs: 'tooltip',
-    multiLine: 4
+    multiLine: 4,
+    min: '08:00',
+    max: '17:00'
   }]);
+  parameter.max = '18:00';
+  assert.equal(action.parameterPresentations[0].max, '18:00');
   const updatedParameter = new CausewayParameterElement();
   updatedParameter.id = 'notes';
   updatedParameter.named = 'Revised order notes';
@@ -461,7 +475,9 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
     named: 'Revised order notes',
     describedAs: null,
     descriptionAs: null,
-    multiLine: null
+    multiLine: null,
+    min: null,
+    max: null
   }]);
   document.body.removeChild(action);
   action.label = 'Legacy order label';

@@ -25,11 +25,12 @@ const HTMLElementBase = globalThis.HTMLElement ?? class extends EventTarget {};
 const MAX_PARAMETER_ID = 256;
 const MAX_PARAMETER_NAME = 512;
 const MAX_PARAMETER_DESCRIPTION = 2_048;
+const MAX_TEMPORAL_BOUND = 128;
 const MAX_MULTI_LINE = 50;
 
 export class CausewayParameterElement extends HTMLElementBase {
   static get observedAttributes() {
-    return ['id', 'named', 'described-as', 'description-as', 'multi-line'];
+    return ['id', 'named', 'described-as', 'description-as', 'multi-line', 'min', 'max'];
   }
 
   get named() {
@@ -66,6 +67,22 @@ export class CausewayParameterElement extends HTMLElementBase {
     else this.removeAttribute('multi-line');
   }
 
+  get min() {
+    return this.getAttribute('min') || '';
+  }
+
+  set min(value) {
+    setOptionalAttribute(this, 'min', value);
+  }
+
+  get max() {
+    return this.getAttribute('max') || '';
+  }
+
+  set max(value) {
+    setOptionalAttribute(this, 'max', value);
+  }
+
   get configuration() {
     return actionParameterConfiguration(this);
   }
@@ -93,7 +110,9 @@ export function actionParameterConfiguration(element) {
     named: authoredAttribute(element, 'named'),
     describedAs: authoredAttribute(element, 'described-as'),
     descriptionAs: authoredAttribute(element, 'description-as'),
-    multiLine: authoredAttribute(element, 'multi-line')
+    multiLine: authoredAttribute(element, 'multi-line'),
+    min: authoredAttribute(element, 'min'),
+    max: authoredAttribute(element, 'max')
   });
 }
 
@@ -105,7 +124,9 @@ export function normalizeActionParameterConfiguration(value = {}) {
     ? null
     : normalizeDescriptionPresentation(value.descriptionAs);
   const multiLine = normalizedMultiLine(value.multiLine);
-  return Object.freeze({parameter, named, describedAs, descriptionAs, multiLine});
+  const min = optionalBoundedText(value.min, MAX_TEMPORAL_BOUND);
+  const max = optionalBoundedText(value.max, MAX_TEMPORAL_BOUND);
+  return Object.freeze({parameter, named, describedAs, descriptionAs, multiLine, min, max});
 }
 
 export function normalizeActionParameterConfigurations(values = []) {
