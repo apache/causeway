@@ -324,6 +324,7 @@ class PetClinicHtmxPlaywrightTest {
             assertCompactCollectionGrid("pets");
         }
         assertIntegratedCollectionActionHeader("pets", "addPet", "removePet", false);
+        assertBelowCollectionActionTooltip("pets", "addPet");
         final var addPetFocusTarget = page.locator("cw-action[id='addPet'] button, cw-action[id='addPet'] vaadin-button").first();
         final var removePetFocusTarget = page.locator("cw-action[id='removePet'] button, cw-action[id='removePet'] vaadin-button").first();
         addPetFocusTarget.focus();
@@ -1586,6 +1587,52 @@ class PetClinicHtmxPlaywrightTest {
                 .isLessThanOrEqualTo(geometry.get(12).doubleValue() + 1.0);
         assertThat(geometry.get(13).intValue()).isEqualTo(1);
         assertThat(geometry.get(14).intValue()).isEqualTo(1);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertBelowCollectionActionTooltip(final String member, final String action) {
+        final var collection = page.locator("cw-collection[id='" + member + "']");
+        final var trigger = collection.locator("cw-action[id='" + action + "'] .causeway-action-control-tooltip").first();
+        final var control = trigger.locator("button, vaadin-button").first();
+        assertThat(trigger.count()).isEqualTo(1);
+        trigger.hover();
+        trigger.evaluate("element => new Promise(resolve => setTimeout(resolve, 160))");
+        assertBelowCollectionActionTooltipState(trigger, "pointer");
+        control.focus();
+        trigger.evaluate("element => new Promise(resolve => setTimeout(resolve, 160))");
+        assertBelowCollectionActionTooltipState(trigger, "keyboard");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertBelowCollectionActionTooltipState(final Locator trigger, final String activation) {
+        final var state = (Map<String, Object>) trigger.evaluate("""
+                element => {
+                  const style = getComputedStyle(element, '::after');
+                  const triggerBounds = element.getBoundingClientRect();
+                  const collection = element.closest('cw-collection');
+                  const hostBounds = collection.getBoundingClientRect();
+                  const bodyBounds = collection.querySelector('[data-causeway-member-primary]').getBoundingClientRect();
+                  const tooltipTop = triggerBounds.top + Number.parseFloat(style.top);
+                  const tooltipBottom = tooltipTop + Number.parseFloat(style.height);
+                  return {
+                    visibility: style.visibility,
+                    opacity: Number.parseFloat(style.opacity),
+                    insetBlockStart: style.insetBlockStart,
+                    insetBlockEnd: style.insetBlockEnd,
+                    zIndex: Number.parseInt(style.zIndex, 10),
+                    belowTrigger: tooltipTop >= triggerBounds.bottom - 1,
+                    overlapsBody: tooltipBottom > bodyBounds.top,
+                    contained: tooltipTop >= hostBounds.top && tooltipBottom <= hostBounds.bottom + 1
+                  };
+                }
+                """);
+        assertThat(state.get("visibility")).as("%s tooltip visibility", activation).isEqualTo("visible");
+        assertThat(((Number) state.get("opacity")).doubleValue()).as("%s tooltip opacity", activation).isEqualTo(1.0);
+        assertThat(state.get("insetBlockStart")).as("%s tooltip block-start inset", activation).isNotEqualTo("auto");
+        assertThat(((Number) state.get("zIndex")).intValue()).isGreaterThan(0);
+        assertThat(state.get("belowTrigger")).isEqualTo(true);
+        assertThat(state.get("overlapsBody")).isEqualTo(true);
+        assertThat(state.get("contained")).isEqualTo(true);
     }
 
     private void assertCollectionPresentation(final String member, final String expected) {

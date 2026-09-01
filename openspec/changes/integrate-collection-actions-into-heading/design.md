@@ -65,6 +65,15 @@ When an effective grid associates actions with a collection, object-layout rende
 Property associations retain their existing external member-composition wrapper because their field-aligned placement differs.
 This removes a separate generated collection-action layout path and lets direct and generated collection composition share heading promotion, lifecycle, CSS, and tests.
 
+### Open shared tooltips below their triggers
+
+The shared property-disabled, member, collection, parameter, and action tooltip pseudo-elements will use a block-start inset below their trigger rather than a block-end inset above it.
+Their hidden transition starts slightly toward the trigger and settles downward into the visible position.
+Using one placement for every tooltip family keeps behavior predictable and prevents an action tooltip from being clipped by the integrated collection panel's bounded top edge.
+
+Increasing `z-index` or allowing the integrated panel to overflow was rejected because either approach would create a new stacking context competition or sacrifice the panel's rounded clipping.
+Per-component placement was rejected because identical tooltip semantics would behave inconsistently.
+
 ## Risks / Trade-offs
 
 - [Heading promotion could briefly duplicate an ID during rerender] → Remove the previous promoted heading before rendering the replacement and test repeated state transitions.
@@ -72,6 +81,7 @@ This removes a separate generated collection-action layout path and lets direct 
 - [Compact buttons could become too small] → Keep a bounded minimum height, visible labels and icons, and browser geometry and focus tests.
 - [Long localized headings and actions may not fit] → Use flex wrapping and a narrow breakpoint that gives the title and toolbar separate lines within the same header.
 - [Generated layout behavior could drift from authored HTML] → Generate direct children and exercise both paths with structural tests.
+- [A below-trigger tooltip can cover following content] → Keep tooltips non-interactive, bounded, elevated, and consistently layered above body content.
 
 ## Migration Plan
 

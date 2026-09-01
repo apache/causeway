@@ -630,6 +630,7 @@ The packaged `/causeway-webcomponents/theme.css` adds a cohesive Wicket-inspired
 It defines `--causeway-*` tokens for typography, navigation, surfaces, borders, text, links, focus, status colors, spacing, radii, shadows, label width, content width, control height, and responsive layout.
 The theme covers light, dark, reduced-motion, and forced-colors preferences without adding Bootstrap, Wicket, or JavaScript behavior.
 Component-owned tooltips use a light neutral explanatory surface with dark text, a subtle border, and elevation so they remain visually distinct from filled action controls.
+The shared property, member, collection, parameter, action, and disabled-state tooltip families open below their semantic trigger so bounded headers do not clip the explanatory surface.
 Applications can customize that shared treatment with `--causeway-tooltip-background`, `--causeway-tooltip-color`, `--causeway-tooltip-border`, and `--causeway-tooltip-shadow`; standalone structural styles provide equivalent fallback values when the optional theme is absent.
 Applications can omit the theme, replace it, or override those rules with ordinary design-system CSS:
 

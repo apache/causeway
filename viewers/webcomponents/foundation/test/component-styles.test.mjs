@@ -69,6 +69,9 @@ test('member tooltips preserve sections, responsive bounds and pointer and focus
   assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/border: 1px solid var\(--causeway-tooltip-border, #cbd5e1\);/g)].length, 2);
   assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/box-shadow: var\(--causeway-tooltip-shadow, 0 0\.25rem 0\.75rem rgb\(15 23 42 \/ 0\.18\)\);/g)].length, 2);
   assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/color: var\(--causeway-tooltip-color, #111827\);/g)].length, 2);
+  assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/inset-block-start: calc\(100% \+ 0\.4rem\);/g)].length, 2);
+  assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/transform: translateY\(-0\.25rem\);/g)].length, 2);
+  assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /inset-block-end: calc\(100% \+ 0\.4rem\);/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip:hover::after,[\s\S]*?\.causeway-member-tooltip:focus-visible::after/);
   assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /causeway-property-disabled-indicator/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-value-string \{\s+text-align: start;/);

@@ -23,6 +23,11 @@ The Petclinic browser profile SHALL verify compact authoritative small-Grid sizi
 - **THEN** the effective name, description, tooltip, and `aria-labelledby` relationship remain current
 - **AND** associated action nodes retain identity, declaration order, pending interaction state, and focus semantics
 
+#### Scenario: Collection action tooltip is revealed
+- **WHEN** pointer or keyboard interaction reveals an associated action tooltip in the Pets collection header
+- **THEN** the tooltip opens below its control and remains fully visible over the collection body
+- **AND** it is not clipped above the bounded header or hidden behind collection content
+
 #### Scenario: Petclinic collection journey remains clean
 - **WHEN** browser acceptance operates the collection actions and collection controls
 - **THEN** prompts, cancellation, invocation, refresh, navigation, focus restoration, and authoritative GraphQL results remain unchanged
