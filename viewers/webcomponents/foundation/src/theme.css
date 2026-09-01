@@ -236,6 +236,7 @@ cw-object-context,
 cw-object-header,
 cw-property,
 cw-collection,
+cw-standalone-collection,
 cw-interaction-controller {
   min-width: 0;
   display: block;
@@ -568,6 +569,11 @@ cw-collection[data-causeway-collection-heading-actions] > .causeway-member-prima
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+}
+
+.causeway-standalone-collection-count {
+  color: var(--causeway-muted);
+  font-size: var(--causeway-font-size-sm);
 }
 
 .causeway-collection-content {

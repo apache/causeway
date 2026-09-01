@@ -22,6 +22,7 @@ export * from './action-widget.mjs';
 export * from './breadcrumbs-element.mjs';
 export * from './collection-column-element.mjs';
 export * from './collection-element.mjs';
+export * from './standalone-collection-element.mjs';
 export * from './collection-grid-projection.mjs';
 export * from './collection-grid-qualification.mjs';
 export * from './collection-range-broker.mjs';

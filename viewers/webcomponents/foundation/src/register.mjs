@@ -22,6 +22,10 @@ import {CausewayBreadcrumbsElement} from './breadcrumbs-element.mjs';
 import {CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement} from './action-widget.mjs';
 import {CausewayCollectionColumnElement} from './collection-column-element.mjs';
 import {captureDeclarativeCollectionColumns, CausewayCollectionElement} from './collection-element.mjs';
+import {
+  captureDeclarativeStandaloneCollectionColumns,
+  CausewayStandaloneCollectionElement
+} from './standalone-collection-element.mjs';
 import {CausewayElementName} from './component-contracts.mjs';
 import {CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement} from './field-widget.mjs';
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
@@ -65,6 +69,7 @@ const DEFINITIONS = Object.freeze([
   [CAUSEWAY_MENUBAR_CONTROL, CausewayMenubarControlElement],
   [CausewayElementName.COLLECTION_COLUMN, CausewayCollectionColumnElement],
   [CausewayElementName.COLLECTION, CausewayCollectionElement],
+  [CausewayElementName.STANDALONE_COLLECTION, CausewayStandaloneCollectionElement],
   [CAUSEWAY_COLLECTION_GRID, CausewayCollectionGridElement]
 ]);
 
@@ -74,6 +79,7 @@ export function defineCausewayWebComponents(registry = globalThis.customElements
   }
   captureDeclarativeActionParameters();
   captureDeclarativeCollectionColumns();
+  captureDeclarativeStandaloneCollectionColumns();
   for (const [name, constructor] of DEFINITIONS) {
     if (!registry.get(name)) {
       registry.define(name, constructor);

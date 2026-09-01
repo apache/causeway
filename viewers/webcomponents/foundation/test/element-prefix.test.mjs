@@ -58,6 +58,7 @@ const OLD_SUFFIXES = [
   'field-editor',
   'reference-editor',
   'collection',
+  'standalone-collection',
   'collection-column',
   'menubars',
   'menubar-primary',
@@ -159,10 +160,11 @@ test('application markup does not expose raw Vaadin elements', async () => {
 });
 
 test('compact element names retain established non-element Causeway contracts', () => {
-  assert.equal(Object.values(CausewayElementName).length, 18);
+  assert.equal(Object.values(CausewayElementName).length, 19);
   assert.ok(Object.values(CausewayElementName).every(name => name.startsWith('cw-')));
   assert.equal(CAUSEWAY_FIELD_EDITOR, 'cw-field-editor');
   assert.equal(CausewayHostClass.PROPERTY, 'causeway-property');
   assert.equal(CausewayHostClass.PARAMETER, 'causeway-parameter');
+  assert.equal(CausewayHostClass.STANDALONE_COLLECTION, 'causeway-standalone-collection');
   assert.equal(CausewaySemanticEvent.PROPERTY_UPDATED, 'causeway-property-updated');
 });

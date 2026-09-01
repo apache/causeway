@@ -505,6 +505,7 @@ class PetClinicHtmxPlaywrightTest {
 
         activateServiceAction("listAll");
         waitForShellResult("listAll", "4 results");
+        assertStandaloneCollectionResult("listAll", 4);
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
@@ -517,8 +518,12 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(parameter("name"));
         fillParameter("name", "Mary");
         submitPrompt();
-        waitForShellResult("findByName", "1 results");
+        waitForShellResult("findByName", "1 result");
+        assertStandaloneCollectionResult("findByName", 1);
         assertMenuClosedAndFocused("Pet Owners");
+        page.locator("cw-standalone-collection cw-object-link[title='Mary Smith (Mary)'] button").click();
+        waitForRoute("petclinic.PetOwner", "s_owner-mary");
+        assertThat(page.locator("[data-testid='causeway-shell-result'] cw-standalone-collection").count()).isZero();
 
         openMenu("Pet Owners");
         activateServiceAction("findByNameLike");
@@ -531,7 +536,8 @@ class PetClinicHtmxPlaywrightTest {
         waitForPrompt("findByNameLike");
         fillParameter("name", "James");
         submitPrompt();
-        waitForShellResult("findByNameLike", "1 results");
+        waitForShellResult("findByNameLike", "1 result");
+        assertStandaloneCollectionResult("findByNameLike", 1);
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
@@ -1501,18 +1507,29 @@ class PetClinicHtmxPlaywrightTest {
 
     @SuppressWarnings("unchecked")
     private void assertSingleVaadinMultilineFocus(final Locator editor) {
-        editor.evaluate("element => element.inputElement.focus()");
-        final var focusStyles = (List<String>) editor.evaluate("""
-                element => {
-                  const host = getComputedStyle(element);
-                  const field = getComputedStyle(element.shadowRoot.querySelector('[part~="input-field"]'));
-                  const input = getComputedStyle(element.inputElement);
-                  const inputBorder = ['Top', 'Right', 'Bottom', 'Left']
-                    .reduce((total, side) => total + Number.parseFloat(input[`border${side}Width`]), 0);
-                  return [host.outlineStyle, host.outlineWidth, field.outlineStyle, field.outlineWidth,
-                    String(inputBorder), input.outlineStyle];
-                }
-                """);
+        List<String> focusStyles = List.of();
+        for (var attempt = 0; attempt < 10; attempt++) {
+            editor.evaluate("element => element.inputElement.focus()");
+            page.waitForTimeout(50);
+            focusStyles = (List<String>) editor.evaluate("""
+                    element => {
+                      const host = getComputedStyle(element);
+                      const field = getComputedStyle(element.shadowRoot.querySelector('[part~="input-field"]'));
+                      const input = getComputedStyle(element.inputElement);
+                      const inputBorder = ['Top', 'Right', 'Bottom', 'Left']
+                        .reduce((total, side) => total + Number.parseFloat(input[`border${side}Width`]), 0);
+                      return [host.outlineStyle, host.outlineWidth, field.outlineStyle, field.outlineWidth,
+                        String(inputBorder), input.outlineStyle];
+                    }
+                    """);
+            if (focusStyles.get(0).equals("none")
+                    && focusStyles.get(2).equals("solid")
+                    && Double.parseDouble(focusStyles.get(3).replace("px", "")) > 0.0
+                    && Double.parseDouble(focusStyles.get(4)) == 0.0
+                    && focusStyles.get(5).equals("none")) {
+                break;
+            }
+        }
         assertThat(focusStyles.get(0)).isEqualTo("none");
         assertThat(focusStyles.get(2)).isEqualTo("solid");
         assertThat(Double.parseDouble(focusStyles.get(3).replace("px", ""))).isGreaterThan(0.0);
@@ -1525,6 +1542,26 @@ class PetClinicHtmxPlaywrightTest {
         result.waitFor();
         page.waitForFunction("args => { const result = document.querySelector('[data-testid=\"causeway-shell-result\"]'); return !result?.hidden && result.textContent.includes(args.action) && result.textContent.includes(args.value); }",
                 java.util.Map.of("action", actionId, "value", value));
+    }
+
+    private void assertStandaloneCollectionResult(final String actionId, final int expectedCount) {
+        final var result = page.locator("[data-testid='causeway-shell-result'] cw-standalone-collection");
+        result.waitFor();
+        page.waitForFunction("args => { const element = document.querySelector(\"[data-testid='causeway-shell-result'] cw-standalone-collection\"); return element?.resultState?.status === (args.count === 0 ? 'empty' : 'ready') && element.resultState.totalCount === args.count; }",
+                java.util.Map.of("count", expectedCount));
+        assertThat(result.getAttribute("named")).isEqualTo(actionId + " result");
+        assertThat(((Number) result.evaluate("element => element.resultState.totalCount")).intValue())
+                .isEqualTo(expectedCount);
+        assertThat(page.locator("[data-testid='causeway-shell-result'] > ul").count()).isZero();
+        if (expectedCount > 0) {
+            assertObjectLinkIcon(result.locator("cw-object-link").first());
+        }
+        if (nativeToolkit()) {
+            assertThat(result.locator("cw-collection-grid").count()).isZero();
+        } else if (expectedCount > 0) {
+            page.waitForFunction("() => document.querySelector(\"[data-testid='causeway-shell-result'] cw-standalone-collection\")?.dataset.causewayGridPresentation === 'grid-virtual'");
+            assertThat(result.locator("cw-collection-grid").count()).isEqualTo(1);
+        }
     }
 
     private long graphQLOperationCount(final String operationName) {
