@@ -461,7 +461,11 @@ function renderNode(node, state) {
     if ((node.children?.length ?? 0) === 0) {
       return memberMarkup;
     }
-    return `<section class="causeway-object-member-composition" data-causeway-associated-member="${escapeHtml(node.memberId)}">${memberMarkup}${renderChildren(node.children, state, 'causeway-object-associated-actions')}</section>`;
+    const associatedActions = renderChildren(node.children, state, 'causeway-object-associated-actions');
+    const composition = node.memberKind === 'collection'
+      ? `${associatedActions}${memberMarkup}`
+      : `${memberMarkup}${associatedActions}`;
+    return `<section class="causeway-object-member-composition" data-causeway-associated-member="${escapeHtml(node.memberId)}" data-causeway-associated-kind="${node.memberKind}">${composition}</section>`;
   }
   return '';
 }

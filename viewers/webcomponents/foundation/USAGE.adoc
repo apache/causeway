@@ -170,7 +170,7 @@ Fallback mode skips resource retrieval.
 The public `refreshLayout()` method explicitly re-evaluates a changed locale, authorization, or dynamic-layout context; ordinary authoritative object refreshes retain the current layout so active child interactions are not rebuilt.
 
 The safe parser supports Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action order, bounded property `multiLine` hints, `named` labels, and unreferenced actions, properties, and collections.
-Actions nested beneath a property or collection remain associated with that member and render immediately after it, while consecutive unassociated actions render in a wrapping top-level action group.
+Actions nested beneath a property remain immediately after it, while collection-associated actions render in a right-aligned wrapping toolbar immediately before the collection surface and consecutive unassociated actions render in a wrapping top-level action group.
 Explicit valid member references are reserved before unreferenced markers allocate remaining members in targeted-schema order.
 Stale, duplicate, and wrong-kind references never create broken or repeated semantic children.
 A usable explicit grid may intentionally omit members by omitting both their references and the corresponding unreferenced marker.
@@ -542,6 +542,8 @@ Each nested action registers its own GraphQL requirement, retains its own visibi
 A hidden or disabled property or collection does not hide or disable an independently visible or enabled action.
 
 The owner renders its loading, value, editor, validation, collection, paging, and error states into a stable primary region without cloning, moving, or recreating direct action elements.
+Property primary regions precede their associated actions, while a collection maintains its stable primary region after its associated action declarations so visual and sequential keyboard order both encounter the top toolbar first.
+Collection toolbars are right-aligned at wide widths and wrap without overlap or horizontal overflow when space narrows.
 Action focus, pending prompt state, context generation, cancellation, stale-result protection, and request counts therefore survive owner rerendering.
 Adjacent ordinary HTML action groups remain compatible when semantic nesting is not wanted.
 
@@ -591,6 +593,7 @@ Causeway owns criteria across native and Grid presentations; an older schema or 
 
 Under the default Vaadin component policy, an active connected collection wider than 48rem may use the internal independently packaged Grid closure when its window ordering is `CONFIGURED`, its semantic columns are fully projectable, and its total or paging metadata is safe.
 A safe positive total selects virtual Grid and maps only bounded range callbacks through the Causeway-owned range broker unless explicit `paged` presentation requires the bounded Grid.
+When that authoritative total is no greater than the currently projected rows, virtual Grid fits its header and complete row set instead of retaining an empty scrolling viewport; larger totals retain the bounded virtual viewport and range provider.
 An unavailable total selects bounded Grid only when normalized previous or next metadata exists, renders only the current window, and keeps accessible Causeway previous and next controls without inventing a logical size.
 Safe-zero, terminal-empty, narrow, inactive, hidden, legacy-list, encounter-ordered, malformed-window, unsupported-column, renderer-failure, family-failure, and explicit-native collections retain the established native presentation.
 The initial authoritative range seeds the bounded cache, identical ranges deduplicate, overlapping work has independent cancellation, retained windows and hydrated contexts are capped, and route, object, member, column, renderer, policy, width, refresh, or connection changes retire stale work.

@@ -110,6 +110,8 @@ test('container observer retains native at 48rem and reuses authoritative rows w
   await Promise.resolve();
   assert.equal(collection.gridQualification.presentation, 'grid-virtual');
   assert.equal(adapter.presentation.mode, 'virtual');
+  assert.equal(adapter.presentation.totalCount, 30);
+  assert.equal(adapter.presentation.rows.length, 1);
   assert.equal(loads.length, 1);
 
   const nativeCell = document.createElement('td');

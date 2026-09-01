@@ -277,6 +277,9 @@ class PetClinicHtmxPlaywrightTest {
         petSearch.fill("cat");
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.totalCount === 1");
         waitForCollectionRows("pets", 1);
+        if (!nativeToolkit()) {
+            assertCompactCollectionGrid("pets");
+        }
         assertThat(page.locator("cw-collection[id='pets']").innerText()).contains("Samantha");
         page.locator("cw-collection[id='pets'] [data-causeway-collection-search-clear]").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.totalCount === 2");
@@ -317,6 +320,17 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator("cw-collection [title*='Cannot edit']").count()).isZero();
         assertCollectionPresentation("pets", "grid");
         assertCollectionPresentation("visits", "ordering-not-deterministic");
+        if (!nativeToolkit()) {
+            assertCompactCollectionGrid("pets");
+        }
+        assertTopCollectionActionToolbar("pets", "addPet", "removePet");
+        final var addPetFocusTarget = page.locator("cw-action[id='addPet'] button, cw-action[id='addPet'] vaadin-button").first();
+        final var removePetFocusTarget = page.locator("cw-action[id='removePet'] button, cw-action[id='removePet'] vaadin-button").first();
+        addPetFocusTarget.focus();
+        page.keyboard().press("Tab");
+        assertThat(removePetFocusTarget.evaluate("element => element.matches(':focus') || element.shadowRoot?.activeElement != null")).isEqualTo(true);
+        page.keyboard().press("Tab");
+        assertThat(petSearch.evaluate("element => element.matches(':focus')")).isEqualTo(true);
         assertThat(page.locator(".petclinic-page-toolbar cw-action[id='delete']").count()).isEqualTo(1);
         assertThat(page.locator("cw-property[id='name'] > cw-action[id='updateName']").count())
                 .isEqualTo(1);
@@ -355,11 +369,14 @@ class PetClinicHtmxPlaywrightTest {
         page.waitForFunction("() => [...document.querySelectorAll(\"cw-collection[id='pets'], cw-collection[id='visits']\")].every(element => element.dataset.causewayGridResponsive === 'narrow' && !element.querySelector('cw-collection-grid'))");
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 1);
+        assertTopCollectionActionToolbar("pets", "addPet", "removePet");
         assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
         page.setViewportSize(1800, 900);
         if (!nativeToolkit()) {
             page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.dataset.causewayGridPresentation.startsWith('grid-') && document.querySelector(\"cw-collection[id='visits']\")?.dataset.causewayGridFallback === 'ordering-not-deterministic'");
+            assertCompactCollectionGrid("pets");
         }
+        assertTopCollectionActionToolbar("pets", "addPet", "removePet");
         assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
 
         page.goBack();
@@ -1481,6 +1498,63 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(collection.locator(".causeway-collection-description").innerText()).isEqualTo(expectedDescription);
         assertThat(collection.locator(".causeway-collection").getAttribute("aria-labelledby")).isNotBlank();
         assertThat(collection.locator(".causeway-collection").getAttribute("aria-describedby")).isNotBlank();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertCompactCollectionGrid(final String member) {
+        final var grid = page.locator("cw-collection[id='" + member + "'] cw-collection-grid vaadin-grid");
+        grid.waitFor();
+        final var geometry = (List<Number>) grid.evaluate("""
+                element => {
+                  const bounds = element.getBoundingClientRect();
+                  const rows = [...element.shadowRoot.querySelectorAll('[part~="body-row"]')]
+                    .filter(row => !row.hidden && row.getBoundingClientRect().height > 0);
+                  return [element.allRowsVisible ? 1 : 0, bounds.height, rows.length];
+                }
+                """);
+        assertThat(geometry.get(0).intValue()).isEqualTo(1);
+        assertThat(geometry.get(1).doubleValue())
+                .as("compact Grid height for %s: %s", member, geometry)
+                .isLessThan(260.0);
+        assertThat(geometry.get(2).intValue()).isGreaterThan(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertTopCollectionActionToolbar(
+            final String member,
+            final String firstAction,
+            final String secondAction) {
+        final var collection = page.locator("cw-collection[id='" + member + "']");
+        assertThat(collection.evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.id).join(',')"))
+                .isEqualTo(firstAction + "," + secondAction);
+        final var geometry = (List<Number>) collection.evaluate("""
+                element => {
+                  const actions = [...element.children].filter(child => child.localName === 'cw-action' && !child.hidden);
+                  const primary = [...element.children].find(child => child.hasAttribute('data-causeway-member-primary'));
+                  const host = element.getBoundingClientRect();
+                  const actionBounds = actions.map(action => action.getBoundingClientRect());
+                  return [
+                    Math.max(...actionBounds.map(bounds => bounds.bottom)),
+                    primary.getBoundingClientRect().top,
+                    [...element.children].indexOf(primary),
+                    element.children.length - 1,
+                    Math.max(...actionBounds.map(bounds => bounds.right)),
+                    host.right
+                  ];
+                }
+                """);
+        final var diagnostics = collection.evaluate("element => ({host: getComputedStyle(element).display, children: [...element.children].map(child => ({tag: child.localName, id: child.id, primary: child.hasAttribute('data-causeway-member-primary'), display: getComputedStyle(child).display, order: getComputedStyle(child).order, top: child.getBoundingClientRect().top, bottom: child.getBoundingClientRect().bottom}))})");
+        if (geometry.get(0).doubleValue() > geometry.get(1).doubleValue() + 1.0) {
+            throw new AssertionError("Collection action toolbar should precede primary: " + diagnostics
+                    + "; geometry=" + geometry);
+        }
+        assertThat(geometry.get(2).intValue())
+                .as("collection primary should be the final child: %s", diagnostics)
+                .isEqualTo(geometry.get(3).intValue());
+        if (Math.abs(geometry.get(4).doubleValue() - geometry.get(5).doubleValue()) > 1.0) {
+            throw new AssertionError("Collection action toolbar should remain contained: " + diagnostics
+                    + "; geometry=" + geometry);
+        }
     }
 
     private void assertCollectionPresentation(final String member, final String expected) {
