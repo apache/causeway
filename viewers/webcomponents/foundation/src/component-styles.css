@@ -57,20 +57,6 @@ cw-object {
 .causeway-object-associated-actions {
   margin-block: -0.25rem 0.75rem;
 }
-.causeway-object-member-composition[data-causeway-associated-kind="collection"] {
-  align-items: flex-start;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  min-inline-size: 0;
-}
-.causeway-object-member-composition[data-causeway-associated-kind="collection"] > .causeway-object-associated-actions {
-  margin-block: 0 0.75rem;
-}
-.causeway-object-member-composition[data-causeway-associated-kind="collection"] > cw-collection {
-  flex: 1 0 100%;
-  min-inline-size: 0;
-}
 cw-property[data-causeway-action-group] {
   align-items: start;
   display: grid;
@@ -85,6 +71,29 @@ cw-collection[data-causeway-action-group] {
   gap: var(--causeway-associated-action-gap, var(--causeway-object-action-gap, 0.5rem));
   justify-content: flex-end;
   min-inline-size: 0;
+}
+cw-collection[data-causeway-collection-heading-actions] {
+  align-items: center;
+  column-gap: var(--causeway-collection-heading-action-gap, var(--causeway-associated-action-gap, 0.5rem));
+  justify-content: flex-start;
+  row-gap: 0;
+}
+cw-collection[data-causeway-collection-heading-actions] > [data-causeway-collection-heading] {
+  flex: 1 1 12rem;
+  min-inline-size: 0;
+}
+cw-collection[data-causeway-collection-heading-actions] > cw-action[data-causeway-associated-action] {
+  --vaadin-button-height: var(--causeway-collection-heading-action-height, 2.25rem);
+  align-self: center;
+  flex: 0 1 auto;
+  margin-block: 0;
+}
+cw-collection[data-causeway-collection-heading-actions] > cw-action[data-causeway-associated-action]:last-of-type {
+  margin-inline-end: var(--causeway-space-4, 1rem);
+}
+cw-collection[data-causeway-collection-heading-actions] > cw-action[data-causeway-associated-action] .causeway-action > button {
+  min-block-size: var(--causeway-collection-heading-action-height, 2.25rem);
+  padding: var(--causeway-collection-heading-action-padding-block, 0.3rem) var(--causeway-collection-heading-action-padding-inline, 0.65rem);
 }
 cw-property[data-causeway-action-group] > .causeway-member-primary {
   grid-column: 1 / -1;
@@ -102,10 +111,21 @@ cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-act
 cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action] > .causeway-action {
   margin-block-start: var(--causeway-associated-action-margin-block-start, 0);
 }
-cw-collection[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
+cw-collection[data-causeway-action-group]:not([data-causeway-collection-heading-actions]) > cw-action[data-causeway-associated-action] {
   flex: 0 1 auto;
   margin-block-end: var(--causeway-associated-action-margin-block-end, 0.75rem);
   min-inline-size: 0;
+}
+@container cw-collection (max-width: 32rem) {
+  cw-collection[data-causeway-collection-heading-actions] > [data-causeway-collection-heading] {
+    flex-basis: 100%;
+  }
+  cw-collection[data-causeway-collection-heading-actions] > cw-action[data-causeway-associated-action]:first-of-type {
+    margin-inline-start: var(--causeway-space-4, 1rem);
+  }
+  cw-collection[data-causeway-collection-heading-actions] > cw-action[data-causeway-associated-action] {
+    margin-block-end: var(--causeway-space-3, 0.75rem);
+  }
 }
 cw-collection-column[hidden] {
   display: none;

@@ -456,16 +456,14 @@ function renderNode(node, state) {
     } else if (node.memberKind === 'action') {
       memberMarkup = `<cw-action data-causeway-region="action" id="${escapeHtml(node.memberId)}"${label}></cw-action>`;
     } else {
-      memberMarkup = `<cw-collection data-causeway-region="collection" id="${escapeHtml(node.memberId)}"${label}></cw-collection>`;
+      const associatedActions = (node.children ?? []).map(child => renderNode(child, state)).join('');
+      memberMarkup = `<cw-collection data-causeway-region="collection" id="${escapeHtml(node.memberId)}"${label}>${associatedActions}</cw-collection>`;
     }
-    if ((node.children?.length ?? 0) === 0) {
+    if ((node.children?.length ?? 0) === 0 || node.memberKind === 'collection') {
       return memberMarkup;
     }
     const associatedActions = renderChildren(node.children, state, 'causeway-object-associated-actions');
-    const composition = node.memberKind === 'collection'
-      ? `${associatedActions}${memberMarkup}`
-      : `${memberMarkup}${associatedActions}`;
-    return `<section class="causeway-object-member-composition" data-causeway-associated-member="${escapeHtml(node.memberId)}" data-causeway-associated-kind="${node.memberKind}">${composition}</section>`;
+    return `<section class="causeway-object-member-composition" data-causeway-associated-member="${escapeHtml(node.memberId)}" data-causeway-associated-kind="${node.memberKind}">${memberMarkup}${associatedActions}</section>`;
   }
   return '';
 }

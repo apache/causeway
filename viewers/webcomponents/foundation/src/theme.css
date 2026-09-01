@@ -542,6 +542,34 @@ cw-property:last-child .causeway-property {
   margin-block-end: var(--causeway-space-4);
 }
 
+cw-collection[data-causeway-collection-heading-actions] {
+  overflow: hidden;
+  margin-block-end: var(--causeway-space-4);
+  border: 1px solid var(--causeway-border);
+  border-radius: var(--causeway-radius-md);
+  background: var(--causeway-surface-subtle);
+  box-shadow: var(--causeway-shadow-sm);
+}
+
+cw-collection[data-causeway-collection-heading-actions] > [data-causeway-collection-heading] {
+  border-block-end: 0;
+  background: transparent;
+}
+
+cw-collection[data-causeway-collection-heading-actions] > .causeway-member-primary {
+  border-block-start: 1px solid var(--causeway-border);
+  background: var(--causeway-surface);
+}
+
+cw-collection[data-causeway-collection-heading-actions] > .causeway-member-primary > .causeway-collection {
+  overflow: visible;
+  margin-block-end: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .causeway-collection-content {
   min-width: 0;
   overflow-x: auto;
