@@ -576,7 +576,8 @@ cw-action-control > vaadin-button > .causeway-action-icon:last-child {
 .causeway-value-null {
   font-style: italic;
 }
-cw-collection {
+cw-collection,
+cw-standalone-collection {
   container-name: cw-collection;
   container-type: inline-size;
   display: block;
@@ -598,6 +599,10 @@ cw-collection-grid {
   --vaadin-grid-row-background-color: var(--causeway-surface, Canvas);
   --vaadin-grid-row-hover-background-color: var(--causeway-surface-subtle, color-mix(in srgb, CanvasText 6%, Canvas));
   --lumo-font-size-m: var(--causeway-font-size-sm, 0.82rem);
+}
+.causeway-standalone-collection-count {
+  display: block;
+  padding-inline: var(--causeway-space-3, 0.75rem);
 }
 .causeway-collection-content {
   min-inline-size: 0;
