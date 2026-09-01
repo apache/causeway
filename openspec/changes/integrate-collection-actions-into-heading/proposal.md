@@ -10,6 +10,7 @@ The controls should share the collection's own heading row when space permits wh
 - Make heading-associated action buttons more compact than ordinary page and prompt actions while preserving readable labels, icons, focus indicators, and touch usability.
 - Keep the collection description, search, table or Grid, paging, diagnostics, and empty states in the full-width body below the header row.
 - Stack or wrap heading actions below the title when the collection becomes too narrow for a safe shared row.
+- Position the shared component tooltip surface below its trigger everywhere so collection-header tooltips remain visible within the integrated panel and other tooltip families stay consistent.
 - Preserve action node identity, declaration order, sequential keyboard order, GraphQL authority, prompts, invocation, refresh, and focus restoration.
 - Add Foundation and Petclinic browser coverage for wide and narrow collection-heading action presentation.
 
@@ -26,5 +27,5 @@ None.
 
 ## Impact
 
-The change affects collection shell rendering, stable member composition, structural and theme CSS, component documentation, Foundation tests, and Petclinic Playwright acceptance.
+The change affects collection shell rendering, stable member composition, shared tooltip placement, structural and theme CSS, component documentation, Foundation tests, and Petclinic Playwright acceptance.
 It changes no public element names, authored action syntax, GraphQL operations, action lifecycle, Vaadin version, routes, or domain behavior.

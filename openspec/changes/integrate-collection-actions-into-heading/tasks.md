@@ -25,3 +25,10 @@
 - [x] 4.2 Preserve collection action prompts, invocation, refresh, focus, accessibility relationships, diagnostics, and no-overflow behavior.
 - [x] 4.3 Run complete Foundation Node and Maven suites plus relevant browser audits.
 - [x] 4.4 Run complete Petclinic Playwright acceptance, IDE compilation or inspections, strict OpenSpec validation, and final diff checks.
+
+## 5. Below-trigger tooltip correction
+
+- [x] 5.1 Position every shared component tooltip below its trigger with a consistent entrance transition.
+- [x] 5.2 Update structural synchronization, tooltip placement tests, and Foundation documentation.
+- [x] 5.3 Qualify the collection-header action tooltip in Petclinic for visibility, geometry, pointer and keyboard access, and stacking over the collection body.
+- [x] 5.4 Rerun Foundation, browser, Petclinic, IDE, and strict OpenSpec validation before archive.
