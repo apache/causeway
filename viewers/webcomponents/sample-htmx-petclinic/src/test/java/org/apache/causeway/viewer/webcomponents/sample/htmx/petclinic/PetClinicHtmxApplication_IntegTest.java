@@ -117,7 +117,9 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("named=\"Owner's full name\"")
                 .contains("<cw-action id=\"addPet\" named=\"Register a pet\" prompt-style=\"DIALOG_SIDEBAR\"")
                 .contains("<cw-action id=\"removePet\"></cw-action>")
-                .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">");
+                .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">")
+                .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
+                .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>");
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",
                 "petclinic.Pet",
@@ -233,6 +235,8 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-parameter id=\"name\"\n                            named=\"Owner's full name\"")
                 .contains("description-as=\"tooltip\"")
                 .contains("<cw-parameter id=\"name\"\n                          named=\"Pet name\"")
+                .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
+                .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>")
                 .contains("<cw-parameter id=\"reason\"\n                          named=\"Reason for visit\"")
                 .contains("multi-line=\"3\"")
                 .doesNotContain("<cw-parameter id=\"species\"", "<cw-action id=\"removePet\">\n            <cw-parameter")
@@ -500,7 +504,7 @@ class PetClinicHtmxApplication_IntegTest {
         assertNoGraphQLErrors(response);
         assertThat(response.at("/data/__type/fields"))
                 .extracting(node -> node.path("name").asText())
-                .containsExactlyInAnyOrder("logicalTypeName", "id", "title");
+                .containsExactlyInAnyOrder("logicalTypeName", "id", "title", "icon");
         assertThat(response.at("/data/rich/petclinic_PetOwner/_meta/breadcrumbs")).isEmpty();
         assertThat(response.at("/data/rich/petclinic_Pet/_meta/breadcrumbs"))
                 .extracting(node -> node.path("logicalTypeName").asText())
