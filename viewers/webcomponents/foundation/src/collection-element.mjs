@@ -35,9 +35,10 @@ import {
 import {
   connectMemberComposition,
   disconnectMemberComposition,
+  associatedActions,
   eventOriginatesFromAssociatedAction,
   refreshMemberComposition,
-  renderMemberPrimary
+  renderMemberPrimary as renderStableMemberPrimary
 } from './member-composition.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {
@@ -141,12 +142,18 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     };
     this.columnObserver = typeof globalThis.MutationObserver === 'function'
       ? new MutationObserver(records => {
+        let associatedActionsChanged = false;
         for (const record of records) {
+          const changedNodes = [...(record.addedNodes ?? []), ...(record.removedNodes ?? [])];
+          associatedActionsChanged ||= changedNodes.some(node => node.localName === 'cw-action');
           for (const node of record.addedNodes ?? []) {
             if (node.localName === 'cw-collection-column' && node.configuration?.member) {
               this.#acceptColumn(node.configuration);
             }
           }
+        }
+        if (associatedActionsChanged && this.componentState) {
+          this.renderComponentState(this.componentState);
         }
       })
       : null;
@@ -1007,6 +1014,56 @@ function collectionRows(state) {
     return state.data.window.rows;
   }
   return Array.isArray(state?.data?.get) ? state.data.get : [];
+}
+
+function renderMemberPrimary(host, html, options = {}) {
+  clearPromotedCollectionHeading(host);
+  const primary = renderStableMemberPrimary(host, html, options);
+  promoteCollectionHeading(host, primary);
+  return primary;
+}
+
+export function promoteCollectionHeading(host, primary) {
+  clearPromotedCollectionHeading(host);
+  if (primary?.hidden) {
+    return null;
+  }
+  const actions = associatedActions(host);
+  const heading = findCollectionHeading(primary);
+  if (!heading || actions.length === 0) {
+    return null;
+  }
+
+  heading.setAttribute('data-causeway-collection-heading', '');
+  if (heading.parentNode && heading.parentNode !== host) {
+    heading.parentNode.removeChild(heading);
+  }
+  host.insertBefore(heading, actions[0]);
+  host.setAttribute('data-causeway-collection-heading-actions', '');
+  return heading;
+}
+
+function clearPromotedCollectionHeading(host) {
+  const previousHeading = [...(host.children ?? [])]
+    .find(child => child.hasAttribute?.('data-causeway-collection-heading'));
+  if (previousHeading?.parentNode === host) {
+    host.removeChild(previousHeading);
+  }
+  host.removeAttribute('data-causeway-collection-heading-actions');
+}
+
+function findCollectionHeading(root) {
+  if (!root) return null;
+  const classes = String(root.getAttribute?.('class') ?? '').split(/\s+/);
+  if (classes.includes('causeway-collection-label')) return root;
+  if (typeof root.querySelector === 'function') {
+    return root.querySelector('.causeway-collection-label');
+  }
+  for (const child of root.children ?? root.childNodes ?? []) {
+    const heading = findCollectionHeading(child);
+    if (heading) return heading;
+  }
+  return null;
 }
 
 function collectionShell(presentation, content, attributes = '') {

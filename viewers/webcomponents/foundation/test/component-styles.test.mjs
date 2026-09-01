@@ -115,13 +115,17 @@ test('application native-control chrome does not cross into toolkit-owned slotte
   assert.doesNotMatch(theme, /:where\(a, button, input, select, textarea, \[tabindex\]\):focus-visible/);
 });
 
-test('direct member associations wrap in semantic source and keyboard order', () => {
+test('direct collection associations share one compact responsive heading row', async () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\]/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection\[data-causeway-action-group\][\s\S]*?justify-content: flex-end;/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /> \.causeway-member-primary/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /> cw-action\[data-causeway-associated-action\]/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /data-causeway-associated-kind="collection"[\s\S]*?display: flex;[\s\S]*?flex-wrap: wrap;[\s\S]*?justify-content: flex-end;/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /data-causeway-associated-kind="collection"\] > cw-collection \{\s+flex: 1 0 100%;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection\[data-causeway-collection-heading-actions\] \{[\s\S]*?align-items: center;[\s\S]*?justify-content: flex-start;[\s\S]*?row-gap: 0;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /> \[data-causeway-collection-heading\] \{\s+flex: 1 1 12rem;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /--vaadin-button-height: var\(--causeway-collection-heading-action-height, 2\.25rem\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /@container cw-collection \(max-width: 32rem\)[\s\S]*?> \[data-causeway-collection-heading\] \{\s+flex-basis: 100%;/);
+  assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /data-causeway-associated-kind="collection"/);
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(theme, /cw-collection\[data-causeway-collection-heading-actions\] \{[\s\S]*?border: 1px solid var\(--causeway-border\);[\s\S]*?background: var\(--causeway-surface-subtle\);/);
+  assert.match(theme, /> \.causeway-member-primary \{\s+border-block-start: 1px solid var\(--causeway-border\);/);
+  assert.match(theme, /> \.causeway-member-primary > \.causeway-collection \{[\s\S]*?border: 0;[\s\S]*?box-shadow: none;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
 });
 

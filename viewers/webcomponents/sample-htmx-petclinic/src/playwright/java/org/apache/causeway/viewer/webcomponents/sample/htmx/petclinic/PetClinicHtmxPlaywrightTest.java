@@ -323,7 +323,7 @@ class PetClinicHtmxPlaywrightTest {
         if (!nativeToolkit()) {
             assertCompactCollectionGrid("pets");
         }
-        assertTopCollectionActionToolbar("pets", "addPet", "removePet");
+        assertIntegratedCollectionActionHeader("pets", "addPet", "removePet", false);
         final var addPetFocusTarget = page.locator("cw-action[id='addPet'] button, cw-action[id='addPet'] vaadin-button").first();
         final var removePetFocusTarget = page.locator("cw-action[id='removePet'] button, cw-action[id='removePet'] vaadin-button").first();
         addPetFocusTarget.focus();
@@ -365,18 +365,18 @@ class PetClinicHtmxPlaywrightTest {
                 .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
 
         final var readsBeforeResponsiveSwitch = graphQLRequests.size();
-        page.setViewportSize(700, 900);
+        page.setViewportSize(500, 900);
         page.waitForFunction("() => [...document.querySelectorAll(\"cw-collection[id='pets'], cw-collection[id='visits']\")].every(element => element.dataset.causewayGridResponsive === 'narrow' && !element.querySelector('cw-collection-grid'))");
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 1);
-        assertTopCollectionActionToolbar("pets", "addPet", "removePet");
+        assertIntegratedCollectionActionHeader("pets", "addPet", "removePet", true);
         assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
         page.setViewportSize(1800, 900);
         if (!nativeToolkit()) {
             page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.dataset.causewayGridPresentation.startsWith('grid-') && document.querySelector(\"cw-collection[id='visits']\")?.dataset.causewayGridFallback === 'ordering-not-deterministic'");
             assertCompactCollectionGrid("pets");
         }
-        assertTopCollectionActionToolbar("pets", "addPet", "removePet");
+        assertIntegratedCollectionActionHeader("pets", "addPet", "removePet", false);
         assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
 
         page.goBack();
@@ -1494,9 +1494,11 @@ class PetClinicHtmxPlaywrightTest {
             final String expectedName,
             final String expectedDescription) {
         final var collection = page.locator("cw-collection[id='" + member + "']");
-        assertThat(collection.locator(".causeway-collection-label").innerText()).isEqualTo(expectedName);
+        final var heading = collection.locator(":scope > .causeway-collection-label");
+        assertThat(heading.count()).isEqualTo(1);
+        assertThat(heading.innerText()).isEqualTo(expectedName);
         assertThat(collection.locator(".causeway-collection-description").innerText()).isEqualTo(expectedDescription);
-        assertThat(collection.locator(".causeway-collection").getAttribute("aria-labelledby")).isNotBlank();
+        assertThat(collection.locator(".causeway-collection").getAttribute("aria-labelledby")).isEqualTo(heading.getAttribute("id"));
         assertThat(collection.locator(".causeway-collection").getAttribute("aria-describedby")).isNotBlank();
     }
 
@@ -1520,41 +1522,70 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void assertTopCollectionActionToolbar(
+    private void assertIntegratedCollectionActionHeader(
             final String member,
             final String firstAction,
-            final String secondAction) {
+            final String secondAction,
+            final boolean wrapped) {
         final var collection = page.locator("cw-collection[id='" + member + "']");
         assertThat(collection.evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.id).join(',')"))
                 .isEqualTo(firstAction + "," + secondAction);
         final var geometry = (List<Number>) collection.evaluate("""
                 element => {
-                  const actions = [...element.children].filter(child => child.localName === 'cw-action' && !child.hidden);
-                  const primary = [...element.children].find(child => child.hasAttribute('data-causeway-member-primary'));
+                  const children = [...element.children];
+                  const heading = children.find(child => child.hasAttribute('data-causeway-collection-heading'));
+                  const actions = children.filter(child => child.localName === 'cw-action' && !child.hidden);
+                  const primary = children.find(child => child.hasAttribute('data-causeway-member-primary'));
+                  const panel = primary.querySelector('.causeway-collection');
                   const host = element.getBoundingClientRect();
+                  const headingBounds = heading.getBoundingClientRect();
                   const actionBounds = actions.map(action => action.getBoundingClientRect());
+                  const controlBounds = actions.map(action => action.querySelector('[data-causeway-action-control], button, vaadin-button').getBoundingClientRect());
                   return [
+                    children.indexOf(heading),
+                    children.indexOf(actions[0]),
+                    children.indexOf(actions[1]),
+                    children.indexOf(primary),
+                    children.length - 1,
+                    headingBounds.top,
+                    headingBounds.bottom,
+                    Math.min(...actionBounds.map(bounds => bounds.top)),
                     Math.max(...actionBounds.map(bounds => bounds.bottom)),
                     primary.getBoundingClientRect().top,
-                    [...element.children].indexOf(primary),
-                    element.children.length - 1,
+                    Math.max(...controlBounds.map(bounds => bounds.height)),
                     Math.max(...actionBounds.map(bounds => bounds.right)),
-                    host.right
+                    host.right,
+                    panel.getAttribute('aria-labelledby') === heading.id ? 1 : 0,
+                    element.querySelectorAll('#' + CSS.escape(heading.id)).length
                   ];
                 }
                 """);
-        final var diagnostics = collection.evaluate("element => ({host: getComputedStyle(element).display, children: [...element.children].map(child => ({tag: child.localName, id: child.id, primary: child.hasAttribute('data-causeway-member-primary'), display: getComputedStyle(child).display, order: getComputedStyle(child).order, top: child.getBoundingClientRect().top, bottom: child.getBoundingClientRect().bottom}))})");
-        if (geometry.get(0).doubleValue() > geometry.get(1).doubleValue() + 1.0) {
-            throw new AssertionError("Collection action toolbar should precede primary: " + diagnostics
-                    + "; geometry=" + geometry);
+        final var diagnostics = collection.evaluate("element => ({host: getComputedStyle(element).display, integrated: element.hasAttribute('data-causeway-collection-heading-actions'), children: [...element.children].map(child => { const control = child.querySelector?.('[data-causeway-action-control], button, vaadin-button'); return {tag: child.localName, id: child.id, heading: child.hasAttribute('data-causeway-collection-heading'), primary: child.hasAttribute('data-causeway-member-primary'), display: getComputedStyle(child).display, top: child.getBoundingClientRect().top, bottom: child.getBoundingClientRect().bottom, height: child.getBoundingClientRect().height, control: control ? {tag: control.localName, height: control.getBoundingClientRect().height, buttonHeight: getComputedStyle(control).getPropertyValue('--vaadin-button-height')} : null}; })})");
+        assertThat(collection.getAttribute("data-causeway-collection-heading-actions")).isNotNull();
+        assertThat(geometry.get(0).intValue()).as("heading before actions: %s", diagnostics).isLessThan(geometry.get(1).intValue());
+        assertThat(geometry.get(1).intValue()).as("first action before second: %s", diagnostics).isLessThan(geometry.get(2).intValue());
+        assertThat(geometry.get(2).intValue()).as("actions before body: %s", diagnostics).isLessThan(geometry.get(3).intValue());
+        assertThat(geometry.get(3).intValue()).as("collection primary should be final: %s", diagnostics).isEqualTo(geometry.get(4).intValue());
+        if (wrapped) {
+            assertThat(geometry.get(7).doubleValue())
+                    .as("actions should wrap beneath the narrow title: %s", diagnostics)
+                    .isGreaterThanOrEqualTo(geometry.get(6).doubleValue() - 1.0);
+        } else {
+            assertThat(geometry.get(7).doubleValue())
+                    .as("actions should share the wide title row: %s", diagnostics)
+                    .isLessThan(geometry.get(6).doubleValue() - 1.0);
         }
-        assertThat(geometry.get(2).intValue())
-                .as("collection primary should be the final child: %s", diagnostics)
-                .isEqualTo(geometry.get(3).intValue());
-        if (Math.abs(geometry.get(4).doubleValue() - geometry.get(5).doubleValue()) > 1.0) {
-            throw new AssertionError("Collection action toolbar should remain contained: " + diagnostics
-                    + "; geometry=" + geometry);
-        }
+        assertThat(geometry.get(9).doubleValue())
+                .as("collection body should follow the complete header: %s", diagnostics)
+                .isGreaterThanOrEqualTo(geometry.get(8).doubleValue() - 1.0);
+        assertThat(geometry.get(10).doubleValue())
+                .as("collection heading actions should use compact controls: %s", diagnostics)
+                .isBetween(32.0, 40.0);
+        assertThat(geometry.get(11).doubleValue())
+                .as("collection heading actions should remain contained: %s", diagnostics)
+                .isLessThanOrEqualTo(geometry.get(12).doubleValue() + 1.0);
+        assertThat(geometry.get(13).intValue()).isEqualTo(1);
+        assertThat(geometry.get(14).intValue()).isEqualTo(1);
     }
 
     private void assertCollectionPresentation(final String member, final String expected) {
