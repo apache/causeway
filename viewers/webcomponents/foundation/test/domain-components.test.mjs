@@ -63,6 +63,7 @@ test('registers the complete compact custom-element vocabulary without old alias
     'cw-interaction-controller',
     'cw-reference-editor',
     'cw-collection',
+    'cw-standalone-collection',
     'cw-collection-column',
     'cw-menubars',
     'cw-menubar-primary',

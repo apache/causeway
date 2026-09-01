@@ -188,10 +188,6 @@
   font-size: var(--causeway-font-size-lg);
 }
 
-.causeway-result-list {
-  margin-block-end: 0;
-}
-
 .causeway-shell-main {
   min-width: 0;
   padding-block: var(--causeway-space-5) var(--causeway-space-8);

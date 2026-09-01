@@ -247,24 +247,13 @@ function presentResult(detail) {
   const output = document.createElement('output');
   const result = detail?.result;
   if (result?.kind === 'collection') {
-    output.textContent = `${Array.isArray(result.value) ? result.value.length : 0} results`;
-    const list = document.createElement('ul');
-    list.className = 'causeway-result-list';
-    for (const item of result.value ?? []) {
-      const metadata = item?._meta;
-      const entry = document.createElement('li');
-      if (metadata?.logicalTypeName && metadata?.id) {
-        const link = document.createElement('a');
-        link.href = canonicalObjectPath(basePath, metadata);
-        link.dataset.causewayRouteLink = '';
-        link.textContent = metadata.title ?? metadata.id;
-        entry.append(link);
-      } else {
-        entry.textContent = 'Result item';
-      }
-      list.append(entry);
-    }
-    resultRegion.append(heading, output, list);
+    const count = Array.isArray(result.value) ? result.value.length : 0;
+    const collection = document.createElement('cw-standalone-collection');
+    collection.named = heading.textContent;
+    collection.setAttribute('data-testid', 'causeway-standalone-action-result');
+    resultRegion.append(collection);
+    collection.result = result;
+    output.textContent = `${count} result${count === 1 ? '' : 's'}`;
   } else if (result?.kind === 'scalar') {
     output.textContent = result.value == null ? '' : String(result.value);
     resultRegion.append(heading, output);
