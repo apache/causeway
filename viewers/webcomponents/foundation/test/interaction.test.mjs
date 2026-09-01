@@ -1008,6 +1008,117 @@ test('action prompt applies partial authored parameter presentation without chan
   controller.cancelPrompt();
 });
 
+test('action prompt carries valid temporal parameter bounds to qualified field hosts', async () => {
+  configureCausewayFieldWidgets({families: ['local-temporal']});
+  const parameters = [
+    {id: 'date', description: 'Date', inputType: scalar('LocalDate'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalDate', validity: null}},
+    {id: 'time', description: 'Time', inputType: scalar('LocalTime'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalTime', validity: null}},
+    {id: 'dateTime', description: 'Date time', inputType: scalar('LocalDateTime'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalDateTime', validity: null}}
+  ];
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('schedule', {
+    async prepareAction() {
+      return {status: 'success', errors: [], data: {parameters}};
+    }
+  }, null, {parameters: [
+    {parameter: 'date', min: '2026-01-01', max: '2026-12-31'},
+    {parameter: 'time', min: '08:00', max: '17:00'},
+    {parameter: 'dateTime', min: '2026-09-01T08:00', max: '2026-09-01T17:00'}
+  ]}), true);
+  assert.match(controller.innerHTML, /data-parameter="date"[\s\S]*?data-control="date-picker"[^>]+data-min="2026-01-01" data-max="2026-12-31"/);
+  assert.match(controller.innerHTML, /data-parameter="time"[\s\S]*?data-control="time-picker"[^>]+data-min="08:00" data-max="17:00"/);
+  assert.match(controller.innerHTML, /data-parameter="dateTime"[\s\S]*?data-control="date-time-picker"[^>]+data-min="2026-09-01T08:00" data-max="2026-09-01T17:00"/);
+  controller.cancelPrompt();
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal']});
+});
+
+test('action prompt applies immutable temporal parameter ranges before GraphQL requests', async () => {
+  configureCausewayFieldWidgets({families: []});
+  const calls = [];
+  const parameters = [
+    {id: 'visitDate', description: 'Date', inputType: scalar('LocalDate'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalDate', validity: null}},
+    {id: 'visitTime', description: 'Time', inputType: scalar('LocalTime'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalTime', validity: null}},
+    {id: 'reminderAt', description: 'Reminder', inputType: scalar('LocalDateTime'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalDateTime', validity: null}},
+    {id: 'invalidDate', description: 'Invalid date range', inputType: scalar('LocalDate'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'LocalDate', validity: null}},
+    {id: 'notes', description: 'Notes', inputType: scalar('String'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, datatype: 'String', validity: null}}
+  ];
+  const context = {
+    async prepareAction(actionId, values) {
+      calls.push(`prepare:${JSON.stringify(values)}`);
+      return {status: 'success', errors: [], data: {parameters}};
+    },
+    async validateAction(actionId, values) {
+      calls.push(`validate:${JSON.stringify(values)}`);
+      return {status: 'success', data: null, errors: []};
+    },
+    async invokeAction(actionId, values) {
+      calls.push(`invoke:${JSON.stringify(values)}`);
+      return {status: 'success', data: {kind: 'void', value: null}, errors: []};
+    }
+  };
+  const presentation = {
+    parameters: [
+      {parameter: 'visitDate', min: '2026-09-02', max: '2026-12-31'},
+      {parameter: 'visitTime', min: '08:00', max: '17:00'},
+      {parameter: 'reminderAt', min: 'now'},
+      {parameter: 'invalidDate', min: '2027-01-01', max: '2026-01-01'},
+      {parameter: 'notes', min: 'today', max: 'tomorrow'},
+      {parameter: 'unknown', min: '08:00', max: '17:00'}
+    ]
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('bookVisit', context, null, presentation), true);
+  const firstRanges = controller.promptState.temporalRanges;
+  assert.equal(firstRanges.length, 4);
+  assert.match(controller.innerHTML, /data-parameter="visitDate" data-causeway-temporal-range-status="valid"[\s\S]*?min="2026-09-02" max="2026-12-31"/);
+  assert.match(controller.innerHTML, /data-parameter="visitTime" data-causeway-temporal-range-status="valid"[\s\S]*?min="08:00" max="17:00"/);
+  assert.match(controller.innerHTML, /data-parameter="reminderAt" data-causeway-temporal-range-status="valid"/);
+  assert.match(controller.innerHTML, /data-parameter="invalidDate" data-causeway-temporal-range-status="invalid"/);
+  assert.doesNotMatch(controller.innerHTML, /data-parameter="invalidDate"[^>]*>[\s\S]*?name="invalidDate"[^>]+\s(?:min|max)=/);
+  assert.doesNotMatch(controller.innerHTML, /data-parameter="notes" data-causeway-temporal-range-status/);
+  assert.doesNotMatch(controller.innerHTML, /data-parameter="unknown"/);
+
+  const preparationsBeforeRejection = calls.filter(call => call.startsWith('prepare:')).length;
+  assert.equal(await controller.setParameterValue('visitTime', '17:00:00.000000001'), false);
+  assert.equal(calls.filter(call => call.startsWith('prepare:')).length, preparationsBeforeRejection);
+  assert.equal(controller.promptState.values.visitTime, '17:00:00.000000001');
+  assert.equal(controller.promptState.status, 'failed');
+  assert.match(controller.innerHTML, /Enter a value on or before 17:00\./);
+  assert.equal(await controller.setParameterValue('notes', 'Still locally invalid'), false);
+  assert.equal(calls.filter(call => call.startsWith('prepare:')).length, preparationsBeforeRejection);
+  assert.equal(controller.promptState.parameterRangeErrors[0].parameter, 'visitTime');
+
+  assert.equal(await controller.setParameterValue('visitTime', '09:00'), true);
+  assert.equal(controller.promptState.parameterRangeErrors.length, 0);
+  assert.equal(controller.promptState.temporalRanges, firstRanges);
+  assert.doesNotMatch(controller.innerHTML, /Enter a value on or before 17:00\./);
+
+  const dateInput = new Event('input');
+  dateInput.target = {
+    getAttribute: name => name === 'data-causeway-editor' ? 'visitDate' : null,
+    value: '2026-09-01',
+    checked: false
+  };
+  controller.dispatchEvent(dateInput);
+  const callsBeforeSubmit = calls.length;
+  assert.equal(await controller.submitPrompt(), false);
+  assert.equal(calls.length, callsBeforeSubmit);
+  assert.equal(controller.promptState.values.visitDate, '2026-09-01');
+  assert.match(controller.innerHTML, /Enter a value on or after 2026-09-02\./);
+
+  assert.equal(controller.cancelPrompt(), true);
+  assert.equal(await controller.beginAction('bookVisit', context, null, presentation), true);
+  assert.notEqual(controller.promptState.temporalRanges, firstRanges);
+  assert.equal(await controller.setParameterValue('visitDate', '2026-09-02'), true);
+  assert.equal(await controller.setParameterValue('visitTime', '08:00'), true);
+  assert.equal(await controller.submitPrompt(), true);
+  assert.equal(calls.some(call => call.startsWith('validate:')), true);
+  assert.equal(calls.some(call => call.startsWith('invoke:')), true);
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal']});
+});
+
 test('action prompt defers prepared validity and recomputation until focus completion', async () => {
   const calls = [];
   const target = (id, value) => ({

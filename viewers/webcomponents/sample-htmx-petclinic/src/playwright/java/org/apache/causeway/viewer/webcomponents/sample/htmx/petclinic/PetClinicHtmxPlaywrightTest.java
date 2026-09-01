@@ -748,6 +748,32 @@ class PetClinicHtmxPlaywrightTest {
         resolveEditor(parameter("name")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
         assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
+
+        final var bookVisitMutations = graphQLMutationCount("bookVisit");
+        objectAction("bookVisit").click();
+        waitForPrompt("bookVisit");
+        final var visitDate = resolveEditor(parameter("visitDate"));
+        final var visitTime = resolveEditor(parameter("visitTime"));
+        final var bookingTomorrowIso = (String) page.evaluate("""
+                () => {
+                  const date = new Date();
+                  date.setDate(date.getDate() + 1);
+                  const pad = value => String(value).padStart(2, '0');
+                  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+                }
+                """);
+        final var bookingTodayIso = LocalDate.parse(bookingTomorrowIso).minusDays(1).toString();
+        assertThat(visitDate.evaluate("element => element.min")).isEqualTo(bookingTomorrowIso);
+        assertThat(visitTime.evaluate("element => element.min")).isEqualTo("08:00");
+        assertThat(visitTime.evaluate("element => element.max")).isEqualTo("17:00");
+        final var rejectedDateRequests = graphQLRequestCount("CausewayPrepareAction", bookingTodayIso);
+        fillEditor(visitDate, bookingTodayIso);
+        commitEditor(resolveEditor(parameter("visitDate")));
+        page.waitForFunction("() => document.querySelector(\"[data-testid='action-prompt'] [data-parameter='visitDate'] .causeway-action-parameter-reason\")");
+        assertThat(graphQLRequestCount("CausewayPrepareAction", bookingTodayIso)).isEqualTo(rejectedDateRequests);
+        assertThat(graphQLMutationCount("bookVisit") - bookVisitMutations).isZero();
+        cancelPrompt();
+        assertFocused("cw-action[id='bookVisit'] [data-causeway-action-control]");
     }
 
     @Test
@@ -852,37 +878,82 @@ class PetClinicHtmxPlaywrightTest {
             page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
             assertThat(petReference.evaluate("element => element.value?.id")).isNotNull();
         }
-        final var visitAt = resolveEditor(parameter("visitAt"));
+        final var visitDate = resolveEditor(parameter("visitDate"));
+        final var visitTime = resolveEditor(parameter("visitTime"));
         final var reason = resolveEditor(parameter("reason"));
+        final var tomorrowIso = (String) page.evaluate("""
+                () => {
+                  const date = new Date();
+                  date.setDate(date.getDate() + 1);
+                  const pad = value => String(value).padStart(2, '0');
+                  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+                }
+                """);
+        final var todayIso = LocalDate.parse(tomorrowIso).minusDays(1).toString();
         assertThat(page.locator(PROMPT + " [data-parameter='reason'] .causeway-action-parameter-label").textContent())
                 .isEqualTo("Reason for visit");
         assertThat(page.locator(PROMPT + " [data-parameter='reason'] .causeway-action-parameter-description").textContent())
                 .isEqualTo("Describe the purpose of the appointment.");
         assertThat(reason.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
                 .isEqualTo(3);
-        assertThat(visitAt.count())
+        assertThat(visitDate.count()).isEqualTo(1);
+        assertThat(visitTime.count())
                 .as(page.locator(PROMPT).evaluate("element => element.outerHTML").toString())
                 .isEqualTo(1);
-        assertThat(String.valueOf(visitAt.evaluate("element => element.value"))).isNotBlank();
+        assertThat(visitDate.evaluate("element => element.min")).isEqualTo(tomorrowIso);
+        assertThat(visitTime.evaluate("element => element.min")).isEqualTo("08:00");
+        assertThat(visitTime.evaluate("element => element.max")).isEqualTo("17:00");
+        assertThat(page.locator(PROMPT + " [data-parameter='visitDate']")
+                .getAttribute("data-causeway-temporal-range-status")).isEqualTo("valid");
+        assertThat(page.locator(PROMPT + " [data-parameter='visitTime']")
+                .getAttribute("data-causeway-temporal-range-status")).isEqualTo("valid");
+        assertThat(String.valueOf(visitDate.evaluate("element => element.value"))).isNotBlank();
+        assertThat(String.valueOf(visitTime.evaluate("element => element.value"))).isNotBlank();
         assertThat(reason.evaluate("element => element.value")).isEqualTo("Routine check-up");
+
+        visitDate.focus();
+        page.waitForTimeout(750);
+        final var rejectedDateRequests = graphQLRequestCount("CausewayPrepareAction", todayIso);
+        fillEditor(visitDate, todayIso);
+        commitEditor(resolveEditor(parameter("visitDate")));
+        page.waitForFunction("() => document.querySelector(\"[data-testid='action-prompt'] [data-parameter='visitDate'] .causeway-action-parameter-reason\")");
+        assertThat(page.locator(PROMPT + " [data-parameter='visitDate'] .causeway-action-parameter-reason").textContent())
+                .contains("Enter a value on or after " + tomorrowIso);
+        assertThat(graphQLRequestCount("CausewayPrepareAction", todayIso)).isEqualTo(rejectedDateRequests);
+        assertThat(graphQLMutationCount("bookVisit") - bookVisitMutations).isZero();
+        fillEditor(resolveEditor(parameter("visitDate")), tomorrowIso);
+        commitEditor(resolveEditor(parameter("visitDate")));
+        page.waitForFunction("() => !document.querySelector(\"[data-testid='action-prompt'] [data-parameter='visitDate'] .causeway-action-parameter-reason\")");
+
+        resolveEditor(parameter("visitTime")).focus();
+        page.waitForTimeout(750);
+        final var rejectedTimeRequests = graphQLRequestCount("CausewayPrepareAction", "17:15");
+        fillEditor(resolveEditor(parameter("visitTime")), "17:15");
+        commitEditor(resolveEditor(parameter("visitTime")));
+        page.waitForFunction("() => document.querySelector(\"[data-testid='action-prompt'] [data-parameter='visitTime'] .causeway-action-parameter-reason\")");
+        assertThat(page.locator(PROMPT + " [data-parameter='visitTime'] .causeway-action-parameter-reason").textContent())
+                .contains("Enter a value on or before 17:00");
+        assertThat(graphQLRequestCount("CausewayPrepareAction", "17:15")).isEqualTo(rejectedTimeRequests);
+        fillEditor(resolveEditor(parameter("visitTime")), "09:00");
+        commitEditor(resolveEditor(parameter("visitTime")));
+        page.waitForFunction("() => !document.querySelector(\"[data-testid='action-prompt'] [data-parameter='visitTime'] .causeway-action-parameter-reason\")");
+
         if (!nativeToolkit()) {
-            assertSingleVaadinMultilineFocus(reason);
-            assertThat(visitAt.evaluate("element => element.step")).isEqualTo(900);
-            final var timePicker = visitAt.locator("vaadin-time-picker");
-            assertThat(timePicker.count()).isEqualTo(1);
+            assertSingleVaadinMultilineFocus(resolveEditor(parameter("reason")));
+            final var timePicker = resolveEditor(parameter("visitTime"));
             assertThat(timePicker.evaluate("element => element.step")).isEqualTo(900);
             assertThat(String.valueOf(timePicker.evaluate("element => element.inputElement?.value")))
                     .doesNotMatch(".*:[0-9]{2}:[0-9]{2}.*")
                     .doesNotContain(".");
             final var timeTrigger = timePicker.locator("[data-causeway-time-trigger]");
             assertThat(timeTrigger.getAttribute("role")).isEqualTo("button");
-            assertThat(timeTrigger.getAttribute("aria-label")).isEqualTo("Open Visit At time picker");
+            assertThat(timeTrigger.getAttribute("aria-label")).isEqualTo("Open Visit Time time picker");
             timePicker.evaluate("element => element.inputElement.focus()");
             page.waitForTimeout(750);
             final var mutationsBeforePickerUse = graphQLMutationCount("bookVisit");
             final var visibleTimeOverlay = """
                     selector => {
-                      const picker = document.querySelector(selector)?.querySelector('vaadin-time-picker');
+                      const picker = document.querySelector(selector);
                       const overlay = picker?.shadowRoot?.querySelector('vaadin-time-picker-overlay');
                       const bounds = overlay?.getBoundingClientRect();
                       return picker?.opened === true
@@ -891,23 +962,22 @@ class PetClinicHtmxPlaywrightTest {
                         && bounds?.height > 0;
                     }
                     """;
-            timePicker.evaluate("element => element.inputElement.focus()");
             assertThat(timePicker.evaluate("element => element.inputElement.matches(':focus')")).isEqualTo(true);
             page.keyboard().press("Tab");
             assertThat(timeTrigger.evaluate("element => element.matches(':focus')"))
                     .as("Tab should move focus from the time input to its clock trigger")
                     .isEqualTo(true);
             timeTrigger.press("Enter");
-            page.waitForFunction(visibleTimeOverlay, parameter("visitAt"));
+            page.waitForFunction(visibleTimeOverlay, parameter("visitTime"));
             timePicker.evaluate("element => element.close()");
             page.waitForTimeout(50);
             timeTrigger.focus();
             timeTrigger.press("Space");
-            page.waitForFunction(visibleTimeOverlay, parameter("visitAt"));
+            page.waitForFunction(visibleTimeOverlay, parameter("visitTime"));
             timePicker.evaluate("element => element.close()");
             page.waitForTimeout(50);
             timeTrigger.click();
-            page.waitForFunction(visibleTimeOverlay, parameter("visitAt"));
+            page.waitForFunction(visibleTimeOverlay, parameter("visitTime"));
             assertThat(graphQLMutationCount("bookVisit") - mutationsBeforePickerUse).isZero();
             timePicker.evaluate("element => element.close()");
             page.waitForTimeout(50);
@@ -1463,6 +1533,12 @@ class PetClinicHtmxPlaywrightTest {
                 .count();
     }
 
+    private long graphQLRequestCount(final String operationName, final String value) {
+        return graphQLRequests.stream()
+                .filter(body -> body != null && body.contains(operationName) && body.contains(value))
+                .count();
+    }
+
     private long graphQLMutationCount(final String actionId) {
         return graphQLRequests.stream()
                 .filter(body -> body != null && body.contains("mutation") && body.contains(actionId))
@@ -1733,6 +1809,10 @@ class PetClinicHtmxPlaywrightTest {
         } else {
             editor.fill(value);
         }
+    }
+
+    private void commitEditor(final Locator editor) {
+        editor.evaluate("element => element.dispatchEvent(new FocusEvent('focusout', {bubbles: true, composed: true}))");
     }
 
     private void assertFocused(final String selector) {

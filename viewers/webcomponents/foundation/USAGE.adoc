@@ -459,11 +459,18 @@ An authored action can optionally nest `<cw-parameter>` presentation hints for s
 A declaration matches only an authoritative parameter with the same `id`; omitted declarations and omitted attributes retain canonical behavior.
 `named` overrides the humanized parameter name, `described-as` overrides its canonical description, and `description-as="label|tooltip"` selects visible or tooltip presentation with `label` as the default.
 A valid `multi-line` value greater than one requests the established bounded multiline string editor without changing parsing, validation, or invocation.
-Declarations never add, remove, reorder, hide, disable, default, validate, or invoke parameters.
+Optional `min` and `max` attributes or JavaScript properties constrain matching authoritative `LocalDate`, `LocalTime`, and `LocalDateTime` parameter editors through the same closed-interval grammar as editable properties.
+`LocalDate` accepts `today` and `tomorrow`, while `LocalDateTime` accepts `now`; relative tokens resolve once when each prompt opens and remain stable until it closes.
+Valid ranges reach native and qualified Vaadin controls and reject out-of-range pending values before GraphQL preparation, action validation, confirmation, or invocation.
+Malformed, blank, datatype-incompatible, or inverted ranges are ignored atomically, with `data-causeway-temporal-range-status="invalid"` exposed on the rendered parameter wrapper.
+A successfully resolved active range exposes `data-causeway-temporal-range-status="valid"`.
+Declarations never add, remove, reorder, hide, disable, default, validate canonically, confirm, or invoke parameters.
 
 [source,html]
 ----
 <cw-action id="bookVisit">
+  <cw-parameter id="visitDate" min="tomorrow"></cw-parameter>
+  <cw-parameter id="visitTime" min="08:00" max="17:00"></cw-parameter>
   <cw-parameter id="reason"
                 named="Reason for visit"
                 described-as="Brief clinical reason for the appointment"

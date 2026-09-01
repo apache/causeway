@@ -85,6 +85,8 @@
           <cw-collection-column id="reason" label="Reason"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
           <cw-action id="bookVisit" prompt-style="DIALOG_MODAL">
+            <cw-parameter id="visitDate" min="tomorrow"></cw-parameter>
+            <cw-parameter id="visitTime" min="08:00" max="17:00"></cw-parameter>
             <cw-parameter id="reason"
                           named="Reason for visit"
                           described-as="Describe the purpose of the appointment."

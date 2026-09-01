@@ -32,6 +32,11 @@ import {defaultEditorRegistry, parseCausewayEditorValue, renderCausewayEditor} f
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
 import {normalizeActionParameterConfigurations} from './parameter-element.mjs';
+import {
+  CausewayTemporalRangeStatus,
+  resolveCausewayTemporalRange,
+  validateCausewayTemporalRange
+} from './temporal-range.mjs';
 import {InteractionStatus} from './types.mjs';
 import {CausewayValueCodecError, semanticTypeName} from './value-codecs.mjs';
 
@@ -205,6 +210,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       parameterPresentations: normalizeActionParameterConfigurations(presentation?.parameters),
       values: Object.freeze({}),
       parameters: Object.freeze([]),
+      temporalRanges: Object.freeze([]),
+      parameterRangeErrors: Object.freeze([]),
       error: null
     });
     this.#publishPromptState();
@@ -249,6 +256,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       status: InteractionStatus.EDITING,
       values: Object.freeze(values),
       parameters,
+      temporalRanges: resolveParameterTemporalRanges(parameters, this.promptState.parameterPresentations),
+      parameterRangeErrors: Object.freeze([]),
       error: null
     });
     this.#publishPromptState();
@@ -271,7 +280,29 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     const effectiveFocusState = focusState === undefined ? this.#captureControlFocus() : focusState;
     const generation = ++this.generation;
     const values = Object.freeze({...this.promptState.values, [parameterId]: value});
-    this.promptState = Object.freeze({...this.promptState, values, error: null, status: InteractionStatus.EDITING});
+    const parameterRangeErrors = this.#validateParameterTemporalRanges(values);
+    const rangeError = parameterRangeErrors.find(candidate => candidate.parameter === parameterId)?.error ?? null;
+    if (parameterRangeErrors.length > 0) {
+      if (rangeError) this.validatedParameterIds.add(parameterId);
+      this.promptState = Object.freeze({
+        ...this.promptState,
+        values,
+        parameterRangeErrors,
+        error: null,
+        status: InteractionStatus.FAILED
+      });
+      this.#publishPromptState();
+      this.render();
+      this.#restoreControlFocus(effectiveFocusState);
+      return false;
+    }
+    this.promptState = Object.freeze({
+      ...this.promptState,
+      values,
+      parameterRangeErrors,
+      error: null,
+      status: InteractionStatus.EDITING
+    });
     this.#publishPromptState();
     if (!recompute) {
       this.render();
@@ -393,7 +424,20 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     for (const parameter of this.promptState.parameters) {
       this.validatedParameterIds.add(parameter.id);
     }
-    this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.VALIDATING, error: null});
+    const parameterRangeErrors = this.#validateParameterTemporalRanges(this.promptState.values);
+    if (parameterRangeErrors.length > 0) {
+      this.promptState = Object.freeze({
+        ...this.promptState,
+        parameterRangeErrors,
+        status: InteractionStatus.FAILED,
+        error: null
+      });
+      this.#publishPromptState();
+      this.render();
+      this.#focusFirstInvalidControl();
+      return false;
+    }
+    this.promptState = Object.freeze({...this.promptState, parameterRangeErrors, status: InteractionStatus.VALIDATING, error: null});
     this.#publishPromptState();
     this.render();
     this.#restoreControlFocus(focusState);
@@ -732,6 +776,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         ...this.promptState,
         values: Object.freeze({...this.promptState.values, [parameterId]: value}),
         parameters,
+        parameterRangeErrors: updateParameterRangeErrors(this.promptState.parameterRangeErrors, parameterId, null),
         error: null,
         status: InteractionStatus.EDITING
       });
@@ -748,7 +793,13 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       const values = Object.freeze({...this.promptState.values, [parameterId]: event.target.value});
       if (!commit) {
         this.validatedParameterIds.delete(parameterId);
-        this.promptState = Object.freeze({...this.promptState, values, status: InteractionStatus.EDITING, error: null});
+        this.promptState = Object.freeze({
+          ...this.promptState,
+          values,
+          parameterRangeErrors: updateParameterRangeErrors(this.promptState.parameterRangeErrors, parameterId, null),
+          status: InteractionStatus.EDITING,
+          error: null
+        });
         clearTimeout(this.parameterTimer);
         if (clearPresentedValidation) {
           this.#publishPromptState();
@@ -765,6 +816,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         ...this.promptState,
         values,
         parameters,
+        parameterRangeErrors: updateParameterRangeErrors(this.promptState.parameterRangeErrors, parameterId, null),
         status: InteractionStatus.FAILED,
         error: error.message
       });
@@ -862,6 +914,10 @@ ${this.#promptSurfaceClose(promptStyle)}`;
     const presentation = this.#parameterPresentation(parameter);
     const editorContext = this.#parameterEditorContext(parameter, choices, presentation);
     const rendered = renderCausewayEditor(editorContext, this._editorRegistry);
+    const temporalRange = this.#parameterTemporalRange(parameter.id);
+    const rangeStatus = [CausewayTemporalRangeStatus.VALID, CausewayTemporalRangeStatus.INVALID].includes(temporalRange?.status)
+      ? ` data-causeway-temporal-range-status="${temporalRange.status}"`
+      : '';
     const reason = protectedPromptText(this.promptState, this.#parameterReason(parameter));
     const tooltip = presentation.descriptionAs === DescriptionPresentation.TOOLTIP
       ? boundedTooltipSection(presentation.description)
@@ -871,7 +927,7 @@ ${this.#promptSurfaceClose(promptStyle)}`;
       ? ` tabindex="0" data-tooltip="${escapeHtml(tooltip)}" aria-describedby="${editorContext.descriptionId}"`
       : '';
     const descriptionClass = `causeway-action-parameter-description${presentation.descriptionAs === DescriptionPresentation.TOOLTIP ? ' causeway-visually-hidden' : ''}`;
-    return `<div class="causeway-action-parameter${reason ? ' causeway-error' : ''}" data-parameter="${escapeHtml(parameter.id)}"${presentation.multiLine ? ` data-multi-line="${presentation.multiLine}"` : ''}>
+    return `<div class="causeway-action-parameter${reason ? ' causeway-error' : ''}" data-parameter="${escapeHtml(parameter.id)}"${rangeStatus}${presentation.multiLine ? ` data-multi-line="${presentation.multiLine}"` : ''}>
   <label id="${editorContext.labelId}" class="${labelClass}" for="${editorContext.inputId}"${labelAttributes}>${escapeHtml(presentation.label)}</label>
   ${presentation.description ? `<span id="${editorContext.descriptionId}" class="${descriptionClass}">${escapeHtml(presentation.description)}</span>` : ''}
   ${rendered.html}
@@ -880,10 +936,14 @@ ${this.#promptSurfaceClose(promptStyle)}`;
   }
 
   #parameterReason(parameter) {
+    const localRangeReason = this.validatedParameterIds.has(parameter.id)
+      ? this.promptState?.parameterRangeErrors
+        ?.find(candidate => candidate.parameter === parameter.id)?.error?.message ?? ''
+      : '';
     const validationReason = this.validatedParameterIds.has(parameter.id)
       ? parameter.state?.error || parameter.state?.validity || ''
       : '';
-    return validationReason || parameter.state?.disabled || '';
+    return localRangeReason || validationReason || parameter.state?.disabled || '';
   }
 
   #parameterEditorContext(parameter, choices, presentation = this.#parameterPresentation(parameter)) {
@@ -904,6 +964,12 @@ ${this.#promptSurfaceClose(promptStyle)}`;
       enumValues: parameter.enumValues,
       inputType: parameter.inputType,
       semanticType: parameter.state?.datatype ?? null,
+      min: this.#parameterTemporalRange(parameter.id)?.status === CausewayTemporalRangeStatus.VALID
+        ? this.#parameterTemporalRange(parameter.id).min
+        : null,
+      max: this.#parameterTemporalRange(parameter.id)?.status === CausewayTemporalRangeStatus.VALID
+        ? this.#parameterTemporalRange(parameter.id).max
+        : null,
       required: parameter.inputType?.kind === 'NON_NULL',
       multiLine: presentation.multiLine,
       inputId: `causeway-action-parameter-${parameter.id}`,
@@ -913,6 +979,24 @@ ${this.#promptSurfaceClose(promptStyle)}`;
       testId: `action-prompt-parameter-${parameter.id}`,
       disabled: Boolean(parameter.state?.disabled) || state.status === InteractionStatus.INVOKING
     };
+  }
+
+  #validateParameterTemporalRanges(values) {
+    return this.promptState.parameters.reduce((errors, parameter) => {
+      const value = Object.prototype.hasOwnProperty.call(values, parameter.id)
+        ? values[parameter.id]
+        : parameter.state?.default ?? null;
+      return updateParameterRangeErrors(
+        errors,
+        parameter.id,
+        validateCausewayTemporalRange(value, this.#parameterTemporalRange(parameter.id))
+      );
+    }, Object.freeze([]));
+  }
+
+  #parameterTemporalRange(parameterId) {
+    return this.promptState?.temporalRanges
+      ?.find(candidate => candidate.parameter === parameterId)?.range ?? null;
   }
 
   #parameterPresentation(parameter) {
@@ -1100,6 +1184,32 @@ ${this.#promptSurfaceClose(promptStyle)}`;
       focusTarget?.focus?.();
     });
   }
+}
+
+function resolveParameterTemporalRanges(parameters, presentations) {
+  const ranges = [];
+  for (const parameter of parameters ?? []) {
+    const authored = presentations?.find(candidate => candidate.parameter === parameter.id);
+    if (!authored || (authored.min == null && authored.max == null)) continue;
+    const range = resolveCausewayTemporalRange({
+      semanticType: semanticTypeName({
+        semanticType: parameter.state?.datatype,
+        inputType: parameter.inputType
+      }),
+      min: authored.min,
+      max: authored.max
+    });
+    if ([CausewayTemporalRangeStatus.VALID, CausewayTemporalRangeStatus.INVALID].includes(range.status)) {
+      ranges.push(Object.freeze({parameter: parameter.id, range}));
+    }
+  }
+  return Object.freeze(ranges);
+}
+
+function updateParameterRangeErrors(errors, parameterId, error) {
+  const updated = (errors ?? []).filter(candidate => candidate.parameter !== parameterId);
+  if (error) updated.push(Object.freeze({parameter: parameterId, error}));
+  return Object.freeze(updated);
 }
 
 function legacyWindowResult(result, offset, requestedSize) {
