@@ -82,6 +82,8 @@ export const CausewayAttribute = Object.freeze({
   DESCRIPTION_AS: 'description-as',
   MULTI_LINE: 'multi-line',
   LABEL_POSITION: 'label-position',
+  MIN: 'min',
+  MAX: 'max',
   PROMPT_STYLE: 'prompt-style',
   ACTIVE: 'active',
   LOGICAL_TYPE: 'logical-type',

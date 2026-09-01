@@ -344,6 +344,22 @@ A property remains read-only unless the application adds `editable`:
 <cw-property id="summary" editable></cw-property>
 ----
 
+Editable authoritative `LocalDate`, `LocalTime`, and `LocalDateTime` properties can declare a closed interval with matching ISO `min` and `max` attributes or JavaScript properties.
+`LocalDate` additionally accepts `today` and `tomorrow`, while `LocalDateTime` accepts `now`.
+Relative tokens resolve from the browser's local calendar and clock when each edit begins and remain fixed until that edit ends.
+Valid bounds are propagated to native and qualified Vaadin editors and are checked locally before GraphQL validation or mutation.
+A rejected pending value remains available for correction, and values equal to either boundary are accepted.
+Malformed, blank, datatype-incompatible, or inverted authored intervals are ignored atomically so the canonical editor remains usable, with `data-causeway-temporal-range-status="invalid"` available as a deterministic diagnostic hook.
+A successfully resolved active interval exposes `data-causeway-temporal-range-status="valid"`; the status is removed when editing ends.
+Ranges do not affect non-local, offset, zoned, legacy, read-only, or unsupported temporal presentations.
+
+[source,html]
+----
+<cw-property id="appointmentDate" editable min="today"></cw-property>
+<cw-property id="officeTime" editable min="08:00" max="18:00"></cw-property>
+<cw-property id="startsAt" editable min="now" max="2027-12-31T18:00"></cw-property>
+----
+
 When the rich schema advertises a setter or top-level property mutation, the component prepares an editor lazily, resolves enum or dynamic choices, validates pending input, and executes the update through its object context.
 Cancel restores the authoritative value without a command.
 A successful save invalidates the complete active object projection so supporting-method changes are reflected by every mounted component.

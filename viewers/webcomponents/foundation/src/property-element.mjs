@@ -46,15 +46,20 @@ import {
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {namedType} from './introspection.mjs';
+import {
+  CausewayTemporalRangeStatus,
+  resolveCausewayTemporalRange,
+  validateCausewayTemporalRange
+} from './temporal-range.mjs';
 import {InteractionStatus} from './types.mjs';
-import {CausewayValueCodecError, selectCausewayValueCodec} from './value-codecs.mjs';
+import {CausewayValueCodecError, selectCausewayValueCodec, semanticTypeName} from './value-codecs.mjs';
 import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
 
 let propertySequence = 0;
 
 export class CausewayPropertyElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'named', 'described-as', 'description-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline'];
+    return ['id', 'named', 'described-as', 'description-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline', 'min', 'max'];
   }
 
   constructor() {
@@ -164,6 +169,22 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     } else {
       this.removeAttribute('editable');
     }
+  }
+
+  get min() {
+    return this.getAttribute('min');
+  }
+
+  set min(value) {
+    setOptionalAttribute(this, 'min', value);
+  }
+
+  get max() {
+    return this.getAttribute('max');
+  }
+
+  set max(value) {
+    setOptionalAttribute(this, 'max', value);
   }
 
   get multiLine() {
@@ -279,6 +300,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     this.restoreEditFocusAfterGeneration = null;
     this.restoreClearFocus = false;
+    this.removeAttribute('data-causeway-temporal-range-status');
     const generation = ++this.interactionGeneration;
     this.#setInteraction({status: InteractionStatus.PREPARING, pendingValue: state.data?.get, error: null});
     const result = await this._resolvedContext.prepareProperty(this.id);
@@ -293,10 +315,13 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       });
       return false;
     }
+    const temporalRange = this.#resolveTemporalRange(result.data.capabilities);
+    this.#presentTemporalRangeStatus(temporalRange);
     const editorContext = this.#editorContext({
       pendingValue: state.data?.get,
       capabilities: result.data.capabilities,
       choices: result.data.choices,
+      temporalRange,
       error: null
     });
     const renderedEditor = renderCausewayEditor(editorContext, this._editorRegistry);
@@ -306,6 +331,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
         pendingValue: state.data?.get,
         capabilities: result.data.capabilities,
         choices: result.data.choices,
+        temporalRange,
         editor: renderedEditor.editor,
         error: `No editor supports '${result.data.capabilities.inputType?.name ?? 'this input type'}'.`
       });
@@ -317,6 +343,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       capabilities: result.data.capabilities,
       choices: result.data.choices,
       suggestions: Object.freeze([]),
+      temporalRange,
       editor: renderedEditor.editor,
       error: null
     });
@@ -337,6 +364,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.interactionState = null;
     this.restoreEditFocusAfterGeneration = null;
     this.restoreClearFocus = false;
+    this.removeAttribute('data-causeway-temporal-range-status');
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
       member: this.id,
       status: InteractionStatus.CANCELLED,
@@ -427,6 +455,23 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   }
 
   async validatePending() {
+    const localRangeError = validateCausewayTemporalRange(
+      this.interactionState?.pendingValue,
+      this.interactionState?.temporalRange
+    );
+    if (localRangeError) {
+      clearTimeout(this.validationTimer);
+      this.#setInteraction({
+        ...this.interactionState,
+        status: InteractionStatus.FAILED,
+        error: localRangeError.message
+      });
+      return {
+        status: InteractionStatus.FAILED,
+        data: null,
+        errors: [{message: localRangeError.message, extensions: {code: localRangeError.code}}]
+      };
+    }
     if (!this.interactionState?.capabilities?.validate) {
       return {status: InteractionStatus.SUCCESS, data: null, errors: []};
     }
@@ -481,6 +526,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const editor = this.interactionState.editor;
     this.interactionState = null;
     this.restoreClearFocus = false;
+    this.removeAttribute('data-causeway-temporal-range-status');
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_UPDATED, Object.freeze({
       member: this.id,
       value: publicInteractionValue(editor, pendingValue),
@@ -706,6 +752,26 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     return multiLine ? ` data-multi-line="${multiLine}"` : '';
   }
 
+  #resolveTemporalRange(capabilities) {
+    const semanticType = semanticTypeName({
+      semanticType: this.componentState?.data?.datatype ?? capabilities?.semanticType,
+      inputType: capabilities?.inputType
+    });
+    return resolveCausewayTemporalRange({
+      semanticType,
+      min: this.hasAttribute('min') ? this.getAttribute('min') : null,
+      max: this.hasAttribute('max') ? this.getAttribute('max') : null
+    });
+  }
+
+  #presentTemporalRangeStatus(range) {
+    if ([CausewayTemporalRangeStatus.VALID, CausewayTemporalRangeStatus.INVALID].includes(range.status)) {
+      this.setAttribute('data-causeway-temporal-range-status', range.status);
+    } else {
+      this.removeAttribute('data-causeway-temporal-range-status');
+    }
+  }
+
   #editorContext(interaction = this.interactionState) {
     const presentation = this.#presentation(this.componentState);
     return {
@@ -721,6 +787,8 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       enumValues: interaction.capabilities?.enumValues ?? [],
       inputType: interaction.capabilities?.inputType,
       semanticType: this.componentState?.data?.datatype ?? interaction.capabilities?.semanticType ?? null,
+      min: interaction.temporalRange?.status === CausewayTemporalRangeStatus.VALID ? interaction.temporalRange.min : null,
+      max: interaction.temporalRange?.status === CausewayTemporalRangeStatus.VALID ? interaction.temporalRange.max : null,
       required: interaction.capabilities?.inputType?.kind === 'NON_NULL',
       multiLine: this.#effectiveMultiLine(this.componentState),
       inputId: this.inputId,

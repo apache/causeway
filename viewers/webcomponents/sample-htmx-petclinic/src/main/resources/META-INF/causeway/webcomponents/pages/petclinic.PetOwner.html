@@ -52,7 +52,8 @@
         <h2 id="petclinic-owner-details-heading">Details</h2>
         <div class="petclinic-field-list">
           <cw-property id="notes" editable multi-line="5"></cw-property>
-          <cw-property id="lastVisit" editable label-position="TOP"></cw-property>
+          <cw-property id="lastVisit" editable label-position="TOP"
+                       min="2000-01-01" max="today"></cw-property>
           <cw-property id="daysSinceLastVisit"></cw-property>
         </div>
       </section>

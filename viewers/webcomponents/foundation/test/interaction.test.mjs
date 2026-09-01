@@ -33,6 +33,7 @@ const {
   buildObjectInteractionOperation,
   commandSelection,
   causewayReferenceWidgetConfiguration,
+  configureCausewayFieldWidgets,
   configureCausewayReferenceWidgets,
   defaultEditorRegistry,
   normalizeAutoCompleteWindow,
@@ -308,6 +309,114 @@ test('default reference widgets preserve identities, bounds and explicit native 
     descriptionId: '', errorId: '', testId: ''
   });
   assert.equal(nativeFallback.editorId, 'choice');
+});
+
+test('property temporal ranges reject locally then resume canonical validation and save', async () => {
+  configureCausewayFieldWidgets({families: []});
+  let stateListener;
+  const calls = [];
+  const context = {
+    registerRequirement(requirement, listener) {
+      stateListener = listener;
+      return () => {};
+    },
+    async prepareProperty() {
+      calls.push('prepare');
+      return {
+        status: 'success', errors: [], data: {
+          capabilities: {validate: true, inputType: scalar('LocalDate'), enumValues: []},
+          choices: []
+        }
+      };
+    },
+    async validateProperty(member, value) {
+      calls.push(`validate:${value}`);
+      return {status: 'success', data: null, errors: []};
+    },
+    async updateProperty(member, value) {
+      calls.push(`update:${value}`);
+      return {status: 'success', data: {_meta: {id: '42'}}, errors: []};
+    }
+  };
+  const property = new CausewayPropertyElement();
+  property.id = 'lastVisit';
+  property.editable = true;
+  property.min = '2026-01-01';
+  property.max = '2026-12-31';
+  property.context = context;
+  document.body.appendChild(property);
+  stateListener({
+    status: 'ready',
+    descriptor: {id: 'lastVisit', value: {typeRef: scalar('LocalDate')}},
+    data: {hidden: false, disabled: null, datatype: 'LocalDate', get: '2026-08-31'},
+    errors: [], generation: 1
+  });
+
+  assert.equal(await property.beginEdit(), true);
+  assert.equal(property.getAttribute('data-causeway-temporal-range-status'), 'valid');
+  assert.match(property.innerHTML, /type="date"[^>]+min="2026-01-01" max="2026-12-31"/);
+  property.setPendingValue('2027-01-01');
+  const localValidation = await property.validatePending();
+  assert.equal(localValidation.status, 'failed');
+  assert.equal(localValidation.errors[0].extensions.code, 'TEMPORAL_RANGE_MAX');
+  assert.match(property.interactionState.error, /on or before 2026-12-31/);
+  assert.equal(property.interactionState.pendingValue, '2027-01-01');
+  assert.deepEqual(calls, ['prepare']);
+  assert.equal(await property.saveEdit(), false);
+  assert.deepEqual(calls, ['prepare']);
+
+  property.setPendingValue('2026-09-01');
+  assert.equal((await property.validatePending()).status, 'success');
+  assert.deepEqual(calls, ['prepare', 'validate:2026-09-01']);
+  assert.equal(await property.saveEdit(), true);
+  assert.deepEqual(calls, ['prepare', 'validate:2026-09-01', 'validate:2026-09-01', 'update:2026-09-01']);
+  assert.equal(property.getAttribute('data-causeway-temporal-range-status'), null);
+
+  property.min = '2027-01-01';
+  property.max = '2026-01-01';
+  assert.equal(await property.beginEdit(), true);
+  assert.equal(property.getAttribute('data-causeway-temporal-range-status'), 'invalid');
+  assert.doesNotMatch(property.innerHTML, /<input[^>]+\smin=|<input[^>]+\smax=/);
+  property.setPendingValue('2027-01-01');
+  assert.equal((await property.validatePending()).status, 'success');
+  assert.ok(calls.includes('validate:2027-01-01'));
+  assert.equal(property.cancelEdit(), true);
+  assert.equal(property.getAttribute('data-causeway-temporal-range-status'), null);
+  document.body.removeChild(property);
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal']});
+});
+
+test('temporal range attributes do not affect non-temporal property editors', async () => {
+  configureCausewayFieldWidgets({families: []});
+  let stateListener;
+  const context = {
+    registerRequirement(requirement, listener) {
+      stateListener = listener;
+      return () => {};
+    },
+    async prepareProperty() {
+      return {status: 'success', errors: [], data: {
+        capabilities: {validate: false, inputType: scalar('String'), enumValues: []}, choices: []
+      }};
+    }
+  };
+  const property = new CausewayPropertyElement();
+  property.id = 'name';
+  property.editable = true;
+  property.min = 'today';
+  property.max = 'tomorrow';
+  property.context = context;
+  document.body.appendChild(property);
+  stateListener({
+    status: 'ready', descriptor: {id: 'name', value: {typeRef: scalar('String')}},
+    data: {hidden: false, disabled: null, datatype: 'String', get: 'Ada'}, errors: [], generation: 1
+  });
+  assert.equal(await property.beginEdit(), true);
+  assert.equal(property.getAttribute('data-causeway-temporal-range-status'), null);
+  assert.doesNotMatch(property.innerHTML, /<input[^>]+\smin=|<input[^>]+\smax=/);
+  property.cancelEdit();
+  document.body.removeChild(property);
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal']});
 });
 
 test('editable properties support prepare, validation, cancel and authoritative save', async () => {
