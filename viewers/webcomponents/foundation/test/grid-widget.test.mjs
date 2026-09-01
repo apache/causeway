@@ -189,6 +189,34 @@ test('virtual Grid maps page callbacks to bounded range provider', async () => {
   document.body.removeChild(adapter);
 });
 
+test('complete one-window virtual Grid fits rows and returns to scrolling when the total grows', async () => {
+  configureCausewayGridWidgets({enabled: true, moduleUrl: fakeGridModule});
+  const adapter = new CausewayCollectionGridElement();
+  adapter.presentation = {
+    ...boundedPresentation(),
+    mode: 'virtual',
+    totalCount: 2,
+    pageSize: 10,
+    rangeProvider: async () => ({rows: boundedPresentation().rows})
+  };
+  await connect(adapter);
+  const control = adapter.childNodes[0];
+  assert.equal(control.allRowsVisible, true);
+
+  adapter.presentation = {
+    ...boundedPresentation(),
+    mode: 'virtual',
+    totalCount: 3,
+    pageSize: 10,
+    rangeProvider: async () => ({rows: boundedPresentation().rows})
+  };
+  assert.equal(control.allRowsVisible, false);
+
+  adapter.presentation = boundedPresentation();
+  assert.equal(control.allRowsVisible, true);
+  document.body.removeChild(adapter);
+});
+
 test('semantic focus follows current row and member rather than a recycled cell node', async () => {
   configureCausewayGridWidgets({enabled: true, moduleUrl: fakeGridModule});
   const adapter = new CausewayCollectionGridElement();

@@ -181,8 +181,12 @@ test('collection keeps interleaved columns and actions in separate vocabularies'
   document.body.appendChild(ownerContext);
   await new Promise(resolve => setTimeout(resolve, 0));
 
+  const primary = collection.childNodes.at(-1);
+  assert.equal(primary.getAttribute('data-causeway-member-primary'), '');
   assert.deepEqual(collection.columns.map(candidate => candidate.member), ['name', 'species']);
   assert.deepEqual(associatedActions(collection), [addPet, removePet]);
+  assert.ok(collection.childNodes.indexOf(addPet) < collection.childNodes.indexOf(primary));
+  assert.ok(collection.childNodes.indexOf(removePet) < collection.childNodes.indexOf(primary));
   assert.equal(nameColumn.hidden, true);
   assert.equal(speciesColumn.hidden, true);
   assert.equal(context.count('collection:pets'), 1);
@@ -191,7 +195,7 @@ test('collection keeps interleaved columns and actions in separate vocabularies'
 
   context.publish('collection:pets', collectionState({hidden: true}));
   assert.equal(collection.hidden, false);
-  assert.equal(collection.childNodes[0].hidden, true);
+  assert.equal(primary.hidden, true);
   assert.equal(addPet.isConnected, true);
   context.publish('collection:pets', collectionState({disabled: 'Collection is locked'}));
   assert.match(collection.innerHTML, /class="causeway-collection-label causeway-member-tooltip"/);
@@ -207,6 +211,28 @@ test('collection keeps interleaved columns and actions in separate vocabularies'
   assert.equal(context.releaseCount('collection:pets'), 1);
   assert.equal(context.releaseCount('action:addPet'), 1);
   assert.equal(context.releaseCount('action:removePet'), 1);
+});
+
+test('parser-late collection actions stay before the stable primary region', async () => {
+  const context = recordingContext();
+  const ownerContext = objectContext(context);
+  const collection = new CausewayCollectionElement();
+  collection.id = 'pets';
+  ownerContext.appendChild(collection);
+  document.body.appendChild(ownerContext);
+  const primary = collection.childNodes.at(-1);
+  const addPet = action('addPet');
+  collection.appendChild(addPet);
+  await Promise.resolve();
+
+  assert.equal(collection.childNodes.at(-1), primary);
+  assert.ok(collection.childNodes.indexOf(addPet) < collection.childNodes.indexOf(primary));
+  assert.deepEqual(associatedActions(collection), [addPet]);
+  assert.equal(context.count('action:addPet'), 1);
+  context.publish('collection:pets', collectionState());
+  assert.equal(collection.childNodes.at(-1), primary);
+  assert.equal(addPet.isConnected, true);
+  document.body.removeChild(ownerContext);
 });
 
 test('reconnecting a composition registers each existing semantic child once per connection', async () => {

@@ -351,7 +351,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
-    connectMemberComposition(this);
+    connectMemberComposition(this, {primaryPlacement: 'last'});
     globalThis.document?.addEventListener?.(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, this.gridPolicyListener);
     this.columnObserver?.observe(this, {childList: true});
     globalThis.setTimeout(() => {

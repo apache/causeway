@@ -184,7 +184,8 @@ export class CausewayCollectionGridElement extends HTMLElement {
     if (presentation.testId) control.setAttribute('data-testid', presentation.testId);
     else control.removeAttribute('data-testid');
     control.pageSize = presentation.pageSize;
-    control.allRowsVisible = presentation.mode === 'bounded';
+    control.allRowsVisible = presentation.mode === 'bounded'
+      || presentation.totalCount <= presentation.rows.length;
     control.columnReorderingAllowed = presentation.reorderableColumns;
     control.activeItem = null;
     control.selectedItems = [];
