@@ -879,7 +879,8 @@ Object composition SHALL present actions in responsive semantic groups with cons
 
 #### Scenario: Collection actions are rendered
 - **WHEN** one or more actions are nested beneath a collection reference in the effective grid
-- **THEN** the actions are rendered together immediately following that collection rather than in the top-level action group
+- **THEN** the actions are rendered together in declaration order immediately before that collection's primary surface
+- **AND** they remain distinct from the top-level action group
 
 ### Requirement: Optional semantic reference widget implementation
 The semantic editor registry SHALL use the qualified internal Vaadin implementation by default for eligible single-reference and multi-reference inputs without changing the public Causeway element, context, identity, validation, or event contracts.
@@ -1191,7 +1192,7 @@ Property and collection components SHALL preserve each declared associated actio
 
 #### Scenario: Collection presentation changes
 - **WHEN** a collection moves through inactive, loading, ready, empty, error, paging, and refreshed states
-- **THEN** its associated action elements remain connected after the collection's primary presentation
+- **THEN** its associated action elements remain connected before the collection's stable primary presentation
 - **AND** collection-column capture and row rendering neither consume nor duplicate them
 
 #### Scenario: Owner route is replaced
@@ -1230,10 +1231,15 @@ Association SHALL affect presentation placement only, while every associated act
 ### Requirement: Accessible responsive association presentation
 Directly authored and grid-generated member associations SHALL expose equivalent ordered, keyboard-operable, responsive presentation through documented Causeway hooks and design variables.
 
-#### Scenario: Associated actions render at a wide viewport
-- **WHEN** one owner has multiple visible associated actions
-- **THEN** the owner presentation appears before one ordered action region
+#### Scenario: Property-associated actions render at a wide viewport
+- **WHEN** one property has one or more visible associated actions
+- **THEN** the property presentation appears before its ordered action region
 - **AND** controls retain visible labels, focus indicators, and semantic button behavior
+
+#### Scenario: Collection-associated actions render at a wide viewport
+- **WHEN** one collection has one or more visible associated actions
+- **THEN** one right-aligned ordered action toolbar appears before the collection's primary surface in both visual and sequential keyboard order
+- **AND** the toolbar does not overlap the collection heading, description, search, rows, Grid, or paging controls
 
 #### Scenario: Associated actions render at a narrow viewport
 - **WHEN** the available inline size cannot contain every associated action on one row
