@@ -69,6 +69,7 @@ class FakeDateTimePicker extends FakeTemporalControl {
 }
 
 if (globalThis.customElements) {
+  if (!customElements.get('vaadin-date-picker')) customElements.define('vaadin-date-picker', FakeTemporalControl);
   if (!customElements.get('vaadin-time-picker')) customElements.define('vaadin-time-picker', FakeTemporalControl);
   if (!customElements.get('vaadin-date-time-picker')) customElements.define('vaadin-date-time-picker', FakeDateTimePicker);
 }

@@ -60,6 +60,7 @@ export * from './selection.mjs';
 export * from './service-action-context.mjs';
 export * from './structural-resource.mjs';
 export * from './structural-xml.mjs';
+export * from './temporal-range.mjs';
 export * from './types.mjs';
 export * from './value-codecs.mjs';
 export * from './value-element.mjs';

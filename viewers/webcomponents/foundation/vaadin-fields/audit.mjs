@@ -38,8 +38,11 @@ if (outputDirectory) writeFileSync(resolve(outputDirectory, 'field-audit.json'),
 console.log(JSON.stringify(results, null, 2));
 if (!writePolicy && Object.values(results).some(result => result.cspViolations.length || result.axeViolations.length
     || result.consoleErrors.length || result.pageErrors.length || result.externalRequests.length || result.overflow
-    || result.readOnlyState.some(state => state.changed || state.opened || !state.named || !state.described || !state.readOnly)
-    || result.timePickerState.some(state => !state.quarterHourStep || !state.hasToggle || !state.pointerOperable || !state.visibleOverlay))) {
+    || result.readOnlyState.some(state => state.changed || state.opened || !state.named || !state.described || !state.readOnly
+      || !state.rangeOmitted)
+    || result.timePickerState.some(state => !state.quarterHourStep || !state.hasToggle || !state.pointerOperable || !state.visibleOverlay)
+    || result.temporalRangeState.some(state => !state.minApplied || !state.maxApplied
+      || !state.outOfRangeRejected || !state.correctedAccepted))) {
   process.exitCode = 1;
 }
 
@@ -124,6 +127,30 @@ async function auditFamily(family, controls, hashes) {
       timePickerState.push({owner, hasToggle, ...state});
     }
   }
+  const temporalRangeState = [];
+  if (family === 'local-temporal') {
+    for (const [index, tag] of controls.entries()) {
+      const locator = page.locator(`#control-${index}`);
+      const bounds = temporalBounds(tag);
+      const state = await locator.evaluate(async (control, expected) => {
+        control.value = expected.outOfRange;
+        await control.updateComplete;
+        control.validate?.();
+        const outOfRangeRejected = control.invalid === true || control.checkValidity?.() === false;
+        control.value = expected.corrected;
+        await control.updateComplete;
+        control.validate?.();
+        const correctedAccepted = control.invalid !== true && control.checkValidity?.() !== false;
+        return {
+          minApplied: control.min === expected.min,
+          maxApplied: control.max === expected.max,
+          outOfRangeRejected,
+          correctedAccepted
+        };
+      }, bounds);
+      temporalRangeState.push({tag, ...state});
+    }
+  }
   const readOnlyState = [];
   for (const [index, tag] of controls.entries()) {
     const locator = page.locator(`#view-${index}`);
@@ -147,6 +174,7 @@ async function auditFamily(family, controls, hashes) {
       value: 'checked' in control ? control.checked : control.value,
       opened: Boolean(control.opened),
       readOnly: control.readOnly === true && control.hasAttribute('readonly'),
+      rangeOmitted: !control.min && !control.max,
       named: (() => {
         const labelId = `${control.id}-label`;
         const inputs = [control.inputElement, control.focusElement];
@@ -206,6 +234,7 @@ async function auditFamily(family, controls, hashes) {
     accessibilityState,
     readOnlyState,
     timePickerState,
+    temporalRangeState,
     presentation: {narrowDarkReducedMotion: !narrowOverflow, wideForcedColors: !wideOverflow},
     consoleErrors,
     pageErrors,
@@ -226,6 +255,11 @@ function fixture(family, controls) {
     control.required = ${index === 0};
     if ('items' in control) control.items = [{label: 'One', value: 'one'}, {label: 'Two', value: 'two'}];
     if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') control.step = 900;
+    if (${JSON.stringify(family)} === 'local-temporal') {
+      const bounds = ${JSON.stringify(controls.map(temporalBounds))}[${index}];
+      control.min = bounds.min;
+      control.max = bounds.max;
+    }
     if ('${tag}' === 'vaadin-checkbox') control.checked = true;
     else if ('value' in control) control.value = ${JSON.stringify(initialValue(family, tag, true))};
     fixture.append(control);
@@ -271,6 +305,19 @@ await Promise.all(${JSON.stringify(controls)}.map(tag => customElements.whenDefi
 ${setups}
 await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 document.body.dataset.ready = 'true';`;
+}
+
+function temporalBounds(tag) {
+  if (tag === 'vaadin-date-picker') {
+    return {min: '2026-01-01', max: '2026-12-31', outOfRange: '2027-01-01', corrected: '2026-08-24'};
+  }
+  if (tag === 'vaadin-time-picker') {
+    return {min: '08:00', max: '18:00', outOfRange: '19:00', corrected: '13:15'};
+  }
+  return {
+    min: '2026-08-24T08:00', max: '2026-08-24T18:00',
+    outOfRange: '2026-08-24T19:00', corrected: '2026-08-24T13:15'
+  };
 }
 
 function initialValue(family, tag, editable) {

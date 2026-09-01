@@ -290,11 +290,11 @@ function parseTemporal(value, context) {
   }
   const typeName = semanticTypeName(context);
   const valid = typeName === 'LocalDate'
-    ? validLocalDate(lexical)
+    ? isValidCausewayLocalDate(lexical)
     : typeName === 'LocalTime'
-      ? LOCAL_TIME_PATTERN.test(lexical)
+      ? isValidCausewayLocalTime(lexical)
       : typeName === 'LocalDateTime'
-        ? validLocalDateTime(lexical)
+        ? isValidCausewayLocalDateTime(lexical)
         : typeName === 'OffsetTime'
           ? validOffsetTime(lexical)
           : typeName === 'ZonedDateTime'
@@ -340,7 +340,7 @@ function requiredValue(value, context) {
   return value == null || value === '' ? null : value;
 }
 
-function validLocalDate(value) {
+export function isValidCausewayLocalDate(value) {
   const match = LOCAL_DATE_PATTERN.exec(value);
   if (!match) {
     return false;
@@ -352,9 +352,15 @@ function validLocalDate(value) {
   return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
-function validLocalDateTime(value) {
+export function isValidCausewayLocalTime(value) {
+  return LOCAL_TIME_PATTERN.test(value);
+}
+
+export function isValidCausewayLocalDateTime(value) {
   const separator = value.indexOf('T');
-  return separator > 0 && validLocalDate(value.slice(0, separator)) && LOCAL_TIME_PATTERN.test(value.slice(separator + 1));
+  return separator > 0
+    && isValidCausewayLocalDate(value.slice(0, separator))
+    && isValidCausewayLocalTime(value.slice(separator + 1));
 }
 
 function validOffsetTime(value) {
@@ -364,7 +370,7 @@ function validOffsetTime(value) {
 
 function validOffsetDateTime(value) {
   const zoneStart = Math.max(value.lastIndexOf('+'), value.lastIndexOf('-'), value.endsWith('Z') ? value.length - 1 : -1);
-  return zoneStart > 10 && validLocalDateTime(value.slice(0, zoneStart)) && OFFSET_PATTERN.test(value.slice(zoneStart));
+  return zoneStart > 10 && isValidCausewayLocalDateTime(value.slice(0, zoneStart)) && OFFSET_PATTERN.test(value.slice(zoneStart));
 }
 
 function validZonedDateTime(value) {

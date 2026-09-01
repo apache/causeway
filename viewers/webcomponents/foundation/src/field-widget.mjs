@@ -189,6 +189,8 @@ export function renderCausewayFieldWidget(context) {
   if (context.testId) attributes.push(`data-testid="${escapeHtml(context.testId)}"`);
   if (context.descriptionId || context.errorId) attributes.push(`data-describedby="${escapeHtml([context.descriptionId, context.errorId].filter(Boolean).join(' '))}"`);
   if (context.errorId) attributes.push('data-invalid="true"');
+  if (context.min != null) attributes.push(`data-min="${escapeHtml(context.min)}"`);
+  if (context.max != null) attributes.push(`data-max="${escapeHtml(context.max)}"`);
   if (context.required) attributes.push('required');
   if (context.disabled) attributes.push('disabled');
   if (descriptor.inputMode) attributes.push(`data-input-mode="${descriptor.inputMode}"`);
@@ -385,6 +387,10 @@ export class CausewayFieldEditorElement extends HTMLElement {
         if (this.dataset.control === 'select') control.items = this.#items();
         if (['time-picker', 'date-time-picker'].includes(this.dataset.control)) {
           control.step = viewMode ? 0.001 : 900;
+        }
+        if (!viewMode) {
+          if (this.dataset.min != null) control.min = this.dataset.min;
+          if (this.dataset.max != null) control.max = this.dataset.max;
         }
         control.value = this.dataset.value ?? '';
         if (this.dataset.rows && 'maxRows' in control) {
