@@ -57,6 +57,20 @@ cw-object {
 .causeway-object-associated-actions {
   margin-block: -0.25rem 0.75rem;
 }
+.causeway-object-member-composition[data-causeway-associated-kind="collection"] {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-inline-size: 0;
+}
+.causeway-object-member-composition[data-causeway-associated-kind="collection"] > .causeway-object-associated-actions {
+  margin-block: 0 0.75rem;
+}
+.causeway-object-member-composition[data-causeway-associated-kind="collection"] > cw-collection {
+  flex: 1 0 100%;
+  min-inline-size: 0;
+}
 cw-property[data-causeway-action-group] {
   align-items: start;
   display: grid;
@@ -69,6 +83,7 @@ cw-collection[data-causeway-action-group] {
   display: flex;
   flex-wrap: wrap;
   gap: var(--causeway-associated-action-gap, var(--causeway-object-action-gap, 0.5rem));
+  justify-content: flex-end;
   min-inline-size: 0;
 }
 cw-property[data-causeway-action-group] > .causeway-member-primary {

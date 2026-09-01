@@ -19,19 +19,25 @@
 
 const memberCompositions = new WeakMap();
 
-export function connectMemberComposition(host) {
+export function connectMemberComposition(host, {primaryPlacement = 'first'} = {}) {
   let composition = memberCompositions.get(host);
   if (!composition) {
     const primary = globalThis.document.createElement('div');
     primary.setAttribute('class', 'causeway-member-primary');
     primary.setAttribute('data-causeway-member-primary', '');
-    host.insertBefore(primary, host.firstChild ?? null);
-    composition = {primary, actions: Object.freeze([]), observer: null};
+    if (primaryPlacement === 'last') {
+      host.appendChild(primary);
+    } else {
+      host.insertBefore(primary, host.firstChild ?? null);
+    }
+    composition = {primary, primaryPlacement, actions: Object.freeze([]), observer: null, repositioning: false};
     memberCompositions.set(host, composition);
+  } else if (primaryPlacement === 'last') {
+    composition.primaryPlacement = 'last';
   }
   if (!composition.observer && typeof globalThis.MutationObserver === 'function') {
     composition.observer = new MutationObserver(records => {
-      if (records.some(record => record.type === 'childList')) {
+      if (!composition.repositioning && records.some(record => record.type === 'childList')) {
         refreshMemberComposition(host);
       }
     });
@@ -84,6 +90,19 @@ export function refreshMemberComposition(host) {
     action.setAttribute?.('data-causeway-associated-action', '');
   }
   composition.actions = Object.freeze(actions);
+  const children = host.childNodes ?? [];
+  const lastChild = children[children.length - 1];
+  if (composition.primaryPlacement === 'last' && lastChild !== composition.primary) {
+    composition.repositioning = true;
+    try {
+      if (composition.primary.parentNode === host) {
+        host.removeChild(composition.primary);
+      }
+      host.appendChild(composition.primary);
+    } finally {
+      composition.repositioning = false;
+    }
+  }
   if (actions.length > 0) {
     host.setAttribute('data-causeway-associated-member', host.id ?? '');
     host.setAttribute('data-causeway-action-group', '');

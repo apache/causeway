@@ -117,10 +117,11 @@ test('application native-control chrome does not cross into toolkit-owned slotte
 
 test('direct member associations wrap in semantic source and keyboard order', () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\]/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection\[data-causeway-action-group\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection\[data-causeway-action-group\][\s\S]*?justify-content: flex-end;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /> \.causeway-member-primary/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /> cw-action\[data-causeway-associated-action\]/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /flex-wrap: wrap/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /data-causeway-associated-kind="collection"[\s\S]*?display: flex;[\s\S]*?flex-wrap: wrap;[\s\S]*?justify-content: flex-end;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /data-causeway-associated-kind="collection"\] > cw-collection \{\s+flex: 1 0 100%;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
 });
 
