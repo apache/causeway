@@ -308,6 +308,56 @@ test('editable temporal adapters use supported quarter-hour dropdown steps and q
   document.body.removeChild(dateTimeEditor);
 });
 
+test('editable temporal adapters apply matching date time and date-time ranges before values', async () => {
+  configureCausewayFieldWidgets({
+    families: ['local-temporal'],
+    moduleUrls: {'local-temporal': fakeLocalTemporalModule}
+  });
+  const cases = [
+    ['date-picker', '2026-01-01', '2026-12-31', '2026-08-31'],
+    ['time-picker', '08:00', '18:00', '13:14:15.123'],
+    ['date-time-picker', '2026-08-31T08:00', '2026-08-31T18:00', '2026-08-31T13:14:15.123']
+  ];
+  for (const [controlName, min, max, value] of cases) {
+    const editor = new CausewayFieldEditorElement();
+    editor.setAttribute('data-family', 'local-temporal');
+    editor.setAttribute('data-control', controlName);
+    editor.setAttribute('data-causeway-editor', 'bounded');
+    editor.setAttribute('data-label', 'Bounded value');
+    editor.setAttribute('data-value', value);
+    editor.setAttribute('data-min', min);
+    editor.setAttribute('data-max', max);
+    document.body.appendChild(editor);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    const control = editor.childNodes[0];
+    assert.equal(control.min, min);
+    assert.equal(control.max, max);
+    assert.equal(control.value, value);
+    if (['time-picker', 'date-time-picker'].includes(controlName)) assert.equal(control.step, 900);
+    document.body.removeChild(editor);
+  }
+
+  const html = renderCausewayFieldWidget(context({
+    codec: {id: 'temporal'}, semanticType: 'LocalTime', controlValue: '09:00', min: '08:00', max: '18:00'
+  }));
+  assert.match(html, /data-min="08:00"/);
+  assert.match(html, /data-max="18:00"/);
+});
+
+test('native temporal fallback receives the same escaped range attributes', () => {
+  configureCausewayFieldWidgets({families: []});
+  const rendered = renderCausewayEditor(context({
+    codec: undefined,
+    semanticType: 'LocalDate',
+    inputType: {kind: 'SCALAR', name: 'LocalDate'},
+    controlValue: '2026-08-31',
+    min: '2026-01-01',
+    max: '2026-12-31'
+  }));
+  assert.equal(rendered.editorId, 'temporal');
+  assert.match(rendered.html, /type="date"[^>]+min="2026-01-01" max="2026-12-31"/);
+});
+
 test('read-only temporal adapters preserve millisecond steps and hide operable triggers', async () => {
   configureCausewayFieldWidgets({
     families: ['local-temporal'],
@@ -321,11 +371,15 @@ test('read-only temporal adapters preserve millisecond steps and hide operable t
   view.setAttribute('data-control', 'time-picker');
   view.setAttribute('data-label', 'Visit At');
   view.setAttribute('data-value', '13:14:15.123');
+  view.setAttribute('data-min', '08:00');
+  view.setAttribute('data-max', '18:00');
   document.body.appendChild(view);
   await new Promise(resolve => setTimeout(resolve, 0));
   const control = view.childNodes[0];
   assert.equal(control.step, 0.001);
   assert.equal(control.value, '13:14:15.123');
+  assert.equal(control.min, undefined);
+  assert.equal(control.max, undefined);
   assert.equal(control._trigger.getAttribute('aria-hidden'), 'true');
   assert.equal(control._trigger.hasAttribute('data-causeway-time-trigger'), false);
   document.body.removeChild(view);

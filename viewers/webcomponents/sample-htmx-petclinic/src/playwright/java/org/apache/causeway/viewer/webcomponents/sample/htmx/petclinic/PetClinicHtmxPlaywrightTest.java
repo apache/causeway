@@ -594,10 +594,22 @@ class PetClinicHtmxPlaywrightTest {
                 .getAttribute("data-label-position")).isEqualTo("TOP");
         if (!nativeToolkit()) {
             page.evaluate("() => { document.documentElement.lang = 'en-GB'; }");
-            lastVisit.locator("[data-causeway-action='edit']").click();
-            final var lastVisitEditorSelector = "cw-property[id='lastVisit'] [data-causeway-editor='lastVisit']";
-            final var lastVisitEditor = resolveEditor(lastVisitEditorSelector);
-            final var lastVisitIso = (String) lastVisitEditor.evaluate("element => element.value");
+        }
+        lastVisit.locator("[data-causeway-action='edit']").click();
+        final var lastVisitEditorSelector = "cw-property[id='lastVisit'] [data-causeway-editor='lastVisit']";
+        final var lastVisitEditor = resolveEditor(lastVisitEditorSelector);
+        final var lastVisitIso = (String) lastVisitEditor.evaluate("element => element.value");
+        final var todayIso = (String) page.evaluate("""
+                () => {
+                  const now = new Date();
+                  const pad = value => String(value).padStart(2, '0');
+                  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+                }
+                """);
+        assertThat(lastVisit.getAttribute("data-causeway-temporal-range-status")).isEqualTo("valid");
+        assertThat(lastVisitEditor.evaluate("element => element.min")).isEqualTo("2000-01-01");
+        assertThat(lastVisitEditor.evaluate("element => element.max")).isEqualTo(todayIso);
+        if (!nativeToolkit()) {
             final var expectedBritishDate = LocalDate.parse(lastVisitIso)
                     .format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
             assertThat(lastVisitEditor.evaluate("element => element.inputElement?.value"))
@@ -615,7 +627,40 @@ class PetClinicHtmxPlaywrightTest {
             page.waitForFunction("selector => document.querySelector(selector)?.opened === true", lastVisitEditorSelector);
             assertThat(lastVisit.locator("[data-causeway-action='save']").count()).isEqualTo(1);
             lastVisitEditor.evaluate("element => element.close()");
-            lastVisit.locator("[data-causeway-action='cancel']").click();
+        }
+
+        page.waitForTimeout(750);
+        final var requestsBeforeLocalRejection = graphQLRequests.size();
+        final var futureDate = LocalDate.parse(todayIso).plusDays(1).toString();
+        fillEditor(lastVisitEditor, futureDate);
+        page.waitForFunction("expected => document.querySelector(\"cw-property[id='lastVisit']\")?.interactionState?.pendingValue === expected", futureDate);
+        assertThat(lastVisit.locator("[data-causeway-action='save']").getAttribute("aria-disabled")).isEqualTo("true");
+        assertThat(lastVisit.evaluate("element => element.interactionState?.status")).isEqualTo("failed");
+        assertThat(lastVisit.evaluate("element => element.interactionState?.error"))
+                .isEqualTo("Enter a value on or before " + todayIso + ".");
+        assertThat(lastVisit.evaluate("element => element.interactionState?.temporalRange?.semanticType"))
+                .isEqualTo("LocalDate");
+        assertThat(lastVisit.innerText()).contains("Enter a value on or before " + todayIso);
+        assertThat(lastVisit.evaluate("element => element.interactionState.pendingValue")).isEqualTo(futureDate);
+        assertThat(graphQLRequests).hasSize(requestsBeforeLocalRejection);
+
+        fillEditor(lastVisitEditor, lastVisitIso);
+        lastVisit.locator("[data-causeway-action='save']").click();
+        page.waitForFunction("() => document.querySelector(\"cw-property[id='lastVisit']\")?.interactionState == null");
+        assertThat(graphQLRequests.size()).isGreaterThan(requestsBeforeLocalRejection);
+        assertThat(lastVisit.getAttribute("data-causeway-temporal-range-status")).isNull();
+
+        lastVisit.locator("[data-causeway-action='edit']").click();
+        final var cancellationEditor = resolveEditor(lastVisitEditorSelector);
+        page.waitForTimeout(750);
+        final var requestsBeforeCancellation = graphQLRequests.size();
+        fillEditor(cancellationEditor, futureDate);
+        page.waitForFunction("expected => document.querySelector(\"cw-property[id='lastVisit']\")?.interactionState?.pendingValue === expected", futureDate);
+        lastVisit.locator("[data-causeway-action='cancel']").click();
+        page.waitForTimeout(750);
+        assertThat(graphQLRequests).hasSize(requestsBeforeCancellation);
+        assertThat(lastVisit.getAttribute("data-causeway-temporal-range-status")).isNull();
+        if (!nativeToolkit()) {
             page.evaluate("() => { document.documentElement.lang = 'en'; }");
         }
         final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");

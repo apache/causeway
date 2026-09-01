@@ -125,7 +125,9 @@ const temporalEditor = Object.freeze({
       ? 'date'
       : typeName === 'LocalTime' ? 'time' : typeName === 'LocalDateTime' ? 'datetime-local' : 'text';
     const step = ['LocalTime', 'LocalDateTime'].includes(typeName) ? ' step="any"' : '';
-    return `<input type="${inputType}" ${inputAttributes(context)} value="${escapeHtml(context.controlValue)}"${step}>`;
+    const min = context.min == null ? '' : ` min="${escapeHtml(context.min)}"`;
+    const max = context.max == null ? '' : ` max="${escapeHtml(context.max)}"`;
+    return `<input type="${inputType}" ${inputAttributes(context)} value="${escapeHtml(context.controlValue)}"${step}${min}${max}>`;
   },
   parse: ({value}) => value
 });
