@@ -28,11 +28,16 @@ import java.nio.file.Path;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.viewer.webcomponents.htmx.HtmxViewerProperties;
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetOwner;
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetOwnerRepository;
@@ -58,11 +63,20 @@ class PetClinicHtmxApplication_IntegTest {
     private VisitRepository visitRepository;
 
     @Autowired
+    private ClockService clockService;
+
+    @Autowired
+    @Qualifier("loadPetClinicData")
+    private ApplicationRunner petClinicDataLoader;
+
+    @Autowired
     private HtmxViewerProperties viewerProperties;
 
     @Test
-    void loadsDeterministicPetclinicFixture() {
+    void loadsDeterministicPetclinicFixture() throws Exception {
         final var mary = ownerRepository.findById(PetOwner.MARY_ID);
+        final var eduardo = ownerRepository.findById("owner-eduardo");
+        final var now = clockService.getClock().nowAsLocalDateTime();
 
         assertThat(mary).isNotNull();
         assertThat(mary.getName()).isEqualTo("Mary Smith");
@@ -70,6 +84,17 @@ class PetClinicHtmxApplication_IntegTest {
                 .containsExactlyInAnyOrder("pet-basil", "pet-samantha");
         assertThat(visitRepository.findByPetOwner(mary)).extracting("id")
                 .containsExactlyInAnyOrder("visit-basil-checkup", "visit-samantha-vaccine");
+        assertThat(ownerRepository.findAll()).hasSize(10).extracting("id").doesNotHaveDuplicates();
+        assertThat(eduardo).isNotNull();
+        assertThat(eduardo.getPets()).hasSize(6).extracting("id").doesNotHaveDuplicates();
+        assertThat(visitRepository.findByPetOwner(eduardo)).hasSize(11).extracting("id").doesNotHaveDuplicates();
+        assertThat(visitRepository.findByVisitAtAfter(now)).hasSize(13).extracting("id").doesNotHaveDuplicates();
+
+        petClinicDataLoader.run(null);
+
+        assertThat(ownerRepository.findAll()).hasSize(10);
+        assertThat(visitRepository.findByPetOwner(eduardo)).hasSize(11);
+        assertThat(visitRepository.findByVisitAtAfter(now)).hasSize(13);
     }
 
     @Test
@@ -119,7 +144,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-action id=\"removePet\"></cw-action>")
                 .contains("<cw-peek>")
                 .contains("<cw-action id=\"clearNotes\" named=\"Clear pet notes\"></cw-action>")
-                .contains("<cw-collection id=\"visits\" named=\"Pet visits\" active paged=\"2\">")
+                .contains("<cw-collection id=\"visits\" named=\"Pet visits\" active paged=\"10\">")
                 .contains("<cw-peek></cw-peek>")
                 .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">")
                 .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
@@ -348,12 +373,12 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
-                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active sortable filterable>")
+                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active paged=\"5\" sortable filterable>")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
                 .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
                 .contains("described-as=\"All visits recorded for this owner's pets.\"")
-                .contains("active paged=\"1\"")
+                .contains("active paged=\"10\"")
                 .contains("<cw-action id=\"bookVisit\"")
                 .doesNotContain("petclinic-associated-actions", "petclinic-member-composition", " offset=", " size=");
         final String homeHtml;
@@ -362,8 +387,8 @@ class PetClinicHtmxApplication_IntegTest {
             homeHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(homeHtml)
-                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\" active filterable>")
-                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\" active paged=\"2\" sortable filterable>")
+                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\" active paged=\"10\" filterable>")
+                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\" active paged=\"5\" sortable filterable>")
                 .doesNotContain("id=\"petOwners\" named=", "id=\"petOwners\" described-as=", " offset=", " size=");
         assertThat(ownerHtml.indexOf("id=\"addPet\""))
                 .isLessThan(ownerHtml.indexOf("id=\"removePet\""));
@@ -408,7 +433,7 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(application.at("/data/rich/application/home/kind").asText()).isEqualTo("OBJECT");
         assertThat(application.at("/data/rich/application/home/logicalTypeName").asText()).isEqualTo("petclinic.HomePage");
         assertThat(application.at("/data/rich/application/home/object/_meta/title").asText())
-                .contains("4 pet owners", "3 upcoming visits");
+                .contains("10 pet owners", "13 upcoming visits");
         final var homeId = application.at("/data/rich/application/home/object/_meta/id").asText();
         final var ownerWindow = graphQL("""
                 query PetClinicOwnerWindow {
@@ -442,7 +467,7 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/rows/0/name/get").asText())
                 .isEqualTo("Mary Smith");
         assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/totalCount").asInt())
-                .isEqualTo(1);
+                .isEqualTo(2);
         assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/searchSupported").asBoolean())
                 .isTrue();
         assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/futureVisits/window/searchPrompt").asText())
@@ -497,7 +522,7 @@ class PetClinicHtmxApplication_IntegTest {
                 }
                 """);
         assertNoGraphQLErrors(service);
-        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/invoke/results").size()).isEqualTo(4);
+        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/invoke/results").size()).isEqualTo(10);
         assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/description").asText())
                 .isEqualTo("Lists every registered pet owner.");
         assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/cssClassFa").asText())
@@ -509,7 +534,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo("DIALOG");
         assertThat(service.at("/data/rich/petclinic_PetOwners/create/metadata/cssClassFa").asText())
                 .isEqualTo("user-plus");
-        assertThat(service.at("/data/rich/petclinic_Visits/listUpcoming/invoke/results").size()).isEqualTo(3);
+        assertThat(service.at("/data/rich/petclinic_Visits/listUpcoming/invoke/results").size()).isEqualTo(13);
 
         final var owner = graphQL("""
                 query PetClinicOwner {
