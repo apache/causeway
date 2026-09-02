@@ -17,12 +17,14 @@ The outlet MUST NOT globally subscribe to action results, invoke actions, choose
 #### Scenario: Host mounts an inline result
 - **WHEN** the owning viewer places a current scalar, void-status, or standalone collection presentation into an `INLINE` outlet
 - **THEN** the outlet exposes an accessible in-page result-region relationship for that content
-- **AND** optional host controls remain compactly aligned with the result presentation rather than stretching across its width
+- **AND** the Dismiss control is placed below the result content without reducing its available inline size
+- **AND** long result content scrolls within a bounded content area while Dismiss remains visible and operable below it
 - **AND** result rendering, announcements, links, values, and lifecycle remain owned by their established host and semantic components
 
 #### Scenario: Host mounts a dialog result
 - **WHEN** the owning viewer places a current presentation into a `DIALOG` outlet
-- **THEN** the outlet opens one bounded labelled modal surface with a backdrop and internally scrollable content
+- **THEN** the outlet opens one bounded labelled modal surface with a backdrop
+- **AND** long result content scrolls independently above a visible Dismiss control placed below that content
 - **AND** presentation nodes remain identity-stable light-DOM descendants of the route-owned outlet
 
 #### Scenario: Keyboard user operates a dialog result
@@ -33,7 +35,7 @@ The outlet MUST NOT globally subscribe to action results, invoke actions, choose
 #### Scenario: Host mounts a sidebar result
 - **WHEN** the owning viewer places a current presentation into a `SIDEBAR` outlet
 - **THEN** the outlet opens one labelled non-modal panel at the viewport inline end without making the underlying page inert
-- **AND** the panel is reachable through ordinary keyboard navigation and its content scrolls without horizontal document overflow
+- **AND** the panel is reachable through ordinary keyboard navigation and its bounded content scrolls above a visible Dismiss control without horizontal document overflow
 
 #### Scenario: Keyboard user operates a sidebar result
 - **WHEN** focus is within an open sidebar result
