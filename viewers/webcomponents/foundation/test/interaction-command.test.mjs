@@ -19,7 +19,11 @@
 
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {argumentsFromValues, normalizeInteractionInput} from '../src/interaction-operations.mjs';
+import {
+  argumentsFromValues,
+  collectionResultSelectionForType,
+  normalizeInteractionInput
+} from '../src/interaction-operations.mjs';
 import {ObjectContextController} from '../src/object-context-controller.mjs';
 
 const scalar = name => ({kind: 'SCALAR', name, ofType: null});
@@ -28,6 +32,38 @@ const list = ofType => ({kind: 'LIST', name: null, ofType});
 const argument = (name, type) => ({name, description: null, defaultValue: null, type});
 const field = (name, type, args = []) => ({name, description: null, args, type});
 const graphType = (name, fields) => ({name, kind: 'OBJECT', description: null, fields, inputFields: [], enumValues: []});
+
+test('collection result selection merges identity with supported declared property wrappers', () => {
+  const ownerType = 'rich__petclinic_PetOwner';
+  const metadataType = `${ownerType}__gqlv_meta`;
+  const nameWrapper = `${ownerType}__name__gqlv_property`;
+  const types = new Map([
+    [ownerType, graphType(ownerType, [
+      field('_meta', named(metadataType)),
+      field('name', named(nameWrapper))
+    ])],
+    [metadataType, graphType(metadataType, [
+      field('id', scalar('String')),
+      field('logicalTypeName', scalar('String')),
+      field('title', scalar('String')),
+      field('icon', scalar('String'))
+    ])],
+    [nameWrapper, graphType(nameWrapper, [
+      field('hidden', scalar('Boolean')),
+      field('disabled', scalar('String')),
+      field('datatype', scalar('String')),
+      field('get', scalar('String'))
+    ])]
+  ]);
+
+  assert.deepEqual(collectionResultSelectionForType(list(named(ownerType)), [
+    {member: 'name'},
+    {member: 'missing'}
+  ], types), {
+    _meta: {id: true, logicalTypeName: true, title: true, icon: true},
+    name: {hidden: true, disabled: true, datatype: true, get: true}
+  });
+});
 
 function fixtureDescription() {
   const generatedTypeName = 'rich__example_Object';

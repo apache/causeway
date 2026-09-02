@@ -28,6 +28,7 @@ import graphql.schema.GraphQLNonNull;
 import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
@@ -76,6 +77,8 @@ final class RichMemberMetadata extends Element {
                         Scalars.GraphQLBoolean))
                 .field(field("promptStyle", "Resolved canonical action prompt-style enum name, or null.",
                         Scalars.GraphQLString))
+                .field(field("resultElementLogicalTypeName", "Canonical collection action result element logical type name, or null.",
+                        Scalars.GraphQLString))
                 .field(field("maxLength", "Finite maximum input length, or null.",
                         Scalars.GraphQLInt))
                 .field(field("pattern", "Java regular-expression text, or null.",
@@ -116,6 +119,7 @@ final class RichMemberMetadata extends Element {
                 : staticIcon.position().name());
         values.put("areYouSure", actionAreYouSure(feature));
         values.put("promptStyle", actionPromptStyle(feature));
+        values.put("resultElementLogicalTypeName", actionResultElementLogicalTypeName(feature));
         values.put("maxLength", includeEditorConstraints
                 ? RichScalarMetadataField.finiteMaxLength(feature)
                 : null);
@@ -148,6 +152,21 @@ final class RichMemberMetadata extends Element {
         }
         var promptStyle = action.getPromptStyle();
         return promptStyle == null ? null : promptStyle.name();
+    }
+
+    private static String actionResultElementLogicalTypeName(final ObjectFeature feature) {
+        if (!(feature instanceof ObjectAction action)) {
+            return null;
+        }
+        var returnType = action.getReturnType();
+        if (returnType == null || !returnType.isPlural()) {
+            return null;
+        }
+        return action.lookupFacet(TypeOfFacet.class)
+                .map(TypeOfFacet::elementSpec)
+                .filter(elementType -> elementType.correspondingClass() != Object.class)
+                .map(elementType -> elementType.logicalType().logicalName())
+                .orElse(null);
     }
 
     private static FontAwesomeLayers staticActionIcon(final ObjectFeature feature) {

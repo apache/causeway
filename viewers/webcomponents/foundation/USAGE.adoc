@@ -50,7 +50,7 @@ The collection remains inactive until its load button is selected or its `active
 
 == Public component contract
 
-The public vocabulary consists of `cw-graphql-client`, `cw-menubars`, `cw-menubar-primary`, `cw-menubar-secondary`, `cw-menubar-tertiary`, `cw-object-context`, `cw-object`, `cw-object-header`, `cw-breadcrumbs`, `cw-property`, `cw-value`, `cw-object-link`, `cw-action`, `cw-interaction-controller`, `cw-field-editor`, `cw-reference-editor`, `cw-collection`, `cw-standalone-collection`, and `cw-collection-column`.
+The public vocabulary consists of `cw-graphql-client`, `cw-menubars`, `cw-menubar-primary`, `cw-menubar-secondary`, `cw-menubar-tertiary`, `cw-object-context`, `cw-object`, `cw-object-header`, `cw-breadcrumbs`, `cw-property`, `cw-value`, `cw-object-link`, `cw-action`, `cw-action-results`, `cw-interaction-controller`, `cw-field-editor`, `cw-reference-editor`, `cw-collection`, `cw-standalone-collection`, and `cw-collection-column`.
 `CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
 
 The `cw-` element namespace replaces the former `causeway-` element namespace without compatibility aliases.
@@ -608,6 +608,32 @@ The component owns no object context, member id, row hydration, associated actio
 Attributes that would imply those member-only capabilities are inert.
 At wide widths, a complete object-valued snapshot may qualify for the internal Grid using the authoritative array length and a static generation-safe range provider; narrow, native-policy, unsupported, or failed qualification uses the accessible native list or table.
 Applications must not consume the internal Grid tag, projection objects, or range callback.
+
+A direct-child `<cw-standalone-collection>` inside `<cw-action>` is an inert reusable declaration for that action's collection result rather than a live result node.
+The declaration remains hidden under the action, preserves its authored node identity across action rerenders, and completely replaces any type-default heading and columns for that invocation.
+An authored zero-column declaration intentionally retains generic row presentation with its own heading and description.
+Duplicate declarations fail closed with `data-causeway-action-result-presentation-error="duplicate"`, while declarations on actions without authoritative collection element metadata fail closed with `inapplicable`.
+The host resolves the declaration or a type default before invocation so supported declared wrappers can be included in the original GraphQL result selection without row hydration.
+
+[source,html]
+----
+<cw-action id="findOwners">
+  <cw-standalone-collection named="Matching owners">
+    <cw-collection-column id="name" label="Name"></cw-collection-column>
+  </cw-standalone-collection>
+</cw-action>
+----
+
+`<cw-action-results>` is a passive accessible outlet into which the application host may mount non-navigating action outcomes.
+The element neither invokes actions nor listens globally for result events, and its `replacePresentation(node)` and `clear()` methods atomically replace or dismiss host-owned content.
+An empty outlet remains hidden and occupies no layout space.
+Applications should author at most one outlet in the active route page; the HTMX host snapshots one unique connected outlet when invocation begins and otherwise uses the stable shell outlet.
+Object-valued results retain canonical navigation rather than being mounted into the outlet.
+
+[source,html]
+----
+<cw-action-results aria-label="Search results" hidden></cw-action-results>
+----
 
 == Lazy collections and row hydration
 

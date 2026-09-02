@@ -58,7 +58,8 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
     ['rich__gqlv_application_home_object', unionType('rich__gqlv_application_home_object', ['rich__sample_Home'])],
     [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, [
       field('areYouSure', scalar('Boolean')),
-      field('promptStyle', scalar('String'))
+      field('promptStyle', scalar('String')),
+      field('resultElementLogicalTypeName', scalar('String'))
     ])],
     [SAMPLE_SERVICE_TYPE, objectType(SAMPLE_SERVICE_TYPE, [
       field('welcomeMessage', named(`${SAMPLE_SERVICE_TYPE}__welcomeMessage__gqlv_action`)),

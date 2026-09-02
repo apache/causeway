@@ -28,6 +28,11 @@ import {
   DescriptionPresentation,
   normalizeDescriptionPresentation
 } from './description-presentation.mjs';
+export {
+  applyStandaloneCollectionPresentation,
+  normalizeStandaloneCollectionPresentation,
+  standaloneCollectionPresentation
+} from './standalone-collection-presentation.mjs';
 import {
   CAUSEWAY_COLLECTION_GRID,
   CAUSEWAY_GRID_WIDGET_POLICY_EVENT,
@@ -199,6 +204,12 @@ export class CausewayStandaloneCollectionElement extends HTMLElementBase {
 
   connectedCallback() {
     this.connectionStarted = true;
+    if (isActionParent(this.parentNode)) {
+      this.hidden = true;
+      captureDeclarativeStandaloneCollectionColumns(this);
+      this.#captureColumns({replace: true});
+      return;
+    }
     this.classList?.add?.('causeway-standalone-collection-host');
     globalThis.document?.addEventListener?.(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, this.gridPolicyListener);
     this.columnObserver?.observe(this, {childList: true});
@@ -221,6 +232,10 @@ export class CausewayStandaloneCollectionElement extends HTMLElementBase {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue || !this.connectionStarted) return;
+    if (isActionParent(this.parentNode)) {
+      this.hidden = true;
+      return;
+    }
     if (name === 'resizable-columns' || name === 'reorderable-columns') this.gridHostRevision += 1;
     this.render();
   }
@@ -515,6 +530,11 @@ function setOptionalAttribute(element, name, value) {
 function setBooleanAttribute(element, name, value) {
   if (value === true) element.setAttribute(name, '');
   else element.removeAttribute(name);
+}
+
+function isActionParent(candidate) {
+  return candidate?.localName === 'cw-action'
+    || candidate?.constructor?.name === 'CausewayActionElement';
 }
 
 function collectionBreakpointPixels() {

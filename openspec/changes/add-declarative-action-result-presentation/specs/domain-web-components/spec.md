@@ -64,7 +64,7 @@ The outlet MUST NOT globally subscribe to action results, invoke actions, choose
 
 #### Scenario: Outlet is empty
 - **WHEN** no current host-owned result presentation is mounted
-- **THEN** `<cw-action-results>` contributes no misleading result content or focus target
+- **THEN** `<cw-action-results>` contributes no misleading result content, focus target, or occupied layout space
 - **AND** it remains available as a semantic placement boundary
 
 #### Scenario: Host mounts a result

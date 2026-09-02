@@ -24,7 +24,7 @@ function bar() {
       sections: [{
         label: 'People',
         actions: [
-          {serviceLogicalTypeName: 'demo.People', actionId: 'find', label: 'Find people', iconHint: 'search', areYouSure: true, promptStyle: 'DIALOG_SIDEBAR'},
+          {serviceLogicalTypeName: 'demo.People', actionId: 'find', label: 'Find people', iconHint: 'search', areYouSure: true, promptStyle: 'DIALOG_SIDEBAR', resultElementLogicalTypeName: 'demo.Person'},
           {serviceLogicalTypeName: 'demo.People', actionId: 'deleteAll', label: 'Delete all', disabled: 'Not permitted'}
         ]
       }, {
@@ -47,6 +47,7 @@ test('projects immutable ordered menus sections actions and opaque identity', ()
   assert.equal(first.serviceLogicalTypeName, 'demo.People');
   assert.equal(first.areYouSure, true);
   assert.equal(first.promptStyle, 'DIALOG_SIDEBAR');
+  assert.equal(first.resultElementLogicalTypeName, 'demo.Person');
   assert.equal(resolveCausewayMenuAction(projection, first.key), first);
   const disabled = projection.menus[0].sections[0].actions[1];
   assert.equal(disabled.disabled, true);

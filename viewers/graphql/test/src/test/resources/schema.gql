@@ -191,6 +191,8 @@ type RichMemberMetadata {
   patternFlags: Int
   "Resolved canonical action prompt-style enum name, or null."
   promptStyle: String
+  "Canonical collection action result element logical type name, or null."
+  resultElementLogicalTypeName: String
   "Positive typical input length, or null."
   typicalLength: Int
 }
