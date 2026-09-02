@@ -1231,6 +1231,7 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator("#causeway-result > cw-standalone-collection").count()).isEqualTo(1);
         page.locator("#causeway-result > [data-causeway-result-dismiss]").click();
         assertThat(page.locator("#causeway-result").isHidden()).isTrue();
+        assertFocused("cw-action[id='allOwners'] [data-causeway-action-control]");
 
         page.route("**/_collection-presentations/petclinic.Malformed", route -> route.fulfill(
                 new com.microsoft.playwright.Route.FulfillOptions()
@@ -1249,6 +1250,76 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.evaluate("() => globalThis.__malformedPresentationExecuted === true")).isEqualTo(false);
         assertThat(page.locator("html").getAttribute("data-causeway-collection-presentation-error"))
                 .isEqualTo("resolution");
+    }
+
+    @Test
+    @Order(8)
+    @SuppressWarnings("unchecked")
+    void actionResultDialogAndSidebarSurfacesRemainAccessibleAndResponsive() {
+        openObject("petclinic.Visit", "s_visit-basil-checkup");
+        waitForMenus();
+        final var dialogOutlet = page.locator("[data-testid='petclinic-dialog-results']");
+        assertThat(dialogOutlet.getAttribute("presentation-style")).isEqualTo("DIALOG");
+        final var dialogScroll = ((Number) page.evaluate("() => window.scrollY")).doubleValue();
+        activateServiceAction("listAll");
+        final var dialog = dialogOutlet.locator("dialog[data-causeway-action-results-surface='DIALOG']");
+        dialog.waitFor();
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-dialog-results'] cw-standalone-collection\")?.resultState?.status === 'ready'");
+        assertThat(dialog.getAttribute("aria-modal")).isEqualTo("true");
+        assertThat(dialog.getAttribute("aria-label")).isEqualTo("Visit action results");
+        assertThat((Boolean) dialog.evaluate("element => element.contains(document.activeElement)")).isTrue();
+        assertThat(((Number) page.evaluate("() => window.scrollY")).doubleValue()).isEqualTo(dialogScroll);
+        dialog.locator("[data-causeway-result-dismiss]").focus();
+        page.keyboard().press("Shift+Tab");
+        assertThat((Boolean) dialog.evaluate("element => element.contains(document.activeElement)")).isTrue();
+        page.keyboard().press("Escape");
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-dialog-results']\")?.hidden === true");
+        assertThat(dialogOutlet.locator("dialog").count()).isZero();
+        assertServiceResultOriginFocused();
+
+        openObject("petclinic.Pet", "s_pet-basil");
+        waitForMenus();
+        final var sidebarOutlet = page.locator("[data-testid='petclinic-sidebar-results']");
+        assertThat(sidebarOutlet.getAttribute("presentation-style")).isEqualTo("SIDEBAR");
+        activateServiceAction("listAll");
+        final var sidebar = sidebarOutlet.locator("aside[data-causeway-action-results-surface='SIDEBAR']");
+        sidebar.waitFor();
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-sidebar-results'] cw-standalone-collection\")?.resultState?.status === 'ready'");
+        assertThat(sidebar.getAttribute("role")).isEqualTo("complementary");
+        assertThat(sidebar.getAttribute("aria-modal")).isNull();
+        sidebar.locator("button:not([disabled]), a[href], [tabindex]:not([tabindex='-1'])").last().focus();
+        page.keyboard().press("Tab");
+        assertThat((Boolean) sidebar.evaluate("element => !element.contains(document.activeElement)")).isTrue();
+        page.locator("cw-object-header cw-object-link button").focus();
+        assertThat((Boolean) sidebar.evaluate("element => !element.contains(document.activeElement)")).isTrue();
+        assertThat(sidebar.isVisible()).isTrue();
+
+        sidebar.evaluate("element => { element.dataset.replacementProbe = 'old'; }");
+        activateServiceAction("listAll");
+        page.waitForFunction("() => { const surface = document.querySelector(\"[data-testid='petclinic-sidebar-results'] aside\"); return surface && surface.dataset.replacementProbe !== 'old'; }");
+        assertThat(sidebarOutlet.locator("aside").count()).isEqualTo(1);
+        sidebarOutlet.locator("[data-causeway-result-dismiss]").focus();
+        page.keyboard().press("Escape");
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-sidebar-results']\")?.hidden === true");
+        assertServiceResultOriginFocused();
+
+        activateServiceAction("listAll");
+        sidebarOutlet.locator("aside").waitFor();
+        page.setViewportSize(480, 800);
+        final var sidebarBounds = (List<Number>) sidebarOutlet.locator("aside").evaluate("element => { const rect = element.getBoundingClientRect(); return [rect.left, rect.right, rect.width, document.documentElement.scrollWidth, innerWidth]; }");
+        assertThat(sidebarBounds.get(0).doubleValue()).isGreaterThanOrEqualTo(0);
+        assertThat(sidebarBounds.get(1).doubleValue()).isLessThanOrEqualTo(sidebarBounds.get(4).doubleValue());
+        assertThat(sidebarBounds.get(2).doubleValue()).isLessThanOrEqualTo(sidebarBounds.get(4).doubleValue());
+        assertThat(sidebarBounds.get(3).doubleValue()).isLessThanOrEqualTo(sidebarBounds.get(4).doubleValue());
+        sidebarOutlet.locator("[data-causeway-result-dismiss]").click();
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-sidebar-results']\")?.hidden === true");
+        page.setViewportSize(1440, 900);
+    }
+
+    private void assertServiceResultOriginFocused() {
+        page.evaluate("() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+        assertThat((String) page.evaluate("() => document.activeElement?.outerHTML ?? 'none'"))
+                .contains("Pet Owners");
     }
 
     @SuppressWarnings("unchecked")
@@ -1437,7 +1508,12 @@ class PetClinicHtmxPlaywrightTest {
 
     private void activateServiceAction(final String actionId) {
         if (nativeToolkit()) {
-            serviceAction(actionId).click();
+            final var action = serviceAction(actionId);
+            if (!action.isVisible()) {
+                final var panelId = (String) action.evaluate("element => element.closest('[data-causeway-menu-panel]')?.id");
+                page.locator("[data-causeway-menu-disclosure][aria-controls='" + panelId + "']").click();
+            }
+            action.click();
             return;
         }
         final var key = (String) page.evaluate("""
@@ -1451,6 +1527,13 @@ class PetClinicHtmxPlaywrightTest {
                 """, actionId);
         assertThat(key).isNotBlank();
         final var menuItem = page.locator("vaadin-menu-bar-item[data-causeway-key='" + key + "']");
+        if (!menuItem.isVisible()) {
+            final var keyParts = key.split(":");
+            final var tier = keyParts[1];
+            final var menuIndex = Integer.parseInt(keyParts[2]);
+            page.locator("cw-menubar-" + tier + " cw-menubar-control vaadin-menu-bar-button")
+                    .nth(menuIndex).click();
+        }
         menuItem.waitFor();
         menuItem.click();
     }

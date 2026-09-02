@@ -23,6 +23,8 @@ import {installDomShim} from './dom-shim.mjs';
 
 const {document} = installDomShim();
 const {
+  ACTION_RESULTS_DISMISS_REQUEST_EVENT,
+  ActionResultPresentationStyle,
   COMPONENT_STATE_EVENT,
   CausewayActionElement,
   CausewayActionResultsElement,
@@ -37,7 +39,8 @@ const {
   CausewayStandaloneCollectionElement,
   CausewayValueRendererRegistry,
   configureCausewayFieldWidgets,
-  defineCausewayWebComponents
+  defineCausewayWebComponents,
+  normalizeActionResultPresentationStyle
 } = await import('../src/index.mjs');
 
 defineCausewayWebComponents();
@@ -610,6 +613,82 @@ test('duplicate standalone result declarations fail closed and action results re
   assert.equal(outlet.children[0], output);
   outlet.clear();
   assert.equal(outlet.hidden, true);
+});
+
+test('action result presentation styles normalize and preserve host-owned node identity', () => {
+  assert.equal(normalizeActionResultPresentationStyle(null), ActionResultPresentationStyle.INLINE);
+  assert.equal(normalizeActionResultPresentationStyle(' dialog '), ActionResultPresentationStyle.DIALOG);
+  assert.equal(normalizeActionResultPresentationStyle('SIDEBAR'), ActionResultPresentationStyle.SIDEBAR);
+  assert.equal(normalizeActionResultPresentationStyle('floating'), ActionResultPresentationStyle.INLINE);
+
+  const outlet = new CausewayActionResultsElement();
+  outlet.setAttribute('presentation-style', 'dialog');
+  document.body.appendChild(outlet);
+  const output = document.createElement('output');
+  outlet.replacePresentation(output);
+  assert.equal(outlet.presentationStyle, ActionResultPresentationStyle.DIALOG);
+  assert.equal(outlet.dataset.causewayPresentationStyle, ActionResultPresentationStyle.DIALOG);
+  assert.equal(outlet.children[0].localName, 'dialog');
+  assert.equal(outlet.children[0].getAttribute('role'), 'dialog');
+  assert.equal(outlet.children[0].getAttribute('aria-modal'), 'true');
+  assert.equal(outlet.children[0].children[0], output);
+  assert.equal(outlet.presentationNodes[0], output);
+
+  outlet.presentationStyle = 'sidebar';
+  assert.equal(outlet.getAttribute('presentation-style'), ActionResultPresentationStyle.SIDEBAR);
+  assert.equal(outlet.children[0].localName, 'aside');
+  assert.equal(outlet.children[0].getAttribute('role'), 'complementary');
+  assert.equal(outlet.children[0].children[0], output);
+  assert.equal(outlet.presentationNodes[0], output);
+
+  outlet.presentationStyle = 'unsupported';
+  assert.equal(outlet.presentationStyle, ActionResultPresentationStyle.INLINE);
+  assert.equal(outlet.children[0], output);
+  outlet.clear();
+  assert.equal(outlet.hidden, true);
+  assert.equal(outlet.children.length, 0);
+});
+
+test('dialog and sidebar result surfaces request dismissal and restore only connected origins', () => {
+  const origin = document.createElement('button');
+  document.body.appendChild(origin);
+  const outlet = new CausewayActionResultsElement();
+  outlet.presentationStyle = ActionResultPresentationStyle.DIALOG;
+  document.body.appendChild(outlet);
+  const dismiss = document.createElement('button');
+  dismiss.setAttribute('data-causeway-result-dismiss', '');
+  outlet.setPresentationContext({origin});
+  let request;
+  outlet.addEventListener(ACTION_RESULTS_DISMISS_REQUEST_EVENT, event => { request = event.detail; });
+  outlet.replacePresentation(dismiss);
+  const dialog = outlet.children[0];
+  assert.equal(document.activeElement, dismiss);
+  const escape = new Event('keydown', {bubbles: true, cancelable: true});
+  escape.key = 'Escape';
+  dialog.dispatchEvent(escape);
+  assert.equal(request.reason, 'escape');
+  assert.equal(outlet.hidden, true);
+  assert.equal(document.activeElement, origin);
+
+  outlet.presentationStyle = ActionResultPresentationStyle.SIDEBAR;
+  outlet.setPresentationContext({origin});
+  outlet.replacePresentation(dismiss);
+  const sidebar = outlet.children[0];
+  dismiss.focus();
+  const sidebarEscape = new Event('keydown', {bubbles: true, cancelable: true});
+  sidebarEscape.key = 'Escape';
+  sidebar.dispatchEvent(sidebarEscape);
+  assert.equal(outlet.hidden, true);
+  assert.equal(document.activeElement, origin);
+
+  outlet.setPresentationContext({origin});
+  outlet.replacePresentation(dismiss);
+  origin.blur();
+  document.body.removeChild(origin);
+  outlet.dismiss();
+  assert.notEqual(document.activeElement, origin);
+  document.body.removeChild(outlet);
+  assert.equal(outlet.presentationNodes.length, 0);
 });
 
 test('standalone result declaration fails closed for an action without collection element metadata', () => {
