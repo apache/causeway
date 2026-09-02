@@ -378,7 +378,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-action id=\"removePet\"")
                 .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
                 .contains("described-as=\"All visits recorded for this owner's pets.\"")
-                .contains("active paged=\"10\"")
+                .contains("active paged=\"8\"")
                 .contains("<cw-action id=\"bookVisit\"")
                 .doesNotContain("petclinic-associated-actions", "petclinic-member-composition", " offset=", " size=");
         final String homeHtml;
