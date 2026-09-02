@@ -60,6 +60,14 @@ test('projection preserves identity first declarative order labels test identity
   assert.equal(result.rows[0].cells[1].testId, 'name-row-0');
 });
 
+test('projection carries immutable preview payload without changing authoritative cells', () => {
+  const preview = {row: {id: 'hydrated'}, presentation: {html: '<p>Preview</p>'}};
+  const result = projection({previewForRow: () => preview});
+  assert.deepEqual(result.rows[0].preview, preview);
+  assert.equal(Object.isFrozen(result.rows[0].preview), true);
+  assert.deepEqual(result.columns.map(column => column.member), ['_meta', 'name', 'manager', 'nullable', 'resource', 'unusual']);
+});
+
 test('projection retains scalar reference null resource and unsupported Causeway renderer output', () => {
   const result = projection();
   const cells = result.rows[0].cells;

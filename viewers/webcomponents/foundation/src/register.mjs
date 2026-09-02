@@ -44,6 +44,7 @@ import {CausewayObjectElement} from './object-element.mjs';
 import {CausewayObjectHeaderElement} from './object-header-element.mjs';
 import {CausewayObjectLinkElement} from './object-link-element.mjs';
 import {CausewayParameterElement} from './parameter-element.mjs';
+import {captureDeclarativeCollectionPeeks, CausewayPeekElement} from './peek-element.mjs';
 import {CausewayPropertyElement} from './property-element.mjs';
 import {CausewayReferenceEditorElement} from './reference-widget.mjs';
 import {CausewayValueElement} from './value-element.mjs';
@@ -70,6 +71,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.MENUBAR_TERTIARY, CausewayMenubarTertiaryElement],
   [CAUSEWAY_MENUBAR_CONTROL, CausewayMenubarControlElement],
   [CausewayElementName.COLLECTION_COLUMN, CausewayCollectionColumnElement],
+  [CausewayElementName.PEEK, CausewayPeekElement],
   [CausewayElementName.COLLECTION, CausewayCollectionElement],
   [CausewayElementName.STANDALONE_COLLECTION, CausewayStandaloneCollectionElement],
   [CAUSEWAY_COLLECTION_GRID, CausewayCollectionGridElement]
@@ -80,6 +82,7 @@ export function defineCausewayWebComponents(registry = globalThis.customElements
     return;
   }
   captureDeclarativeActionParameters();
+  captureDeclarativeCollectionPeeks();
   captureDeclarativeCollectionColumns();
   captureDeclarativeStandaloneCollectionColumns();
   for (const [name, constructor] of DEFINITIONS) {

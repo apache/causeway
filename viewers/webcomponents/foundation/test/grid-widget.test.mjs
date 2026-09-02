@@ -121,6 +121,56 @@ test('bounded Grid upgrades lazily with immutable rows columns and relationships
   document.body.removeChild(adapter);
 });
 
+test('Grid row details use one leading disclosure and preserve the projected item', async () => {
+  configureCausewayGridWidgets({enabled: true, moduleUrl: fakeGridModule});
+  let expandedKey = null;
+  let detailsController;
+  const item = {
+    key: 'example.Staff:1',
+    identity: {title: 'Ada'},
+    preview: {presentation: {html: '<p>Ada</p>'}}
+  };
+  const adapter = new CausewayCollectionGridElement();
+  adapter.presentation = {
+    ...boundedPresentation(),
+    rows: [item],
+    rowDetails: {
+      expandedKey: () => expandedKey,
+      toggle(candidate) {
+        expandedKey = expandedKey === candidate.key ? null : candidate.key;
+        return expandedKey === candidate.key;
+      },
+      render(root, candidate, controller) {
+        assert.equal(candidate, item);
+        detailsController = controller;
+        const content = document.createElement('p');
+        content.textContent = candidate.identity.title;
+        root.appendChild(content);
+      }
+    }
+  };
+  await connect(adapter);
+  const control = adapter.childNodes[0];
+  assert.equal(control.childNodes.length, 2);
+  assert.equal(control.childNodes[0].header, 'Preview');
+  assert.equal(control.itemIdPath, 'key');
+  const cell = document.createElement('div');
+  control.childNodes[0].renderer(cell, control.childNodes[0], {item});
+  const button = cell.childNodes[0];
+  assert.equal(button.getAttribute('aria-expanded'), 'false');
+  assert.equal(button.getAttribute('aria-controls'), 'causeway-grid-peek-example.Staff_1');
+  button.dispatchEvent(new Event('click'));
+  assert.deepEqual(control.detailsOpenedItems, [item]);
+
+  const details = document.createElement('div');
+  control.rowDetailsRenderer(details, control, {item});
+  assert.equal(details.id, 'causeway-grid-peek-example.Staff_1');
+  assert.equal(details.childNodes[0].textContent, 'Ada');
+  detailsController.close({restoreFocus: true});
+  assert.deepEqual(control.detailsOpenedItems, []);
+  document.body.removeChild(adapter);
+});
+
 test('Grid renders Causeway-owned sort headers without enabling toolkit sorting', async () => {
   configureCausewayGridWidgets({enabled: true, moduleUrl: fakeGridModule});
   const requests = [];

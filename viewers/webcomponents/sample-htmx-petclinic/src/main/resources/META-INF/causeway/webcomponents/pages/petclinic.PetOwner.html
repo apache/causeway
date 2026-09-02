@@ -73,6 +73,19 @@
       <section class="petclinic-card" aria-labelledby="petclinic-owner-pets-heading">
         <h2 id="petclinic-owner-pets-heading">Pets</h2>
         <cw-collection id="pets" named="Companion animals" active sortable filterable>
+          <cw-peek>
+            <section class="petclinic-preview" aria-label="Pet preview">
+              <cw-object-header></cw-object-header>
+              <cw-property id="name"></cw-property>
+              <cw-property id="species"></cw-property>
+              <cw-property id="notes" editable multi-line="3"></cw-property>
+              <cw-action id="clearNotes" named="Clear pet notes"></cw-action>
+              <cw-collection id="visits" named="Pet visits" active paged="2">
+                <cw-collection-column id="visitAt" label="When"></cw-collection-column>
+                <cw-collection-column id="reason" label="Reason"></cw-collection-column>
+              </cw-collection>
+            </section>
+          </cw-peek>
           <cw-collection-column id="name" label="Name"></cw-collection-column>
           <cw-collection-column id="species" label="Species"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
@@ -91,6 +104,7 @@
         <cw-collection id="visits" named="Visit history"
                        described-as="All visits recorded for this owner's pets."
                        active paged="1">
+          <cw-peek></cw-peek>
           <cw-collection-column id="visitAt" label="When"></cw-collection-column>
           <cw-collection-column id="reason" label="Reason"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
