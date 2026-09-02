@@ -272,17 +272,17 @@ class PetClinicHtmxPlaywrightTest {
         clickObjectLink("Eduardo Rodriguez");
         waitForRoute("petclinic.PetOwner", "s_owner-eduardo");
         waitForCollectionRows("pets", 5);
-        waitForCollectionRows("visits", 10);
+        waitForCollectionRows("visits", 8);
         assertThat(page.locator("cw-collection[id='pets'] .causeway-collection-range").textContent())
                 .isEqualTo("Items 1–5 of 6");
         assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
-                .isEqualTo("Items 1–10 of 11");
+                .isEqualTo("Items 1–8 of 11");
         page.locator("cw-collection[id='pets'] [data-causeway-grid-next]").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.offset === 5");
         waitForCollectionRows("pets", 1);
         page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === 10");
-        waitForCollectionRows("visits", 1);
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === 8");
+        waitForCollectionRows("visits", 3);
 
         openHome();
         waitForCollectionRows("petOwners", 5);
@@ -327,7 +327,7 @@ class PetClinicHtmxPlaywrightTest {
         page.locator("cw-collection[id='pets'] [data-causeway-collection-sort='name']").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.ordering === 'REQUESTED'");
         assertThat(page.locator("cw-collection[id='pets'] cw-action[id='addPet']").isVisible()).isTrue();
-        assertThat(page.locator("cw-collection[id='visits']").getAttribute("paged")).isEqualTo("10");
+        assertThat(page.locator("cw-collection[id='visits']").getAttribute("paged")).isEqualTo("8");
         final var visitTotal = ((Number) page.locator("cw-collection[id='visits']")
                 .evaluate("element => element.collectionState.window.totalCount")).intValue();
         assertThat(visitTotal).isEqualTo(2);
