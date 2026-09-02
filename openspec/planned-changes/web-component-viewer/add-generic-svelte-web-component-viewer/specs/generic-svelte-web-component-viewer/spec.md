@@ -27,14 +27,15 @@ The viewer SHALL resolve canonical public logical-type and identifier routes thr
 
 ### Requirement: Svelte custom-page precedence
 The Svelte route resolver SHALL choose an exact-logical-type registered Svelte page before the generic object page.
+Application-authored custom and generic Svelte templates SHALL declare their own route-level `<cw-object-context>`, and the router SHALL bind canonical identity without manufacturing that element.
 
 #### Scenario: Svelte page is registered
 - **WHEN** a route resolves a logical type with a registered Svelte component or lazy loader
-- **THEN** that page is rendered beneath the route-level object context
+- **THEN** that page's declared object context is bound to canonical route identity
 
 #### Scenario: No Svelte page is registered
 - **WHEN** no exact registration exists
-- **THEN** the route renders `<cw-object>` beneath the same kind of route-level object context
+- **THEN** the route renders a declarative fallback containing one object context and `<cw-object>`
 
 #### Scenario: Generic component connects
 - **WHEN** `<cw-object>` renders the route object
@@ -42,12 +43,18 @@ The Svelte route resolver SHALL choose an exact-logical-type registered Svelte p
 - **AND** does not inspect SvelteKit routing or custom-page registrations
 
 ### Requirement: Stable Svelte application layout
-The Svelte viewer SHALL keep `<cw-menubars>` and global viewer state outside the changing route-page slot.
+The application-authored Svelte layout SHALL declare one stable `<cw-graphql-client>` containing `<cw-menubars>` and global viewer state outside the changing route-page slot.
+The viewer SHALL bind configured client properties without manufacturing the provider element.
 
 #### Scenario: SvelteKit route changes
 - **WHEN** the active page slot changes object routes
-- **THEN** menu coordination remains stable
-- **AND** obsolete object contexts and lazy page resolutions disconnect deterministically
+- **THEN** the declared client and menu coordination remain stable
+- **AND** obsolete declared object contexts and lazy page resolutions disconnect deterministically
+
+#### Scenario: Route page has an invalid context boundary
+- **WHEN** a custom or generic Svelte page omits or duplicates its route-level object context
+- **THEN** the viewer presents a bounded diagnostic
+- **AND** does not silently create or select a context
 
 ### Requirement: Deterministic custom-element upgrade
 The Svelte viewer SHALL define browser registration, upgrade, readiness, cleanup, and supported server-rendering behavior for Causeway custom elements.
