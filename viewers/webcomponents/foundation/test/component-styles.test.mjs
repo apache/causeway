@@ -33,6 +33,15 @@ test('declarative action parameters remain non-visual configuration elements', (
   assert.match(CAUSEWAY_COMPONENT_STYLES, /^\s*cw-parameter \{\s+display: none;\s+\}/);
 });
 
+test('action result dialog and sidebar surfaces are bounded and responsive', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-dialog \{[\s\S]*?max-block-size: calc\(100dvh - 2rem\);[\s\S]*?inline-size: min\(var\(--causeway-action-results-dialog-width, 60rem\)/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-dialog::backdrop \{[\s\S]*?--causeway-action-results-backdrop/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-sidebar \{[\s\S]*?block-size: 100dvh;[\s\S]*?position: fixed;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /@media \(max-width: 36rem\) \{[\s\S]*?\.causeway-action-results-sidebar \{[\s\S]*?inline-size: 100vw;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?transition: none;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /@media \(forced-colors: active\) \{[\s\S]*?border: 2px solid CanvasText;/);
+});
+
 test('property edit affordance remains a compact deterministic icon control', async () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit \{[\s\S]*?block-size: 2rem;[\s\S]*?inline-size: 2rem;[\s\S]*?padding: 0\.35rem;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit-icon \{[\s\S]*?block-size: 1rem;[\s\S]*?inline-size: 1rem;[\s\S]*?stroke: currentColor;/);
