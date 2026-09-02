@@ -389,6 +389,10 @@ cw-action-results > .causeway-result-dismiss,
   grid-row: 1;
   justify-self: end;
 }
+cw-action-results > cw-standalone-collection .causeway-collection,
+.causeway-action-results > cw-standalone-collection .causeway-collection {
+  margin-block-start: 0;
+}
 .causeway-property {
   align-items: start;
   display: grid;
