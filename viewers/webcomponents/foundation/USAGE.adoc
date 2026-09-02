@@ -632,6 +632,8 @@ Object-valued results retain canonical navigation rather than being mounted into
 
 `presentation-style` accepts case-insensitive `INLINE`, `DIALOG`, and `SIDEBAR` values and defaults safely to `INLINE`.
 Inline presentation retains direct result children and ordinary page flow.
+All three styles place the Dismiss control after the result content and keep it outside a bounded scrolling content area so it remains visible for long results.
+Applications may tune that content bound with `--causeway-action-results-content-max-block-size`.
 Dialog presentation uses a labelled modal surface with focus containment and Escape dismissal, while sidebar presentation uses a non-modal panel at the viewport's inline end with ordinary Tab navigation.
 Before mounting asynchronous results, a host may call `setPresentationContext({origin})` with the connected originating action control; `dismiss()` then clears the surface and restores that focus when it remains eligible.
 `requestDismiss(reason)` publishes a cancelable `causeway-action-results-dismiss-request` event so an owning host may retain dismissal policy.

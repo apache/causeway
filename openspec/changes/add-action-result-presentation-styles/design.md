@@ -37,7 +37,9 @@ That would couple reusable result placement to every invoking action and would c
 
 ### Inline remains the direct-child compatibility mode
 
-`INLINE` keeps the current direct result children, region semantics, automatic reveal, compact dismiss alignment, replacement, and clear behavior.
+`INLINE` keeps the current direct result children, region semantics, automatic reveal, replacement, and clear behavior.
+Inline, dialog, and sidebar layouts place the Dismiss control below the result content so it does not reduce the content's available inline size.
+The content area has a configurable bounded block size and scrolls independently, leaving Dismiss visible and operable for long collections.
 Existing markup and hosts require no migration.
 
 Alternative considered: always wrap inline content in a surface element.
@@ -73,8 +75,9 @@ Asynchronous completion and prompt closure make that value unreliable, especiall
 
 ### Responsive and layering behavior is deterministic
 
-Dialog dimensions are clamped to the visual viewport and its body scrolls internally.
+Dialog dimensions are clamped to the visual viewport and its result content scrolls internally above the non-scrolling Dismiss control.
 Sidebar width is bounded by a documented token and becomes viewport-width on narrow screens without horizontal document overflow.
+Its result content consumes the available panel height and scrolls independently above the non-scrolling Dismiss control.
 Both styled surfaces use established z-index tokens and must coexist safely with action prompts, confirmation dialogs, menus, and route replacement.
 Reduced-motion preference disables optional transitions.
 

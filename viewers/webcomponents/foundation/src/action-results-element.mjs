@@ -196,7 +196,8 @@ export class CausewayActionResultsElement extends HTMLElementBase {
       schedule(() => {
         if (surface.isConnected && this._surface === surface) {
           const controls = this.#focusableControls(surface);
-          (controls[0] ?? surface).focus?.();
+          const dismiss = controls.find(control => control.hasAttribute?.('data-causeway-result-dismiss'));
+          (dismiss ?? controls[0] ?? surface).focus?.();
         }
       });
     }

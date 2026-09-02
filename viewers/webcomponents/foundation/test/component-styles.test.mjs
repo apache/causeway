@@ -33,7 +33,11 @@ test('declarative action parameters remain non-visual configuration elements', (
   assert.match(CAUSEWAY_COMPONENT_STYLES, /^\s*cw-parameter \{\s+display: none;\s+\}/);
 });
 
-test('action result dialog and sidebar surfaces are bounded and responsive', () => {
+test('action result content is bounded above a persistent dismiss control', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-action-results[\s\S]*?display: flex;[\s\S]*?flex-direction: column;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /data-causeway-presentation-style="INLINE"[\s\S]*?--causeway-action-results-content-max-block-size[\s\S]*?overflow: auto;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-surface > \.causeway-result-dismiss \{[\s\S]*?align-self: end;[\s\S]*?order: 2;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-surface > :not\(\.causeway-result-dismiss\) \{[\s\S]*?--causeway-action-results-content-max-block-size[\s\S]*?overflow: auto;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-dialog \{[\s\S]*?max-block-size: calc\(100dvh - 2rem\);[\s\S]*?inline-size: min\(var\(--causeway-action-results-dialog-width, 60rem\)/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-dialog::backdrop \{[\s\S]*?--causeway-action-results-backdrop/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-results-sidebar \{[\s\S]*?block-size: 100dvh;[\s\S]*?position: fixed;/);

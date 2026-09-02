@@ -29,3 +29,9 @@
 - [x] 5.1 Add deterministic Petclinic outlet declarations and journeys demonstrating inline, dialog, and sidebar collection results without changing invocation projection.
 - [x] 5.2 Verify object-action and service-action origins, replacement, dismissal, focus restoration, stale/disconnected fallback, object navigation, and void refresh under Vaadin and native toolkit policies.
 - [x] 5.3 Run Foundation Node and Maven suites, HTMX and Petclinic integration tests, browser accessibility/console/network/focus/overflow audits, strict OpenSpec validation, and `git diff --check` with Java 21 where required.
+
+## 6. Keep dismissal below bounded result content
+
+- [x] 6.1 Place the Dismiss control below result content for inline, dialog, and sidebar presentation without reducing result width.
+- [x] 6.2 Bound and independently scroll long result content while keeping Dismiss visible and operable.
+- [x] 6.3 Qualify layout, overflow, and dismissal behavior under Foundation, Vaadin, and native policies.

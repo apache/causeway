@@ -655,13 +655,16 @@ test('dialog and sidebar result surfaces request dismissal and restore only conn
   const outlet = new CausewayActionResultsElement();
   outlet.presentationStyle = ActionResultPresentationStyle.DIALOG;
   document.body.appendChild(outlet);
+  const resultControl = document.createElement('button');
   const dismiss = document.createElement('button');
   dismiss.setAttribute('data-causeway-result-dismiss', '');
   outlet.setPresentationContext({origin});
   let request;
   outlet.addEventListener(ACTION_RESULTS_DISMISS_REQUEST_EVENT, event => { request = event.detail; });
-  outlet.replacePresentation(dismiss);
+  outlet.replacePresentation(resultControl, dismiss);
   const dialog = outlet.children[0];
+  assert.equal(dialog.children[0], resultControl);
+  assert.equal(dialog.children[1], dismiss);
   assert.equal(document.activeElement, dismiss);
   const escape = new Event('keydown', {bubbles: true, cancelable: true});
   escape.key = 'Escape';
