@@ -699,7 +699,7 @@ Petclinic HTML resource pages SHALL demonstrate declarative paging with sample-a
 
 #### Scenario: Owner visit history renders
 - **WHEN** an owner page composes visit history
-- **THEN** that collection declares `paged="10"`
+- **THEN** that collection declares `paged="8"`
 - **AND** its associated actions, semantic columns, and row peeks remain unchanged
 
 #### Scenario: Nested pet visits render
