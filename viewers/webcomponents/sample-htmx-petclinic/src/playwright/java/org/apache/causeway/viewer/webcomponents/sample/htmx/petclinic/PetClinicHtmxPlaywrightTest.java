@@ -35,6 +35,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.ColorScheme;
 import com.microsoft.playwright.options.WaitUntilState;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,6 +45,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -213,10 +215,11 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
         assertFocused(ROUTE_PAGE);
-        waitForCollectionRows("petOwners", 2);
-        waitForCollectionRows("futureVisits", 3);
+        waitForCollectionRows("petOwners", 5);
+        waitForCollectionRows("futureVisits", 10);
         assertObjectLinkIcon(page.locator("cw-collection[id='petOwners'] cw-object-link").first());
-        assertThat(page.locator("cw-collection[id='petOwners']").getAttribute("paged")).isEqualTo("2");
+        assertThat(page.locator("cw-collection[id='petOwners']").getAttribute("paged")).isEqualTo("5");
+        assertThat(page.locator("cw-collection[id='futureVisits']").getAttribute("paged")).isEqualTo("10");
         assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-grid-next]").isVisible()).isTrue();
         assertThat(page.locator("cw-collection[id='futureVisits'] .causeway-collection-label").innerText())
                 .isEqualTo("Next appointments");
@@ -233,12 +236,12 @@ class PetClinicHtmxPlaywrightTest {
         final var visitSearch = page.locator("cw-collection[id='futureVisits'] [data-causeway-collection-search]");
         assertThat(visitSearch.isVisible()).isTrue();
         visitSearch.fill("vaccination");
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.collectionState?.window?.totalCount === 1");
-        waitForCollectionRows("futureVisits", 1);
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.collectionState?.window?.totalCount === 2");
+        waitForCollectionRows("futureVisits", 2);
         assertThat(page.locator("cw-collection[id='futureVisits']").innerText()).contains("Vaccination");
         page.locator("cw-collection[id='futureVisits'] [data-causeway-collection-search-clear]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.collectionState?.window?.totalCount === 3");
-        waitForCollectionRows("futureVisits", 3);
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.collectionState?.window?.totalCount === 13");
+        waitForCollectionRows("futureVisits", 10);
 
         final var ownerSearch = page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search]");
         assertThat(ownerSearch.isVisible()).isTrue();
@@ -248,21 +251,44 @@ class PetClinicHtmxPlaywrightTest {
         waitForCollectionRows("petOwners", 1);
         assertThat(page.locator("cw-collection[id='petOwners']").innerText()).contains("Mary Smith");
         page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search-clear]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.totalCount === 4");
-        waitForCollectionRows("petOwners", 2);
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.totalCount === 10");
+        waitForCollectionRows("petOwners", 5);
         assertThat(page.locator("cw-collection[id='petOwners'] .causeway-collection-range").textContent())
-                .isEqualTo("Items 1–2 of 4");
+                .isEqualTo("Items 1–5 of 10");
         page.locator("cw-collection[id='petOwners'] [data-causeway-collection-sort='name']").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.ordering === 'REQUESTED'");
         assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-collection-sort='name']").getAttribute("aria-label"))
                 .contains("descending");
 
         page.locator("cw-collection[id='petOwners'] [data-causeway-grid-next]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.offset === 2");
-        waitForCollectionRows("petOwners", 2);
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.offset === 5");
+        waitForCollectionRows("petOwners", 5);
         assertThat(page.locator("cw-collection[id='petOwners'] .causeway-collection-range").textContent())
-                .isEqualTo("Items 3–4 of 4");
+                .isEqualTo("Items 6–10 of 10");
         assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-grid-previous]").isVisible()).isTrue();
+        page.locator("cw-collection[id='petOwners'] [data-causeway-grid-previous]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.offset === 0");
+        waitForCollectionRows("petOwners", 5);
+        clickObjectLink("Eduardo Rodriguez");
+        waitForRoute("petclinic.PetOwner", "s_owner-eduardo");
+        waitForCollectionRows("pets", 5);
+        waitForCollectionRows("visits", 10);
+        assertThat(page.locator("cw-collection[id='pets'] .causeway-collection-range").textContent())
+                .isEqualTo("Items 1–5 of 6");
+        assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
+                .isEqualTo("Items 1–10 of 11");
+        page.locator("cw-collection[id='pets'] [data-causeway-grid-next]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.offset === 5");
+        waitForCollectionRows("pets", 1);
+        page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === 10");
+        waitForCollectionRows("visits", 1);
+
+        openHome();
+        waitForCollectionRows("petOwners", 5);
+        final var marySearch = page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search]");
+        marySearch.fill("Mary");
+        waitForCollectionRows("petOwners", 1);
         clickObjectLink("Mary Smith");
         waitForRoute("petclinic.PetOwner", "s_owner-mary");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
@@ -281,8 +307,9 @@ class PetClinicHtmxPlaywrightTest {
                 """)).isEqualTo(true);
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
-        waitForCollectionRows("visits", 1);
+        waitForCollectionRows("visits", 2);
         assertObjectLinkIcon(page.locator("cw-collection[id='pets'] cw-object-link").first());
+        assertThat(page.locator("cw-collection[id='pets']").getAttribute("paged")).isEqualTo("5");
         assertThat(page.locator("cw-collection[id='pets']").getAttribute("sortable")).isEmpty();
         assertThat(page.locator("cw-collection[id='pets']").getAttribute("filterable")).isEmpty();
         final var petSearch = page.locator("cw-collection[id='pets'] [data-causeway-collection-search]");
@@ -300,31 +327,13 @@ class PetClinicHtmxPlaywrightTest {
         page.locator("cw-collection[id='pets'] [data-causeway-collection-sort='name']").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.ordering === 'REQUESTED'");
         assertThat(page.locator("cw-collection[id='pets'] cw-action[id='addPet']").isVisible()).isTrue();
-        assertThat(page.locator("cw-collection[id='visits']").getAttribute("paged")).isEqualTo("1");
+        assertThat(page.locator("cw-collection[id='visits']").getAttribute("paged")).isEqualTo("10");
         final var visitTotal = ((Number) page.locator("cw-collection[id='visits']")
                 .evaluate("element => element.collectionState.window.totalCount")).intValue();
-        assertThat(visitTotal).isGreaterThan(1);
+        assertThat(visitTotal).isEqualTo(2);
         assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
-                .isEqualTo("Items 1–1 of " + visitTotal);
-        for (int offset = 1; offset < visitTotal; offset++) {
-            assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").isVisible()).isTrue();
-            page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").click();
-            final var expectedOffset = offset;
-            page.waitForFunction("offset => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === offset", expectedOffset);
-            waitForCollectionRows("visits", 1);
-            assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
-                    .isEqualTo("Items " + (offset + 1) + "–" + (offset + 1) + " of " + visitTotal);
-        }
+                .isEqualTo("Items 1–2 of 2");
         assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").isDisabled()).isTrue();
-        for (int offset = visitTotal - 2; offset >= 0; offset--) {
-            assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-previous]").isVisible()).isTrue();
-            page.locator("cw-collection[id='visits'] [data-causeway-grid-previous]").click();
-            final var expectedOffset = offset;
-            page.waitForFunction("offset => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.window?.offset === offset", expectedOffset);
-            waitForCollectionRows("visits", 1);
-        }
-        assertThat(page.locator("cw-collection[id='visits'] .causeway-collection-range").textContent())
-                .isEqualTo("Items 1–1 of " + visitTotal);
         assertCollectionHeading("pets", "Companion animals", "Pets currently registered to this owner.");
         assertCollectionHeading("visits", "Visit history", "All visits recorded for this owner's pets.");
         final var visitDisabledReason = page.locator("cw-collection[id='visits'] .causeway-visually-hidden");
@@ -382,7 +391,7 @@ class PetClinicHtmxPlaywrightTest {
         page.setViewportSize(500, 900);
         page.waitForFunction("() => [...document.querySelectorAll(\"cw-collection[id='pets'], cw-collection[id='visits']\")].every(element => element.dataset.causewayGridResponsive === 'narrow' && !element.querySelector('cw-collection-grid'))");
         waitForCollectionRows("pets", 2);
-        waitForCollectionRows("visits", 1);
+        waitForCollectionRows("visits", 2);
         assertIntegratedCollectionActionHeader("pets", "addPet", "removePet", true);
         assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
         page.setViewportSize(1800, 900);
@@ -523,8 +532,8 @@ class PetClinicHtmxPlaywrightTest {
         final var shellResultOutlet = page.locator("#causeway-result");
         constrainResultContentHeight(shellResultOutlet);
         activateServiceAction("listAll");
-        waitForShellResult("Pet owners", "4 results");
-        assertStandaloneCollectionResult("Pet owners", 4);
+        waitForShellResult("Pet owners", "10 results");
+        assertStandaloneCollectionResult("Pet owners", 10);
         assertScrollableResultWithDismissBelow(shellResultOutlet);
         assertThat(page.locator("cw-action-results:not([hidden]) cw-standalone-collection").first().textContent())
                 .contains("Owner", "Telephone", "Email")
@@ -571,7 +580,7 @@ class PetClinicHtmxPlaywrightTest {
 
         openMenu("Pet Owners");
         activateServiceAction("count");
-        waitForShellResult("count", "4");
+        waitForShellResult("count", "10");
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
@@ -595,7 +604,7 @@ class PetClinicHtmxPlaywrightTest {
 
         openMenu("Visits");
         activateServiceAction("listUpcoming");
-        waitForShellResult("listUpcoming", "3 results");
+        waitForShellResult("listUpcoming", "13 results");
         assertMenuClosedAndFocused("Visits");
     }
 
@@ -1063,7 +1072,7 @@ class PetClinicHtmxPlaywrightTest {
         page.locator("[data-testid='action-confirmation-cancel']").click();
         confirmation.waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-        assertThat(ownerRepository.findById("owner-5")).isNotNull();
+        assertThat(ownerRepository.findById("owner-11")).isNotNull();
         assertThat(graphQLMutationCount("delete") - deleteMutations).isZero();
         assertFocused("cw-action[id='delete'] [data-causeway-action-control]");
 
@@ -1073,7 +1082,7 @@ class PetClinicHtmxPlaywrightTest {
         page.waitForFunction("() => location.pathname.includes('/object/petclinic.HomePage/')");
         waitForLogicalType("petclinic.HomePage");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
-        assertThat(ownerRepository.findById("owner-5")).isNull();
+        assertThat(ownerRepository.findById("owner-11")).isNull();
         assertThat(graphQLMutationCount("delete") - deleteMutations).isEqualTo(1);
     }
 
@@ -1336,14 +1345,14 @@ class PetClinicHtmxPlaywrightTest {
     @Order(9)
     void collectionRowPeeksRemainSingleContextualAndRefreshAfterMutations() {
         openHome();
-        waitForCollectionRows("petOwners", 2);
-        waitForCollectionRows("futureVisits", 3);
+        waitForCollectionRows("petOwners", 5);
+        waitForCollectionRows("futureVisits", 10);
         final var owners = page.locator("cw-collection[id='petOwners']");
         final var ownerToggles = owners.locator("button[data-causeway-peek-toggle]");
         ownerToggles.first().waitFor();
-        assertThat(ownerToggles.count()).isEqualTo(2);
+        assertThat(ownerToggles.count()).isEqualTo(5);
         assertThat(page.locator("cw-collection[id='futureVisits'] button[data-causeway-peek-toggle]").count())
-                .isEqualTo(3);
+                .isEqualTo(10);
         assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.PetOwner")).count())
                 .isEqualTo(1);
         assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.Visit")).count())
@@ -1793,7 +1802,7 @@ class PetClinicHtmxPlaywrightTest {
                     + "; generation=" + page.locator("[data-testid='causeway-route']").getAttribute("data-navigation-generation")
                     + "; busy=" + page.locator("[data-testid='causeway-route']").getAttribute("aria-busy")
                     + "; prompt=" + (page.locator("[data-testid='action-prompt']").count() > 0
-                            ? page.locator("[data-testid='action-prompt']").evaluate("element => element.outerHTML") : "none")
+                    ? page.locator("[data-testid='action-prompt']").evaluate("element => element.outerHTML") : "none")
                     + "; result=" + page.locator("[data-testid='causeway-shell-result']").textContent(), cause);
         }
     }
