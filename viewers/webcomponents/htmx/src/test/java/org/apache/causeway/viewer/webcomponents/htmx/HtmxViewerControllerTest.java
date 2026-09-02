@@ -394,7 +394,8 @@ class HtmxViewerControllerTest {
                 codec,
                 new HtmxPageRenderer(codec, properties, pages),
                 properties,
-                new HtmxCollectionPresentationRegistry(List.of(definition)));
+                new HtmxCollectionPresentationRegistry(List.of(definition)),
+                new HtmxPreviewRegistry(List.of()));
 
         assertThat(controller.collectionPresentation("petclinic.PetOwner"))
                 .satisfies(response -> {
@@ -410,6 +411,32 @@ class HtmxViewerControllerTest {
                     assertThat(response.getBody()).isNull();
                 });
         assertThat(controller.collectionPresentation("../petclinic.PetOwner").getStatusCode().value()).isEqualTo(404);
+    }
+
+    @Test
+    void servesOnlyExactRegisteredPreviewsFromReservedRoute() {
+        final var definition = HtmxPreviewDefinition.resource(
+                "petclinic.Visit",
+                "resource:petclinic.Visit.html",
+                "<cw-peek><cw-property id=\"reason\"></cw-property></cw-peek>");
+        final var pages = new HtmxPageFragmentRegistry(List.of(), List.of());
+        final var controller = new HtmxViewerController(
+                codec,
+                new HtmxPageRenderer(codec, properties, pages),
+                properties,
+                new HtmxCollectionPresentationRegistry(List.of()),
+                new HtmxPreviewRegistry(List.of(definition)));
+
+        assertThat(controller.preview("petclinic.Visit"))
+                .satisfies(response -> {
+                    assertThat(response.getStatusCode().value()).isEqualTo(200);
+                    assertThat(response.getBody()).contains("cw-peek");
+                    assertThat(response.getHeaders().getFirst("X-Causeway-Preview"))
+                            .isEqualTo("petclinic.Visit");
+                    assertThat(response.getHeaders().getCacheControl()).contains("no-store");
+                });
+        assertThat(controller.preview("petclinic.Missing").getStatusCode().value()).isEqualTo(404);
+        assertThat(controller.preview("../petclinic.Visit").getStatusCode().value()).isEqualTo(404);
     }
 
     @Test
@@ -439,7 +466,8 @@ class HtmxViewerControllerTest {
                 codec,
                 new HtmxPageRenderer(codec, properties, registry),
                 properties,
-                new HtmxCollectionPresentationRegistry(List.of()));
+                new HtmxCollectionPresentationRegistry(List.of()),
+                new HtmxPreviewRegistry(List.of()));
     }
 
     private static MockHttpServletRequest request(

@@ -8,7 +8,8 @@ This directory builds the pinned free-core Vaadin Grid asset used internally by 
 Applications continue to use Causeway collection and column elements and must not depend on the internal Grid tag, data provider, renderer callbacks, events, item objects, methods, properties, or Shadow DOM.
 
 The closure is independent from reference, field-family, action, and future menu assets so inactive, narrow, unsupported, unaffected, and native routes do not download Grid.
-It excludes sorting, filtering, selection, editing, details, drag, resize, reorder, Grid Pro, commercial packages, Flow, Binder, server-side Vaadin state, telemetry, CDN resources, external assets, Menu Bar, and persistence query pushdown.
+It excludes toolkit-owned sorting, filtering, selection, editing, application-authored details, drag, resize, reorder, Grid Pro, commercial packages, Flow, Binder, server-side Vaadin state, telemetry, CDN resources, external assets, Menu Bar, and persistence query pushdown.
+The adapter uses only Causeway-owned `<cw-peek>` disclosure cells and row details when the neutral collection projection explicitly supplies preview callbacks.
 
 == Reproducible build
 

@@ -51,6 +51,7 @@ import {
   loginDestination,
   readAuthenticationMetadata
 } from './authentication-policy.mjs';
+import {createCausewayPreviewResolver} from './preview-resource.mjs';
 import {
   canonicalObjectPath,
   homeObjectIdentity,
@@ -130,10 +131,19 @@ let pendingVoidRefreshGeneration = null;
 const resolvingHomeLandings = new WeakSet();
 const actionResultDestinations = new WeakMap();
 const collectionPresentationCache = new Map();
+const resolvePreview = createCausewayPreviewResolver({
+  basePath,
+  resourcePageMode,
+  diagnostic: classification => {
+    if (classification) document.documentElement.dataset.causewayPreviewError = classification;
+    else document.documentElement.removeAttribute('data-causeway-preview-error');
+  }
+});
 let unscopedActionResultDestination = null;
 
 defineCausewayWebComponents();
 globalThis.causewayActionResultPresentationResolver = resolveCollectionPresentation;
+globalThis.causewayCollectionRowPreviewResolver = resolvePreview;
 
 async function resolveCollectionPresentation({logicalTypeName} = {}) {
   const type = String(logicalTypeName ?? '').trim();
@@ -239,6 +249,8 @@ function resultOrigin(detail) {
 
 function actionResultOrigin(source) {
   if (!source) return null;
+  const previewCollection = source.closest?.('cw-peek[data-causeway-peek-live]')?.closest?.('cw-collection');
+  if (previewCollection && typeof previewCollection.focus === 'function') return previewCollection;
   if (source.localName === 'cw-action') {
     return source.querySelector?.('[data-causeway-action-control]') ?? null;
   }
@@ -415,7 +427,8 @@ function presentResult(detail) {
     output.textContent = 'Completed';
     replaceResultPresentation(destination, heading, output, resultDismissButton(destination, detail));
     const context = routeRegion?.querySelector('cw-object-context')?.context;
-    if (context) {
+    const collectionRefreshOwnsMutation = resultOrigin(detail)?.matches?.('cw-collection') === true;
+    if (context && !collectionRefreshOwnsMutation) {
       globalThis.setTimeout(() => navigate(
         globalThis.location.pathname + globalThis.location.search,
         {replace: true, preserveResult: true, recoverMissingAfterVoid: result?.kind === 'void'}

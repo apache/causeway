@@ -189,7 +189,55 @@ export class CausewayCollectionGridElement extends HTMLElement {
     control.columnReorderingAllowed = presentation.reorderableColumns;
     control.activeItem = null;
     control.selectedItems = [];
-    control.rowDetailsRenderer = null;
+    control.itemIdPath = 'key';
+    control.detailsOpenedItems = [];
+    control.rowDetailsRenderer = presentation.rowDetails ? (root, _grid, model) => {
+      if (presentationRevision !== this._presentationRevision || control !== this._control) return;
+      try {
+        root.replaceChildren();
+        root.id = gridPeekDetailsId(model.item?.key);
+        presentation.rowDetails.render(root, model.item, Object.freeze({
+          close: ({restoreFocus = false} = {}) => this.#closeRowDetails(control, model.item, {restoreFocus})
+        }));
+      } catch (_error) {
+        failCausewayGridWidget({phase: 'row-details-renderer', classification: 'GRID_DETAILS_RENDERER_UNAVAILABLE'});
+      }
+    } : null;
+    if (presentation.rowDetails) {
+      const detailsColumn = document.createElement('vaadin-grid-column');
+      detailsColumn.header = 'Preview';
+      detailsColumn.resizable = false;
+      detailsColumn.sortable = false;
+      detailsColumn.frozen = true;
+      detailsColumn.width = '3rem';
+      detailsColumn.flexGrow = 0;
+      detailsColumn.renderer = (root, _column, model) => {
+        if (presentationRevision !== this._presentationRevision || control !== this._control) return;
+        root.replaceChildren();
+        root.setAttribute('data-causeway-grid-row-key', String(model.item?.key ?? ''));
+        root.setAttribute('data-causeway-grid-member', '_peek');
+        root.setAttribute('data-causeway-grid-role', 'peek');
+        if (!model.item?.preview) return;
+        const expanded = presentation.rowDetails.expandedKey() === model.item.key;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'causeway-collection-peek-toggle';
+        button.dataset.causewayPeekToggle = model.item.key;
+        button.setAttribute('aria-expanded', String(expanded));
+        button.setAttribute('aria-controls', gridPeekDetailsId(model.item.key));
+        button.setAttribute('aria-label', `${expanded ? 'Collapse' : 'Preview'} ${model.item.identity?.title ?? 'item'}`);
+        button.textContent = expanded ? '▾' : '▸';
+        button.addEventListener('click', event => {
+          event.stopPropagation();
+          const opened = presentation.rowDetails.toggle(model.item) === true;
+          control.detailsOpenedItems = opened ? [model.item] : [];
+          control.requestContentUpdate?.();
+        });
+        root.appendChild(button);
+        this.#restoreRenderedFocus(root, {member: '_peek'}, model.item);
+      };
+      control.appendChild(detailsColumn);
+    }
     for (const descriptor of presentation.columns) {
       const column = document.createElement('vaadin-grid-column');
       column.header = descriptor.label;
@@ -261,6 +309,16 @@ export class CausewayCollectionGridElement extends HTMLElement {
     }
   }
 
+  #closeRowDetails(control, item, {restoreFocus = false} = {}) {
+    if (control !== this._control) return false;
+    control.detailsOpenedItems = [];
+    if (restoreFocus && item?.key) {
+      this._semanticFocusIntent = Object.freeze({rowKey: item.key, member: '_peek', role: 'peek'});
+    }
+    control.requestContentUpdate?.();
+    return true;
+  }
+
   #restoreRenderedFocus(root, descriptor, item) {
     const intent = this._semanticFocusIntent;
     if (!intent || item?.key !== intent.rowKey || descriptor.member !== intent.member) return;
@@ -274,6 +332,8 @@ export class CausewayCollectionGridElement extends HTMLElement {
   #releaseControl() {
     if (this._control) {
       this._control.dataProvider = undefined;
+      this._control.rowDetailsRenderer = null;
+      this._control.detailsOpenedItems = [];
       this._control.items = [];
     }
     this._control = null;
@@ -298,6 +358,16 @@ function freezePresentation(value = {}) {
       && ['ASCENDING', 'DESCENDING'].includes(value.sortCriterion.direction)
     ? Object.freeze({member: String(value.sortCriterion.member), direction: value.sortCriterion.direction})
     : null;
+  const rowDetails = value.rowDetails
+      && typeof value.rowDetails.expandedKey === 'function'
+      && typeof value.rowDetails.toggle === 'function'
+      && typeof value.rowDetails.render === 'function'
+    ? Object.freeze({
+      expandedKey: value.rowDetails.expandedKey,
+      toggle: value.rowDetails.toggle,
+      render: value.rowDetails.render
+    })
+    : null;
   return Object.freeze({
     mode,
     rows,
@@ -312,7 +382,8 @@ function freezePresentation(value = {}) {
     reorderableColumns: value.reorderableColumns === true,
     sortableMembers,
     sortCriterion,
-    sortCallback: typeof value.sortCallback === 'function' ? value.sortCallback : () => {}
+    sortCallback: typeof value.sortCallback === 'function' ? value.sortCallback : () => {},
+    rowDetails
   });
 }
 
@@ -326,6 +397,10 @@ function safeModuleUrl(value) {
   const url = new URL(value, globalThis.document?.baseURI ?? import.meta.url);
   if (!APPROVED_PROTOCOLS.has(url.protocol)) throw new Error('Grid module URL must use an approved module protocol.');
   return url.href;
+}
+
+function gridPeekDetailsId(key) {
+  return `causeway-grid-peek-${String(key ?? '').replace(/[^A-Za-z0-9_.-]/g, '_').slice(0, 160)}`;
 }
 
 function boundedToken(value) {

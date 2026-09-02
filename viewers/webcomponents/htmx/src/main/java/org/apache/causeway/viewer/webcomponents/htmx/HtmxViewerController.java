@@ -74,17 +74,20 @@ public class HtmxViewerController {
     private final HtmxPageRenderer renderer;
     private final HtmxViewerProperties properties;
     private final HtmxCollectionPresentationRegistry collectionPresentationRegistry;
+    private final HtmxPreviewRegistry previewRegistry;
     private HtmxAuthenticationShell authenticationShell;
 
     public HtmxViewerController(
             final HtmxRouteCodec routeCodec,
             final HtmxPageRenderer renderer,
             final HtmxViewerProperties properties,
-            final HtmxCollectionPresentationRegistry collectionPresentationRegistry) {
+            final HtmxCollectionPresentationRegistry collectionPresentationRegistry,
+            final HtmxPreviewRegistry previewRegistry) {
         this.routeCodec = routeCodec;
         this.renderer = renderer;
         this.properties = properties;
         this.collectionPresentationRegistry = collectionPresentationRegistry;
+        this.previewRegistry = previewRegistry;
     }
 
     @Autowired(required = false)
@@ -108,6 +111,25 @@ public class HtmxViewerController {
                 .contentType(HTML_UTF8)
                 .cacheControl(CacheControl.noStore().cachePrivate())
                 .header("X-Causeway-Collection-Presentation", logicalTypeName)
+                .body(definition.orElseThrow().content());
+    }
+
+    @GetMapping("/_previews/{logicalTypeName:.+}")
+    public ResponseEntity<String> preview(
+            @PathVariable("logicalTypeName") final String logicalTypeName) {
+        if (logicalTypeName == null
+                || logicalTypeName.length() > 255
+                || !logicalTypeName.matches("[A-Za-z_][A-Za-z0-9_$-]*(?:\\.[A-Za-z_][A-Za-z0-9_$-]*)*")) {
+            return ResponseEntity.notFound().build();
+        }
+        final var definition = previewRegistry.find(logicalTypeName);
+        if (definition.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .contentType(HTML_UTF8)
+                .cacheControl(CacheControl.noStore().cachePrivate())
+                .header("X-Causeway-Preview", logicalTypeName)
                 .body(definition.orElseThrow().content());
     }
 
