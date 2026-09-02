@@ -188,6 +188,10 @@
   font-size: var(--causeway-font-size-lg);
 }
 
+cw-action-results {
+  --causeway-action-results-scroll-margin: calc(var(--causeway-nav-height) + var(--causeway-space-3));
+}
+
 cw-action-results > .causeway-result-dismiss {
   margin: 0;
 }
