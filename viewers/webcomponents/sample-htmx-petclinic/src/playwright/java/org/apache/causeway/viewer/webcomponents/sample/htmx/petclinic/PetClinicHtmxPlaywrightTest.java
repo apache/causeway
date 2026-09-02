@@ -514,6 +514,7 @@ class PetClinicHtmxPlaywrightTest {
         activateServiceAction("listAll");
         waitForShellResult("Pet owners", "4 results");
         assertStandaloneCollectionResult("Pet owners", 4);
+        assertResultDismissAlignment(page.locator("#causeway-result"));
         assertThat(page.locator("cw-action-results:not([hidden]) cw-standalone-collection").first().textContent())
                 .contains("Owner", "Telephone", "Email")
                 .doesNotContain("Known as", "Notes", "Unavailable");
@@ -1173,10 +1174,8 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(liveResult).first().getAttribute("named")).isEqualTo("Pet owners");
         assertThat(page.locator(liveResult + " cw-object-link").count()).isGreaterThan(0);
         assertObjectLinkIcon(page.locator(liveResult + " cw-object-link").first());
-        page.waitForFunction("() => { const outlet = document.querySelector(\"cw-action-results[data-testid='petclinic-action-results']\"); const rect = outlet?.getBoundingClientRect(); return rect && rect.top >= 0 && rect.top < Math.min(innerHeight / 3, 160); }");
-        final var resultAlignment = (List<Number>) emptyOutlet.evaluate("element => { const dismiss = element.querySelector('[data-causeway-result-dismiss]').getBoundingClientRect(); const result = element.querySelector('cw-standalone-collection').getBoundingClientRect(); return [Math.abs(dismiss.top - result.top), dismiss.width]; }");
-        assertThat(resultAlignment.get(0).doubleValue()).isLessThan(2);
-        assertThat(resultAlignment.get(1).doubleValue()).isLessThan(160);
+        page.waitForFunction("() => { const outlet = document.querySelector(\"cw-action-results[data-testid='petclinic-action-results']\"); const header = document.querySelector('.causeway-shell-header'); const rect = outlet?.getBoundingClientRect(); const headerBottom = header?.getBoundingClientRect().bottom ?? 0; return rect && rect.top >= headerBottom + 8 && rect.top < Math.min(innerHeight / 3, 160); }");
+        assertResultDismissAlignment(emptyOutlet);
         assertThat((List<String>) page.evaluate("() => globalThis.__causewayResultPlacements"))
                 .contains("Pet owners:petclinic-action-results");
         final var defaultRequest = graphQLRequests.subList(defaultRequestStart, graphQLRequests.size()).stream()
@@ -1703,6 +1702,13 @@ class PetClinicHtmxPlaywrightTest {
             page.waitForFunction("() => document.querySelector(\"cw-action-results:not([hidden]) cw-standalone-collection\")?.dataset.causewayGridPresentation === 'grid-virtual'");
             assertThat(result.locator("cw-collection-grid").count()).isEqualTo(1);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertResultDismissAlignment(final Locator outlet) {
+        final var resultAlignment = (List<Number>) outlet.evaluate("element => { const dismiss = element.querySelector('[data-causeway-result-dismiss]').getBoundingClientRect(); const result = element.querySelector('cw-standalone-collection .causeway-collection').getBoundingClientRect(); return [Math.abs(dismiss.top - result.top), dismiss.width]; }");
+        assertThat(resultAlignment.get(0).doubleValue()).isLessThan(2);
+        assertThat(resultAlignment.get(1).doubleValue()).isLessThan(160);
     }
 
     private long graphQLOperationCount(final String operationName) {
