@@ -18,7 +18,11 @@
  */
 
 import {fieldsByName, namedType} from './introspection.mjs';
-import {argumentsFromValues, resultSelectionForType} from './interaction-operations.mjs';
+import {
+  argumentsFromValues,
+  collectionResultSelectionForType,
+  resultSelectionForType
+} from './interaction-operations.mjs';
 
 export const ActionInvocationPlacement = Object.freeze({
   NESTED_QUERY: 'nested-query',
@@ -117,16 +121,25 @@ export function actionInvocationArguments(plan, values = {}, identity = null) {
   return args;
 }
 
-export async function ensureActionInvocationResultTypes(client, description, plan, signal) {
+export async function ensureActionInvocationResultTypes(client, description, plan, signal, columns = []) {
   await ensureType(client, description, plan?.field?.type, signal);
   const describedType = description.types.get(namedType(plan?.field?.type)) ?? null;
   const resultsField = describedType ? fieldsByName(describedType).get('results') ?? null : null;
-  if (resultsField) {
-    await ensureType(client, description, resultsField.type, signal);
+  const resultType = resultsField?.type ?? plan?.field?.type ?? null;
+  if (resultsField) await ensureType(client, description, resultType, signal);
+  const resultDescription = description.types.get(namedType(resultType)) ?? null;
+  for (const column of [...(columns ?? [])].slice(0, 32)) {
+    const member = typeof column === 'string' ? column : column?.member;
+    const memberField = member ? fieldsByName(resultDescription).get(member) ?? null : null;
+    if (!memberField) continue;
+    await ensureType(client, description, memberField.type, signal);
+    const wrapper = description.types.get(namedType(memberField.type)) ?? null;
+    const getField = fieldsByName(wrapper).get('get') ?? null;
+    if (getField) await ensureType(client, description, getField.type, signal);
   }
 }
 
-export function actionInvocationResultPlan(plan, types) {
+export function actionInvocationResultPlan(plan, types, columns = []) {
   if (!plan?.supported || !plan.field) {
     throw new ActionDispatchPlanError('ACTION_INVOCATION_UNAVAILABLE', 'No executable action invocation is advertised.');
   }
@@ -135,13 +148,17 @@ export function actionInvocationResultPlan(plan, types) {
   const resultsField = describedType ? fieldsByName(describedType).get('results') ?? null : null;
   if (resultsField) {
     return Object.freeze({
-      selection: Object.freeze({results: resultSelectionForType(resultsField.type, types) ?? true}),
+      selection: Object.freeze({results: columns.length > 0
+        ? collectionResultSelectionForType(resultsField.type, columns, types)
+        : resultSelectionForType(resultsField.type, types) ?? true}),
       resultType: resultsField.type,
       extractionPath: Object.freeze(['results'])
     });
   }
   return Object.freeze({
-    selection: resultSelectionForType(directType, types) ?? true,
+    selection: columns.length > 0
+      ? collectionResultSelectionForType(directType, columns, types)
+      : resultSelectionForType(directType, types) ?? true,
     resultType: directType,
     extractionPath: Object.freeze([])
   });

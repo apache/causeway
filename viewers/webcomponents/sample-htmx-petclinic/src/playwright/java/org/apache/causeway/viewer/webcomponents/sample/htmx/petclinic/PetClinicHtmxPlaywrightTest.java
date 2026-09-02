@@ -120,7 +120,7 @@ class PetClinicHtmxPlaywrightTest {
                   globalThis.fetch = async (...args) => {
                     const response = await originalFetch(...args);
                     const url = String(response.url || args[0]);
-                    if (!response.ok) {
+                    if (!response.ok && !(response.status === 404 && url.includes('/_collection-presentations/'))) {
                       record(`HTTP ${response.status}: ${url}`);
                     }
                     if (/\\/graphql(?:\\?|$)/.test(url)) {
@@ -141,7 +141,8 @@ class PetClinicHtmxPlaywrightTest {
                 """);
         page = browserContext.newPage();
         page.onConsoleMessage(message -> {
-            if ("error".equals(message.type())) {
+            if ("error".equals(message.type())
+                    && !(message.text().contains("Failed to load resource") && message.text().contains("404"))) {
                 browserFailures.add("console: " + message.text());
             }
         });
@@ -160,7 +161,10 @@ class PetClinicHtmxPlaywrightTest {
         });
         page.onRequestFailed(request -> {
             final var failure = request.failure();
-            if (!(request.url().contains("/graphql") && failure != null && failure.contains("ERR_ABORTED"))) {
+            final var expectedOptionalPresentationMiss = request.url().contains("/_collection-presentations/")
+                    && failure != null && failure.contains("ERR_ABORTED");
+            if (!(request.url().contains("/graphql") && failure != null && failure.contains("ERR_ABORTED"))
+                    && !expectedOptionalPresentationMiss) {
                 browserFailures.add("request: " + request.method() + " " + request.url() + " " + failure);
             }
         });
@@ -503,9 +507,19 @@ class PetClinicHtmxPlaywrightTest {
                     .isEqualTo("Lists every registered pet owner.");
         }
 
+        final var listAllRequestStart = graphQLRequests.size();
         activateServiceAction("listAll");
-        waitForShellResult("listAll", "4 results");
-        assertStandaloneCollectionResult("listAll", 4);
+        waitForShellResult("Pet owners", "4 results");
+        assertStandaloneCollectionResult("Pet owners", 4);
+        assertThat(page.locator("cw-action-results:not([hidden]) cw-standalone-collection").first().textContent())
+                .contains("Owner", "Telephone", "Email")
+                .doesNotContain("Known as", "Notes", "Unavailable");
+        final var listAllRequest = graphQLRequests.subList(listAllRequestStart, graphQLRequests.size()).stream()
+                .filter(body -> body != null && body.contains("listAll") && body.contains("results"))
+                .findFirst().orElseThrow();
+        assertThat(listAllRequest)
+                .contains("name", "telephoneNumber", "emailAddress")
+                .doesNotContain("knownAs", "notes");
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
@@ -518,8 +532,8 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(parameter("name"));
         fillParameter("name", "Mary");
         submitPrompt();
-        waitForShellResult("findByName", "1 result");
-        assertStandaloneCollectionResult("findByName", 1);
+        waitForShellResult("Pet owners", "1 result");
+        assertStandaloneCollectionResult("Pet owners", 1);
         assertMenuClosedAndFocused("Pet Owners");
         page.locator("cw-standalone-collection cw-object-link[title='Mary Smith (Mary)'] button").click();
         waitForRoute("petclinic.PetOwner", "s_owner-mary");
@@ -536,8 +550,8 @@ class PetClinicHtmxPlaywrightTest {
         waitForPrompt("findByNameLike");
         fillParameter("name", "James");
         submitPrompt();
-        waitForShellResult("findByNameLike", "1 result");
-        assertStandaloneCollectionResult("findByNameLike", 1);
+        waitForShellResult("Pet owners", "1 result");
+        assertStandaloneCollectionResult("Pet owners", 1);
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
@@ -1006,7 +1020,7 @@ class PetClinicHtmxPlaywrightTest {
         objectAction("removePet").click();
         waitForPrompt("removePet");
         assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_MODAL");
-        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
+        waitForReferenceParameterReady("pet");
         assertFocused(parameter("pet"));
         resolveEditor(parameter("pet")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
@@ -1016,7 +1030,7 @@ class PetClinicHtmxPlaywrightTest {
 
         objectAction("removePet").click();
         waitForPrompt("removePet");
-        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
+        waitForReferenceParameterReady("pet");
         selectFirstAvailableChoice("pet");
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);
@@ -1122,6 +1136,113 @@ class PetClinicHtmxPlaywrightTest {
         submitPromptExpectingNavigation();
         waitForObjectTitle("Mary Smith (Mary)");
         assertThat(graphQLMutationCount("updateName") - mutations).isEqualTo(1);
+    }
+
+    @Test
+    @Order(7)
+    @SuppressWarnings("unchecked")
+    void declarativeCollectionActionResultsUseDefaultAndInlineProjectionWithoutHydration() {
+        openObject("petclinic.PetOwner", "s_owner-mary");
+        assertThat(page.locator("cw-action[id='relatedOwners'] > cw-standalone-collection").count()).isEqualTo(1);
+        assertThat(page.locator("cw-action[id='relatedOwners'] > cw-standalone-collection").isHidden()).isTrue();
+        final var emptyOutlet = page.locator("cw-action-results[data-testid='petclinic-action-results']");
+        assertThat(emptyOutlet.isHidden()).isTrue();
+        assertThat((List<Number>) emptyOutlet.evaluate("element => [element.offsetWidth, element.offsetHeight]"))
+                .containsExactly(0, 0);
+        page.evaluate("""
+                () => {
+                  globalThis.__causewayResultPlacements = [];
+                  new MutationObserver(() => {
+                    document.querySelectorAll('cw-action-results > cw-standalone-collection').forEach(result => {
+                      const placement = `${result.named}:${result.parentNode.dataset.testid}`;
+                      if (!globalThis.__causewayResultPlacements.includes(placement)) {
+                        globalThis.__causewayResultPlacements.push(placement);
+                      }
+                    });
+                  }).observe(document.body, {childList: true, subtree: true});
+                }
+                """);
+
+        final var defaultRequestStart = graphQLRequests.size();
+        objectAction("allOwners").click();
+        final var liveResult = "cw-action-results:not([hidden]) > cw-standalone-collection";
+        page.waitForFunction("selector => document.querySelector(selector)?.resultState?.status === 'ready'", liveResult);
+        assertThat(page.locator(liveResult).first().getAttribute("named")).isEqualTo("Pet owners");
+        assertThat(page.locator(liveResult + " cw-object-link").count()).isGreaterThan(0);
+        assertObjectLinkIcon(page.locator(liveResult + " cw-object-link").first());
+        assertThat((List<String>) page.evaluate("() => globalThis.__causewayResultPlacements"))
+                .contains("Pet owners:petclinic-action-results");
+        final var defaultRequest = graphQLRequests.subList(defaultRequestStart, graphQLRequests.size()).stream()
+                .filter(body -> body != null && body.contains("allOwners") && body.contains("results"))
+                .findFirst().orElseThrow();
+        assertThat(defaultRequest)
+                .contains("name")
+                .contains("telephoneNumber")
+                .contains("emailAddress")
+                .doesNotContain("knownAs");
+
+        final var emptyRequestStart = graphQLRequests.size();
+        objectAction("noOwners").click();
+        page.waitForFunction("selector => { const result = document.querySelector(selector); return result?.named === 'Pet owners' && result?.resultState?.status === 'empty'; }", liveResult);
+        assertThat(page.locator(liveResult).first().textContent()).contains("0 results", "No items");
+        assertThat(page.locator("#causeway-route-announcement").textContent()).contains("Pet owners: 0 results");
+        assertThat(page.locator(liveResult + " cw-object-link").count()).isZero();
+        final var emptyRequest = graphQLRequests.subList(emptyRequestStart, graphQLRequests.size()).stream()
+                .filter(body -> body != null && body.contains("noOwners") && body.contains("results"))
+                .findFirst().orElseThrow();
+        assertThat(emptyRequest).contains("name", "telephoneNumber", "emailAddress");
+
+        final var inlineRequestStart = graphQLRequests.size();
+        objectAction("relatedOwners").click();
+        page.waitForFunction("selector => { const result = document.querySelector(selector); return result?.named === 'Related owners' && result?.resultState?.status === 'ready'; }", liveResult);
+        assertThat(page.locator(liveResult).first().getAttribute("named")).isEqualTo("Related owners");
+        final var inlineRequest = graphQLRequests.subList(inlineRequestStart, graphQLRequests.size()).stream()
+                .filter(body -> body != null && body.contains("relatedOwners") && body.contains("results"))
+                .findFirst().orElseThrow();
+        assertThat(inlineRequest)
+                .contains("name")
+                .contains("knownAs")
+                .contains("notes")
+                .doesNotContain("telephoneNumber", "emailAddress");
+        assertThat(page.locator("cw-action[id='relatedOwners'] > cw-standalone-collection").count()).isEqualTo(1);
+        assertThat(page.locator("cw-action[id='relatedOwners'] > cw-standalone-collection").isHidden()).isTrue();
+        assertThat((List<String>) page.evaluate("() => globalThis.__causewayResultPlacements"))
+                .contains("Related owners:petclinic-action-results");
+
+        page.evaluate("""
+                () => {
+                  globalThis.__causewayResultPlacements = [];
+                  const duplicate = document.createElement('cw-action-results');
+                  duplicate.dataset.testid = 'duplicate-action-results';
+                  document.querySelector('[data-testid="causeway-route-page"]').append(duplicate);
+                }
+                """);
+        objectAction("allOwners").click();
+        page.waitForFunction("() => globalThis.__causewayResultPlacements.includes('Pet owners:causeway-shell-result')");
+        assertThat((List<String>) page.evaluate("() => globalThis.__causewayResultPlacements"))
+                .contains("Pet owners:causeway-shell-result")
+                .doesNotContain("Pet owners:petclinic-action-results", "Pet owners:duplicate-action-results");
+        assertThat(page.locator("#causeway-result > cw-standalone-collection").count()).isEqualTo(1);
+        page.locator("#causeway-result > [data-causeway-result-dismiss]").click();
+        assertThat(page.locator("#causeway-result").isHidden()).isTrue();
+
+        page.route("**/_collection-presentations/petclinic.Malformed", route -> route.fulfill(
+                new com.microsoft.playwright.Route.FulfillOptions()
+                        .setContentType("text/html")
+                        .setBody("<cw-standalone-collection><script>globalThis.__malformedPresentationExecuted = true</script></cw-standalone-collection>")));
+        assertThat(page.evaluate("""
+                async () => {
+                  try {
+                    await globalThis.causewayActionResultPresentationResolver({logicalTypeName: 'petclinic.Malformed'});
+                    return 'accepted';
+                  } catch {
+                    return 'rejected';
+                  }
+                }
+                """)).isEqualTo("rejected");
+        assertThat(page.evaluate("() => globalThis.__malformedPresentationExecuted === true")).isEqualTo(false);
+        assertThat(page.locator("html").getAttribute("data-causeway-collection-presentation-error"))
+                .isEqualTo("resolution");
     }
 
     @SuppressWarnings("unchecked")
@@ -1359,6 +1480,18 @@ class PetClinicHtmxPlaywrightTest {
         return action;
     }
 
+    private void waitForReferenceParameterReady(final String parameterId) {
+        if (nativeToolkit()) {
+            final var editor = page.locator(parameter(parameterId));
+            editor.waitFor();
+            assertThat(editor.evaluate("element => element.localName")).isEqualTo("select");
+            return;
+        }
+        page.waitForFunction(
+                "selector => document.querySelector(selector)?.dataset.widgetState === 'ready'",
+                parameter(parameterId));
+    }
+
     private void waitForPrompt(final String actionId) {
         waitForPrompt(actionId, humanize(actionId));
     }
@@ -1538,28 +1671,29 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForShellResult(final String actionId, final String value) {
-        final var result = page.locator("[data-testid='causeway-shell-result']");
+        final var result = page.locator("cw-action-results:not([hidden])").first();
         result.waitFor();
-        page.waitForFunction("args => { const result = document.querySelector('[data-testid=\"causeway-shell-result\"]'); return !result?.hidden && result.textContent.includes(args.action) && result.textContent.includes(args.value); }",
+        page.waitForFunction("args => { const result = document.querySelector('cw-action-results:not([hidden])'); return result?.textContent.includes(args.action) && result.textContent.includes(args.value); }",
                 java.util.Map.of("action", actionId, "value", value));
     }
 
-    private void assertStandaloneCollectionResult(final String actionId, final int expectedCount) {
-        final var result = page.locator("[data-testid='causeway-shell-result'] cw-standalone-collection");
+    private void assertStandaloneCollectionResult(final String expectedName, final int expectedCount) {
+        final var result = page.locator("cw-action-results:not([hidden]) cw-standalone-collection").first();
         result.waitFor();
-        page.waitForFunction("args => { const element = document.querySelector(\"[data-testid='causeway-shell-result'] cw-standalone-collection\"); return element?.resultState?.status === (args.count === 0 ? 'empty' : 'ready') && element.resultState.totalCount === args.count; }",
+        page.waitForFunction("args => { const element = document.querySelector(\"cw-action-results:not([hidden]) cw-standalone-collection\"); return element?.resultState?.status === (args.count === 0 ? 'empty' : 'ready') && element.resultState.totalCount === args.count; }",
                 java.util.Map.of("count", expectedCount));
-        assertThat(result.getAttribute("named")).isEqualTo(actionId + " result");
+        assertThat(result.getAttribute("named")).isEqualTo(expectedName);
         assertThat(((Number) result.evaluate("element => element.resultState.totalCount")).intValue())
                 .isEqualTo(expectedCount);
-        assertThat(page.locator("[data-testid='causeway-shell-result'] > ul").count()).isZero();
+        assertThat(page.locator("cw-action-results:not([hidden]) > ul").count()).isZero();
         if (expectedCount > 0) {
             assertObjectLinkIcon(result.locator("cw-object-link").first());
         }
         if (nativeToolkit()) {
             assertThat(result.locator("cw-collection-grid").count()).isZero();
-        } else if (expectedCount > 0) {
-            page.waitForFunction("() => document.querySelector(\"[data-testid='causeway-shell-result'] cw-standalone-collection\")?.dataset.causewayGridPresentation === 'grid-virtual'");
+        } else if (expectedCount > 0
+                && ((Number) result.evaluate("element => element.columns.length")).intValue() == 0) {
+            page.waitForFunction("() => document.querySelector(\"cw-action-results:not([hidden]) cw-standalone-collection\")?.dataset.causewayGridPresentation === 'grid-virtual'");
             assertThat(result.locator("cw-collection-grid").count()).isEqualTo(1);
         }
     }

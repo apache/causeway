@@ -30,15 +30,18 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -48,6 +51,7 @@ import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -112,6 +116,55 @@ class RichMemberMetadataTest {
         assertThat(new RichMemberMetadata(context(), ordinaryFeature, false).fetchData(null))
                 .containsEntry("areYouSure", null)
                 .containsEntry("promptStyle", null);
+    }
+
+    @Test
+    void exposesAuthoritativeCollectionActionResultElementLogicalTypeOnlyForSupportedActions() {
+        var collectionAction = mock(ObjectAction.class);
+        when(collectionAction.getCanonicalFriendlyName()).thenReturn("List owners");
+        when(collectionAction.getCanonicalDescription()).thenReturn(Optional.empty());
+        var returnType = mock(ObjectSpecification.class);
+        var elementType = mock(ObjectSpecification.class);
+        var logicalType = mock(LogicalType.class);
+        when(collectionAction.getReturnType()).thenReturn(returnType);
+        when(returnType.isPlural()).thenReturn(true);
+        var typeOfFacet = mock(TypeOfFacet.class);
+        when(typeOfFacet.elementSpec()).thenReturn(elementType);
+        when(collectionAction.lookupFacet(TypeOfFacet.class)).thenReturn(Optional.of(typeOfFacet));
+        doReturn(RichMemberMetadataTest.class).when(elementType).correspondingClass();
+        when(elementType.logicalType()).thenReturn(logicalType);
+        when(logicalType.logicalName()).thenReturn("petclinic.PetOwner");
+        assertThat(new RichMemberMetadata(context(), collectionAction, false).fetchData(null))
+                .containsEntry("resultElementLogicalTypeName", "petclinic.PetOwner");
+
+        var scalarAction = mock(ObjectAction.class);
+        when(scalarAction.getCanonicalFriendlyName()).thenReturn("Count owners");
+        when(scalarAction.getCanonicalDescription()).thenReturn(Optional.empty());
+        var scalarReturnType = mock(ObjectSpecification.class);
+        when(scalarAction.getReturnType()).thenReturn(scalarReturnType);
+        when(scalarReturnType.isPlural()).thenReturn(false);
+        assertThat(new RichMemberMetadata(context(), scalarAction, false).fetchData(null))
+                .containsEntry("resultElementLogicalTypeName", null);
+
+        var rawCollectionAction = mock(ObjectAction.class);
+        when(rawCollectionAction.getCanonicalFriendlyName()).thenReturn("Raw values");
+        when(rawCollectionAction.getCanonicalDescription()).thenReturn(Optional.empty());
+        var rawReturnType = mock(ObjectSpecification.class);
+        var rawElementType = mock(ObjectSpecification.class);
+        var rawTypeOfFacet = mock(TypeOfFacet.class);
+        when(rawCollectionAction.getReturnType()).thenReturn(rawReturnType);
+        when(rawReturnType.isPlural()).thenReturn(true);
+        when(rawCollectionAction.lookupFacet(TypeOfFacet.class)).thenReturn(Optional.of(rawTypeOfFacet));
+        when(rawTypeOfFacet.elementSpec()).thenReturn(rawElementType);
+        doReturn(Object.class).when(rawElementType).correspondingClass();
+        assertThat(new RichMemberMetadata(context(), rawCollectionAction, false).fetchData(null))
+                .containsEntry("resultElementLogicalTypeName", null);
+
+        var ordinaryFeature = mock(ObjectFeature.class);
+        when(ordinaryFeature.getCanonicalFriendlyName()).thenReturn("Name");
+        when(ordinaryFeature.getCanonicalDescription()).thenReturn(Optional.empty());
+        assertThat(new RichMemberMetadata(context(), ordinaryFeature, false).fetchData(null))
+                .containsEntry("resultElementLogicalTypeName", null);
     }
 
     @Test

@@ -30,6 +30,7 @@ import {fieldsByName, namedType} from './introspection.mjs';
 import {
   argumentsFromValues,
   autoCompleteWindowPlan,
+  collectionResultSelectionForType,
   commandSelection,
   MAX_DIRECT_FRAGMENT_TYPES,
   metadataSelectionForType,
@@ -535,7 +536,7 @@ export class ObjectContextController extends EventTarget {
     });
   }
 
-  async invokeAction(member, values = {}, {signal} = {}) {
+  async invokeAction(member, values = {}, {signal, resultPresentation = null} = {}) {
     const capabilities = await this.describeActionInteraction(member);
     if (!capabilities.invokable) {
       return interactionResult(
@@ -547,8 +548,9 @@ export class ObjectContextController extends EventTarget {
       try {
         const {description} = await this.#memberDescriptor(member, 'action');
         const plan = capabilities.invocationPlan;
-        await ensureActionInvocationResultTypes(this.client, description, plan, signal);
-        const resultPlan = actionInvocationResultPlan(plan, description.types);
+        const resultColumns = resultPresentation?.columns ?? [];
+        await ensureActionInvocationResultTypes(this.client, description, plan, signal, resultColumns);
+        const resultPlan = actionInvocationResultPlan(plan, description.types, resultColumns);
         const args = actionInvocationArguments(plan, values, this.identity);
         let result;
         if (plan.placement === 'root-mutation') {
@@ -1334,7 +1336,9 @@ function translateRequirement(requirement, description) {
   const metadataFields = [
     'friendlyName',
     'description',
-    ...(requirement.kind === 'action' ? ['cssClassFa', 'cssClassFaPosition', 'areYouSure', 'promptStyle'] : [])
+    ...(requirement.kind === 'action'
+      ? ['cssClassFa', 'cssClassFaPosition', 'areYouSure', 'promptStyle', 'resultElementLogicalTypeName']
+      : [])
   ].filter(field => member.metadata?.fields.has(field));
   if (metadataFields.length > 0) {
     memberSelection.metadata = Object.fromEntries(metadataFields.map(field => [field, true]));
@@ -1536,31 +1540,7 @@ async function describeInto(client, types, typeNames, signal) {
 
 function collectionRowSelection(descriptor, columns, types) {
   const value = descriptor.value;
-  const elementTypeRef = value?.elementTypeRef ?? value?.typeRef ?? null;
-  const selection = {...(resultSelectionForType(elementTypeRef, types) ?? {__typename: true})};
-  const concreteObject = value?.typeKind === 'OBJECT' && value.typeDescription;
-  if (!concreteObject) {
-    return selection;
-  }
-  for (const column of columns) {
-    const member = typeof column === 'string' ? column : column?.member;
-    if (!member) {
-      continue;
-    }
-    const memberField = fieldsByName(concreteObject).get(member);
-    const wrapper = memberField ? types.get(namedType(memberField.type)) : null;
-    const wrapperFields = fieldsByName(wrapper);
-    const memberSelection = {hidden: true, disabled: true, datatype: true, get: true};
-    const metadataField = wrapperFields.get('metadata');
-    const metadataType = metadataField ? types.get(namedType(metadataField.type)) : null;
-    const metadataFields = ['friendlyName', 'description', 'multiLine', 'labelPosition']
-      .filter(fieldName => fieldsByName(metadataType).has(fieldName));
-    if (metadataFields.length > 0) {
-      memberSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
-    }
-    selection[member] = memberSelection;
-  }
-  return selection;
+  return collectionResultSelectionForType(value?.typeRef ?? value?.elementTypeRef ?? null, columns, types);
 }
 
 function innermostType(typeRef) {

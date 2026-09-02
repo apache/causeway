@@ -71,7 +71,12 @@ export const MENU_BARS_WITH_INVALID_REFERENCE_XML = MENU_BARS_XML.replace(
 );
 
 export const MENU_ACTION_STATES = new Map([
-  ['causeway.webcomponents.sample.SampleMenu#welcomeMessage', Object.freeze({hidden: false, disabled: null, error: null})],
+  ['causeway.webcomponents.sample.SampleMenu#welcomeMessage', Object.freeze({
+    hidden: false,
+    disabled: null,
+    error: null,
+    metadata: {resultElementLogicalTypeName: 'sample.Person'}
+  })],
   ['causeway.webcomponents.sample.SampleMenu#disabledAction', Object.freeze({hidden: false, disabled: 'Available to administrators only.', error: null})],
   ['causeway.webcomponents.sample.SampleMenu#hiddenAction', Object.freeze({hidden: true, disabled: null, error: null})],
   ['causeway.webcomponents.sample.SampleMenu#greet', Object.freeze({

@@ -39,6 +39,10 @@ import {
 } from '../causeway-webcomponents/menubar-widget.mjs';
 import {defineCausewayWebComponents} from '../causeway-webcomponents/register.mjs';
 import {
+  applyStandaloneCollectionPresentation,
+  standaloneCollectionPresentation
+} from '../causeway-webcomponents/standalone-collection-presentation.mjs';
+import {
   applyAuthenticationMenuPolicy,
   csrfHeaders,
   isExcludedAction,
@@ -65,6 +69,7 @@ const collectionGridMode = document.documentElement.dataset.causewayCollectionGr
 const collectionGridModuleUrl = document.documentElement.dataset.causewayGridModuleUrl;
 const applicationMenubarMode = document.documentElement.dataset.causewayApplicationMenubar;
 const applicationMenubarModuleUrl = document.documentElement.dataset.causewayApplicationMenubarUrl;
+const resourcePageMode = document.documentElement.dataset.causewayResourcePageMode;
 const authentication = readAuthenticationMetadata(document);
 if (shell && authentication) {
   const executor = createFetchGraphQLExecutor({
@@ -122,8 +127,55 @@ let activeRequest = null;
 let navigationGeneration = 0;
 let pendingVoidRefreshGeneration = null;
 const resolvingHomeLandings = new WeakSet();
+const actionResultDestinations = new WeakMap();
+const collectionPresentationCache = new Map();
+let unscopedActionResultDestination = null;
 
 defineCausewayWebComponents();
+globalThis.causewayActionResultPresentationResolver = resolveCollectionPresentation;
+
+async function resolveCollectionPresentation({logicalTypeName} = {}) {
+  const type = String(logicalTypeName ?? '').trim();
+  if (!/^[A-Za-z_][A-Za-z0-9_$-]*(?:\.[A-Za-z_][A-Za-z0-9_$-]*)*$/.test(type)) return null;
+  if (resourcePageMode !== 'reload' && collectionPresentationCache.has(type)) {
+    return collectionPresentationCache.get(type);
+  }
+  const pending = fetch(`${basePath}/_collection-presentations/${encodeURIComponent(type)}`, {
+    headers: {Accept: 'text/html'}
+  }).then(async response => {
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`Collection presentation lookup failed (${response.status}).`);
+    return parseCollectionPresentation(await response.text());
+  });
+  if (resourcePageMode !== 'reload') collectionPresentationCache.set(type, pending);
+  try {
+    return await pending;
+  } catch (error) {
+    if (resourcePageMode !== 'reload') collectionPresentationCache.delete(type);
+    document.documentElement.dataset.causewayCollectionPresentationError = 'resolution';
+    throw error;
+  }
+}
+
+function parseCollectionPresentation(html) {
+  const template = document.createElement('template');
+  template.innerHTML = String(html ?? '');
+  const roots = [...template.content.children];
+  if (roots.length !== 1 || roots[0].localName !== 'cw-standalone-collection') {
+    throw new Error('A collection presentation requires one standalone collection root.');
+  }
+  const root = roots[0];
+  const supportedAttributes = new Set([
+    'named', 'described-as', 'description-as', 'resizable-columns', 'reorderable-columns'
+  ]);
+  if ([...root.attributes].some(attribute => !supportedAttributes.has(attribute.name))
+      || [...root.children].some(child => child.localName !== 'cw-collection-column')
+      || root.querySelector('script,style,link,iframe,object,embed')) {
+    throw new Error('A collection presentation contains unsupported markup.');
+  }
+  document.documentElement.removeAttribute('data-causeway-collection-presentation-error');
+  return standaloneCollectionPresentation(root);
+}
 
 function redirectToLogin() {
   if (authentication) {
@@ -139,6 +191,60 @@ function announce(message) {
       announcement.textContent = message;
     });
   }
+}
+
+function activePageResultOutlet() {
+  const outlets = [...(routeRegion?.querySelectorAll?.('cw-action-results') ?? [])]
+    .filter(outlet => outlet.isConnected && outlet.closest?.('[data-route-state]'));
+  if (outlets.length === 1) {
+    routeRegion?.removeAttribute('data-causeway-action-results-error');
+    return outlets[0];
+  }
+  if (outlets.length > 1) routeRegion?.setAttribute('data-causeway-action-results-error', 'duplicate');
+  else routeRegion?.removeAttribute('data-causeway-action-results-error');
+  return null;
+}
+
+function snapshotActionResultDestination(detail) {
+  const snapshot = Object.freeze({
+    outlet: activePageResultOutlet(),
+    routeGeneration: navigationGeneration
+  });
+  if (detail?.context && typeof detail.context === 'object') actionResultDestinations.set(detail.context, snapshot);
+  else unscopedActionResultDestination = snapshot;
+}
+
+function resultDestination(detail) {
+  const snapshot = detail?.context && typeof detail.context === 'object'
+    ? actionResultDestinations.get(detail.context)
+    : unscopedActionResultDestination;
+  if (snapshot?.outlet?.isConnected
+      && snapshot.routeGeneration === navigationGeneration
+      && routeRegion?.contains(snapshot.outlet)) {
+    return snapshot.outlet;
+  }
+  return resultRegion;
+}
+
+function replaceResultPresentation(destination, ...nodes) {
+  if (!destination) return;
+  if (typeof destination.replacePresentation === 'function') destination.replacePresentation(...nodes);
+  else destination.replaceChildren(...nodes);
+  destination.hidden = nodes.filter(Boolean).length === 0;
+}
+
+function preserveRouteResultInShell() {
+  const outlet = activePageResultOutlet();
+  if (!outlet || !resultRegion || outlet.children.length === 0) return;
+  replaceResultPresentation(resultRegion, ...outlet.children);
+  replaceResultPresentation(outlet);
+}
+
+function rehomePreservedShellResult() {
+  const outlet = activePageResultOutlet();
+  if (!outlet || !resultRegion || resultRegion.children.length === 0) return;
+  replaceResultPresentation(outlet, ...resultRegion.children);
+  replaceResultPresentation(resultRegion);
 }
 
 function collapseNarrowBars() {
@@ -178,10 +284,9 @@ async function navigate(path, {replace = false, preserveResult = false, recoverM
     disclosure.click();
   }
   if (!preserveResult) {
-    resultRegion?.replaceChildren();
-    if (resultRegion) {
-      resultRegion.hidden = true;
-    }
+    replaceResultPresentation(resultRegion);
+  } else {
+    preserveRouteResultInShell();
   }
   setBusy(true);
   try {
@@ -238,10 +343,9 @@ function presentResult(detail) {
     navigate(canonicalObjectPath(basePath, identity));
     return;
   }
-  if (!resultRegion) {
-    return;
-  }
-  resultRegion.replaceChildren();
+  const destination = resultDestination(detail);
+  if (!destination) return;
+  replaceResultPresentation(destination);
   const heading = document.createElement('h2');
   heading.textContent = detail?.actionId ? `${detail.actionId} result` : 'Action result';
   const output = document.createElement('output');
@@ -249,17 +353,18 @@ function presentResult(detail) {
   if (result?.kind === 'collection') {
     const count = Array.isArray(result.value) ? result.value.length : 0;
     const collection = document.createElement('cw-standalone-collection');
-    collection.named = heading.textContent;
+    applyStandaloneCollectionPresentation(collection, detail?.resultPresentation);
+    if (!collection.named) collection.named = heading.textContent;
     collection.setAttribute('data-testid', 'causeway-standalone-action-result');
-    resultRegion.append(collection);
+    replaceResultPresentation(destination, resultDismissButton(destination, detail), collection);
     collection.result = result;
     output.textContent = `${count} result${count === 1 ? '' : 's'}`;
   } else if (result?.kind === 'scalar') {
     output.textContent = result.value == null ? '' : String(result.value);
-    resultRegion.append(heading, output);
+    replaceResultPresentation(destination, resultDismissButton(destination, detail), heading, output);
   } else {
     output.textContent = 'Completed';
-    resultRegion.append(heading, output);
+    replaceResultPresentation(destination, resultDismissButton(destination, detail), heading, output);
     const context = routeRegion?.querySelector('cw-object-context')?.context;
     if (context) {
       globalThis.setTimeout(() => navigate(
@@ -268,8 +373,29 @@ function presentResult(detail) {
       ), 0);
     }
   }
-  resultRegion.hidden = false;
-  announce(`${heading.textContent}: ${output.textContent}`);
+  destination.hidden = false;
+  announce(`${collectionHeading(detail, heading)}: ${output.textContent}`);
+}
+
+function resultDismissButton(destination, detail) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'causeway-button causeway-button-secondary causeway-result-dismiss';
+  button.setAttribute('data-causeway-result-dismiss', '');
+  button.setAttribute('aria-label', 'Dismiss action result');
+  button.textContent = 'Dismiss';
+  button.addEventListener('click', () => {
+    replaceResultPresentation(destination);
+    const actionId = String(detail?.actionId ?? '').trim();
+    if (actionId) {
+      routeRegion?.querySelector(`cw-action[id="${CSS.escape(actionId)}"] [data-causeway-action-control]`)?.focus?.();
+    }
+  });
+  return button;
+}
+
+function collectionHeading(detail, fallbackHeading) {
+  return detail?.resultPresentation?.named || fallbackHeading.textContent;
 }
 
 async function resolveHome() {
@@ -342,6 +468,10 @@ document.addEventListener(NAVIGATION_REQUEST_EVENT, event => {
   event.preventDefault();
   navigate(canonicalObjectPath(basePath, target));
 });
+
+document.addEventListener(ACTION_REQUEST_EVENT, event => {
+  snapshotActionResultDestination(event.detail);
+}, {capture: true});
 
 document.addEventListener(ACTION_REQUEST_EVENT, event => {
   if (!authentication) {
@@ -437,6 +567,7 @@ document.body.addEventListener('htmx:afterSwap', event => {
   activeRequest = null;
   setBusy(false);
   event.detail.target.querySelector('[tabindex="-1"]')?.focus();
+  if (pendingVoidRefreshGeneration === navigationGeneration) rehomePreservedShellResult();
   void resolveHome();
 });
 

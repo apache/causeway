@@ -54,6 +54,9 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
               iconPosition: action?.iconPosition === 'RIGHT' ? 'RIGHT' : 'LEFT',
               areYouSure: action?.areYouSure === true,
               promptStyle: action?.promptStyle ?? null,
+              ...(action?.resultElementLogicalTypeName
+                ? {resultElementLogicalTypeName: action.resultElementLogicalTypeName}
+                : {}),
               disabled: Boolean(action?.disabled),
               disabledReason: boundedText(action?.disabled),
               generation

@@ -188,6 +188,12 @@
   font-size: var(--causeway-font-size-lg);
 }
 
+cw-action-results > .causeway-result-dismiss {
+  float: inline-end;
+  margin-block-end: var(--causeway-space-2);
+  margin-inline-start: var(--causeway-space-2);
+}
+
 .causeway-shell-main {
   min-width: 0;
   padding-block: var(--causeway-space-5) var(--causeway-space-8);

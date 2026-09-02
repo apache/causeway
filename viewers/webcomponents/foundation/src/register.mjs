@@ -18,6 +18,7 @@
  */
 
 import {captureDeclarativeActionParameters, CausewayActionElement} from './action-element.mjs';
+import {CausewayActionResultsElement} from './action-results-element.mjs';
 import {CausewayBreadcrumbsElement} from './breadcrumbs-element.mjs';
 import {CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement} from './action-widget.mjs';
 import {CausewayCollectionColumnElement} from './collection-column-element.mjs';
@@ -57,6 +58,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.VALUE, CausewayValueElement],
   [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
   [CausewayElementName.ACTION, CausewayActionElement],
+  [CausewayElementName.ACTION_RESULTS, CausewayActionResultsElement],
   [CausewayElementName.PARAMETER, CausewayParameterElement],
   [CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement],
   [CausewayElementName.INTERACTION_CONTROLLER, CausewayInteractionControllerElement],

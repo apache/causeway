@@ -119,7 +119,19 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-action id=\"removePet\"></cw-action>")
                 .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">")
                 .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
-                .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>");
+                .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>")
+                .contains("<cw-action id=\"allOwners\" named=\"Show all owners\"></cw-action>")
+                .contains("<cw-action id=\"noOwners\" named=\"Show empty owner result\"></cw-action>")
+                .contains("<cw-action id=\"relatedOwners\"")
+                .contains("<cw-standalone-collection named=\"Related owners\"")
+                .contains("<cw-action-results class=\"petclinic-card\" data-testid=\"petclinic-action-results\" hidden></cw-action-results>");
+        final var collectionPresentation = get("/htmx/_collection-presentations/petclinic.PetOwner");
+        assertThat(collectionPresentation.statusCode()).isEqualTo(200);
+        assertThat(collectionPresentation.headers().firstValue("cache-control").orElse(""))
+                .contains("no-store");
+        assertThat(collectionPresentation.body())
+                .contains("<cw-standalone-collection named=\"Pet owners\"")
+                .contains("<cw-collection-column id=\"name\" label=\"Owner\">");
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",
                 "petclinic.Pet",
@@ -202,6 +214,30 @@ class PetClinicHtmxApplication_IntegTest {
     }
 
     @Test
+    void reloadsChangedCollectionPresentationAndRejectsInvalidCurrentContent() throws Exception {
+        final var resource = getClass().getClassLoader().getResource(
+                "META-INF/causeway/webcomponents/collections/petclinic.PetOwner.html");
+        assertThat(resource).isNotNull();
+        assertThat(resource.getProtocol()).isEqualTo("file");
+        final var path = Path.of(resource.toURI());
+        final var original = Files.readAllBytes(path);
+        final var marker = "<cw-standalone-collection named=\"Reloaded owners\"></cw-standalone-collection>";
+        try {
+            Files.writeString(path, marker, StandardCharsets.UTF_8);
+            assertThat(get("/htmx/_collection-presentations/petclinic.PetOwner").body()).isEqualTo(marker);
+            Files.write(path, new byte[0]);
+            final var invalid = get("/htmx/_collection-presentations/petclinic.PetOwner");
+            assertThat(invalid.statusCode()).isEqualTo(500);
+            assertThat(invalid.body()).doesNotContain(marker, path.toString());
+        } finally {
+            Files.write(path, original);
+        }
+        assertThat(get("/htmx/_collection-presentations/petclinic.PetOwner").body())
+                .contains("named=\"Pet owners\"")
+                .doesNotContain("Reloaded owners");
+    }
+
+    @Test
     void packagesHtmlPagesAndRetainsLayoutFallbackResources() throws Exception {
         final var loader = getClass().getClassLoader();
         for (final var name : java.util.List.of(
@@ -224,13 +260,22 @@ class PetClinicHtmxApplication_IntegTest {
                 assertThat(html).contains("<cw-breadcrumbs data-testid=\"petclinic-breadcrumbs\"");
             }
         }
+        final var collectionPath = "META-INF/causeway/webcomponents/collections/petclinic.PetOwner.html";
+        final var collectionResource = loader.getResource(collectionPath);
+        assertThat(collectionResource).as(collectionPath).isNotNull();
+        try (var input = collectionResource.openStream()) {
+            assertThat(new String(input.readAllBytes(), StandardCharsets.UTF_8))
+                    .contains("<cw-standalone-collection named=\"Pet owners\"")
+                    .contains("<cw-collection-column id=\"name\"")
+                    .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
+        }
         final String ownerHtml;
         try (var input = loader.getResource(
                 "META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").openStream()) {
             ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(ownerHtml)
-                .contains("<div class=\"petclinic-object-heading\">\n    <cw-object-header></cw-object-header>\n    <div class=\"petclinic-page-toolbar\" aria-label=\"Owner actions\">\n      <cw-action id=\"delete\"")
+                .contains("<div class=\"petclinic-object-heading\">\n    <cw-object-header></cw-object-header>\n    <div class=\"petclinic-page-toolbar\" aria-label=\"Owner actions\">\n      <cw-action id=\"allOwners\"")
                 .contains("<cw-property id=\"name\" named=\"Full name\">\n            <cw-action id=\"updateName\"")
                 .contains("<cw-parameter id=\"name\"\n                            named=\"Owner's full name\"")
                 .contains("description-as=\"tooltip\"")

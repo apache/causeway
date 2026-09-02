@@ -48,6 +48,16 @@ public class CausewayModuleViewerWebcomponentsHtmx {
     }
 
     @Bean
+    HtmxCollectionPresentationRegistry htmxCollectionPresentationRegistry(
+            final ApplicationContext applicationContext,
+            final HtmxViewerProperties properties) {
+        return new HtmxCollectionPresentationRegistry(
+                new HtmxClasspathCollectionPresentationLoader(
+                        applicationContext,
+                        properties.getResourcePageMode()).load());
+    }
+
+    @Bean
     HtmxPageRenderer htmxPageRenderer(
             final HtmxRouteCodec routeCodec,
             final HtmxViewerProperties properties,

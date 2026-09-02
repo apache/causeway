@@ -85,7 +85,8 @@ export class ServiceActionContextController {
       if (descriptor.fields.has('disabled')) {
         actionSelection.disabled = true;
       }
-      const metadataFields = ['areYouSure', 'promptStyle'].filter(fieldName => descriptor.metadata?.fields.has(fieldName));
+      const metadataFields = ['areYouSure', 'promptStyle', 'resultElementLogicalTypeName']
+        .filter(fieldName => descriptor.metadata?.fields.has(fieldName));
       if (metadataFields.length > 0) {
         actionSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
       }
@@ -279,7 +280,7 @@ export class ServiceActionContextController {
     });
   }
 
-  async invokeAction(actionId, values = {}, {signal} = {}) {
+  async invokeAction(actionId, values = {}, {signal, resultPresentation = null} = {}) {
     const capabilities = await this.describeActionInteraction(actionId);
     if (!capabilities.invokable) {
       return interactionResult(
@@ -291,8 +292,9 @@ export class ServiceActionContextController {
       try {
         const description = await this.describeService();
         const plan = capabilities.invocationPlan;
-        await ensureActionInvocationResultTypes(this.client, description, plan, signal);
-        const resultPlan = actionInvocationResultPlan(plan, description.types);
+        const resultColumns = resultPresentation?.columns ?? [];
+        await ensureActionInvocationResultTypes(this.client, description, plan, signal, resultColumns);
+        const resultPlan = actionInvocationResultPlan(plan, description.types, resultColumns);
         const args = actionInvocationArguments(plan, values);
         let result;
         if (plan.placement === 'root-mutation') {

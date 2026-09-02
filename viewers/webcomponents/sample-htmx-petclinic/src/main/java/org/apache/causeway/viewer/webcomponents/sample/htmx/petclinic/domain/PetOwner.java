@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
@@ -136,6 +137,10 @@ public class PetOwner implements Comparable<PetOwner> {
     @Inject
     @Transient
     private VisitRepository visitRepository;
+
+    @Inject
+    @Transient
+    private PetOwnerRepository petOwnerRepository;
 
     protected PetOwner() {
     }
@@ -277,6 +282,24 @@ public class PetOwner implements Comparable<PetOwner> {
             return "A name is required.";
         }
         return candidateName.matches(".*[!&%].*") ? "The name cannot contain !, &, or %." : null;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE, typeOf = PetOwner.class)
+    @ActionLayout(describedAs = "Shows all owners using the type-default result presentation.")
+    public List<PetOwner> allOwners() {
+        return petOwnerRepository.findAll();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE, typeOf = PetOwner.class)
+    @ActionLayout(describedAs = "Demonstrates an empty typed collection result.")
+    public List<PetOwner> noOwners() {
+        return List.of();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE, typeOf = PetOwner.class)
+    @ActionLayout(describedAs = "Shows all owners using an action-specific result presentation.")
+    public List<PetOwner> relatedOwners() {
+        return petOwnerRepository.findAll();
     }
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)

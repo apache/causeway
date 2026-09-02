@@ -16,6 +16,7 @@
 
 import {composeMemberTooltip} from './description-presentation.mjs';
 import {escapeHtml} from './rendering.mjs';
+import {normalizeStandaloneCollectionPresentation} from './standalone-collection-presentation.mjs';
 
 const MAX_ACTION_NAME = 512;
 const MAX_ACTION_DESCRIPTION = 2_048;
@@ -34,12 +35,16 @@ const STYLE_TOKENS = new Set([
 export function normalizeActionPresentation(value = {}) {
   const name = boundedText(value.name ?? value.friendlyName, MAX_ACTION_NAME);
   const description = boundedText(value.description, MAX_ACTION_DESCRIPTION);
+  const resultElementLogicalTypeName = boundedLogicalTypeName(value.resultElementLogicalTypeName);
+  const resultPresentation = normalizeStandaloneCollectionPresentation(value.resultPresentation);
   return Object.freeze({
     name,
     description: normalizedDistinctDescription(description, name),
     areYouSure: value.areYouSure === true,
     promptStyle: normalizeActionPromptStyle(value.promptStyle),
-    icon: normalizeFontAwesomeIcon(value.cssClassFa, value.cssClassFaPosition)
+    icon: normalizeFontAwesomeIcon(value.cssClassFa, value.cssClassFaPosition),
+    resultElementLogicalTypeName,
+    resultPresentation
   });
 }
 
@@ -116,4 +121,11 @@ function normalizedDistinctDescription(description, name) {
 
 function boundedText(value, maximum) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, maximum);
+}
+
+function boundedLogicalTypeName(value) {
+  const candidate = boundedText(value, 255);
+  return /^[A-Za-z_][A-Za-z0-9_$-]*(?:\.[A-Za-z_][A-Za-z0-9_$-]*)*$/.test(candidate)
+    ? candidate
+    : '';
 }

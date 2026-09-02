@@ -140,7 +140,7 @@ final class HtmxPageRenderer {
                     </header>
                     <div id="causeway-route-loading" class="causeway-route-loading htmx-indicator" role="status" aria-live="polite">Loading page…</div>
                     <div id="causeway-route-announcement" class="causeway-visually-hidden" aria-live="polite" aria-atomic="true"></div>
-                    <aside id="causeway-result" class="causeway-shell-result" data-testid="causeway-shell-result" aria-live="polite" hidden></aside>
+                    <cw-action-results id="causeway-result" class="causeway-shell-result" data-testid="causeway-shell-result" aria-label="Application action results" aria-live="polite" hidden></cw-action-results>
                     <main id="causeway-route" class="causeway-shell-main" data-testid="causeway-route" data-navigation-generation="0" hx-history-elt hx-history="false" aria-busy="false">
                       %s
                     </main>
@@ -244,7 +244,9 @@ final class HtmxPageRenderer {
                 + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
                 + " data-causeway-reference-maximum-results=\"" + maximumResults + "\""
                 + " data-causeway-field-families=\""
-                + escape(properties.getEffectiveVaadinFieldFamilies()) + "\"";
+                + escape(properties.getEffectiveVaadinFieldFamilies()) + "\""
+                + " data-causeway-resource-page-mode=\""
+                + properties.getResourcePageMode().name().toLowerCase(Locale.ROOT) + "\"";
     }
 
     private String applicationStylesheet(final String contextPath) {

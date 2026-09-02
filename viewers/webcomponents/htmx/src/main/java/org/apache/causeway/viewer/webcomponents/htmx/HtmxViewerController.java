@@ -30,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -72,20 +73,42 @@ public class HtmxViewerController {
     private final HtmxRouteCodec routeCodec;
     private final HtmxPageRenderer renderer;
     private final HtmxViewerProperties properties;
+    private final HtmxCollectionPresentationRegistry collectionPresentationRegistry;
     private HtmxAuthenticationShell authenticationShell;
 
     public HtmxViewerController(
             final HtmxRouteCodec routeCodec,
             final HtmxPageRenderer renderer,
-            final HtmxViewerProperties properties) {
+            final HtmxViewerProperties properties,
+            final HtmxCollectionPresentationRegistry collectionPresentationRegistry) {
         this.routeCodec = routeCodec;
         this.renderer = renderer;
         this.properties = properties;
+        this.collectionPresentationRegistry = collectionPresentationRegistry;
     }
 
     @Autowired(required = false)
     void setAuthenticationShell(final HtmxAuthenticationShell authenticationShell) {
         this.authenticationShell = authenticationShell;
+    }
+
+    @GetMapping("/_collection-presentations/{logicalTypeName:.+}")
+    public ResponseEntity<String> collectionPresentation(
+            @PathVariable("logicalTypeName") final String logicalTypeName) {
+        if (logicalTypeName == null
+                || logicalTypeName.length() > 255
+                || !logicalTypeName.matches("[A-Za-z_][A-Za-z0-9_$-]*(?:\\.[A-Za-z_][A-Za-z0-9_$-]*)*")) {
+            return ResponseEntity.notFound().build();
+        }
+        final var definition = collectionPresentationRegistry.find(logicalTypeName);
+        if (definition.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .contentType(HTML_UTF8)
+                .cacheControl(CacheControl.noStore().cachePrivate())
+                .header("X-Causeway-Collection-Presentation", logicalTypeName)
+                .body(definition.orElseThrow().content());
     }
 
     @GetMapping({"", "/", "/**"})

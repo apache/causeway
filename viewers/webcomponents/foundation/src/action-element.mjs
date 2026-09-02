@@ -36,9 +36,14 @@ import {
   normalizeActionParameterConfigurations
 } from './parameter-element.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
+import {
+  normalizeStandaloneCollectionPresentation,
+  standaloneCollectionPresentation
+} from './standalone-collection-presentation.mjs';
 
 let actionSequence = 0;
 const initialParameterConfigurations = new WeakMap();
+const initialResultPresentations = new WeakMap();
 
 export function captureDeclarativeActionParameters(root = globalThis.document) {
   if (!root?.querySelectorAll) return;
@@ -49,6 +54,15 @@ export function captureDeclarativeActionParameters(root = globalThis.document) {
       .map(child => child?.configuration ?? actionParameterConfiguration(child));
     if (configurations.length > 0) {
       initialParameterConfigurations.set(action, normalizeActionParameterConfigurations(configurations));
+    }
+    const resultDeclarations = [...(action.children ?? action.childNodes ?? [])]
+      .filter(isStandaloneCollectionDeclaration);
+    if (resultDeclarations.length === 1) {
+      initialResultPresentations.set(action, standaloneCollectionPresentation(resultDeclarations[0]));
+      action.removeAttribute?.('data-causeway-action-result-presentation-error');
+    } else if (resultDeclarations.length > 1) {
+      initialResultPresentations.set(action, null);
+      action.setAttribute?.('data-causeway-action-result-presentation-error', 'duplicate');
     }
   }
 }
@@ -64,6 +78,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     this.descriptionId = `causeway-action-description-${sequence}`;
     this.reasonId = `causeway-action-reason-${sequence}`;
     this._parameterPresentations = [];
+    this._resultPresentation = null;
     this._connectionGeneration = 0;
     this.addEventListener(CausewaySemanticEvent.ACTION_PARAMETER_CONFIGURATION, event => {
       if (event.target?.parentNode !== this) return;
@@ -88,12 +103,12 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
   connectedCallback() {
     const generation = ++this._connectionGeneration;
     captureDeclarativeActionParameters(this);
-    this.#captureParameterPresentations();
+    this.#captureDeclarativePresentations();
     document.addEventListener(CAUSEWAY_ACTION_WIDGET_POLICY_EVENT, this._actionWidgetPolicyListener);
     queueMicrotask(() => {
       if (!this.isConnected || generation !== this._connectionGeneration) return;
       captureDeclarativeActionParameters(this);
-      this.#captureParameterPresentations();
+      this.#captureDeclarativePresentations();
       super.connectedCallback();
     });
   }
@@ -115,6 +130,10 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
 
   get parameterPresentations() {
     return normalizeActionParameterConfigurations(this._parameterPresentations);
+  }
+
+  get resultPresentation() {
+    return normalizeStandaloneCollectionPresentation(this._resultPresentation);
   }
 
   get promptStyle() {
@@ -227,13 +246,22 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
 
   actionPresentation(state = this.componentState) {
     const metadata = state?.data?.metadata ?? {};
+    let resultPresentation = this.resultPresentation;
+    if (resultPresentation && state?.status === 'ready' && !metadata.resultElementLogicalTypeName) {
+      resultPresentation = null;
+      this.setAttribute('data-causeway-action-result-presentation-error', 'inapplicable');
+    } else if (this.getAttribute('data-causeway-action-result-presentation-error') === 'inapplicable') {
+      this.removeAttribute('data-causeway-action-result-presentation-error');
+    }
     const presentation = normalizeActionPresentation({
       name: this.named || this.label || metadata.friendlyName || humanize(this.id),
       description: metadata.description || state?.descriptor?.description || '',
       areYouSure: metadata.areYouSure,
       promptStyle: this.promptStyle || metadata.promptStyle,
       cssClassFa: metadata.cssClassFa,
-      cssClassFaPosition: metadata.cssClassFaPosition
+      cssClassFaPosition: metadata.cssClassFaPosition,
+      resultElementLogicalTypeName: metadata.resultElementLogicalTypeName,
+      resultPresentation
     });
     const parameters = this.parameterPresentations;
     return parameters.length > 0 ? Object.freeze({...presentation, parameters}) : presentation;
@@ -246,28 +274,61 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
 
   #renderMarkup(markup) {
     const declarations = [...(this.children ?? this.childNodes ?? [])]
-      .filter(child => child?.localName === 'cw-parameter' || child?.configuration?.parameter);
+      .filter(child => child?.localName === 'cw-parameter'
+        || child?.configuration?.parameter
+        || isStandaloneCollectionDeclaration(child));
+    const resultDeclarations = declarations.filter(isStandaloneCollectionDeclaration);
+    if (resultDeclarations.length === 1) {
+      this._resultPresentation = standaloneCollectionPresentation(resultDeclarations[0]);
+      this.removeAttribute('data-causeway-action-result-presentation-error');
+    } else if (resultDeclarations.length > 1) {
+      this._resultPresentation = null;
+      this.setAttribute('data-causeway-action-result-presentation-error', 'duplicate');
+    }
     for (const declaration of declarations) {
-      this.#acceptParameterPresentation(declaration.configuration ?? actionParameterConfiguration(declaration));
+      if (!isStandaloneCollectionDeclaration(declaration)) {
+        this.#acceptParameterPresentation(declaration.configuration ?? actionParameterConfiguration(declaration));
+      }
       if (declaration.parentNode === this) this.removeChild(declaration);
     }
     this.innerHTML = markup;
     for (const declaration of declarations) {
       this.appendChild(declaration);
+      if (isStandaloneCollectionDeclaration(declaration)) declaration.hidden = true;
     }
   }
 
-  #captureParameterPresentations() {
+  #captureDeclarativePresentations() {
     for (const configuration of initialParameterConfigurations.get(this) ?? []) {
       this.#acceptParameterPresentation(configuration);
     }
     initialParameterConfigurations.delete(this);
+    if (initialResultPresentations.has(this)) {
+      this._resultPresentation = initialResultPresentations.get(this);
+      initialResultPresentations.delete(this);
+    }
+    const resultDeclarations = [];
     for (const child of this.childNodes ?? []) {
       if (child?.localName === 'cw-parameter') {
         this.#acceptParameterPresentation(child?.configuration ?? actionParameterConfiguration(child));
+      } else if (isStandaloneCollectionDeclaration(child)) {
+        child.hidden = true;
+        resultDeclarations.push(child);
       }
     }
+    if (resultDeclarations.length === 1) {
+      this._resultPresentation = standaloneCollectionPresentation(resultDeclarations[0]);
+      this.removeAttribute('data-causeway-action-result-presentation-error');
+    } else if (resultDeclarations.length > 1) {
+      this._resultPresentation = null;
+      this.setAttribute('data-causeway-action-result-presentation-error', 'duplicate');
+    }
   }
+}
+
+function isStandaloneCollectionDeclaration(candidate) {
+  return candidate?.localName === 'cw-standalone-collection'
+    || candidate?.constructor?.name === 'CausewayStandaloneCollectionElement';
 }
 
 function originatesFromOrdinaryActionControl(action, target) {

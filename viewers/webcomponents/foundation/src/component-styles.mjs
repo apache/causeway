@@ -366,6 +366,14 @@ cw-field-editor[data-widget-state="fallback"]::after {
   margin-block: 1rem;
   padding: 0.75rem;
 }
+cw-action-results,
+.causeway-action-results {
+  display: block;
+  min-width: 0;
+}
+cw-action-results[hidden] {
+  display: none;
+}
 .causeway-property {
   align-items: start;
   display: grid;

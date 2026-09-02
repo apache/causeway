@@ -18,6 +18,7 @@
  */
 
 export * from './action-element.mjs';
+export * from './action-results-element.mjs';
 export * from './action-widget.mjs';
 export * from './breadcrumbs-element.mjs';
 export * from './collection-column-element.mjs';

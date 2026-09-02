@@ -51,7 +51,8 @@ class HtmxViewerControllerTest {
                 .contains("<link rel=\"stylesheet\" href=\"/app/webjars/font-awesome/7.3.0/css/all.min.css\">")
                 .doesNotContain("cdnjs.cloudflare.com", "use.fontawesome.com")
                 .contains("<cw-object editable>")
-                .contains("<cw-interaction-controller data-causeway-route-interactions>");
+                .contains("<cw-interaction-controller data-causeway-route-interactions>")
+                .contains("<cw-action-results id=\"causeway-result\"");
         assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
                 .contains("default-src 'self'")
                 .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
@@ -383,6 +384,35 @@ class HtmxViewerControllerTest {
     }
 
     @Test
+    void servesOnlyExactRegisteredCollectionPresentationsFromReservedRoute() {
+        final var definition = HtmxCollectionPresentationDefinition.resource(
+                "petclinic.PetOwner",
+                "resource:petclinic.PetOwner.html",
+                "<cw-standalone-collection></cw-standalone-collection>");
+        final var pages = new HtmxPageFragmentRegistry(List.of(), List.of());
+        final var controller = new HtmxViewerController(
+                codec,
+                new HtmxPageRenderer(codec, properties, pages),
+                properties,
+                new HtmxCollectionPresentationRegistry(List.of(definition)));
+
+        assertThat(controller.collectionPresentation("petclinic.PetOwner"))
+                .satisfies(response -> {
+                    assertThat(response.getStatusCode().value()).isEqualTo(200);
+                    assertThat(response.getBody()).contains("cw-standalone-collection");
+                    assertThat(response.getHeaders().getFirst("X-Causeway-Collection-Presentation"))
+                            .isEqualTo("petclinic.PetOwner");
+                    assertThat(response.getHeaders().getCacheControl()).contains("no-store");
+                });
+        assertThat(controller.collectionPresentation("petclinic.Missing"))
+                .satisfies(response -> {
+                    assertThat(response.getStatusCode().value()).isEqualTo(404);
+                    assertThat(response.getBody()).isNull();
+                });
+        assertThat(controller.collectionPresentation("../petclinic.PetOwner").getStatusCode().value()).isEqualTo(404);
+    }
+
+    @Test
     void historyRestoreReceivesOnlyTheRouteFragmentWithoutChangingHistory() {
         final var controller = controller(List.of());
         final var request = request("/htmx/object/petclinic.PetOwner/owner-1", "", true);
@@ -405,7 +435,11 @@ class HtmxViewerControllerTest {
             final List<HtmxPageFragmentFactory> factories,
             final List<HtmxPageDefinition> resourcePages) {
         final var registry = new HtmxPageFragmentRegistry(factories, resourcePages);
-        return new HtmxViewerController(codec, new HtmxPageRenderer(codec, properties, registry), properties);
+        return new HtmxViewerController(
+                codec,
+                new HtmxPageRenderer(codec, properties, registry),
+                properties,
+                new HtmxCollectionPresentationRegistry(List.of()));
     }
 
     private static MockHttpServletRequest request(

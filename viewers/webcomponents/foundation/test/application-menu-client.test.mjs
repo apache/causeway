@@ -26,7 +26,8 @@ import {InteractionStatus} from '../src/types.mjs';
 import {
   createMenuGraphQLExecutor,
   createMenuGraphQLTypes,
-  SAMPLE_SERVICE_LOGICAL_TYPE
+  SAMPLE_SERVICE_LOGICAL_TYPE,
+  SAMPLE_SERVICE_TYPE
 } from './fixtures/menu-graphql-fixture.mjs';
 import {waitFor} from './fixtures/rich-schema-fixture.mjs';
 
@@ -144,6 +145,75 @@ test('service action adapter reuses parameter preparation, validation, safe invo
   assert.deepEqual(invoked.data, {kind: 'scalar', value: 'Hello, Grace!'});
   assert.equal(context.identity, null);
   assert.deepEqual(context.interactionTarget, {kind: 'service', logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE});
+});
+
+test('service collection action requests declared wrappers in its single invocation response', async () => {
+  const types = createMenuGraphQLTypes();
+  const personType = 'rich__sample_Person';
+  const personMetaType = `${personType}__gqlv_meta`;
+  const nameWrapperType = `${personType}__name__gqlv_property`;
+  const actionTypeName = `${SAMPLE_SERVICE_TYPE}__findPeople__gqlv_action`;
+  const invokeTypeName = `${actionTypeName}_invoke`;
+  const ref = (kind, name, ofType = null) => ({kind, name, ofType});
+  const scalarRef = name => ref('SCALAR', name);
+  const namedRef = name => ref('OBJECT', name);
+  const listRef = ofType => ref('LIST', null, ofType);
+  const field = (name, type) => ({name, description: null, args: [], type});
+  const objectType = (name, fields) => ({
+    name, kind: 'OBJECT', description: null, fields, inputFields: [], enumValues: [], possibleTypes: []
+  });
+  types.get(SAMPLE_SERVICE_TYPE).fields.push(field('findPeople', namedRef(actionTypeName)));
+  types.set(actionTypeName, objectType(actionTypeName, [
+    field('hidden', scalarRef('Boolean')),
+    field('disabled', scalarRef('String')),
+    field('metadata', namedRef('RichMemberMetadata')),
+    field('validate', scalarRef('String')),
+    field('invoke', namedRef(invokeTypeName))
+  ]));
+  types.set(invokeTypeName, objectType(invokeTypeName, [field('results', listRef(namedRef(personType)))]));
+  types.set(personType, objectType(personType, [
+    field('_meta', namedRef(personMetaType)),
+    field('name', namedRef(nameWrapperType))
+  ]));
+  types.set(personMetaType, objectType(personMetaType, [
+    field('id', scalarRef('ID')),
+    field('logicalTypeName', scalarRef('String')),
+    field('title', scalarRef('String')),
+    field('icon', scalarRef('String'))
+  ]));
+  types.set(nameWrapperType, objectType(nameWrapperType, [
+    field('hidden', scalarRef('Boolean')),
+    field('disabled', scalarRef('String')),
+    field('datatype', scalarRef('String')),
+    field('get', scalarRef('String'))
+  ]));
+  const base = createMenuGraphQLExecutor({types});
+  let invocation;
+  const executor = async request => {
+    if (request.operationName === 'CausewayInvokeServiceAction' && request.document.includes('findPeople')) {
+      invocation = request;
+      return {data: {rich: {causeway_webcomponents_sample_SampleMenu: {findPeople: {invoke: {results: [{
+        _meta: {id: 'person-1', logicalTypeName: 'sample.Person', title: 'Ada', icon: '/icons/ada.svg'},
+        name: {hidden: false, disabled: null, datatype: 'String', get: 'Ada'}
+      }]}}}}}};
+    }
+    return base(request);
+  };
+  const context = new ServiceActionContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE
+  });
+
+  const result = await context.invokeAction('findPeople', {}, {
+    resultPresentation: {columns: [{member: 'name'}, {member: 'missing'}]}
+  });
+
+  assert.equal(result.status, InteractionStatus.SUCCESS);
+  assert.equal(result.data.kind, 'collection');
+  assert.equal(result.data.value.length, 1);
+  assert.match(invocation.document, /_meta \{[\s\S]*?icon[\s\S]*?id[\s\S]*?logicalTypeName[\s\S]*?title[\s\S]*?\}/);
+  assert.match(invocation.document, /name \{[\s\S]*?datatype[\s\S]*?disabled[\s\S]*?get[\s\S]*?hidden[\s\S]*?\}/);
+  assert.doesNotMatch(invocation.document, /missing|CausewayRead|range|hydrate/i);
 });
 
 test('service action context executes advertised autocomplete windows', async () => {

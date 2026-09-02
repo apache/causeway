@@ -32,6 +32,7 @@ import {defaultEditorRegistry, parseCausewayEditorValue, renderCausewayEditor} f
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
 import {normalizeActionParameterConfigurations} from './parameter-element.mjs';
+import {normalizeStandaloneCollectionPresentation} from './standalone-collection-presentation.mjs';
 import {
   CausewayTemporalRangeStatus,
   resolveCausewayTemporalRange,
@@ -205,7 +206,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         areYouSure: presentation?.areYouSure,
         promptStyle: presentation?.promptStyle,
         cssClassFa: presentation?.icon?.classes?.join(' '),
-        cssClassFaPosition: presentation?.icon?.position
+        cssClassFaPosition: presentation?.icon?.position,
+        resultElementLogicalTypeName: presentation?.resultElementLogicalTypeName,
+        resultPresentation: presentation?.resultPresentation
       }),
       parameterPresentations: normalizeActionParameterConfigurations(presentation?.parameters),
       values: Object.freeze({}),
@@ -230,6 +233,14 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       this.render();
       return false;
     }
+    const resultPresentation = await this.#resolveResultPresentation(actionId, this.promptState.presentation, context);
+    if (generation !== this.generation) {
+      return false;
+    }
+    this.promptState = Object.freeze({
+      ...this.promptState,
+      presentation: Object.freeze({...this.promptState.presentation, resultPresentation})
+    });
     let parameters = prepared.data.parameters ?? [];
     if (parameters.length === 0) {
       return this.promptState.presentation.areYouSure
@@ -660,6 +671,22 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
   }
 
+  async #resolveResultPresentation(actionId, presentation, context) {
+    if (presentation?.resultPresentation) return presentation.resultPresentation;
+    const logicalTypeName = presentation?.resultElementLogicalTypeName;
+    const resolver = globalThis.causewayActionResultPresentationResolver;
+    if (!logicalTypeName || typeof resolver !== 'function') return null;
+    try {
+      return normalizeStandaloneCollectionPresentation(await resolver(Object.freeze({
+        actionId,
+        logicalTypeName,
+        context
+      })));
+    } catch {
+      return null;
+    }
+  }
+
   #requestConfirmation() {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
@@ -682,7 +709,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.render();
     let result;
     try {
-      result = await context.invokeAction(actionId, values);
+      result = await context.invokeAction(actionId, values, {
+        resultPresentation: this.promptState?.presentation?.resultPresentation ?? null
+      });
     } catch {
       if (generation === this.generation) {
         this.promptState = Object.freeze({
@@ -711,12 +740,14 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return false;
     }
     this.validatedParameterIds.clear();
+    const resultPresentation = this.promptState?.presentation?.resultPresentation ?? null;
     this.promptState = null;
-    this.resultState = Object.freeze({actionId, result: result.data, ...interactionTargetDetail(context)});
+    this.resultState = Object.freeze({actionId, result: result.data, resultPresentation, ...interactionTargetDetail(context)});
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_RESULT, Object.freeze({
       actionId,
       ...interactionTargetDetail(context),
       result: result.data,
+      resultPresentation,
       context
     })));
     this.render();

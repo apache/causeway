@@ -895,6 +895,87 @@ test('standard action controller renders prompts, blocks invalid input, invokes 
   assert.ok(calls.includes('invoke:Updated'));
 });
 
+test('action controller resolves a type-default result presentation before one invocation', async () => {
+  const calls = [];
+  let invocationOptions;
+  const context = {
+    identity: {logicalTypeName: 'example.Object', id: '42'},
+    async prepareAction() {
+      calls.push('prepare');
+      return {status: 'success', errors: [], data: {parameters: []}};
+    },
+    async invokeAction(actionId, values, options) {
+      calls.push('invoke');
+      invocationOptions = options;
+      return {status: 'success', errors: [], data: {kind: 'collection', value: []}};
+    }
+  };
+  globalThis.causewayActionResultPresentationResolver = async detail => {
+    calls.push(`resolve:${detail.logicalTypeName}`);
+    return {named: 'Owners', columns: [{member: 'name', label: 'Owner', testId: null}]};
+  };
+  try {
+    const controller = new CausewayInteractionControllerElement();
+    document.body.appendChild(controller);
+    let result;
+    controller.addEventListener('causeway-action-result', event => { result = event.detail; });
+    assert.equal(await controller.beginAction('findOwners', context, null, {
+      name: 'Find owners',
+      resultElementLogicalTypeName: 'petclinic.PetOwner'
+    }), true);
+    assert.deepEqual(calls, ['prepare', 'resolve:petclinic.PetOwner', 'invoke']);
+    assert.deepEqual(invocationOptions.resultPresentation.columns, [
+      {member: 'name', label: 'Owner', testId: null}
+    ]);
+    assert.equal(result.resultPresentation.named, 'Owners');
+    assert.deepEqual(result.result, {kind: 'collection', value: []});
+  } finally {
+    delete globalThis.causewayActionResultPresentationResolver;
+  }
+});
+
+test('superseded result presentation resolution cannot invoke or replace the latest interaction', async () => {
+  let releaseFirst;
+  let resolution = 0;
+  const firstResolution = new Promise(resolve => { releaseFirst = resolve; });
+  globalThis.causewayActionResultPresentationResolver = async () => ++resolution === 1
+    ? firstResolution
+    : {named: 'Latest', columns: []};
+  const invocations = [];
+  const context = {
+    async prepareAction() {
+      return {status: 'success', errors: [], data: {parameters: []}};
+    },
+    async invokeAction(actionId, values, options) {
+      invocations.push({actionId, presentation: options.resultPresentation});
+      return {status: 'success', errors: [], data: {kind: 'collection', value: []}};
+    }
+  };
+  try {
+    const controller = new CausewayInteractionControllerElement();
+    document.body.appendChild(controller);
+    const first = controller.beginAction('first', context, null, {
+      resultElementLogicalTypeName: 'example.Result'
+    });
+    await Promise.resolve();
+    const second = controller.beginAction('second', context, null, {
+      resultElementLogicalTypeName: 'example.Result'
+    });
+    assert.equal(await second, true);
+    releaseFirst({named: 'Obsolete', columns: [{member: 'ignored'}]});
+    assert.equal(await first, false);
+    assert.deepEqual(invocations, [{
+      actionId: 'second',
+      presentation: {
+        named: 'Latest', describedAs: '', descriptionAs: 'label',
+        resizableColumns: false, reorderableColumns: false, columns: []
+      }
+    }]);
+  } finally {
+    delete globalThis.causewayActionResultPresentationResolver;
+  }
+});
+
 test('action prompts render modal and sidebar surfaces with safe style normalization', async () => {
   const parameter = {
     id: 'name', description: 'Name', inputType: scalar('String'), enumValues: [], fields: new Map(),
