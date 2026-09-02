@@ -405,15 +405,15 @@ function presentResult(detail) {
     applyStandaloneCollectionPresentation(collection, detail?.resultPresentation);
     if (!collection.named) collection.named = heading.textContent;
     collection.setAttribute('data-testid', 'causeway-standalone-action-result');
-    replaceResultPresentation(destination, resultDismissButton(destination, detail), collection);
+    replaceResultPresentation(destination, collection, resultDismissButton(destination, detail));
     collection.result = result;
     output.textContent = `${count} result${count === 1 ? '' : 's'}`;
   } else if (result?.kind === 'scalar') {
     output.textContent = result.value == null ? '' : String(result.value);
-    replaceResultPresentation(destination, resultDismissButton(destination, detail), heading, output);
+    replaceResultPresentation(destination, heading, output, resultDismissButton(destination, detail));
   } else {
     output.textContent = 'Completed';
-    replaceResultPresentation(destination, resultDismissButton(destination, detail), heading, output);
+    replaceResultPresentation(destination, heading, output, resultDismissButton(destination, detail));
     const context = routeRegion?.querySelector('cw-object-context')?.context;
     if (context) {
       globalThis.setTimeout(() => navigate(

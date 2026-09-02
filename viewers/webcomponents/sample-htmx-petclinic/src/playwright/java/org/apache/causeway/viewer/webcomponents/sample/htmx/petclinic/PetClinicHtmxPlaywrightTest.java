@@ -511,10 +511,12 @@ class PetClinicHtmxPlaywrightTest {
         }
 
         final var listAllRequestStart = graphQLRequests.size();
+        final var shellResultOutlet = page.locator("#causeway-result");
+        constrainResultContentHeight(shellResultOutlet);
         activateServiceAction("listAll");
         waitForShellResult("Pet owners", "4 results");
         assertStandaloneCollectionResult("Pet owners", 4);
-        assertResultDismissAlignment(page.locator("#causeway-result"));
+        assertScrollableResultWithDismissBelow(shellResultOutlet);
         assertThat(page.locator("cw-action-results:not([hidden]) cw-standalone-collection").first().textContent())
                 .contains("Owner", "Telephone", "Email")
                 .doesNotContain("Known as", "Notes", "Unavailable");
@@ -1168,6 +1170,7 @@ class PetClinicHtmxPlaywrightTest {
                 """);
 
         final var defaultRequestStart = graphQLRequests.size();
+        constrainResultContentHeight(emptyOutlet);
         objectAction("allOwners").click();
         final var liveResult = "cw-action-results:not([hidden]) > cw-standalone-collection";
         page.waitForFunction("selector => document.querySelector(selector)?.resultState?.status === 'ready'", liveResult);
@@ -1175,7 +1178,7 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(liveResult + " cw-object-link").count()).isGreaterThan(0);
         assertObjectLinkIcon(page.locator(liveResult + " cw-object-link").first());
         page.waitForFunction("() => { const outlet = document.querySelector(\"cw-action-results[data-testid='petclinic-action-results']\"); const header = document.querySelector('.causeway-shell-header'); const rect = outlet?.getBoundingClientRect(); const headerBottom = header?.getBoundingClientRect().bottom ?? 0; return rect && rect.top >= headerBottom + 8 && rect.top < Math.min(innerHeight / 3, 160); }");
-        assertResultDismissAlignment(emptyOutlet);
+        assertScrollableResultWithDismissBelow(emptyOutlet);
         assertThat((List<String>) page.evaluate("() => globalThis.__causewayResultPlacements"))
                 .contains("Pet owners:petclinic-action-results");
         final var defaultRequest = graphQLRequests.subList(defaultRequestStart, graphQLRequests.size()).stream()
@@ -1261,13 +1264,15 @@ class PetClinicHtmxPlaywrightTest {
         final var dialogOutlet = page.locator("[data-testid='petclinic-dialog-results']");
         assertThat(dialogOutlet.getAttribute("presentation-style")).isEqualTo("DIALOG");
         final var dialogScroll = ((Number) page.evaluate("() => window.scrollY")).doubleValue();
+        constrainResultContentHeight(dialogOutlet);
         activateServiceAction("listAll");
         final var dialog = dialogOutlet.locator("dialog[data-causeway-action-results-surface='DIALOG']");
         dialog.waitFor();
         page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-dialog-results'] cw-standalone-collection\")?.resultState?.status === 'ready'");
         assertThat(dialog.getAttribute("aria-modal")).isEqualTo("true");
         assertThat(dialog.getAttribute("aria-label")).isEqualTo("Visit action results");
-        assertThat((Boolean) dialog.evaluate("element => element.contains(document.activeElement)")).isTrue();
+        assertScrollableResultWithDismissBelow(dialog);
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-dialog-results'] dialog\")?.contains(document.activeElement)");
         assertThat(((Number) page.evaluate("() => window.scrollY")).doubleValue()).isEqualTo(dialogScroll);
         dialog.locator("[data-causeway-result-dismiss]").focus();
         page.keyboard().press("Shift+Tab");
@@ -1281,12 +1286,14 @@ class PetClinicHtmxPlaywrightTest {
         waitForMenus();
         final var sidebarOutlet = page.locator("[data-testid='petclinic-sidebar-results']");
         assertThat(sidebarOutlet.getAttribute("presentation-style")).isEqualTo("SIDEBAR");
+        constrainResultContentHeight(sidebarOutlet);
         activateServiceAction("listAll");
         final var sidebar = sidebarOutlet.locator("aside[data-causeway-action-results-surface='SIDEBAR']");
         sidebar.waitFor();
         page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-sidebar-results'] cw-standalone-collection\")?.resultState?.status === 'ready'");
         assertThat(sidebar.getAttribute("role")).isEqualTo("complementary");
         assertThat(sidebar.getAttribute("aria-modal")).isNull();
+        assertScrollableResultWithDismissBelow(sidebar);
         sidebar.locator("button:not([disabled]), a[href], [tabindex]:not([tabindex='-1'])").last().focus();
         page.keyboard().press("Tab");
         assertThat((Boolean) sidebar.evaluate("element => !element.contains(document.activeElement)")).isTrue();
@@ -1787,11 +1794,18 @@ class PetClinicHtmxPlaywrightTest {
         }
     }
 
+    private void constrainResultContentHeight(final Locator outlet) {
+        outlet.evaluate("element => element.style.setProperty('--causeway-action-results-content-max-block-size', '8rem')");
+    }
+
     @SuppressWarnings("unchecked")
-    private void assertResultDismissAlignment(final Locator outlet) {
-        final var resultAlignment = (List<Number>) outlet.evaluate("element => { const dismiss = element.querySelector('[data-causeway-result-dismiss]').getBoundingClientRect(); const result = element.querySelector('cw-standalone-collection .causeway-collection').getBoundingClientRect(); return [Math.abs(dismiss.top - result.top), dismiss.width]; }");
-        assertThat(resultAlignment.get(0).doubleValue()).isLessThan(2);
-        assertThat(resultAlignment.get(1).doubleValue()).isLessThan(160);
+    private void assertScrollableResultWithDismissBelow(final Locator outlet) {
+        final var resultLayout = (List<Number>) outlet.evaluate("element => { const dismissElement = element.querySelector('[data-causeway-result-dismiss]'); const scrollable = element.querySelector('cw-standalone-collection'); const dismiss = dismissElement.getBoundingClientRect(); const result = scrollable.getBoundingClientRect(); const bounds = element.getBoundingClientRect(); const dismissFollowsResult = Boolean(scrollable.compareDocumentPosition(dismissElement) & Node.DOCUMENT_POSITION_FOLLOWING); return [dismiss.top - result.bottom, bounds.bottom - dismiss.bottom, dismiss.width, scrollable.scrollHeight - scrollable.clientHeight, dismissFollowsResult ? 1 : 0]; }");
+        assertThat(resultLayout.get(0).doubleValue()).isGreaterThanOrEqualTo(-1);
+        assertThat(resultLayout.get(1).doubleValue()).isGreaterThanOrEqualTo(-1);
+        assertThat(resultLayout.get(2).doubleValue()).isLessThan(160);
+        assertThat(resultLayout.get(3).doubleValue()).isGreaterThan(0);
+        assertThat(resultLayout.get(4).intValue()).isEqualTo(1);
     }
 
     private long graphQLOperationCount(final String operationName) {

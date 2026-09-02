@@ -62,18 +62,20 @@ Unexpected invocation, routing, focus, Escape, backdrop, overflow, responsive, r
 
 #### Scenario: Inline result is qualified
 - **WHEN** a deterministic Petclinic action returns a non-navigating result to an `INLINE` outlet
-- **THEN** current compact layout, sticky-header-aware reveal, links, values, announcements, replacement, and dismissal remain operable
+- **THEN** sticky-header-aware reveal, links, values, announcements, replacement, and dismissal remain operable
+- **AND** long result content scrolls within a bounded area above a visible Dismiss control
 - **AND** the result surface introduces no modal or sidebar behavior
 
 #### Scenario: Dialog result is qualified
 - **WHEN** a deterministic Petclinic action returns a result to a `DIALOG` outlet
 - **THEN** labelled modal semantics, backdrop, initial focus, Tab containment, Escape, explicit dismissal, replacement, and origin focus restoration are verified
+- **AND** bounded result scrolling keeps the Dismiss control visible below the content
 - **AND** route content cannot remain interactively exposed through stale modal state
 
 #### Scenario: Sidebar result is qualified
 - **WHEN** a deterministic Petclinic action returns a result to a `SIDEBAR` outlet
 - **THEN** right-side placement, non-modal page access, ordinary Tab order, Escape while focused within, explicit dismissal, replacement, and origin focus restoration are verified
-- **AND** wide and narrow viewports retain bounded internal scrolling with no horizontal document overflow
+- **AND** wide and narrow viewports retain bounded internal result scrolling above a visible Dismiss control with no horizontal document overflow
 
 #### Scenario: Styled result respects established ownership
 - **WHEN** duplicate, disconnected, superseded, application-claimed, object-valued, or void-refresh result paths are exercised
