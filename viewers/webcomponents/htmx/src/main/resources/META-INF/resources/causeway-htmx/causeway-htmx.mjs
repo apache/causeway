@@ -233,6 +233,14 @@ function replaceResultPresentation(destination, ...nodes) {
   destination.hidden = nodes.filter(Boolean).length === 0;
 }
 
+function revealResultPresentation(destination) {
+  globalThis.requestAnimationFrame?.(() => {
+    if (!destination?.isConnected || destination.hidden || destination.children.length === 0) return;
+    const reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+    destination.scrollIntoView?.({block: 'start', behavior: reducedMotion ? 'auto' : 'smooth'});
+  });
+}
+
 function preserveRouteResultInShell() {
   const outlet = activePageResultOutlet();
   if (!outlet || !resultRegion || outlet.children.length === 0) return;
@@ -374,6 +382,7 @@ function presentResult(detail) {
     }
   }
   destination.hidden = false;
+  revealResultPresentation(destination);
   announce(`${collectionHeading(detail, heading)}: ${output.textContent}`);
 }
 
@@ -566,8 +575,10 @@ document.body.addEventListener('htmx:afterSwap', event => {
   }
   activeRequest = null;
   setBusy(false);
-  event.detail.target.querySelector('[tabindex="-1"]')?.focus();
-  if (pendingVoidRefreshGeneration === navigationGeneration) rehomePreservedShellResult();
+  const preservingScroll = pendingVoidRefreshGeneration === navigationGeneration;
+  if (!preservingScroll) globalThis.scrollTo?.({top: 0, left: 0, behavior: 'auto'});
+  event.detail.target.querySelector('[tabindex="-1"]')?.focus?.({preventScroll: true});
+  if (preservingScroll) rehomePreservedShellResult();
   void resolveHome();
 });
 

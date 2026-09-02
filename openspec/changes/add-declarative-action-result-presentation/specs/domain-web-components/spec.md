@@ -70,6 +70,7 @@ The outlet MUST NOT globally subscribe to action results, invoke actions, choose
 #### Scenario: Host mounts a result
 - **WHEN** the owning viewer places a current scalar, void-status, or standalone collection presentation into the outlet
 - **THEN** the outlet exposes an accessible result-region relationship for that content
+- **AND** optional host controls remain compactly aligned with the result presentation rather than stretching across its width
 - **AND** result rendering, announcements, links, values, and lifecycle remain owned by their established host and semantic components
 
 #### Scenario: Result is replaced

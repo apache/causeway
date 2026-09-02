@@ -41,3 +41,10 @@
 - [x] 6.3 Extend Petclinic integration and Playwright journeys to verify original GraphQL selection, empty and populated results, links, icons, announcements, outlet placement, replacement, fallback, and canonical navigation.
 - [x] 6.4 Run equivalent default and inline journeys under Vaadin and explicit native toolkit policies with no follow-up row request or raw application result list.
 - [x] 6.5 Run Foundation Node and Maven suites, GraphQL and HTMX reactor tests, browser CSP/axe/console/network/overflow audits, Petclinic integration and Playwright tests, IDE build/lint, strict OpenSpec validation, and `git diff --check` using Java 21 where the complete reactor requires it.
+
+## 7. Result Placement Polish
+
+- [x] 7.1 Keep the dismiss control compact and top-aligned consistently in shell and authored page outlets.
+- [x] 7.2 Reveal a newly mounted inline result without moving keyboard focus and respect reduced-motion preference.
+- [x] 7.3 Reset ordinary HTMX route navigation to the beginning of the new page while preserving explicit refresh and history scroll policy.
+- [x] 7.4 Add browser coverage for dismiss alignment, automatic result reveal, and route scroll reset.

@@ -189,9 +189,7 @@
 }
 
 cw-action-results > .causeway-result-dismiss {
-  float: inline-end;
-  margin-block-end: var(--causeway-space-2);
-  margin-inline-start: var(--causeway-space-2);
+  margin: 0;
 }
 
 .causeway-shell-main {

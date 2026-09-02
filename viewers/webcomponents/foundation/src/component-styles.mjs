@@ -368,11 +368,26 @@ cw-field-editor[data-widget-state="fallback"]::after {
 }
 cw-action-results,
 .causeway-action-results {
-  display: block;
+  align-items: start;
+  display: grid;
+  gap: var(--causeway-action-results-gap, 0.75rem);
+  grid-template-columns: minmax(0, 1fr) auto;
   min-width: 0;
+  scroll-margin-block-start: var(--causeway-action-results-scroll-margin, 1rem);
 }
 cw-action-results[hidden] {
   display: none;
+}
+cw-action-results > :not(.causeway-result-dismiss),
+.causeway-action-results > :not(.causeway-result-dismiss) {
+  grid-column: 1;
+}
+cw-action-results > .causeway-result-dismiss,
+.causeway-action-results > .causeway-result-dismiss {
+  align-self: start;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
 }
 .causeway-property {
   align-items: start;
