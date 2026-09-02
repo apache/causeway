@@ -2,7 +2,8 @@
 
 Svelte is well suited to consuming custom elements directly, while SvelteKit provides route, layout, history, loading, and error boundaries.
 Causeway's semantic components already own GraphQL contexts, object layout, menu layout, editors, validation, interactions, and results.
-A generic Svelte viewer should integrate those components with SvelteKit routing rather than reproduce them as Svelte domain components.
+Applications declare those elements directly in Svelte templates.
+A generic Svelte viewer should integrate those components with SvelteKit routing and route-value binding rather than reproduce them as Svelte domain components.
 
 The router resolves a canonical bookmark and chooses a registered logical-type Svelte page or a generic page containing `<cw-object>`.
 The component itself remains unaware that custom pages exist.
@@ -40,20 +41,22 @@ Applications can wrap or relocate it while preserving canonical semantic route m
 ### Register framework-native Svelte pages
 
 Applications register a Svelte component or lazy component loader against an exact Causeway logical type.
-The chosen page renders beneath one route-level `<cw-object-context>` created by the viewer route page.
+The chosen application page declares one route-level `<cw-object-context>` and binds the canonical logical type and identifier supplied by the viewer route page.
+The viewer diagnoses an invalid declared boundary but does not manufacture it imperatively.
 
 Custom pages can compose Causeway custom elements, Svelte components, ordinary HTML, and application elements.
-They rely on the object context for domain state rather than duplicating the object in Svelte stores.
+They rely on their declared object context for domain state rather than duplicating the object in Svelte stores.
 
 ### Use `<cw-object>` as the generic fallback
 
-When no custom loader exists, the route page renders `<cw-object>` beneath the same context contract.
+When no custom loader exists, the declarative route-page template renders one `<cw-object-context>` containing `<cw-object>`, with endpoint and canonical identity values bound by the router.
 Page selection completes before the generic component connects.
 The generic component never discovers custom pages or reads SvelteKit route state.
 
 ### Keep menus in the root viewer layout
 
-A viewer `+layout` component or equivalent shell renders `<cw-menubars>` outside the route-page slot.
+An application-authored viewer `+layout` component or equivalent shell declares one stable `<cw-graphql-client>` containing `<cw-menubars>` outside the route-page slot.
+The adapter binds configured client properties but does not create the provider element.
 Page navigation does not recreate menu coordination.
 Semantic menu outcomes flow to replaceable Svelte navigation and result policy.
 
@@ -82,6 +85,7 @@ They do not mirror GraphQL object snapshots, member state, validation state, or 
 - [Filesystem routes can make a package intrusive] → Export thin reusable route and layout helpers with documented mounting rather than generating an application tree silently.
 - [Lazy custom page loaders can race navigation] → Associate loaders with route identity and ignore superseded results.
 - [Stores can duplicate component state] → Restrict package stores to shell and viewer policy.
+- [A page can omit or duplicate its declarative context] → Validate the route-page contract and present a bounded development diagnostic without silently adding a context.
 - [Viewer routes may diverge] → Share canonical route and fallback fixtures with HTMX and Vue implementations.
 
 ## Migration Plan
