@@ -427,8 +427,11 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link")
                 .evaluateAll("elements => elements.map(element => element.getAttribute('title')).join(',')"))
                 .isEqualTo("Mary Smith (Mary),Basil · dog");
-        page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link[title='Basil · dog'] button").click();
+        page.evaluate("() => window.scrollTo(0, document.documentElement.scrollHeight)");
+        page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link[title='Basil · dog'] button")
+                .evaluate("element => element.click()");
         waitForRoute("petclinic.Pet", "s_pet-basil");
+        assertThat(((Number) page.evaluate("() => window.scrollY")).doubleValue()).isZero();
         page.goBack();
         waitForRoute("petclinic.Visit", "s_visit-basil-checkup");
         waitForBreadcrumbs(2);
@@ -1170,6 +1173,10 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(liveResult).first().getAttribute("named")).isEqualTo("Pet owners");
         assertThat(page.locator(liveResult + " cw-object-link").count()).isGreaterThan(0);
         assertObjectLinkIcon(page.locator(liveResult + " cw-object-link").first());
+        page.waitForFunction("() => { const outlet = document.querySelector(\"cw-action-results[data-testid='petclinic-action-results']\"); const rect = outlet?.getBoundingClientRect(); return rect && rect.top >= 0 && rect.top < Math.min(innerHeight / 3, 160); }");
+        final var resultAlignment = (List<Number>) emptyOutlet.evaluate("element => { const dismiss = element.querySelector('[data-causeway-result-dismiss]').getBoundingClientRect(); const result = element.querySelector('cw-standalone-collection').getBoundingClientRect(); return [Math.abs(dismiss.top - result.top), dismiss.width]; }");
+        assertThat(resultAlignment.get(0).doubleValue()).isLessThan(2);
+        assertThat(resultAlignment.get(1).doubleValue()).isLessThan(160);
         assertThat((List<String>) page.evaluate("() => globalThis.__causewayResultPlacements"))
                 .contains("Pet owners:petclinic-action-results");
         final var defaultRequest = graphQLRequests.subList(defaultRequestStart, graphQLRequests.size()).stream()
