@@ -57,6 +57,7 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                         "cssClassFaPosition",
                         "areYouSure",
                         "promptStyle",
+                        "resultElementLogicalTypeName",
                         "maxLength",
                         "pattern",
                         "patternFlags",
@@ -122,6 +123,7 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
         var collection = department.get("staffMembers").get("metadata");
         var staff = root.at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results");
         var property = staff.get("name").get("metadata");
+        var collectionAction = root.at("/data/rich/university_dept_Departments/findAllDepartments/metadata");
 
         assertThat(action.get("metadata").get("friendlyName").stringValue())
                 .isEqualTo("Rename department");
@@ -131,10 +133,14 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                 .isEqualTo("pen-to-square");
         assertThat(action.get("metadata").get("cssClassFaPosition").stringValue())
                 .isEqualTo("RIGHT");
+        assertThat(action.get("metadata").get("resultElementLogicalTypeName").isNull()).isTrue();
+        assertThat(collectionAction.get("resultElementLogicalTypeName").stringValue())
+                .isEqualTo("university.dept.Department");
         assertThat(parameter.get("friendlyName").stringValue()).isEqualTo("Replacement name");
         assertThat(parameter.get("description").stringValue()).isEqualTo("New name for the department");
         assertThat(parameter.get("cssClassFa").isNull()).isTrue();
         assertThat(parameter.get("cssClassFaPosition").isNull()).isTrue();
+        assertThat(parameter.get("resultElementLogicalTypeName").isNull()).isTrue();
         assertThat(parameter.get("maxLength").intValue()).isEqualTo(50);
         assertThat(parameter.get("pattern").stringValue()).isEqualTo("[A-Za-z !]+");
         assertThat(parameter.get("patternFlags").intValue()).isEqualTo(2);
@@ -146,6 +152,7 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                 .isEqualTo("Staff assigned to this department");
         assertThat(collection.get("cssClassFa").isNull()).isTrue();
         assertThat(collection.get("cssClassFaPosition").isNull()).isTrue();
+        assertThat(collection.get("resultElementLogicalTypeName").isNull()).isTrue();
         assertThat(collection.get("maxLength").isNull()).isTrue();
 
         assertThat(property.get("friendlyName").stringValue()).isEqualTo("Staff display name");

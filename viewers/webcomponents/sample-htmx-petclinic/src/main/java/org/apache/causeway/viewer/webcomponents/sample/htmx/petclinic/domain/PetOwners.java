@@ -58,19 +58,19 @@ public class PetOwners {
         return repository.persist(owner);
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(semantics = SemanticsOf.SAFE, typeOf = PetOwner.class)
     @ActionLayout(describedAs = "Finds owners whose names contain the search text.", cssClassFa = "magnifying-glass")
     public List<PetOwner> findByName(@Parameter(maxLength = 80) final String name) {
         return repository.findByNameContaining(name);
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(semantics = SemanticsOf.SAFE, typeOf = PetOwner.class)
     @ActionLayout(describedAs = "Finds owners using the demonstration name search.", cssClassFa = "magnifying-glass")
     public List<PetOwner> findByNameLike(@Parameter(maxLength = 80) final String name) {
         return repository.findByNameContaining(name);
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(semantics = SemanticsOf.SAFE, typeOf = PetOwner.class)
     @ActionLayout(describedAs = "Lists every registered pet owner.", cssClassFa = "users")
     public List<PetOwner> listAll() {
         return repository.findAll();

@@ -14,6 +14,11 @@ A default resource MUST be resolved inertly before invocation and MUST NOT execu
 - **THEN** the viewer resolves and normalizes the matching default before invocation
 - **AND** its valid columns can shape the original authoritative result selection
 
+#### Scenario: Domain service action advertises a matching result type
+- **WHEN** a domain service collection action advertises an element logical type with a matching default resource
+- **THEN** menu projection and invocation preserve the authoritative element type
+- **AND** the same default presentation and original-invocation column projection apply as for object actions
+
 #### Scenario: No default resource exists
 - **WHEN** no resource is registered for the advertised element logical type
 - **THEN** the action proceeds with generic standalone result presentation

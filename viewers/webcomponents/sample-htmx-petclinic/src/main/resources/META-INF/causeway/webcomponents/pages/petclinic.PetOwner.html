@@ -14,10 +14,20 @@
   limitations under the License.
 -->
 <article class="petclinic-page petclinic-owner-page" data-testid="petclinic-owner-page">
+  <cw-action-results class="petclinic-card" data-testid="petclinic-action-results" hidden></cw-action-results>
   <cw-breadcrumbs data-testid="petclinic-breadcrumbs"></cw-breadcrumbs>
   <div class="petclinic-object-heading">
     <cw-object-header></cw-object-header>
     <div class="petclinic-page-toolbar" aria-label="Owner actions">
+      <cw-action id="allOwners" named="Show all owners"></cw-action>
+      <cw-action id="noOwners" named="Show empty owner result"></cw-action>
+      <cw-action id="relatedOwners" named="Show related owners">
+        <cw-standalone-collection named="Related owners">
+          <cw-collection-column id="name" label="Owner"></cw-collection-column>
+          <cw-collection-column id="knownAs" label="Known as"></cw-collection-column>
+          <cw-collection-column id="notes" label="Notes"></cw-collection-column>
+        </cw-standalone-collection>
+      </cw-action>
       <cw-action id="delete" named="Remove this owner"></cw-action>
     </div>
   </div>

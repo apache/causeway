@@ -365,7 +365,8 @@ export class CausewayMenubarElement extends HTMLElementBase {
         areYouSure: descriptor?.areYouSure,
         promptStyle: descriptor?.promptStyle,
         cssClassFa: descriptor?.iconHint,
-        cssClassFaPosition: descriptor?.iconPosition
+        cssClassFaPosition: descriptor?.iconPosition,
+        resultElementLogicalTypeName: descriptor?.resultElementLogicalTypeName
       })
     }), {cancelable: true}));
   }

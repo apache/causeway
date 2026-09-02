@@ -123,6 +123,7 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
   assert.equal(request.presentation.name, 'Welcome Message');
   assert.equal(request.presentation.description, 'Return a friendly greeting.');
   assert.deepEqual(request.presentation.icon, {classes: ['fa-solid', 'fa-message'], position: 'RIGHT'});
+  assert.equal(request.presentation.resultElementLogicalTypeName, 'sample.Person');
   assert.equal(requestCount, 1);
   assert.equal(Object.hasOwn(request, 'focusTarget'), false);
   assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');

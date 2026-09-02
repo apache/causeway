@@ -59,6 +59,7 @@ test('current action states omit hidden actions, retain disabled reasons, and co
   const primaryActions = plan.bars.primary.menus[0].sections[0].actions;
 
   assert.deepEqual(primaryActions.map(action => action.actionId), ['welcomeMessage', 'disabledAction']);
+  assert.equal(primaryActions[0].resultElementLogicalTypeName, 'sample.Person');
   assert.equal(primaryActions[1].disabled, 'Available to administrators only.');
   assert.equal(plan.bars.secondary.menus[0].sections[0].actions[0].actionId, 'greet');
   assert.equal(plan.bars.secondary.menus[0].sections[0].actions[0].promptStyle, 'DIALOG_SIDEBAR');

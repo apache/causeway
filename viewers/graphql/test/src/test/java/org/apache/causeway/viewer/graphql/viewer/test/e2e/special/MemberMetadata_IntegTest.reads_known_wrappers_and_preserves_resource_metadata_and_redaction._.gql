@@ -7,6 +7,7 @@
           description
           cssClassFa
           cssClassFaPosition
+          resultElementLogicalTypeName
           maxLength
         }
       }
@@ -16,6 +17,7 @@
           description
           cssClassFa
           cssClassFaPosition
+          resultElementLogicalTypeName
         }
         params {
           newName {
@@ -24,6 +26,7 @@
               description
               cssClassFa
               cssClassFaPosition
+              resultElementLogicalTypeName
               maxLength
               pattern
               patternFlags
@@ -31,6 +34,13 @@
               typicalLength
             }
           }
+        }
+      }
+    }
+    university_dept_Departments {
+      findAllDepartments {
+        metadata {
+          resultElementLogicalTypeName
         }
       }
     }

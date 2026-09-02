@@ -27,11 +27,35 @@ test('normalizes bounded distinct action presentation', () => {
     description: 'Creates an order',
     areYouSure: false,
     promptStyle: 'DIALOG_MODAL',
-    icon: {classes: ['fa-solid', 'fa-cart-shopping'], position: 'RIGHT'}
+    icon: {classes: ['fa-solid', 'fa-cart-shopping'], position: 'RIGHT'},
+    resultElementLogicalTypeName: '',
+    resultPresentation: null
   });
   assert.equal(normalizeActionPresentation({name: 'Delete', description: 'delete'}).description, '');
   assert.equal(normalizeActionPresentation({name: 'Delete', areYouSure: true}).areYouSure, true);
   assert.equal(normalizeActionPresentation({name: 'Delete', areYouSure: 'true'}).areYouSure, false);
+});
+
+test('normalizes an immutable zero-column action result override without implicit columns', () => {
+  const presentation = normalizeActionPresentation({
+    resultElementLogicalTypeName: 'petclinic.PetOwner',
+    resultPresentation: {
+      named: 'Matching owners',
+      describedAs: 'Only values selected by this action',
+      columns: []
+    }
+  });
+  assert.equal(presentation.resultElementLogicalTypeName, 'petclinic.PetOwner');
+  assert.deepEqual(presentation.resultPresentation, {
+    named: 'Matching owners',
+    describedAs: 'Only values selected by this action',
+    descriptionAs: 'label',
+    resizableColumns: false,
+    reorderableColumns: false,
+    columns: []
+  });
+  assert.equal(Object.isFrozen(presentation.resultPresentation), true);
+  assert.equal(Object.isFrozen(presentation.resultPresentation.columns), true);
 });
 
 test('normalizes canonical and authored action prompt styles', () => {

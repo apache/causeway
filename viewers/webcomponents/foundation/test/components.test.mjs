@@ -25,6 +25,7 @@ const {document} = installDomShim();
 const {
   COMPONENT_STATE_EVENT,
   CausewayActionElement,
+  CausewayActionResultsElement,
   CausewayBreadcrumbsElement,
   CausewayCollectionColumnElement,
   CausewayCollectionElement,
@@ -33,6 +34,7 @@ const {
   CausewayParameterElement,
   CausewayPropertyElement,
   CausewaySemanticEvent,
+  CausewayStandaloneCollectionElement,
   CausewayValueRendererRegistry,
   configureCausewayFieldWidgets,
   defineCausewayWebComponents
@@ -537,6 +539,91 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
   assert.equal(action.promptStyle, '');
   assert.equal(action.activate(), true);
   assert.equal(request.presentation.promptStyle, 'INLINE');
+});
+
+test('action captures one inert standalone collection result override without moving authored nodes', () => {
+  const action = new CausewayActionElement();
+  action.id = 'findOwners';
+  const declaration = new CausewayStandaloneCollectionElement();
+  declaration.named = 'Matching owners';
+  const name = new CausewayCollectionColumnElement();
+  name.id = 'name';
+  name.label = 'Owner';
+  const notes = new CausewayCollectionColumnElement();
+  notes.id = 'notes';
+  declaration.appendChild(name);
+  declaration.appendChild(notes);
+  action.appendChild(declaration);
+  document.body.appendChild(action);
+  action.connectedCallback();
+  declaration.connectedCallback();
+  action.acceptComponentState(state({
+    descriptor: {id: 'findOwners'},
+    data: {
+      hidden: false,
+      disabled: null,
+      metadata: {resultElementLogicalTypeName: 'petclinic.PetOwner'}
+    }
+  }));
+
+  assert.equal(declaration.parentNode, action);
+  assert.equal(declaration.hidden, true);
+  assert.deepEqual(action.resultPresentation, {
+    named: 'Matching owners',
+    describedAs: '',
+    descriptionAs: 'label',
+    resizableColumns: false,
+    reorderableColumns: false,
+    columns: [
+      {member: 'name', label: 'Owner', testId: null},
+      {member: 'notes', label: 'Notes', testId: null}
+    ]
+  });
+  let request;
+  action.addEventListener(CausewaySemanticEvent.ACTION_REQUEST, event => { request = event.detail; });
+  assert.equal(action.activate(), true);
+  assert.equal(request.presentation.resultElementLogicalTypeName, 'petclinic.PetOwner');
+  assert.deepEqual(request.presentation.resultPresentation, action.resultPresentation);
+  assert.equal(declaration.parentNode, action);
+});
+
+test('duplicate standalone result declarations fail closed and action results remain passive', () => {
+  const action = new CausewayActionElement();
+  action.id = 'findOwners';
+  action.appendChild(new CausewayStandaloneCollectionElement());
+  action.appendChild(new CausewayStandaloneCollectionElement());
+  document.body.appendChild(action);
+  action.connectedCallback();
+  assert.equal(action.resultPresentation, null);
+  assert.equal(action.getAttribute('data-causeway-action-result-presentation-error'), 'duplicate');
+
+  const outlet = new CausewayActionResultsElement();
+  document.body.appendChild(outlet);
+  outlet.connectedCallback();
+  assert.equal(outlet.hidden, true);
+  assert.equal(outlet.getAttribute('role'), 'region');
+  assert.equal(outlet.getAttribute('aria-label'), 'Action results');
+  const output = document.createElement('output');
+  output.textContent = '3 results';
+  outlet.replacePresentation(output);
+  assert.equal(outlet.hidden, false);
+  assert.equal(outlet.children[0], output);
+  outlet.clear();
+  assert.equal(outlet.hidden, true);
+});
+
+test('standalone result declaration fails closed for an action without collection element metadata', () => {
+  const action = new CausewayActionElement();
+  action.id = 'scalarAction';
+  action.appendChild(new CausewayStandaloneCollectionElement());
+  document.body.appendChild(action);
+  action.connectedCallback();
+  action.acceptComponentState(state({
+    descriptor: {id: 'scalarAction'},
+    data: {hidden: false, disabled: null, metadata: {}}
+  }));
+  assert.equal(action.actionPresentation().resultPresentation, null);
+  assert.equal(action.getAttribute('data-causeway-action-result-presentation-error'), 'inapplicable');
 });
 
 test('member-bearing elements use native identifiers without a member compatibility API', () => {

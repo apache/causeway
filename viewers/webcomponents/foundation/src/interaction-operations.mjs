@@ -254,6 +254,29 @@ export function metadataSelectionForType(typeRef, types) {
   return Object.keys(selection).length > 0 ? {_meta: selection} : null;
 }
 
+export function collectionResultSelectionForType(typeRef, columns, types) {
+  const elementTypeRef = listElementType(typeRef);
+  const selection = {...(resultSelectionForType(elementTypeRef ?? typeRef, types) ?? {__typename: true})};
+  if (!elementTypeRef || innermostType(elementTypeRef)?.kind !== 'OBJECT') return selection;
+  const elementType = types.get(namedType(elementTypeRef)) ?? null;
+  const elementFields = fieldsByName(elementType);
+  for (const column of [...(columns ?? [])].slice(0, 32)) {
+    const member = typeof column === 'string' ? column : column?.member;
+    const memberField = member ? elementFields.get(member) ?? null : null;
+    const wrapper = memberField ? types.get(namedType(memberField.type)) ?? null : null;
+    const wrapperFields = fieldsByName(wrapper);
+    const getField = wrapperFields.get('get') ?? null;
+    if (!member || !memberField || !wrapper || !getField) continue;
+    const memberSelection = Object.fromEntries(
+      ['hidden', 'disabled', 'datatype']
+        .filter(fieldName => wrapperFields.has(fieldName))
+        .map(fieldName => [fieldName, true]));
+    memberSelection.get = resultSelectionForType(getField.type, types) ?? true;
+    selection[member] = memberSelection;
+  }
+  return selection;
+}
+
 export function resultSelectionForType(typeRef, types) {
   const kind = innermostType(typeRef)?.kind;
   if (kind === 'SCALAR' || kind === 'ENUM') {
@@ -290,6 +313,12 @@ export function resultSelectionForType(typeRef, types) {
   return scalarFields.length > 0
     ? Object.fromEntries(scalarFields.map(field => [field.name, true]))
     : {__typename: true};
+}
+
+function listElementType(typeRef) {
+  let current = typeRef;
+  while (current?.kind === 'NON_NULL') current = current.ofType;
+  return current?.kind === 'LIST' ? current.ofType ?? null : null;
 }
 
 function integerDefault(value, fallback) {
