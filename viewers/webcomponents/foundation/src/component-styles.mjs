@@ -21,6 +21,9 @@ export const CAUSEWAY_COMPONENT_STYLES = `
 cw-parameter {
   display: none;
 }
+cw-peek:not([data-causeway-peek-live]) {
+  display: none;
+}
 cw-object {
   container-name: cw-object;
   container-type: inline-size;
@@ -736,6 +739,36 @@ cw-collection-grid {
 }
 .causeway-collection-search :is(input, button) {
   block-size: var(--causeway-control-height, 2.35rem);
+}
+.causeway-collection-row {
+  align-items: center;
+  display: flex;
+  gap: var(--causeway-space-2, 0.5rem);
+}
+.causeway-collection-peek-toggle {
+  align-items: center;
+  block-size: var(--causeway-control-height, 2.35rem);
+  display: inline-flex;
+  inline-size: var(--causeway-control-height, 2.35rem);
+  justify-content: center;
+  padding: 0;
+}
+.causeway-collection-peek-heading,
+.causeway-collection-peek-cell {
+  inline-size: 3rem;
+  text-align: center !important;
+}
+.causeway-collection-peek-details {
+  background: var(--causeway-surface-subtle, color-mix(in srgb, CanvasText 4%, Canvas));
+  border-inline-start: 0.2rem solid var(--causeway-border, GrayText);
+  padding: var(--causeway-space-3, 0.75rem);
+}
+.causeway-collection-peek-row > td {
+  padding: 0;
+}
+cw-peek[data-causeway-peek-live] {
+  display: block;
+  min-inline-size: 0;
 }
 .causeway-collection-table th button[data-causeway-collection-sort],
 cw-collection-grid button[data-causeway-collection-sort] {

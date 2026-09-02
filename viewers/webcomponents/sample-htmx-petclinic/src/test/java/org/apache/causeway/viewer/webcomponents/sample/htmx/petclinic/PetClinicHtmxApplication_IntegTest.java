@@ -117,6 +117,10 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("named=\"Owner's full name\"")
                 .contains("<cw-action id=\"addPet\" named=\"Register a pet\" prompt-style=\"DIALOG_SIDEBAR\"")
                 .contains("<cw-action id=\"removePet\"></cw-action>")
+                .contains("<cw-peek>")
+                .contains("<cw-action id=\"clearNotes\" named=\"Clear pet notes\"></cw-action>")
+                .contains("<cw-collection id=\"visits\" named=\"Pet visits\" active paged=\"2\">")
+                .contains("<cw-peek></cw-peek>")
                 .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">")
                 .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
                 .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>")
@@ -132,6 +136,20 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(collectionPresentation.body())
                 .contains("<cw-standalone-collection named=\"Pet owners\"")
                 .contains("<cw-collection-column id=\"name\" label=\"Owner\">");
+        final var visitPreview = get("/htmx/_previews/petclinic.Visit");
+        assertThat(visitPreview.statusCode()).isEqualTo(200);
+        assertThat(visitPreview.headers().firstValue("cache-control").orElse("")).contains("no-store");
+        assertThat(visitPreview.headers().firstValue("x-causeway-preview").orElse(""))
+                .isEqualTo("petclinic.Visit");
+        assertThat(visitPreview.body())
+                .contains("<cw-peek>")
+                .contains("<cw-property id=\"reason\" editable>");
+        assertThat(get("/htmx/_previews/petclinic.Pet").body())
+                .contains("Pet type-default preview");
+        assertThat(get("/htmx/_previews/petclinic.PetOwner").body())
+                .contains("Owner preview")
+                .contains("<cw-collection id=\"pets\"");
+        assertThat(get("/htmx/_previews/petclinic.Missing").statusCode()).isEqualTo(404);
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",
                 "petclinic.Pet",
@@ -242,6 +260,30 @@ class PetClinicHtmxApplication_IntegTest {
     }
 
     @Test
+    void reloadsChangedPreviewAndRejectsInvalidCurrentContent() throws Exception {
+        final var resource = getClass().getClassLoader().getResource(
+                "META-INF/causeway/webcomponents/previews/petclinic.Visit.html");
+        assertThat(resource).isNotNull();
+        assertThat(resource.getProtocol()).isEqualTo("file");
+        final var path = Path.of(resource.toURI());
+        final var original = Files.readAllBytes(path);
+        final var marker = "<cw-peek><p>Reloaded preview</p></cw-peek>";
+        try {
+            Files.writeString(path, marker, StandardCharsets.UTF_8);
+            assertThat(get("/htmx/_previews/petclinic.Visit").body()).isEqualTo(marker);
+            Files.write(path, new byte[0]);
+            final var invalid = get("/htmx/_previews/petclinic.Visit");
+            assertThat(invalid.statusCode()).isEqualTo(500);
+            assertThat(invalid.body()).doesNotContain(marker, path.toString());
+        } finally {
+            Files.write(path, original);
+        }
+        assertThat(get("/htmx/_previews/petclinic.Visit").body())
+                .contains("Visit preview")
+                .doesNotContain("Reloaded preview");
+    }
+
+    @Test
     void packagesHtmlPagesAndRetainsLayoutFallbackResources() throws Exception {
         final var loader = getClass().getClassLoader();
         for (final var name : java.util.List.of(
@@ -272,6 +314,20 @@ class PetClinicHtmxApplication_IntegTest {
                     .contains("<cw-standalone-collection named=\"Pet owners\"")
                     .contains("<cw-collection-column id=\"name\"")
                     .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
+        }
+        for (final var name : java.util.List.of(
+                "petclinic.Pet.html",
+                "petclinic.PetOwner.html",
+                "petclinic.Visit.html")) {
+            final var previewPath = "META-INF/causeway/webcomponents/previews/" + name;
+            final var previewResource = loader.getResource(previewPath);
+            assertThat(previewResource).as(previewPath).isNotNull();
+            try (var input = previewResource.openStream()) {
+                assertThat(new String(input.readAllBytes(), StandardCharsets.UTF_8))
+                        .contains("<cw-peek>")
+                        .contains("<cw-property")
+                        .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
+            }
         }
         final String ownerHtml;
         try (var input = loader.getResource(

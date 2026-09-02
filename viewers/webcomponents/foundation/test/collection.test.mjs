@@ -40,6 +40,7 @@ const {document} = installDomShim();
 const {
   captureDeclarativeCollectionColumns,
   CausewayCollectionColumnElement,
+  CausewaySemanticEvent,
   configureCausewayGridWidgets,
   CausewayCollectionElement,
   CausewayGraphQLClient,
@@ -95,6 +96,20 @@ function staffDeltaResponse() {
     }
   };
 }
+
+test('nested collection column configuration remains scoped to its direct collection', () => {
+  const outer = new CausewayCollectionElement();
+  const nested = new CausewayCollectionElement();
+  const column = new CausewayCollectionColumnElement();
+  outer.appendChild(nested);
+  nested.appendChild(column);
+  column.dispatchEvent(new CustomEvent(CausewaySemanticEvent.COLLECTION_CONFIGURATION, {
+    bubbles: true,
+    detail: {column: {member: 'reason', label: 'Reason'}}
+  }));
+  assert.deepEqual(outer.columns, []);
+  assert.deepEqual(nested.columns, [{member: 'reason', label: 'Reason'}]);
+});
 
 test('captures declarative columns before browser upgrade reactions replace source children', async () => {
   const collection = new CausewayCollectionElement();

@@ -35,6 +35,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -140,6 +143,12 @@ public class Pet implements Comparable<Pet> {
         return notes;
     }
 
+    @Collection
+    @CollectionLayout
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
     void addVisit(final Visit visit) {
         visits.add(visit);
     }
@@ -150,6 +159,11 @@ public class Pet implements Comparable<Pet> {
 
     public void setNotes(final String notes) {
         this.notes = notes;
+    }
+
+    @Action
+    public void clearNotes() {
+        this.notes = null;
     }
 
     @Override

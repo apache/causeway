@@ -12,7 +12,8 @@ export function buildCausewayGridProjection({
   columns = [],
   rowDescription = null,
   errors = [],
-  rendererRegistry = defaultValueRendererRegistry
+  rendererRegistry = defaultValueRendererRegistry,
+  previewForRow = () => null
 } = {}) {
   if (!Array.isArray(rows) || !Array.isArray(columns) || !Array.isArray(errors)) {
     return unsupportedProjection('invalid-input');
@@ -28,7 +29,8 @@ export function buildCausewayGridProjection({
         columns: acceptedColumns,
         rowDescription,
         errors,
-        rendererRegistry
+        rendererRegistry,
+        preview: typeof previewForRow === 'function' ? previewForRow(rows[rowIndex], rowIndex) : null
       }));
     }
   } catch (_error) {
@@ -94,7 +96,7 @@ function memberColumn(column, columnIndex) {
   });
 }
 
-function projectRow({row, rowIndex, columns, rowDescription, errors, rendererRegistry}) {
+function projectRow({row, rowIndex, columns, rowDescription, errors, rendererRegistry, preview}) {
   const metadata = row?._meta;
   if (!metadata?.logicalTypeName || !metadata?.id) throw new TypeError('A Grid row requires Causeway object identity.');
   const identity = Object.freeze({
@@ -166,7 +168,8 @@ function projectRow({row, rowIndex, columns, rowDescription, errors, rendererReg
   return Object.freeze({
     key: `${identity.logicalTypeName}:${identity.id}`,
     identity,
-    cells: Object.freeze(cells)
+    cells: Object.freeze(cells),
+    preview: preview ? Object.freeze({...preview}) : null
   });
 }
 

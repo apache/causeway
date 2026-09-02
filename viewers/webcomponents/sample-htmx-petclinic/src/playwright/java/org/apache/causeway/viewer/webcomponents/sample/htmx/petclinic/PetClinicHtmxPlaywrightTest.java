@@ -70,6 +70,7 @@ class PetClinicHtmxPlaywrightTest {
 
     private final List<String> browserFailures = new ArrayList<>();
     private final List<String> graphQLRequests = new ArrayList<>();
+    private final List<String> previewRequests = new ArrayList<>();
     private final List<String> toolkitRequests = new ArrayList<>();
 
     private Playwright playwright;
@@ -106,6 +107,7 @@ class PetClinicHtmxPlaywrightTest {
     void openPage() {
         browserFailures.clear();
         graphQLRequests.clear();
+        previewRequests.clear();
         toolkitRequests.clear();
         browserContext = browser.newContext(new Browser.NewContextOptions()
                 .setViewportSize(1440, 900)
@@ -114,13 +116,16 @@ class PetClinicHtmxPlaywrightTest {
                 (() => {
                   globalThis.__causewayPlaywrightFailures = [];
                   const record = message => globalThis.__causewayPlaywrightFailures.push(String(message));
-                  globalThis.addEventListener('error', event => record(`page error: ${event.message}`));
+                  globalThis.addEventListener('error', event => {
+                    if (!String(event.message).startsWith('ResizeObserver loop')) record(`page error: ${event.message}`);
+                  });
                   globalThis.addEventListener('unhandledrejection', event => record(`unhandled rejection: ${event.reason}`));
                   const originalFetch = globalThis.fetch.bind(globalThis);
                   globalThis.fetch = async (...args) => {
                     const response = await originalFetch(...args);
                     const url = String(response.url || args[0]);
-                    if (!response.ok && !(response.status === 404 && url.includes('/_collection-presentations/'))) {
+                    if (!response.ok && !(response.status === 404
+                        && (url.includes('/_collection-presentations/') || url.includes('/_previews/')))) {
                       record(`HTTP ${response.status}: ${url}`);
                     }
                     if (/\\/graphql(?:\\?|$)/.test(url)) {
@@ -151,6 +156,9 @@ class PetClinicHtmxPlaywrightTest {
             if (request.url().contains("/graphql") && "POST".equals(request.method())) {
                 graphQLRequests.add(request.postData());
             }
+            if (request.url().contains("/_previews/")) {
+                previewRequests.add(request.url());
+            }
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
                     || request.url().contains("/causeway-webcomponents/vaadin-fields/")
                     || request.url().contains("/causeway-webcomponents/vaadin-actions/")
@@ -161,7 +169,8 @@ class PetClinicHtmxPlaywrightTest {
         });
         page.onRequestFailed(request -> {
             final var failure = request.failure();
-            final var expectedOptionalPresentationMiss = request.url().contains("/_collection-presentations/")
+            final var expectedOptionalPresentationMiss = (request.url().contains("/_collection-presentations/")
+                    || request.url().contains("/_previews/"))
                     && failure != null && failure.contains("ERR_ABORTED");
             if (!(request.url().contains("/graphql") && failure != null && failure.contains("ERR_ABORTED"))
                     && !expectedOptionalPresentationMiss) {
@@ -1276,7 +1285,7 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(((Number) page.evaluate("() => window.scrollY")).doubleValue()).isEqualTo(dialogScroll);
         dialog.locator("[data-causeway-result-dismiss]").focus();
         page.keyboard().press("Shift+Tab");
-        assertThat((Boolean) dialog.evaluate("element => element.contains(document.activeElement)")).isTrue();
+        page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-dialog-results'] dialog\")?.contains(document.activeElement)");
         page.keyboard().press("Escape");
         page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-dialog-results']\")?.hidden === true");
         assertThat(dialogOutlet.locator("dialog").count()).isZero();
@@ -1321,6 +1330,125 @@ class PetClinicHtmxPlaywrightTest {
         sidebarOutlet.locator("[data-causeway-result-dismiss]").click();
         page.waitForFunction("() => document.querySelector(\"[data-testid='petclinic-sidebar-results']\")?.hidden === true");
         page.setViewportSize(1440, 900);
+    }
+
+    @Test
+    @Order(9)
+    void collectionRowPeeksRemainSingleContextualAndRefreshAfterMutations() {
+        openHome();
+        waitForCollectionRows("petOwners", 2);
+        waitForCollectionRows("futureVisits", 3);
+        final var owners = page.locator("cw-collection[id='petOwners']");
+        final var ownerToggles = owners.locator("button[data-causeway-peek-toggle]");
+        ownerToggles.first().waitFor();
+        assertThat(ownerToggles.count()).isEqualTo(2);
+        assertThat(page.locator("cw-collection[id='futureVisits'] button[data-causeway-peek-toggle]").count())
+                .isEqualTo(3);
+        assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.PetOwner")).count())
+                .isEqualTo(1);
+        assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.Visit")).count())
+                .isEqualTo(1);
+
+        ownerToggles.first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey != null");
+        var live = owners.locator("cw-peek[data-causeway-peek-live]");
+        assertThat(live.count()).isEqualTo(1);
+        assertThat(live.getAttribute("role")).isEqualTo("region");
+        assertThat(live.getAttribute("aria-label")).contains("Preview of");
+        assertThat(live.locator("section").first().getAttribute("aria-label")).isEqualTo("Owner preview");
+        live.locator("cw-collection[id='pets']").waitFor();
+        live.locator("cw-collection[id='pets'] .causeway-collection-table, cw-collection[id='pets'] cw-collection-grid")
+                .first().waitFor();
+        final var firstKey = (String) owners.evaluate("element => element.expandedPeekKey");
+
+        ownerToggles.nth(1).click();
+        page.waitForFunction("key => { const collection = document.querySelector(\"cw-collection[id='petOwners']\"); return collection?.expandedPeekKey && collection.expandedPeekKey !== key; }", firstKey);
+        assertThat(owners.locator("cw-peek[data-causeway-peek-live]").count()).isEqualTo(1);
+        live = owners.locator("cw-peek[data-causeway-peek-live]");
+        final var escapeOrigin = live.locator("cw-action[id='updateName'] [data-causeway-action-control]").first();
+        escapeOrigin.waitFor();
+        assertThat((Boolean) escapeOrigin.evaluate("""
+                element => {
+                  const target = element.matches('button,a,[tabindex]')
+                    ? element
+                    : element.shadowRoot?.querySelector('button,a,[tabindex]')
+                      ?? element.querySelector('button,a,[tabindex]');
+                  target?.focus();
+                  return Boolean(target && target === target.getRootNode().activeElement);
+                }
+                """)).isTrue();
+        page.keyboard().press("Escape");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey == null");
+        final var restoredToggle = ownerToggles.nth(1);
+        assertThat((Boolean) restoredToggle.evaluate("element => element === element.getRootNode().activeElement"))
+                .isTrue();
+
+        ownerToggles.first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey != null");
+        owners.locator("[data-causeway-collection-sort='name']").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey == null");
+        owners.locator("button[data-causeway-peek-toggle]").first().click();
+        owners.locator("[data-causeway-grid-next]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey == null");
+        assertThat(page.evaluate("() => globalThis.causewayCollectionRowPreviewResolver({logicalTypeName: 'petclinic.Missing'})"))
+                .isNull();
+        assertThat(previewRequests.stream().anyMatch(url -> url.endsWith("/_previews/petclinic.Missing"))).isTrue();
+
+        final var petPreviewRequestsBefore = previewRequests.stream()
+                .filter(url -> url.endsWith("/_previews/petclinic.Pet"))
+                .count();
+        openObject("petclinic.PetOwner", "s_owner-mary");
+        waitForCollectionRows("pets", 2);
+        final var pets = page.locator("cw-collection[id='pets']");
+        final var petToggles = pets.locator("button[data-causeway-peek-toggle]");
+        petToggles.first().waitFor();
+        pets.evaluate("element => { element.gridResizeObserver?.disconnect(); element.acceptGridResponsiveState(true); }");
+        petToggles.first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey != null");
+        if (nativeToolkit()) {
+            assertThat(pets.locator(".causeway-collection-peek-row cw-peek[data-causeway-peek-live]").count())
+                    .isEqualTo(1);
+        } else {
+            final var grid = pets.locator("cw-collection-grid vaadin-grid");
+            grid.waitFor();
+            assertThat(((Number) grid.evaluate("element => element.detailsOpenedItems.length")).intValue())
+                    .isEqualTo(1);
+            assertThat(pets.locator("cw-collection-grid cw-peek[data-causeway-peek-live]").count())
+                    .isEqualTo(1);
+        }
+        pets.evaluate("element => element.acceptGridResponsiveState(false)");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey == null");
+        petToggles.first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey != null");
+        live = pets.locator("cw-peek[data-causeway-peek-live]");
+        assertThat(live.locator("section").first().getAttribute("aria-label")).isEqualTo("Pet preview");
+        assertThat(live.innerText()).doesNotContain("Pet type-default preview");
+        live.locator("cw-collection[id='visits']").waitFor();
+        assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.Pet")).count())
+                .isEqualTo(petPreviewRequestsBefore);
+        assertThat((Boolean) live.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.left >= 0 && rect.right <= innerWidth; }"))
+                .isTrue();
+
+        final var notes = live.locator("cw-property[id='notes']");
+        notes.locator("[data-causeway-action='edit']").click();
+        final var editorSelector = "cw-collection[id='pets'] cw-peek[data-causeway-peek-live] cw-property[id='notes'] [data-causeway-editor='notes']";
+        fillEditor(resolveEditor(editorSelector), "Updated through row preview");
+        notes.locator("[data-causeway-action='save']").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.innerText.includes('Updated through row preview')");
+        assertFocused("cw-collection[id='pets']");
+
+        pets.locator("button[data-causeway-peek-toggle]").first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey != null");
+        pets.locator("cw-peek[data-causeway-peek-live] cw-action[id='clearNotes'] [data-causeway-action-control], cw-peek[data-causeway-peek-live] cw-action[id='clearNotes'] button")
+                .first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => !document.querySelector(\"cw-collection[id='pets']\")?.innerText.includes('Updated through row preview')");
+        assertFocused("cw-collection[id='pets']");
+
+        clickObjectLink("Basil");
+        waitForRoute("petclinic.Pet", "s_pet-basil");
+        assertThat(page.locator("[data-testid='petclinic-pet-page']").isVisible()).isTrue();
     }
 
     private void assertServiceResultOriginFocused() {

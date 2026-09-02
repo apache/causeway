@@ -40,6 +40,11 @@ import {
   refreshMemberComposition,
   renderMemberPrimary as renderStableMemberPrimary
 } from './member-composition.mjs';
+import {
+  captureDeclarativeCollectionPeeks,
+  collectionPeekDeclaration,
+  normalizePeekPresentation
+} from './peek-element.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {
   CAUSEWAY_COLLECTION_GRID,
@@ -102,6 +107,16 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this._rendererRegistry = defaultValueRendererRegistry;
     this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
     this.authoritativeResult = null;
+    this._peekDeclaration = Object.freeze({count: 0, presentation: null});
+    this._peekPresentations = new Map();
+    this._expandedPeekKey = null;
+    this._expandedPeekRow = null;
+    this._expandedPeekRowSelection = null;
+    this._expandedPeekPresentation = null;
+    this._expandedPeekParentGeneration = null;
+    this._expandedPeekElement = null;
+    this._expandedPeekContext = null;
+    this._peekRefreshScheduled = false;
     this.rangeBroker = null;
     this.rowContexts = [];
     this.loadRevision = 0;
@@ -136,6 +151,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       })
       : null;
     this.gridPolicyListener = () => {
+      this.#collapsePeek({render: false, reason: 'grid-policy'});
       this.gridHostRevision += 1;
       this.#rebuildRangeBroker();
       if (this.isConnected && this.componentState) this.renderComponentState(this.componentState);
@@ -143,27 +159,34 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.columnObserver = typeof globalThis.MutationObserver === 'function'
       ? new MutationObserver(records => {
         let associatedActionsChanged = false;
+        let peekDeclarationsChanged = false;
         for (const record of records) {
           const changedNodes = [...(record.addedNodes ?? []), ...(record.removedNodes ?? [])];
           associatedActionsChanged ||= changedNodes.some(node => node.localName === 'cw-action');
+          peekDeclarationsChanged ||= changedNodes.some(node => node.localName === 'cw-peek');
           for (const node of record.addedNodes ?? []) {
             if (node.localName === 'cw-collection-column' && node.configuration?.member) {
               this.#acceptColumn(node.configuration);
             }
           }
         }
-        if (associatedActionsChanged && this.componentState) {
+        if (peekDeclarationsChanged) this.#capturePeekDeclaration();
+        if ((associatedActionsChanged || peekDeclarationsChanged) && this.componentState) {
           this.renderComponentState(this.componentState);
         }
       })
       : null;
     this.columnObserver?.observe(this, {childList: true});
     this.addEventListener(CausewaySemanticEvent.COLLECTION_CONFIGURATION, event => {
+      if (event.target?.parentNode !== this) return;
       this.#acceptColumn(event.detail?.column);
     });
     this.addEventListener('click', event => {
       if (eventOriginatesFromAssociatedAction(this, event.target)) return;
-      if (event.target?.hasAttribute?.('data-causeway-activate')) {
+      const peekToggle = event.target?.closest?.('[data-causeway-peek-toggle]');
+      if (peekToggle && this.contains(peekToggle)) {
+        this.#toggleNativePeek(peekToggle.getAttribute('data-causeway-peek-toggle'));
+      } else if (event.target?.hasAttribute?.('data-causeway-activate')) {
         this.activate();
       } else if (event.target?.hasAttribute?.('data-causeway-grid-previous')) {
         this.#loadNormalizedPage(this.collectionState.window?.previousOffset);
@@ -202,6 +225,15 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         collectionMember: this.id
       });
     });
+    this.peekMutationListener = event => {
+      const originatesInPeek = this._expandedPeekElement?.contains?.(event.target) === true
+        || (this._expandedPeekContext && event.detail?.context === this._expandedPeekContext);
+      if (originatesInPeek) {
+        this.#schedulePeekRefresh(event.type === CausewaySemanticEvent.ACTION_RESULT ? 'action' : 'property');
+      }
+    };
+    this.addEventListener(CausewaySemanticEvent.ACTION_RESULT, this.peekMutationListener);
+    this.addEventListener(CausewaySemanticEvent.PROPERTY_UPDATED, this.peekMutationListener);
     this.addEventListener('causeway-grid-ready', event => {
       if (this.criteriaFocusIntent) {
         const restored = event.target?.restoreSortFocus?.(this.criteriaFocusIntent);
@@ -325,6 +357,14 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
   }
 
+  get peekDeclaration() {
+    return this._peekDeclaration;
+  }
+
+  get expandedPeekKey() {
+    return this._expandedPeekKey;
+  }
+
   get gridQualification() {
     return this._gridQualification;
   }
@@ -336,6 +376,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   acceptGridResponsiveState(wide) {
     const next = wide === true;
     if (next === this._gridWide) return false;
+    this.#collapsePeek({render: false, reason: 'responsive'});
     this._gridWide = next;
     this.gridResponsiveRevision += 1;
     this.gridHostRevision += 1;
@@ -358,8 +399,14 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
+    captureDeclarativeCollectionPeeks(this);
+    this.#capturePeekDeclaration();
+    this.tabIndex = -1;
+    this.setAttribute('aria-labelledby', this.labelId);
     connectMemberComposition(this, {primaryPlacement: 'last'});
     globalThis.document?.addEventListener?.(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, this.gridPolicyListener);
+    globalThis.document?.addEventListener?.(CausewaySemanticEvent.ACTION_RESULT, this.peekMutationListener);
+    globalThis.document?.addEventListener?.(CausewaySemanticEvent.PROPERTY_UPDATED, this.peekMutationListener);
     this.columnObserver?.observe(this, {childList: true});
     globalThis.setTimeout(() => {
       if (!this.isConnected) {
@@ -376,6 +423,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   disconnectedCallback() {
     disconnectMemberComposition(this);
     globalThis.document?.removeEventListener?.(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, this.gridPolicyListener);
+    globalThis.document?.removeEventListener?.(CausewaySemanticEvent.ACTION_RESULT, this.peekMutationListener);
+    globalThis.document?.removeEventListener?.(CausewaySemanticEvent.PROPERTY_UPDATED, this.peekMutationListener);
     this.columnObserver?.disconnect();
     this.gridResizeObserver?.disconnect();
     this.gridResizeRevision += 1;
@@ -386,6 +435,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     globalThis.clearTimeout(this.searchTimer);
     this.searchTimer = null;
     this.#disconnectRangeBroker();
+    this.#collapsePeek({render: false, reason: 'disconnected'});
     for (const context of this.rowContexts) {
       context.disconnect?.();
     }
@@ -466,6 +516,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     if (!context || this.componentState?.status !== 'ready') {
       return null;
     }
+    this.#collapsePeek({render: false, reason: 'reload'});
     const revision = ++this.loadRevision;
     this.loadAbortController?.abort();
     this.#disconnectRangeBroker();
@@ -491,10 +542,18 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       if (revision !== this.loadRevision || !this.isConnected) {
         return null;
       }
+      const rows = collectionRows(result);
+      const peekPresentations = await this.#resolvePeekPresentations(rows, {
+        revision,
+        signal: abortController.signal
+      });
+      if (revision !== this.loadRevision || !this.isConnected) {
+        return null;
+      }
+      this._peekPresentations = peekPresentations;
       for (const rowContext of this.rowContexts) {
         rowContext.disconnect?.();
       }
-      const rows = collectionRows(result);
       this.rowContexts = rows
         .filter(row => row?._meta?.logicalTypeName && row?._meta?.id)
         .map(row => context.createHydratedRowContext(row, result.rowSelection));
@@ -543,6 +602,11 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   renderComponentState(state) {
     if (!state) {
       return;
+    }
+    if (this._expandedPeekKey
+        && this._expandedPeekParentGeneration != null
+        && state.generation !== this._expandedPeekParentGeneration) {
+      this.#collapsePeek({render: false, reason: 'parent-generation'});
     }
     this.#qualifyGrid(state);
     const label = firstNonBlank(this.named, this.label, state.data?.metadata?.friendlyName, humanize(this.id));
@@ -620,6 +684,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       : this.#renderDefaultRows(rows);
     const pager = this.paged ? this.#renderBoundedPager(this.collectionState.window) : '';
     renderMemberPrimary(this, shell(`${criteriaControls}${content}${pager}${errors}`));
+    this.#mountNativePeek();
     this.#restoreNativeFocus();
     this.#restoreCriteriaFocus();
   }
@@ -646,7 +711,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       sortableMembers: this.sortable ? this.collectionState.window?.sortableMembers ?? [] : [],
       sortCriterion: this.sortCriterion,
       sortCallback: member => this.#changeSort(member),
-      rangeProvider: request => this.#projectRange(request, revision)
+      rangeProvider: request => this.#projectRange(request, revision),
+      rowDetails: this._peekDeclaration.count === 1 ? {
+        expandedKey: () => this._expandedPeekKey,
+        toggle: item => this.#toggleGridPeek(item),
+        render: (root, item, controller) => this.#renderGridPeek(root, item, controller)
+      } : null
     };
     this.#restoreCriteriaFocus();
   }
@@ -666,12 +736,22 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       error.name = 'AbortError';
       throw error;
     }
+    const peekPresentations = await this.#resolvePeekPresentations(result.rows, {
+      revision: this.loadRevision,
+      signal: null
+    });
+    if (revision !== this.gridHostRevision || !this.isConnected) {
+      const error = new Error('Collection Grid preview range was superseded.');
+      error.name = 'AbortError';
+      throw error;
+    }
     const projection = buildCausewayGridProjection({
       rows: result.rows,
       columns: this._columns,
       rowDescription: result.rowDescription,
       errors: result.errors,
-      rendererRegistry: this._rendererRegistry
+      rendererRegistry: this._rendererRegistry,
+      previewForRow: row => this.#previewPayload(row, result.rowSelection, peekPresentations)
     });
     if (!projection.supported) {
       failCausewayGridWidget({phase: 'renderer', classification: 'GRID_RANGE_PROJECTION_UNAVAILABLE'});
@@ -766,22 +846,249 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   #renderDefaultRows(rows) {
-    return `<ul class="causeway-collection-rows">${rows.map(row => {
+    return `<ul class="causeway-collection-rows">${rows.map((row, rowIndex) => {
       const metadata = row?._meta ?? {};
-      return `<li><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"${metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : ''}></cw-object-link></li>`;
+      const key = gridRowKey(row);
+      const toggle = this.#renderPeekToggle(row, rowIndex);
+      const details = this._expandedPeekKey === key
+        ? `<div id="${this.#peekDetailsId(rowIndex)}" class="causeway-collection-peek-details" data-causeway-peek-host="${escapeHtml(key)}"></div>`
+        : '';
+      return `<li data-causeway-grid-row-key="${escapeHtml(key)}"><div class="causeway-collection-row"><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"${metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : ''}></cw-object-link>${toggle}</div>${details}</li>`;
     }).join('')}</ul>`;
   }
 
   #renderTable(rows) {
-    const header = `<th scope="col">Item</th>${this._columns.map(column => this.#renderColumnHeader(column)).join('')}`;
+    const hasPeek = rows.some(row => this.#peekPresentationFor(row));
+    const peekHeader = hasPeek ? '<th scope="col" class="causeway-collection-peek-heading" aria-label="Preview"></th>' : '';
+    const header = `${peekHeader}<th scope="col">Item</th>${this._columns.map(column => this.#renderColumnHeader(column)).join('')}`;
     const body = rows.map((row, rowIndex) => {
       const metadata = row?._meta ?? {};
       const key = gridRowKey(row);
+      const peekCell = hasPeek ? `<td class="causeway-collection-peek-cell">${this.#renderPeekToggle(row, rowIndex)}</td>` : '';
       const item = `<td data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_meta" data-causeway-grid-role="object-link"><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"${metadata.icon ? ` icon="${escapeHtml(metadata.icon)}"` : ''}></cw-object-link></td>`;
       const cells = this._columns.map(column => this.#renderCell(row, rowIndex, column)).join('');
-      return `<tr data-row-index="${rowIndex}" data-causeway-grid-row-key="${escapeHtml(key)}">${item}${cells}</tr>`;
+      const details = this._expandedPeekKey === key
+        ? `<tr class="causeway-collection-peek-row"><td colspan="${this._columns.length + 1 + (hasPeek ? 1 : 0)}"><div id="${this.#peekDetailsId(rowIndex)}" class="causeway-collection-peek-details" data-causeway-peek-host="${escapeHtml(key)}"></div></td></tr>`
+        : '';
+      return `<tr data-row-index="${rowIndex}" data-causeway-grid-row-key="${escapeHtml(key)}">${peekCell}${item}${cells}</tr>${details}`;
     }).join('');
     return `<table class="causeway-collection-table"><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+  }
+
+  #capturePeekDeclaration() {
+    captureDeclarativeCollectionPeeks(this);
+    this._peekDeclaration = collectionPeekDeclaration(this);
+    if (this._peekDeclaration.count > 1) {
+      this.dataset.causewayPeekError = 'duplicate';
+      this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.COLLECTION_PEEK_DIAGNOSTIC, Object.freeze({
+        classification: 'COLLECTION_PEEK_DUPLICATE',
+        collection: this.id
+      })));
+    } else if (this._peekDeclaration.presentation?.invalid) {
+      this.dataset.causewayPeekError = 'invalid';
+      this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.COLLECTION_PEEK_DIAGNOSTIC, Object.freeze({
+        classification: 'COLLECTION_PEEK_TEMPLATE_INVALID',
+        collection: this.id
+      })));
+    } else {
+      delete this.dataset.causewayPeekError;
+    }
+    if (this._peekDeclaration.count !== 1) this.#collapsePeek({render: false, reason: 'declaration'});
+  }
+
+  async #resolvePeekPresentations(rows, {revision, signal} = {}) {
+    const resolved = new Map();
+    const declaration = this._peekDeclaration;
+    if (this.dataset.causewayPeekError === 'resolution') delete this.dataset.causewayPeekError;
+    if (declaration.count !== 1 || declaration.presentation?.inline) return resolved;
+    const resolver = globalThis.causewayCollectionRowPreviewResolver;
+    if (typeof resolver !== 'function') return resolved;
+    const types = [...new Set(rows
+      .map(row => String(row?._meta?.logicalTypeName ?? '').trim())
+      .filter(Boolean))];
+    await Promise.all(types.map(async logicalTypeName => {
+      try {
+        const presentation = normalizePeekPresentation(await resolver(Object.freeze({
+          logicalTypeName,
+          collection: this,
+          signal
+        })));
+        if (revision === this.loadRevision && this.isConnected) resolved.set(logicalTypeName, presentation);
+      } catch (error) {
+        if (signal?.aborted) return;
+        if (revision === this.loadRevision && this.isConnected) {
+          resolved.set(logicalTypeName, null);
+          this.dataset.causewayPeekError = 'resolution';
+          this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.COLLECTION_PEEK_DIAGNOSTIC, Object.freeze({
+            classification: 'COLLECTION_PEEK_RESOLUTION_UNAVAILABLE',
+            logicalTypeName,
+            message: String(error?.message ?? 'Preview resolution failed.').slice(0, 200)
+          })));
+        }
+      }
+    }));
+    return resolved;
+  }
+
+  #peekPresentationFor(row, presentations = this._peekPresentations) {
+    if (this._peekDeclaration.count !== 1) return null;
+    const inline = this._peekDeclaration.presentation;
+    if (inline?.inline) return normalizePeekPresentation(inline);
+    return presentations.get(String(row?._meta?.logicalTypeName ?? '')) ?? null;
+  }
+
+  #previewPayload(row, rowSelection = this.collectionState.rowSelection, presentations = this._peekPresentations) {
+    const presentation = this.#peekPresentationFor(row, presentations);
+    const metadata = row?._meta;
+    if (!presentation || !metadata?.logicalTypeName || !metadata?.id) return null;
+    return Object.freeze({row, rowSelection, presentation});
+  }
+
+  #renderPeekToggle(row, rowIndex) {
+    const presentation = this.#peekPresentationFor(row);
+    if (!presentation) return '';
+    const key = gridRowKey(row);
+    const title = String(row?._meta?.title ?? row?._meta?.id ?? 'item');
+    const expanded = this._expandedPeekKey === key;
+    return `<button type="button" class="causeway-collection-peek-toggle" data-causeway-peek-toggle="${escapeHtml(key)}" data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_peek" data-causeway-grid-role="peek" aria-expanded="${expanded}" aria-controls="${this.#peekDetailsId(rowIndex)}" aria-label="${expanded ? 'Collapse' : 'Preview'} ${escapeHtml(title)}"><span aria-hidden="true">${expanded ? '▾' : '▸'}</span></button>`;
+  }
+
+  #peekDetailsId(rowIndex) {
+    return `${this.labelId}-peek-${rowIndex}`;
+  }
+
+  #toggleNativePeek(key) {
+    const rows = collectionRows(this.collectionState);
+    const rowIndex = rows.findIndex(row => gridRowKey(row) === key);
+    if (rowIndex < 0) return false;
+    if (this._expandedPeekKey === key) {
+      this.#collapsePeek({render: true, restoreFocus: true, reason: 'toggle'});
+      return false;
+    }
+    const payload = this.#previewPayload(rows[rowIndex]);
+    if (!payload) return false;
+    this.#acceptExpandedPeek(key, payload);
+    this.renderComponentState(this.componentState);
+    queueMicrotask(() => this.#findPeekToggle(key)?.focus?.());
+    return true;
+  }
+
+  #toggleGridPeek(item) {
+    const key = String(item?.key ?? '');
+    if (!key || !item?.preview) return false;
+    if (this._expandedPeekKey === key) {
+      this.#collapsePeek({render: false, reason: 'toggle'});
+      return false;
+    }
+    this.#acceptExpandedPeek(key, item.preview);
+    return true;
+  }
+
+  #acceptExpandedPeek(key, payload) {
+    this.#releasePeekInstance();
+    this._expandedPeekKey = key;
+    this._expandedPeekRow = payload.row;
+    this._expandedPeekPresentation = payload.presentation;
+    this._expandedPeekRowSelection = payload.rowSelection;
+    this._expandedPeekParentGeneration = this.componentState?.generation ?? null;
+    this.#publishPeekState('expanded');
+  }
+
+  #mountNativePeek() {
+    if (!this._expandedPeekKey || !this.querySelectorAll) return;
+    const host = [...this.querySelectorAll('[data-causeway-peek-host]')]
+      .find(candidate => candidate.getAttribute('data-causeway-peek-host') === this._expandedPeekKey);
+    if (!host) return;
+    this.#mountPeek(host, {
+      key: this._expandedPeekKey,
+      row: this._expandedPeekRow,
+      rowSelection: this._expandedPeekRowSelection,
+      presentation: this._expandedPeekPresentation
+    }, () => this.#collapsePeek({render: true, restoreFocus: true, reason: 'escape'}));
+  }
+
+  #renderGridPeek(root, item, controller) {
+    if (!root || item?.key !== this._expandedPeekKey || !item?.preview) return false;
+    this.#mountPeek(root, {key: item.key, ...item.preview}, () => {
+      this.#collapsePeek({render: false, reason: 'escape'});
+      controller?.close?.({restoreFocus: true});
+    });
+    return true;
+  }
+
+  #mountPeek(host, payload, collapse) {
+    this.#releasePeekInstance();
+    const context = this._resolvedContext?.createHydratedRowContext?.(payload.row, payload.rowSelection);
+    if (!context) return false;
+    const peek = globalThis.document.createElement('cw-peek');
+    peek.innerHTML = payload.presentation.html;
+    peek.configureLive?.({
+      context,
+      label: `Preview of ${String(payload.row?._meta?.title ?? payload.row?._meta?.id ?? 'item')}`,
+      collapse
+    });
+    host.replaceChildren(peek);
+    this._expandedPeekContext = context;
+    this._expandedPeekElement = peek;
+    return true;
+  }
+
+  #collapsePeek({render = false, restoreFocus = false, reason = 'lifecycle'} = {}) {
+    const key = this._expandedPeekKey;
+    const hadPeek = Boolean(key || this._expandedPeekElement);
+    this.#releasePeekInstance();
+    this._expandedPeekKey = null;
+    this._expandedPeekRow = null;
+    this._expandedPeekRowSelection = null;
+    this._expandedPeekPresentation = null;
+    this._expandedPeekParentGeneration = null;
+    if (!hadPeek) return false;
+    this.#publishPeekState('collapsed', reason, key);
+    if (render && this.isConnected && this.componentState) this.renderComponentState(this.componentState);
+    if (restoreFocus && key) queueMicrotask(() => this.#findPeekToggle(key)?.focus?.());
+    return true;
+  }
+
+  #releasePeekInstance() {
+    const peek = this._expandedPeekElement;
+    const context = this._expandedPeekContext;
+    this._expandedPeekElement = null;
+    this._expandedPeekContext = null;
+    if (peek?.isConnected) peek.remove?.();
+    else if (!peek) context?.disconnect?.();
+  }
+
+  #findPeekToggle(key) {
+    return [...(this.querySelectorAll?.('[data-causeway-peek-toggle]') ?? [])]
+      .find(candidate => candidate.getAttribute('data-causeway-peek-toggle') === key) ?? null;
+  }
+
+  #publishPeekState(status, reason = null, rowKey = this._expandedPeekKey) {
+    this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.COLLECTION_PEEK_STATE, Object.freeze({
+      status,
+      rowKey,
+      collection: this.id,
+      reason
+    })));
+  }
+
+  #schedulePeekRefresh(_kind) {
+    if (this._peekRefreshScheduled) return;
+    this._peekRefreshScheduled = true;
+    queueMicrotask(async () => {
+      this._peekRefreshScheduled = false;
+      if (!this.isConnected || !this.active || this.componentState?.status !== 'ready') return;
+      this.#collapsePeek({render: false, reason: 'mutation'});
+      const window = this.collectionState.window;
+      await this.load({
+        force: true,
+        offset: window?.offset ?? 0,
+        size: this.paged ?? window?.requestedSize ?? null
+      });
+      const active = globalThis.document?.activeElement;
+      const resultSurfaceOwnsFocus = active?.closest?.('[data-causeway-action-results-surface], [data-testid="action-prompt"]');
+      if (!resultSurfaceOwnsFocus) this.focus?.();
+    });
   }
 
   #renderColumnHeader(column) {
@@ -896,7 +1203,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       columns: this._columns,
       rowDescription: this.collectionState.rowDescription,
       errors: this.collectionState.errors,
-      rendererRegistry: this._rendererRegistry
+      rendererRegistry: this._rendererRegistry,
+      previewForRow: row => this.#previewPayload(row)
     });
     const columnsSupported = this._columns.every(column => {
       if (!column?.member || typeof column.member !== 'string') return false;
