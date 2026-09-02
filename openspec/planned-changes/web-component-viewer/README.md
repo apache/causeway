@@ -13,7 +13,7 @@ The archived `make-vaadin-default-for-webcomponent-viewer` change completes the 
 The archived `extend-vaadin-to-domain-member-presentation`, `use-vaadin-grid-for-collection-presentation`, and `use-vaadin-menu-bar-for-application-menus` changes extend that internal toolkit to read-only fields and buttons, collections, and horizontal application navigation in independently reviewable tranches.
 Their order, shared boundaries, and promotion gates are recorded in `vaadin-presentation-roadmap.md`.
 The proposal-only `analyze-configurable-vertical-application-menus` draft evaluates left-side vertical application navigation without changing the accepted horizontal Menu Bar implementation.
-The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued for separate review.
+The older Vue and Svelte drafts are aligned with the declarative context-boundary contract, and a parallel Angular draft joins the metadata, diagnostics, performance-analysis, catalogue, and designer drafts queued for separate review.
 Proposal-only security drafts separate local SecMan authentication for the HTMX viewer, subsequent OAuth/OIDC support, eventual promotion of the proven bridge into shared Causeway security, future CSRF-safe Wicket and HTMX coexistence, and stable SecMan delegated-user identity mapping.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
@@ -45,26 +45,27 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 9 | `add-composite-object-web-component` *(archived)* | Complete | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<cw-object>` |
 | 10 | `add-menubar-web-components` *(archived)* | Complete | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
 | 11 | `add-generic-htmx-web-component-viewer` *(archived)* | Complete | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
-| 12 | `add-generic-vue-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-vue-web-component-viewer` |
-| 13 | `add-generic-svelte-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-svelte-web-component-viewer` |
-| 14 | `add-rich-graphql-member-metadata` *(archived)* | Complete | Completed analysis and proven standalone-component requirements | NEW narrow `rich-graphql-member-metadata` |
-| 15 | `add-graphql-web-component-diagnostics` *(pending refinement)* | P2 | Archived foundation and component interactions; accepted redaction boundaries | NEW `graphql-web-component-diagnostics` |
-| 16 | `analyze-rich-graphql-collection-query-pushdown` *(analysis only)* | P2 performance | Archived collection windowing | NEW `rich-graphql-collection-query-pushdown-analysis` |
-| 17 | `analyze-rich-graphql-parallel-execution` *(analysis only)* | P2 performance | Correct interactions and representative rich operations | NEW `rich-graphql-parallel-execution-analysis` |
-| 18 | `publish-web-component-catalogue-and-workbench` | P2 | Completed public component vocabulary | NEW `web-component-catalogue-and-workbench` |
-| 19 | `analyze-semantic-page-designer` *(analysis only)* | Future gate | Generic HTMX, Vue, and Svelte viewers plus component catalogue | NEW `semantic-page-designer-analysis` |
+| 12 | `add-generic-vue-web-component-viewer` | P1 | Same semantic prerequisites, declarative context ownership, and shared canonical routing contract | NEW `generic-vue-web-component-viewer` |
+| 13 | `add-generic-svelte-web-component-viewer` | P1 | Same semantic prerequisites, declarative context ownership, and shared canonical routing contract | NEW `generic-svelte-web-component-viewer` |
+| 14 | `add-generic-angular-web-component-viewer` | P1 | Same semantic prerequisites, declarative context ownership, and shared canonical routing contract | NEW `generic-angular-web-component-viewer` |
+| 15 | `add-rich-graphql-member-metadata` *(archived)* | Complete | Completed analysis and proven standalone-component requirements | NEW narrow `rich-graphql-member-metadata` |
+| 16 | `add-graphql-web-component-diagnostics` *(pending refinement)* | P2 | Archived foundation and component interactions; accepted redaction boundaries | NEW `graphql-web-component-diagnostics` |
+| 17 | `analyze-rich-graphql-collection-query-pushdown` *(analysis only)* | P2 performance | Archived collection windowing | NEW `rich-graphql-collection-query-pushdown-analysis` |
+| 18 | `analyze-rich-graphql-parallel-execution` *(analysis only)* | P2 performance | Correct interactions and representative rich operations | NEW `rich-graphql-parallel-execution-analysis` |
+| 19 | `publish-web-component-catalogue-and-workbench` | P2 | Completed public component vocabulary | NEW `web-component-catalogue-and-workbench` |
+| 20 | `analyze-semantic-page-designer` *(analysis only)* | Future gate | Generic HTMX, Vue, Svelte, and Angular viewers plus component catalogue | NEW `semantic-page-designer-analysis` |
 
 The two P0 changes correct successful-looking or unsafe established contracts and precede additive capabilities.
 The P1 GraphQL changes are independent bounded capabilities after their stated prerequisites, but the single-active-change rule requires serial promotion.
-The three generic viewers are higher priority than the catalogue workbench and page-designer analysis.
-HTMX is the first reference router implementation, while Vue and Svelte remain sibling production viewers rather than samples or wrappers.
+The four generic viewers are higher priority than the catalogue workbench and page-designer analysis.
+HTMX is the first reference router implementation, while Vue, Svelte, and Angular remain sibling production viewers rather than samples or wrappers.
 The narrow member-metadata, diagnostics, collection-query-pushdown analysis, and parallel-execution analysis are useful but do not block the generic viewer routers unless implementation evidence reveals a new hard dependency.
 The two performance analyses must preserve the existing semantic contracts and produce separate implementation proposals rather than changing production behavior directly.
 No production semantic page-designer proposal will be drafted until its analysis selects an authoring model and artifact contract.
 
 ## Shared generic-viewer routing contract
 
-The three generic viewers preserve one architectural boundary:
+The four generic viewers preserve one architectural boundary:
 
 ```text
 canonical bookmark or application entry
@@ -84,12 +85,15 @@ framework custom page   generic route page
 
 - Routing and exact-logical-type page selection belong to the host viewer.
 - `<cw-object>` remains a pure effective-grid or fallback object renderer and never discovers custom pages.
-- Custom and generic pages render beneath one route-level object context.
-- `<cw-menubars>` remains in a stable shell outside changing object pages.
+- Application-authored shell templates declare one stable `<cw-graphql-client>` rather than receiving a provider manufactured by the host adapter.
+- Application-authored custom and generic page templates declare their route-level `<cw-object-context>` rather than receiving a context manufactured by the host adapter.
+- Routers bind endpoint and canonical route identity to those declared elements and own deterministic replacement or reuse.
+- `<cw-menubars>` remains beneath the shared client in a stable shell outside changing object pages.
 - Semantic object navigation, home entries, and interaction results flow into replaceable viewer policy.
 - HTMX uses server routes and HTML fragments.
 - Vue uses Vue Router and registered Vue components or async components.
 - Svelte uses SvelteKit routes and registered Svelte components or lazy loaders.
+- Angular uses Angular Router and registered standalone components or lazy `loadComponent` routes.
 - Canonical bookmark meaning and custom-before-generic precedence remain compatible across viewers.
 - Framework-specific lifecycle, history, hydration, and rendering remain internal to each viewer.
 
@@ -114,7 +118,7 @@ The generic viewers do not require the later designer, catalogue workbench, or a
 The catalogue and designer work are intentionally later:
 
 ```text
-generic HTMX, Vue, and Svelte viewers
+generic HTMX, Vue, Svelte, and Angular viewers
                  |
                  v
  component catalogue and workbench
@@ -136,7 +140,8 @@ It does not replace Causeway grid XML or make `<cw-object>` aware of custom page
 - The rich GraphQL schema and standard GraphQL introspection are the application protocol.
 - Generated rich-schema naming rules are accepted public client grammar rather than accidental implementation details.
 - Components expose semantic Causeway APIs and do not expose GraphQL document construction to page composers.
-- HTMX, Vue, and Svelte remain host viewer technologies; the component library remains framework-neutral.
+- HTMX, Vue, Svelte, and Angular remain host viewer technologies; the component library remains framework-neutral.
+- Each host binds values into application-authored `<cw-graphql-client>` and `<cw-object-context>` elements and does not manufacture those semantic boundaries.
 - The programme does not add duplicate member-list, datatype-catalogue, grid, or menu metadata APIs.
 - Effective grid and menu resources remain canonical structural sources.
 - Rich-schema extensions are proposed only when executable evidence and a concrete semantic client requirement demonstrate missing behavior.

@@ -11,6 +11,7 @@ The architectural ownership boundary is recorded in `coverage-matrix.yaml` entri
 - Add an opt-in generic Svelte viewer package for SvelteKit applications.
 - Implement canonical bookmark routing through a thin SvelteKit route that preserves cross-viewer route meaning.
 - Resolve an exact-logical-type Svelte page registration before falling back to a generic route page containing `<cw-object>`.
+- Require application-authored Svelte shell and page templates to declare `<cw-graphql-client>` and `<cw-object-context>`, with SvelteKit binding endpoint and canonical identity rather than manufacturing those elements.
 - Keep `<cw-object>` unaware of SvelteKit routes, component loaders, and custom-page registration.
 - Compose `<cw-menubars>` in a stable SvelteKit layout and translate semantic custom-element events into navigation under replaceable policy.
 - Support Svelte components and lazy component loaders as custom logical-type pages.
@@ -31,6 +32,6 @@ None.
 
 - Adds an optional Svelte package, SvelteKit route and layout integration, route pages, tests, and documentation.
 - Depends on accepted P0 and P1 rich GraphQL coverage plus completed application-entry, composite-object, and menu-bar capabilities.
-- Uses native custom elements and semantic events without reimplementing GraphQL schema interpretation in Svelte stores or load functions.
+- Uses application-authored native custom elements and semantic events without reimplementing GraphQL schema interpretation or semantic context hierarchy in Svelte stores, load functions, or adapters.
 - Preserves canonical route and fallback semantics shared with the generic HTMX and Vue viewers.
 - Does not require non-Svelte applications to install Svelte or SvelteKit.

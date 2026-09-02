@@ -27,14 +27,15 @@ The viewer SHALL resolve canonical public logical-type and identifier routes thr
 
 ### Requirement: Vue custom-page precedence
 The Vue route resolver SHALL choose an exact-logical-type registered Vue page before the generic object page.
+Application-authored custom and generic Vue templates SHALL declare their own route-level `<cw-object-context>`, and the router SHALL bind canonical identity without manufacturing that element.
 
 #### Scenario: Vue page is registered
 - **WHEN** a route resolves a logical type with a registered Vue component, async component, or accepted factory
-- **THEN** that page is rendered beneath the route-level object context
+- **THEN** that page's declared object context is bound to canonical route identity
 
 #### Scenario: No Vue page is registered
 - **WHEN** no exact registration exists
-- **THEN** the route renders `<cw-object>` beneath the same kind of route-level object context
+- **THEN** the route renders a declarative fallback containing one object context and `<cw-object>`
 
 #### Scenario: Generic component connects
 - **WHEN** `<cw-object>` renders the route object
@@ -42,12 +43,18 @@ The Vue route resolver SHALL choose an exact-logical-type registered Vue page be
 - **AND** does not inspect Vue Router or custom-page registrations
 
 ### Requirement: Stable Vue application shell
-The Vue viewer SHALL keep `<cw-menubars>` and global viewer state outside the changing route-page region.
+The application-authored Vue shell SHALL declare one stable `<cw-graphql-client>` containing `<cw-menubars>` and global viewer state outside the changing route-page region.
+The viewer SHALL bind configured client properties without manufacturing the provider element.
 
 #### Scenario: Vue route changes
 - **WHEN** `RouterView` or the equivalent page region changes object routes
-- **THEN** menu coordination remains stable
-- **AND** obsolete object contexts disconnect deterministically
+- **THEN** the declared client and menu coordination remain stable
+- **AND** obsolete declared object contexts disconnect deterministically
+
+#### Scenario: Route page has an invalid context boundary
+- **WHEN** a custom or generic Vue page omits or duplicates its route-level object context
+- **THEN** the viewer presents a bounded diagnostic
+- **AND** does not silently create or select a context
 
 ### Requirement: Native custom-element integration
 The Vue viewer SHALL preserve Causeway custom-element attributes, properties, slots, native custom events, upgrade behavior, and lifecycle without duplicating their domain state in Vue.

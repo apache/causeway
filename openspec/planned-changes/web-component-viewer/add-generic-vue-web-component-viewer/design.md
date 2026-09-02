@@ -2,7 +2,8 @@
 
 Vue provides component composition, dynamic components, application plugins, and a mature router.
 Causeway's custom elements already provide the domain-aware controls, object contexts, grid composition, menu composition, validation, and interaction results.
-A generic Vue viewer should therefore be a router and shell integration, not a Vue rewrite of those components.
+Applications declare those elements directly in Vue templates.
+A generic Vue viewer should therefore be a router, route-value binder, and lifecycle integration, not a Vue rewrite of those components.
 
 The final customization architecture is route-first.
 The Vue router resolves a bookmark, chooses an exact logical-type application page if registered, and otherwise renders a generic route page containing `<cw-object>`.
@@ -40,20 +41,23 @@ The generic object component remains unaware of custom pages.
 ### Register framework-native custom pages
 
 Applications register a Vue component, async component, or documented page factory against an exact Causeway logical type.
-The selected page receives route identity and is rendered beneath one `<cw-object-context>` owned by the generic route page boundary.
+The selected application page declares one `<cw-object-context>` and binds the canonical logical type and identifier supplied by the generic route-page boundary.
+The viewer validates or diagnoses the declared boundary but does not manufacture it imperatively.
 
 Custom Vue pages can compose Causeway custom elements, ordinary Vue components, HTML, and application custom elements.
-They consume domain state through the shared object context rather than constructing GraphQL documents in Vue stores.
+They consume domain state through their declared object context rather than constructing GraphQL documents in Vue stores.
 
 ### Render a generic page when no registration exists
 
-The fallback route page creates the GraphQL client association and route-level object context and places `<cw-object>` beneath it.
+The fallback route-page template declares its GraphQL client association, route-level object context, and `<cw-object>` fallback.
+The router binds endpoint and canonical identity values into those declared elements.
 A stable route key based on canonical bookmark identity ensures old contexts disconnect when navigation changes.
 Superseded component responses remain governed by object-context generation handling.
 
 ### Keep the application shell stable
 
-The root viewer shell renders `<cw-menubars>` outside `RouterView` or its equivalent route-page boundary.
+The application-authored root viewer shell declares one stable `<cw-graphql-client>` containing `<cw-menubars>` outside `RouterView` or its equivalent route-page boundary.
+The Vue adapter binds configured client properties but does not create the provider element.
 Menu disclosure, service-action interaction, and menu layout remain component-owned.
 Vue policy receives semantic outcomes and may call router navigation or render non-object results.
 
@@ -78,6 +82,7 @@ Nuxt, SSR, streaming hydration, and server-only route data are separate compatib
 - [Vue may treat unknown tags or properties specially] → Configure custom-element recognition and test attributes, properties, slots, and native events.
 - [Route reuse can retain obsolete object context] → Key route pages by canonical bookmark identity and verify deterministic disconnect.
 - [A duplicate Vue store can emerge] → Keep domain state in semantic object contexts and expose only viewer policy through Vue state.
+- [A page can omit or duplicate its declarative context] → Validate the route-page contract and present a bounded development diagnostic without silently adding a context.
 - [Async custom pages can race navigation] → Associate imports with route generation and discard superseded resolutions.
 - [Viewer routes may diverge] → Share canonical route and fallback fixtures with HTMX and Svelte viewers.
 
