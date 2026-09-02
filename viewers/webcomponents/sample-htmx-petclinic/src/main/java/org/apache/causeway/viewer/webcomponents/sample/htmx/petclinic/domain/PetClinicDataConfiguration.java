@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -65,9 +66,65 @@ public class PetClinicDataConfiguration {
             peter.addSeedPet(tweety);
             ownerRepository.persist(peter);
 
-            visitRepository.persist(new Visit("visit-basil-checkup", basil, today.plusDays(1).atTime(9, 30), "Annual check-up"));
-            visitRepository.persist(new Visit("visit-samantha-vaccine", samantha, today.plusDays(3).atTime(11, 0), "Vaccination"));
-            visitRepository.persist(new Visit("visit-max-followup", max, today.plusDays(7).atTime(14, 15), "Diet follow-up"));
+            final var george = owner("owner-george", "George Franklin", "George", "020 7946 1020", "george@example.com", "Prefers email reminders.", today.minusDays(62));
+            final var ruby = pet("pet-ruby", george, "Ruby", PetSpecies.CAT, "Nervous around dogs");
+            george.addSeedPet(ruby);
+            ownerRepository.persist(george);
+
+            final var betty = owner("owner-betty", "Betty Davis", null, "020 7946 1131", "betty@example.com", null, today.minusDays(25));
+            final var archie = pet("pet-archie", betty, "Archie", PetSpecies.DOG, "Enjoys long walks");
+            betty.addSeedPet(archie);
+            ownerRepository.persist(betty);
+
+            final var eduardo = owner("owner-eduardo", "Eduardo Rodriguez", "Eddie", "020 7946 1242", "eduardo@example.com", "Multi-pet household", today.minusDays(14));
+            final var rosy = pet("pet-rosy", eduardo, "Rosy", PetSpecies.DOG, "Needs a quiet waiting area");
+            final var jewel = pet("pet-jewel", eduardo, "Jewel", PetSpecies.CAT, "Indoor cat");
+            final var iggy = pet("pet-iggy", eduardo, "Iggy", PetSpecies.LIZARD, "Requires a heated carrier");
+            final var chester = pet("pet-chester", eduardo, "Chester", PetSpecies.HAMSTER, null);
+            final var sly = pet("pet-sly", eduardo, "Sly", PetSpecies.SNAKE, "Experienced handler only");
+            final var tico = pet("pet-tico", eduardo, "Tico", PetSpecies.BIRD, "Mimics telephone rings");
+            eduardo.addSeedPet(rosy);
+            eduardo.addSeedPet(jewel);
+            eduardo.addSeedPet(iggy);
+            eduardo.addSeedPet(chester);
+            eduardo.addSeedPet(sly);
+            eduardo.addSeedPet(tico);
+            ownerRepository.persist(eduardo);
+
+            final var jean = owner("owner-jean", "Jean Coleman", "Jean", "020 7946 1353", "jean@example.com", "Weekend appointments preferred.", today.minusDays(33));
+            final var shadow = pet("pet-shadow", jean, "Shadow", PetSpecies.CAT, null);
+            jean.addSeedPet(shadow);
+            ownerRepository.persist(jean);
+
+            final var jeff = owner("owner-jeff", "Jeff Black", null, "020 7946 1464", "jeff@example.com", null, today.minusDays(12));
+            final var lucky = pet("pet-lucky", jeff, "Lucky", PetSpecies.BIRD, "Recovering flight feathers");
+            jeff.addSeedPet(lucky);
+            ownerRepository.persist(jeff);
+
+            final var maria = owner("owner-maria", "Maria Escobito", "Maria", "020 7946 1575", "maria@example.com", "Requires step-free access.", today.minusDays(50));
+            final var mulligan = pet("pet-mulligan", maria, "Mulligan", PetSpecies.DOG, "Senior dog");
+            maria.addSeedPet(mulligan);
+            ownerRepository.persist(maria);
+
+            visit(visitRepository, "visit-basil-checkup", basil, today.plusDays(1).atTime(9, 30), "Annual check-up", null);
+            visit(visitRepository, "visit-samantha-vaccine", samantha, today.plusDays(3).atTime(11, 0), "Vaccination", "Bring vaccination record");
+            visit(visitRepository, "visit-max-followup", max, today.plusDays(7).atTime(14, 15), "Diet follow-up", null);
+
+            visit(visitRepository, "visit-rosy-dental-history", rosy, today.minusDays(60).atTime(10, 0), "Dental treatment", "Routine recovery");
+            visit(visitRepository, "visit-jewel-checkup-history", jewel, today.minusDays(45).atTime(13, 30), "Annual check-up", null);
+            visit(visitRepository, "visit-iggy-skin-history", iggy, today.minusDays(28).atTime(15, 0), "Skin examination", "Humidity reviewed");
+            visit(visitRepository, "visit-chester-nail-history", chester, today.minusDays(14).atTime(9, 15), "Nail trim", null);
+            visit(visitRepository, "visit-rosy-followup", rosy, today.plusDays(2).atTime(10, 15), "Dental follow-up", null);
+            visit(visitRepository, "visit-jewel-dental", jewel, today.plusDays(4).atTime(9, 0), "Dental examination", null);
+            visit(visitRepository, "visit-iggy-wellness", iggy, today.plusDays(5).atTime(15, 30), "Wellness review", "Check enclosure temperature");
+            visit(visitRepository, "visit-chester-checkup", chester, today.plusDays(8).atTime(11, 15), "Annual check-up", null);
+            visit(visitRepository, "visit-sly-nutrition", sly, today.plusDays(10).atTime(13, 0), "Nutrition review", null);
+            visit(visitRepository, "visit-tico-beak", tico, today.plusDays(12).atTime(16, 0), "Beak examination", null);
+            visit(visitRepository, "visit-rosy-vaccine", rosy, today.plusDays(15).atTime(8, 45), "Vaccination", null);
+
+            visit(visitRepository, "visit-ruby-wellness", ruby, today.plusDays(6).atTime(10, 45), "Wellness review", null);
+            visit(visitRepository, "visit-archie-physio", archie, today.plusDays(9).atTime(14, 0), "Mobility assessment", "Observe gait after exercise");
+            visit(visitRepository, "visit-shadow-checkup", shadow, today.plusDays(11).atTime(9, 45), "Annual check-up", null);
         });
     }
 
@@ -97,5 +154,17 @@ public class PetClinicDataConfiguration {
         final var pet = new Pet(id, owner, name, species);
         pet.setNotes(notes);
         return pet;
+    }
+
+    private static void visit(
+            final VisitRepository repository,
+            final String id,
+            final Pet pet,
+            final LocalDateTime visitAt,
+            final String reason,
+            final String notes) {
+        final var visit = new Visit(id, pet, visitAt, reason);
+        visit.setNotes(notes);
+        repository.persist(visit);
     }
 }
