@@ -137,11 +137,15 @@ class PetClinicHtmxApplication_IntegTest {
                 "petclinic.Pet",
                 "s_pet-basil",
                 "petclinic-pet-page");
+        assertThat(get("/htmx/object/petclinic.Pet/s_pet-basil").body())
+                .contains("<cw-action-results aria-label=\"Pet action results\" presentation-style=\"SIDEBAR\"");
         assertResourcePage(
                 "/htmx/object/petclinic.Visit/s_visit-basil-checkup",
                 "petclinic.Visit",
                 "s_visit-basil-checkup",
                 "petclinic-visit-page");
+        assertThat(get("/htmx/object/petclinic.Visit/s_visit-basil-checkup").body())
+                .contains("<cw-action-results aria-label=\"Visit action results\" presentation-style=\"DIALOG\"");
         assertResourcePage(
                 "/htmx/object/petclinic.HomePage/home-fixture",
                 "petclinic.HomePage",

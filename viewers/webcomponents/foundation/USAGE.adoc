@@ -625,14 +625,23 @@ The host resolves the declaration or a type default before invocation so support
 ----
 
 `<cw-action-results>` is a passive accessible outlet into which the application host may mount non-navigating action outcomes.
-The element neither invokes actions nor listens globally for result events, and its `replacePresentation(node)` and `clear()` methods atomically replace or dismiss host-owned content.
+The element neither invokes actions nor listens globally for result events, and its `replacePresentation(node)` and `clear()` methods atomically replace host-owned content.
 An empty outlet remains hidden and occupies no layout space.
 Applications should author at most one outlet in the active route page; the HTMX host snapshots one unique connected outlet when invocation begins and otherwise uses the stable shell outlet.
 Object-valued results retain canonical navigation rather than being mounted into the outlet.
 
+`presentation-style` accepts case-insensitive `INLINE`, `DIALOG`, and `SIDEBAR` values and defaults safely to `INLINE`.
+Inline presentation retains direct result children and ordinary page flow.
+Dialog presentation uses a labelled modal surface with focus containment and Escape dismissal, while sidebar presentation uses a non-modal panel at the viewport's inline end with ordinary Tab navigation.
+Before mounting asynchronous results, a host may call `setPresentationContext({origin})` with the connected originating action control; `dismiss()` then clears the surface and restores that focus when it remains eligible.
+`requestDismiss(reason)` publishes a cancelable `causeway-action-results-dismiss-request` event so an owning host may retain dismissal policy.
+
 [source,html]
 ----
-<cw-action-results aria-label="Search results" hidden></cw-action-results>
+<cw-action-results
+    aria-label="Search results"
+    presentation-style="SIDEBAR"
+    hidden></cw-action-results>
 ----
 
 == Lazy collections and row hydration

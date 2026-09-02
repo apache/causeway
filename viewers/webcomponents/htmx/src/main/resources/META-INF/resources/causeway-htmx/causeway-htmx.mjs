@@ -20,6 +20,7 @@
 import {
   ACTION_REQUEST_EVENT,
   ACTION_RESULT_EVENT,
+  ACTION_RESULTS_DISMISS_REQUEST_EVENT,
   COMPONENT_STATE_EVENT,
   MENU_BARS_STATE_EVENT,
   NAVIGATION_REQUEST_EVENT,
@@ -205,25 +206,59 @@ function activePageResultOutlet() {
   return null;
 }
 
-function snapshotActionResultDestination(detail) {
+function snapshotActionResultDestination(detail, source = null) {
   const snapshot = Object.freeze({
     outlet: activePageResultOutlet(),
+    origin: actionResultOrigin(source),
     routeGeneration: navigationGeneration
   });
   if (detail?.context && typeof detail.context === 'object') actionResultDestinations.set(detail.context, snapshot);
   else unscopedActionResultDestination = snapshot;
 }
 
-function resultDestination(detail) {
-  const snapshot = detail?.context && typeof detail.context === 'object'
+function resultDestinationSnapshot(detail) {
+  return detail?.context && typeof detail.context === 'object'
     ? actionResultDestinations.get(detail.context)
     : unscopedActionResultDestination;
+}
+
+function resultDestination(detail) {
+  const snapshot = resultDestinationSnapshot(detail);
   if (snapshot?.outlet?.isConnected
       && snapshot.routeGeneration === navigationGeneration
       && routeRegion?.contains(snapshot.outlet)) {
     return snapshot.outlet;
   }
   return resultRegion;
+}
+
+function resultOrigin(detail) {
+  const origin = resultDestinationSnapshot(detail)?.origin;
+  return origin?.isConnected && typeof origin.focus === 'function' ? origin : null;
+}
+
+function actionResultOrigin(source) {
+  if (!source) return null;
+  if (source.localName === 'cw-action') {
+    return source.querySelector?.('[data-causeway-action-control]') ?? null;
+  }
+  if (source.matches?.('vaadin-menu-bar-item[data-causeway-key]')) {
+    const [, role, menuIndex] = String(source.getAttribute('data-causeway-key') ?? '').split(':');
+    const controls = document.querySelectorAll?.(`cw-menubar-${role} cw-menubar-control vaadin-menu-bar-button`) ?? [];
+    const stableMenuOrigin = controls[Number(menuIndex)];
+    if (stableMenuOrigin && typeof stableMenuOrigin.focus === 'function') return stableMenuOrigin;
+  }
+  if (source.matches?.('[data-service-logical-type][data-action-id]')) {
+    const panelId = source.closest?.('[data-causeway-menu-panel]')?.id;
+    const stableMenuOrigin = panelId
+      ? document.querySelector?.(`[data-causeway-menu-disclosure][aria-controls="${CSS.escape(panelId)}"]`)
+      : null;
+    if (stableMenuOrigin && typeof stableMenuOrigin.focus === 'function') return stableMenuOrigin;
+  }
+  if (source.hasAttribute?.('data-causeway-action-control') || source.matches?.('button,[href],[tabindex]')) {
+    return typeof source.focus === 'function' ? source : null;
+  }
+  return source.closest?.('cw-action')?.querySelector?.('[data-causeway-action-control]') ?? null;
 }
 
 function replaceResultPresentation(destination, ...nodes) {
@@ -234,6 +269,7 @@ function replaceResultPresentation(destination, ...nodes) {
 }
 
 function revealResultPresentation(destination) {
+  if ((destination?.presentationStyle ?? 'INLINE') !== 'INLINE') return;
   globalThis.requestAnimationFrame?.(() => {
     if (!destination?.isConnected || destination.hidden || destination.children.length === 0) return;
     const reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
@@ -243,15 +279,19 @@ function revealResultPresentation(destination) {
 
 function preserveRouteResultInShell() {
   const outlet = activePageResultOutlet();
-  if (!outlet || !resultRegion || outlet.children.length === 0) return;
-  replaceResultPresentation(resultRegion, ...outlet.children);
+  const nodes = outlet?.presentationNodes ?? [...(outlet?.children ?? [])];
+  if (!outlet || !resultRegion || nodes.length === 0) return;
+  resultRegion.setPresentationContext?.(outlet.presentationContext ?? {});
+  replaceResultPresentation(resultRegion, ...nodes);
   replaceResultPresentation(outlet);
 }
 
 function rehomePreservedShellResult() {
   const outlet = activePageResultOutlet();
-  if (!outlet || !resultRegion || resultRegion.children.length === 0) return;
-  replaceResultPresentation(outlet, ...resultRegion.children);
+  const nodes = resultRegion?.presentationNodes ?? [...(resultRegion?.children ?? [])];
+  if (!outlet || !resultRegion || nodes.length === 0) return;
+  outlet.setPresentationContext?.(resultRegion.presentationContext ?? {});
+  replaceResultPresentation(outlet, ...nodes);
   replaceResultPresentation(resultRegion);
 }
 
@@ -354,6 +394,7 @@ function presentResult(detail) {
   const destination = resultDestination(detail);
   if (!destination) return;
   replaceResultPresentation(destination);
+  destination.setPresentationContext?.({origin: resultOrigin(detail)});
   const heading = document.createElement('h2');
   heading.textContent = detail?.actionId ? `${detail.actionId} result` : 'Action result';
   const output = document.createElement('output');
@@ -394,6 +435,10 @@ function resultDismissButton(destination, detail) {
   button.setAttribute('aria-label', 'Dismiss action result');
   button.textContent = 'Dismiss';
   button.addEventListener('click', () => {
+    if (typeof destination.requestDismiss === 'function') {
+      destination.requestDismiss('control');
+      return;
+    }
     replaceResultPresentation(destination);
     const actionId = String(detail?.actionId ?? '').trim();
     if (actionId) {
@@ -479,7 +524,7 @@ document.addEventListener(NAVIGATION_REQUEST_EVENT, event => {
 });
 
 document.addEventListener(ACTION_REQUEST_EVENT, event => {
-  snapshotActionResultDestination(event.detail);
+  snapshotActionResultDestination(event.detail, event.target);
 }, {capture: true});
 
 document.addEventListener(ACTION_REQUEST_EVENT, event => {
@@ -502,6 +547,13 @@ document.addEventListener(MENU_BARS_STATE_EVENT, () => globalThis.setTimeout(() 
 document.addEventListener(ACTION_RESULT_EVENT, event => {
   presentResult(event.detail);
   queueMicrotask(() => event.target?.dismissResult?.());
+});
+
+document.addEventListener(ACTION_RESULTS_DISMISS_REQUEST_EVENT, event => {
+  const outlet = event.detail?.outlet;
+  if (!outlet?.matches?.('cw-action-results')) return;
+  event.preventDefault();
+  outlet.dismiss?.();
 });
 
 document.addEventListener(COMPONENT_STATE_EVENT, event => {

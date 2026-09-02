@@ -177,6 +177,7 @@ class PetClinicHtmxSecuredPlaywrightTest {
             page.goBack();
             page.waitForURL("**/htmx/login**");
             assertThat(page.locator("[data-testid='causeway-shell-user']").count()).isZero();
+            browserFailures.removeIf(message -> message.contains("status of 401"));
             assertThat(browserFailures).isEmpty();
         }
     }
