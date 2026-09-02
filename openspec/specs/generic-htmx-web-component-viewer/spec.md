@@ -314,6 +314,7 @@ The viewer SHALL provide accessible loading, ready, not-found, access-denied, pa
 #### Scenario: Navigation completes
 - **WHEN** a new route fragment replaces the active page
 - **THEN** the route heading or main landmark receives documented focus
+- **AND** the viewport starts at the beginning of the new route while explicit in-place refresh and browser-history restoration retain their established scroll policy
 - **AND** a concise route announcement is published without trapping focus
 
 #### Scenario: Domain object cannot be presented
@@ -1154,6 +1155,11 @@ Result routing MUST remain host-owned and generation-safe.
 - **WHEN** an action interaction begins while exactly one connected action-result outlet belongs to the active route page
 - **THEN** the viewer snapshots that outlet and route generation as the preferred destination
 - **AND** a later successful scalar, void-status, or collection presentation is mounted there only while the destination remains current
+
+#### Scenario: Inline result is outside the viewport
+- **WHEN** the current host mounts a successful non-navigating result outside the visible viewport
+- **THEN** the viewer scrolls the result outlet into view without moving keyboard focus
+- **AND** reduced-motion preference disables animated scrolling
 
 #### Scenario: Active page has no outlet
 - **WHEN** no applicable page outlet exists

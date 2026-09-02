@@ -43,6 +43,11 @@ Result routing MUST remain host-owned and generation-safe.
 - **THEN** the viewer snapshots that outlet and route generation as the preferred destination
 - **AND** a later successful scalar, void-status, or collection presentation is mounted there only while the destination remains current
 
+#### Scenario: Inline result is outside the viewport
+- **WHEN** the current host mounts a successful non-navigating result outside the visible viewport
+- **THEN** the viewer scrolls the result outlet into view without moving keyboard focus
+- **AND** reduced-motion preference disables animated scrolling
+
 #### Scenario: Active page has no outlet
 - **WHEN** no applicable page outlet exists
 - **THEN** successful non-navigating results use the stable shell result region
@@ -108,6 +113,15 @@ The viewer MUST retain policy ownership while delegating collection row markup, 
 - **WHEN** another action outcome is handled by default policy
 - **THEN** the resolved result destination replaces the prior live presentation according to established result lifecycle
 - **AND** prior rows, outlet ownership, and toolkit state cannot remain interactive or overwrite the newer result
+
+### Requirement: Accessible route lifecycle
+The viewer SHALL provide accessible loading, ready, not-found, access-denied, partial-error, invalid-route, unsupported, and terminal-error states.
+
+#### Scenario: Navigation completes
+- **WHEN** a new route fragment replaces the active page
+- **THEN** the route heading or main landmark receives documented focus
+- **AND** the viewport starts at the beginning of the new route while explicit in-place refresh and browser-history restoration retain their established scroll policy
+- **AND** a concise route announcement is published without trapping focus
 
 ### Requirement: Standalone collection viewer qualification
 The Petclinic browser acceptance application SHALL exercise default and action-specific collection-valued outcomes through semantic action-result outlets under default Vaadin and explicit native component-toolkit policies.
