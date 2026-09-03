@@ -54,6 +54,7 @@ const viewer = createCausewayVueViewer({
   router,
   endpoint: '/graphql',
   basePath: '/vue',
+  applicationResourceBase: '/',
   pages: {
     'petclinic.HomePage': HomePage,
     'petclinic.PetOwner': PetOwnerPage,

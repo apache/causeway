@@ -101,6 +101,8 @@ The login page is server rendered and makes no GraphQL request before authentica
 Spring Security owns credential processing, request caching, session-identifier migration, security-context persistence, CSRF, and logout invalidation.
 Only canonical same-origin GET routes beneath the configured HTMX base path are restored after login.
 The HTMX host owns login presentation, current-user chrome, session-expiry navigation, exact suppression of `causeway.security.LogoutMenu#logout`, and the native POST logout control.
+That control remains independent of typed `LocalResourcePathValue` action results: secure logout uses current CSRF evidence and Spring Security session invalidation, while local-resource results are only safe same-origin navigation.
+A local-resource path equal to `/logout` does not acquire authentication semantics.
 Invalid passwords, absent users, locked users, passwordless users, and internal lookup failures all produce the same public credential failure.
 
 == Provisional bridge boundary

@@ -25,6 +25,7 @@ import {
   extractActionInvocationResult,
   secureActionInvocationResult
 } from './action-dispatch.mjs';
+import {normalizeActionResult} from './action-result.mjs';
 import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
 import {
@@ -47,7 +48,7 @@ import {
 } from './selection.mjs';
 import {assertGraphQLName} from './schema-names.mjs';
 import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
-import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
+import {InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
 
 export {StructuralResourceError} from './structural-resource.mjs';
 
@@ -1184,29 +1185,6 @@ function interactionResult(status, data = null, errors = [], operation = null) {
     errors: Object.freeze([...(errors ?? [])]),
     operation
   });
-}
-
-function normalizeActionResult(value, typeRef) {
-  const inner = innermostType(typeRef);
-  const list = unwrapNonNull(typeRef)?.kind === 'LIST';
-  if (value == null) {
-    return Object.freeze({kind: InteractionResultKind.VOID, value: null});
-  }
-  if (list || Array.isArray(value)) {
-    return Object.freeze({kind: InteractionResultKind.COLLECTION, value});
-  }
-  if (inner?.kind === 'SCALAR' || inner?.kind === 'ENUM' || typeof value !== 'object') {
-    return Object.freeze({kind: InteractionResultKind.SCALAR, value});
-  }
-  return Object.freeze({kind: InteractionResultKind.OBJECT, value});
-}
-
-function unwrapNonNull(typeRef) {
-  let current = typeRef;
-  while (current?.kind === 'NON_NULL') {
-    current = current.ofType;
-  }
-  return current;
 }
 
 function commandError(error) {

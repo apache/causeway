@@ -147,6 +147,56 @@ test('service action adapter reuses parameter preparation, validation, safe invo
   assert.deepEqual(context.interactionTarget, {kind: 'service', logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE});
 });
 
+test('service actions preserve typed local-resource results distinctly', async () => {
+  const types = createMenuGraphQLTypes();
+  const actionTypeName = `${SAMPLE_SERVICE_TYPE}__openGuide__gqlv_action`;
+  const invokeTypeName = `${actionTypeName}_invoke`;
+  const ref = (kind, name, ofType = null) => ({kind, name, ofType});
+  const scalarRef = name => ref('SCALAR', name);
+  const namedRef = name => ref('OBJECT', name);
+  const field = (name, type) => ({name, description: null, args: [], type});
+  const objectType = (name, fields) => ({
+    name, kind: 'OBJECT', description: null, fields, inputFields: [], enumValues: [], possibleTypes: []
+  });
+  types.get(SAMPLE_SERVICE_TYPE).fields.push(field('openGuide', namedRef(actionTypeName)));
+  types.set(actionTypeName, objectType(actionTypeName, [
+    field('hidden', scalarRef('Boolean')),
+    field('disabled', scalarRef('String')),
+    field('metadata', namedRef('RichMemberMetadata')),
+    field('validate', scalarRef('String')),
+    field('invoke', namedRef(invokeTypeName))
+  ]));
+  types.set(invokeTypeName, objectType(invokeTypeName, [field('results', namedRef('LocalResourcePathValue'))]));
+  types.set('LocalResourcePathValue', objectType('LocalResourcePathValue', [
+    field('path', scalarRef('String')),
+    field('openUrlStrategy', ref('ENUM', 'OpenUrlStrategy'))
+  ]));
+  const base = createMenuGraphQLExecutor({types});
+  let invocation;
+  const executor = async request => {
+    if (request.operationName === 'CausewayInvokeServiceAction' && request.document.includes('openGuide')) {
+      invocation = request;
+      return {data: {rich: {causeway_webcomponents_sample_SampleMenu: {
+        openGuide: {invoke: {results: {path: '/guide', openUrlStrategy: 'SAME_WINDOW'}}}
+      }}}};
+    }
+    return base(request);
+  };
+  const context = new ServiceActionContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE
+  });
+
+  const result = await context.invokeAction('openGuide', {});
+
+  assert.equal(result.status, InteractionStatus.SUCCESS);
+  assert.deepEqual(result.data, {
+    kind: 'local-resource', value: {path: '/guide', openUrlStrategy: 'SAME_WINDOW'}
+  });
+  assert.match(invocation.document, /openUrlStrategy/);
+  assert.match(invocation.document, /path/);
+});
+
 test('service collection action requests declared wrappers in its single invocation response', async () => {
   const types = createMenuGraphQLTypes();
   const personType = 'rich__sample_Person';

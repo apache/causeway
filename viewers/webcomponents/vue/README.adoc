@@ -1,5 +1,9 @@
 = Apache Causeway Vue Web Component Viewer
 
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
 The package provides the thin Vue 3 and Vue Router 4 integration for Apache Causeway semantic web components.
 It owns route and host policy but does not duplicate GraphQL or domain state.
 
@@ -38,6 +42,7 @@ const viewer = createCausewayVueViewer({
   router,
   endpoint: '/graphql',
   basePath: '/vue',
+  applicationResourceBase: '/',
   pages: {
     'petclinic.PetOwner': PetOwnerPage,
     'petclinic.HomePage': () => import('./pages/HomePage.vue')
@@ -120,8 +125,16 @@ Registrations are immutable after plugin creation and do not use type inheritanc
 == Public exports
 
 The package exports route codecs, route names and records, the viewer plugin factory, shell binding helpers, boundary validators, policy helpers, public TypeScript contracts, and the generic route components.
-Applications may replace navigation, home, result, and error policy through viewer options.
+Applications may replace pre-invocation action, navigation, home, result, and error policy through viewer options.
+The typed action policy receives canonical action-request detail, an idempotent single-claim capability, and immutable route context; a synchronous claim prevents validation and GraphQL invocation, while an unclaimed asynchronous decision resumes an ordinary action exactly once if the route remains current.
 Claimed semantic events are not also handled by the default policy.
+The default policy removes and blocks only the exact framework action `causeway.security.LogoutMenu#logout`; applications with authentication claim that action and own the secure logout workflow.
+Without such a policy, framework Logout fails closed before GraphQL and similarly named application actions remain ordinary.
+
+`applicationResourceBase` is independent of `basePath` and identifies the application-local deployment base used for typed `LocalResourcePathValue` results.
+The default result policy resolves those values as same-origin full-document targets, rejects unsafe or escaping paths, and uses opener isolation for `NEW_WINDOW`; it does not send them through Vue Router.
+A local-resource path named `/logout` remains ordinary navigation and is never treated as authentication.
+Hosts may claim result policy first to replace or further restrict this behavior.
 
 The canonical route grammar is `<base-path>/object/<logical-type>/<identifier>` using independently canonical UTF-8 percent-encoded segments.
 Malformed, unsafe, non-canonical, or oversized segments fail before an object context is mounted.
