@@ -33,6 +33,7 @@ import {createCausewayRouteRecords} from '../src/routes';
 function authoredShell(): HTMLElement {
   const shell = document.createElement('div');
   shell.innerHTML = `<cw-graphql-client data-causeway-shell-client>
+    <cw-menubars></cw-menubars>
     <div data-causeway-route-loading></div><div data-causeway-route-announcement></div>
     <cw-action-results data-causeway-shell-result></cw-action-results>
     <main data-causeway-router-view></main>
@@ -132,6 +133,9 @@ describe('semantic policy bridge', () => {
     shell.append(region);
     const dispose = installSemanticBridge(viewer, shell);
     expect(region.isConnected).toBe(false);
+    const menuBoundary = shell.querySelector('cw-menubars') as HTMLElement & {excludeAction?: (detail: object) => boolean};
+    expect(menuBoundary.excludeAction?.({serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout'})).toBe(true);
+    expect(menuBoundary.excludeAction?.({serviceLogicalTypeName: 'example.LogoutMenu', actionId: 'logout'})).toBe(false);
 
     const request = new CustomEvent(ACTION_REQUEST_EVENT, {
       bubbles: true,
@@ -144,6 +148,7 @@ describe('semantic policy bridge', () => {
     expect(shell.dataset.causewayLogoutUnavailable).toBe('true');
     expect(shell.querySelector('[data-causeway-route-announcement]')?.textContent).toContain('host authentication');
     dispose();
+    expect(menuBoundary.excludeAction).toBeUndefined();
   });
 
   it('lets synchronous and asynchronous action policies claim or resume exactly once', async () => {

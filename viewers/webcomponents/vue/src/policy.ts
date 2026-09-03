@@ -155,6 +155,9 @@ async function applyNavigation(runtime: CausewayViewerRuntime, target: CausewayO
 export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTMLElement): () => void {
   const destinations = new WeakMap<object, HTMLElement>();
   const resumedActionEvents = new WeakSet<Event>();
+  const menuBoundary = shell.querySelector<HTMLElement & {excludeAction?: (detail: CausewayActionRequest) => boolean}>('cw-menubars');
+  const excludeFrameworkLogout = (detail: CausewayActionRequest) => isFrameworkLogoutAction(detail);
+  if (menuBoundary) menuBoundary.excludeAction = excludeFrameworkLogout;
   let unscopedDestination: HTMLElement | null = null;
   let active = true;
   const announceUnavailableLogout = () => {
@@ -252,6 +255,7 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
   shell.addEventListener(MENU_BARS_STATE_EVENT, onMenuState);
   return () => {
     active = false;
+    if (menuBoundary?.excludeAction === excludeFrameworkLogout) menuBoundary.excludeAction = undefined;
     shell.removeEventListener(ACTION_REQUEST_EVENT, onActionRequest, {capture: true});
     shell.removeEventListener(NAVIGATION_REQUEST_EVENT, onNavigation);
     shell.removeEventListener(ACTION_RESULT_EVENT, onResult);
