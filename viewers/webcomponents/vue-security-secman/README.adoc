@@ -1,0 +1,127 @@
+= Local SecMan authentication for the Vue viewer
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+The `causeway-viewer-webcomponents-vue-security-secman` module is an optional local username/password integration for application-owned Vue web-component hosts.
+It combines the presentation-neutral SecMan Spring bridge with Vue-route protection, server-rendered login, safe request restoration, bounded CSRF context, and native session logout.
+Generic Vue and foundation modules remain authentication-neutral when this module is absent.
+
+== Installation
+
+Add the Vue integration alongside the application-selected SecMan persistence and encryption implementations:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-webcomponents-vue-security-secman</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-secman-encryption-spring</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+----
+
+Import `CausewayModuleViewerWebcomponentsVueSecuritySecman`, the selected SecMan persistence and encryption modules, the GraphQL viewer, and the application-owned Vue route controller.
+The Vue integration imports the shared SecMan Spring bridge itself.
+
+Spring CSRF filters are mandatory, and startup fails unless they are explicitly allowed:
+
+[source,properties]
+----
+causeway.security.spring.allow-csrf-filters=true
+----
+
+== Paths and configuration
+
+The defaults are:
+
+[source,properties]
+----
+causeway.viewer.webcomponents.vue.security.secman.base-path=/vue
+causeway.viewer.webcomponents.vue.security.secman.graph-ql-path=/graphql
+causeway.viewer.webcomponents.vue.security.secman.login-path=/login
+causeway.viewer.webcomponents.vue.security.secman.logout-path=/logout
+causeway.viewer.webcomponents.vue.security.secman.authentication-context-path=/authentication
+causeway.viewer.webcomponents.vue.security.secman.brand=Apache Causeway
+causeway.viewer.webcomponents.vue.security.secman.filter-chain-order=20
+causeway.viewer.webcomponents.vue.security.secman.cookies-to-delete=JSESSIONID
+----
+
+The login, logout, and authentication-context paths are relative to the Vue base path.
+The chain protects the Vue hierarchy, bounded authentication context, and GraphQL hierarchy while permitting login and required immutable `/vue/assets/**`, `/causeway-webcomponents/**`, and Font Awesome resources.
+It does not claim unrelated Wicket, HTMX, actuator, console, application, or bearer-token paths.
+Choose an order that precedes a broader fallback chain without displacing an application chain intended to own the same paths.
+
+== Application document and bootstrap
+
+The application-owned Vue document must identify whether authentication bootstrap is active.
+The ordinary Petclinic document uses an inert empty marker:
+
+[source,html]
+----
+<meta name="causeway-authentication-context" content="">
+----
+
+Its secured route controller serves the same committed production document while binding only the context-path-aware endpoint URL.
+It does not embed a username or CSRF token into the document or assets.
+The Vue bootstrap fetches that authenticated no-store endpoint before mounting and receives only the username, CSRF header name, CSRF parameter name, current token, login path, and logout path.
+
+Bind the resulting executor as a DOM property on the stable provider:
+
+[source,vue]
+----
+<cw-graphql-client
+  data-causeway-shell-client
+  :endpoint="viewer.endpoint"
+  :executor.prop="graphQlExecutor">
+  <!-- application-owned stable shell -->
+</cw-graphql-client>
+----
+
+The executor adds current CSRF evidence to every GraphQL POST.
+A GraphQL `401` performs full-document login navigation with a safe current Vue continuation, while an authenticated `403` remains a bounded authorization or CSRF failure.
+Do not store the context or token in URLs, Vue Router state, local storage, GraphQL documents, variables, or semantic results.
+
+== Login, restoration, and logout
+
+The login page is server rendered, labelled, keyboard accessible, focused on username, and independent of Vue, custom elements, and GraphQL.
+Only canonical same-origin GET destinations beneath the configured Vue base path are restored after successful login.
+Authentication, GraphQL, assets, malformed paths, unsafe methods, unrelated paths, and external destinations fall back to the Vue root.
+Spring migrates the session identifier after login.
+
+The stable Vue shell owns current-user presentation and a native POST logout form carrying the context's CSRF parameter and token.
+The application's typed action policy claims only exact `causeway.security.LogoutMenu#logout` and submits that form before GraphQL invocation.
+Successful logout clears authentication, invalidates the session, applies configured cookie cleanup, and redirects to the signed-out login page.
+A `LocalResourcePathValue` equal to `/logout` remains ordinary safe local-resource navigation and does not acquire authentication semantics.
+Similarly named application actions remain ordinary domain actions.
+
+== HTTPS and production deployment
+
+Transport credentials and session cookies only over HTTPS.
+Keep session cookies `HttpOnly`, enable `Secure` in HTTPS deployments, select a suitable `SameSite` policy, and trust forwarded headers only from a proxy that overwrites untrusted values.
+Review mixed browser-session and bearer-token ownership of a shared GraphQL path explicitly; this module does not combine those models automatically.
+
+== Reference application and rollback
+
+Run the complete secured reference from the repository root with:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-vue-petclinic/run-secured.sh
+----
+
+Sign in as `sven` with password `pass`.
+The sample's `test.sh` runs ordinary and secured integration and headless browser journeys.
+
+To roll back, remove `CausewayModuleViewerWebcomponentsVueSecuritySecman`, the optional dependency, secured route binding, executor decoration, and session chrome, then restore the application's previous security owner for Vue and GraphQL paths.
+No SecMan data migration is required because this integration changes no user, role, permission, tenancy, locale, or password schema.

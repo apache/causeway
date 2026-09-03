@@ -36,11 +36,12 @@ Run the separate local SecMan-authenticated configuration with:
 
 [source,bash]
 ----
-mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic-secured
+./viewers/webcomponents/sample-htmx-petclinic/run-secured.sh
 ----
 
 Open `http://localhost:8080/htmx` and sign in with username `sven` and password `pass`.
-This secured configuration enables Spring CSRF protection and intentionally omits Wicket and bypass security.
+This secured configuration enables Spring CSRF protection, consumes the shared presentation-neutral SecMan Spring bridge, and intentionally omits Wicket and bypass security.
+The secured launcher preserves the same `JAVA_HOME`, `MVN`, and pass-through Maven argument behavior as `run.sh`.
 
 == Headless Playwright acceptance
 

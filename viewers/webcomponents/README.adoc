@@ -5,7 +5,8 @@
 The Causeway web-component modules provide framework-neutral browser components backed by the Causeway rich GraphQL schema.
 The foundation module includes a GraphQL client provider, coordinated application menu bars, service-action prompts and invocation, coordinated object contexts, safe effective-grid and fallback composite objects, toolkit-qualified read-only scalar and ordinary-action presentation with native rollback, explicitly enabled property editing, normalized interaction results, lazy collections, and an optional cohesive theme.
 It deliberately has no dependency on HTMX, React, Vue, Svelte, Wicket, Bootstrap, or a browser component-authoring framework.
-The separate optional HTMX module adds canonical routing, a stable shell, history, custom-page selection, and fragment lifecycle above those components.
+The separate optional HTMX and Vue modules add thin host routing, stable application shells, history, exact page selection, and lifecycle above those components.
+Optional `security-secman`, `htmx-security-secman`, and `vue-security-secman` modules provide a shared local credential bridge plus viewer-owned browser-session policy without adding authentication to the generic viewers.
 
 This page explains how to run the automated verification and how to exercise the components manually against a Causeway application.
 
@@ -108,7 +109,7 @@ This avoids cross-origin and authentication-cookie differences that can obscure 
 
 The repository provides HTMX and Vue Petclinic applications over one shared deterministic JPA/H2 domain and rich GraphQL contract, plus `viewers/webcomponents/sample-html` as the stable low-level vanilla-component fixture.
 The HTMX Petclinic application is the presentation reference for the Vue sample's application-owned shell and exact-type HomePage, PetOwner, Pet, and Visit pages.
-Start either Petclinic viewer from the repository root with:
+Start either ordinary Petclinic viewer from the repository root with:
 
 [source,shell]
 ----
@@ -116,10 +117,19 @@ Start either Petclinic viewer from the repository root with:
 ./viewers/webcomponents/sample-vue-petclinic/run.sh
 ----
 
-Run only one application at a time because both use port 8080 by default.
+Start the corresponding local SecMan and Spring Security variants with:
+
+[source,shell]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-secured.sh
+./viewers/webcomponents/sample-vue-petclinic/run-secured.sh
+----
+
+Both secured applications use username `sven` and password `pass`, require current CSRF evidence for GraphQL and logout POSTs, and restore safe viewer deep links after login.
+Run only one application at a time because all four use port 8080 by default.
 Open `http://localhost:8080/htmx` for HTMX or `http://localhost:8080/vue/` for Vue.
 The HTMX application also exposes `/wicket/`; sign in as `sven` with password `pass` for comparison.
-See link:sample-htmx-petclinic/README.adoc[`sample-htmx-petclinic/README.adoc`], link:sample-vue-petclinic/README.adoc[`sample-vue-petclinic/README.adoc`], link:htmx/README.adoc[`htmx/README.adoc`], and link:vue/README.adoc[`vue/README.adoc`] for routes, customization, and acceptance contracts.
+See link:sample-htmx-petclinic/README.adoc[`sample-htmx-petclinic/README.adoc`], link:sample-vue-petclinic/README.adoc[`sample-vue-petclinic/README.adoc`], link:htmx/README.adoc[`htmx/README.adoc`], link:vue/README.adoc[`vue/README.adoc`], link:security-secman/README.adoc[`security-secman/README.adoc`], link:htmx-security-secman/README.adoc[`htmx-security-secman/README.adoc`], and link:vue-security-secman/README.adoc[`vue-security-secman/README.adoc`] for routes, customization, security ownership, and acceptance contracts.
 
 The vanilla sample supplies its own deterministic JPA/H2 data, the same rich GraphQL endpoint, packaged foundation modules, and stable low-level automation hooks.
 Start it from the repository root with:

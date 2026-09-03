@@ -16,8 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.causeway.viewer.webcomponents.htmx.security.secman;
+package org.apache.causeway.viewer.webcomponents.security.secman;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
@@ -129,6 +133,34 @@ class SecmanAuthenticationBridgeTest {
         assertThatThrownBy(() -> authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated("sven", "anything else")))
                 .isInstanceOf(BadCredentialsException.class);
+    }
+
+    @Test
+    void erasedPrincipalCanBeSerializedWithoutCredentials() throws Exception {
+        final var details = new SecmanUserDetails(
+                "sven",
+                "encoded",
+                true,
+                Set.of("petclinic-user"),
+                "/clinic/eu",
+                Locale.FRENCH,
+                Locale.GERMANY,
+                Locale.UK);
+        details.eraseCredentials();
+
+        final var bytes = new ByteArrayOutputStream();
+        try (var output = new ObjectOutputStream(bytes)) {
+            output.writeObject(details);
+        }
+        final SecmanUserDetails restored;
+        try (var input = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+            restored = (SecmanUserDetails) input.readObject();
+        }
+
+        assertThat(restored.getUsername()).isEqualTo("sven");
+        assertThat(restored.getPassword()).isNull();
+        assertThat(restored.getAuthorities()).extracting("authority").containsExactly("petclinic-user");
+        assertThat(restored.atPath()).isEqualTo("/clinic/eu");
     }
 
     @Test

@@ -136,6 +136,17 @@ The default result policy resolves those values as same-origin full-document tar
 A local-resource path named `/logout` remains ordinary navigation and is never treated as authentication.
 Hosts may claim result policy first to replace or further restrict this behavior.
 
+== Secured host composition
+
+Authentication remains an application responsibility.
+A secured application can fetch its current session and CSRF context before mounting, bind a CSRF-decorating executor with `:executor.prop` on its stable `<cw-graphql-client>`, render current-user and native POST logout controls in its authored shell, and claim exact framework Logout through the typed action policy.
+The viewer neither fetches credentials nor CSRF evidence, creates endpoints, persists tokens, or infers authentication from routes or `LocalResourcePathValue` results.
+A host that does not supply this context makes no authentication bootstrap request and retains ordinary executor behavior.
+
+The optional `causeway-viewer-webcomponents-vue-security-secman` server module provides one local SecMan and Spring Security implementation of these application-owned integration points.
+It serves a JavaScript-independent login page and bounded no-store authentication context, protects Vue and GraphQL routes, restores safe Vue GET destinations, and owns CSRF-protected session logout.
+See `../vue-security-secman/README.adoc` and the secured Vue Petclinic variant for a complete host composition.
+
 The canonical route grammar is `<base-path>/object/<logical-type>/<identifier>` using independently canonical UTF-8 percent-encoded segments.
 Malformed, unsafe, non-canonical, or oversized segments fail before an object context is mounted.
 

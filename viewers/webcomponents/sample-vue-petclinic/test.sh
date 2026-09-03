@@ -40,8 +40,15 @@ if [[ "${1:-}" == "--install-browser" ]]; then
     exec:java
 fi
 
-exec "$MVN" -f "$POM" -pl "$MODULE" -am -P"$PROFILE" \
+"$MVN" -f "$POM" -pl "$MODULE" -am -P"$PROFILE" \
   -Dtest=PetClinicVueApplicationIntegTest,PetClinicVuePlaywrightTest \
+  -Dsurefire.failIfNoSpecifiedTests=false \
+  test \
+  "$@"
+
+exec "$MVN" -f "$POM" -pl "$MODULE" -am \
+  -Dsample-vue-petclinic.secured=true \
+  -Dtest=PetClinicVueSecuredApplication_IntegTest,PetClinicVueSecuredPlaywrightAcceptance \
   -Dsurefire.failIfNoSpecifiedTests=false \
   test \
   "$@"

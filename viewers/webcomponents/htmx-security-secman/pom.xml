@@ -44,12 +44,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.causeway.security</groupId>
-            <artifactId>causeway-security-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.extensions</groupId>
-            <artifactId>causeway-extensions-secman-integration</artifactId>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-webcomponents-security-secman</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.causeway.extensions</groupId>

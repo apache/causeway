@@ -99,6 +99,33 @@ body {
   flex: 0 1 auto;
 }
 
+.causeway-authentication {
+  display: flex;
+  align-items: center;
+  gap: var(--causeway-space-2);
+  white-space: nowrap;
+}
+
+.causeway-authentication form {
+  margin: 0;
+}
+
+.causeway-authentication button {
+  min-height: 2.25rem;
+  padding: var(--causeway-space-1) var(--causeway-space-3);
+  border: 1px solid currentColor;
+  border-radius: var(--causeway-radius-sm);
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.causeway-authentication button:focus-visible {
+  outline: 3px solid var(--causeway-focus);
+  outline-offset: 2px;
+}
+
 .causeway-shell-brand {
   min-height: 2.75rem;
   display: inline-flex;

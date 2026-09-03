@@ -21,7 +21,8 @@ import {createApp} from 'vue';
 import {createRouter, createWebHistory} from 'vue-router';
 import {
   createCausewayRouteRecords,
-  createCausewayVueViewer
+  createCausewayVueViewer,
+  isFrameworkLogoutAction
 } from '@apache-causeway/vue-viewer';
 import '@apache-causeway/vue-viewer/theme.css';
 import App from './App.vue';
@@ -30,6 +31,7 @@ import PetOwnerPage from './pages/PetOwnerPage.vue';
 import PetPage from './pages/PetPage.vue';
 import VisitPage from './pages/VisitPage.vue';
 import './petclinic.css';
+import {authenticationContext, bootstrapAuthentication} from './authentication';
 
 const toolkit = new URLSearchParams(location.search).get('toolkit') === 'native' ? 'native' : 'vaadin';
 const policy = document.documentElement.dataset;
@@ -42,6 +44,8 @@ policy.causewayApplicationMenubar = toolkit;
 policy.causewayFieldFamilies = toolkit === 'vaadin' ? 'basic,numeric,local-temporal' : '';
 policy.causewayReferenceMinimumSearchLength = '2';
 policy.causewayReferenceMaximumResults = '50';
+
+await bootstrapAuthentication('/graphql');
 
 const componentsModuleUrl = '/causeway-webcomponents/index.mjs';
 await import(/* @vite-ignore */ componentsModuleUrl);
@@ -62,7 +66,16 @@ const viewer = createCausewayVueViewer({
     'petclinic.Visit': VisitPage
   },
   policies: {
+    action(detail, claim) {
+      if (!authenticationContext.value || !isFrameworkLogoutAction(detail)) return;
+      if (!claim.claim()) return true;
+      const form = document.querySelector<HTMLFormElement>('[data-causeway-authentication-logout]');
+      if (!form) throw new Error('The secured Vue logout form is unavailable.');
+      form.requestSubmit();
+      return true;
+    },
     error(error) {
+      if (error instanceof Error && error.message === 'The authenticated session has expired.') return;
       console.error('Causeway Vue viewer policy error', error);
     }
   }

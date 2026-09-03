@@ -47,7 +47,9 @@
         <module>foundation</module>
         <module>vue</module>
         <module>htmx</module>
+        <module>security-secman</module>
         <module>htmx-security-secman</module>
+        <module>vue-security-secman</module>
         <module>sample-petclinic-domain</module>
         <module>sample-html</module>
         <module>sample-htmx-petclinic</module>
@@ -77,6 +79,17 @@
             <id>run-sample-vue-petclinic</id>
             <properties>
                 <sample-vue-petclinic.run.skip>false</sample-vue-petclinic.run.skip>
+            </properties>
+            <build>
+                <defaultGoal>spring-boot:run</defaultGoal>
+            </build>
+        </profile>
+        <profile>
+            <id>run-sample-vue-petclinic-secured</id>
+            <properties>
+                <sample-vue-petclinic.run.skip>false</sample-vue-petclinic.run.skip>
+                <sample-vue-petclinic.secured>true</sample-vue-petclinic.secured>
+                <spring-boot.run.main-class>org.apache.causeway.viewer.webcomponents.sample.vue.petclinicsecured.PetClinicVueSecuredApplication</spring-boot.run.main-class>
             </properties>
             <build>
                 <defaultGoal>spring-boot:run</defaultGoal>
