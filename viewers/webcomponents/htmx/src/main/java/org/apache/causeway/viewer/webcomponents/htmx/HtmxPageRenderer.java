@@ -20,30 +20,47 @@ package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 final class HtmxPageRenderer {
 
-    private static final String SHELL_TEMPLATE = HtmxDeclarativeTemplate.load("shell.html");
+    private static final String DOCUMENT_TEMPLATE = HtmxDeclarativeTemplate.load("document.html");
+    private static final String DEFAULT_SHELL_TEMPLATE = HtmxDeclarativeTemplate.load("default-shell.html");
     private static final String GENERIC_OBJECT_PAGE_TEMPLATE = HtmxDeclarativeTemplate.load("generic-object-page.html");
     private static final String LANDING_PAGE_TEMPLATE = HtmxDeclarativeTemplate.load("landing-page.html");
     private static final String INVALID_ROUTE_PAGE_TEMPLATE = HtmxDeclarativeTemplate.load("invalid-route-page.html");
 
     static {
-        HtmxDeclarativeTemplate.validateShell(SHELL_TEMPLATE);
+        HtmxDeclarativeTemplate.validateDocumentTemplate(DOCUMENT_TEMPLATE);
+        HtmxDeclarativeTemplate.validateApplicationShell(DEFAULT_SHELL_TEMPLATE, "internal:default-shell.html");
         HtmxDeclarativeTemplate.validateResourcePage(GENERIC_OBJECT_PAGE_TEMPLATE, "generic-object-page.html");
     }
 
     private final HtmxRouteCodec routeCodec;
     private final HtmxViewerProperties properties;
     private final HtmxPageFragmentRegistry fragmentRegistry;
+    private final HtmxShellDefinition shellDefinition;
 
     HtmxPageRenderer(
             final HtmxRouteCodec routeCodec,
             final HtmxViewerProperties properties,
             final HtmxPageFragmentRegistry fragmentRegistry) {
+        this(
+                routeCodec,
+                properties,
+                fragmentRegistry,
+                HtmxShellDefinition.cached("internal:default-shell.html", false, DEFAULT_SHELL_TEMPLATE));
+    }
+
+    HtmxPageRenderer(
+            final HtmxRouteCodec routeCodec,
+            final HtmxViewerProperties properties,
+            final HtmxPageFragmentRegistry fragmentRegistry,
+            final HtmxShellDefinition shellDefinition) {
         this.routeCodec = routeCodec;
         this.properties = properties;
         this.fragmentRegistry = fragmentRegistry;
+        this.shellDefinition = shellDefinition;
     }
 
     String renderObjectFragment(final HtmxObjectRoute route) {
@@ -91,8 +108,19 @@ final class HtmxPageRenderer {
         final var applicationStylesheet = applicationStylesheet(context);
         final var authenticationMetadata = authenticationMetadata(authenticationState);
         final var authenticationChrome = authenticationChrome(authenticationState);
+        final var shell = HtmxDeclarativeTemplate.bind(
+                shellDefinition.render(),
+                java.util.Map.of(
+                        "basePath", escape(basePath),
+                        "brand", escape(properties.getBrand()),
+                        "graphQlEndpoint", escape(graphQlEndpoint),
+                        "authenticationChrome", authenticationChrome,
+                        "routeContent", fragment,
+                        "comparisonLink", comparisonLink),
+                Set.of("graphQlEndpoint", "authenticationChrome", "routeContent"),
+                "HTMX_SHELL_BINDING_UNRESOLVED");
         return HtmxDeclarativeTemplate.bind(
-                SHELL_TEMPLATE,
+                DOCUMENT_TEMPLATE,
                 java.util.Map.ofEntries(
                         java.util.Map.entry("language", language),
                         java.util.Map.entry("basePath", escape(basePath)),
@@ -102,11 +130,8 @@ final class HtmxPageRenderer {
                         java.util.Map.entry("brand", escape(properties.getBrand())),
                         java.util.Map.entry("contextPath", escape(context)),
                         java.util.Map.entry("applicationStylesheet", applicationStylesheet),
-                        java.util.Map.entry("graphQlEndpoint", escape(graphQlEndpoint)),
-                        java.util.Map.entry("authenticationChrome", authenticationChrome),
-                        java.util.Map.entry("routeContent", fragment),
-                        java.util.Map.entry("comparisonLink", comparisonLink)),
-                "HTMX_SHELL_BINDING_UNRESOLVED");
+                        java.util.Map.entry("applicationShell", shell)),
+                "HTMX_DOCUMENT_BINDING_UNRESOLVED");
     }
 
     private static String authenticationMetadata(final Optional<HtmxAuthenticationShell.State> state) {
