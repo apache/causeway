@@ -53,6 +53,7 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this._release = null;
     this._client = null;
     this._fetchImpl = null;
+    this._excludeAction = null;
     this.lastDiagnosticGeneration = -1;
     this._currentState = null;
     this._currentBar = null;
@@ -108,6 +109,15 @@ export class CausewayMenubarElement extends HTMLElementBase {
 
   set fetchImpl(value) {
     this._fetchImpl = value ?? null;
+  }
+
+  get excludeAction() {
+    return this._excludeAction;
+  }
+
+  set excludeAction(value) {
+    this._excludeAction = typeof value === 'function' ? value : null;
+    this.#renderCurrentReadyState();
   }
 
   connectedCallback() {
@@ -208,9 +218,11 @@ export class CausewayMenubarElement extends HTMLElementBase {
 
   #renderReadyBar(renderRoot, bar, state) {
     const widgetPolicy = causewayMenubarWidgetConfiguration();
+    const instanceExcludeAction = this._excludeAction;
+    const globalExcludeAction = widgetPolicy.excludeAction;
     const projection = projectCausewayMenuBar(bar, {
       generation: state.generation,
-      excludeAction: widgetPolicy.excludeAction
+      excludeAction: detail => instanceExcludeAction?.(detail) === true || globalExcludeAction?.(detail) === true
     });
     const qualification = qualifyCausewayMenuBar({
       role: this.role,
@@ -240,7 +252,7 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this.dataset.causewayMenubarResponsive = qualification.presentation === 'vaadin-overflow' ? 'narrow' : 'wide';
     this.dataset.causewayMenubarFallback = qualification.reason ?? '';
     if (!qualification.accepted) {
-      renderRoot.innerHTML = renderBar(bar, this.sequence);
+      renderRoot.innerHTML = renderBar(projection.accepted ? projection : bar, this.sequence);
       this.#restoreSemanticFocus(renderRoot);
       return;
     }
@@ -550,7 +562,8 @@ function renderAction(action, sequence, role, menuIndex, sectionIndex, actionInd
   const describedByIds = [presentation.description ? descriptionId : '', action.disabled ? reasonId : ''].filter(Boolean);
   const describedBy = describedByIds.length ? ` aria-describedby="${describedByIds.join(' ')}"` : '';
   const disabled = action.disabled ? ' disabled aria-disabled="true"' : '';
-  const tooltip = composeActionTooltip(presentation.description, action.disabled);
+  const disabledReason = action.disabledReason || action.disabled;
+  const tooltip = composeActionTooltip(presentation.description, disabledReason);
   const tooltipAttributes = tooltip
     ? ` data-tooltip="${escapeHtml(tooltip)}"${action.disabled ? ' tabindex="0"' : ''}`
     : '';
@@ -558,7 +571,7 @@ function renderAction(action, sequence, role, menuIndex, sectionIndex, actionInd
     ? `<span class="causeway-action-description causeway-visually-hidden" id="${descriptionId}">${escapeHtml(presentation.description)}</span>`
     : '';
   const reason = action.disabled
-    ? `<span class="causeway-disabled-reason causeway-visually-hidden" id="${reasonId}">${escapeHtml(action.disabled)}</span>`
+    ? `<span class="causeway-disabled-reason causeway-visually-hidden" id="${reasonId}">${escapeHtml(disabledReason)}</span>`
     : '';
   return `<div class="causeway-service-action${tooltip ? ' causeway-action-control-tooltip' : ''}" data-causeway-service-action-region${dataHint('css-hint', action.cssHint)}${dataHint('icon-hint', action.iconHint)}${tooltipAttributes}>
   <button class="causeway-service-action-control" type="button" data-causeway-service-action data-service-logical-type="${escapeHtml(action.serviceLogicalTypeName)}" data-action-id="${escapeHtml(action.actionId)}"${disabled}${describedBy}>${renderActionContent(presentation.name, presentation.icon)}</button>${description}${reason}

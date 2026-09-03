@@ -270,7 +270,15 @@ class PetClinicVuePlaywrightTest {
         page.waitForFunction("() => document.querySelector('cw-object cw-action#openLocalResource')?.componentState?.status === 'ready'");
         page.locator("cw-menubars[data-menu-state='ready']").waitFor();
 
-        assertThat(page.locator("cw-menubars [data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']").count()).isZero();
+        final var systemMenu = page.locator("vaadin-menu-bar-button")
+                .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("System")).first();
+        systemMenu.waitFor();
+        systemMenu.click();
+        final var systemOverlay = page.locator("vaadin-menu-bar-overlay[opened]");
+        systemOverlay.waitFor();
+        assertThat(systemOverlay.innerText()).doesNotContain("Logout");
+        page.keyboard().press("Escape");
+
         final var logoutInvocationsBefore = graphQLRequests.stream()
                 .filter(body -> body.contains("CausewayInvokeServiceAction") && body.contains("LogoutMenu"))
                 .count();
