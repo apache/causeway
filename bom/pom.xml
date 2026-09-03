@@ -71,7 +71,6 @@ identified
 
         <assertj-guava.version>3.27.7</assertj-guava.version>
 
-        <commons-email.version>1.6.0</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.22.0</commons-io.version>
 
@@ -103,7 +102,6 @@ identified
         <jakartaee.version>11.0.0</jakartaee.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <jakarta.inject-api.version>2.0.1.MR</jakarta.inject-api.version>
-        <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
 
         <jbcrypt.version>0.4</jbcrypt.version>
         <jboss-jaxrs-api_2.1_spec.version>2.0.2.Final</jboss-jaxrs-api_2.1_spec.version>
@@ -207,8 +205,6 @@ identified
                 <groupId>org.apache.causeway.commons</groupId>
                 <artifactId>causeway-commons</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
@@ -219,107 +215,78 @@ identified
                 <artifactId>causeway-core</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-schema</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-codegen-bytebuddy</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-config</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-interaction</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-internaltestsupport</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-mmtestsupport</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-mmtest</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-runtime</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-runtimeservices</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-security</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-transaction</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-webapp</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
@@ -329,16 +296,12 @@ identified
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-commons</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-jdbc</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -346,77 +309,57 @@ identified
                 <artifactId>causeway-persistence-jpa</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-jpa-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-jpa-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-jpa-integration</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-querydsl</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-querydsl-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-querydsl-integration</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-querydsl-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-querydsl-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-querydsl-testsupport</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.security -->
@@ -425,29 +368,21 @@ identified
                 <groupId>org.apache.causeway.security</groupId>
                 <artifactId>causeway-security-bypass</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.security</groupId>
                 <artifactId>causeway-security-keycloak</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.security</groupId>
                 <artifactId>causeway-security-simple</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.security</groupId>
                 <artifactId>causeway-security-spring</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
@@ -458,35 +393,26 @@ identified
                 <artifactId>causeway-viewer-commons</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-commons-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-commons-model</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-commons-prism</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-commons-services</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -525,42 +451,31 @@ identified
                 <artifactId>causeway-viewer-restfulobjects</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-client</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-test</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -568,35 +483,26 @@ identified
                 <artifactId>causeway-viewer-wicket</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket-model</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket-ui</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket-viewer</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
@@ -618,7 +524,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fixtures-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -631,7 +536,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-unittestsupport-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -644,7 +548,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-integtestsupport-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -657,7 +560,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-specsupport-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -670,7 +572,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-archtestsupport-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -683,19 +584,16 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fakedata-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fakedata-fixtures</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fakedata-integtests</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -708,7 +606,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-h2console-ui</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -721,7 +618,6 @@ identified
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-hsqldbmgr-ui</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
             </dependency>
 
             <!-- org.apache.causeway.mavendeps -->
@@ -738,14 +634,11 @@ identified
                 <artifactId>causeway-extensions-commandlog</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-commandlog-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
@@ -758,8 +651,6 @@ identified
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (docgen) -->
@@ -768,14 +659,11 @@ identified
                 <artifactId>causeway-extensions-docgen</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-docgen-help</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (excel) -->
@@ -784,35 +672,26 @@ identified
                 <artifactId>causeway-extensions-excel</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-fixtures</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-integtests</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-testing</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (executionlog) -->
@@ -821,14 +700,11 @@ identified
                 <artifactId>causeway-extensions-executionlog</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-executionlog-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
@@ -841,8 +717,6 @@ identified
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (executionoutbox) -->
@@ -851,28 +725,21 @@ identified
                 <artifactId>causeway-extensions-executionoutbox</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-executionoutbox-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (executionrepublisher) -->
@@ -881,14 +748,11 @@ identified
                 <artifactId>causeway-extensions-executionrepublisher</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-executionoutrepublisher-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (flyway) -->
@@ -897,14 +761,11 @@ identified
                 <artifactId>causeway-extensions-flyway</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-flyway-impl</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (layoutloaders) -->
@@ -913,14 +774,11 @@ identified
                 <artifactId>causeway-extensions-layoutloaders</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders-github</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (titlecache) -->
@@ -929,21 +787,16 @@ identified
                 <artifactId>causeway-extensions-titlecache</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-titlecache-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-titlecache-caffeine</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (audittrail) -->
@@ -952,14 +805,11 @@ identified
                 <artifactId>causeway-extensions-audittrail</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-audittrail-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
@@ -972,8 +822,6 @@ identified
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (secman) -->
@@ -982,14 +830,11 @@ identified
                 <artifactId>causeway-extensions-secman</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
@@ -1002,36 +847,26 @@ identified
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-delegated-springoauth2</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-encryption-spring</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-integration</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (sessionlog) -->
@@ -1040,14 +875,11 @@ identified
                 <artifactId>causeway-extensions-sessionlog</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sessionlog-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
@@ -1060,8 +892,6 @@ identified
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (spring security) -->
@@ -1069,8 +899,6 @@ identified
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (restful objects viewer) -->
@@ -1079,14 +907,11 @@ identified
                 <artifactId>causeway-extensions-cors</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-cors-impl</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- org.apache.causeway.extensions (wicket viewer) -->
@@ -1095,140 +920,106 @@ identified
                 <artifactId>causeway-extensions-tabular</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-tabular-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-tabular-excel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-tabular-pdf</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar-wicket-integration</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-fixtures</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-wicket</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sse</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sse-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sse-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sse-wicket</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
@@ -1239,49 +1030,36 @@ identified
                 <artifactId>causeway-valuetypes-asciidoc</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-asciidoc-ui-vaa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-asciidoc-ui-wkt</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -1289,35 +1067,26 @@ identified
                 <artifactId>causeway-valuetypes-markdown</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-markdown-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-markdown-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-markdown-ui-wkt</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -1325,42 +1094,31 @@ identified
                 <artifactId>causeway-valuetypes-vega</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-applib</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-metamodel</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-ui-vaa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
