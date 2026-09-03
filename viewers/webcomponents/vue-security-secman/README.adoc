@@ -99,8 +99,9 @@ Only canonical same-origin GET destinations beneath the configured Vue base path
 Authentication, GraphQL, assets, malformed paths, unsafe methods, unrelated paths, and external destinations fall back to the Vue root.
 Spring migrates the session identifier after login.
 
-The stable Vue shell owns current-user presentation and a native POST logout form carrying the context's CSRF parameter and token.
-The application's typed action policy claims only exact `causeway.security.LogoutMenu#logout` and submits that form before GraphQL invocation.
+The stable Vue shell retains a non-visual native POST logout form carrying the context's CSRF parameter and token.
+Its `menuActionLabel` policy presents exact `causeway.security.LogoutMenu#logout` as **Sign out** in the authorized tertiary semantic menu location, while the typed action policy claims only that identity and submits the form before GraphQL invocation.
+The shell renders no separate visible username or logout block.
 Successful logout clears authentication, invalidates the session, applies configured cookie cleanup, and redirects to the signed-out login page.
 A `LocalResourcePathValue` equal to `/logout` remains ordinary safe local-resource navigation and does not acquire authentication semantics.
 Similarly named application actions remain ordinary domain actions.

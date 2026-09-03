@@ -41,6 +41,8 @@ Run the separate local SecMan-authenticated configuration with:
 
 Open `http://localhost:8080/htmx` and sign in with username `sven` and password `pass`.
 This secured configuration enables Spring CSRF protection, consumes the shared presentation-neutral SecMan Spring bridge, and intentionally omits Wicket and bypass security.
+The authorized tertiary Account menu remains part of the ordinary application-menu hierarchy and presents **Sign out**, whose activation submits the host's non-visual current-CSRF POST form rather than invoking GraphQL.
+The secured shell adds no separate visible username or logout block.
 The secured launcher preserves the same `JAVA_HOME`, `MVN`, and pass-through Maven argument behavior as `run.sh`.
 
 == Headless Playwright acceptance

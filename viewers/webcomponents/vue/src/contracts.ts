@@ -61,6 +61,7 @@ export interface CausewayPolicyContext {
 }
 
 export interface CausewayViewerPolicies {
+  readonly menuActionLabel?: (detail: CausewayActionRequest, context: CausewayPolicyContext) => string | void;
   readonly action?: (detail: CausewayActionRequest, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
   readonly navigate?: (target: CausewayObjectTarget, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
   readonly home?: (entry: unknown, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;

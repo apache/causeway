@@ -41,6 +41,7 @@ export class CausewayMenubarsElement extends HTMLElementBase {
     this._client = null;
     this._fetchImpl = null;
     this._excludeAction = null;
+    this._actionLabel = null;
     this._context = null;
     this._release = null;
     this.lastDiagnosticGeneration = -1;
@@ -78,6 +79,15 @@ export class CausewayMenubarsElement extends HTMLElementBase {
   set excludeAction(value) {
     this._excludeAction = typeof value === 'function' ? value : null;
     for (const child of this.#directBarChildren()) child.excludeAction = this._excludeAction;
+  }
+
+  get actionLabel() {
+    return this._actionLabel;
+  }
+
+  set actionLabel(value) {
+    this._actionLabel = typeof value === 'function' ? value : null;
+    for (const child of this.#directBarChildren()) child.actionLabel = this._actionLabel;
   }
 
   get context() {
@@ -151,6 +161,7 @@ export class CausewayMenubarsElement extends HTMLElementBase {
   #provideContextToDeclarativeBars() {
     for (const child of this.#directBarChildren()) {
       child.excludeAction = this._excludeAction;
+      child.actionLabel = this._actionLabel;
       child.context = this._context;
     }
   }
@@ -169,6 +180,7 @@ export class CausewayMenubarsElement extends HTMLElementBase {
       if (bar) {
         bar.setAttribute('data-causeway-bar-order', String(index));
         bar.excludeAction = this._excludeAction;
+        bar.actionLabel = this._actionLabel;
         bar.context = this._context;
         if (!present && bar.getAttribute('data-causeway-generated') === 'menubar') {
           this.removeChild(bar);

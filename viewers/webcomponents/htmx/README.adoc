@@ -169,9 +169,9 @@ Unsafe local-resource targets fail closed in the result region, and `NEW_WINDOW`
 An application can provide `window.causewayHtmxPolicy.navigate`, `handleHome`, or `handleResult` functions and return `true` to claim the corresponding policy decision.
 These policy functions receive semantic public payloads and do not replace component interaction behavior.
 
-The generic host always removes and blocks the exact framework action `causeway.security.LogoutMenu#logout` before GraphQL invocation.
-Without an authentication integration it exposes no logout endpoint and announces that logout is unavailable; similarly named application actions remain available.
-Secure authentication integrations own their logout form, HTTP method, CSRF evidence, session cleanup, and redirect independently of ordinary local-resource results.
+Without an authentication integration, the generic host removes and blocks the exact framework action `causeway.security.LogoutMenu#logout` before GraphQL invocation, exposes no logout endpoint, and announces that logout is unavailable; similarly named application actions remain available.
+An explicit authentication integration can retain that exact authorized action in its authoritative menu location, label it for host presentation, and claim it before GraphQL.
+Secure authentication integrations own their native logout form, HTTP method, CSRF evidence, session cleanup, and redirect independently of ordinary local-resource results.
 
 == Styling and accessibility
 
