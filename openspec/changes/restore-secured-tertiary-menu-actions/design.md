@@ -27,7 +27,8 @@ The HTMX and Vue secured variants maintain parallel seed configurations and use 
 ### Assign established framework roles to the deterministic user
 
 Both secured seed configurations will add the existing SecMan regular-user role and configuration-access role to `sven`, in addition to the Petclinic application role.
-The regular-user role is the framework-owned authority for `MeService`, and the configuration role is the framework-owned authority for `ConfigurationMenu`.
+The regular-user role authorizes the framework `UserMenu#me` action, and the configuration role authorizes `ConfigurationMenu#configuration`.
+The secured profiles will enable the generic `UserMenu#me` action so the shared menu can use the same exact **Me** identity in ordinary and secured runtimes instead of referencing the SecMan-only `MeService` from a shared layout.
 This reuses established permission boundaries instead of duplicating feature strings or granting an entire framework namespace through the sample role.
 
 Adding direct broad permissions to the Petclinic role was rejected because it would couple the sample's application role to framework internals and could accidentally expand authority as namespaces evolve.
@@ -36,7 +37,8 @@ Changing the viewer to retain unauthorized menu entries was rejected because aut
 ### Keep menu placement metadata authoritative
 
 The viewers will not insert or move **Me** and **Configuration**.
-Once SecMan authorizes them, the existing application-menu resource and service layout metadata determine their tertiary placement, while host policy continues to relabel only exact Logout as **Sign out**.
+The shared application-menu resource will explicitly list `UserMenu#me`, `ConfigurationMenu#configuration`, and Logout in the Account section so both ordinary and secured runtimes retain the complete intended tertiary set.
+SecMan remains responsible for authorizing those entries, while host policy continues to relabel only exact Logout as **Sign out**.
 
 ### Assert semantic parity rather than markup identity
 

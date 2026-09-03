@@ -6,6 +6,7 @@ This makes the secured menu incomplete and hides useful framework capabilities r
 ## What Changes
 
 - Make the secured Petclinic users receive the framework roles and permissions needed for the **Me** and **Configuration** actions.
+- Declare the complete intended Account action set in the shared menu layout and enable the same generic **Me** identity in secured profiles.
 - Preserve **Me**, **Configuration**, and **Sign out** together in the authoritative tertiary menu for both HTMX and Vue.
 - Keep authorization authoritative: viewers must not synthesize actions or expose actions that the current user is not permitted to invoke.
 - Add integration and headless browser coverage comparing ordinary and secured tertiary menu semantics.
@@ -24,5 +25,5 @@ None.
 
 ## Impact
 
-The change affects the deterministic SecMan seed configuration, secured HTMX and Vue integration and browser tests, and sample documentation.
+The change affects the shared Petclinic menu layout, secured profiles and deterministic SecMan seed configuration, secured HTMX and Vue integration and browser tests, and sample documentation.
 It does not change generic menu projection, action identity, GraphQL invocation, authentication endpoints, CSRF handling, or ordinary runtime authorization.

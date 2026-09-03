@@ -221,7 +221,7 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("rgb(23, 105, 170)");
         assertThat(page.locator("body").evaluate("element => getComputedStyle(element).fontFamily"))
                 .asString().contains("Inter");
-        assertThat(page.locator("cw-menubars").innerText()).containsSubsequence("Pet Owners", "Visits", "System");
+        assertThat(page.locator("cw-menubars").innerText()).containsSubsequence("Pet Owners", "Visits", "Account");
         assertThat(page.locator("footer").innerText()).contains("Powered by Apache Causeway", "Vue viewer");
         assertThat(page.locator(".causeway-object-identity").isVisible()).isFalse();
         assertThat(page.locator("[data-causeway-route-page]").evaluate("element => getComputedStyle(element).outlineStyle"))
@@ -270,13 +270,13 @@ class PetClinicVuePlaywrightTest {
         page.waitForFunction("() => document.querySelector('cw-object cw-action#openLocalResource')?.componentState?.status === 'ready'");
         page.locator("cw-menubars[data-menu-state='ready']").waitFor();
 
-        final var systemMenu = page.locator("vaadin-menu-bar-button")
-                .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("System")).first();
-        systemMenu.waitFor();
-        systemMenu.click();
-        final var systemOverlay = page.locator("vaadin-menu-bar-overlay[opened]");
-        systemOverlay.waitFor();
-        assertThat(systemOverlay.innerText()).doesNotContain("Logout");
+        final var accountMenu = page.locator("vaadin-menu-bar-button")
+                .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Account")).first();
+        accountMenu.waitFor();
+        accountMenu.click();
+        final var accountOverlay = page.locator("vaadin-menu-bar-overlay[opened]");
+        accountOverlay.waitFor();
+        assertThat(accountOverlay.innerText()).doesNotContain("Logout");
         page.keyboard().press("Escape");
 
         final var logoutInvocationsBefore = graphQLRequests.stream()
@@ -332,6 +332,21 @@ class PetClinicVuePlaywrightTest {
             assertThat(page.locator("footer").count()).isEqualTo(1);
             page.locator("cw-menubars[data-menu-state='ready']").waitFor();
             assertThat(page.locator("cw-menubars[data-menu-state='ready']").count()).isEqualTo(1);
+            assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("""
+                    element => {
+                      const actions = Object.values(element._projection?.actions ?? {});
+                      const has = (identity, label) => actions.some(action =>
+                        `${action.serviceLogicalTypeName}#${action.actionId}` === identity
+                          && action.label === label
+                          && action.role === 'tertiary');
+                      return has('causeway.applib.UserMenu#me', 'Me')
+                        && has('causeway.conf.ConfigurationMenu#configuration', 'Configuration')
+                        && !actions.some(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu')
+                        && !actions.some(action => action.serviceLogicalTypeName === 'causeway.ext.secman.MeService');
+                    }
+                    """))
+                    .as(page.locator("cw-menubar-tertiary").evaluate("element => Object.values(element._projection?.actions ?? {}).map(action => `${action.serviceLogicalTypeName}#${action.actionId}:${action.label}:${action.role}`)").toString())
+                    .isTrue();
             final var skipLink = page.locator("a[href='#causeway-vue-route']");
             assertThat(skipLink.innerText()).isEqualTo("Skip to main content");
             skipLink.focus();

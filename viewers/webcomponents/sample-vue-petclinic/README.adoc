@@ -53,7 +53,9 @@ Open any `/vue` route and sign in with username `sven` and password `pass`.
 The secured launcher preserves the environment and additional Maven argument behavior of `run.sh` while selecting `PetClinicVueSecuredApplication`.
 The application restores only safe Vue GET deep links, fetches bounded no-store username and CSRF context before mounting, decorates every GraphQL POST with the current CSRF header, and retains an application-owned non-visual POST logout form.
 Invalid, absent, locked, and passwordless accounts have the same public failure, and successful authentication migrates the session identifier.
-The authorized tertiary Account menu presents exact framework action `causeway.security.LogoutMenu#logout` as **Sign out**; host policy claims activation and submits the native form before GraphQL, while similarly named application actions and typed local-resource results remain independent.
+The shared Account layout declares **Me**, **Configuration**, and framework Logout together in the tertiary application-menu hierarchy.
+The deterministic secured user receives the standard regular-user and configuration-access roles, so the secured menu preserves **Me** and **Configuration** while presenting exact framework action `causeway.security.LogoutMenu#logout` as **Sign out**.
+Host policy claims Sign out activation and submits the native form before GraphQL, while similarly named application actions and typed local-resource results remain independent.
 The secured shell adds no separate visible username or logout block.
 
 == Test
