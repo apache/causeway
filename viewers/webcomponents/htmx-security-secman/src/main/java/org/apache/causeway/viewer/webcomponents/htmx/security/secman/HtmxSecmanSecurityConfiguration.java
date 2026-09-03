@@ -36,7 +36,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -45,9 +44,7 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.viewer.webcomponents.htmx.HtmxAuthenticationShell;
 import org.apache.causeway.viewer.webcomponents.htmx.HtmxViewerProperties;
 
@@ -67,18 +64,6 @@ class HtmxSecmanSecurityConfiguration {
             final HtmxSecmanSecurityProperties securityProperties,
             final HtmxSecmanPaths paths) {
         return new HtmxSecmanSecurityValidator(causewayConfiguration, securityProperties, paths);
-    }
-
-    @Bean
-    SecmanUserDetailsService secmanUserDetailsService(
-            final ApplicationUserRepository applicationUserRepository,
-            final InteractionService interactionService) {
-        return new SecmanUserDetailsService(applicationUserRepository, interactionService);
-    }
-
-    @Bean
-    AuthenticationConverterOfSecmanUserDetails authenticationConverterOfSecmanUserDetails() {
-        return new AuthenticationConverterOfSecmanUserDetails();
     }
 
     @Bean
@@ -105,22 +90,13 @@ class HtmxSecmanSecurityConfiguration {
     }
 
     @Bean
-    DaoAuthenticationProvider htmxSecmanAuthenticationProvider(
-            final SecmanUserDetailsService userDetailsService,
-            final @Qualifier("Secman") PasswordEncoder passwordEncoder) {
-        final var provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        provider.setHideUserNotFoundExceptions(true);
-        return provider;
-    }
-
-    @Bean
     SecurityFilterChain htmxSecmanSecurityFilterChain(
             final HttpSecurity http,
             final HtmxSecmanPaths paths,
             final HtmxSecmanSecurityProperties securityProperties,
             final HtmxViewerProperties viewerProperties,
-            final DaoAuthenticationProvider authenticationProvider,
+            final @Qualifier("webcomponentsSecmanAuthenticationProvider")
+            DaoAuthenticationProvider authenticationProvider,
             final RequestCache requestCache) throws Exception {
         final var requestMatcher = PathPatternRequestMatcher.withDefaults();
         final var viewerRoute = new OrRequestMatcher(

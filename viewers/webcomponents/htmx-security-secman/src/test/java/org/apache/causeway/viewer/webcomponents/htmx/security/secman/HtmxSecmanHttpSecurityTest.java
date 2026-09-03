@@ -50,6 +50,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.causeway.viewer.webcomponents.htmx.HtmxViewerProperties;
+import org.apache.causeway.viewer.webcomponents.security.secman.SecmanSpringAuthenticationConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -209,7 +210,10 @@ class HtmxSecmanHttpSecurityTest {
     @Configuration
     @EnableWebMvc
     @EnableWebSecurity
-    @org.springframework.context.annotation.Import(HtmxSecmanSecurityConfiguration.class)
+    @org.springframework.context.annotation.Import({
+            SecmanSpringAuthenticationConfiguration.class,
+            HtmxSecmanSecurityConfiguration.class
+    })
     static class TestConfiguration {
 
         @Bean

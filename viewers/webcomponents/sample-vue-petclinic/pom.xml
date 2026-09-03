@@ -140,6 +140,68 @@
 
     <profiles>
         <profile>
+            <id>secured-vue-petclinic</id>
+            <activation>
+                <property>
+                    <name>sample-vue-petclinic.secured</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.causeway.viewer</groupId>
+                    <artifactId>causeway-viewer-webcomponents-vue-security-secman</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.causeway.extensions</groupId>
+                    <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.causeway.extensions</groupId>
+                    <artifactId>causeway-extensions-secman-encryption-spring</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.microsoft.playwright</groupId>
+                    <artifactId>playwright</artifactId>
+                    <version>${playwright.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <resources>
+                    <resource><directory>src/main/resources</directory></resource>
+                    <resource><directory>src/secured/resources</directory></resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.6.1</version>
+                        <executions>
+                            <execution>
+                                <id>add-secured-vue-source</id>
+                                <phase>generate-sources</phase>
+                                <goals><goal>add-source</goal></goals>
+                                <configuration><sources><source>src/secured/java</source></sources></configuration>
+                            </execution>
+                            <execution>
+                                <id>add-secured-vue-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals><goal>add-test-source</goal></goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/secured-test/java</source>
+                                        <source>src/secured-playwright/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>regenerate-vue-petclinic</id>
             <build>
                 <plugins>
