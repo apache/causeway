@@ -1,0 +1,142 @@
+= Apache Causeway Vue Web Component Viewer
+
+The package provides the thin Vue 3 and Vue Router 4 integration for Apache Causeway semantic web components.
+It owns route and host policy but does not duplicate GraphQL or domain state.
+
+== Installation
+
+Install `@apache-causeway/vue-viewer`, `vue`, and `vue-router` in the application frontend.
+Vue and Vue Router are peer dependencies of the viewer package.
+The Causeway component registration modules and any selected toolkit adapters remain same-origin application assets supplied by the Causeway backend.
+
+Configure the Vue plugin so `cw-` tags compile as native custom elements.
+
+[source,typescript]
+----
+vue({
+  template: {
+    compilerOptions: {
+      isCustomElement: tag => tag.startsWith('cw-')
+    }
+  }
+})
+----
+
+Create the router with the application's browser-history base, add the exported route records, and install the returned plugin.
+
+[source,typescript]
+----
+const router = createRouter({
+  history: createWebHistory('/vue'),
+  routes: [
+    ...createCausewayRouteRecords(),
+    ...applicationRoutes
+  ]
+});
+
+const viewer = createCausewayVueViewer({
+  router,
+  endpoint: '/graphql',
+  basePath: '/vue',
+  pages: {
+    'petclinic.PetOwner': PetOwnerPage,
+    'petclinic.HomePage': () => import('./pages/HomePage.vue')
+  }
+});
+
+createApp(App).use(router).use(viewer.plugin).mount('#app');
+----
+
+The application server must return its Vue `index.html` for `/vue`, `/vue/object/**`, and other intended client routes.
+That fallback must not capture `/graphql`, application assets, authentication endpoints, or unrelated backend routes.
+
+== Application-owned shell
+
+The root application component declares stable protocol landmarks rather than asking the viewer to manufacture them.
+The visual hierarchy remains application-owned.
+
+[source,vue]
+----
+<script setup lang="ts">
+import {ref} from 'vue';
+import {RouterView, useRoute} from 'vue-router';
+import {useCausewayShell, useCausewayViewer} from '@apache-causeway/vue-viewer';
+
+const viewer = useCausewayViewer();
+const route = useRoute();
+const shell = useCausewayShell(ref<HTMLElement | null>(null));
+</script>
+
+<template>
+  <div ref="shell">
+    <cw-graphql-client data-causeway-shell-client :endpoint="viewer.endpoint">
+      <header><cw-menubars /></header>
+      <div data-causeway-route-loading role="status" aria-live="polite" />
+      <div data-causeway-route-announcement aria-live="polite" aria-atomic="true" />
+      <cw-action-results data-causeway-shell-result hidden />
+      <main data-causeway-router-view>
+        <RouterView v-slot="{ Component }">
+          <component :is="Component" :key="route.path" />
+        </RouterView>
+      </main>
+    </cw-graphql-client>
+  </div>
+</template>
+----
+
+Use Vue's `.prop` modifier for structured custom-element values that are DOM properties rather than strings.
+For example, `:executor.prop="executor"` preserves the executor function instead of serializing it as an attribute.
+
+== Custom route pages
+
+A custom page receives immutable `logicalTypeName`, `objectId`, and `routeKey` props.
+It declares one marked route object context and one marked interaction controller inside that context.
+
+[source,vue]
+----
+<script setup lang="ts">
+import type {CausewayRoutePageProps} from '@apache-causeway/vue-viewer';
+defineProps<CausewayRoutePageProps>();
+</script>
+
+<template>
+  <section data-causeway-route-page tabindex="-1">
+    <cw-object-context
+      data-causeway-route-context
+      :logical-type="logicalTypeName"
+      :object-id="objectId"
+    >
+      <cw-object-header />
+      <cw-property id="name" editable />
+      <cw-interaction-controller data-causeway-route-interactions />
+    </cw-object-context>
+  </section>
+</template>
+----
+
+An unregistered exact logical type uses the package's generic page containing `<cw-object editable>`.
+Registrations are immutable after plugin creation and do not use type inheritance.
+
+== Public exports
+
+The package exports route codecs, route names and records, the viewer plugin factory, shell binding helpers, boundary validators, policy helpers, public TypeScript contracts, and the generic route components.
+Applications may replace navigation, home, result, and error policy through viewer options.
+Claimed semantic events are not also handled by the default policy.
+
+The canonical route grammar is `<base-path>/object/<logical-type>/<identifier>` using independently canonical UTF-8 percent-encoded segments.
+Malformed, unsafe, non-canonical, or oversized segments fail before an object context is mounted.
+
+== Lifecycle and presentation
+
+The stable shell keeps its GraphQL provider and menus connected while canonical route keys dispose obsolete object contexts.
+Object-context state remains authoritative for loading, ready, partial-error, and terminal-error presentation.
+The application owns shell CSS and may copy or override the package reference theme through documented custom properties.
+The semantic components continue to own object layout, menus, validation, interactions, results, collection previews, and toolkit selection.
+
+The first release supports client-rendered Vue applications only.
+Nuxt, server-side rendering, streaming hydration, runtime page-registry mutation, and inherited logical-type matching are not supported.
+
+== Verification
+
+Run `npm ci --ignore-scripts` followed by `npm run verify` to type-check, test, build, inspect, pack, install, and import the package.
+The Maven profile `regenerate-vue-viewer` performs the same locked regeneration for reactor maintainers.

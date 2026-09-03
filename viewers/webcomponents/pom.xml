@@ -40,14 +40,18 @@
         <spring-boot.run.skip>true</spring-boot.run.skip>
         <sample-html.run.skip>true</sample-html.run.skip>
         <sample-htmx-petclinic.run.skip>true</sample-htmx-petclinic.run.skip>
+        <sample-vue-petclinic.run.skip>true</sample-vue-petclinic.run.skip>
     </properties>
 
     <modules>
         <module>foundation</module>
+        <module>vue</module>
         <module>htmx</module>
         <module>htmx-security-secman</module>
+        <module>sample-petclinic-domain</module>
         <module>sample-html</module>
         <module>sample-htmx-petclinic</module>
+        <module>sample-vue-petclinic</module>
     </modules>
 
     <profiles>
@@ -64,6 +68,15 @@
             <id>run-sample-htmx-petclinic</id>
             <properties>
                 <sample-htmx-petclinic.run.skip>false</sample-htmx-petclinic.run.skip>
+            </properties>
+            <build>
+                <defaultGoal>spring-boot:run</defaultGoal>
+            </build>
+        </profile>
+        <profile>
+            <id>run-sample-vue-petclinic</id>
+            <properties>
+                <sample-vue-petclinic.run.skip>false</sample-vue-petclinic.run.skip>
             </properties>
             <build>
                 <defaultGoal>spring-boot:run</defaultGoal>

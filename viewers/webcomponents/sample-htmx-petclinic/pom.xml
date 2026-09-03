@@ -49,6 +49,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-webcomponents-sample-petclinic-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
             <artifactId>causeway-viewer-graphql-viewer</artifactId>
         </dependency>
         <dependency>
