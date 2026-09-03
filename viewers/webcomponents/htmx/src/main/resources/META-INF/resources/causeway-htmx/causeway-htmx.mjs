@@ -40,6 +40,11 @@ import {
 } from '../causeway-webcomponents/menubar-widget.mjs';
 import {defineCausewayWebComponents} from '../causeway-webcomponents/register.mjs';
 import {
+  isFrameworkLogoutAction,
+  removeFrameworkLogoutMenuActions
+} from '../causeway-webcomponents/host-operation-policy.mjs';
+import {navigateLocalResource} from '../causeway-webcomponents/local-resource-policy.mjs';
+import {
   applyStandaloneCollectionPresentation,
   standaloneCollectionPresentation
 } from '../causeway-webcomponents/standalone-collection-presentation.mjs';
@@ -73,6 +78,7 @@ const resultRegion = uniqueShellLandmark('#causeway-result');
 const loadingRegion = uniqueShellLandmark('#causeway-route-loading');
 const menuBoundary = uniqueShellLandmark('cw-menubars');
 const basePath = document.documentElement.dataset.causewayHtmxBase;
+const applicationResourceBase = document.documentElement.dataset.causewayApplicationResourceBase || '/';
 const applicationTitle = document.title.trim();
 const referenceWidgetMode = document.documentElement.dataset.causewayReferenceWidgets;
 const collectionGridMode = document.documentElement.dataset.causewayCollectionGrid;
@@ -138,7 +144,8 @@ document.addEventListener(CAUSEWAY_MENUBAR_WIDGET_POLICY_EVENT, event => {
 configureCausewayMenubarWidgets({
   enabled: applicationMenubarMode === 'vaadin',
   moduleUrl: applicationMenubarModuleUrl,
-  excludeAction: detail => Boolean(authentication && isExcludedAction(authentication, detail))
+  excludeAction: detail => isFrameworkLogoutAction(detail)
+    || Boolean(authentication && isExcludedAction(authentication, detail))
 });
 let activeRequest = null;
 let navigationGeneration = 0;
@@ -429,6 +436,15 @@ function presentResult(detail) {
   if (typeof policy?.handleResult === 'function' && policy.handleResult(detail) === true) {
     return;
   }
+  if (detail?.result?.kind === 'local-resource') {
+    try {
+      navigateLocalResource(detail.result.value, {applicationBase: applicationResourceBase});
+    } catch (error) {
+      document.documentElement.dataset.causewayLocalResourceError = String(error?.code ?? 'LOCAL_RESOURCE_NAVIGATION_FAILED');
+      announce('The local resource could not be opened.');
+    }
+    return;
+  }
   const identity = resultObjectIdentity(detail?.result);
   if (identity) {
     navigate(canonicalObjectPath(basePath, identity));
@@ -453,6 +469,9 @@ function presentResult(detail) {
     output.textContent = `${count} result${count === 1 ? '' : 's'}`;
   } else if (result?.kind === 'scalar') {
     output.textContent = result.value == null ? '' : String(result.value);
+    replaceResultPresentation(destination, heading, output, resultDismissButton(destination, detail));
+  } else if (result?.kind === 'unsupported') {
+    output.textContent = 'This result cannot be presented.';
     replaceResultPresentation(destination, heading, output, resultDismissButton(destination, detail));
   } else {
     output.textContent = 'Completed';
@@ -572,19 +591,34 @@ document.addEventListener(ACTION_REQUEST_EVENT, event => {
 }, {capture: true});
 
 document.addEventListener(ACTION_REQUEST_EVENT, event => {
-  if (!authentication) {
+  const detail = event.detail;
+  const policy = globalThis.causewayHtmxPolicy;
+  try {
+    if (typeof policy?.handleAction === 'function' && policy.handleAction(detail) === true) {
+      event.preventDefault();
+      return;
+    }
+  } catch {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    document.documentElement.dataset.causewayActionPolicyError = 'ACTION_POLICY_FAILED';
+    announce('The action host policy could not complete.');
     return;
   }
-  if (!isExcludedAction(authentication, event.detail)) {
-    return;
-  }
+  if (!isFrameworkLogoutAction(detail)) return;
   event.preventDefault();
   event.stopImmediatePropagation();
-  document.querySelector('[data-causeway-logout-form]')?.requestSubmit?.();
+  if (authentication && isExcludedAction(authentication, detail)) {
+    document.querySelector('[data-causeway-logout-form]')?.requestSubmit?.();
+  } else {
+    document.documentElement.dataset.causewayLogoutUnavailable = 'true';
+    announce('Logout requires a host authentication integration.');
+  }
 }, {capture: true});
 
 document.addEventListener(MENU_BARS_STATE_EVENT, () => globalThis.setTimeout(() => {
   collapseNarrowBars();
+  removeFrameworkLogoutMenuActions(document);
   applyAuthenticationMenuPolicy(authentication, document);
 }, 0));
 

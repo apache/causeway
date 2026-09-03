@@ -7,9 +7,22 @@ export interface CausewayObjectTarget {
     readonly objectId?: string;
     readonly title?: string;
 }
+export interface CausewayLocalResourceTarget {
+    readonly path: string;
+    readonly openUrlStrategy: 'SAME_WINDOW' | 'NEW_WINDOW';
+}
 export interface CausewaySemanticResult {
-    readonly kind: 'object' | 'scalar' | 'collection' | 'void' | string;
+    readonly kind: 'object' | 'scalar' | 'collection' | 'local-resource' | 'unsupported' | 'void' | string;
     readonly value?: unknown;
+    readonly reason?: string;
+}
+export interface CausewayActionRequest {
+    readonly actionId: string;
+    readonly serviceLogicalTypeName?: string;
+    readonly identity?: CausewayObjectTarget | null;
+    readonly target?: object | null;
+    readonly context?: object;
+    readonly presentation?: Record<string, unknown>;
 }
 export interface CausewayEventClaim {
     readonly claimed: boolean;
@@ -22,6 +35,7 @@ export interface CausewayPolicyContext {
     readonly routeGeneration: number;
 }
 export interface CausewayViewerPolicies {
+    readonly action?: (detail: CausewayActionRequest, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
     readonly navigate?: (target: CausewayObjectTarget, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
     readonly home?: (entry: unknown, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
     readonly result?: (detail: unknown, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
@@ -31,6 +45,7 @@ export interface CausewayViewerOptions {
     readonly router: Router;
     readonly endpoint: string;
     readonly basePath?: string;
+    readonly applicationResourceBase?: string;
     readonly pages?: CausewayPageRegistryInput;
     readonly policies?: CausewayViewerPolicies;
     readonly developmentDiagnostics?: boolean;
@@ -40,6 +55,7 @@ export interface CausewayViewerRuntime {
     readonly router: Router;
     readonly endpoint: string;
     readonly basePath: string;
+    readonly applicationResourceBase: string;
     readonly pages: ReadonlyMap<string, CausewayPageRegistration>;
     readonly policies: CausewayViewerPolicies;
     readonly developmentDiagnostics: boolean;

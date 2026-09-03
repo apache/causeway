@@ -3,6 +3,7 @@ export declare const NAVIGATION_REQUEST_EVENT = "causeway-navigation-request";
 export declare const ACTION_REQUEST_EVENT = "causeway-action-request";
 export declare const ACTION_RESULT_EVENT = "causeway-action-result";
 export declare const OBJECT_CONTEXT_STATE_EVENT = "causeway-object-context-state-change";
+export declare const MENU_BARS_STATE_EVENT = "causeway-menu-bars-state-change";
 interface ActionResultDetail {
     readonly actionId?: string;
     readonly context?: object;

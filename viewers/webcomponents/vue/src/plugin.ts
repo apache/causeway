@@ -40,6 +40,7 @@ export function createCausewayVueViewer(options: CausewayViewerOptions): Causewa
     router: options.router,
     endpoint,
     basePath: normalizeBasePath(options.basePath ?? (options.router.options.history.base || '/')),
+    applicationResourceBase: normalizeBasePath(options.applicationResourceBase ?? '/'),
     pages: normalizePageRegistry(options.pages),
     policies: Object.freeze({...options.policies}),
     developmentDiagnostics: options.developmentDiagnostics ?? true,

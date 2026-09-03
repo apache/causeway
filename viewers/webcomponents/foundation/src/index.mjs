@@ -18,6 +18,7 @@
  */
 
 export * from './action-element.mjs';
+export * from './action-result.mjs';
 export * from './action-results-element.mjs';
 export * from './action-widget.mjs';
 export * from './breadcrumbs-element.mjs';
@@ -37,9 +38,11 @@ export * from './graphql-client.mjs';
 export * from './graphql-client-element.mjs';
 export * from './graphql-executor.mjs';
 export * from './grid-widget.mjs';
+export * from './host-operation-policy.mjs';
 export * from './interaction-controller-element.mjs';
 export * from './interaction-operations.mjs';
 export * from './introspection.mjs';
+export * from './local-resource-policy.mjs';
 export * from './menu-context-controller.mjs';
 export * from './menu-layout.mjs';
 export * from './menubar-element.mjs';

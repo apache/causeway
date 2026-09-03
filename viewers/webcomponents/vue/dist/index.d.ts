@@ -1,5 +1,7 @@
 export * from './boundary';
 export * from './contracts';
+export * from './host-operation';
+export * from './local-resource';
 export * from './plugin';
 export * from './policy';
 export * from './registry';

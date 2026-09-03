@@ -25,9 +25,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.value.OpenUrlStrategy;
 
 @Entity
 @Table(name = "petclinic_viewer_fallback")
@@ -72,5 +77,23 @@ public class ViewerFallback {
 
     public String getMessage() {
         return message;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(named = "Open local resource")
+    public LocalResourcePath openLocalResource() {
+        return new LocalResourcePath("/petclinic-local-resource.html", OpenUrlStrategy.SAME_WINDOW);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(named = "Open local resource in new window")
+    public LocalResourcePath openLocalResourceInNewWindow() {
+        return new LocalResourcePath("/petclinic-local-resource.html", OpenUrlStrategy.NEW_WINDOW);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(named = "Logout")
+    public String logout() {
+        return "Application action completed";
     }
 }

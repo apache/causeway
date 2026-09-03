@@ -21,6 +21,7 @@ import {createMemoryHistory, createRouter} from 'vue-router';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {createCausewayVueViewer} from '../src/plugin';
 import {
+  ACTION_REQUEST_EVENT,
   ACTION_RESULT_EVENT,
   installSemanticBridge,
   NAVIGATION_REQUEST_EVENT,
@@ -120,5 +121,73 @@ describe('semantic policy bridge', () => {
     }));
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(viewer.router.currentRoute.value.path).toBe('/');
+  });
+
+  it('fails framework Logout closed before invocation and removes its menu control', async () => {
+    const viewer = await runtime();
+    const shell = authoredShell();
+    const region = document.createElement('div');
+    region.setAttribute('data-causeway-service-action-region', '');
+    region.innerHTML = '<button data-causeway-service-action data-service-logical-type="causeway.security.LogoutMenu" data-action-id="logout">Logout</button>';
+    shell.append(region);
+    const dispose = installSemanticBridge(viewer, shell);
+    expect(region.isConnected).toBe(false);
+
+    const request = new CustomEvent(ACTION_REQUEST_EVENT, {
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+      detail: {serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', context: {}}
+    });
+    shell.dispatchEvent(request);
+    expect(request.defaultPrevented).toBe(true);
+    expect(shell.dataset.causewayLogoutUnavailable).toBe('true');
+    expect(shell.querySelector('[data-causeway-route-announcement]')?.textContent).toContain('host authentication');
+    dispose();
+  });
+
+  it('lets synchronous and asynchronous action policies claim or resume exactly once', async () => {
+    const claimed = vi.fn((_detail, claim) => claim.claim());
+    const claimedViewer = await runtime({action: claimed});
+    const claimedShell = authoredShell();
+    const disposeClaimed = installSemanticBridge(claimedViewer, claimedShell);
+    const claimedRequest = new CustomEvent(ACTION_REQUEST_EVENT, {
+      bubbles: true, cancelable: true, detail: {actionId: 'run', serviceLogicalTypeName: 'example.Service', context: {}}
+    });
+    claimedShell.dispatchEvent(claimedRequest);
+    expect(claimedRequest.defaultPrevented).toBe(true);
+    expect(claimed).toHaveBeenCalledOnce();
+    disposeClaimed();
+
+    const asyncViewer = await runtime({action: async () => false});
+    const asyncShell = authoredShell();
+    const source = document.createElement('button');
+    asyncShell.append(source);
+    const seen: Event[] = [];
+    source.addEventListener(ACTION_REQUEST_EVENT, event => seen.push(event));
+    const disposeAsync = installSemanticBridge(asyncViewer, asyncShell);
+    source.dispatchEvent(new CustomEvent(ACTION_REQUEST_EVENT, {
+      bubbles: true, cancelable: true, detail: {actionId: 'run', serviceLogicalTypeName: 'example.Service', context: {}}
+    }));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(seen).toHaveLength(2);
+    expect(seen[0].defaultPrevented).toBe(true);
+    expect(seen[1].defaultPrevented).toBe(false);
+    disposeAsync();
+  });
+
+  it('lets the result policy claim local-resource navigation', async () => {
+    const result = vi.fn((_detail, claim) => claim.claim());
+    const viewer = await runtime({result});
+    const shell = authoredShell();
+    const dispose = installSemanticBridge(viewer, shell);
+    shell.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
+      bubbles: true,
+      detail: {result: {kind: 'local-resource', value: {path: '/guide', openUrlStrategy: 'SAME_WINDOW'}}}
+    }));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(result).toHaveBeenCalledOnce();
+    expect(viewer.router.currentRoute.value.path).toBe('/');
+    dispose();
   });
 });

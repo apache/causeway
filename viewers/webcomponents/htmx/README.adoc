@@ -164,8 +164,14 @@ Absent, hidden, invalid, unsupported, or partially failing home state leaves an 
 The viewer does not invent a home service-action descriptor.
 
 Default result policy routes object results, presents scalar and collection results in the shell result region, and announces void completion before authoritatively replacing the current route context while preserving the result announcement.
+Typed `LocalResourcePathValue` results use the servlet context path published as `data-causeway-application-resource-base` and perform safe same-origin full-document navigation; they never enter HTMX fragment or object routing.
+Unsafe local-resource targets fail closed in the result region, and `NEW_WINDOW` requests an opener-isolated window.
 An application can provide `window.causewayHtmxPolicy.navigate`, `handleHome`, or `handleResult` functions and return `true` to claim the corresponding policy decision.
 These policy functions receive semantic public payloads and do not replace component interaction behavior.
+
+The generic host always removes and blocks the exact framework action `causeway.security.LogoutMenu#logout` before GraphQL invocation.
+Without an authentication integration it exposes no logout endpoint and announces that logout is unavailable; similarly named application actions remain available.
+Secure authentication integrations own their logout form, HTTP method, CSRF evidence, session cleanup, and redirect independently of ordinary local-resource results.
 
 == Styling and accessibility
 

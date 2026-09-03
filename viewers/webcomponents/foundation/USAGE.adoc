@@ -245,7 +245,9 @@ Safe actions use their advertised rich query invocation, while mutating actions 
 No object bookmark or `_target` is manufactured for a service action.
 `causeway-action-request`, `causeway-action-prompt-state-change`, and `causeway-action-result` retain their established names.
 Service interaction events add `target: {kind: "service", logicalTypeName}`, `serviceLogicalTypeName`, and `identity: null`; object interaction identities remain unchanged.
-Routing, result rendering, browser history, home behavior, and navigation remain host policy.
+Routing, result rendering, browser history, home behavior, authentication, and navigation remain host policy.
+Every action publishes one cancelable `causeway-action-request` before validation or invocation; a host that synchronously claims or cancels that request prevents validation, GraphQL invocation, and synthetic result emission.
+The reserved framework operation helper matches only `causeway.security.LogoutMenu#logout`, so similarly labelled application actions remain ordinary domain actions.
 Selecting an enabled menu action closes its transient menu before interaction presentation, clicking outside closes an expanded menu without moving focus, and cancellation restores focus to the visible originating disclosure.
 
 Each non-empty bar renders a labelled `nav` landmark.
@@ -575,6 +577,15 @@ Adjacent ordinary HTML action groups remain compatible when semantic nesting is 
 Direct compositions expose `data-causeway-associated-member`, `data-causeway-action-group`, `data-causeway-associated-action`, and `causeway-member-primary` hooks.
 Use `--causeway-associated-action-gap` and `--causeway-associated-action-margin-block-end` to adjust wrapping presentation without inline styles or toolkit-specific elements.
 Generated `<cw-object>` layouts retain semantically equivalent associated-member and action-group hooks from effective grid XML.
+
+== Typed action results and local resources
+
+Object and service interactions use the same immutable result normalization.
+An exact GraphQL `LocalResourcePathValue` wrapper becomes `{kind: "local-resource", value: {path, openUrlStrategy}}`; malformed wrappers become bounded unsupported results rather than scalar or object values.
+Foundation exports a host-facing resolver and navigator that require an explicit application-local base, preserve a nested deployment context exactly once, and reject malformed, scheme-relative, cross-origin, credential-bearing, escaping, or unsupported targets.
+`SAME_WINDOW` performs full-document navigation and `NEW_WINDOW` requests an opener-isolated window.
+These values are navigation results, not authentication instructions: a path equal to `/logout` does not acquire logout semantics.
+Secure logout remains a host concern because only the host owns CSRF evidence, sessions, provider logout, and post-logout destinations.
 
 == Standalone action-result collections
 

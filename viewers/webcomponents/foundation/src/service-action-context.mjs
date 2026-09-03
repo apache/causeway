@@ -25,6 +25,7 @@ import {
   extractActionInvocationResult,
   secureActionInvocationResult
 } from './action-dispatch.mjs';
+import {normalizeActionResult} from './action-result.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
 import {
   argumentsFromValues,
@@ -33,7 +34,7 @@ import {
   normalizeAutoCompleteWindow,
   resultSelectionForType
 } from './interaction-operations.mjs';
-import {InteractionResultKind, InteractionStatus} from './types.mjs';
+import {InteractionStatus} from './types.mjs';
 
 export class ServiceActionContextController {
   constructor({
@@ -492,37 +493,6 @@ function interactionResult(status, data = null, errors = [], operation = null) {
     errors: Object.freeze([...(errors ?? [])]),
     operation
   });
-}
-
-function normalizeActionResult(value, typeRef) {
-  const inner = innermostType(typeRef);
-  const list = unwrapNonNull(typeRef)?.kind === 'LIST';
-  if (value == null) {
-    return Object.freeze({kind: InteractionResultKind.VOID, value: null});
-  }
-  if (list || Array.isArray(value)) {
-    return Object.freeze({kind: InteractionResultKind.COLLECTION, value});
-  }
-  if (inner?.kind === 'SCALAR' || inner?.kind === 'ENUM' || typeof value !== 'object') {
-    return Object.freeze({kind: InteractionResultKind.SCALAR, value});
-  }
-  return Object.freeze({kind: InteractionResultKind.OBJECT, value});
-}
-
-function unwrapNonNull(typeRef) {
-  let current = typeRef;
-  while (current?.kind === 'NON_NULL') {
-    current = current.ofType;
-  }
-  return current;
-}
-
-function innermostType(typeRef) {
-  let current = typeRef;
-  while (current?.ofType) {
-    current = current.ofType;
-  }
-  return current;
 }
 
 function commandError(error) {
