@@ -17,12 +17,15 @@ Owner and service actions demonstrate canonical descriptions, parameter-prompt d
 
 == Run
 
-Use JDK 17 or later.
+Use JDK 17 or later and run this command from the repository root:
 
 [source,bash]
 ----
-mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic
+./viewers/webcomponents/sample-htmx-petclinic/run.sh
 ----
+
+The script respects an existing `JAVA_HOME`, discovers JDK 21 through macOS `/usr/libexec/java_home` when `JAVA_HOME` is unset, and uses `MVN` instead of `mvn` when that environment variable is supplied.
+Pass Maven properties such as `-Dspring-boot.run.arguments=--server.port=9090` to the script when needed.
 
 The root URL redirects to `http://localhost:8080/htmx`.
 The Wicket comparison is available at `http://localhost:8080/wicket/`.
@@ -44,30 +47,21 @@ This secured configuration enables Spring CSRF protection and intentionally omit
 The opt-in `playwright` profile adds Playwright for Java only to the dedicated browser-test source set, so ordinary reactor builds do not resolve a browser or compile the Playwright suite.
 Playwright runs Chromium headlessly by default and does not take foreground focus.
 
-Install the profile's reactor dependencies and Chromium once:
+Run the integration, secured integration, and complete headless UI suites from the repository root:
 
 [source,bash]
 ----
-mvn -f viewers/webcomponents/pom.xml -pl htmx -am install -DskipTests
-mvn -f viewers/webcomponents/sample-htmx-petclinic/pom.xml \
-    -Pplaywright \
-    -Dexec.mainClass=com.microsoft.playwright.CLI \
-    -Dexec.classpathScope=test \
-    -Dexec.args="install chromium" \
-    test-compile exec:java
+./viewers/webcomponents/sample-htmx-petclinic/test.sh
 ----
 
-Run the complete headless UI suite from the web-components reactor:
+Install Playwright Chromium on the first run when necessary:
 
 [source,bash]
 ----
-mvn -f viewers/webcomponents/pom.xml \
-    -pl sample-htmx-petclinic -am \
-    -Pplaywright \
-    -Dtest=PetClinicHtmxPlaywrightTest \
-    -Dsurefire.failIfNoSpecifiedTests=false \
-    test
+./viewers/webcomponents/sample-htmx-petclinic/test.sh --install-browser
 ----
+
+Any arguments after `--install-browser` are passed to the Maven test invocation.
 
 Add `-Dcauseway.viewer.webcomponents.htmx.component-toolkit=native` to run the same suite through complete explicit-native reference, read-only field, editor, and ordinary-action rollback.
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
