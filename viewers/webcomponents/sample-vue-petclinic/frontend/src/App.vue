@@ -57,21 +57,19 @@ onBeforeUnmount(() => titleObserver?.disconnect());
             <span>Pet Clinic</span>
           </a>
           <cw-menubars />
-          <div v-if="authenticationContext" class="causeway-authentication" data-testid="vue-authentication-shell">
-            <span class="causeway-authentication-user">Signed in as {{ authenticationContext.username }}</span>
-            <form
-              method="post"
-              :action="authenticationContext.logoutPath"
-              data-causeway-authentication-logout
+          <form
+            v-if="authenticationContext"
+            method="post"
+            :action="authenticationContext.logoutPath"
+            data-causeway-authentication-logout
+            hidden
+          >
+            <input
+              type="hidden"
+              :name="authenticationContext.csrfParameterName"
+              :value="authenticationContext.csrfToken"
             >
-              <input
-                type="hidden"
-                :name="authenticationContext.csrfParameterName"
-                :value="authenticationContext.csrfToken"
-              >
-              <button type="submit">Sign out</button>
-            </form>
-          </div>
+          </form>
         </div>
       </header>
       <div

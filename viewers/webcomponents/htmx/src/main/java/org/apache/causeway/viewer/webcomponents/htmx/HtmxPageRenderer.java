@@ -163,15 +163,10 @@ final class HtmxPageRenderer {
         }
         final var value = state.orElseThrow();
         return """
-                <div class="causeway-shell-user" data-testid="causeway-shell-user">
-                  <span class="causeway-shell-username">%s</span>
-                  <form method="post" action="%s" data-causeway-logout-form>
-                    <input type="hidden" name="%s" value="%s">
-                    <button type="submit" class="causeway-shell-logout">Sign out</button>
-                  </form>
-                </div>
+                <form method="post" action="%s" data-causeway-logout-form hidden>
+                  <input type="hidden" name="%s" value="%s">
+                </form>
                 """.formatted(
-                escape(value.username()),
                 escape(value.logoutPath()),
                 escape(value.csrfParameterName()),
                 escape(value.csrfToken()));

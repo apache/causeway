@@ -121,15 +121,13 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                         + "; element=" + page.locator("cw-graphql-client").evaluate("element => element.outerHTML"), cause);
             }
             waitForReadyObject(page);
-            assertThat(page.locator("[data-testid='vue-authentication-shell']").textContent()).contains("sven");
+            assertThat(page.locator("[data-testid='vue-authentication-shell']").count()).isZero();
+            assertThat(page.locator("[data-causeway-authentication-logout]").getAttribute("hidden")).isNotNull();
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
             page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
             assertThat(menuBarRequests).hasSize(1);
-            assertThat(page.locator("[data-causeway-service-action][data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']").count())
-                    .isZero();
-            assertThat(page.locator("cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary")
-                    .evaluateAll("elements => elements.some(element => Object.values(element._projection?.actions ?? {}).some(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu' && action.actionId === 'logout'))"))
-                    .isEqualTo(false);
+            assertThat(page.locator("cw-menubar-tertiary").isVisible()).isTrue();
+            assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("element => { const action = Object.values(element._projection?.actions ?? {}).find(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu' && action.actionId === 'logout'); return action?.label === 'Sign out' && action.role === 'tertiary'; }")).isTrue();
             assertThat(graphQlCsrfHeaders).isNotEmpty().allSatisfy(value -> assertThat(value).isNotBlank());
 
             final var graphQlCountBeforeLogoutPolicy = graphQlCsrfHeaders.size();
@@ -187,7 +185,7 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             page.waitForURL("**/vue**");
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState) && document.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready'");
             assertThat(menuBarRequests).hasSize(2);
-            page.locator("[data-causeway-authentication-logout] button[type='submit']").click();
+            page.locator("cw-menubar-tertiary").evaluate("element => { const projection = element._projection; const action = Object.values(projection.actions).find(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu' && action.actionId === 'logout'); const control = element.querySelector('cw-menubar-control')._control; const items = control.items.flatMap(menu => menu.children ?? []); const item = items.find(candidate => candidate.causewayKey === action.key); control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: item}})); }");
             page.waitForURL("**/vue/login?logout=true");
             assertThat(page.locator("[role='status']").textContent()).contains("signed out");
             assertThat(menuBarRequests).hasSize(2);

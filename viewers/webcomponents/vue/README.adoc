@@ -125,11 +125,12 @@ Registrations are immutable after plugin creation and do not use type inheritanc
 == Public exports
 
 The package exports route codecs, route names and records, the viewer plugin factory, shell binding helpers, boundary validators, policy helpers, public TypeScript contracts, and the generic route components.
-Applications may replace pre-invocation action, navigation, home, result, and error policy through viewer options.
+Applications may replace pre-invocation action, menu-action label, navigation, home, result, and error policy through viewer options.
 The typed action policy receives canonical action-request detail, an idempotent single-claim capability, and immutable route context; a synchronous claim prevents validation and GraphQL invocation, while an unclaimed asynchronous decision resumes an ordinary action exactly once if the route remains current.
 Claimed semantic events are not also handled by the default policy.
-The default policy removes and blocks only the exact framework action `causeway.security.LogoutMenu#logout`; applications with authentication claim that action and own the secure logout workflow.
-Without such a policy, framework Logout fails closed before GraphQL and similarly named application actions remain ordinary.
+The default policy removes and blocks only the exact framework action `causeway.security.LogoutMenu#logout`.
+Applications with authentication can return a bounded label from `menuActionLabel` for that exact identity, retain it in its authoritative semantic menu location, claim its activation, and own the secure logout workflow.
+Without both explicit presentation and invocation policy, framework Logout fails closed before GraphQL and similarly named application actions remain ordinary.
 
 `applicationResourceBase` is independent of `basePath` and identifies the application-local deployment base used for typed `LocalResourcePathValue` results.
 The default result policy resolves those values as same-origin full-document targets, rejects unsafe or escaping paths, and uses opener isolation for `NEW_WINDOW`; it does not send them through Vue Router.
@@ -139,7 +140,7 @@ Hosts may claim result policy first to replace or further restrict this behavior
 == Secured host composition
 
 Authentication remains an application responsibility.
-A secured application can fetch its current session and CSRF context before mounting, bind a CSRF-decorating executor with `:executor.prop` on its stable `<cw-graphql-client>`, render current-user and native POST logout controls in its authored shell, and claim exact framework Logout through the typed action policy.
+A secured application can fetch its current session and CSRF context before mounting, bind a CSRF-decorating executor with `:executor.prop` on its stable `<cw-graphql-client>`, retain a non-visual native POST logout form, present **Sign out** in the exact framework Logout menu location through `menuActionLabel`, and claim activation through the typed action policy.
 The viewer neither fetches credentials nor CSRF evidence, creates endpoints, persists tokens, or infers authentication from routes or `LocalResourcePathValue` results.
 A host that does not supply this context makes no authentication bootstrap request and retains ordinary executor behavior.
 

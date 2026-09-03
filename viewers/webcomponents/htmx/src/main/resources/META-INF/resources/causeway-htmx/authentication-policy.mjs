@@ -56,16 +56,10 @@ export function isExcludedAction(authentication, detail) {
   return authentication?.excludedActions.has(identity) ?? false;
 }
 
-export function applyAuthenticationMenuPolicy(authentication, document) {
-  if (!authentication?.excludedActions.size) {
-    return;
-  }
-  for (const button of document.querySelectorAll('[data-causeway-service-action]')) {
-    if (isExcludedAction(authentication, {
-      serviceLogicalTypeName: button.getAttribute('data-service-logical-type'),
-      actionId: button.getAttribute('data-action-id')
-    })) {
-      button.closest('[data-causeway-service-action-region]')?.remove();
-    }
-  }
+export function authenticationActionLabel(authentication, detail) {
+  return isExcludedAction(authentication, detail)
+    && detail?.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
+    && detail?.actionId === 'logout'
+    ? 'Sign out'
+    : undefined;
 }

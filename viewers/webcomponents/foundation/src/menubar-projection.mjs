@@ -12,7 +12,7 @@ const MAX_SECTIONS = 128;
 const MAX_ACTIONS = 1024;
 const MAX_TEXT = 512;
 
-export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = null} = {}) {
+export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = null, actionLabel = null} = {}) {
   const role = ROLES.includes(bar?.role) ? bar.role : null;
   if (!role) return rejected('role-unsupported', generation);
   if (!Number.isSafeInteger(generation) || generation < 0) return rejected('generation-invalid', 0, role);
@@ -39,6 +39,11 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
             if (seenActions.has(semanticIdentity)) throw projectionError('action-identity-duplicate');
             seenActions.add(semanticIdentity);
             const key = `${generation}:${role}:${menuIndex}:${sectionIndex}:${actionIndex}`;
+            const label = projectedActionLabel(actionLabel, {
+              serviceLogicalTypeName,
+              actionId,
+              label: boundedText(action?.label || actionId)
+            });
             const descriptor = Object.freeze({
               kind: 'action',
               key,
@@ -48,7 +53,7 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
               actionIndex,
               serviceLogicalTypeName,
               actionId,
-              label: boundedText(action?.label || actionId),
+              label,
               description: boundedText(action?.description),
               iconHint: boundedText(action?.iconHint, 128),
               iconPosition: action?.iconPosition === 'RIGHT' ? 'RIGHT' : 'LEFT',
@@ -146,6 +151,16 @@ function isExcludedAction(predicate, action) {
     })) === true;
   } catch (_error) {
     return true;
+  }
+}
+
+function projectedActionLabel(mapper, detail) {
+  if (typeof mapper !== 'function') return detail.label;
+  try {
+    const mapped = mapper(Object.freeze({...detail}));
+    return typeof mapped === 'string' ? boundedText(mapped) || detail.label : detail.label;
+  } catch (_error) {
+    return detail.label;
   }
 }
 

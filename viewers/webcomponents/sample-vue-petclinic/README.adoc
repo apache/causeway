@@ -51,9 +51,10 @@ Run the local SecMan and Spring Security variant with:
 
 Open any `/vue` route and sign in with username `sven` and password `pass`.
 The secured launcher preserves the environment and additional Maven argument behavior of `run.sh` while selecting `PetClinicVueSecuredApplication`.
-The application restores only safe Vue GET deep links, fetches bounded no-store username and CSRF context before mounting, decorates every GraphQL POST with the current CSRF header, and renders an application-owned POST logout form.
+The application restores only safe Vue GET deep links, fetches bounded no-store username and CSRF context before mounting, decorates every GraphQL POST with the current CSRF header, and retains an application-owned non-visual POST logout form.
 Invalid, absent, locked, and passwordless accounts have the same public failure, and successful authentication migrates the session identifier.
-The exact framework action `causeway.security.LogoutMenu#logout` is claimed by host policy and submits the native form before GraphQL; similarly named application actions and typed local-resource results remain independent.
+The authorized tertiary Account menu presents exact framework action `causeway.security.LogoutMenu#logout` as **Sign out**; host policy claims activation and submits the native form before GraphQL, while similarly named application actions and typed local-resource results remain independent.
+The secured shell adds no separate visible username or logout block.
 
 == Test
 
@@ -99,7 +100,7 @@ The frontend config treats `cw-` names as native custom elements and deduplicate
 == Application structure
 
 `frontend/index.html` is the application-owned HTML document.
-`frontend/src/App.vue` declares the stable GraphQL provider, menus, loading and announcement regions, default result outlet, keyed router view, and conditional application-owned authentication chrome.
+`frontend/src/App.vue` declares the stable GraphQL provider, menus, loading and announcement regions, default result outlet, keyed router view, and conditional non-visual native logout form.
 `frontend/src/authentication.ts` performs no work for the ordinary document and, for the secured document only, fetches current bounded session context and supplies the CSRF-decorating executor.
 The files under `frontend/src/pages` provide exact-type application compositions for `petclinic.HomePage`, `petclinic.PetOwner`, `petclinic.Pet`, and `petclinic.Visit`.
 The menu layout is shared with HTMX through the framework-neutral Petclinic domain resources.

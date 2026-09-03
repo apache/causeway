@@ -54,6 +54,7 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this._client = null;
     this._fetchImpl = null;
     this._excludeAction = null;
+    this._actionLabel = null;
     this.lastDiagnosticGeneration = -1;
     this._currentState = null;
     this._currentBar = null;
@@ -117,6 +118,15 @@ export class CausewayMenubarElement extends HTMLElementBase {
 
   set excludeAction(value) {
     this._excludeAction = typeof value === 'function' ? value : null;
+    this.#renderCurrentReadyState();
+  }
+
+  get actionLabel() {
+    return this._actionLabel;
+  }
+
+  set actionLabel(value) {
+    this._actionLabel = typeof value === 'function' ? value : null;
     this.#renderCurrentReadyState();
   }
 
@@ -220,9 +230,12 @@ export class CausewayMenubarElement extends HTMLElementBase {
     const widgetPolicy = causewayMenubarWidgetConfiguration();
     const instanceExcludeAction = this._excludeAction;
     const globalExcludeAction = widgetPolicy.excludeAction;
+    const instanceActionLabel = this._actionLabel;
+    const globalActionLabel = widgetPolicy.actionLabel;
     const projection = projectCausewayMenuBar(bar, {
       generation: state.generation,
-      excludeAction: detail => instanceExcludeAction?.(detail) === true || globalExcludeAction?.(detail) === true
+      excludeAction: detail => instanceExcludeAction?.(detail) === true || globalExcludeAction?.(detail) === true,
+      actionLabel: detail => instanceActionLabel?.(detail) ?? globalActionLabel?.(detail)
     });
     const qualification = qualifyCausewayMenuBar({
       role: this.role,

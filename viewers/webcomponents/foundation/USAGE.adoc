@@ -248,6 +248,8 @@ Service interaction events add `target: {kind: "service", logicalTypeName}`, `se
 Routing, result rendering, browser history, home behavior, authentication, and navigation remain host policy.
 Every action publishes one cancelable `causeway-action-request` before validation or invocation; a host that synchronously claims or cancels that request prevents validation, GraphQL invocation, and synthetic result emission.
 The reserved framework operation helper matches only `causeway.security.LogoutMenu#logout`, so similarly labelled application actions remain ordinary domain actions.
+A host can assign an `actionLabel` function to `<cw-menubars>` or one bar, or configure the same function through `configureCausewayMenubarWidgets`, to return bounded presentation text for an exact menu action.
+The callback cannot change identity, hierarchy, order, visibility, disabled state, metadata, or activation, and the same immutable projection feeds native and Vaadin controls.
 Selecting an enabled menu action closes its transient menu before interaction presentation, clicking outside closes an expanded menu without moving focus, and cancellation restores focus to the visible originating disclosure.
 
 Each non-empty bar renders a labelled `nav` landmark.
