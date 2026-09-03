@@ -32,3 +32,39 @@ The HTMX Petclinic sample SHALL provide a repository-root-relative `run-secured.
 - **WHEN** a maintainer executes the existing `run.sh`
 - **THEN** the ordinary HTMX and Wicket comparison runtime remains selected
 - **AND** no local SecMan form integration is enabled by the new launcher
+
+## MODIFIED Requirements
+
+### Requirement: Existing security implementations remain unchanged
+
+The HTMX integration MUST consume the optional presentation-neutral web-component SecMan Spring bridge and MUST NOT modify existing Causeway core security, Spring security, SecMan, Wicket, or OAuth implementation code.
+The shared bridge SHALL remain isolated from HTMX routes and presentation while making credential and principal behavior reusable by another explicitly installed web-component host.
+
+#### Scenario: Shared bridge is consumed
+
+- **WHEN** local HTMX authentication is installed
+- **THEN** shared Causeway security modules retain their existing defaults and implementation behavior
+- **AND** credential lookup and principal conversion come from the optional presentation-neutral bridge
+- **AND** HTMX-specific security policy remains isolated in the HTMX integration
+
+#### Scenario: Existing application does not opt in
+
+- **WHEN** an application upgrades without importing an optional viewer authentication integration
+- **THEN** no new security bean, filter chain, login route, logout route, or SecMan lookup is activated
+
+### Requirement: Authenticated principal preserves SecMan user context
+
+A successful local login SHALL establish a Causeway `UserMemento` for the authenticated username with the effective SecMan roles, tenancy path, language, number locale, and time locale available at authentication time.
+The shared converter MUST operate without an unscoped repository access and MUST erase credential material according to Spring Security lifecycle behavior.
+
+#### Scenario: User has roles and profile preferences
+
+- **WHEN** a local user with SecMan roles, tenancy, and locale preferences signs in
+- **THEN** authenticated HTMX and GraphQL requests execute with the corresponding refined `UserMemento`
+- **AND** SecMan authorization sees the same effective username and roles
+
+#### Scenario: Authentication completes
+
+- **WHEN** Spring finishes validating the local credentials
+- **THEN** raw credentials are absent from the session principal and authentication diagnostics
+- **AND** retained browser-session state contains no plaintext password
