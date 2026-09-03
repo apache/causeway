@@ -495,6 +495,7 @@ class PetClinicHtmxPlaywrightTest {
     @Order(2)
     void serviceActionsCoverValidationCancellationScalarAndCollections() {
         openHome();
+        assertOrdinaryTertiaryActions();
 
         openMenu("Pet Owners");
         if (nativeToolkit()) {
@@ -1567,6 +1568,24 @@ class PetClinicHtmxPlaywrightTest {
         page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
         assertThat(((Number) page.evaluate("() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/vaadin-menubar/vaadin-menubar.js')).length")).intValue())
                 .isEqualTo(1);
+    }
+
+    private void assertOrdinaryTertiaryActions() {
+        assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("""
+                element => {
+                  const actions = Object.values(element._projection?.actions ?? {});
+                  const has = (identity, label) => actions.some(action =>
+                    `${action.serviceLogicalTypeName}#${action.actionId}` === identity
+                      && action.label === label
+                      && action.role === 'tertiary');
+                  return has('causeway.applib.UserMenu#me', 'Me')
+                    && has('causeway.conf.ConfigurationMenu#configuration', 'Configuration')
+                    && !actions.some(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu')
+                    && !actions.some(action => action.serviceLogicalTypeName === 'causeway.ext.secman.MeService');
+                }
+                """))
+                .as(page.locator("cw-menubar-tertiary").evaluate("element => Object.values(element._projection?.actions ?? {}).map(action => `${action.serviceLogicalTypeName}#${action.actionId}:${action.label}:${action.role}`)").toString())
+                .isTrue();
     }
 
     private void openObject(final String logicalTypeName, final String id) {
