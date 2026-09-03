@@ -107,6 +107,7 @@ The preferred manual test serves the page and GraphQL endpoint from the same Cau
 This avoids cross-origin and authentication-cookie differences that can obscure component behavior.
 
 The repository provides HTMX and Vue Petclinic applications over one shared deterministic JPA/H2 domain and rich GraphQL contract, plus `viewers/webcomponents/sample-html` as the stable low-level vanilla-component fixture.
+The HTMX Petclinic application is the presentation reference for the Vue sample's application-owned shell and exact-type HomePage, PetOwner, Pet, and Visit pages.
 Start either Petclinic viewer from the repository root with:
 
 [source,shell]

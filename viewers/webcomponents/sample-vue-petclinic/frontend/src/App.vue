@@ -7,7 +7,7 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
 
-      https://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
@@ -17,43 +17,85 @@
   under the License.
 -->
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 import {RouterView, useRoute} from 'vue-router';
 import {useCausewayShell, useCausewayViewer} from '@apache-causeway/vue-viewer';
 
 const viewer = useCausewayViewer();
 const route = useRoute();
 const shell = useCausewayShell(ref<HTMLElement | null>(null));
+let titleObserver: MutationObserver | undefined;
+
+function applyApplicationTitle(): void {
+  const title = document.title.trim();
+  if (title && !title.endsWith(' · Pet Clinic')) {
+    document.title = `${title} · Pet Clinic`;
+  }
+}
+
+onMounted(() => {
+  applyApplicationTitle();
+  const titleElement = document.querySelector('title');
+  if (titleElement) {
+    titleObserver = new MutationObserver(applyApplicationTitle);
+    titleObserver.observe(titleElement, {childList: true});
+  }
+});
+
+onBeforeUnmount(() => titleObserver?.disconnect());
 </script>
 
 <template>
-  <div ref="shell" class="petclinic-vue-shell" data-testid="petclinic-vue-application-shell">
-    <a class="petclinic-skip-link" href="#causeway-vue-route">Skip to main content</a>
+  <div ref="shell" class="causeway-app-shell" data-testid="petclinic-vue-application-shell">
+    <a class="causeway-skip-link" href="#causeway-vue-route">Skip to main content</a>
     <cw-graphql-client data-causeway-shell-client :endpoint="viewer.endpoint">
-      <header class="petclinic-navbar">
-        <a class="petclinic-brand" href="/vue/" @click.prevent="viewer.router.push('/')">
-          <span aria-hidden="true">C</span>
-          <span>Pet Clinic</span>
-        </a>
-        <cw-menubars />
+      <header class="causeway-shell-header">
+        <div class="causeway-shell-navbar">
+          <a class="causeway-shell-brand" href="/vue/" aria-label="Pet Clinic home" @click.prevent="viewer.router.push('/')">
+            <span class="causeway-shell-mark" aria-hidden="true">C</span>
+            <span>Pet Clinic</span>
+          </a>
+          <cw-menubars />
+        </div>
       </header>
-      <div data-causeway-route-loading class="petclinic-route-loading" role="status" aria-live="polite" hidden>
+      <div
+        data-causeway-route-loading
+        class="causeway-route-loading"
+        role="status"
+        aria-live="polite"
+        hidden
+      >
         Loading page…
       </div>
-      <div data-causeway-route-announcement class="petclinic-visually-hidden" aria-live="polite" aria-atomic="true" />
+      <div
+        data-causeway-route-announcement
+        class="causeway-visually-hidden"
+        aria-live="polite"
+        aria-atomic="true"
+      />
       <cw-action-results
+        id="causeway-result"
         data-causeway-shell-result
-        class="petclinic-shell-results"
+        class="causeway-shell-result"
         aria-label="Application action results"
         aria-live="polite"
         hidden
       />
-      <main id="causeway-vue-route" data-causeway-router-view class="petclinic-main" aria-busy="false" tabindex="-1">
+      <main
+        id="causeway-vue-route"
+        data-causeway-router-view
+        class="causeway-shell-main"
+        aria-busy="false"
+        tabindex="-1"
+      >
         <RouterView v-slot="{ Component }">
           <component :is="Component" :key="route.path" />
         </RouterView>
       </main>
-      <footer class="petclinic-footer">Powered by Apache Causeway · Vue viewer</footer>
+      <footer class="causeway-shell-footer">
+        <span>Powered by Apache Causeway</span>
+        <span>Vue viewer</span>
+      </footer>
     </cw-graphql-client>
   </div>
 </template>
