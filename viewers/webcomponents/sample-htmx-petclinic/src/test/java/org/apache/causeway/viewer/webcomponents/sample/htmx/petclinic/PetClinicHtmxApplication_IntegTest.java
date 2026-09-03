@@ -116,6 +116,7 @@ class PetClinicHtmxApplication_IntegTest {
                     .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=");
         }
         assertThat(shell.body())
+                .contains("<body class=\"causeway-app-shell\" data-testid=\"petclinic-application-shell\">")
                 .contains("<cw-menubars>")
                 .contains("id=\"causeway-route\"")
                 .contains("hx-history-elt")
@@ -404,6 +405,8 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(ownerHtml.indexOf("id=\"addPet\""))
                 .isLessThan(ownerHtml.indexOf("id=\"removePet\""));
         assertThat(get("/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").statusCode())
+                .isEqualTo(404);
+        assertThat(get("/META-INF/causeway/webcomponents/shells/htmx.html").statusCode())
                 .isEqualTo(404);
         assertThat(get("/petclinic.PetOwner.html").statusCode()).isEqualTo(404);
         assertThat(loader.getResource(

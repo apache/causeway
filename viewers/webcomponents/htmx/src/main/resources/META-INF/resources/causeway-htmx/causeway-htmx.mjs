@@ -61,12 +61,19 @@ import {
 if (!globalThis.customElements?.get('cw-graphql-client')) {
   globalThis.customElements?.define('cw-graphql-client', CausewayGraphQLClientElement);
 }
-const shellCandidates = [...document.querySelectorAll('body > cw-graphql-client')];
+const shellCandidates = [...document.querySelectorAll('body cw-graphql-client')];
 const shell = shellCandidates.length === 1 ? shellCandidates[0] : null;
-const routeRegion = document.querySelector('#causeway-route');
-const announcement = document.querySelector('#causeway-route-announcement');
-const resultRegion = document.querySelector('#causeway-result');
+const uniqueShellLandmark = selector => {
+  const candidates = shell ? [...shell.querySelectorAll(selector)] : [];
+  return candidates.length === 1 ? candidates[0] : null;
+};
+const routeRegion = uniqueShellLandmark('#causeway-route');
+const announcement = uniqueShellLandmark('#causeway-route-announcement');
+const resultRegion = uniqueShellLandmark('#causeway-result');
+const loadingRegion = uniqueShellLandmark('#causeway-route-loading');
+const menuBoundary = uniqueShellLandmark('cw-menubars');
 const basePath = document.documentElement.dataset.causewayHtmxBase;
+const applicationTitle = document.title.trim();
 const referenceWidgetMode = document.documentElement.dataset.causewayReferenceWidgets;
 const collectionGridMode = document.documentElement.dataset.causewayCollectionGrid;
 const collectionGridModuleUrl = document.documentElement.dataset.causewayGridModuleUrl;
@@ -76,6 +83,8 @@ const resourcePageMode = document.documentElement.dataset.causewayResourcePageMo
 const authentication = readAuthenticationMetadata(document);
 if (!shell) {
   document.documentElement.dataset.causewayShellContextError = shellCandidates.length === 0 ? 'missing' : 'duplicate';
+} else if (!routeRegion || !announcement || !resultRegion || !loadingRegion || !menuBoundary) {
+  document.documentElement.dataset.causewayShellContextError = 'landmarks';
 } else {
   document.documentElement.removeAttribute('data-causeway-shell-context-error');
 }
@@ -317,7 +326,7 @@ function collapseNarrowBars() {
   if (!globalThis.matchMedia?.('(max-width: 48rem)').matches) {
     return;
   }
-  for (const disclosure of document.querySelectorAll('.causeway-shell-header .causeway-menubar-bar-disclosure[aria-expanded="true"]')) {
+  for (const disclosure of document.querySelectorAll('cw-menubars .causeway-menubar-bar-disclosure[aria-expanded="true"]')) {
     disclosure.click();
   }
 }
@@ -618,9 +627,8 @@ document.addEventListener(OBJECT_CONTEXT_STATE_EVENT, event => {
       pendingVoidRefreshGeneration = null;
     }
     const objectTitle = state.snapshot?.data?._meta?.title;
-    const brand = document.querySelector('.causeway-shell-brand > span:last-child')?.textContent?.trim();
     if (objectTitle) {
-      document.title = brand ? `${objectTitle} · ${brand}` : objectTitle;
+      document.title = applicationTitle ? `${objectTitle} · ${applicationTitle}` : objectTitle;
     }
     globalThis.setTimeout(activateRouteCollections, 0);
     announce(state.status === 'ready' ? 'Page ready' : 'Page ready with partial information');

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +37,43 @@ class HtmxDeclarativeTemplateTest {
                         "brand", "Pet Clinic"),
                 "TEST_BINDING_INVALID"))
                 .isEqualTo("<article>{{causeway.brand}}</article> Pet Clinic");
+    }
+
+    @Test
+    void permitsKnownOptionalBindingsToBeAbsent() {
+        assertThat(HtmxDeclarativeTemplate.bind(
+                "{{causeway.required}}",
+                Map.of("required", "present", "optional", "unused"),
+                Set.of("required"),
+                "TEST_BINDING_INVALID"))
+                .isEqualTo("present");
+
+        assertThatThrownBy(() -> HtmxDeclarativeTemplate.bind(
+                "{{causeway.optional}}",
+                Map.of("required", "secret", "optional", "present"),
+                Set.of("required"),
+                "TEST_BINDING_INVALID"))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("TEST_BINDING_INVALID")
+                .hasMessageNotContaining("secret");
+    }
+
+    @Test
+    void acceptsFlexibleShellLayoutAndNestedRouteWrappers() {
+        final var shell = """
+                <body class="custom">
+                  <cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">
+                    <aside><cw-menubars></cw-menubars></aside>
+                    {{causeway.authenticationChrome}}
+                    <div id="causeway-route-loading"></div>
+                    <div id="causeway-route-announcement"></div>
+                    <cw-action-results id="causeway-result"></cw-action-results>
+                    <div id="causeway-route"><div><span>{{causeway.routeContent}}</span></div></div>
+                  </cw-graphql-client>
+                </body>
+                """;
+
+        HtmxDeclarativeTemplate.validateApplicationShell(shell, "fixture:shell");
     }
 
     @Test

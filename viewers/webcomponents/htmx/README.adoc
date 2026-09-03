@@ -25,8 +25,8 @@ The shell uses external same-origin scripts and styles and requires no inline sc
 `causeway.viewer.webcomponents.htmx.language` defaults to `en`.
 `causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
 `causeway.viewer.webcomponents.htmx.resource-page-mode` accepts `cached` or `reload` and defaults to `cached`.
-Cached mode validates and retains private HTML page content at startup, while reload mode additionally reopens and validates an already-registered page whenever it renders.
-Reload mode is intended for development and adds one bounded classpath-resource read per custom page render.
+Cached mode validates and retains private HTML page and application-shell content at startup, while reload mode additionally reopens and validates an already-registered resource whenever it renders.
+Reload mode is intended for development and adds one bounded classpath-resource read per custom page or full-page shell render.
 `causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
 `causeway.viewer.webcomponents.htmx.component-toolkit` accepts `vaadin` or `native` and defaults to `vaadin`.
 The Vaadin policy enables qualified reference editors, basic, numeric, and local-temporal editors and read-only fields, ordinary action buttons, deterministic wide collection Grid presentation, and qualified application Menu Bar tiers, while the native policy is the immediate complete rollback.
@@ -90,6 +90,35 @@ A history-restore request receives only the route fragment and swaps it into the
 The shell disables authorization-sensitive HTMX history snapshots and re-fetches the authorized route fragment on a history cache miss.
 Normal home and result links remain canonical anchors, while the browser bridge enhances same-origin navigation with `htmx.ajax()` target, swap, push, and replace options.
 
+== Application shell
+
+The viewer-owned document scaffold declares the doctype, `<html>` runtime attributes, framework-sensitive `<head>`, HTMX configuration and scripts, common component styles, CSP-sensitive metadata, authentication metadata, title, and configured application stylesheet.
+An application can independently own the complete stable `<body>` shell by packaging one UTF-8 resource at `META-INF/causeway/webcomponents/shells/htmx.html`.
+The private shell resource is consumed only by server-side composition and is not exposed by Spring's ordinary static-resource handler.
+When no application shell exists, the viewer uses its separately packaged built-in default so existing applications require no migration.
+Exactly one application shell takes authority, while duplicate or defective application shells fail closed instead of being merged, selected by classpath order, repaired, or replaced by the default.
+
+The application shell has one `<body>` root and one stable `<cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">`.
+The client contains exactly one `<cw-menubars>`, route region identified by `causeway-route`, action-result outlet identified by `causeway-result`, loading region identified by `causeway-route-loading`, announcement region identified by `causeway-route-announcement`, `{{causeway.authenticationChrome}}` slot, and `{{causeway.routeContent}}` inside the route region.
+The shell may arrange those landmarks with any ordinary HTML wrappers, order, classes, body attributes, branding, header, aside, auxiliary regions, and footer content.
+It must not declare `<html>`, `<head>`, executable scripts, a route-level `<cw-object-context>`, an unknown reserved token, or duplicate protocol landmarks.
+A side region may contain `<cw-menubars>`, but this shell flexibility does not itself add vertical menu rendering or orientation behavior.
+
+The shell's closed escaped value bindings are `{{causeway.basePath}}`, `{{causeway.brand}}`, and `{{causeway.graphQlEndpoint}}`.
+Its validated structural bindings are `{{causeway.authenticationChrome}}`, `{{causeway.routeContent}}`, and `{{causeway.comparisonLink}}`.
+Brand and comparison-link bindings are optional, while the GraphQL endpoint, authentication slot, and route-content slot are required exactly where their contracts specify.
+Inserted structural fragments are not reparsed for token substitution, and no expression, request parameter, arbitrary configuration, metamodel value, persistence value, or GraphQL result is addressable through the vocabulary.
+
+The shell registration follows `resource-page-mode`.
+Cached mode validates and retains its bounded non-empty strict UTF-8 content at startup.
+Reload mode fixes the selected resource at startup but reopens and revalidates it for every ordinary full-page render.
+Adding or removing a shell requires an application-context restart, and a defective reload fails the affected full-page request without stale content or default fallback.
+HTMX fragment responses continue to contain only the route page, so the application shell, GraphQL client, menus, results, and other global state remain connected across route replacement.
+
+To migrate from the built-in shell, copy the body structure from the viewer's `default-shell.html` into the application convention and then change ordinary wrappers and CSS as needed.
+Removing the application resource immediately restores the built-in shell after application restart.
+Custom layouts own their corresponding application CSS, while the built-in classes continue to receive the default viewer styling.
+
 == Generic and custom pages
 
 Every custom or generic object-page definition declares exactly one route-level `<cw-object-context>`.
@@ -122,10 +151,6 @@ Two resources, two factories, or one of each claiming the same logical type fail
 A discovered resource that is unreadable, empty, oversized, malformed, invalidly named, or duplicated also fails startup rather than silently selecting the generic page.
 Only complete absence of an exact registration selects the declarative generic page containing `<cw-object editable>`.
 
-The module's complete document shell is likewise held as private declarative HTML rather than constructed as a Java text block.
-It declares the one stable `<cw-graphql-client>`, menu bars, result outlet, route outlet, authentication slot, and route-content slot.
-The renderer binds only its documented escaped configuration values and validated structural fragments.
-This stable provider remains connected across HTMX route replacement so menu state and schema-description caches are shared.
 
 Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, and collection elements.
 Those elements consume the one nearest route context and therefore do not create a parallel data plane.

@@ -68,10 +68,20 @@ public class CausewayModuleViewerWebcomponentsHtmx {
     }
 
     @Bean
+    HtmxShellDefinition htmxShellDefinition(
+            final ApplicationContext applicationContext,
+            final HtmxViewerProperties properties) {
+        return new HtmxClasspathShellLoader(
+                applicationContext,
+                properties.getResourcePageMode()).load();
+    }
+
+    @Bean
     HtmxPageRenderer htmxPageRenderer(
             final HtmxRouteCodec routeCodec,
             final HtmxViewerProperties properties,
-            final HtmxPageFragmentRegistry fragmentRegistry) {
-        return new HtmxPageRenderer(routeCodec, properties, fragmentRegistry);
+            final HtmxPageFragmentRegistry fragmentRegistry,
+            final HtmxShellDefinition shellDefinition) {
+        return new HtmxPageRenderer(routeCodec, properties, fragmentRegistry, shellDefinition);
     }
 }

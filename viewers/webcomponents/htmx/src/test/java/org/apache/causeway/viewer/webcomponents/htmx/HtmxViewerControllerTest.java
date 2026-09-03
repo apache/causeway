@@ -81,6 +81,45 @@ class HtmxViewerControllerTest {
     }
 
     @Test
+    void composesFlexibleApplicationShellOnlyForFullPageResponses() {
+        final var applicationShell = """
+                <body data-testid="custom-shell">
+                  <section class="custom-layout">
+                    <cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">
+                      <aside><cw-menubars></cw-menubars></aside>
+                      {{causeway.authenticationChrome}}
+                      <div id="causeway-route-loading"></div>
+                      <div id="causeway-route-announcement"></div>
+                      <cw-action-results id="causeway-result"></cw-action-results>
+                      <div id="causeway-route"><div>{{causeway.routeContent}}</div></div>
+                    </cw-graphql-client>
+                  </section>
+                </body>
+                """;
+        HtmxDeclarativeTemplate.validateApplicationShell(applicationShell, "fixture:custom-shell");
+        final var controller = controller(
+                List.of(),
+                List.of(),
+                HtmxShellDefinition.cached("fixture:custom-shell", true, applicationShell));
+        final var path = "/app/htmx/object/petclinic.PetOwner/owner-1";
+
+        final var full = controller.route(request(path, "/app", false));
+        final var fragment = controller.route(request(path, "/app", true));
+
+        assertThat(full.getBody())
+                .contains("<!doctype html>")
+                .contains("<body data-testid=\"custom-shell\">")
+                .contains("<aside><cw-menubars></cw-menubars></aside>")
+                .contains("<cw-graphql-client endpoint=\"/app/graphql\">")
+                .contains("<cw-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">")
+                .contains("/app/causeway-htmx/causeway-htmx.mjs")
+                .doesNotContain("causeway-shell-footer");
+        assertThat(fragment.getBody())
+                .doesNotContain("<!doctype html>", "custom-shell", "cw-graphql-client")
+                .contains("<cw-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">");
+    }
+
+    @Test
     void preservesLongOpaqueIdentityAcrossFullFragmentAndHistoryResponses() {
         final var controller = controller(List.of());
         final var identifier = "memento-" + "a".repeat(3000);
@@ -507,10 +546,21 @@ class HtmxViewerControllerTest {
     private HtmxViewerController controller(
             final List<HtmxPageFragmentFactory> factories,
             final List<HtmxPageDefinition> resourcePages) {
+        final var defaultShell = HtmxShellDefinition.cached(
+                "internal:default-shell.html",
+                false,
+                HtmxDeclarativeTemplate.load("default-shell.html"));
+        return controller(factories, resourcePages, defaultShell);
+    }
+
+    private HtmxViewerController controller(
+            final List<HtmxPageFragmentFactory> factories,
+            final List<HtmxPageDefinition> resourcePages,
+            final HtmxShellDefinition shell) {
         final var registry = new HtmxPageFragmentRegistry(factories, resourcePages);
         return new HtmxViewerController(
                 codec,
-                new HtmxPageRenderer(codec, properties, registry),
+                new HtmxPageRenderer(codec, properties, registry, shell),
                 properties,
                 new HtmxCollectionPresentationRegistry(List.of()),
                 new HtmxPreviewRegistry(List.of()));

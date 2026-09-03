@@ -32,29 +32,5 @@
   <script defer src="{{causeway.contextPath}}/webjars/htmx.org/2.0.6/dist/htmx.min.js"></script>
   <script type="module" src="{{causeway.contextPath}}/causeway-htmx/causeway-htmx.mjs"></script>
 </head>
-<body class="causeway-app-shell">
-  <a class="causeway-skip-link" href="#causeway-route">Skip to main content</a>
-  <cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">
-    <header class="causeway-shell-header">
-      <div class="causeway-shell-navbar">
-        <a class="causeway-shell-brand" href="{{causeway.basePath}}" data-causeway-route-link aria-label="{{causeway.brand}} home">
-          <span class="causeway-shell-mark" aria-hidden="true">C</span>
-          <span>{{causeway.brand}}</span>
-        </a>
-        <cw-menubars></cw-menubars>
-        {{causeway.authenticationChrome}}
-      </div>
-    </header>
-    <div id="causeway-route-loading" class="causeway-route-loading htmx-indicator" role="status" aria-live="polite">Loading page…</div>
-    <div id="causeway-route-announcement" class="causeway-visually-hidden" aria-live="polite" aria-atomic="true"></div>
-    <cw-action-results id="causeway-result" class="causeway-shell-result" data-testid="causeway-shell-result" aria-label="Application action results" aria-live="polite" hidden></cw-action-results>
-    <main id="causeway-route" class="causeway-shell-main" data-testid="causeway-route" data-navigation-generation="0" hx-history-elt hx-history="false" aria-busy="false">
-      {{causeway.routeContent}}
-    </main>
-    <footer class="causeway-shell-footer">
-      <span>Powered by Apache Causeway</span>
-      {{causeway.comparisonLink}}
-    </footer>
-  </cw-graphql-client>
-</body>
+{{causeway.applicationShell}}
 </html>
