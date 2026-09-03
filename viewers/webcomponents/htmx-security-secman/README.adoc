@@ -105,17 +105,18 @@ That control remains independent of typed `LocalResourcePathValue` action result
 A local-resource path equal to `/logout` does not acquire authentication semantics.
 Invalid passwords, absent users, locked users, passwordless users, and internal lookup failures all produce the same public credential failure.
 
-== Provisional bridge boundary
+== Shared bridge boundary
 
-`SecmanUserDetailsService`, `SecmanUserDetails`, and `AuthenticationConverterOfSecmanUserDetails` form an intentionally HTMX-local provisional SecMan-to-Spring bridge.
-They perform controlled anonymous lookup, preserve the effective SecMan roles and user profile needed for the Causeway `UserMemento`, erase credentials, and avoid an unscoped second repository lookup.
-They must not be treated as a stable shared-security SPI while they remain in this viewer integration.
-A separate planned change, `promote-htmx-secman-spring-security-bridge`, covers reconciliation and possible promotion into shared Causeway security.
+The integration consumes `causeway-viewer-webcomponents-security-secman` for SecMan credential lookup, its credentials-erasing session principal, Causeway `UserMemento` conversion, and DAO authentication-provider construction.
+That bridge performs controlled anonymous lookup, preserves effective roles, tenancy, and locales captured at authentication time, and avoids a second unscoped repository lookup.
+It deliberately owns no HTMX or Vue routes, login UI, request cache, CSRF transport, session-expiry navigation, or logout presentation.
+This HTMX module continues to own all of those viewer-specific policies.
 
 This module explicitly excludes OAuth 2.0, OIDC, external-provider buttons, bearer-token APIs, delegated-user auto-creation, provider logout, registration, password reset, remember-me, multi-factor authentication, and brute-force infrastructure.
 The planned `add-oauth-oidc-authentication-to-htmx-viewer` change covers provider authentication separately.
 Wicket and HTMX coexistence with active Spring CSRF filters is also deferred to `enable-csrf-safe-wicket-htmx-coexistence`.
 The secured Petclinic acceptance configuration therefore does not import Wicket or bypass security.
+Run it from the repository root with `./viewers/webcomponents/sample-htmx-petclinic/run-secured.sh`.
 
 == Rollback
 

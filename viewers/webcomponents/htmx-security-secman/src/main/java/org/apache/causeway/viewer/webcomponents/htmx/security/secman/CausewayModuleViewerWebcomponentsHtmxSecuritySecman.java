@@ -22,15 +22,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
-import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 import org.apache.causeway.viewer.webcomponents.htmx.CausewayModuleViewerWebcomponentsHtmx;
+import org.apache.causeway.viewer.webcomponents.security.secman.CausewayModuleViewerWebcomponentsSecuritySecman;
 
 @Configuration
 @Import({
         CausewayModuleViewerWebcomponentsHtmx.class,
-        CausewayModuleSecuritySpring.class,
-        CausewayModuleExtSecmanIntegration.class,
+        CausewayModuleViewerWebcomponentsSecuritySecman.class,
         HtmxSecmanSecurityConfiguration.class
 })
 @EnableConfigurationProperties(HtmxSecmanSecurityProperties.class)

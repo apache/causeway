@@ -40,9 +40,24 @@ For example, this uses port 9090:
 
 The script respects an existing `JAVA_HOME`, discovers JDK 21 through macOS `/usr/libexec/java_home` when `JAVA_HOME` is unset, and uses `MVN` instead of `mvn` when that environment variable is supplied.
 
+=== Secured variant
+
+Run the local SecMan and Spring Security variant with:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-vue-petclinic/run-secured.sh
+----
+
+Open any `/vue` route and sign in with username `sven` and password `pass`.
+The secured launcher preserves the environment and additional Maven argument behavior of `run.sh` while selecting `PetClinicVueSecuredApplication`.
+The application restores only safe Vue GET deep links, fetches bounded no-store username and CSRF context before mounting, decorates every GraphQL POST with the current CSRF header, and renders an application-owned POST logout form.
+Invalid, absent, locked, and passwordless accounts have the same public failure, and successful authentication migrates the session identifier.
+The exact framework action `causeway.security.LogoutMenu#logout` is claimed by host policy and submits the native form before GraphQL; similarly named application actions and typed local-resource results remain independent.
+
 == Test
 
-The test script runs the Spring integration tests and the Playwright acceptance suite.
+The test script runs the ordinary and secured Spring integration tests and both Playwright acceptance suites.
 Playwright uses headless Chromium by default and does not take foreground focus.
 
 Run the suite with:
@@ -59,7 +74,8 @@ Install Playwright Chromium on the first run when necessary:
 ./viewers/webcomponents/sample-vue-petclinic/test.sh --install-browser
 ----
 
-The browser suite covers the HTMX presentation baseline, wide and narrow layout invariants, the four exact-type pages, stable application shell, direct links, refresh, back and forward navigation, generic fallback, invalid and absent objects, semantic navigation and results, menus, keyboard skip navigation, and both toolkit policies.
+The ordinary browser suite covers the HTMX presentation baseline, wide and narrow layout invariants, the four exact-type pages, stable application shell, direct links, refresh, back and forward navigation, generic fallback, invalid and absent objects, semantic navigation and results, menus, keyboard skip navigation, and both toolkit policies.
+The secured browser journey additionally covers generic invalid login, valid deep-link restoration, CSRF-bearing reads and mutation, missing-CSRF rejection, exact host Logout policy, native logout, browser history, and session expiry.
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser.
 Any arguments after `--install-browser` are passed to the Maven test invocation.
@@ -83,10 +99,12 @@ The frontend config treats `cw-` names as native custom elements and deduplicate
 == Application structure
 
 `frontend/index.html` is the application-owned HTML document.
-`frontend/src/App.vue` declares the stable GraphQL provider, menus, loading and announcement regions, default result outlet, and keyed router view.
+`frontend/src/App.vue` declares the stable GraphQL provider, menus, loading and announcement regions, default result outlet, keyed router view, and conditional application-owned authentication chrome.
+`frontend/src/authentication.ts` performs no work for the ordinary document and, for the secured document only, fetches current bounded session context and supplies the CSRF-decorating executor.
 The files under `frontend/src/pages` provide exact-type application compositions for `petclinic.HomePage`, `petclinic.PetOwner`, `petclinic.Pet`, and `petclinic.Visit`.
 The menu layout is shared with HTMX through the framework-neutral Petclinic domain resources.
 The deliberately unregistered `petclinic.ViewerFallback` fixture demonstrates the generic route-page fallback without making a user-visible Petclinic route inconsistent.
-`PetClinicVueRouteController` forwards only the intended client routes to the production `index.html` without capturing GraphQL or static assets.
+`PetClinicVueRouteController` forwards only the intended ordinary client routes to the production `index.html` without capturing GraphQL or static assets.
+The secured source set adds `PetClinicVueSecuredRouteController`, which serves the same committed document with only its authentication-context endpoint slot bound; it never embeds a username or token into static assets.
 
 The generic Vue viewer package and its application integration contract are documented in `../vue/README.adoc`.

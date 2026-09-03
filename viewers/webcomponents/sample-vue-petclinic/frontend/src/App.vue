@@ -20,6 +20,7 @@
 import {onBeforeUnmount, onMounted, ref} from 'vue';
 import {RouterView, useRoute} from 'vue-router';
 import {useCausewayShell, useCausewayViewer} from '@apache-causeway/vue-viewer';
+import {authenticationContext, graphQlExecutor} from './authentication';
 
 const viewer = useCausewayViewer();
 const route = useRoute();
@@ -48,7 +49,7 @@ onBeforeUnmount(() => titleObserver?.disconnect());
 <template>
   <div ref="shell" class="causeway-app-shell" data-testid="petclinic-vue-application-shell">
     <a class="causeway-skip-link" href="#causeway-vue-route">Skip to main content</a>
-    <cw-graphql-client data-causeway-shell-client :endpoint="viewer.endpoint">
+    <cw-graphql-client data-causeway-shell-client :endpoint="viewer.endpoint" :executor.prop="graphQlExecutor">
       <header class="causeway-shell-header">
         <div class="causeway-shell-navbar">
           <a class="causeway-shell-brand" href="/vue/" aria-label="Pet Clinic home" @click.prevent="viewer.router.push('/')">
@@ -56,6 +57,21 @@ onBeforeUnmount(() => titleObserver?.disconnect());
             <span>Pet Clinic</span>
           </a>
           <cw-menubars />
+          <div v-if="authenticationContext" class="causeway-authentication" data-testid="vue-authentication-shell">
+            <span class="causeway-authentication-user">Signed in as {{ authenticationContext.username }}</span>
+            <form
+              method="post"
+              :action="authenticationContext.logoutPath"
+              data-causeway-authentication-logout
+            >
+              <input
+                type="hidden"
+                :name="authenticationContext.csrfParameterName"
+                :value="authenticationContext.csrfToken"
+              >
+              <button type="submit">Sign out</button>
+            </form>
+          </div>
         </div>
       </header>
       <div

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.causeway.viewer.webcomponents.htmx.security.secman;
+package org.apache.causeway.viewer.webcomponents.security.secman;
 
 import java.io.Serial;
 import java.io.Serializable;
