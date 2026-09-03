@@ -53,3 +53,8 @@ The host MUST use its native current-CSRF POST logout contract for activation an
 
 - **WHEN** an application action has a similar label but a different logical type or member identity
 - **THEN** the host does not suppress, relabel, or reinterpret that domain action
+
+## RENAMED Requirements
+
+- FROM: `### Requirement: Legacy framework logout is excluded from HTMX invocation`
+- TO: `### Requirement: Legacy framework logout is intercepted by the HTMX host`
