@@ -1,34 +1,34 @@
-import { inject as le, onMounted as W, onBeforeUnmount as ee, defineComponent as C, ref as L, openBlock as N, createElementBlock as I, createElementVNode as A, toDisplayString as de, computed as P, h as S, defineAsyncComponent as pe, watch as fe, createBlock as ge, resolveDynamicComponent as he, nextTick as ye } from "vue";
+import { inject as le, onMounted as W, onBeforeUnmount as te, defineComponent as O, ref as L, openBlock as N, createElementBlock as I, createElementVNode as C, toDisplayString as de, computed as P, h as S, defineAsyncComponent as pe, watch as fe, createBlock as ge, resolveDynamicComponent as he, nextTick as ye } from "vue";
 import { useRoute as ve } from "vue-router";
 const k = "cw-object-context[data-causeway-route-context]", we = "cw-interaction-controller[data-causeway-route-interactions]";
 function me(e, t) {
-  const a = [...e.querySelectorAll(k)].filter((r) => !r.parentElement?.closest(k));
+  const a = [...e.querySelectorAll(k)].filter((i) => !i.parentElement?.closest(k));
   if (a.length === 0) return Object.freeze({ valid: !1, classification: "missing-context" });
   if (a.length !== 1) return Object.freeze({ valid: !1, classification: "duplicate-context" });
   const n = a[0];
-  return n.getAttribute("logical-type") !== t.logicalTypeName || n.getAttribute("object-id") !== t.objectId ? Object.freeze({ valid: !1, classification: "identity" }) : [...n.querySelectorAll(we)].filter((r) => r.closest(k) === n).length !== 1 ? Object.freeze({ valid: !1, classification: "interactions" }) : Object.freeze({ valid: !0, context: n });
+  return n.getAttribute("logical-type") !== t.logicalTypeName || n.getAttribute("object-id") !== t.objectId ? Object.freeze({ valid: !1, classification: "identity" }) : [...n.querySelectorAll(we)].filter((i) => i.closest(k) === n).length !== 1 ? Object.freeze({ valid: !1, classification: "interactions" }) : Object.freeze({ valid: !0, context: n });
 }
-function j(e, t) {
+function x(e, t) {
   const a = e.querySelectorAll(t);
   return a.length === 1 ? a[0] : null;
 }
-function te(e) {
-  const t = j(e, "cw-graphql-client[data-causeway-shell-client]"), a = j(e, "[data-causeway-router-view]"), n = j(e, "[data-causeway-route-loading]"), o = j(e, "[data-causeway-route-announcement]"), r = j(e, "cw-action-results[data-causeway-shell-result]");
-  if (!t || !a || !n || !o || !r || !t.contains(a) || !t.contains(r))
+function ae(e) {
+  const t = x(e, "cw-graphql-client[data-causeway-shell-client]"), a = x(e, "[data-causeway-router-view]"), n = x(e, "[data-causeway-route-loading]"), r = x(e, "[data-causeway-route-announcement]"), i = x(e, "cw-action-results[data-causeway-shell-result]");
+  if (!t || !a || !n || !r || !i || !t.contains(a) || !t.contains(i))
     throw new Error("The authored Vue application shell is invalid.");
-  return Object.freeze({ shell: e, client: t, route: a, loading: n, announcement: o, result: r });
+  return Object.freeze({ shell: e, client: t, route: a, loading: n, announcement: r, result: i });
 }
-const ae = /* @__PURE__ */ Symbol("causeway-vue-viewer"), D = Object.freeze({
+const ne = /* @__PURE__ */ Symbol("causeway-vue-viewer"), M = Object.freeze({
   serviceLogicalTypeName: "causeway.security.LogoutMenu",
   actionId: "logout"
 });
-function ne(e) {
-  return e?.serviceLogicalTypeName === D.serviceLogicalTypeName && e?.actionId === D.actionId;
+function G(e) {
+  return e?.serviceLogicalTypeName === M.serviceLogicalTypeName && e?.actionId === M.actionId;
 }
-function M(e) {
+function F(e) {
   let t = 0;
   for (const a of e.querySelectorAll("[data-causeway-service-action]"))
-    ne({
+    G({
       serviceLogicalTypeName: a.getAttribute("data-service-logical-type") ?? void 0,
       actionId: a.getAttribute("data-action-id") ?? ""
     }) && ((a.closest("[data-causeway-service-action-region]") ?? a).remove(), t += 1);
@@ -41,15 +41,15 @@ class be extends Error {
   }
 }
 function Ee(e, t = {}) {
-  const a = t.location ?? window.location, n = typeof e?.path == "string" ? e.path.trim() : "", o = e?.openUrlStrategy;
-  if (!n || !["SAME_WINDOW", "NEW_WINDOW"].includes(o ?? ""))
+  const a = t.location ?? window.location, n = typeof e?.path == "string" ? e.path.trim() : "", r = e?.openUrlStrategy;
+  if (!n || !["SAME_WINDOW", "NEW_WINDOW"].includes(r ?? ""))
     throw R("LOCAL_RESOURCE_INVALID", "The local-resource result is incomplete.");
   if (/^[a-z][a-z\d+.-]*:/i.test(n) || n.startsWith("//") || n.includes("\\") || /[\u0000-\u001f\u007f]/.test(n))
     throw R("LOCAL_RESOURCE_TARGET_UNSAFE", "The local-resource target is not an application-local path.");
-  const r = new URL(a.href), u = _e(t.applicationBase ?? "/", r).pathname.replace(/\/+$/, "") || "/", l = n.startsWith("/") ? n : `/${n}`, h = u !== "/" && (l === u || l.startsWith(`${u}/`) || l.startsWith(`${u}?`) || l.startsWith(`${u}#`)) ? l : `${u === "/" ? "" : u}/${l.replace(/^\/+/, "")}`, v = new URL(h, r.origin);
-  if (v.origin !== r.origin || v.username || v.password || u !== "/" && v.pathname !== u && !v.pathname.startsWith(`${u}/`))
+  const i = new URL(a.href), s = _e(t.applicationBase ?? "/", i).pathname.replace(/\/+$/, "") || "/", u = n.startsWith("/") ? n : `/${n}`, h = s !== "/" && (u === s || u.startsWith(`${s}/`) || u.startsWith(`${s}?`) || u.startsWith(`${s}#`)) ? u : `${s === "/" ? "" : s}/${u.replace(/^\/+/, "")}`, y = new URL(h, i.origin);
+  if (y.origin !== i.origin || y.username || y.password || s !== "/" && y.pathname !== s && !y.pathname.startsWith(`${s}/`))
     throw R("LOCAL_RESOURCE_TARGET_UNSAFE", "The local-resource target escapes the configured application boundary.");
-  return Object.freeze({ url: v, openUrlStrategy: o });
+  return Object.freeze({ url: y, openUrlStrategy: r });
 }
 function Te(e, t = {}) {
   const a = t.location ?? window.location, n = Ee(e, { location: a, applicationBase: t.applicationBase });
@@ -57,8 +57,8 @@ function Te(e, t = {}) {
     a.assign(n.url.href);
     return;
   }
-  const r = (t.open ?? window.open.bind(window))(n.url.href, "_blank", "noopener,noreferrer");
-  r && (r.opener = null);
+  const i = (t.open ?? window.open.bind(window))(n.url.href, "_blank", "noopener,noreferrer");
+  i && (i.opener = null);
 }
 function _e(e, t) {
   const a = String(e).trim() || "/";
@@ -72,11 +72,11 @@ function _e(e, t) {
 function R(e, t) {
   return new be(e, t);
 }
-const F = 4096, oe = 4096, Se = "The requested application route is invalid.";
-function b() {
-  return new Error(Se);
+const K = 4096, oe = 4096, Ae = "The requested application route is invalid.";
+function T() {
+  return new Error(Ae);
 }
-function Ae(e) {
+function Se(e) {
   for (let t = 0; t < e.length; t += 1) {
     const a = e.charCodeAt(t);
     if (a >= 55296 && a <= 56319) {
@@ -88,28 +88,28 @@ function Ae(e) {
   }
   return !1;
 }
-function q(e) {
+function V(e) {
   const t = String(e ?? "");
-  if (!t || t.length > F || t === "." || t === ".." || /[\\/\u0000-\u001f\u007f-\u009f]/u.test(t) || Ae(t) || new TextEncoder().encode(t).length > F) throw b();
+  if (!t || t.length > K || t === "." || t === ".." || /[\\/\u0000-\u001f\u007f-\u009f]/u.test(t) || Se(t) || new TextEncoder().encode(t).length > K) throw T();
   let a;
   try {
     a = encodeURIComponent(t).replace(/[!'()*]/g, (n) => `%${n.charCodeAt(0).toString(16).toUpperCase()}`);
   } catch {
-    throw b();
+    throw T();
   }
-  if (a.length > oe) throw b();
+  if (a.length > oe) throw T();
   return a;
 }
-function K(e) {
+function Y(e) {
   if (!e || e.length > oe || !/^(?:[^%]|%[0-9A-F]{2})+$/u.test(e))
-    throw b();
+    throw T();
   let t;
   try {
     t = decodeURIComponent(e);
   } catch {
-    throw b();
+    throw T();
   }
-  if (q(t) !== e) throw b();
+  if (V(t) !== e) throw T();
   return t;
 }
 function U(e) {
@@ -120,27 +120,27 @@ function U(e) {
   return t;
 }
 function Ce(e, t) {
-  const a = U(e), n = `/object/${q(t?.logicalTypeName)}/${q(t?.id ?? t?.objectId)}`;
+  const a = U(e), n = `/object/${V(t?.logicalTypeName)}/${V(t?.id ?? t?.objectId)}`;
   return a === "/" ? n : `${a}${n}`;
 }
-function B(e) {
+function z(e) {
   return Ce("/", e);
 }
 function re(e, t = "/") {
-  const a = String(e ?? ""), n = U(t), o = n === "/" ? "/object/" : `${n}/object/`;
-  if (!a.startsWith(o)) throw b();
-  const p = a.slice(o.length).split("/");
-  if (p.length !== 2) throw b();
+  const a = String(e ?? ""), n = U(t), r = n === "/" ? "/object/" : `${n}/object/`;
+  if (!a.startsWith(r)) throw T();
+  const d = a.slice(r.length).split("/");
+  if (d.length !== 2) throw T();
   return Object.freeze({
-    logicalTypeName: K(p[0]),
-    objectId: K(p[1])
+    logicalTypeName: Y(d[0]),
+    objectId: Y(d[1])
   });
 }
 function Oe(e) {
-  return B(e);
+  return z(e);
 }
-const Y = "causeway-navigation-request", G = "causeway-action-request", X = "causeway-action-result", Z = "causeway-object-context-state-change", H = "causeway-menu-bars-state-change";
-function V() {
+const X = "causeway-navigation-request", q = "causeway-action-request", Z = "causeway-action-result", H = "causeway-object-context-state-change", Q = "causeway-menu-bars-state-change";
+function $() {
   let e = !1;
   return {
     get claimed() {
@@ -151,7 +151,7 @@ function V() {
     }
   };
 }
-function _(e) {
+function A(e) {
   return Object.freeze({
     router: e.router,
     basePath: e.basePath,
@@ -159,122 +159,123 @@ function _(e) {
     routeGeneration: e.state.routeGeneration
   });
 }
-function je(e) {
+function xe(e) {
   if (e?.kind !== "object" || !e.value || typeof e.value != "object") return null;
   const t = e.value._meta, a = t?.logicalTypeName, n = t?.id;
   return typeof a != "string" || typeof n != "string" || !a || !n ? null : Object.freeze({ logicalTypeName: a, id: n, title: String(t?.title ?? n) });
 }
-function xe(e) {
+function je(e) {
   return [...e.querySelector("[data-causeway-router-view]")?.querySelectorAll("cw-action-results[data-causeway-page-result]") ?? []].filter((a) => a.isConnected);
 }
 function Le(e) {
   const t = e.querySelectorAll("cw-action-results[data-causeway-shell-result]");
   return t.length === 1 ? t[0] : null;
 }
-function $(e) {
-  const t = xe(e);
+function B(e) {
+  const t = je(e);
   if (t.length > 1) throw new Error("The active Vue route has duplicate action-result outlets.");
   if (t.length === 1) return t[0];
   const a = Le(e);
   if (!a?.isConnected) throw new Error("The authored Vue shell result outlet is unavailable.");
   return a;
 }
-function Q(e, ...t) {
+function J(e, ...t) {
   const a = e;
   a.replacePresentation ? a.replacePresentation(...t) : e.replaceChildren(...t), e.hidden = t.length === 0;
 }
 function ie(e, t) {
   const a = t.result, n = document.createElement("h2");
   if (n.textContent = t.actionId ? `${t.actionId} result` : "Action result", a?.kind === "collection") {
-    const r = document.createElement("cw-standalone-collection");
-    r.setAttribute("data-testid", "causeway-standalone-action-result"), r.setAttribute("named", String(t.resultPresentation?.named ?? n.textContent)), r.result = a, Q(e, r);
+    const i = document.createElement("cw-standalone-collection");
+    i.setAttribute("data-testid", "causeway-standalone-action-result"), i.setAttribute("named", String(t.resultPresentation?.named ?? n.textContent)), i.result = a, J(e, i);
     return;
   }
-  const o = document.createElement("output");
-  o.textContent = a?.kind === "scalar" ? String(a.value ?? "") : a?.kind === "void" ? "Completed" : "This result cannot be presented.", Q(e, n, o);
+  const r = document.createElement("output");
+  r.textContent = a?.kind === "scalar" ? String(a.value ?? "") : a?.kind === "void" ? "Completed" : "This result cannot be presented.", J(e, n, r);
 }
 async function Ne(e, t) {
-  const a = e.state.shell, o = a?.querySelector("[data-causeway-router-view]")?.querySelector("cw-object-context[data-causeway-route-context]"), r = o?.context;
-  if (!o || !r?.refresh) return;
-  const p = e.state.routeGeneration, u = (m) => {
-    if (p !== e.state.routeGeneration) return l();
-    const h = m.detail?.state;
+  const a = e.state.shell, r = a?.querySelector("[data-causeway-router-view]")?.querySelector("cw-object-context[data-causeway-route-context]"), i = r?.context;
+  if (!r || !i?.refresh) return;
+  const d = e.state.routeGeneration, s = (w) => {
+    if (d !== e.state.routeGeneration) return u();
+    const h = w.detail?.state;
     if (h?.status !== "terminal-error") {
-      (h?.status === "ready" || h?.status === "partial-error") && l();
+      (h?.status === "ready" || h?.status === "partial-error") && u();
       return;
     }
-    l(), (h.errors?.[0]?.extensions?.classification ?? h.errors?.[0]?.extensions?.code ?? h.error?.code) === "NOT_FOUND" && e.router.replace("/");
-  }, l = () => o.removeEventListener(Z, u);
-  o.addEventListener(Z, u), r.refresh(), ie($(a), t);
+    u(), (h.errors?.[0]?.extensions?.classification ?? h.errors?.[0]?.extensions?.code ?? h.error?.code) === "NOT_FOUND" && e.router.replace("/");
+  }, u = () => r.removeEventListener(H, s);
+  r.addEventListener(H, s), i.refresh(), ie(B(a), t);
 }
-async function J(e, t) {
-  const a = V();
-  await e.policies.navigate?.(t, a, _(e)) === !0 && a.claim(), a.claimed || await e.router.push(B(t));
+async function ee(e, t) {
+  const a = $();
+  await e.policies.navigate?.(t, a, A(e)) === !0 && a.claim(), a.claimed || await e.router.push(z(t));
 }
 function ce(e, t) {
-  const a = /* @__PURE__ */ new WeakMap(), n = /* @__PURE__ */ new WeakSet();
-  let o = null, r = !0;
-  const p = () => {
-    const f = t.querySelector("[data-causeway-route-announcement]");
-    f && (f.textContent = "Logout requires a host authentication integration."), t.dataset.causewayLogoutUnavailable = "true";
-  }, u = (f, d) => {
-    if (!r || d !== e.state.routeGeneration || !(f.target instanceof EventTarget)) return;
-    const i = new CustomEvent(G, {
+  const a = /* @__PURE__ */ new WeakMap(), n = /* @__PURE__ */ new WeakSet(), r = t.querySelector("cw-menubars"), i = (l) => G(l);
+  r && (r.excludeAction = i);
+  let d = null, s = !0;
+  const u = () => {
+    const l = t.querySelector("[data-causeway-route-announcement]");
+    l && (l.textContent = "Logout requires a host authentication integration."), t.dataset.causewayLogoutUnavailable = "true";
+  }, w = (l, p) => {
+    if (!s || p !== e.state.routeGeneration || !(l.target instanceof EventTarget)) return;
+    const o = new CustomEvent(q, {
       bubbles: !0,
       composed: !0,
       cancelable: !0,
-      detail: f.detail
+      detail: l.detail
     });
-    n.add(i), f.target.dispatchEvent(i);
-  }, l = (f) => {
-    const d = f, i = d.detail;
+    n.add(o), l.target.dispatchEvent(o);
+  }, h = (l) => {
+    const p = l, o = p.detail;
     try {
-      const g = $(t);
-      i?.context && typeof i.context == "object" ? a.set(i.context, g) : o = g;
-    } catch (g) {
-      e.policies.error?.(g, _(e));
+      const f = B(t);
+      o?.context && typeof o.context == "object" ? a.set(o.context, f) : d = f;
+    } catch (f) {
+      e.policies.error?.(f, A(e));
     }
-    if (n.has(d)) return;
-    const y = ne(i), s = e.policies.action;
-    if (!s) {
-      y && (d.preventDefault(), p());
+    if (n.has(p)) return;
+    const c = G(o), v = e.policies.action;
+    if (!v) {
+      c && (p.preventDefault(), u());
       return;
     }
-    const c = V(), w = e.state.routeGeneration;
+    const g = $(), _ = e.state.routeGeneration;
     try {
-      const g = s(i, c, _(e));
-      if (g && typeof g.then == "function") {
-        d.preventDefault(), Promise.resolve(g).then((E) => {
-          E === !0 && c.claim(), !c.claimed && !y ? u(d, w) : c.claimed || p();
-        }).catch((E) => e.policies.error?.(E, _(e)));
+      const f = v(o, g, A(e));
+      if (f && typeof f.then == "function") {
+        p.preventDefault(), Promise.resolve(f).then((E) => {
+          E === !0 && g.claim(), !g.claimed && !c ? w(p, _) : g.claimed || u();
+        }).catch((E) => e.policies.error?.(E, A(e)));
         return;
       }
-      g === !0 && c.claim(), (c.claimed || y) && d.preventDefault(), y && !c.claimed && p();
-    } catch (g) {
-      d.preventDefault(), e.policies.error?.(g, _(e));
+      f === !0 && g.claim(), (g.claimed || c) && p.preventDefault(), c && !g.claimed && u();
+    } catch (f) {
+      p.preventDefault(), e.policies.error?.(f, A(e));
     }
-  }, m = (f) => {
-    const d = f, i = d.detail?.target;
-    !i?.logicalTypeName || !(i.id ?? i.objectId) || (d.preventDefault(), J(e, i).catch((y) => e.policies.error?.(y, _(e))));
-  }, h = (f) => {
-    const d = f, i = d.detail ?? {};
+  }, y = (l) => {
+    const p = l, o = p.detail?.target;
+    !o?.logicalTypeName || !(o.id ?? o.objectId) || (p.preventDefault(), ee(e, o).catch((c) => e.policies.error?.(c, A(e))));
+  }, m = (l) => {
+    const p = l, o = p.detail ?? {};
     (async () => {
-      const y = V();
-      if (await e.policies.result?.(i, y, _(e)) === !0 && y.claim(), y.claimed) return;
-      if (i.result?.kind === "local-resource") {
-        Te(i.result.value, { applicationBase: e.applicationResourceBase }), d.target?.dismissResult?.();
+      const c = $();
+      if (await e.policies.result?.(o, c, A(e)) === !0 && c.claim(), c.claimed) return;
+      if (o.result?.kind === "local-resource") {
+        Te(o.result.value, { applicationBase: e.applicationResourceBase }), p.target?.dismissResult?.();
         return;
       }
-      const c = je(i.result);
-      if (c) return J(e, c);
-      const w = i.context && a.get(i.context) || o || $(t);
-      i.result?.kind === "void" ? await Ne(e, i) : ie(w, i), d.target?.dismissResult?.();
-    })().catch((y) => e.policies.error?.(y, _(e)));
-  }, v = () => queueMicrotask(() => {
-    r && M(t);
+      const g = xe(o.result);
+      if (g) return ee(e, g);
+      const _ = o.context && a.get(o.context) || d || B(t);
+      o.result?.kind === "void" ? await Ne(e, o) : ie(_, o), p.target?.dismissResult?.();
+    })().catch((c) => e.policies.error?.(c, A(e)));
+  }, b = () => queueMicrotask(() => {
+    s && F(t);
   });
-  return M(t), t.addEventListener(G, l, { capture: !0 }), t.addEventListener(Y, m), t.addEventListener(X, h), t.addEventListener(H, v), () => {
-    r = !1, t.removeEventListener(G, l, { capture: !0 }), t.removeEventListener(Y, m), t.removeEventListener(X, h), t.removeEventListener(H, v);
+  return F(t), t.addEventListener(q, h, { capture: !0 }), t.addEventListener(X, y), t.addEventListener(Z, m), t.addEventListener(Q, b), () => {
+    s = !1, r?.excludeAction === i && (r.excludeAction = void 0), t.removeEventListener(q, h, { capture: !0 }), t.removeEventListener(X, y), t.removeEventListener(Z, m), t.removeEventListener(Q, b);
   };
 }
 const Re = /^[A-Za-z_][A-Za-z0-9_$-]*(?:\.[A-Za-z_][A-Za-z0-9_$-]*)*$/u;
@@ -284,12 +285,12 @@ function Pe(e) {
 function Ie(e) {
   const t = /* @__PURE__ */ new Map();
   for (const [a, n] of Pe(e)) {
-    const o = String(a ?? "").trim();
-    if (!Re.test(o)) throw new Error("A Vue page registration has an invalid logical type.");
+    const r = String(a ?? "").trim();
+    if (!Re.test(r)) throw new Error("A Vue page registration has an invalid logical type.");
     if (!n || typeof n != "object" && typeof n != "function")
-      throw new Error(`The Vue page registration for ${o} is unsupported.`);
-    if (t.has(o)) throw new Error(`The Vue page registration for ${o} is duplicated.`);
-    t.set(o, n);
+      throw new Error(`The Vue page registration for ${r} is unsupported.`);
+    if (t.has(r)) throw new Error(`The Vue page registration for ${r} is duplicated.`);
+    t.set(r, n);
   }
   return t;
 }
@@ -304,8 +305,8 @@ function Ye(e) {
   let n;
   return n = Object.freeze({
     plugin: {
-      install(r) {
-        r.provide(ae, n);
+      install(i) {
+        i.provide(ne, n);
       }
     },
     router: e.router,
@@ -318,24 +319,24 @@ function Ye(e) {
     state: a
   }), n;
 }
-function z() {
-  const e = le(ae);
+function D() {
+  const e = le(ne);
   if (!e) throw new Error("The Causeway Vue viewer plugin is not installed.");
   return e;
 }
 function Xe(e) {
-  const t = z();
+  const t = D();
   let a = null;
   return W(() => {
     const n = e.value;
     if (!n) throw new Error("The authored Vue application shell is missing.");
-    te(n), t.state.shell = n, a = ce(t, n);
-  }), ee(() => {
+    ae(n), t.state.shell = n, a = ce(t, n);
+  }), te(() => {
     a?.(), a = null, t.state.shell === e.value && (t.state.shell = null);
   }), e;
 }
 function Ze(e, t) {
-  const a = te(t);
+  const a = ae(t);
   e.state.shell = t;
   const n = ce(e, t);
   return {
@@ -345,67 +346,67 @@ function Ze(e, t) {
     }
   };
 }
-const ke = ["data-route-state"], Ge = /* @__PURE__ */ C({
+const ke = ["data-route-state"], qe = /* @__PURE__ */ O({
   __name: "HomePage",
   setup(e) {
-    const t = z(), a = L(null), n = L("loading"), o = L("Loading the application home page…");
-    function r(p) {
-      let u = null;
-      return p.dispatchEvent(new CustomEvent("causeway-graphql-client-request", {
+    const t = D(), a = L(null), n = L("loading"), r = L("Loading the application home page…");
+    function i(d) {
+      let s = null;
+      return d.dispatchEvent(new CustomEvent("causeway-graphql-client-request", {
         bubbles: !0,
         composed: !0,
-        detail: { provide(l) {
-          u ??= l;
+        detail: { provide(u) {
+          s ??= u;
         } }
-      })), u;
+      })), s;
     }
     return W(async () => {
-      const p = ++t.state.routeGeneration, u = a.value ? r(a.value) : null;
-      if (!u) {
-        n.value = "unsupported", o.value = "Choose an application action to begin.";
+      const d = ++t.state.routeGeneration, s = a.value ? i(a.value) : null;
+      if (!s) {
+        n.value = "unsupported", r.value = "Choose an application action to begin.";
         return;
       }
       try {
-        const l = await u.describeApplicationEntry();
-        if (p !== t.state.routeGeneration) return;
-        if (!l?.supported) {
-          n.value = "unsupported", o.value = "Choose an application action to begin.";
+        const u = await s.describeApplicationEntry();
+        if (d !== t.state.routeGeneration) return;
+        if (!u?.supported) {
+          n.value = "unsupported", r.value = "Choose an application action to begin.";
           return;
         }
-        const m = await u.readApplicationEntry({ description: l });
-        if (p !== t.state.routeGeneration) return;
-        const h = m?.data?.home, v = h?.object?._meta, f = v?.logicalTypeName ?? h?.logicalTypeName, d = v?.id, i = { claimed: !1, claim() {
+        const w = await s.readApplicationEntry({ description: u });
+        if (d !== t.state.routeGeneration) return;
+        const h = w?.data?.home, y = h?.object?._meta, m = y?.logicalTypeName ?? h?.logicalTypeName, b = y?.id, l = { claimed: !1, claim() {
           return this.claimed ? !1 : (this.claimed = !0, !0);
-        } }, y = { router: t.router, basePath: t.basePath, shell: t.state.shell, routeGeneration: p };
-        if (await t.policies.home?.(m?.data, i, y) === !0 && i.claim(), p !== t.state.routeGeneration || i.claimed) return;
-        if (h?.kind === "OBJECT" && f && d) {
-          await t.router.replace(B({ logicalTypeName: f, id: d }));
+        } }, p = { router: t.router, basePath: t.basePath, shell: t.state.shell, routeGeneration: d };
+        if (await t.policies.home?.(w?.data, l, p) === !0 && l.claim(), d !== t.state.routeGeneration || l.claimed) return;
+        if (h?.kind === "OBJECT" && m && b) {
+          await t.router.replace(z({ logicalTypeName: m, id: b }));
           return;
         }
-        n.value = m?.errors?.length ? "partial-error" : "ready", o.value = "Choose an application action to begin.";
-      } catch (l) {
-        if (p !== t.state.routeGeneration) return;
-        t.policies.error?.(l, { router: t.router, basePath: t.basePath, shell: t.state.shell, routeGeneration: p }), n.value = "partial-error", o.value = "The home page is unavailable; application menus remain available.";
+        n.value = w?.errors?.length ? "partial-error" : "ready", r.value = "Choose an application action to begin.";
+      } catch (u) {
+        if (d !== t.state.routeGeneration) return;
+        t.policies.error?.(u, { router: t.router, basePath: t.basePath, shell: t.state.shell, routeGeneration: d }), n.value = "partial-error", r.value = "The home page is unavailable; application menus remain available.";
       }
-    }), (p, u) => (N(), I("section", {
+    }), (d, s) => (N(), I("section", {
       ref_key: "page",
       ref: a,
       class: "causeway-vue-route-page causeway-vue-status",
       "data-route-state": n.value,
       tabindex: "-1"
     }, [
-      u[0] || (u[0] = A("h1", null, "Welcome", -1)),
-      A("p", null, de(o.value), 1)
+      s[0] || (s[0] = C("h1", null, "Welcome", -1)),
+      C("p", null, de(r.value), 1)
     ], 8, ke));
   }
-}), qe = {
+}), Ge = {
   class: "causeway-vue-route-page causeway-vue-route-object",
   "data-causeway-route-page": "",
   "data-page-kind": "generic",
   "data-route-state": "loading",
   tabindex: "-1",
   "aria-label": "Object page"
-}, Ve = ["logical-type", "object-id"], $e = /* @__PURE__ */ C({
+}, Ve = ["logical-type", "object-id"], $e = /* @__PURE__ */ O({
   __name: "GenericObjectPage",
   props: {
     logicalTypeName: {},
@@ -413,48 +414,48 @@ const ke = ["data-route-state"], Ge = /* @__PURE__ */ C({
     routeKey: {}
   },
   setup(e) {
-    return (t, a) => (N(), I("section", qe, [
-      A("cw-object-context", {
+    return (t, a) => (N(), I("section", Ge, [
+      C("cw-object-context", {
         "data-causeway-route-context": "",
         "logical-type": e.logicalTypeName,
         "object-id": e.objectId
       }, [...a[0] || (a[0] = [
-        A("cw-object", { editable: "" }, null, -1),
-        A("cw-interaction-controller", { "data-causeway-route-interactions": "" }, null, -1)
+        C("cw-object", { editable: "" }, null, -1),
+        C("cw-interaction-controller", { "data-causeway-route-interactions": "" }, null, -1)
       ])], 8, Ve)
     ]));
   }
-}), We = ["data-route-key"], Be = {
+}), Be = ["data-route-key"], We = {
   key: 0,
   class: "causeway-vue-route-page causeway-vue-status causeway-vue-status-danger",
   "data-route-state": "terminal-error",
   tabindex: "-1",
   role: "alert"
-}, ze = /* @__PURE__ */ C({
+}, ze = /* @__PURE__ */ O({
   __name: "ObjectRoutePage",
   setup(e) {
-    const t = ve(), a = z(), n = L(null), o = L(null), r = P(() => re(t.path, "/")), p = C(() => () => S("section", {
+    const t = ve(), a = D(), n = L(null), r = L(null), i = P(() => re(t.path, "/")), d = O(() => () => S("section", {
       class: "causeway-vue-route-page causeway-vue-status",
       "data-route-state": "loading",
       tabindex: -1,
       role: "status"
-    }, [S("h1", "Loading page…")])), u = C(() => () => S("section", {
+    }, [S("h1", "Loading page…")])), s = O(() => () => S("section", {
       class: "causeway-vue-route-page causeway-vue-status causeway-vue-status-danger",
       "data-route-state": "terminal-error",
       tabindex: -1,
       role: "alert"
-    }, [S("h1", "Page unavailable"), S("p", "The application page could not be loaded.")])), l = P(() => Oe(r.value)), m = P(() => a.pages.get(r.value.logicalTypeName)), h = P(() => {
-      const s = m.value;
-      return s ? Ue(s) ? pe({
+    }, [S("h1", "Page unavailable"), S("p", "The application page could not be loaded.")])), u = P(() => Oe(i.value)), w = P(() => a.pages.get(i.value.logicalTypeName)), h = P(() => {
+      const o = w.value;
+      return o ? Ue(o) ? pe({
         loader: async () => {
-          const c = await s();
+          const c = await o();
           return "default" in c ? c.default : c;
         },
         delay: 0,
         timeout: 3e4,
-        loadingComponent: p,
-        errorComponent: u,
-        onError(c, w, g) {
+        loadingComponent: d,
+        errorComponent: s,
+        onError(c, v, g) {
           a.policies.error?.(c, {
             router: a.router,
             basePath: a.basePath,
@@ -462,88 +463,88 @@ const ke = ["data-route-state"], Ge = /* @__PURE__ */ C({
             routeGeneration: a.state.routeGeneration
           }), g();
         }
-      }) : s : $e;
+      }) : o : $e;
     });
-    function v() {
-      const s = a.state.shell;
+    function y() {
+      const o = a.state.shell;
       return {
-        route: s?.querySelector("[data-causeway-router-view]") ?? null,
-        loading: s?.querySelector("[data-causeway-route-loading]") ?? null,
-        announcement: s?.querySelector("[data-causeway-route-announcement]") ?? null
+        route: o?.querySelector("[data-causeway-router-view]") ?? null,
+        loading: o?.querySelector("[data-causeway-route-loading]") ?? null,
+        announcement: o?.querySelector("[data-causeway-route-announcement]") ?? null
       };
     }
-    function f(s, c) {
-      const w = v().announcement;
-      w && (w.textContent = "", requestAnimationFrame(() => {
-        c === a.state.routeGeneration && w.isConnected && (w.textContent = s);
+    function m(o, c) {
+      const v = y().announcement;
+      v && (v.textContent = "", requestAnimationFrame(() => {
+        c === a.state.routeGeneration && v.isConnected && (v.textContent = o);
       }));
     }
-    function d(s) {
-      const c = v();
-      c.route?.setAttribute("aria-busy", String(s)), c.loading && (c.loading.hidden = !s);
+    function b(o) {
+      const c = y();
+      c.route?.setAttribute("aria-busy", String(o)), c.loading && (c.loading.hidden = !o);
     }
-    async function i() {
-      const s = a.state.routeGeneration;
-      if (o.value = null, await ye(), s !== a.state.routeGeneration || !n.value) return;
-      const c = me(n.value, r.value);
-      c.valid || (o.value = c.classification ?? "invalid", d(!1), f("Page unavailable", s));
+    async function l() {
+      const o = a.state.routeGeneration;
+      if (r.value = null, await ye(), o !== a.state.routeGeneration || !n.value) return;
+      const c = me(n.value, i.value);
+      c.valid || (r.value = c.classification ?? "invalid", b(!1), m("Page unavailable", o));
     }
-    function y(s) {
-      const c = a.state.routeGeneration, w = s, g = w.detail?.state, E = w.target?.closest("[data-causeway-route-page]");
-      if (!g || !E || !n.value?.contains(E)) return;
-      let T = String(g.status ?? "terminal-error");
-      if (T === "terminal-error") {
-        const O = g.errors?.[0]?.extensions?.classification ?? g.errors?.[0]?.extensions?.code ?? g.error?.code;
-        (O === "NOT_FOUND" || O === "ACCESS_DENIED") && (T = "unavailable");
+    function p(o) {
+      const c = a.state.routeGeneration, v = o, g = v.detail?.state, _ = v.target?.closest("[data-causeway-route-page]");
+      if (!g || !_ || !n.value?.contains(_)) return;
+      let f = String(g.status ?? "terminal-error");
+      if (f === "terminal-error") {
+        const E = g.errors?.[0]?.extensions?.classification ?? g.errors?.[0]?.extensions?.code ?? g.error?.code;
+        (E === "NOT_FOUND" || E === "ACCESS_DENIED") && (f = "unavailable");
       }
-      if (E.dataset.routeState = T, T === "ready" || T === "partial-error") {
-        d(!1);
-        const O = g.snapshot?.data?._meta?.title;
-        O && (document.title = String(O));
-        for (const ue of E.querySelectorAll("cw-collection:not([active])"))
+      if (_.dataset.routeState = f, f === "ready" || f === "partial-error") {
+        b(!1);
+        const E = g.snapshot?.data?._meta?.title;
+        E && (document.title = String(E));
+        for (const ue of _.querySelectorAll("cw-collection:not([active])"))
           ue.activate?.();
-        f(T === "ready" ? "Page ready" : "Page ready with partial information", c);
-      } else (T === "terminal-error" || T === "unavailable") && (d(!1), f("Page unavailable", c));
+        m(f === "ready" ? "Page ready" : "Page ready with partial information", c);
+      } else (f === "terminal-error" || f === "unavailable") && (b(!1), m("Page unavailable", c));
     }
     return fe(() => t.fullPath, () => {
-      a.state.routeGeneration += 1, d(!0), f("Loading page", a.state.routeGeneration), i();
+      a.state.routeGeneration += 1, b(!0), m("Loading page", a.state.routeGeneration), l();
     }, { immediate: !0 }), W(async () => {
-      n.value?.addEventListener("causeway-object-context-state-change", y), await i();
-      const s = n.value?.querySelector(
+      n.value?.addEventListener("causeway-object-context-state-change", p), await l();
+      const o = n.value?.querySelector(
         "cw-object-context[data-causeway-route-context]"
       );
-      s?.context?.state && s.dispatchEvent(new CustomEvent("causeway-object-context-state-change", {
+      o?.context?.state && o.dispatchEvent(new CustomEvent("causeway-object-context-state-change", {
         bubbles: !0,
         composed: !0,
-        detail: { state: s.context.state, context: s.context }
+        detail: { state: o.context.state, context: o.context }
       })), n.value?.querySelector("[data-causeway-route-page]")?.focus({ preventScroll: !0 });
-    }), ee(() => n.value?.removeEventListener("causeway-object-context-state-change", y)), (s, c) => (N(), I("div", {
+    }), te(() => n.value?.removeEventListener("causeway-object-context-state-change", p)), (o, c) => (N(), I("div", {
       ref_key: "host",
       ref: n,
       class: "causeway-vue-object-route",
-      "data-route-key": l.value
+      "data-route-key": u.value
     }, [
-      o.value ? (N(), I("section", Be, [...c[0] || (c[0] = [
-        A("h1", null, "Page unavailable", -1),
-        A("p", null, "The application page has an invalid semantic context boundary.", -1)
+      r.value ? (N(), I("section", We, [...c[0] || (c[0] = [
+        C("h1", null, "Page unavailable", -1),
+        C("p", null, "The application page has an invalid semantic context boundary.", -1)
       ])])) : (N(), ge(he(h.value), {
-        key: l.value,
-        "logical-type-name": r.value.logicalTypeName,
-        "object-id": r.value.objectId,
-        "route-key": l.value,
-        onVnodeMounted: i,
-        onVnodeUpdated: i
+        key: u.value,
+        "logical-type-name": i.value.logicalTypeName,
+        "object-id": i.value.objectId,
+        "route-key": u.value,
+        onVnodeMounted: l,
+        onVnodeUpdated: l
       }, null, 8, ["logical-type-name", "object-id", "route-key"]))
-    ], 8, We));
+    ], 8, Be));
   }
-}), x = Object.freeze({
+}), j = Object.freeze({
   home: "causeway-home",
   object: "causeway-object",
   invalid: "causeway-invalid-route",
   notFound: "causeway-not-found"
 });
 function se(e, t, a, n) {
-  return C({
+  return O({
     name: `Causeway${e.replace(/\W/gu, "")}Page`,
     setup() {
       return () => S("section", {
@@ -568,71 +569,71 @@ const De = se(
 );
 function He(e = {}) {
   return [
-    { path: "/", name: x.home, component: e.homeComponent ?? Ge },
+    { path: "/", name: j.home, component: e.homeComponent ?? qe },
     {
       path: "/object/:logicalTypeName/:objectId",
-      name: x.object,
+      name: j.object,
       component: ze,
       beforeEnter(t) {
         try {
           return re(t.path, "/"), !0;
         } catch {
-          return { name: x.invalid, replace: !0 };
+          return { name: j.invalid, replace: !0 };
         }
       }
     },
     {
       path: "/invalid-route",
-      name: x.invalid,
+      name: j.invalid,
       component: De
     },
     {
       path: "/:pathMatch(.*)*",
-      name: x.notFound,
+      name: j.notFound,
       component: e.notFoundComponent ?? Me
     }
   ];
 }
 export {
-  G as ACTION_REQUEST_EVENT,
-  X as ACTION_RESULT_EVENT,
-  x as CAUSEWAY_ROUTE_NAMES,
-  ae as CAUSEWAY_VIEWER_KEY,
+  q as ACTION_REQUEST_EVENT,
+  Z as ACTION_RESULT_EVENT,
+  j as CAUSEWAY_ROUTE_NAMES,
+  ne as CAUSEWAY_VIEWER_KEY,
   $e as CausewayGenericObjectPage,
-  Ge as CausewayHomePage,
+  qe as CausewayHomePage,
   De as CausewayInvalidRoutePage,
   Me as CausewayNotFoundPage,
   ze as CausewayObjectRoutePage,
-  D as FRAMEWORK_LOGOUT_ACTION,
-  Se as INVALID_ROUTE_MESSAGE,
+  M as FRAMEWORK_LOGOUT_ACTION,
+  Ae as INVALID_ROUTE_MESSAGE,
   be as LocalResourceNavigationError,
-  H as MENU_BARS_STATE_EVENT,
-  Y as NAVIGATION_REQUEST_EVENT,
-  Z as OBJECT_CONTEXT_STATE_EVENT,
+  Q as MENU_BARS_STATE_EVENT,
+  X as NAVIGATION_REQUEST_EVENT,
+  H as OBJECT_CONTEXT_STATE_EVENT,
   k as ROUTE_CONTEXT_SELECTOR,
   we as ROUTE_INTERACTIONS_SELECTOR,
   Ze as bindCausewayShell,
   Ce as canonicalObjectPath,
   Oe as canonicalRouteKey,
-  B as canonicalRouterObjectPath,
+  z as canonicalRouterObjectPath,
   He as createCausewayRouteRecords,
   Ye as createCausewayVueViewer,
-  K as decodeRouteSegment,
-  q as encodeRouteSegment,
+  Y as decodeRouteSegment,
+  V as encodeRouteSegment,
   ce as installSemanticBridge,
-  ne as isFrameworkLogoutAction,
+  G as isFrameworkLogoutAction,
   Ue as isPageLoader,
   Te as navigateLocalResource,
   U as normalizeBasePath,
   Ie as normalizePageRegistry,
   re as parseCanonicalObjectPath,
   ie as presentSemanticResult,
-  M as removeFrameworkLogoutMenuActions,
+  F as removeFrameworkLogoutMenuActions,
   Ee as resolveLocalResourceTarget,
-  $ as resolveResultOutlet,
+  B as resolveResultOutlet,
   Xe as useCausewayShell,
-  z as useCausewayViewer,
+  D as useCausewayViewer,
   me as validateRouteBoundary,
-  te as validateShellBoundary
+  ae as validateShellBoundary
 };
 //# sourceMappingURL=causeway-vue.js.map

@@ -193,6 +193,9 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
 test('composite preserves declarative bars, generates only missing effective roles, and shares one generation', async () => {
   const executor = createMenuGraphQLExecutor();
   const composite = new CausewayMenubarsElement();
+  const excludeWelcome = detail => detail.serviceLogicalTypeName === 'causeway.webcomponents.sample.SampleMenu'
+    && detail.actionId === 'welcomeMessage';
+  composite.excludeAction = excludeWelcome;
   composite.client = new CausewayGraphQLClient({executor});
   let fetchCount = 0;
   composite.fetchImpl = async () => {
@@ -213,6 +216,8 @@ test('composite preserves declarative bars, generates only missing effective rol
   assert.equal(bars.length, 3);
   assert.equal(bars.filter(child => child.localName === CausewayElementName.MENUBAR_PRIMARY).length, 1);
   assert.equal(bars.find(child => child.localName === CausewayElementName.MENUBAR_PRIMARY), declarativePrimary);
+  assert.ok(bars.every(child => child.excludeAction === excludeWelcome));
+  assert.doesNotMatch(bars.map(renderMarkup).join(''), /welcomeMessage|Welcome Message/);
   assert.equal(fetchCount, 1);
   assert.equal(executor.applicationCalls.length, 1);
   assert.equal(executor.serviceCalls.filter(call => call.operationName === 'CausewayReadServiceActionStates').length, 1);
