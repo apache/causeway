@@ -237,8 +237,16 @@ class PetClinicHtmxApplication_IntegTest {
         final var path = Path.of(resource.toURI());
         final var original = Files.readAllBytes(path);
         final var marker = "<p data-reload-verification>current classpath content</p>";
+        final var replacement = """
+                <section data-route-state="loading" data-page-kind="custom" data-page-source="resource" data-testid="causeway-route-page">
+                  <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}">
+                    %s
+                    <cw-interaction-controller data-causeway-route-interactions></cw-interaction-controller>
+                  </cw-object-context>
+                </section>
+                """.formatted(marker);
         try {
-            Files.writeString(path, marker, StandardCharsets.UTF_8);
+            Files.writeString(path, replacement, StandardCharsets.UTF_8);
             final var changed = get("/htmx/object/petclinic.PetOwner/s_owner-mary");
             assertThat(changed.statusCode()).isEqualTo(200);
             assertThat(changed.body())
@@ -325,7 +333,10 @@ class PetClinicHtmxApplication_IntegTest {
             }
             assertThat(html)
                     .contains("<cw-object-header")
-                    .contains("<cw-")
+                    .contains("<cw-object-context logical-type=\"{{causeway.logicalType}}\" object-id=\"{{causeway.objectId}}\"")
+                    .containsOnlyOnce("<cw-object-context")
+                    .containsOnlyOnce("<cw-interaction-controller data-causeway-route-interactions>")
+                    .contains("data-testid=\"causeway-route-page\"")
                     .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
             if (!name.equals("petclinic.HomePage.html")) {
                 assertThat(html).contains("<cw-breadcrumbs data-testid=\"petclinic-breadcrumbs\"");

@@ -211,6 +211,13 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-menubar/vaadin-menubar.js")).count())
                 .isEqualTo(nativeToolkit() ? 0 : 1);
         assertThat(toolkitRequests.stream().noneMatch(url -> !url.contains("/vaadin-menubar/"))).isTrue();
+        assertThat(page.locator("body > cw-graphql-client").count()).isEqualTo(1);
+        assertThat(page.locator("html").getAttribute("data-causeway-shell-context-error")).isNull();
+        assertThat(page.locator("#causeway-route").getAttribute("data-causeway-route-context-error")).isNull();
+        assertThat(page.locator("#causeway-route > [data-testid='causeway-route-page'] > cw-object-context").count())
+                .isEqualTo(1);
+        assertThat(page.locator("#causeway-route > [data-testid='causeway-route-page'] > cw-object-context > cw-interaction-controller").count())
+                .isEqualTo(1);
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();

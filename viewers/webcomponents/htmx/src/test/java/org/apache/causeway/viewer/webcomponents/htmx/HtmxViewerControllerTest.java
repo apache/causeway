@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -274,7 +275,7 @@ class HtmxViewerControllerTest {
 
             @Override
             public String render(final HtmxObjectRoute route) {
-                return "<article data-custom-page><cw-property id=\"name\"></cw-property></article>";
+                return factoryPage(route);
             }
         };
         final var controller = controller(List.of(custom));
@@ -293,11 +294,32 @@ class HtmxViewerControllerTest {
     }
 
     @Test
+    void rejectsFactoryContentWithoutAnAuthoredCanonicalRouteContext() {
+        final HtmxPageFragmentFactory invalid = new HtmxPageFragmentFactory() {
+            @Override
+            public String logicalTypeName() {
+                return "petclinic.PetOwner";
+            }
+
+            @Override
+            public String render(final HtmxObjectRoute route) {
+                return "<article data-custom-page></article>";
+            }
+        };
+
+        assertThatThrownBy(() -> controller(List.of(invalid)).route(request(
+                "/htmx/object/petclinic.PetOwner/owner-1", "", true)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("HTMX_PAGE_OBJECT_CONTEXT_INVALID")
+                .hasMessageNotContaining("<article");
+    }
+
+    @Test
     void rendersLiteralResourcePageInsideEscapedRouteContext() {
         final var resource = HtmxPageDefinition.resource(
                 "petclinic.PetOwner",
                 "resource:petclinic.PetOwner.html",
-                "<article data-resource-page>{{objectId}}<cw-property id=\"name\"></cw-property></article>");
+                resourcePage("<article data-resource-page>{{objectId}}<cw-property id=\"name\"></cw-property></article>"));
         final var controller = controller(List.of(), List.of(resource));
 
         final var response = controller.route(request(
@@ -317,7 +339,7 @@ class HtmxViewerControllerTest {
 
     @Test
     void controllerResponsesUseCurrentReloadContentAndStableCachedContent() {
-        final var current = new AtomicReference<>("<article data-version=\"initial\"></article>");
+        final var current = new AtomicReference<>(resourcePage("<article data-version=\"initial\"></article>"));
         final var reloading = HtmxPageDefinition.reloadingResource(
                 "petclinic.Reload",
                 "resource:petclinic.Reload.html",
@@ -328,7 +350,7 @@ class HtmxViewerControllerTest {
                 current.get());
         final var controller = controller(List.of(), List.of(reloading, cached));
 
-        current.set("<article data-version=\"current\"></article>");
+        current.set(resourcePage("<article data-version=\"current\"></article>"));
 
         assertThat(controller.route(request(
                 "/htmx/object/petclinic.Reload/1", "", true)).getBody())
@@ -452,6 +474,30 @@ class HtmxViewerControllerTest {
                 .contains("data-page-kind=\"generic\"")
                 .containsOnlyOnce("<cw-object-context");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
+    }
+
+    private static String resourcePage(final String content) {
+        return """
+                <section data-route-state="loading" data-page-kind="custom" data-page-source="resource" data-testid="causeway-route-page">
+                  <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}">
+                    %s
+                    <cw-interaction-controller></cw-interaction-controller>
+                  </cw-object-context>
+                </section>
+                """.formatted(content);
+    }
+
+    private static String factoryPage(final HtmxObjectRoute route) {
+        return """
+                <section data-route-state="loading" data-page-kind="custom" data-page-source="factory" data-testid="causeway-route-page">
+                  <cw-object-context logical-type="%s" object-id="%s">
+                    <article data-custom-page><cw-property id="name"></cw-property></article>
+                    <cw-interaction-controller></cw-interaction-controller>
+                  </cw-object-context>
+                </section>
+                """.formatted(
+                HtmxPageRenderer.escape(route.logicalTypeName()),
+                HtmxPageRenderer.escape(route.objectId()));
     }
 
     private HtmxViewerController controller(final List<HtmxPageFragmentFactory> factories) {

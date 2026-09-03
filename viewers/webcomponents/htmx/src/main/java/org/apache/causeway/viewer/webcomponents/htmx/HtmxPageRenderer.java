@@ -23,8 +23,15 @@ import java.util.Optional;
 
 final class HtmxPageRenderer {
 
-    private static final String HTMX_VERSION = "2.0.6";
-    private static final String FONT_AWESOME_VERSION = "7.3.0";
+    private static final String SHELL_TEMPLATE = HtmxDeclarativeTemplate.load("shell.html");
+    private static final String GENERIC_OBJECT_PAGE_TEMPLATE = HtmxDeclarativeTemplate.load("generic-object-page.html");
+    private static final String LANDING_PAGE_TEMPLATE = HtmxDeclarativeTemplate.load("landing-page.html");
+    private static final String INVALID_ROUTE_PAGE_TEMPLATE = HtmxDeclarativeTemplate.load("invalid-route-page.html");
+
+    static {
+        HtmxDeclarativeTemplate.validateShell(SHELL_TEMPLATE);
+        HtmxDeclarativeTemplate.validateResourcePage(GENERIC_OBJECT_PAGE_TEMPLATE, "generic-object-page.html");
+    }
 
     private final HtmxRouteCodec routeCodec;
     private final HtmxViewerProperties properties;
@@ -41,51 +48,30 @@ final class HtmxPageRenderer {
 
     String renderObjectFragment(final HtmxObjectRoute route) {
         final var custom = fragmentRegistry.find(route.logicalTypeName());
-        final var content = custom
-                .map(page -> page.render(route))
-                .orElse("<cw-object editable></cw-object>");
-        final var pageKind = custom.isPresent() ? "custom" : "generic";
-        final var pageSource = custom
-                .map(page -> page.source().attributeValue())
-                .orElse("generic");
-        return """
-                <section class="causeway-route-page causeway-route-object" data-route-state="loading" data-page-kind="%s" data-page-source="%s" data-testid="causeway-route-page" tabindex="-1" aria-label="Object page">
-                  <cw-object-context logical-type="%s" object-id="%s">
-                    %s
-                    <cw-interaction-controller data-causeway-route-interactions></cw-interaction-controller>
-                  </cw-object-context>
-                </section>
-                """.formatted(
-                        pageKind,
-                        pageSource,
-                        escape(route.logicalTypeName()),
-                        escape(route.objectId()),
-                        content);
+        if (custom.isEmpty()) {
+            return HtmxDeclarativeTemplate.bindObjectPage(
+                    GENERIC_OBJECT_PAGE_TEMPLATE,
+                    route,
+                    "generic-object-page.html",
+                    true);
+        }
+        final var page = custom.orElseThrow();
+        return HtmxDeclarativeTemplate.bindObjectPage(
+                page.render(route),
+                route,
+                page.safeSourceIdentifier(),
+                page.source() == HtmxPageDefinition.Source.RESOURCE);
     }
 
     String renderLandingFragment() {
-        return """
-                <section class="causeway-route-page causeway-route-landing" data-route-state="landing" data-testid="causeway-route-page" tabindex="-1" aria-labelledby="causeway-route-heading">
-                  <div class="causeway-landing-card">
-                    <p class="causeway-eyebrow">Apache Causeway</p>
-                    <h1 id="causeway-route-heading">Welcome</h1>
-                    <p data-causeway-home-message>Select an application action or wait while the configured home page is resolved.</p>
-                  </div>
-                </section>
-                """;
+        return LANDING_PAGE_TEMPLATE;
     }
 
     String renderInvalidRouteFragment() {
-        return """
-                <section class="causeway-route-page causeway-route-error" data-route-state="invalid-route" data-testid="causeway-route-page" tabindex="-1" aria-labelledby="causeway-route-heading">
-                  <div class="causeway-status-card causeway-status-danger" role="alert">
-                    <p class="causeway-eyebrow">Invalid route</p>
-                    <h1 id="causeway-route-heading">This application route is not valid</h1>
-                    <p>Use the application menus or return to the home page.</p>
-                    <a class="causeway-button causeway-button-primary" href="%s" data-causeway-route-link>Return home</a>
-                  </div>
-                </section>
-                """.formatted(escape(routeCodec.rootPath()));
+        return HtmxDeclarativeTemplate.bind(
+                INVALID_ROUTE_PAGE_TEMPLATE,
+                java.util.Map.of("homePath", escape(routeCodec.rootPath())),
+                "HTMX_INVALID_ROUTE_BINDING_UNRESOLVED");
     }
 
     String renderShell(final String contextPath, final String fragment, final String canonicalPath) {
@@ -105,75 +91,22 @@ final class HtmxPageRenderer {
         final var applicationStylesheet = applicationStylesheet(context);
         final var authenticationMetadata = authenticationMetadata(authenticationState);
         final var authenticationChrome = authenticationChrome(authenticationState);
-        return """
-                <!doctype html>
-                <html lang="%s" data-causeway-htmx-base="%s" data-causeway-canonical-path="%s"%s>
-                <head>
-                  <meta charset="utf-8">
-                  <meta name="viewport" content="width=device-width, initial-scale=1">
-                  <meta name="description" content="Generic Apache Causeway application viewer using semantic web components and HTMX routing.">
-                  <meta name="color-scheme" content="light dark">
-                  <link rel="icon" href="data:,">
-                  <meta name="htmx-config" content='{"historyCacheSize":0,"historyRestoreAsHxRequest":false,"includeIndicatorStyles":false}'>
-                  %s
-                  <title>%s</title>
-                  <link rel="stylesheet" href="%s/webjars/font-awesome/%s/css/all.min.css">
-                  <link rel="stylesheet" href="%s/causeway-webcomponents/component-styles.css">
-                  <link rel="stylesheet" href="%s/causeway-webcomponents/theme.css">
-                  <link rel="stylesheet" href="%s/causeway-htmx/causeway-htmx.css">
-                  %s
-                  <script defer src="%s/webjars/htmx.org/%s/dist/htmx.min.js"></script>
-                  <script type="module" src="%s/causeway-htmx/causeway-htmx.mjs"></script>
-                </head>
-                <body class="causeway-app-shell">
-                  <a class="causeway-skip-link" href="#causeway-route">Skip to main content</a>
-                  <cw-graphql-client endpoint="%s">
-                    <header class="causeway-shell-header">
-                      <div class="causeway-shell-navbar">
-                        <a class="causeway-shell-brand" href="%s" data-causeway-route-link aria-label="%s home">
-                          <span class="causeway-shell-mark" aria-hidden="true">C</span>
-                          <span>%s</span>
-                        </a>
-                        <cw-menubars></cw-menubars>
-                        %s
-                      </div>
-                    </header>
-                    <div id="causeway-route-loading" class="causeway-route-loading htmx-indicator" role="status" aria-live="polite">Loading page…</div>
-                    <div id="causeway-route-announcement" class="causeway-visually-hidden" aria-live="polite" aria-atomic="true"></div>
-                    <cw-action-results id="causeway-result" class="causeway-shell-result" data-testid="causeway-shell-result" aria-label="Application action results" aria-live="polite" hidden></cw-action-results>
-                    <main id="causeway-route" class="causeway-shell-main" data-testid="causeway-route" data-navigation-generation="0" hx-history-elt hx-history="false" aria-busy="false">
-                      %s
-                    </main>
-                    <footer class="causeway-shell-footer">
-                      <span>Powered by Apache Causeway</span>
-                      %s
-                    </footer>
-                  </cw-graphql-client>
-                </body>
-                </html>
-                """.formatted(
-                        language,
-                        escape(basePath),
-                        escape(context + canonicalPath),
-                        widgetAttributes(context),
-                        authenticationMetadata,
-                        escape(properties.getBrand()),
-                        escape(context),
-                        FONT_AWESOME_VERSION,
-                        escape(context),
-                        escape(context),
-                        escape(context),
-                        applicationStylesheet,
-                        escape(context),
-                        HTMX_VERSION,
-                        escape(context),
-                        escape(graphQlEndpoint),
-                        escape(basePath),
-                        escape(properties.getBrand()),
-                        escape(properties.getBrand()),
-                        authenticationChrome,
-                        fragment,
-                        comparisonLink);
+        return HtmxDeclarativeTemplate.bind(
+                SHELL_TEMPLATE,
+                java.util.Map.ofEntries(
+                        java.util.Map.entry("language", language),
+                        java.util.Map.entry("basePath", escape(basePath)),
+                        java.util.Map.entry("canonicalPath", escape(context + canonicalPath)),
+                        java.util.Map.entry("widgetAttributes", widgetAttributes(context)),
+                        java.util.Map.entry("authenticationMetadata", authenticationMetadata),
+                        java.util.Map.entry("brand", escape(properties.getBrand())),
+                        java.util.Map.entry("contextPath", escape(context)),
+                        java.util.Map.entry("applicationStylesheet", applicationStylesheet),
+                        java.util.Map.entry("graphQlEndpoint", escape(graphQlEndpoint)),
+                        java.util.Map.entry("authenticationChrome", authenticationChrome),
+                        java.util.Map.entry("routeContent", fragment),
+                        java.util.Map.entry("comparisonLink", comparisonLink)),
+                "HTMX_SHELL_BINDING_UNRESOLVED");
     }
 
     private static String authenticationMetadata(final Optional<HtmxAuthenticationShell.State> state) {
@@ -192,11 +125,11 @@ final class HtmxPageRenderer {
                 <meta name="causeway-auth-csrf-token" content="%s">
                 <meta name="causeway-auth-excluded-actions" content="%s">
                 """.formatted(
-                        escape(value.loginPath()),
-                        escape(value.csrfHeaderName()),
-                        escape(value.csrfParameterName()),
-                        escape(value.csrfToken()),
-                        escape(exclusions));
+                escape(value.loginPath()),
+                escape(value.csrfHeaderName()),
+                escape(value.csrfParameterName()),
+                escape(value.csrfToken()),
+                escape(exclusions));
     }
 
     private static String authenticationChrome(final Optional<HtmxAuthenticationShell.State> state) {
@@ -213,10 +146,10 @@ final class HtmxPageRenderer {
                   </form>
                 </div>
                 """.formatted(
-                        escape(value.username()),
-                        escape(value.logoutPath()),
-                        escape(value.csrfParameterName()),
-                        escape(value.csrfToken()));
+                escape(value.username()),
+                escape(value.logoutPath()),
+                escape(value.csrfParameterName()),
+                escape(value.csrfToken()));
     }
 
     private String widgetAttributes(final String contextPath) {

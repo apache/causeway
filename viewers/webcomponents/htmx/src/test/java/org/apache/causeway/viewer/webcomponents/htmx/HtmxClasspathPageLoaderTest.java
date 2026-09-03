@@ -31,6 +31,7 @@ import java.util.jar.JarOutputStream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
 import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -49,7 +50,8 @@ class HtmxClasspathPageLoaderTest {
 
     @Test
     void loadsLiteralUtf8ResourceWithExactLogicalType() {
-        final var loader = loader(named("petclinic.PetOwner.html", "<p>Olé {{objectId}}</p>"));
+        final var html = page("<p>Olé {{objectId}}</p>");
+        final var loader = loader(named("petclinic.PetOwner.html", html));
 
         final var pages = loader.load();
 
@@ -58,36 +60,36 @@ class HtmxClasspathPageLoaderTest {
         assertThat(pages.get(0).source()).isEqualTo(HtmxPageDefinition.Source.RESOURCE);
         assertThat(pages.get(0).safeSourceIdentifier()).isEqualTo("resource:petclinic.PetOwner.html");
         assertThat(pages.get(0).render(new HtmxObjectRoute("petclinic.PetOwner", "opaque")))
-                .isEqualTo("<p>Olé {{objectId}}</p>");
+                .isEqualTo(html);
     }
 
     @Test
     void cachedAndReloadModesRetainRegistrationButDifferForCurrentContent() {
-        final var cachedResource = mutable("petclinic.Cached.html", "<p>initial cached</p>");
+        final var cachedResource = mutable("petclinic.Cached.html", page("<p>initial cached</p>"));
         final var cached = loader(HtmxViewerProperties.ResourcePageMode.CACHED, cachedResource)
                 .load().get(0);
-        cachedResource.set("<p>changed cached</p>");
-        assertThat(cached.render(route("petclinic.Cached"))).isEqualTo("<p>initial cached</p>");
+        cachedResource.set(page("<p>changed cached</p>"));
+        assertThat(cached.render(route("petclinic.Cached"))).isEqualTo(page("<p>initial cached</p>"));
 
-        final var reloadResource = mutable("petclinic.Reload.html", "<p>initial reload</p>");
+        final var reloadResource = mutable("petclinic.Reload.html", page("<p>initial reload</p>"));
         final var reloading = loader(HtmxViewerProperties.ResourcePageMode.RELOAD, reloadResource)
                 .load().get(0);
-        reloadResource.set("<p>changed once</p>");
-        assertThat(reloading.render(route("petclinic.Reload"))).isEqualTo("<p>changed once</p>");
-        reloadResource.set("<p>changed twice</p>");
-        assertThat(reloading.render(route("petclinic.Reload"))).isEqualTo("<p>changed twice</p>");
+        reloadResource.set(page("<p>changed once</p>"));
+        assertThat(reloading.render(route("petclinic.Reload"))).isEqualTo(page("<p>changed once</p>"));
+        reloadResource.set(page("<p>changed twice</p>"));
+        assertThat(reloading.render(route("petclinic.Reload"))).isEqualTo(page("<p>changed twice</p>"));
         assertThat(reloading.logicalTypeName()).isEqualTo("petclinic.Reload");
     }
 
     @Test
     void reloadReappliesEveryBoundedContentValidationWithoutStaleFallback() {
-        final var resource = mutable("petclinic.Reload.html", "<p>valid</p>");
+        final var resource = mutable("petclinic.Reload.html", page("<p>valid</p>"));
         final var page = loader(HtmxViewerProperties.ResourcePageMode.RELOAD, resource)
                 .load().get(0);
 
         resource.set(new byte[0]);
         assertRenderFailure(page, "HTMX_PAGE_EMPTY");
-        resource.set(new byte[] {(byte) 0xc3, (byte) 0x28});
+        resource.set(new byte[]{(byte) 0xc3, (byte) 0x28});
         assertRenderFailure(page, "HTMX_PAGE_INVALID_UTF8");
         resource.set("<p>\0</p>");
         assertRenderFailure(page, "HTMX_PAGE_NUL_CONTENT");
@@ -102,9 +104,9 @@ class HtmxClasspathPageLoaderTest {
         final var pagesDirectory = temporaryDirectory.resolve(RESOURCE_DIRECTORY);
         Files.createDirectories(pagesDirectory);
         final var original = pagesDirectory.resolve("petclinic.Original.html");
-        Files.writeString(original, "<p>original</p>", StandardCharsets.UTF_8);
+        Files.writeString(original, page("<p>original</p>"), StandardCharsets.UTF_8);
         try (var classLoader = new URLClassLoader(
-                new java.net.URL[] {temporaryDirectory.toUri().toURL()},
+                new java.net.URL[]{temporaryDirectory.toUri().toURL()},
                 null)) {
             final var resolver = new PathMatchingResourcePatternResolver(classLoader);
             final var cached = new HtmxClasspathPageLoader(
@@ -116,14 +118,14 @@ class HtmxClasspathPageLoaderTest {
 
             Files.writeString(
                     pagesDirectory.resolve("petclinic.Added.html"),
-                    "<p>added</p>",
+                    page("<p>added</p>"),
                     StandardCharsets.UTF_8);
             Files.move(original, pagesDirectory.resolve("petclinic.Renamed.html"));
 
             assertThat(cached).extracting(HtmxPageDefinition::logicalTypeName)
                     .containsExactly("petclinic.Original");
             assertThat(cached.get(0).render(route("petclinic.Original")))
-                    .isEqualTo("<p>original</p>");
+                    .isEqualTo(page("<p>original</p>"));
             assertThat(reload).extracting(HtmxPageDefinition::logicalTypeName)
                     .containsExactly("petclinic.Original");
             assertThatThrownBy(() -> reload.get(0).render(route("petclinic.Original")))
@@ -138,10 +140,10 @@ class HtmxClasspathPageLoaderTest {
     void discoversExplodedAndJarResources() throws Exception {
         final var explodedPage = temporaryDirectory.resolve(RESOURCE_DIRECTORY).resolve("petclinic.Pet.html");
         Files.createDirectories(explodedPage.getParent());
-        Files.writeString(explodedPage, "<p>pet</p>", StandardCharsets.UTF_8);
+        Files.writeString(explodedPage, page("<p>pet</p>"), StandardCharsets.UTF_8);
         final var jar = temporaryDirectory.resolve("pages.jar");
         try (var output = new JarOutputStream(Files.newOutputStream(jar))) {
-            for (final var directory : new String[] {
+            for (final var directory : new String[]{
                     "META-INF/",
                     "META-INF/causeway/",
                     "META-INF/causeway/webcomponents/",
@@ -150,11 +152,11 @@ class HtmxClasspathPageLoaderTest {
                 output.closeEntry();
             }
             output.putNextEntry(new JarEntry(RESOURCE_DIRECTORY + "petclinic.Visit.html"));
-            output.write("<p>visit</p>".getBytes(StandardCharsets.UTF_8));
+            output.write(page("<p>visit</p>").getBytes(StandardCharsets.UTF_8));
             output.closeEntry();
         }
         try (var classLoader = new URLClassLoader(
-                new java.net.URL[] {temporaryDirectory.toUri().toURL(), jar.toUri().toURL()},
+                new java.net.URL[]{temporaryDirectory.toUri().toURL(), jar.toUri().toURL()},
                 null)) {
             final var pages = new HtmxClasspathPageLoader(
                     new PathMatchingResourcePatternResolver(classLoader)).load();
@@ -165,11 +167,32 @@ class HtmxClasspathPageLoaderTest {
     }
 
     @Test
+    void validatesAuthoredRouteContextAndAllowsNestedNonRouteContexts() {
+        final var nested = page("""
+                <!-- <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}"> -->
+                <cw-object-context logical-type="petclinic.Pet" object-id="nested">
+                  <cw-property id="name"></cw-property>
+                </cw-object-context>
+                """);
+
+        assertThat(loader(named("petclinic.Valid.html", nested)).load()).hasSize(1);
+        assertFailure("HTMX_PAGE_OBJECT_CONTEXT_INVALID", loader(named(
+                "petclinic.MissingContext.html",
+                "<section data-route-state=\"loading\" data-testid=\"causeway-route-page\"><cw-interaction-controller></cw-interaction-controller></section>")));
+        assertFailure("HTMX_PAGE_INTERACTION_CONTROLLER_INVALID", loader(named(
+                "petclinic.DuplicateInteraction.html",
+                page("<cw-interaction-controller></cw-interaction-controller>"))));
+        assertFailure("HTMX_PAGE_LOGICAL_TYPE_BINDING_INVALID", loader(named(
+                "petclinic.MissingBinding.html",
+                page("nothing").replace(HtmxDeclarativeTemplate.LOGICAL_TYPE_TOKEN, "petclinic.Fixed"))));
+    }
+
+    @Test
     void rejectsInvalidNameEmptyMalformedUtf8NulAndOversize() {
         assertFailure("HTMX_PAGE_INVALID_NAME", loader(named("bad name.html", "<p/>")));
         assertFailure("HTMX_PAGE_EMPTY", loader(named("petclinic.Empty.html", new byte[0])));
         assertFailure("HTMX_PAGE_INVALID_UTF8", loader(named(
-                "petclinic.Encoding.html", new byte[] {(byte) 0xc3, (byte) 0x28})));
+                "petclinic.Encoding.html", new byte[]{(byte) 0xc3, (byte) 0x28})));
         assertFailure("HTMX_PAGE_NUL_CONTENT", loader(named(
                 "petclinic.Nul.html", "<p>\0</p>".getBytes(StandardCharsets.UTF_8))));
         assertFailure("HTMX_PAGE_SIZE_EXCEEDED", loader(named(
@@ -231,6 +254,17 @@ class HtmxClasspathPageLoaderTest {
                 .hasMessageContaining("resource:petclinic.Reload.html")
                 .hasMessageNotContaining("fixture secret")
                 .hasMessageNotContaining("<p>valid</p>");
+    }
+
+    private static String page(final String content) {
+        return """
+                <section data-route-state="loading" data-testid="causeway-route-page">
+                  <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}">
+                    %s
+                    <cw-interaction-controller></cw-interaction-controller>
+                  </cw-object-context>
+                </section>
+                """.formatted(content);
     }
 
     private static HtmxObjectRoute route(final String logicalTypeName) {
