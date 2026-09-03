@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.webcomponents.sample.petclinic.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.EntityManager;
+
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,8 +39,12 @@ public class PetClinicDataConfiguration {
             final TransactionService transactionService,
             final ClockService clockService,
             final PetOwnerRepository ownerRepository,
-            final VisitRepository visitRepository) {
+            final VisitRepository visitRepository,
+            final EntityManager entityManager) {
         return args -> transactionService.runTransactional(Propagation.REQUIRED, () -> {
+            if (entityManager.find(ViewerFallback.class, ViewerFallback.ID) == null) {
+                entityManager.persist(new ViewerFallback(ViewerFallback.ID, "Rendered by the generic Vue page."));
+            }
             if (ownerRepository.findById(PetOwner.MARY_ID) != null) {
                 return;
             }
