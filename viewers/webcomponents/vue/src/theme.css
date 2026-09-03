@@ -1,0 +1,80 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+:root {
+  --causeway-vue-surface: #ffffff;
+  --causeway-vue-text: #1f2937;
+  --causeway-vue-muted: #596579;
+  --causeway-vue-border: #d7dee8;
+  --causeway-vue-danger: #9b1c1c;
+  --causeway-vue-focus: #075ea8;
+  color-scheme: light dark;
+}
+
+.causeway-vue-route-page {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  color: var(--causeway-vue-text);
+}
+
+.causeway-vue-route-page:focus-visible,
+[data-causeway-router-view]:focus-visible {
+  outline: 0.2rem solid var(--causeway-vue-focus);
+  outline-offset: 0.2rem;
+}
+
+.causeway-vue-status {
+  margin: 1rem auto;
+  max-width: 52rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--causeway-vue-border);
+  border-radius: 0.5rem;
+  background: var(--causeway-vue-surface);
+}
+
+.causeway-vue-status-danger {
+  border-color: color-mix(in srgb, var(--causeway-vue-danger) 55%, var(--causeway-vue-border));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --causeway-vue-surface: #18212f;
+    --causeway-vue-text: #f2f6fb;
+    --causeway-vue-muted: #c4ceda;
+    --causeway-vue-border: #526176;
+    --causeway-vue-danger: #ffaaaa;
+    --causeway-vue-focus: #7dc7ff;
+  }
+}
+
+@media (max-width: 48rem) {
+  .causeway-vue-status {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .causeway-vue-route-page,
+  .causeway-vue-route-page * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -39,9 +39,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.viewer.webcomponents.htmx.HtmxViewerProperties;
-import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetOwner;
-import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetOwnerRepository;
-import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.VisitRepository;
+import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.PetOwner;
+import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.PetOwnerRepository;
+import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.VisitRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -410,10 +410,10 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo(404);
         assertThat(get("/petclinic.PetOwner.html").statusCode()).isEqualTo(404);
         assertThat(loader.getResource(
-                "org/apache/causeway/viewer/webcomponents/sample/htmx/petclinic/domain/PetOwner.layout.xml"))
+                "org/apache/causeway/viewer/webcomponents/sample/petclinic/domain/PetOwner.layout.xml"))
                 .isNotNull();
         assertThat(loader.getResource(
-                "org/apache/causeway/viewer/webcomponents/sample/htmx/petclinic/domain/PetOwner#pets.columnOrder.txt"))
+                "org/apache/causeway/viewer/webcomponents/sample/petclinic/domain/PetOwner#pets.columnOrder.txt"))
                 .isNotNull();
         assertThat(loader.getResource("menubars.layout.xml")).isNotNull();
         assertThatThrownBy(() -> Class.forName(

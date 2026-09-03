@@ -34,7 +34,7 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlViewer;
 import org.apache.causeway.viewer.webcomponents.htmx.CausewayModuleViewerWebcomponentsHtmx;
-import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetClinicDomainModule;
+import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.PetClinicDomainModule;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 @SpringBootApplication

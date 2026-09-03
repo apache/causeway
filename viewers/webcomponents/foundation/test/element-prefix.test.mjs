@@ -96,7 +96,8 @@ const ELEMENT_API_MARKERS = [
 async function sourceFiles(directory) {
   const files = [];
   for (const entry of await readdir(directory, {withFileTypes: true})) {
-    if (entry.name === 'node_modules' || entry.name === 'target') continue;
+    if (entry.name === 'node_modules' || entry.name === 'target' || entry.name === 'dist'
+        || (entry.name === 'assets' && directory.endsWith('/static/vue'))) continue;
     const path = `${directory}/${entry.name}`;
     if (entry.isDirectory()) {
       files.push(...await sourceFiles(path));
