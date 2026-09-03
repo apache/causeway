@@ -5,8 +5,8 @@
 // The ASF licenses this file to you under the Apache License, Version 2.0.
 
 The `causeway-viewer-webcomponents-htmx` module provides an optional server-routed application shell over the framework-neutral Causeway custom elements.
-HTMX owns canonical navigation, fragment replacement, browser history, loading, announcements, and route errors.
-The semantic components continue to own GraphQL projections, effective layouts, menus, interactions, validation, mutations, and typed results.
+HTMX owns canonical navigation, bounded binding of declarative templates, fragment replacement, browser history, loading, announcements, and route errors.
+Declarative HTML owns the GraphQL-client and object-context hierarchy, while the semantic components own GraphQL projections, effective layouts, menus, interactions, validation, mutations, and typed results.
 
 == Enablement
 
@@ -92,8 +92,9 @@ Normal home and result links remain canonical anchors, while the browser bridge 
 
 == Generic and custom pages
 
-Every object route creates exactly one `<cw-object-context>`.
-Without an exact custom registration, its child is `<cw-object editable>` and the component uses its effective or fallback Causeway grid.
+Every custom or generic object-page definition declares exactly one route-level `<cw-object-context>`.
+The viewer binds canonical identity into that authored element and never creates or repairs it.
+Without an exact custom registration, the viewer selects its declarative generic page containing `<cw-object editable>`, and the component uses its effective or fallback Causeway grid.
 
 The preferred application customization is a UTF-8 HTML file beneath `META-INF/causeway/webcomponents/pages/`.
 The filename before `.html` is the exact public logical type, so `petclinic.PetOwner.html` registers `petclinic.PetOwner` without an application bean, annotation, manifest, template controller, or client-side fetch.
@@ -101,21 +102,30 @@ The private resource is packaged in the application or a dependency jar but is n
 The viewer discovers all direct `*.html` children during startup, accepts at most 512 pages, and accepts at most 256 KiB per page.
 In default `cached` mode it retains one immutable literal string for each accepted page.
 In opt-in `reload` mode it retains the immutable startup registration but reopens that resource and validates its current content for each render.
-Pages must be non-empty strict UTF-8, contain no NUL character, and use a filename-safe Causeway logical type.
+Pages must be non-empty strict UTF-8, contain no NUL character, use a filename-safe Causeway logical type, and satisfy the complete declarative route-page contract.
 Reload does not rescan the classpath, so adding, deleting, or renaming a page requires an application restart.
 A defective reload fails the affected request instead of serving stale content or selecting generic layout.
 
-A page contains only the markup placed beneath the viewer-owned route context.
-It does not contain a document shell, GraphQL client, second object context, route interaction controller, or interpolated object identifier.
-The viewer does not evaluate expressions, substitute route values, sanitize content, or expose the classpath resource as a public URL.
+A page contains its route-page boundary, one token-bound route-level object context, application presentation, and one interaction controller.
+The exact required context attributes are `logical-type="{{causeway.logicalType}}"` and `object-id="{{causeway.objectId}}"`.
+The viewer performs escaped replacement only for those two closed tokens and rejects missing, duplicate, misplaced, or unresolved reserved bindings.
+It does not evaluate general expressions, interpolate metamodel or GraphQL data, sanitize trusted packaged content, add semantic wrappers, or expose the classpath resource as a public URL.
+Nested object contexts with their own explicit non-route identity remain valid because only the one token-bound context is the route boundary.
 These files are trusted packaged application code and must never contain arbitrary user-supplied HTML without an application-controlled sanitization boundary.
 Strict CSP remains active, so customization uses ordinary elements, classes, the configured same-origin application stylesheet, documented selectors, and `--causeway-*` variables rather than inline handlers or styles.
 
 The compatible dynamic extension remains one Spring bean implementing `HtmxPageFragmentFactory` for a public logical type.
-The factory receives only `HtmxObjectRoute`, not a metamodel object, persistence session, authorization object, or GraphQL response.
+The factory returns the same complete route-page hierarchy and binds its declared object context to the escaped identity from `HtmxObjectRoute`.
+The factory receives only that public route value, not a metamodel object, persistence session, authorization object, or GraphQL response.
+The viewer validates the result but does not wrap it.
 Two resources, two factories, or one of each claiming the same logical type fail during startup without using bean or classpath order.
 A discovered resource that is unreadable, empty, oversized, malformed, invalidly named, or duplicated also fails startup rather than silently selecting the generic page.
-Only complete absence of an exact registration selects `<cw-object editable>`.
+Only complete absence of an exact registration selects the declarative generic page containing `<cw-object editable>`.
+
+The module's complete document shell is likewise held as private declarative HTML rather than constructed as a Java text block.
+It declares the one stable `<cw-graphql-client>`, menu bars, result outlet, route outlet, authentication slot, and route-content slot.
+The renderer binds only its documented escaped configuration values and validated structural fragments.
+This stable provider remains connected across HTMX route replacement so menu state and schema-description caches are shared.
 
 Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, and collection elements.
 Those elements consume the one nearest route context and therefore do not create a parallel data plane.
@@ -161,6 +171,6 @@ See `../sample-htmx-petclinic/PROVENANCE.adoc` for the pinned Apache Petclinic s
 == Non-goals
 
 The module does not add routing awareness to `<cw-object>`.
-It does not construct domain GraphQL operations, translate GraphQL values, parse effective grid or menu XML, expose metamodel internals, or define Vue and Svelte lifecycle APIs.
+It does not construct domain GraphQL operations, translate GraphQL values, parse effective grid or menu XML, expose metamodel internals, manufacture semantic context elements, or define Vue, Svelte, or Angular lifecycle APIs.
 It does not require applications that use only the component library to adopt HTMX, Wicket, Petclinic, or the default theme.
 The default toolkit policy adds no Grid query contract, upload adapter, unsupported temporal adapter, Flow, Binder, Pro component, server-side Vaadin state, telemetry, CDN asset, or application-facing raw Vaadin API.

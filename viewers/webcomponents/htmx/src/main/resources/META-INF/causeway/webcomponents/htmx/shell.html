@@ -1,0 +1,60 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!doctype html>
+<html lang="{{causeway.language}}" data-causeway-htmx-base="{{causeway.basePath}}" data-causeway-canonical-path="{{causeway.canonicalPath}}"{{causeway.widgetAttributes}}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generic Apache Causeway application viewer using semantic web components and HTMX routing.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:,">
+  <meta name="htmx-config" content='{"historyCacheSize":0,"historyRestoreAsHxRequest":false,"includeIndicatorStyles":false}'>
+  {{causeway.authenticationMetadata}}
+  <title>{{causeway.brand}}</title>
+  <link rel="stylesheet" href="{{causeway.contextPath}}/webjars/font-awesome/7.3.0/css/all.min.css">
+  <link rel="stylesheet" href="{{causeway.contextPath}}/causeway-webcomponents/component-styles.css">
+  <link rel="stylesheet" href="{{causeway.contextPath}}/causeway-webcomponents/theme.css">
+  <link rel="stylesheet" href="{{causeway.contextPath}}/causeway-htmx/causeway-htmx.css">
+  {{causeway.applicationStylesheet}}
+  <script defer src="{{causeway.contextPath}}/webjars/htmx.org/2.0.6/dist/htmx.min.js"></script>
+  <script type="module" src="{{causeway.contextPath}}/causeway-htmx/causeway-htmx.mjs"></script>
+</head>
+<body class="causeway-app-shell">
+  <a class="causeway-skip-link" href="#causeway-route">Skip to main content</a>
+  <cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">
+    <header class="causeway-shell-header">
+      <div class="causeway-shell-navbar">
+        <a class="causeway-shell-brand" href="{{causeway.basePath}}" data-causeway-route-link aria-label="{{causeway.brand}} home">
+          <span class="causeway-shell-mark" aria-hidden="true">C</span>
+          <span>{{causeway.brand}}</span>
+        </a>
+        <cw-menubars></cw-menubars>
+        {{causeway.authenticationChrome}}
+      </div>
+    </header>
+    <div id="causeway-route-loading" class="causeway-route-loading htmx-indicator" role="status" aria-live="polite">Loading page…</div>
+    <div id="causeway-route-announcement" class="causeway-visually-hidden" aria-live="polite" aria-atomic="true"></div>
+    <cw-action-results id="causeway-result" class="causeway-shell-result" data-testid="causeway-shell-result" aria-label="Application action results" aria-live="polite" hidden></cw-action-results>
+    <main id="causeway-route" class="causeway-shell-main" data-testid="causeway-route" data-navigation-generation="0" hx-history-elt hx-history="false" aria-busy="false">
+      {{causeway.routeContent}}
+    </main>
+    <footer class="causeway-shell-footer">
+      <span>Powered by Apache Causeway</span>
+      {{causeway.comparisonLink}}
+    </footer>
+  </cw-graphql-client>
+</body>
+</html>

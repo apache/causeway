@@ -61,7 +61,8 @@ import {
 if (!globalThis.customElements?.get('cw-graphql-client')) {
   globalThis.customElements?.define('cw-graphql-client', CausewayGraphQLClientElement);
 }
-const shell = document.querySelector('cw-graphql-client');
+const shellCandidates = [...document.querySelectorAll('body > cw-graphql-client')];
+const shell = shellCandidates.length === 1 ? shellCandidates[0] : null;
 const routeRegion = document.querySelector('#causeway-route');
 const announcement = document.querySelector('#causeway-route-announcement');
 const resultRegion = document.querySelector('#causeway-result');
@@ -73,6 +74,11 @@ const applicationMenubarMode = document.documentElement.dataset.causewayApplicat
 const applicationMenubarModuleUrl = document.documentElement.dataset.causewayApplicationMenubarUrl;
 const resourcePageMode = document.documentElement.dataset.causewayResourcePageMode;
 const authentication = readAuthenticationMetadata(document);
+if (!shell) {
+  document.documentElement.dataset.causewayShellContextError = shellCandidates.length === 0 ? 'missing' : 'duplicate';
+} else {
+  document.documentElement.removeAttribute('data-causeway-shell-context-error');
+}
 if (shell && authentication) {
   const executor = createFetchGraphQLExecutor({
     endpoint: shell.endpoint,
@@ -325,6 +331,22 @@ function activateRouteCollections() {
   for (const collection of routeRegion?.querySelectorAll('cw-collection:not([active])') ?? []) {
     collection.activate?.();
   }
+}
+
+function validateAuthoredRouteBoundary() {
+  const page = routeRegion?.querySelector(':scope > [data-testid="causeway-route-page"]');
+  if (!page?.classList.contains('causeway-route-object')) {
+    routeRegion?.removeAttribute('data-causeway-route-context-error');
+    return true;
+  }
+  const contexts = [...page.querySelectorAll('cw-object-context')]
+    .filter(context => !context.parentElement?.closest('cw-object-context'));
+  const valid = contexts.length === 1
+    && Boolean(contexts[0].getAttribute('logical-type'))
+    && Boolean(contexts[0].getAttribute('object-id'));
+  if (valid) routeRegion?.removeAttribute('data-causeway-route-context-error');
+  else routeRegion?.setAttribute('data-causeway-route-context-error', contexts.length === 0 ? 'missing' : 'invalid');
+  return valid;
 }
 
 async function navigate(path, {replace = false, preserveResult = false, recoverMissingAfterVoid = false} = {}) {
@@ -644,6 +666,7 @@ document.body.addEventListener('htmx:afterSwap', event => {
   if (!preservingScroll) globalThis.scrollTo?.({top: 0, left: 0, behavior: 'auto'});
   event.detail.target.querySelector('[tabindex="-1"]')?.focus?.({preventScroll: true});
   if (preservingScroll) rehomePreservedShellResult();
+  validateAuthoredRouteBoundary();
   void resolveHome();
 });
 
@@ -668,11 +691,13 @@ document.body.addEventListener('htmx:responseError', event => {
 document.body.addEventListener('htmx:historyCacheMiss', () => setBusy(true));
 document.body.addEventListener('htmx:historyRestore', () => {
   setBusy(false);
+  validateAuthoredRouteBoundary();
   queueMicrotask(() => routeRegion?.querySelector('[tabindex="-1"]')?.focus());
   globalThis.setTimeout(activateRouteCollections, 0);
 });
 globalThis.matchMedia?.('(max-width: 48rem)').addEventListener?.('change', collapseNarrowBars);
 
+validateAuthoredRouteBoundary();
 resolveHome();
 
 export {navigate, presentResult, resolveHome};

@@ -25,11 +25,7 @@ final class HtmxPageDefinition {
 
     enum Source {
         RESOURCE,
-        FACTORY;
-
-        String attributeValue() {
-            return name().toLowerCase(java.util.Locale.ROOT);
-        }
+        FACTORY
     }
 
     private final String logicalTypeName;

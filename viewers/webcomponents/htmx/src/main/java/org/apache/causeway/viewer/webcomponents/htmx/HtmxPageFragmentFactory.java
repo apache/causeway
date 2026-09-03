@@ -19,8 +19,10 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 /**
- * Application-owned trusted HTML rendered inside the viewer-provided route object context.
- * Implementations must use only public route identity and semantic component contracts.
+ * Application-owned trusted HTML defining a complete object route page.
+ * Implementations must declare exactly one route-level {@code <cw-object-context>} bound to the supplied public route identity,
+ * include their interaction controller, and use only public route identity and semantic component contracts.
+ * The HTMX viewer validates but does not wrap the returned markup.
  */
 public interface HtmxPageFragmentFactory {
 
