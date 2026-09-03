@@ -49,6 +49,7 @@ class PetClinicVuePlaywrightTest {
     private int port;
 
     private final List<String> browserFailures = new ArrayList<>();
+    private final List<String> graphQLRequests = new ArrayList<>();
     private Playwright playwright;
     private Browser browser;
     private Page page;
@@ -74,11 +75,17 @@ class PetClinicVuePlaywrightTest {
     @BeforeEach
     void openPage() {
         browserFailures.clear();
+        graphQLRequests.clear();
         page = browser.newPage(new Browser.NewPageOptions().setViewportSize(1440, 900));
         page.onPageError(error -> browserFailures.add(error));
         page.onConsoleMessage(message -> {
             if ("error".equals(message.type()) && !message.text().contains("favicon.ico")) {
                 browserFailures.add("console: " + message.text());
+            }
+        });
+        page.onRequest(request -> {
+            if (request.url().contains("/graphql") && request.postData() != null) {
+                graphQLRequests.add(request.postData());
             }
         });
         page.onRequestFailed(request -> {
@@ -257,6 +264,39 @@ class PetClinicVuePlaywrightTest {
     }
 
     @Test
+    void frameworkLogoutFailsClosedWhileApplicationActionsAndLocalResourcesRemainAvailable() {
+        open("/vue/object/petclinic.ViewerFallback/s_viewer-fallback");
+        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector('cw-object cw-action#openLocalResource')?.componentState?.status === 'ready'");
+        page.locator("cw-menubars[data-menu-state='ready']").waitFor();
+
+        assertThat(page.locator("cw-menubars [data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']").count()).isZero();
+        final var logoutInvocationsBefore = graphQLRequests.stream()
+                .filter(body -> body.contains("CausewayInvokeServiceAction") && body.contains("LogoutMenu"))
+                .count();
+        final var logoutAnnouncement = (String) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("element => { element.dispatchEvent(new CustomEvent('causeway-action-request', { bubbles: true, composed: true, cancelable: true, detail: { serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', context: {} } })); return element.querySelector('[data-causeway-route-announcement]').textContent; }");
+        page.waitForTimeout(50);
+        assertThat(graphQLRequests.stream()
+                .filter(body -> body.contains("CausewayInvokeServiceAction") && body.contains("LogoutMenu"))
+                .count()).isEqualTo(logoutInvocationsBefore);
+        assertThat(logoutAnnouncement).contains("host authentication");
+
+        page.locator("cw-object cw-action#logout [data-causeway-action-control]").click();
+        page.waitForFunction("() => document.body.innerText.includes('Application action completed')");
+        assertThat(page.locator("cw-action-results:not([hidden])").innerText()).contains("Application action completed");
+
+        final var localResourcePopup = page.waitForPopup(() ->
+                page.locator("cw-object cw-action#openLocalResourceInNewWindow [data-causeway-action-control]").click());
+        localResourcePopup.locator("h1").waitFor();
+        assertThat(localResourcePopup.locator("h1").innerText()).isEqualTo("Pet Clinic local resource");
+        localResourcePopup.close();
+
+        page.locator("cw-object cw-action#openLocalResource [data-causeway-action-control]").click();
+        page.waitForURL("**/petclinic-local-resource.html");
+        assertThat(page.locator("h1").innerText()).isEqualTo("Pet Clinic local resource");
+    }
+
+    @Test
     void directRefreshAndInvalidRoutesRemainWithinTheApplicationShell() {
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
@@ -279,7 +319,7 @@ class PetClinicVuePlaywrightTest {
         for (final String toolkit : List.of("native", "vaadin")) {
             open("/vue/?toolkit=" + toolkit);
             assertThat(page.locator("html").getAttribute("data-causeway-component-toolkit")).isEqualTo(toolkit);
-            assertThat(page.locator("header").count()).isEqualTo(1);
+            assertThat(page.locator("header.causeway-shell-header").count()).isEqualTo(1);
             assertThat(page.locator("main#causeway-vue-route").count()).isEqualTo(1);
             assertThat(page.locator("footer").count()).isEqualTo(1);
             page.locator("cw-menubars[data-menu-state='ready']").waitFor();

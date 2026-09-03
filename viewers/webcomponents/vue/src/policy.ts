@@ -18,18 +18,23 @@
  */
 
 import type {
+  CausewayActionRequest,
   CausewayEventClaim,
+  CausewayLocalResourceTarget,
   CausewayObjectTarget,
   CausewayPolicyContext,
   CausewaySemanticResult,
   CausewayViewerRuntime
 } from './contracts';
+import {isFrameworkLogoutAction, removeFrameworkLogoutMenuActions} from './host-operation';
+import {navigateLocalResource} from './local-resource';
 import {canonicalRouterObjectPath} from './route-codec';
 
 export const NAVIGATION_REQUEST_EVENT = 'causeway-navigation-request';
 export const ACTION_REQUEST_EVENT = 'causeway-action-request';
 export const ACTION_RESULT_EVENT = 'causeway-action-result';
 export const OBJECT_CONTEXT_STATE_EVENT = 'causeway-object-context-state-change';
+export const MENU_BARS_STATE_EVENT = 'causeway-menu-bars-state-change';
 
 interface ActionResultDetail {
   readonly actionId?: string;
@@ -149,14 +154,63 @@ async function applyNavigation(runtime: CausewayViewerRuntime, target: CausewayO
 
 export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTMLElement): () => void {
   const destinations = new WeakMap<object, HTMLElement>();
+  const resumedActionEvents = new WeakSet<Event>();
   let unscopedDestination: HTMLElement | null = null;
+  let active = true;
+  const announceUnavailableLogout = () => {
+    const announcement = shell.querySelector<HTMLElement>('[data-causeway-route-announcement]');
+    if (announcement) announcement.textContent = 'Logout requires a host authentication integration.';
+    shell.dataset.causewayLogoutUnavailable = 'true';
+  };
+  const resumeAction = (event: CustomEvent<CausewayActionRequest>, generation: number) => {
+    if (!active || generation !== runtime.state.routeGeneration || !(event.target instanceof EventTarget)) return;
+    const replay = new CustomEvent<CausewayActionRequest>(ACTION_REQUEST_EVENT, {
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+      detail: event.detail
+    });
+    resumedActionEvents.add(replay);
+    event.target.dispatchEvent(replay);
+  };
   const onActionRequest = (rawEvent: Event) => {
-    const detail = (rawEvent as CustomEvent).detail as ActionResultDetail | undefined;
+    const event = rawEvent as CustomEvent<CausewayActionRequest>;
+    const detail = event.detail;
     try {
       const outlet = resolveResultOutlet(shell);
       if (detail?.context && typeof detail.context === 'object') destinations.set(detail.context, outlet);
       else unscopedDestination = outlet;
     } catch (error) {
+      runtime.policies.error?.(error, context(runtime));
+    }
+    if (resumedActionEvents.has(event)) return;
+    const frameworkLogout = isFrameworkLogoutAction(detail);
+    const actionPolicy = runtime.policies.action;
+    if (!actionPolicy) {
+      if (frameworkLogout) {
+        event.preventDefault();
+        announceUnavailableLogout();
+      }
+      return;
+    }
+    const claim = createClaim();
+    const generation = runtime.state.routeGeneration;
+    try {
+      const handled = actionPolicy(detail, claim, context(runtime));
+      if (handled && typeof (handled as Promise<boolean | void>).then === 'function') {
+        event.preventDefault();
+        void Promise.resolve(handled).then(value => {
+          if (value === true) claim.claim();
+          if (!claim.claimed && !frameworkLogout) resumeAction(event, generation);
+          else if (!claim.claimed) announceUnavailableLogout();
+        }).catch(error => runtime.policies.error?.(error, context(runtime)));
+        return;
+      }
+      if (handled === true) claim.claim();
+      if (claim.claimed || frameworkLogout) event.preventDefault();
+      if (frameworkLogout && !claim.claimed) announceUnavailableLogout();
+    } catch (error) {
+      event.preventDefault();
       runtime.policies.error?.(error, context(runtime));
     }
   };
@@ -175,6 +229,11 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
       const handled = await runtime.policies.result?.(detail, claim, context(runtime));
       if (handled === true) claim.claim();
       if (claim.claimed) return;
+      if (detail.result?.kind === 'local-resource') {
+        navigateLocalResource(detail.result.value as CausewayLocalResourceTarget, {applicationBase: runtime.applicationResourceBase});
+        (event.target as {dismissResult?: () => void} | null)?.dismissResult?.();
+        return;
+      }
       const identity = objectIdentity(detail.result);
       if (identity) return applyNavigation(runtime, identity);
       const destination = detail.context && destinations.get(detail.context) || unscopedDestination || resolveResultOutlet(shell);
@@ -183,12 +242,19 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
       (event.target as {dismissResult?: () => void} | null)?.dismissResult?.();
     })().catch(error => runtime.policies.error?.(error, context(runtime)));
   };
+  const onMenuState = () => queueMicrotask(() => {
+    if (active) removeFrameworkLogoutMenuActions(shell);
+  });
+  removeFrameworkLogoutMenuActions(shell);
   shell.addEventListener(ACTION_REQUEST_EVENT, onActionRequest, {capture: true});
   shell.addEventListener(NAVIGATION_REQUEST_EVENT, onNavigation);
   shell.addEventListener(ACTION_RESULT_EVENT, onResult);
+  shell.addEventListener(MENU_BARS_STATE_EVENT, onMenuState);
   return () => {
+    active = false;
     shell.removeEventListener(ACTION_REQUEST_EVENT, onActionRequest, {capture: true});
     shell.removeEventListener(NAVIGATION_REQUEST_EVENT, onNavigation);
     shell.removeEventListener(ACTION_RESULT_EVENT, onResult);
+    shell.removeEventListener(MENU_BARS_STATE_EVENT, onMenuState);
   };
 }

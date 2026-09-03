@@ -236,6 +236,8 @@ export const InteractionResultKind = Object.freeze({
   OBJECT: 'object',
   COLLECTION: 'collection',
   SCALAR: 'scalar',
+  LOCAL_RESOURCE: 'local-resource',
+  UNSUPPORTED: 'unsupported',
   VOID: 'void'
 });
 

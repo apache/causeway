@@ -45,6 +45,7 @@ class HtmxViewerControllerTest {
         assertThat(response.getBody())
                 .contains("<!doctype html>")
                 .contains("<cw-menubars>")
+                .contains("data-causeway-application-resource-base=\"/app\"")
                 .contains("<main id=\"causeway-route\"")
                 .contains("data-page-kind=\"generic\"")
                 .contains("data-page-source=\"generic\"")

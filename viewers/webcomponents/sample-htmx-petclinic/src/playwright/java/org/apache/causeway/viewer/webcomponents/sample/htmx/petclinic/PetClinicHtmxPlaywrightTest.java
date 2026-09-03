@@ -1499,6 +1499,36 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(after.get(3).doubleValue()).isLessThanOrEqualTo(viewport.get(1).doubleValue() + 0.5);
     }
 
+    @Test
+    @Order(10)
+    void frameworkLogoutFailsClosedWhileApplicationActionsAndLocalResourcesRemainAvailable() {
+        page.navigate(url("/htmx/object/petclinic.ViewerFallback/s_viewer-fallback"),
+                new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+        waitForPageKind("generic");
+        waitForMenus();
+        page.waitForFunction("() => document.querySelector('cw-object cw-action#openLocalResource')?.componentState?.status === 'ready'");
+
+        assertThat(page.locator("cw-menubars [data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']").count()).isZero();
+        final var logoutInvocationsBefore = graphQLRequestCount("CausewayInvokeServiceAction", "LogoutMenu");
+        page.locator("#causeway-route").evaluate("element => element.dispatchEvent(new CustomEvent('causeway-action-request', { bubbles: true, composed: true, cancelable: true, detail: { serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', context: {} } }))");
+        page.waitForTimeout(50);
+        assertThat(graphQLRequestCount("CausewayInvokeServiceAction", "LogoutMenu")).isEqualTo(logoutInvocationsBefore);
+        assertThat(page.locator("#causeway-route-announcement").innerText()).contains("host authentication");
+
+        page.locator("cw-object cw-action#logout [data-causeway-action-control]").click();
+        waitForShellResult("logout", "Application action completed");
+
+        final var localResourcePopup = page.waitForPopup(() ->
+                page.locator("cw-object cw-action#openLocalResourceInNewWindow [data-causeway-action-control]").click());
+        localResourcePopup.locator("h1").waitFor();
+        assertThat(localResourcePopup.locator("h1").innerText()).isEqualTo("Pet Clinic local resource");
+        localResourcePopup.close();
+
+        page.locator("cw-object cw-action#openLocalResource [data-causeway-action-control]").click();
+        page.waitForURL("**/petclinic-local-resource.html");
+        assertThat(page.locator("h1").innerText()).isEqualTo("Pet Clinic local resource");
+    }
+
     @SuppressWarnings("unchecked")
     private void assertApplicationUsesAvailableWidth() {
         page.setViewportSize(1800, 900);
