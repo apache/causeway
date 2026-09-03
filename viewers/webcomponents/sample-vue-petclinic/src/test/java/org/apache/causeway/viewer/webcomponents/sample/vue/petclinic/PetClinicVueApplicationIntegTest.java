@@ -24,13 +24,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.regex.Pattern;
 
+import jakarta.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.io.ResourceLoader;
 
 import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.PetOwner;
 import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.PetOwnerRepository;
+import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.ViewerFallback;
 import org.apache.causeway.viewer.webcomponents.sample.petclinic.domain.VisitRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,6 +56,12 @@ class PetClinicVueApplicationIntegTest {
     @Autowired
     private VisitRepository visitRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     @Test
     void reusesDeterministicPetclinicDomain() {
         final var mary = ownerRepository.findById(PetOwner.MARY_ID);
@@ -58,6 +69,9 @@ class PetClinicVueApplicationIntegTest {
         assertThat(mary.getName()).isEqualTo("Mary Smith");
         assertThat(ownerRepository.findAll()).hasSize(10);
         assertThat(visitRepository.findByPetOwner(mary)).hasSize(2);
+        assertThat(entityManager.find(ViewerFallback.class, ViewerFallback.ID).getMessage())
+                .isEqualTo("Rendered by the generic Vue page.");
+        assertThat(resourceLoader.getResource("classpath:menubars.layout.xml").exists()).isTrue();
     }
 
     @Test

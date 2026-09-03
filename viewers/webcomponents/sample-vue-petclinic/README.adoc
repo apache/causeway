@@ -7,6 +7,7 @@
 This module is the executable reference application for the generic Vue web-component viewer.
 It uses the shared deterministic Petclinic domain, the Causeway GraphQL endpoint, Vue 3, Vue Router 4, and the framework-neutral `cw-` elements.
 The Vue application owns its HTML document, stable shell, router, history fallback, theme, and exact logical-type page registration.
+Its application-owned presentation follows the HTMX Petclinic shell and page compositions documented in link:PRESENTATION-PARITY.adoc[`PRESENTATION-PARITY.adoc`].
 The semantic web components remain authoritative for metadata, values, validation, interactions, collections, previews, and results.
 
 == Run
@@ -22,8 +23,10 @@ Open these URLs after Spring Boot starts:
 
 * `http://localhost:8080/vue/` uses the default Vaadin component policy.
 * `http://localhost:8080/vue/?toolkit=native` uses the native component policy.
-* `http://localhost:8080/vue/object/petclinic.PetOwner/s_owner-mary` opens Mary Smith through the custom Vue owner page.
-* `http://localhost:8080/vue/object/petclinic.Pet/s_pet-basil` opens Basil through the generic `<cw-object>` fallback page.
+* `http://localhost:8080/vue/object/petclinic.PetOwner/s_owner-mary` opens Mary Smith through the exact-type Vue owner page.
+* `http://localhost:8080/vue/object/petclinic.Pet/s_pet-basil` opens Basil through the exact-type Vue pet page.
+* `http://localhost:8080/vue/object/petclinic.Visit/s_visit-basil-checkup` opens Basil's visit through the exact-type Vue visit page.
+* `http://localhost:8080/vue/object/petclinic.ViewerFallback/s_viewer-fallback` demonstrates the generic `<cw-object>` fallback page.
 * `http://localhost:8080/graphiql` opens GraphiQL.
 
 Pass Maven properties to the script when needed.
@@ -56,7 +59,7 @@ Install Playwright Chromium on the first run when necessary:
 ./viewers/webcomponents/sample-vue-petclinic/test.sh --install-browser
 ----
 
-The browser suite covers the stable application shell, direct links, refresh, back and forward navigation, custom-page precedence, generic fallback, invalid and absent objects, semantic navigation and results, menus, keyboard skip navigation, and both toolkit policies.
+The browser suite covers the HTMX presentation baseline, wide and narrow layout invariants, the four exact-type pages, stable application shell, direct links, refresh, back and forward navigation, generic fallback, invalid and absent objects, semantic navigation and results, menus, keyboard skip navigation, and both toolkit policies.
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser.
 Any arguments after `--install-browser` are passed to the Maven test invocation.
@@ -81,8 +84,9 @@ The frontend config treats `cw-` names as native custom elements and deduplicate
 
 `frontend/index.html` is the application-owned HTML document.
 `frontend/src/App.vue` declares the stable GraphQL provider, menus, loading and announcement regions, default result outlet, and keyed router view.
-`frontend/src/pages/PetOwnerPage.vue` is an exact-type custom page for `petclinic.PetOwner`.
-Other domain types remain unregistered and therefore demonstrate the generic route-page fallback.
+The files under `frontend/src/pages` provide exact-type application compositions for `petclinic.HomePage`, `petclinic.PetOwner`, `petclinic.Pet`, and `petclinic.Visit`.
+The menu layout is shared with HTMX through the framework-neutral Petclinic domain resources.
+The deliberately unregistered `petclinic.ViewerFallback` fixture demonstrates the generic route-page fallback without making a user-visible Petclinic route inconsistent.
 `PetClinicVueRouteController` forwards only the intended client routes to the production `index.html` without capturing GraphQL or static assets.
 
 The generic Vue viewer package and its application integration contract are documented in `../vue/README.adoc`.

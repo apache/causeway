@@ -25,7 +25,10 @@ import {
 } from '@apache-causeway/vue-viewer';
 import '@apache-causeway/vue-viewer/theme.css';
 import App from './App.vue';
+import HomePage from './pages/HomePage.vue';
 import PetOwnerPage from './pages/PetOwnerPage.vue';
+import PetPage from './pages/PetPage.vue';
+import VisitPage from './pages/VisitPage.vue';
 import './petclinic.css';
 
 const toolkit = new URLSearchParams(location.search).get('toolkit') === 'native' ? 'native' : 'vaadin';
@@ -52,7 +55,10 @@ const viewer = createCausewayVueViewer({
   endpoint: '/graphql',
   basePath: '/vue',
   pages: {
-    'petclinic.PetOwner': PetOwnerPage
+    'petclinic.HomePage': HomePage,
+    'petclinic.PetOwner': PetOwnerPage,
+    'petclinic.Pet': PetPage,
+    'petclinic.Visit': VisitPage
   },
   policies: {
     error(error) {

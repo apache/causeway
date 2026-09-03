@@ -78,7 +78,13 @@ class PetClinicVuePlaywrightTest {
         page.onPageError(error -> browserFailures.add(error));
         page.onConsoleMessage(message -> {
             if ("error".equals(message.type()) && !message.text().contains("favicon.ico")) {
-                browserFailures.add(message.text());
+                browserFailures.add("console: " + message.text());
+            }
+        });
+        page.onRequestFailed(request -> {
+            final var failure = request.failure();
+            if (!(request.url().contains("/graphql") && failure != null && failure.contains("ERR_ABORTED"))) {
+                browserFailures.add("request: " + request.method() + " " + request.url() + " " + failure);
             }
         });
     }
@@ -103,30 +109,132 @@ class PetClinicVuePlaywrightTest {
     }
 
     @Test
-    void semanticNavigationUsesGenericFallbackAndBrowserHistory() {
-        open("/vue/object/petclinic.PetOwner/s_owner-mary");
-        page.locator("[data-route-state='ready']").waitFor();
-        page.evaluate("""
-                document.querySelector('[data-testid="petclinic-vue-application-shell"]').dispatchEvent(
-                  new CustomEvent('causeway-navigation-request', {
-                    bubbles: true,
-                    composed: true,
-                    cancelable: true,
-                    detail: {target: {logicalTypeName: 'petclinic.Pet', id: 's_pet-basil'}}
-                  }))
-                """);
-        page.waitForURL("**/vue/object/petclinic.Pet/s_pet-basil");
-        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
-        page.waitForFunction("document.body.innerText.includes('Basil')");
+    void semanticNavigationUsesExactPagesGenericFallbackAndBrowserHistory() {
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
         assertThat(page.locator("body").innerText()).contains("Basil");
 
+        navigateTo("petclinic.ViewerFallback", "s_viewer-fallback");
+        page.waitForURL("**/vue/object/petclinic.ViewerFallback/s_viewer-fallback");
+        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.body.innerText.includes('Generic viewer fallback')");
+        assertThat(page.locator("body").innerText()).contains("Generic viewer fallback", "Message");
+
         page.goBack();
-        page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
-        assertThat(page.url()).endsWith("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        assertThat(page.url()).endsWith("/vue/object/petclinic.Pet/s_pet-basil");
 
         page.goForward();
         page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
-        assertThat(page.url()).endsWith("/vue/object/petclinic.Pet/s_pet-basil");
+        assertThat(page.url()).endsWith("/vue/object/petclinic.ViewerFallback/s_viewer-fallback");
+    }
+
+    @Test
+    void exactPetclinicPagesMatchTheHtmxSemanticComposition() {
+        open("/vue/");
+        page.locator("[data-page-kind='home'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.collectionState?.rows?.length === 5");
+        page.waitForFunction("() => document.querySelector('cw-collection#futureVisits')?.collectionState?.rows?.length === 10");
+        assertThat(page.locator(".petclinic-dashboard-grid > section > h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Pet owners,Upcoming visits");
+        assertThat(page.locator("cw-collection#petOwners").getAttribute("paged")).isEqualTo("5");
+        assertThat(page.locator("cw-collection#futureVisits").getAttribute("paged")).isEqualTo("10");
+        assertThat(page.locator("cw-collection#petOwners > cw-peek").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#futureVisits > cw-peek").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#petOwners [data-causeway-peek-toggle]").count()).isGreaterThan(0);
+        assertThat(page.title()).endsWith(" · Pet Clinic");
+
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector('.petclinic-object-collections > section:last-child cw-collection#visits')?.collectionState?.rows?.length === 2");
+        assertThat(page.locator(".petclinic-owner-page h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history");
+        assertThat(page.locator(".petclinic-page-toolbar > cw-action")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("allOwners,noOwners,relatedOwners,delete");
+        assertThat(page.locator("cw-action#relatedOwners cw-standalone-collection > cw-collection-column")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("name,knownAs,notes");
+        assertThat(page.locator(".petclinic-object-details cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit,daysSinceLastVisit");
+        assertThat(page.locator(".petclinic-object-collections > section").count()).isEqualTo(2);
+        assertThat(page.locator("cw-collection#visits > cw-collection-column")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("visitAt,reason,notes");
+        assertThat(page.locator("cw-collection#visits").getAttribute("paged")).isEqualTo("8");
+        assertThat(page.locator("cw-collection#visits > cw-peek").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#visits [data-causeway-peek-toggle]").count()).isGreaterThan(0);
+
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        assertThat(page.locator(".petclinic-pet-page h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Identity,Details");
+        assertThat(page.locator(".petclinic-pet-page cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("petOwner,name,species,notes");
+        assertThat(page.locator(".petclinic-pet-page cw-property#id, .petclinic-pet-page cw-property#version").count()).isZero();
+
+        open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
+        page.locator("[data-page-kind='visit'][data-route-state='ready']").waitFor();
+        assertThat(page.locator(".petclinic-visit-page h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Appointment,Details");
+        assertThat(page.locator(".petclinic-visit-page cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("pet,visitAt,reason,notes");
+        assertThat(page.locator(".petclinic-visit-page cw-property#id, .petclinic-visit-page cw-property#version").count()).isZero();
+    }
+
+    @Test
+    void shellAndOwnerLayoutMatchTheWideAndNarrowReferenceInvariants() {
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-route-state='ready']").waitFor();
+        page.locator("cw-menubars[data-menu-state='ready']").waitFor();
+
+        final var wide = (List<Number>) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("""
+                shell => {
+                  const header = shell.querySelector('header').getBoundingClientRect();
+                  const main = shell.querySelector('main').getBoundingClientRect();
+                  const details = shell.querySelector('.petclinic-object-details').getBoundingClientRect();
+                  const collections = shell.querySelector('.petclinic-object-collections').getBoundingClientRect();
+                  return [header.height, main.left, details.left, details.right, collections.left, collections.top - details.top,
+                    document.documentElement.scrollWidth - document.documentElement.clientWidth];
+                }
+                """);
+        assertThat(wide.get(0).doubleValue()).isBetween(50.0, 54.0);
+        assertThat(wide.get(1).doubleValue()).isBetween(15.0, 17.0);
+        assertThat(wide.get(4).doubleValue()).isGreaterThanOrEqualTo(wide.get(3).doubleValue());
+        assertThat(Math.abs(wide.get(5).doubleValue())).isLessThan(1.0);
+        assertThat(wide.get(6).intValue()).isZero();
+        assertThat(page.locator("header.causeway-shell-header").evaluate("element => getComputedStyle(element).backgroundColor"))
+                .isEqualTo("rgb(23, 105, 170)");
+        assertThat(page.locator("body").evaluate("element => getComputedStyle(element).fontFamily"))
+                .asString().contains("Inter");
+        assertThat(page.locator("cw-menubars").innerText()).containsSubsequence("Pet Owners", "Visits", "System");
+        assertThat(page.locator("footer").innerText()).contains("Powered by Apache Causeway", "Vue viewer");
+        assertThat(page.locator(".causeway-object-identity").isVisible()).isFalse();
+        assertThat(page.locator("[data-causeway-route-page]").evaluate("element => getComputedStyle(element).outlineStyle"))
+                .isEqualTo("none");
+
+        page.setViewportSize(500, 900);
+        page.waitForFunction("() => { const grid = document.querySelector('.petclinic-object-grid'); return getComputedStyle(grid).gridTemplateColumns.split(' ').length === 1; }");
+        final var narrow = (List<Number>) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("""
+                shell => {
+                  const details = shell.querySelector('.petclinic-object-details').getBoundingClientRect();
+                  const collections = shell.querySelector('.petclinic-object-collections').getBoundingClientRect();
+                  const footer = shell.querySelector('footer');
+                  return [collections.top - details.bottom,
+                    document.documentElement.scrollWidth - document.documentElement.clientWidth,
+                    getComputedStyle(footer).flexDirection === 'column' ? 1 : 0];
+                }
+                """);
+        assertThat(narrow.get(0).doubleValue()).isGreaterThanOrEqualTo(0.0);
+        assertThat(narrow.get(1).intValue()).isZero();
+        assertThat(narrow.get(2).intValue()).isEqualTo(1);
     }
 
     @Test
@@ -151,9 +259,9 @@ class PetClinicVuePlaywrightTest {
     @Test
     void directRefreshAndInvalidRoutesRemainWithinTheApplicationShell() {
         open("/vue/object/petclinic.Pet/s_pet-basil");
-        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
         page.reload();
-        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
         assertThat(page.locator("cw-graphql-client[data-causeway-shell-client]").count()).isEqualTo(1);
 
         open("/vue/invalid-route");
@@ -182,6 +290,18 @@ class PetClinicVuePlaywrightTest {
             page.keyboard().press("Enter");
             assertThat(page.evaluate("document.activeElement?.id")).isEqualTo("causeway-vue-route");
         }
+    }
+
+    private void navigateTo(final String logicalTypeName, final String id) {
+        page.evaluate("""
+                ([logicalTypeName, id]) => document.querySelector('[data-testid="petclinic-vue-application-shell"]').dispatchEvent(
+                  new CustomEvent('causeway-navigation-request', {
+                    bubbles: true,
+                    composed: true,
+                    cancelable: true,
+                    detail: {target: {logicalTypeName, id}}
+                  }))
+                """, List.of(logicalTypeName, id));
     }
 
     private void open(final String path) {
