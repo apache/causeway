@@ -45,6 +45,8 @@
         <mb:menu>
             <mb:named>Account</mb:named>
             <mb:section>
+                <mb:serviceAction objectType="causeway.applib.UserMenu" id="me"/>
+                <mb:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
                 <mb:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
             </mb:section>
         </mb:menu>

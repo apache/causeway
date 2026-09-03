@@ -29,8 +29,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,6 +53,25 @@ class PetClinicHtmxSecuredApplication_IntegTest {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private CausewayConfiguration causewayConfiguration;
+
+    @Autowired
+    private ApplicationUserRepository userRepository;
+
+    @Test
+    @Transactional
+    void deterministicUserHasApplicationAndFrameworkRoles() {
+        final var roleNames = userRepository.findByUsername(PetClinicSecmanDataConfiguration.USERNAME).orElseThrow()
+                .getRoles().stream()
+                .map(ApplicationRole::getName)
+                .toList();
+        assertThat(roleNames).contains(
+                PetClinicSecmanDataConfiguration.ROLE_NAME,
+                causewayConfiguration.extensions().secman().seed().regularUser().roleName(),
+                CausewayConfigurationRoleAndPermissions.ROLE_NAME);
+    }
 
     @Test
     void realSecmanLoginCsrfGraphQlAndLogoutJourney() throws Exception {
@@ -146,7 +173,7 @@ class PetClinicHtmxSecuredApplication_IntegTest {
             builder.header("X-CSRF-TOKEN", csrf);
         }
         return client.send(builder.POST(HttpRequest.BodyPublishers.ofString(
-                "{\"query\":\"query SecuredHome { rich { application { home { kind logicalTypeName } } } }\"}"))
+                        "{\"query\":\"query SecuredHome { rich { application { home { kind logicalTypeName } } } }\"}"))
                 .build(), HttpResponse.BodyHandlers.ofString());
     }
 

@@ -102,6 +102,7 @@ Spring Security owns credential processing, request caching, session-identifier 
 Only canonical same-origin GET routes beneath the configured HTMX base path are restored after login.
 The HTMX host owns login presentation, session-expiry navigation, exact interception of `causeway.security.LogoutMenu#logout`, its **Sign out** menu label, and the non-visual native POST logout form.
 When the exact action is authorized, it remains in the GraphQL-authoritative tertiary menu position and activation submits the form before GraphQL invocation; the shell renders no separate visible username or logout block.
+Other tertiary actions remain subject to ordinary menu layout and SecMan authorization, so applications must grant any regular-user or configuration roles needed to preserve controls such as **Me** and **Configuration**.
 That menu control remains independent of typed `LocalResourcePathValue` action results: secure logout uses current CSRF evidence and Spring Security session invalidation, while local-resource results are only safe same-origin navigation.
 A local-resource path equal to `/logout` does not acquire authentication semantics.
 Invalid passwords, absent users, locked users, passwordless users, and internal lookup failures all produce the same public credential failure.

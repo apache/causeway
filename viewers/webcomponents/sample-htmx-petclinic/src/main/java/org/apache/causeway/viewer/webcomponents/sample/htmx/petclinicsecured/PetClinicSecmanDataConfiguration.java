@@ -28,10 +28,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.value.Password;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
@@ -48,6 +50,7 @@ public class PetClinicSecmanDataConfiguration {
 
     @Bean
     ApplicationRunner loadPetClinicSecurityData(
+            final CausewayConfiguration causewayConfiguration,
             final TransactionService transactionService,
             final ApplicationUserRepository userRepository,
             final ApplicationRoleRepository roleRepository,
@@ -72,6 +75,10 @@ public class PetClinicSecmanDataConfiguration {
             unlocked.setNumberFormat(Locale.GERMANY);
             unlocked.setTimeFormat(Locale.UK);
             addRoleIfMissing(roleRepository, role, unlocked);
+            addRoleIfMissing(roleRepository, roleRepository.findByName(
+                    causewayConfiguration.extensions().secman().seed().regularUser().roleName()).orElseThrow(), unlocked);
+            addRoleIfMissing(roleRepository, roleRepository.findByName(
+                    CausewayConfigurationRoleAndPermissions.ROLE_NAME).orElseThrow(), unlocked);
 
             final var locked = userRepository.upsertLocal(
                     LOCKED_USERNAME, Password.of(PASSWORD), ApplicationUserStatus.LOCKED);
