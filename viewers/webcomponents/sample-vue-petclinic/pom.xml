@@ -140,13 +140,7 @@
 
     <profiles>
         <profile>
-            <id>secured-vue-petclinic</id>
-            <activation>
-                <property>
-                    <name>sample-vue-petclinic.secured</name>
-                    <value>true</value>
-                </property>
-            </activation>
+            <id>run-sample-vue-petclinic-secured</id>
             <dependencies>
                 <dependency>
                     <groupId>org.apache.causeway.viewer</groupId>

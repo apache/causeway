@@ -88,7 +88,6 @@
             <id>run-sample-vue-petclinic-secured</id>
             <properties>
                 <sample-vue-petclinic.run.skip>false</sample-vue-petclinic.run.skip>
-                <sample-vue-petclinic.secured>true</sample-vue-petclinic.secured>
                 <spring-boot.run.main-class>org.apache.causeway.viewer.webcomponents.sample.vue.petclinicsecured.PetClinicVueSecuredApplication</spring-boot.run.main-class>
             </properties>
             <build>

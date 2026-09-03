@@ -47,7 +47,7 @@ fi
   "$@"
 
 exec "$MVN" -f "$POM" -pl "$MODULE" -am \
-  -Dsample-vue-petclinic.secured=true \
+  -Prun-sample-vue-petclinic-secured \
   -Dtest=PetClinicVueSecuredApplication_IntegTest,PetClinicVueSecuredPlaywrightAcceptance \
   -Dsurefire.failIfNoSpecifiedTests=false \
   test \
