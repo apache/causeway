@@ -76,10 +76,11 @@ class PetClinicHtmxSecuredApplication_IntegTest {
         final var shell = get(client, "/htmx/object/petclinic.PetOwner/s_owner-mary");
         assertThat(shell.statusCode()).isEqualTo(200);
         assertThat(shell.body())
-                .contains("data-testid=\"causeway-shell-user\"")
-                .contains(">sven</span>")
-                .contains("data-causeway-logout-form")
-                .contains("causeway.security.LogoutMenu#logout");
+                .contains("data-causeway-logout-form hidden")
+                .contains("causeway.security.LogoutMenu#logout")
+                .doesNotContain("data-testid=\"causeway-shell-user\"")
+                .doesNotContain(">sven</span>")
+                .doesNotContain(">Sign out</button>");
         final var currentCsrf = token(CSRF_META, shell.body());
         assertThat(get(client, "/causeway-htmx/causeway-htmx.mjs").statusCode()).isEqualTo(200);
         assertThat(get(client, "/causeway-htmx/authentication-policy.mjs").statusCode()).isEqualTo(200);

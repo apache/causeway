@@ -21,7 +21,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
-  applyAuthenticationMenuPolicy,
+  authenticationActionLabel,
   csrfHeaders,
   isExcludedAction,
   isUnsafeMethod,
@@ -87,23 +87,15 @@ test('legacy exclusion matches only the exact framework service and member', () 
   }), false);
 });
 
-test('menu policy removes the exact legacy action and preserves similarly named domain actions', () => {
+test('menu policy relabels only exact host-managed framework Logout', () => {
   const authentication = readAuthenticationMetadata(documentWith());
-  const removed = [];
-  const button = (serviceLogicalTypeName, actionId) => ({
-    getAttribute(name) {
-      return name === 'data-service-logical-type' ? serviceLogicalTypeName : actionId;
-    },
-    closest() {
-      return {remove: () => removed.push(`${serviceLogicalTypeName}#${actionId}`)};
-    }
-  });
-  const buttons = [
-    button('causeway.security.LogoutMenu', 'logout'),
-    button('petclinic.LogoutMenu', 'logout')
-  ];
-
-  applyAuthenticationMenuPolicy(authentication, documentWith(metadata, buttons));
-
-  assert.deepEqual(removed, ['causeway.security.LogoutMenu#logout']);
+  assert.equal(authenticationActionLabel(authentication, {
+    serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', label: 'Logout'
+  }), 'Sign out');
+  assert.equal(authenticationActionLabel(authentication, {
+    serviceLogicalTypeName: 'petclinic.LogoutMenu', actionId: 'logout', label: 'Logout'
+  }), undefined);
+  assert.equal(authenticationActionLabel(null, {
+    serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', label: 'Logout'
+  }), undefined);
 });

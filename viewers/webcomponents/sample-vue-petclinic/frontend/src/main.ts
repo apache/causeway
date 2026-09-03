@@ -66,6 +66,9 @@ const viewer = createCausewayVueViewer({
     'petclinic.Visit': VisitPage
   },
   policies: {
+    menuActionLabel(detail) {
+      return authenticationContext.value && isFrameworkLogoutAction(detail) ? 'Sign out' : undefined;
+    },
     action(detail, claim) {
       if (!authenticationContext.value || !isFrameworkLogoutAction(detail)) return;
       if (!claim.claim()) return true;

@@ -18,7 +18,13 @@ const DEFAULT_MODULE_URL = new URL('./vaadin-menubar/vaadin-menubar.js', import.
 const DEFAULT_DEFINITION_TIMEOUT_MS = 5000;
 const MAX_DEFINITION_TIMEOUT_MS = 60000;
 const APPROVED_PROTOCOLS = new Set(['http:', 'https:', 'file:']);
-let configuration = Object.freeze({enabled: true, moduleUrl: DEFAULT_MODULE_URL, definitionTimeoutMs: DEFAULT_DEFINITION_TIMEOUT_MS, excludeAction: null});
+let configuration = Object.freeze({
+  enabled: true,
+  moduleUrl: DEFAULT_MODULE_URL,
+  definitionTimeoutMs: DEFAULT_DEFINITION_TIMEOUT_MS,
+  excludeAction: null,
+  actionLabel: null
+});
 let modulePromise = null;
 let failed = false;
 let failure = null;
@@ -37,7 +43,8 @@ export function configureCausewayMenubarWidgets(options = {}) {
     enabled: options.enabled !== false,
     moduleUrl: options.moduleUrl ? safeModuleUrl(options.moduleUrl) : DEFAULT_MODULE_URL,
     definitionTimeoutMs: boundedTimeout(options.definitionTimeoutMs),
-    excludeAction: typeof options.excludeAction === 'function' ? options.excludeAction : null
+    excludeAction: typeof options.excludeAction === 'function' ? options.excludeAction : null,
+    actionLabel: typeof options.actionLabel === 'function' ? options.actionLabel : null
   });
   modulePromise = null;
   failed = false;

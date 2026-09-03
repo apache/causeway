@@ -44,6 +44,9 @@
     <mb:tertiary>
         <mb:menu>
             <mb:named>Account</mb:named>
+            <mb:section>
+                <mb:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
+            </mb:section>
         </mb:menu>
     </mb:tertiary>
 </mb:menuBars>

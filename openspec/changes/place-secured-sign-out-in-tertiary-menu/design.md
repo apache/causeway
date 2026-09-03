@@ -2,7 +2,8 @@
 
 The semantic menu pipeline projects authorized Causeway menu resources into native or Vaadin controls and currently offers only an exclusion predicate to host viewers.
 The generic HTMX and Vue hosts use that predicate to suppress exact framework Logout because invoking it through GraphQL is unsafe.
-Their secured Petclinic variants compensate with a separate visible shell form, but that removes the Logout entry from the System menu and can collapse the tertiary bar when no other effective action remains.
+The shared Petclinic menu resource currently leaves its tertiary Account menu empty and catches framework Logout through the secondary System menu's unreferenced-action policy.
+The secured variants then remove that action and compensate with a separate visible shell form, leaving the intended tertiary account navigation absent and duplicating navigation chrome solely for authentication.
 
 Logout endpoint selection, POST method, current CSRF evidence, session invalidation, cookie cleanup, and redirect behavior must remain owned by the installed security integration.
 The foundation and generic viewer packages must remain authentication-neutral, and exact action identity rather than label must continue to distinguish framework Logout.
@@ -12,7 +13,7 @@ The foundation and generic viewer packages must remain authentication-neutral, a
 **Goals:**
 
 - Preserve authoritative menu hierarchy and placement while allowing a host to replace presentation text for one exact action.
-- Show **Sign out** in the existing tertiary System menu for secured HTMX and Vue.
+- Show **Sign out** in the existing tertiary Account menu for secured HTMX and Vue.
 - Route that menu activation to the existing native CSRF-protected logout form before GraphQL validation or invocation.
 - Keep ordinary unsecured viewers fail closed by excluding framework Logout.
 - Support both native and Vaadin menu projections through one shared mechanism.
@@ -64,13 +65,13 @@ The visible and accessible control is the semantic tertiary menu action.
 Direct form submission behavior remains browser-native, preserving server-controlled redirects and full session cleanup.
 Creating a `fetch` logout request was rejected because native navigation already provides the required full-document lifecycle and simpler CSRF/session semantics.
 
-### Preserve menu hierarchy rather than synthesize a secured bar
+### Place account logout declaratively rather than synthesize a secured bar
 
-The exact framework action remains in its GraphQL-authoritative menu, section, and order.
-The host changes only its visible label and activation destination.
+The shared Petclinic menu resource will explicitly reference exact framework Logout in the tertiary Account menu instead of allowing the secondary System menu's unreferenced-action policy to catch it.
+That resource remains authoritative for role, menu, section, and order across HTMX and Vue; the secured host changes only the visible label and activation destination.
 If authorization hides the framework action, the security integration does not manufacture a replacement menu or reveal its existence.
 
-This keeps secured and unsecured effective-menu semantics aligned and avoids a security feature overriding application menu structure.
+Runtime reassignment between menu roles was rejected because it would let security presentation override authoritative application menu structure.
 
 ## Risks / Trade-offs
 
@@ -83,10 +84,11 @@ This keeps secured and unsecured effective-menu semantics aligned and avoids a s
 ## Migration Plan
 
 1. Add and test the bounded action-label mapper in foundation menu projection and elements.
-2. Update generic HTMX and Vue policy wiring so explicit secured ownership retains and relabels exact framework Logout while absent ownership still excludes it.
-3. Replace visible secured-shell authentication blocks with hidden native logout forms.
-4. Update secured integration and browser tests for native and Vaadin menu behavior and CSRF-safe logout.
-5. Regenerate and verify committed Vue assets and update documentation.
+2. Place exact framework Logout explicitly in the shared Petclinic tertiary Account menu.
+3. Update generic HTMX and Vue policy wiring so explicit secured ownership retains and relabels exact framework Logout while absent ownership still excludes it.
+4. Replace visible secured-shell authentication blocks with hidden native logout forms.
+5. Update secured integration and browser tests for native and Vaadin menu behavior and CSRF-safe logout.
+6. Regenerate and verify committed Vue assets and update documentation.
 
 Rollback restores exclusion and visible shell chrome without changing server security endpoints or sessions.
 

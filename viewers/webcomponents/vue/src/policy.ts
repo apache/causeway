@@ -155,9 +155,29 @@ async function applyNavigation(runtime: CausewayViewerRuntime, target: CausewayO
 export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTMLElement): () => void {
   const destinations = new WeakMap<object, HTMLElement>();
   const resumedActionEvents = new WeakSet<Event>();
-  const menuBoundary = shell.querySelector<HTMLElement & {excludeAction?: (detail: CausewayActionRequest) => boolean}>('cw-menubars');
-  const excludeFrameworkLogout = (detail: CausewayActionRequest) => isFrameworkLogoutAction(detail);
-  if (menuBoundary) menuBoundary.excludeAction = excludeFrameworkLogout;
+  const menuBoundary = shell.querySelector<HTMLElement & {
+    excludeAction?: (detail: CausewayActionRequest) => boolean;
+    actionLabel?: (detail: CausewayActionRequest) => string | void;
+  }>('cw-menubars');
+  const mappedActionLabel = (detail: CausewayActionRequest): string | undefined => {
+    try {
+      const label = runtime.policies.menuActionLabel?.(detail, context(runtime));
+      return typeof label === 'string' && label.trim() ? label : undefined;
+    } catch (error) {
+      runtime.policies.error?.(error, context(runtime));
+      return undefined;
+    }
+  };
+  const hasFrameworkLogoutPresentation = () => Boolean(mappedActionLabel({
+    serviceLogicalTypeName: 'causeway.security.LogoutMenu',
+    actionId: 'logout'
+  }));
+  const excludeFrameworkLogout = (detail: CausewayActionRequest) => isFrameworkLogoutAction(detail)
+    && !Boolean(mappedActionLabel(detail));
+  if (menuBoundary) {
+    menuBoundary.excludeAction = excludeFrameworkLogout;
+    menuBoundary.actionLabel = mappedActionLabel;
+  }
   let unscopedDestination: HTMLElement | null = null;
   let active = true;
   const announceUnavailableLogout = () => {
@@ -246,9 +266,9 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
     })().catch(error => runtime.policies.error?.(error, context(runtime)));
   };
   const onMenuState = () => queueMicrotask(() => {
-    if (active) removeFrameworkLogoutMenuActions(shell);
+    if (active && !hasFrameworkLogoutPresentation()) removeFrameworkLogoutMenuActions(shell);
   });
-  removeFrameworkLogoutMenuActions(shell);
+  if (!hasFrameworkLogoutPresentation()) removeFrameworkLogoutMenuActions(shell);
   shell.addEventListener(ACTION_REQUEST_EVENT, onActionRequest, {capture: true});
   shell.addEventListener(NAVIGATION_REQUEST_EVENT, onNavigation);
   shell.addEventListener(ACTION_RESULT_EVENT, onResult);
@@ -256,6 +276,7 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
   return () => {
     active = false;
     if (menuBoundary?.excludeAction === excludeFrameworkLogout) menuBoundary.excludeAction = undefined;
+    if (menuBoundary?.actionLabel === mappedActionLabel) menuBoundary.actionLabel = undefined;
     shell.removeEventListener(ACTION_REQUEST_EVENT, onActionRequest, {capture: true});
     shell.removeEventListener(NAVIGATION_REQUEST_EVENT, onNavigation);
     shell.removeEventListener(ACTION_RESULT_EVENT, onResult);

@@ -133,7 +133,10 @@ describe('semantic policy bridge', () => {
     shell.append(region);
     const dispose = installSemanticBridge(viewer, shell);
     expect(region.isConnected).toBe(false);
-    const menuBoundary = shell.querySelector('cw-menubars') as HTMLElement & {excludeAction?: (detail: object) => boolean};
+    const menuBoundary = shell.querySelector('cw-menubars') as HTMLElement & {
+      excludeAction?: (detail: object) => boolean;
+      actionLabel?: (detail: object) => string | void;
+    };
     expect(menuBoundary.excludeAction?.({serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout'})).toBe(true);
     expect(menuBoundary.excludeAction?.({serviceLogicalTypeName: 'example.LogoutMenu', actionId: 'logout'})).toBe(false);
 
@@ -149,6 +152,26 @@ describe('semantic policy bridge', () => {
     expect(shell.querySelector('[data-causeway-route-announcement]')?.textContent).toContain('host authentication');
     dispose();
     expect(menuBoundary.excludeAction).toBeUndefined();
+    expect(menuBoundary.actionLabel).toBeUndefined();
+  });
+
+  it('retains and relabels exact framework Logout only with an explicit host menu policy', async () => {
+    const menuActionLabel = vi.fn((detail: {serviceLogicalTypeName?: string; actionId: string}) => detail.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
+      && detail.actionId === 'logout' ? 'Sign out' : undefined);
+    const viewer = await runtime({menuActionLabel});
+    const shell = authoredShell();
+    const dispose = installSemanticBridge(viewer, shell);
+    const menuBoundary = shell.querySelector('cw-menubars') as HTMLElement & {
+      excludeAction?: (detail: object) => boolean;
+      actionLabel?: (detail: object) => string | void;
+    };
+    const logout = {serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout'};
+    const similar = {serviceLogicalTypeName: 'example.LogoutMenu', actionId: 'logout'};
+    expect(menuBoundary.excludeAction?.(logout)).toBe(false);
+    expect(menuBoundary.actionLabel?.(logout)).toBe('Sign out');
+    expect(menuBoundary.actionLabel?.(similar)).toBeUndefined();
+    expect(menuActionLabel).toHaveBeenCalled();
+    dispose();
   });
 
   it('lets synchronous and asynchronous action policies claim or resume exactly once', async () => {

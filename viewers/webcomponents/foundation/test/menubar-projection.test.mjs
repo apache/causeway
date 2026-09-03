@@ -96,6 +96,37 @@ test('host exclusion removes authentication actions before item projection', () 
   assert.equal(JSON.stringify(createVaadinMenuItems(projection)).includes('Log out'), false);
 });
 
+test('host label mapping changes presentation without changing semantic action structure', () => {
+  const source = bar();
+  source.menus[0].sections[1].actions.push({
+    serviceLogicalTypeName: 'causeway.security.LogoutMenu',
+    actionId: 'logout',
+    label: 'Logout'
+  });
+  const projection = projectCausewayMenuBar(source, {
+    generation: 5,
+    actionLabel: action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
+      && action.actionId === 'logout' ? 'Sign out' : undefined
+  });
+  const logout = Object.values(projection.actions).find(action => action.actionId === 'logout');
+  assert.equal(logout.label, 'Sign out');
+  assert.equal(logout.serviceLogicalTypeName, 'causeway.security.LogoutMenu');
+  assert.equal(logout.role, 'primary');
+  assert.equal(projection.menus[0].sections[1].actions.at(-1), logout);
+  assert.equal(JSON.stringify(createVaadinMenuItems(projection)).includes('Sign out'), true);
+  assert.equal(projection.menus[0].sections[0].actions[0].label, 'Find people');
+});
+
+test('defective host label mapping preserves bounded authoritative labels', () => {
+  const thrown = projectCausewayMenuBar(bar(), {actionLabel: () => { throw new Error('host failure'); }});
+  const unsupported = projectCausewayMenuBar(bar(), {actionLabel: () => ({label: '<script>'})});
+  const bounded = projectCausewayMenuBar(bar(), {actionLabel: () => `Sign\u0000 out${'!'.repeat(600)}`});
+  assert.equal(thrown.menus[0].sections[0].actions[0].label, 'Find people');
+  assert.equal(unsupported.menus[0].sections[0].actions[0].label, 'Find people');
+  assert.equal(bounded.menus[0].sections[0].actions[0].label.includes('\u0000'), false);
+  assert.equal(bounded.menus[0].sections[0].actions[0].label.length, 512);
+});
+
 test('qualification is deterministic across policy family lifecycle and width', () => {
   const projection = projectCausewayMenuBar(bar(), {generation: 2});
   const base = {role: 'primary', generation: 2, policy: 'vaadin', familyAvailable: true, connected: true, visible: true, current: true, projection};

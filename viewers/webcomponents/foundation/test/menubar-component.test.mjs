@@ -47,6 +47,7 @@ test('semantic bar renders labelled navigation, disclosures, text-safe hints, di
   const plan = applyServiceActionStates(parsed.plan, MENU_ACTION_STATES);
   const context = fakeMenuContext(plan);
   const bar = new CausewayMenubarPrimaryElement();
+  bar.actionLabel = detail => detail.actionId === 'welcomeMessage' ? 'Sign out' : undefined;
   bar.context = context;
   document.body.appendChild(bar);
   const markup = renderMarkup(bar);
@@ -55,7 +56,7 @@ test('semantic bar renders labelled navigation, disclosures, text-safe hints, di
   assert.match(markup, /data-causeway-menu-disclosure/);
   assert.match(markup, /aria-expanded="false"/);
   assert.match(markup, /data-icon-hint="fa-building"/);
-  assert.match(markup, /<span class="causeway-action-label">Welcome Message<\/span><i class="causeway-action-icon fa-solid fa-message"/);
+  assert.match(markup, /<span class="causeway-action-label">Sign out<\/span><i class="causeway-action-icon fa-solid fa-message"/);
   assert.match(markup, /disabled aria-disabled="true"/);
   assert.match(markup, /data-tooltip="Performs an administrative operation\.\n\nAvailable to administrators only\."/);
   assert.match(markup, /Available to administrators only/);
@@ -195,7 +196,9 @@ test('composite preserves declarative bars, generates only missing effective rol
   const composite = new CausewayMenubarsElement();
   const excludeWelcome = detail => detail.serviceLogicalTypeName === 'causeway.webcomponents.sample.SampleMenu'
     && detail.actionId === 'welcomeMessage';
+  const actionLabel = detail => detail.actionId === 'dailyReport' ? 'Daily summary' : undefined;
   composite.excludeAction = excludeWelcome;
+  composite.actionLabel = actionLabel;
   composite.client = new CausewayGraphQLClient({executor});
   let fetchCount = 0;
   composite.fetchImpl = async () => {
@@ -217,6 +220,7 @@ test('composite preserves declarative bars, generates only missing effective rol
   assert.equal(bars.filter(child => child.localName === CausewayElementName.MENUBAR_PRIMARY).length, 1);
   assert.equal(bars.find(child => child.localName === CausewayElementName.MENUBAR_PRIMARY), declarativePrimary);
   assert.ok(bars.every(child => child.excludeAction === excludeWelcome));
+  assert.ok(bars.every(child => child.actionLabel === actionLabel));
   assert.doesNotMatch(bars.map(renderMarkup).join(''), /welcomeMessage|Welcome Message/);
   assert.equal(fetchCount, 1);
   assert.equal(executor.applicationCalls.length, 1);

@@ -49,7 +49,7 @@ import {
   standaloneCollectionPresentation
 } from '../causeway-webcomponents/standalone-collection-presentation.mjs';
 import {
-  applyAuthenticationMenuPolicy,
+  authenticationActionLabel,
   csrfHeaders,
   isExcludedAction,
   isUnsafeMethod,
@@ -145,7 +145,9 @@ configureCausewayMenubarWidgets({
   enabled: applicationMenubarMode === 'vaadin',
   moduleUrl: applicationMenubarModuleUrl,
   excludeAction: detail => isFrameworkLogoutAction(detail)
-    || Boolean(authentication && isExcludedAction(authentication, detail))
+    ? !Boolean(authentication && isExcludedAction(authentication, detail))
+    : Boolean(authentication && isExcludedAction(authentication, detail)),
+  actionLabel: detail => authenticationActionLabel(authentication, detail)
 });
 let activeRequest = null;
 let navigationGeneration = 0;
@@ -618,8 +620,7 @@ document.addEventListener(ACTION_REQUEST_EVENT, event => {
 
 document.addEventListener(MENU_BARS_STATE_EVENT, () => globalThis.setTimeout(() => {
   collapseNarrowBars();
-  removeFrameworkLogoutMenuActions(document);
-  applyAuthenticationMenuPolicy(authentication, document);
+  if (!authentication) removeFrameworkLogoutMenuActions(document);
 }, 0));
 
 document.addEventListener(ACTION_RESULT_EVENT, event => {
