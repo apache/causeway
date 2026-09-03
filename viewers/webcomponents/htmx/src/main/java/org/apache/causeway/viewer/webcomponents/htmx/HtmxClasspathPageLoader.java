@@ -90,10 +90,16 @@ final class HtmxClasspathPageLoader {
                     "Private HTML page '" + bounded(filename) + "' does not have a valid logical-type filename.");
         }
         final var source = "resource:" + bounded(filename);
-        final var startupHtml = decode(resource, source);
+        final var startupHtml = validatedPage(resource, source);
         return resourcePageMode == HtmxViewerProperties.ResourcePageMode.RELOAD
-                ? HtmxPageDefinition.reloadingResource(logicalTypeName, source, () -> decode(resource, source))
+                ? HtmxPageDefinition.reloadingResource(logicalTypeName, source, () -> validatedPage(resource, source))
                 : HtmxPageDefinition.resource(logicalTypeName, source, startupHtml);
+    }
+
+    private static String validatedPage(final Resource resource, final String source) {
+        final var html = decode(resource, source);
+        HtmxDeclarativeTemplate.validateResourcePage(html, source);
+        return html;
     }
 
     static String decode(final Resource resource, final String source) {
