@@ -2636,27 +2636,27 @@ The outlet MUST NOT globally subscribe to action results, invoke actions, choose
 - **AND** the viewer remains free to use its current deterministic fallback destination
 
 
-### Requirement: Declarative collection row peek
-The `<cw-collection>` component SHALL accept at most one direct `<cw-peek>` declaration that enables an accessible simplified object view for eligible collection rows without changing authoritative collection data or canonical navigation.
+### Requirement: Declarative collection row preview
+The `<cw-collection>` component SHALL accept at most one direct `<cw-preview>` declaration that enables an accessible simplified object view for eligible collection rows without changing authoritative collection data or canonical navigation.
 The declaration MUST remain hidden and inert until the collection creates a live preview for one selected row.
 
-#### Scenario: Collection has no peek declaration
-- **WHEN** a collection has no direct `<cw-peek>` child
+#### Scenario: Collection has no preview declaration
+- **WHEN** a collection has no direct `<cw-preview>` child
 - **THEN** its projection, rendering, interaction, loading, and navigation remain unchanged
 - **AND** no preview requirement or disclosure control is introduced
 
-#### Scenario: Collection has an inline peek declaration
-- **WHEN** a collection has one non-empty direct `<cw-peek>` containing semantic layout and domain components
+#### Scenario: Collection has an inline preview declaration
+- **WHEN** a collection has one non-empty direct `<cw-preview>` containing semantic layout and domain components
 - **THEN** each eligible object row exposes a labelled disclosure control backed by a reusable clone of that declaration
 - **AND** the declaration itself remains hidden, inert, and outside every live row context
 
-#### Scenario: Collection has an empty peek declaration
-- **WHEN** a collection has one direct `<cw-peek>` with no meaningful authored content
+#### Scenario: Collection has an empty preview declaration
+- **WHEN** a collection has one direct `<cw-preview>` with no meaningful authored content
 - **THEN** the collection asks its optional host resolver for a default using each row's authoritative runtime logical type
 - **AND** a row exposes a disclosure control only when a safe default is available for its runtime type
 
-#### Scenario: Collection has duplicate peek declarations
-- **WHEN** more than one direct `<cw-peek>` belongs to the same collection
+#### Scenario: Collection has duplicate preview declarations
+- **WHEN** more than one direct `<cw-preview>` belongs to the same collection
 - **THEN** the collection fails closed with a bounded diagnostic
 - **AND** it exposes no row preview controls or live preview subtree
 
@@ -2666,11 +2666,11 @@ The declaration MUST remain hidden and inert until the collection creates a live
 - **AND** the component does not merge, reorder, or reinterpret their contents
 
 ### Requirement: Single hydrated row preview lifecycle
-An opted-in collection SHALL keep at most one row preview expanded and SHALL provide its live `<cw-peek>` subtree with a dedicated hydrated object context created from the selected authoritative row identity, data, and selection.
+An opted-in collection SHALL keep at most one row preview expanded and SHALL provide its live `<cw-preview>` subtree with a dedicated hydrated object context created from the selected authoritative row identity, data, and selection.
 
 #### Scenario: User expands an eligible row
 - **WHEN** the user activates a collapsed row's preview disclosure
-- **THEN** the collection creates one live `<cw-peek>` after that row using a fresh clone of its effective template
+- **THEN** the collection creates one live `<cw-preview>` after that row using a fresh clone of its effective template
 - **AND** it assigns the dedicated row context before descendant properties, actions, or collections connect
 - **AND** focus remains on the disclosure while ordinary forward navigation reaches the preview content
 
