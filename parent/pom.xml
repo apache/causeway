@@ -71,6 +71,7 @@
         <maven-surefire-report-plugin.version>3.6.0-M1</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.15.2</maven.plugin.tools.version>
+        <maven-timeline.version>2.1.0</maven-timeline.version>
 
         <maven.jar.phase>package</maven.jar.phase> <!-- override with 'none' for
         artifacts that need to skip the maven-jar-plugin-->
@@ -886,6 +887,12 @@
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ftp</artifactId>
                 <version>3.5.3</version>
+            </extension>
+            <!-- see https://github.com/takari/maven-timeline -->
+            <extension>
+                <groupId>io.takari.maven</groupId>
+                <artifactId>maven-timeline</artifactId>
+                <version>${maven-timeline.version}</version>
             </extension>
         </extensions>
     </build>

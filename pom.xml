@@ -48,8 +48,6 @@
         -Drevision=2.7.8 -->
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <maven-timeline.version>2.1.0</maven-timeline.version>
     </properties>
 
     <scm>
@@ -58,16 +56,6 @@
         <url>https://github.com/apache/causeway.git</url>
         <tag>HEAD</tag>
     </scm>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>io.takari.maven</groupId>
-                <artifactId>maven-timeline</artifactId>
-                <version>${maven-timeline.version}</version>
-            </extension>
-        </extensions>
-    </build>
 
     <profiles>
 
