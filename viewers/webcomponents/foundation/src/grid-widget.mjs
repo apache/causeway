@@ -195,7 +195,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
       if (presentationRevision !== this._presentationRevision || control !== this._control) return;
       try {
         root.replaceChildren();
-        root.id = gridPeekDetailsId(model.item?.key);
+        root.id = gridPreviewDetailsId(model.item?.key);
         presentation.rowDetails.render(root, model.item, Object.freeze({
           close: ({restoreFocus = false} = {}) => this.#closeRowDetails(control, model.item, {restoreFocus})
         }));
@@ -215,16 +215,16 @@ export class CausewayCollectionGridElement extends HTMLElement {
         if (presentationRevision !== this._presentationRevision || control !== this._control) return;
         root.replaceChildren();
         root.setAttribute('data-causeway-grid-row-key', String(model.item?.key ?? ''));
-        root.setAttribute('data-causeway-grid-member', '_peek');
-        root.setAttribute('data-causeway-grid-role', 'peek');
+        root.setAttribute('data-causeway-grid-member', '_preview');
+        root.setAttribute('data-causeway-grid-role', 'preview');
         if (!model.item?.preview) return;
         const expanded = presentation.rowDetails.expandedKey() === model.item.key;
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'causeway-collection-peek-toggle';
-        button.dataset.causewayPeekToggle = model.item.key;
+        button.className = 'causeway-collection-preview-toggle';
+        button.dataset.causewayPreviewToggle = model.item.key;
         button.setAttribute('aria-expanded', String(expanded));
-        button.setAttribute('aria-controls', gridPeekDetailsId(model.item.key));
+        button.setAttribute('aria-controls', gridPreviewDetailsId(model.item.key));
         button.setAttribute('aria-label', `${expanded ? 'Collapse' : 'Preview'} ${model.item.identity?.title ?? 'item'}`);
         button.textContent = expanded ? '▾' : '▸';
         button.addEventListener('click', event => {
@@ -234,7 +234,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
           control.requestContentUpdate?.();
         });
         root.appendChild(button);
-        this.#restoreRenderedFocus(root, {member: '_peek'}, model.item);
+        this.#restoreRenderedFocus(root, {member: '_preview'}, model.item);
       };
       control.appendChild(detailsColumn);
     }
@@ -313,7 +313,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
     if (control !== this._control) return false;
     control.detailsOpenedItems = [];
     if (restoreFocus && item?.key) {
-      this._semanticFocusIntent = Object.freeze({rowKey: item.key, member: '_peek', role: 'peek'});
+      this._semanticFocusIntent = Object.freeze({rowKey: item.key, member: '_preview', role: 'preview'});
     }
     control.requestContentUpdate?.();
     return true;
@@ -399,8 +399,8 @@ function safeModuleUrl(value) {
   return url.href;
 }
 
-function gridPeekDetailsId(key) {
-  return `causeway-grid-peek-${String(key ?? '').replace(/[^A-Za-z0-9_.-]/g, '_').slice(0, 160)}`;
+function gridPreviewDetailsId(key) {
+  return `causeway-grid-preview-${String(key ?? '').replace(/[^A-Za-z0-9_.-]/g, '_').slice(0, 160)}`;
 }
 
 function boundedToken(value) {

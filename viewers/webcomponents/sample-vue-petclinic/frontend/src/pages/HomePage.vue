@@ -43,7 +43,7 @@ defineProps<CausewayRoutePageProps>();
           <section aria-labelledby="petclinic-owner-heading">
             <h2 id="petclinic-owner-heading">Pet owners</h2>
             <cw-collection id="petOwners" label="Pet owners" active paged="5" sortable filterable>
-              <cw-peek>
+              <cw-preview>
                 <section class="petclinic-preview" aria-label="Owner preview">
                   <cw-object-header />
                   <cw-property id="knownAs" editable />
@@ -55,7 +55,7 @@ defineProps<CausewayRoutePageProps>();
                     <cw-collection-column id="species" label="Species" />
                   </cw-collection>
                 </section>
-              </cw-peek>
+              </cw-preview>
               <cw-collection-column id="name" label="Owner" />
               <cw-collection-column id="telephoneNumber" label="Telephone" />
               <cw-collection-column id="emailAddress" label="Email" />
@@ -64,14 +64,14 @@ defineProps<CausewayRoutePageProps>();
           <section aria-labelledby="petclinic-visit-heading">
             <h2 id="petclinic-visit-heading">Upcoming visits</h2>
             <cw-collection id="futureVisits" named="Next appointments" active paged="10" filterable>
-              <cw-peek>
+              <cw-preview>
                 <section class="petclinic-preview" aria-label="Visit preview">
                   <cw-object-header />
                   <cw-property id="visitAt" named="Appointment" />
                   <cw-property id="reason" editable />
                   <cw-property id="notes" editable multi-line="3" />
                 </section>
-              </cw-peek>
+              </cw-preview>
               <cw-collection-column id="visitAt" label="When" />
               <cw-collection-column id="reason" label="Reason" />
               <cw-collection-column id="notes" label="Notes" />

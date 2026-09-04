@@ -158,13 +158,13 @@ test('Grid row details use one leading disclosure and preserve the projected ite
   control.childNodes[0].renderer(cell, control.childNodes[0], {item});
   const button = cell.childNodes[0];
   assert.equal(button.getAttribute('aria-expanded'), 'false');
-  assert.equal(button.getAttribute('aria-controls'), 'causeway-grid-peek-example.Staff_1');
+  assert.equal(button.getAttribute('aria-controls'), 'causeway-grid-preview-example.Staff_1');
   button.dispatchEvent(new Event('click'));
   assert.deepEqual(control.detailsOpenedItems, [item]);
 
   const details = document.createElement('div');
   control.rowDetailsRenderer(details, control, {item});
-  assert.equal(details.id, 'causeway-grid-peek-example.Staff_1');
+  assert.equal(details.id, 'causeway-grid-preview-example.Staff_1');
   assert.equal(details.childNodes[0].textContent, 'Ada');
   detailsController.close({restoreFocus: true});
   assert.deepEqual(control.detailsOpenedItems, []);
