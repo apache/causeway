@@ -9,6 +9,7 @@ It uses the shared deterministic Petclinic domain, the Causeway GraphQL endpoint
 The Vue application owns its HTML document, stable shell, router, history fallback, theme, and exact logical-type page registration.
 Its application-owned presentation follows the HTMX Petclinic shell and page compositions documented in link:PRESENTATION-PARITY.adoc[`PRESENTATION-PARITY.adoc`].
 The semantic web components remain authoritative for metadata, values, validation, interactions, collections, `<cw-preview>` row previews, and results.
+Inline preview bodies omit `<cw-object-header>` to match the concise HTMX reference while their owning rows retain authoritative titles and canonical links.
 
 == Run
 

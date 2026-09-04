@@ -109,7 +109,6 @@ defineProps<CausewayRoutePageProps>();
               <cw-collection id="pets" named="Companion animals" active paged="5" sortable filterable>
                 <cw-preview>
                   <section class="petclinic-preview" aria-label="Pet preview">
-                    <cw-object-header />
                     <cw-property id="name" />
                     <cw-property id="species" />
                     <cw-property id="notes" editable multi-line="3" />
@@ -146,7 +145,6 @@ defineProps<CausewayRoutePageProps>();
               >
                 <cw-preview>
                   <section class="petclinic-preview" aria-label="Visit preview">
-                    <cw-object-header />
                     <cw-property id="visitAt" named="Appointment" />
                     <cw-property id="reason" editable />
                     <cw-property id="notes" editable multi-line="3" />
