@@ -12,7 +12,8 @@ It owns route and host policy but does not duplicate GraphQL or domain state.
 Install `@apache-causeway/vue-viewer`, `vue`, and `vue-router` in the application frontend.
 Vue and Vue Router are peer dependencies of the viewer package.
 The Causeway component registration modules and any selected toolkit adapters remain same-origin application assets supplied by the Causeway backend.
-The same rule applies to the foundation's lazily loaded PDF.js display module, module worker, support assets, authorized PDF resource URLs, contained page navigation, and toolbar download link; Vue does not bundle or replace the reader.
+The same rule applies to the foundation's lazily loaded PDF.js display module, module worker, support assets, authorized PDF resource URLs, contained page navigation, toolbar zoom selector, and toolbar download link; Vue does not bundle or replace the reader.
+Page-width restoration, page-height and page-fit modes, actual size, and percentage choices remain foundation behavior rather than Vue state.
 
 Configure the Vue plugin so `cw-` tags compile as native custom elements.
 

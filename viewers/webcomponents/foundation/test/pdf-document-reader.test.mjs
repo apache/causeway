@@ -29,6 +29,7 @@ class FakeControl extends EventTarget {
         super();
         this.disabled = false;
         this.textContent = '';
+        this.value = '';
     }
 
     click() {
@@ -70,7 +71,7 @@ function fixture({pageCount = 5, password = false, deferredModule = null, declar
     const outerScroller = {scrollTop: 421};
     FakePage.prototype.outerScroller = outerScroller;
     const controls = Object.fromEntries([
-        'activate', 'previous', 'next', 'zoom-out', 'zoom-in', 'status', 'zoom-status', 'viewport'
+        'activate', 'previous', 'next', 'zoom-out', 'zoom-select', 'zoom-in', 'status', 'viewport'
     ].map(name => [name, new FakeControl()]));
     controls.viewport.clientWidth = 636;
     controls.viewport.clientHeight = 816;
@@ -111,6 +112,7 @@ function fixture({pageCount = 5, password = false, deferredModule = null, declar
         }
     };
     const rendered = [];
+    const renderedScales = [];
     const documentProxy = {
         numPages: pageCount,
         async getPage(number) {
@@ -118,8 +120,9 @@ function fixture({pageCount = 5, password = false, deferredModule = null, declar
                 getViewport({scale}) {
                     return {width: 612 * scale, height: 792 * scale};
                 },
-                render() {
+                render({viewport}) {
                     rendered.push(number);
+                    renderedScales.push(viewport.width / 612);
                     return {
                         promise: Promise.resolve(), cancel() {
                         }
@@ -190,6 +193,7 @@ function fixture({pageCount = 5, password = false, deferredModule = null, declar
         controls,
         pages,
         rendered,
+        renderedScales,
         host,
         moduleValue,
         counts: () => ({moduleLoads, fetches}),
@@ -297,7 +301,55 @@ test('automatic mode creates every placeholder but initially renders only curren
     assert.ok(value.controls.viewport.scrollCalls.every(call => call.behavior === 'auto'));
     value.controls['zoom-in'].click();
     await settle();
-    assert.equal(value.controls['zoom-status'].textContent, '125%');
+    assert.equal(value.controls['zoom-select'].value, '125');
+});
+
+test('zoom selector restores fit modes, applies percentages, and preserves the current page', async () => {
+    const value = fixture({pageCount: 3});
+    value.controls.viewport.clientHeight = 420;
+    value.controller.mount(value.container, {
+        url: '/document.pdf',
+        name: 'Document',
+        mode: 'auto',
+        initialPage: 2,
+        zoom: 'page-width'
+    });
+    await settle();
+
+    const select = async zoom => {
+        value.renderedScales.length = 0;
+        value.controls['zoom-select'].value = zoom;
+        value.controls['zoom-select'].dispatchEvent(new Event('change'));
+        await settle();
+        assert.ok(value.renderedScales.length > 0);
+    };
+
+    await select('150');
+    assert.equal(value.controls['zoom-select'].value, '150');
+    assert.ok(value.renderedScales.every(scale => scale === 1.5));
+    assert.match(value.controls.status.textContent, /Page 2 of 3/);
+
+    await select('page-height');
+    assert.equal(value.controls['zoom-select'].value, 'page-height');
+    assert.ok(value.renderedScales.every(scale => scale === 0.5));
+
+    await select('page-fit');
+    assert.equal(value.controls['zoom-select'].value, 'page-fit');
+    assert.ok(value.renderedScales.every(scale => scale === 0.5));
+
+    await select('page-width');
+    assert.equal(value.controls['zoom-select'].value, 'page-width');
+    assert.ok(value.renderedScales.every(scale => scale === 1));
+    assert.match(value.controls.status.textContent, /Page 2 of 3/);
+    assert.equal(value.outerScroller.scrollTop, 421);
+
+    for (let index = 0; index < 4; index += 1) value.controls['zoom-out'].click();
+    assert.equal(value.controls['zoom-select'].value, '25');
+    assert.equal(value.controls['zoom-out'].disabled, true);
+    for (let index = 0; index < 15; index += 1) value.controls['zoom-in'].click();
+    assert.equal(value.controls['zoom-select'].value, '400');
+    assert.equal(value.controls['zoom-in'].disabled, true);
+    assert.match(value.controls.status.textContent, /Page 2 of 3/);
 });
 
 test('documents beyond the fixed byte limit fail before PDF.js receives content', async () => {
