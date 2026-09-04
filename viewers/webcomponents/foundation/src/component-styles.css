@@ -1034,7 +1034,8 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
   gap: var(--causeway-pdf-control-gap, 0.5rem);
 }
 .causeway-pdf-control,
-.causeway-pdf-activate {
+.causeway-pdf-activate,
+.causeway-pdf-zoom-select {
   background: var(--causeway-pdf-control-background, ButtonFace);
   border: var(--causeway-pdf-control-border, 1px solid ButtonBorder);
   border-radius: var(--causeway-pdf-control-radius, 0.25rem);
@@ -1045,6 +1046,7 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
 }
 .causeway-pdf-control:focus-visible,
 .causeway-pdf-activate:focus-visible,
+.causeway-pdf-zoom-select:focus-visible,
 .causeway-pdf-viewport:focus-visible {
   outline: var(--causeway-pdf-focus, 0.2rem solid Highlight);
   outline-offset: 0.15rem;
@@ -1053,9 +1055,9 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
   min-inline-size: 8rem;
   text-align: center;
 }
-.causeway-pdf-zoom-status {
-  min-inline-size: 4.5rem;
-  text-align: center;
+.causeway-pdf-zoom-select {
+  max-inline-size: 8rem;
+  min-inline-size: 6.5rem;
 }
 .causeway-pdf-toolbar > .causeway-value-lob {
   align-items: baseline;

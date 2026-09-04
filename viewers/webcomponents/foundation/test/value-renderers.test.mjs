@@ -111,6 +111,7 @@ test('PDF qualification and authored options are bounded and link mode retains B
     assert.equal(normalizePdfRenderMode('invalid'), 'auto');
     assert.equal(normalizePdfInitialPage('100000'), 100000);
     assert.equal(normalizePdfInitialPage('0'), 1);
+    assert.equal(normalizePdfZoom('page-height'), 'page-height');
     assert.equal(normalizePdfZoom('275%'), 275);
     assert.equal(normalizePdfZoom('401%'), 'page-width');
 
@@ -130,6 +131,16 @@ test('PDF qualification and authored options are bounded and link mode retains B
         zoom: 'page-fit'
     });
     assert.match(manual.html, /Preview document/);
+    assert.match(manual.html, /<select[^>]+data-causeway-pdf-zoom-select[^>]+aria-label="Zoom level"[^>]+disabled>/);
+    assert.match(manual.html, /<option value="page-width">Page width<\/option>/);
+    assert.match(manual.html, /<option value="page-height">Page height<\/option>/);
+    assert.match(manual.html, /<option value="page-fit" selected>Page fit<\/option>/);
+    assert.match(manual.html, /<option value="actual-size">Actual size<\/option>/);
+    assert.match(manual.html, /<option value="200">200%<\/option>/);
+    assert.doesNotMatch(manual.html, /data-causeway-pdf-zoom-status/);
+
+    const nonStandardZoom = renderCausewayValue({value, presentation: {pdfZoom: '275%'}});
+    assert.match(nonStandardZoom.html, /<option value="275" data-causeway-pdf-dynamic-zoom selected>275%<\/option>/);
 });
 
 test('application renderers override standards deterministically and can be released', () => {

@@ -328,7 +328,8 @@ The legacy `label` and `multiline` attributes remain compatibility aliases below
 For eligible PDFs, `pdf-render` accepts `auto`, `manual`, or `link` and defaults to `auto`.
 Automatic mode initializes when the ready property renders, manual mode waits for the keyboard-operable *Preview document* control, and link mode loads neither PDF.js nor inline bytes.
 `pdf-initial-page` accepts an integer from `1` through `100000` and defaults to `1`; the loaded document clamps it to the actual final page.
-`pdf-zoom` accepts `page-width`, `page-fit`, `actual-size`, or an integer percentage from `25%` through `400%` and defaults to `page-width`.
+`pdf-zoom` accepts `page-width`, `page-height`, `page-fit`, `actual-size`, or an integer percentage from `25%` through `400%` and defaults to `page-width`.
+The reader toolbar exposes those fit modes and standard percentages through an accessible zoom selector, keeps the existing incremental controls, and adds a temporary percentage choice when an incremental or authored value is outside the standard selector list.
 Invalid PDF options use their bounded defaults and emit `causeway-pdf-reader-diagnostic`; lifecycle state is available through `causeway-pdf-reader-state-change`.
 These authored attributes are inert for non-PDF, application-rendered, unsupported, or link-only values and are not projected from effective grids.
 A future `@PdfJsViewer` proposal may add domain facets and GraphQL metadata with authored attribute → facet → foundation-default precedence, but this release includes no annotation, facet, or metadata mapping.

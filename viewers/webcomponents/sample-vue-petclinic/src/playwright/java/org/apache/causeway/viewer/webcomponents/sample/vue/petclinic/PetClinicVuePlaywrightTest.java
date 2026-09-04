@@ -194,6 +194,42 @@ class PetClinicVuePlaywrightTest {
         assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
         assertThat(toolbar.isVisible()).isTrue();
         assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
+        assertSelectablePdfZoom(reader, viewport, outerScrollBefore);
+    }
+
+    private void assertSelectablePdfZoom(final Locator reader, final Locator viewport, final double outerScrollBefore) {
+        final var select = reader.locator("[data-causeway-pdf-zoom-select]");
+        assertThat(select.locator("option").allTextContents())
+                .containsSubsequence("Page width", "Page height", "Page fit", "Actual size", "50%", "100%", "200%");
+        final var pageStatus = reader.locator("[data-causeway-pdf-status]").innerText();
+
+        select.selectOption("150");
+        assertThat(select.inputValue()).isEqualTo("150");
+        select.selectOption("page-height");
+        reader.locator("[data-causeway-pdf-page='1'] canvas").waitFor();
+        assertThat(select.inputValue()).isEqualTo("page-height");
+        final var pageHeight = ((Number) reader.locator("[data-causeway-pdf-page='1'] canvas")
+                .evaluate("canvas => parseFloat(canvas.style.height)")).doubleValue();
+        final var availableHeight = ((Number) viewport.evaluate("element => element.clientHeight - 24")).doubleValue();
+        assertThat(Math.abs(pageHeight - availableHeight)).isLessThanOrEqualTo(1.0);
+
+        select.selectOption("page-fit");
+        assertThat(select.inputValue()).isEqualTo("page-fit");
+        select.selectOption("200");
+        reader.locator("[data-causeway-pdf-zoom-in]").click();
+        assertThat(select.inputValue()).isEqualTo("225");
+        assertThat(select.locator("option[value='225']").innerText()).isEqualTo("225%");
+        select.selectOption("page-width");
+        reader.locator("[data-causeway-pdf-page='1'] canvas").waitFor();
+        assertThat(select.inputValue()).isEqualTo("page-width");
+        final var pageWidth = ((Number) reader.locator("[data-causeway-pdf-page='1'] canvas")
+                .evaluate("canvas => parseFloat(canvas.style.width)")).doubleValue();
+        final var availableWidth = ((Number) viewport.evaluate("element => element.clientWidth - 24")).doubleValue();
+        assertThat(Math.abs(pageWidth - availableWidth)).isLessThanOrEqualTo(1.0);
+
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).isEqualTo(pageStatus);
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue()).isLessThanOrEqualTo(1.0);
     }
 
     @Test
