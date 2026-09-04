@@ -1368,6 +1368,16 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.Visit")).count())
                 .isEqualTo(1);
 
+        final var futureVisits = page.locator("cw-collection[id='futureVisits']");
+        final var futureVisitToggle = futureVisits.locator("button[data-causeway-preview-toggle]").first();
+        futureVisitToggle.click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.expandedPreviewKey != null");
+        final var futureVisitPreview = futureVisits.locator("cw-preview[data-causeway-preview-live]");
+        assertThat(futureVisitPreview.locator("cw-object-header").count()).isZero();
+        futureVisitPreview.locator("cw-property[id='reason']").waitFor();
+        futureVisitToggle.click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.expandedPreviewKey == null");
+
         ownerToggles.first().click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey != null");
         assertPreviewToggleIcon(ownerToggles.first(), true);
@@ -1376,6 +1386,9 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(live.getAttribute("role")).isEqualTo("region");
         assertThat(live.getAttribute("aria-label")).contains("Preview of");
         assertThat(live.locator("section").first().getAttribute("aria-label")).isEqualTo("Owner preview");
+        assertThat(live.locator("cw-object-header").count()).isZero();
+        live.locator("cw-property[id='knownAs']").waitFor();
+        live.locator("cw-action[id='updateName']").waitFor();
         live.locator("cw-collection[id='pets']").waitFor();
         live.locator("cw-collection[id='pets'] .causeway-collection-table, cw-collection[id='pets'] cw-collection-grid")
                 .first().waitFor();
@@ -1445,7 +1458,10 @@ class PetClinicHtmxPlaywrightTest {
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey != null");
         live = pets.locator("cw-preview[data-causeway-preview-live]");
         assertThat(live.locator("section").first().getAttribute("aria-label")).isEqualTo("Pet preview");
+        assertThat(live.locator("cw-object-header").count()).isZero();
         assertThat(live.innerText()).doesNotContain("Pet type-default preview");
+        live.locator("cw-property[id='notes']").waitFor();
+        live.locator("cw-action[id='clearNotes']").waitFor();
         live.locator("cw-collection[id='visits']").waitFor();
         assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.Pet")).count())
                 .isEqualTo(petPreviewRequestsBefore);
