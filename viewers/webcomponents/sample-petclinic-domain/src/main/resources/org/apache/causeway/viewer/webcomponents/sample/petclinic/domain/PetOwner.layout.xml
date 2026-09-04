@@ -69,6 +69,13 @@
                     </cpt:collection>
                 </bs3:col>
             </bs3:row>
+            <bs3:row>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Agreement" id="documents">
+                        <cpt:property id="agreement" labelPosition="NONE"/>
+                    </cpt:fieldSet>
+                </bs3:col>
+            </bs3:row>
         </bs3:col>
     </bs3:row>
 </bs3:grid>

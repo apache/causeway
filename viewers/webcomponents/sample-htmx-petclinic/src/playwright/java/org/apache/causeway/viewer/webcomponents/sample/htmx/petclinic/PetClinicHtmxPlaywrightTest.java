@@ -1534,39 +1534,93 @@ class PetClinicHtmxPlaywrightTest {
     @Order(11)
     void authoredPdfModesProvideCompleteProgressiveReadingAndPersistentLinks() {
         openObject("petclinic.Visit", "s_visit-basil-checkup");
-        final var linked = page.locator("cw-property#pdfLink");
+        final var linked = page.locator("cw-property#ownerAgreementDocument");
         assertThat(linked.getAttribute("data-renderer")).isEqualTo("blob");
         assertThat(linked.locator("[data-causeway-pdf-reader]").count()).isZero();
+        assertThat(linked.locator(".causeway-value-lob-link").innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
         final var linkedHref = linked.locator(".causeway-value-lob-link").getAttribute("href");
         assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", linkedHref)).isFalse();
         assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
 
         openObject("petclinic.Pet", "s_pet-basil");
-        final var manual = page.locator("cw-property#pdfManual [data-causeway-pdf-reader]");
+        final var manual = page.locator("cw-property#ownerAgreementPreview [data-causeway-pdf-reader]");
         assertThat(manual.getAttribute("data-causeway-pdf-state")).isEqualTo("inactive");
         assertThat(manual.locator("[data-causeway-pdf-page]").count()).isZero();
+        assertThat(manual.locator(".causeway-pdf-toolbar .causeway-value-lob-link").innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        assertThat(manual.locator(".causeway-pdf-accessibility-note").count()).isZero();
         final var manualHref = manual.locator(".causeway-value-lob-link").getAttribute("href");
         assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", manualHref)).isFalse();
         assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
         manual.locator("[data-causeway-pdf-activate]").click();
-        page.waitForFunction("() => document.querySelector('cw-property#pdfManual [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementPreview [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
         assertThat(manual.locator("[data-causeway-pdf-page]").count()).isEqualTo(3);
         assertThat(manual.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
         assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", manualHref)).isTrue();
         assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/pdf.min.mjs'))")).isTrue();
 
         openObject("petclinic.PetOwner", "s_owner-mary");
-        final var automatic = page.locator("cw-property#pdfAuto [data-causeway-pdf-reader]");
-        page.waitForFunction("() => document.querySelector('cw-property#pdfAuto [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='visits']\")?.collectionState?.rows?.length === 2");
+        final var agreementProperty = page.locator("cw-property#agreement");
+        final var automatic = agreementProperty.locator("[data-causeway-pdf-reader]");
+        page.waitForFunction("() => document.querySelector('cw-property#agreement [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        assertThat(agreementProperty.getAttribute("label-position")).isEqualTo("NONE");
+        final var agreementCard = page.locator(".petclinic-object-collections .petclinic-agreement-card");
+        assertThat(agreementCard.locator("cw-property#agreement").count()).isEqualTo(1);
+        assertThat(agreementProperty.locator(".causeway-property-label").isVisible()).isFalse();
+        assertThat(((Number) automatic.evaluate("(reader) => reader.getBoundingClientRect().width / reader.closest('.petclinic-agreement-card').getBoundingClientRect().width")).doubleValue()).isGreaterThan(0.9);
         assertThat(automatic.locator("[data-causeway-pdf-page]").count()).isEqualTo(3);
         automatic.locator(".causeway-pdf-page-canvas").first().waitFor();
+        final var toolbar = automatic.locator(".causeway-pdf-toolbar");
+        final var download = toolbar.locator(".causeway-value-lob-link");
+        assertThat(download.getAttribute("href")).isNotBlank();
+        assertThat(download.innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        assertThat(automatic.locator(".causeway-pdf-accessibility-note").count()).isZero();
+
+        assertContainedPdfNavigation(automatic, 1800);
+        assertContainedPdfNavigation(automatic, 720);
+        page.setViewportSize(1440, 900);
+
+        automatic.locator("[data-causeway-pdf-next]").click();
+        automatic.locator("[data-causeway-pdf-next]").click();
         final var finalPage = automatic.locator("[data-causeway-pdf-page='3']");
-        finalPage.scrollIntoViewIfNeeded();
         finalPage.locator("canvas").waitFor();
         assertThat(finalPage.getAttribute("aria-label")).isEqualTo("PDF page 3 of 3");
-        assertThat(automatic.locator(".causeway-value-lob-link").getAttribute("href")).isNotBlank();
         automatic.locator("[data-causeway-pdf-zoom-in]").click();
         assertThat(automatic.locator("[data-causeway-pdf-zoom-status]").innerText()).isEqualTo("125%");
+    }
+
+    private void assertContainedPdfNavigation(final Locator reader, final int width) {
+        page.setViewportSize(width, 900);
+        final var toolbar = reader.locator(".causeway-pdf-toolbar");
+        final var viewport = reader.locator("[data-causeway-pdf-viewport]");
+        final var next = reader.locator("[data-causeway-pdf-next]");
+        final var previous = reader.locator("[data-causeway-pdf-previous]");
+        toolbar.scrollIntoViewIfNeeded();
+        final var outerScrollBefore = ((Number) page.evaluate("() => window.scrollY")).doubleValue();
+        final var geometryBefore = (String) page.evaluate("() => JSON.stringify({scrollY: window.scrollY, toolbar: document.querySelector('cw-property#agreement .causeway-pdf-toolbar')?.getBoundingClientRect(), viewport: document.querySelector('cw-property#agreement [data-causeway-pdf-viewport]')?.getBoundingClientRect()})");
+
+        next.click();
+        page.waitForTimeout(350);
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
+        assertThat(((Number) viewport.evaluate("element => element.scrollTop")).doubleValue()).isGreaterThan(0);
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
+        assertThat(toolbar.isVisible()).isTrue();
+        assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue()).isLessThanOrEqualTo(1.0);
+
+        previous.click();
+        page.waitForTimeout(350);
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).contains("Page 1 of 3");
+        final var outerScrollAfter = ((Number) page.evaluate("() => window.scrollY")).doubleValue();
+        final var geometryAfter = (String) page.evaluate("() => JSON.stringify({scrollY: window.scrollY, toolbar: document.querySelector('cw-property#agreement .causeway-pdf-toolbar')?.getBoundingClientRect(), viewport: document.querySelector('cw-property#agreement [data-causeway-pdf-viewport]')?.getBoundingClientRect()})");
+        assertThat(Math.abs(outerScrollAfter - outerScrollBefore))
+                .as("PDF navigation moved the outer page; before=%s after=%s", geometryBefore, geometryAfter)
+                .isLessThan(2.0);
+        assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
+        assertThat(toolbar.isVisible()).isTrue();
+        assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
     }
 
     @SuppressWarnings("unchecked")

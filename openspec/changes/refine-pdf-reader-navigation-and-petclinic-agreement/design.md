@@ -35,7 +35,8 @@ HTMX and Vue remain thin, equivalent hosts, while the existing GraphQL resource 
 
 Previous-page and next-page navigation will calculate the target page's position within `[data-causeway-pdf-viewport]` and scroll that element directly.
 It will not call `scrollIntoView()` on the page placeholder because that API can also reposition the host document.
-The activated toolbar control will retain focus, the outer document scroll position will remain unchanged within a small rendering tolerance, and the existing observer will continue to establish current-page state.
+Focus will remain on the activated toolbar control while it remains enabled; navigation to a boundary will move focus to the available opposite page control rather than leave focus on a disabled control.
+The outer document scroll position will remain unchanged within a small rendering tolerance, and the existing observer will continue to establish current-page state.
 
 An alternative was to make the toolbar sticky while retaining document-level scrolling.
 That would mask only part of the problem, could overlap host content, and would still mutate an ancestor the reader does not own.

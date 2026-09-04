@@ -131,9 +131,9 @@ public class Visit implements Comparable<Visit> {
     }
 
     @Property
-    @PropertyLayout(fieldSetId = "documents", sequence = "1", named = "PDF resource link")
-    public Blob getPdfLink() {
-        return PetClinicPdfDocument.sample();
+    @PropertyLayout(fieldSetId = "documents", sequence = "1", named = "Owner agreement document")
+    public Blob getOwnerAgreementDocument() {
+        return PetClinicPdfDocument.agreementFor(pet.getPetOwner());
     }
 
     @Override

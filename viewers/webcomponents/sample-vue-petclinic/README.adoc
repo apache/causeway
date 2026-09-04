@@ -105,6 +105,7 @@ The frontend config treats `cw-` names as native custom elements and deduplicate
 `frontend/src/App.vue` declares the stable GraphQL provider, menus, loading and announcement regions, default result outlet, keyed router view, and conditional non-visual native logout form.
 `frontend/src/authentication.ts` performs no work for the ordinary document and, for the secured document only, fetches current bounded session context and supplies the CSRF-decorating executor.
 The files under `frontend/src/pages` provide exact-type application compositions for `petclinic.HomePage`, `petclinic.PetOwner`, `petclinic.Pet`, and `petclinic.Visit`.
+The PetOwner page mirrors HTMX by placing the deterministic owner-specific clinic agreement after Pets and Visits in the secondary column, suppressing its redundant property label, and delegating contained page navigation and the toolbar download link to the foundation reader.
 The menu layout is shared with HTMX through the framework-neutral Petclinic domain resources.
 The deliberately unregistered `petclinic.ViewerFallback` fixture demonstrates the generic route-page fallback without making a user-visible Petclinic route inconsistent.
 `PetClinicVueRouteController` forwards only the intended ordinary client routes to the production `index.html` without capturing GraphQL or static assets.

@@ -98,7 +98,7 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                 if (request.url().contains("/causeway-webcomponents/vaadin-menubar/")) {
                     menuBarRequests.add(request.url());
                 }
-                if (request.url().contains("/causeway-webcomponents/pdfjs/") || request.url().contains("/pdfAuto/")) {
+                if (request.url().contains("/causeway-webcomponents/pdfjs/") || request.url().contains("/agreement/")) {
                     pdfRequests.add(request.url());
                 }
             });
@@ -130,11 +130,11 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                         + "; element=" + page.locator("cw-graphql-client").evaluate("element => element.outerHTML"), cause);
             }
             waitForReadyObject(page);
-            page.waitForFunction("() => document.querySelector('cw-property#pdfAuto [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
-            assertThat(page.locator("cw-property#pdfAuto [data-causeway-pdf-page]").count()).isEqualTo(3);
+            page.waitForFunction("() => document.querySelector('cw-property#agreement [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+            assertThat(page.locator("cw-property#agreement [data-causeway-pdf-page]").count()).isEqualTo(3);
             assertThat(pdfRequests.stream().anyMatch(url -> url.contains("/causeway-webcomponents/pdfjs/pdf.min.mjs"))).isTrue();
-            assertThat(pdfRequests.stream().anyMatch(url -> url.contains("/pdfAuto/") || url.contains("pdfAuto"))).isTrue();
-            final var protectedPdfHref = page.locator("cw-property#pdfAuto .causeway-value-lob-link").getAttribute("href");
+            assertThat(pdfRequests.stream().anyMatch(url -> url.contains("/agreement/") || url.contains("agreement"))).isTrue();
+            final var protectedPdfHref = page.locator("cw-property#agreement .causeway-value-lob-link").getAttribute("href");
             assertThat(page.locator("[data-testid='vue-authentication-shell']").count()).isZero();
             assertThat(page.locator("[data-causeway-authentication-logout]").getAttribute("hidden")).isNotNull();
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");

@@ -1057,12 +1057,23 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
   min-inline-size: 4.5rem;
   text-align: center;
 }
+.causeway-pdf-toolbar > .causeway-value-lob {
+  align-items: baseline;
+  display: inline-flex;
+  flex: 1 1 14rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
 .causeway-pdf-viewport {
   background: var(--causeway-pdf-viewport-background, #525659);
   block-size: var(--causeway-pdf-viewport-height, min(70vh, 52rem));
   inline-size: 100%;
   min-block-size: var(--causeway-pdf-viewport-min-height, 24rem);
   overflow: auto;
+  overflow-anchor: none;
   padding: var(--causeway-pdf-viewport-padding, 0.75rem);
   scrollbar-gutter: stable;
 }
@@ -1086,10 +1097,6 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
 .causeway-pdf-page-canvas {
   display: block;
   max-inline-size: none;
-}
-.causeway-pdf-accessibility-note {
-  font-size: 0.875em;
-  margin: 0;
 }
 .causeway-pdf-reader[data-causeway-pdf-state="failed"] .causeway-pdf-viewport,
 .causeway-pdf-reader[data-causeway-pdf-state="safety-limit"] .causeway-pdf-viewport,

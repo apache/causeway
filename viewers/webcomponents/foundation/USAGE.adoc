@@ -283,7 +283,8 @@ Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete M
 The standard renderer registry presents GraphQL scalars, enums, nulls, object references, and the rich-schema Blob and Clob resource shapes.
 An authoritative Blob whose normalized MIME type is exactly `application/pdf` and whose `bytes` value is an available same-origin URL uses the standard PDF document reader unless an application renderer wins or `pdf-render="link"` is authored.
 The Causeway-owned reader lazily loads pinned PDF.js display and module-worker assets, creates a continuously scrollable placeholder for every page, and progressively renders visible and nearby pages as canvas images.
-The ordinary authorized Blob link remains visible during loading, reading, unsupported-password, safety-limit, and failure states.
+Previous-page and next-page controls scroll only the owned PDF viewport, keep the surrounding host document stable, and keep keyboard focus within the available page controls at document boundaries.
+The ordinary authorized Blob link is placed in the reader toolbar and remains visible during inactive manual presentation, loading, reading, unsupported-password, safety-limit, and failure states.
 The reader deliberately provides no search, selection, print, outline, thumbnail, annotation, form, attachment, XFA, embedded-script, or password-entry feature.
 Object references become semantic `<cw-object-link>` elements.
 Null values use an explicit em-dash presentation labelled as no value.
@@ -332,7 +333,8 @@ Invalid PDF options use their bounded defaults and emit `causeway-pdf-reader-dia
 These authored attributes are inert for non-PDF, application-rendered, unsupported, or link-only values and are not projected from effective grids.
 A future `@PdfJsViewer` proposal may add domain facets and GraphQL metadata with authored attribute → facet → foundation-default precedence, but this release includes no annotation, facet, or metadata mapping.
 Applications can size the reader with `--causeway-pdf-viewport-height`, `--causeway-pdf-viewport-min-height`, `--causeway-pdf-viewport-padding`, `--causeway-pdf-page-gap`, and `--causeway-pdf-page-placeholder-height`.
-Canvas pixels are labelled by page but are not represented as semantic document text, so the persistent resource link remains the route to an external accessible reader.
+Canvas pixels have concise page labels but are not represented as semantic document text, and no separate visible disclaimer is added below the viewport.
+The persistent toolbar resource link remains the route to an external accessible reader.
 
 [source,html]
 ----

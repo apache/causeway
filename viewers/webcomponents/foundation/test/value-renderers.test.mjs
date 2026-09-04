@@ -75,9 +75,11 @@ test('standard value renderers cover PDF, Blob and Clob resource representations
     assert.match(pdf.html, /data-causeway-pdf-reader/);
     assert.match(pdf.html, /role="region" aria-label="PDF document reader/);
     assert.match(pdf.html, /role="toolbar" aria-label="PDF document controls/);
-    assert.match(pdf.html, /canvas images and do not provide a semantic text alternative/);
+    assert.doesNotMatch(pdf.html, /canvas images and do not provide a semantic text alternative/);
     assert.match(pdf.html, /href="\/blobBytes"/);
     assert.match(pdf.html, /application\/pdf/);
+    assert.equal(pdf.html.match(/href="\/blobBytes"/g)?.length, 1);
+    assert.ok(pdf.html.indexOf('href="/blobBytes"') < pdf.html.indexOf('data-causeway-pdf-viewport'));
 
     const blob = renderCausewayValue({
         value: {name: 'image.png', mimeType: 'image\/png', bytes: '/blobBytes'}

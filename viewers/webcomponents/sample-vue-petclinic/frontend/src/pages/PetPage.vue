@@ -69,11 +69,11 @@ defineProps<CausewayRoutePageProps>();
         <section class="petclinic-card" aria-labelledby="petclinic-pet-documents-heading">
           <h2 id="petclinic-pet-documents-heading">Documents</h2>
           <cw-property
-            id="pdfManual"
+            id="ownerAgreementPreview"
             pdf-render="manual"
             pdf-initial-page="2"
             pdf-zoom="page-fit"
-            data-testid="petclinic-pdf-manual"
+            data-testid="petclinic-owner-agreement-preview"
           />
         </section>
       </article>

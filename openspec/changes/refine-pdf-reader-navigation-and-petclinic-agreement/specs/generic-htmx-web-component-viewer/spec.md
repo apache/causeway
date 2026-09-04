@@ -28,4 +28,4 @@ The agreement SHALL be presented in the PetOwner secondary column with its redun
 
 - **WHEN** headless browser coverage repeatedly activates next and previous on the agreement at wide and narrow viewport sizes
 - **THEN** requested PDF pages render within the reader viewport while the outer page position remains stable
-- **AND** the toolbar stays visible, the activated control retains focus, and no browser, worker, resource, or GraphQL failure occurs
+- **AND** the toolbar stays visible, focus remains within the available page controls, and no browser, worker, resource, or GraphQL failure occurs

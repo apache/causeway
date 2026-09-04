@@ -68,7 +68,7 @@ defineProps<CausewayRoutePageProps>();
 
         <section class="petclinic-card" aria-labelledby="petclinic-visit-documents-heading">
           <h2 id="petclinic-visit-documents-heading">Documents</h2>
-          <cw-property id="pdfLink" pdf-render="link" data-testid="petclinic-pdf-link" />
+          <cw-property id="ownerAgreementDocument" pdf-render="link" data-testid="petclinic-owner-agreement-document" />
         </section>
       </article>
       <cw-interaction-controller data-causeway-route-interactions />

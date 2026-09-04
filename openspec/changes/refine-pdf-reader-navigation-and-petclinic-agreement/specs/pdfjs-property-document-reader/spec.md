@@ -11,7 +11,7 @@ Removing that sentence MUST NOT cause the reader to claim that canvas pixels exp
 - **WHEN** the user activates next-page or previous-page while the reader and its toolbar are visible in a wide host page
 - **THEN** only the PDF viewport scrolls to the requested page placeholder
 - **AND** the surrounding document position remains stable and the toolbar remains visible
-- **AND** the activated control retains keyboard focus
+- **AND** keyboard focus remains in the page controls, moving to the available opposite control when the activated control becomes disabled at a boundary
 
 #### Scenario: User advances pages at a narrow viewport
 

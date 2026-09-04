@@ -242,12 +242,11 @@ function pdfMarkup(value, presentation) {
     <button type="button" class="causeway-pdf-control" data-causeway-pdf-zoom-out aria-label="Zoom out" disabled>−</button>
     <span class="causeway-pdf-zoom-status" data-causeway-pdf-zoom-status>${escapeHtml(typeof presentation.zoom === 'number' ? `${presentation.zoom}%` : presentation.zoom.replace('-', ' '))}</span>
     <button type="button" class="causeway-pdf-control" data-causeway-pdf-zoom-in aria-label="Zoom in" disabled>+</button>
+    ${lobMarkup(value, 'bytes', 'Open PDF document')}
   </div>
   <div class="causeway-pdf-viewport" data-causeway-pdf-viewport tabindex="0" aria-label="PDF pages">
     <div class="causeway-pdf-pages" data-causeway-pdf-pages></div>
   </div>
-  <p class="causeway-pdf-accessibility-note">Rendered pages are canvas images and do not provide a semantic text alternative.</p>
-  ${lobMarkup(value, 'bytes', 'Open PDF document')}
 </section>`;
 }
 

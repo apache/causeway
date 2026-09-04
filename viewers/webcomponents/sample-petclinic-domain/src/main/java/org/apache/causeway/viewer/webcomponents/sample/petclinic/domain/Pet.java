@@ -163,9 +163,9 @@ public class Pet implements Comparable<Pet> {
     }
 
     @Property
-    @PropertyLayout(fieldSetId = "documents", sequence = "1", named = "Manual PDF reader")
-    public Blob getPdfManual() {
-        return PetClinicPdfDocument.sample();
+    @PropertyLayout(fieldSetId = "documents", sequence = "1", named = "Owner agreement preview")
+    public Blob getOwnerAgreementPreview() {
+        return PetClinicPdfDocument.agreementFor(petOwner);
     }
 
     @Action
