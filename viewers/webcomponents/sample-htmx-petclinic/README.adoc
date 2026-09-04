@@ -102,7 +102,7 @@ petclinic.Visit.html
 
 Each exact logical-type filename is discovered at startup and its literal UTF-8 content is placed beneath the viewer-provided route context.
 The sample opts into `causeway.viewer.webcomponents.htmx.resource-page-mode=reload`, while the viewer's production-oriented default remains `cached`.
-The files compose navigable breadcrumbs, object headers, ordinary application regions, properties, actions, collections, and declared columns while GraphQL remains authoritative for identity, hierarchy, values, visibility, usability, validation, invocation, and results.
+The files compose navigable breadcrumbs, object headers, ordinary application regions, properties, actions, collections, `<cw-preview>` row previews, and declared columns while GraphQL remains authoritative for identity, hierarchy, values, visibility, usability, validation, invocation, and results.
 `Pet.petOwner` and `Visit.pet` use `@PropertyLayout(navigable = Navigable.PARENT)`, producing the deterministic Mary Smith → Basil → visit hierarchy without application-specific breadcrumb rendering or route code.
 `petclinic.PetOwner.html` demonstrates natural member association by nesting `updateName` beneath `name`, `addPet` and `removePet` beneath `pets`, and `bookVisit` beneath `visits`.
 The retained `PetOwner.layout.xml` expresses the equivalent generated-grid associations, while the direct HTML needs no adjacent Petclinic-only association wrapper.

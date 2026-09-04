@@ -664,18 +664,21 @@ Before mounting asynchronous results, a host may call `setPresentationContext({o
 
 == Collection row previews
 
-A direct `<cw-peek>` child opts a `<cw-collection>` into one-at-a-time row previews without changing canonical row links, data, projection, navigation, or authorization.
-A collection accepts at most one direct declaration; duplicates emit a bounded `causeway-collection-peek-diagnostic` event, expose `data-causeway-peek-error="duplicate"`, and render no disclosure controls.
+`<cw-preview>` replaces the former `<cw-peek>` spelling; this is a breaking custom-element rename, so applications must update that tag and any direct `peek-element.mjs` imports before upgrading.
+No compatibility alias is registered.
+
+A direct `<cw-preview>` child opts a `<cw-collection>` into one-at-a-time row previews without changing canonical row links, data, projection, navigation, or authorization.
+A collection accepts at most one direct declaration; duplicates emit a bounded `causeway-collection-preview-diagnostic` event, expose `data-causeway-preview-error="duplicate"`, and render no disclosure controls.
 The declaration remains hidden and inert, and its authored descendants are captured before they can connect or request context.
 
 [source,html]
 ----
 <cw-collection id="pets" active>
-  <cw-peek>
+  <cw-preview>
     <cw-object-header></cw-object-header>
     <cw-property id="notes" editable></cw-property>
     <cw-action id="clearNotes"></cw-action>
-  </cw-peek>
+  </cw-preview>
   <cw-collection-column id="name" label="Name"></cw-collection-column>
 </cw-collection>
 ----
@@ -684,13 +687,13 @@ Non-empty inline content completely defines the preview template and prevents ho
 An empty declaration asks the optional JavaScript-only `causewayCollectionRowPreviewResolver({logicalTypeName, collection, signal})` for a bounded `{html}` presentation using each row's authoritative runtime `_meta.logicalTypeName`.
 A missing, invalid, or failed default renders no disclosure for that runtime type while leaving the collection usable.
 
-Opening a disclosure creates a fresh live `<cw-peek>` after the selected native row or in Vaadin Grid row details.
+Opening a disclosure creates a fresh live `<cw-preview>` after the selected native row or in Vaadin Grid row details.
 The collection creates a dedicated hydrated row context before connecting the cloned descendants, so selected values are reused and later properties, actions, and nested collections use the ordinary authorized lazy context behavior.
 Opening another row retires the prior live subtree and context.
 Escape inside the live preview collapses it and restores disclosure focus, while sorting, filtering, paging, reload, parent generation, responsive replacement, supersession, and disconnection may discard expansion state.
 A successful action or property update originating in the preview collapses it and performs one criteria-preserving forced reload of the parent collection.
 When that refresh retires the invoking control, the focusable collection host provides a stable fallback.
-The collection emits `causeway-collection-peek-state-change` for expanded and collapsed state without publishing row values.
+The collection emits `causeway-collection-preview-state-change` for expanded and collapsed state without publishing row values.
 
 == Lazy collections and row hydration
 
@@ -746,7 +749,7 @@ Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete c
 The Grid closure is same-origin and route-lazy, has a 196608-byte gzip cap, and participates with Menu Bar in the 631808-byte aggregate closure cap and exact-hash CSP policy.
 See `vaadin-grid/README.adoc` for pinned inputs, accepted checksum, legal metadata, CSP evidence, verification, and audit commands.
 Multi-column sorting, per-column filtering, page-local array criteria, selection, inline Grid editing, application-authored Grid details, drag, Grid Pro, Flow, Binder, telemetry, CDN resources, server-side Vaadin state, and backend query pushdown remain outside the component contract.
-Collection-owned `<cw-peek>` row details are the sole supported Grid details integration.
+Collection-owned `<cw-preview>` row details are the sole supported Grid details integration.
 Sorting, quick search, column resizing, and column reordering are supported only through the bounded public attributes above; no other Vaadin Grid API becomes application-facing.
 
 == Observable state, accessibility, and styling

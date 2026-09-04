@@ -143,10 +143,10 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("named=\"Owner's full name\"")
                 .contains("<cw-action id=\"addPet\" named=\"Register a pet\" prompt-style=\"DIALOG_SIDEBAR\"")
                 .contains("<cw-action id=\"removePet\"></cw-action>")
-                .contains("<cw-peek>")
+                .contains("<cw-preview>")
                 .contains("<cw-action id=\"clearNotes\" named=\"Clear pet notes\"></cw-action>")
                 .contains("<cw-collection id=\"visits\" named=\"Pet visits\" active paged=\"10\">")
-                .contains("<cw-peek></cw-peek>")
+                .contains("<cw-preview></cw-preview>")
                 .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">")
                 .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
                 .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>")
@@ -168,7 +168,7 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(visitPreview.headers().firstValue("x-causeway-preview").orElse(""))
                 .isEqualTo("petclinic.Visit");
         assertThat(visitPreview.body())
-                .contains("<cw-peek>")
+                .contains("<cw-preview>")
                 .contains("<cw-property id=\"reason\" editable>");
         assertThat(get("/htmx/_previews/petclinic.Pet").body())
                 .contains("Pet type-default preview");
@@ -301,7 +301,7 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(resource.getProtocol()).isEqualTo("file");
         final var path = Path.of(resource.toURI());
         final var original = Files.readAllBytes(path);
-        final var marker = "<cw-peek><p>Reloaded preview</p></cw-peek>";
+        final var marker = "<cw-preview><p>Reloaded preview</p></cw-preview>";
         try {
             Files.writeString(path, marker, StandardCharsets.UTF_8);
             assertThat(get("/htmx/_previews/petclinic.Visit").body()).isEqualTo(marker);
@@ -361,7 +361,7 @@ class PetClinicHtmxApplication_IntegTest {
             assertThat(previewResource).as(previewPath).isNotNull();
             try (var input = previewResource.openStream()) {
                 assertThat(new String(input.readAllBytes(), StandardCharsets.UTF_8))
-                        .contains("<cw-peek>")
+                        .contains("<cw-preview>")
                         .contains("<cw-property")
                         .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
             }

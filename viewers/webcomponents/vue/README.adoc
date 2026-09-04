@@ -159,7 +159,8 @@ Object-context state remains authoritative for loading, ready, partial-error, an
 For unclaimed results, the default bridge transfers ownership exactly once: it clears obsolete viewer-owned outlets, dismisses transient source result chrome, routes complete entity or view-model identity canonically, and replaces scalar, collection, void, or unsupported presentation.
 A claimed result remains wholly application-owned, and a result that becomes obsolete while policy awaits cannot clear or repopulate a newer route.
 The application owns shell CSS and may copy or override the package reference theme through documented custom properties.
-The semantic components continue to own object layout, menus, validation, interactions, results, collection previews, and toolkit selection.
+The semantic components continue to own object layout, menus, validation, interactions, results, `<cw-preview>` collection previews, and toolkit selection.
+Vue applications upgrading from the former `<cw-peek>` spelling must migrate authored templates before rebuilding because no compatibility alias is registered.
 
 The first release supports client-rendered Vue applications only.
 Nuxt, server-side rendering, streaming hydration, runtime page-registry mutation, and inherited logical-type matching are not supported.

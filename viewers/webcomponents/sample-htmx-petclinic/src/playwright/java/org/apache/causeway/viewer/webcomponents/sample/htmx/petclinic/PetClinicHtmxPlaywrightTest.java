@@ -1352,15 +1352,15 @@ class PetClinicHtmxPlaywrightTest {
 
     @Test
     @Order(9)
-    void collectionRowPeeksRemainSingleContextualAndRefreshAfterMutations() {
+    void collectionRowPreviewsRemainSingleContextualAndRefreshAfterMutations() {
         openHome();
         waitForCollectionRows("petOwners", 5);
         waitForCollectionRows("futureVisits", 10);
         final var owners = page.locator("cw-collection[id='petOwners']");
-        final var ownerToggles = owners.locator("button[data-causeway-peek-toggle]");
+        final var ownerToggles = owners.locator("button[data-causeway-preview-toggle]");
         ownerToggles.first().waitFor();
         assertThat(ownerToggles.count()).isEqualTo(5);
-        assertThat(page.locator("cw-collection[id='futureVisits'] button[data-causeway-peek-toggle]").count())
+        assertThat(page.locator("cw-collection[id='futureVisits'] button[data-causeway-preview-toggle]").count())
                 .isEqualTo(10);
         assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.PetOwner")).count())
                 .isEqualTo(1);
@@ -1368,8 +1368,8 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(1);
 
         ownerToggles.first().click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey != null");
-        var live = owners.locator("cw-peek[data-causeway-peek-live]");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey != null");
+        var live = owners.locator("cw-preview[data-causeway-preview-live]");
         assertThat(live.count()).isEqualTo(1);
         assertThat(live.getAttribute("role")).isEqualTo("region");
         assertThat(live.getAttribute("aria-label")).contains("Preview of");
@@ -1377,12 +1377,12 @@ class PetClinicHtmxPlaywrightTest {
         live.locator("cw-collection[id='pets']").waitFor();
         live.locator("cw-collection[id='pets'] .causeway-collection-table, cw-collection[id='pets'] cw-collection-grid")
                 .first().waitFor();
-        final var firstKey = (String) owners.evaluate("element => element.expandedPeekKey");
+        final var firstKey = (String) owners.evaluate("element => element.expandedPreviewKey");
 
         ownerToggles.nth(1).click();
-        page.waitForFunction("key => { const collection = document.querySelector(\"cw-collection[id='petOwners']\"); return collection?.expandedPeekKey && collection.expandedPeekKey !== key; }", firstKey);
-        assertThat(owners.locator("cw-peek[data-causeway-peek-live]").count()).isEqualTo(1);
-        live = owners.locator("cw-peek[data-causeway-peek-live]");
+        page.waitForFunction("key => { const collection = document.querySelector(\"cw-collection[id='petOwners']\"); return collection?.expandedPreviewKey && collection.expandedPreviewKey !== key; }", firstKey);
+        assertThat(owners.locator("cw-preview[data-causeway-preview-live]").count()).isEqualTo(1);
+        live = owners.locator("cw-preview[data-causeway-preview-live]");
         final var escapeOrigin = live.locator("cw-action[id='updateName'] [data-causeway-action-control]").first();
         escapeOrigin.waitFor();
         assertThat((Boolean) escapeOrigin.evaluate("""
@@ -1396,18 +1396,18 @@ class PetClinicHtmxPlaywrightTest {
                 }
                 """)).isTrue();
         page.keyboard().press("Escape");
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey == null");
         final var restoredToggle = ownerToggles.nth(1);
         assertThat((Boolean) restoredToggle.evaluate("element => element === element.getRootNode().activeElement"))
                 .isTrue();
 
         ownerToggles.first().click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey != null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey != null");
         owners.locator("[data-causeway-collection-sort='name']").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey == null");
-        owners.locator("button[data-causeway-peek-toggle]").first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey == null");
+        owners.locator("button[data-causeway-preview-toggle]").first().click();
         owners.locator("[data-causeway-grid-next]").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey == null");
         assertThat(page.evaluate("() => globalThis.causewayCollectionRowPreviewResolver({logicalTypeName: 'petclinic.Missing'})"))
                 .isNull();
         assertThat(previewRequests.stream().anyMatch(url -> url.endsWith("/_previews/petclinic.Missing"))).isTrue();
@@ -1418,27 +1418,27 @@ class PetClinicHtmxPlaywrightTest {
         openObject("petclinic.PetOwner", "s_owner-mary");
         waitForCollectionRows("pets", 2);
         final var pets = page.locator("cw-collection[id='pets']");
-        final var petToggles = pets.locator("button[data-causeway-peek-toggle]");
+        final var petToggles = pets.locator("button[data-causeway-preview-toggle]");
         petToggles.first().waitFor();
         pets.evaluate("element => { element.gridResizeObserver?.disconnect(); element.acceptGridResponsiveState(true); }");
         petToggles.first().click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey != null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey != null");
         if (nativeToolkit()) {
-            assertThat(pets.locator(".causeway-collection-peek-row cw-peek[data-causeway-peek-live]").count())
+            assertThat(pets.locator(".causeway-collection-preview-row cw-preview[data-causeway-preview-live]").count())
                     .isEqualTo(1);
         } else {
             final var grid = pets.locator("cw-collection-grid vaadin-grid");
             grid.waitFor();
             assertThat(((Number) grid.evaluate("element => element.detailsOpenedItems.length")).intValue())
                     .isEqualTo(1);
-            assertThat(pets.locator("cw-collection-grid cw-peek[data-causeway-peek-live]").count())
+            assertThat(pets.locator("cw-collection-grid cw-preview[data-causeway-preview-live]").count())
                     .isEqualTo(1);
         }
         pets.evaluate("element => element.acceptGridResponsiveState(false)");
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey == null");
         petToggles.first().click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey != null");
-        live = pets.locator("cw-peek[data-causeway-peek-live]");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey != null");
+        live = pets.locator("cw-preview[data-causeway-preview-live]");
         assertThat(live.locator("section").first().getAttribute("aria-label")).isEqualTo("Pet preview");
         assertThat(live.innerText()).doesNotContain("Pet type-default preview");
         live.locator("cw-collection[id='visits']").waitFor();
@@ -1449,18 +1449,18 @@ class PetClinicHtmxPlaywrightTest {
 
         final var notes = live.locator("cw-property[id='notes']");
         notes.locator("[data-causeway-action='edit']").click();
-        final var editorSelector = "cw-collection[id='pets'] cw-peek[data-causeway-peek-live] cw-property[id='notes'] [data-causeway-editor='notes']";
+        final var editorSelector = "cw-collection[id='pets'] cw-preview[data-causeway-preview-live] cw-property[id='notes'] [data-causeway-editor='notes']";
         fillEditor(resolveEditor(editorSelector), "Updated through row preview");
         notes.locator("[data-causeway-action='save']").click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey == null");
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.innerText.includes('Updated through row preview')");
         assertFocused("cw-collection[id='pets']");
 
-        pets.locator("button[data-causeway-peek-toggle]").first().click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey != null");
-        pets.locator("cw-peek[data-causeway-peek-live] cw-action[id='clearNotes'] [data-causeway-action-control], cw-peek[data-causeway-peek-live] cw-action[id='clearNotes'] button")
+        pets.locator("button[data-causeway-preview-toggle]").first().click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey != null");
+        pets.locator("cw-preview[data-causeway-preview-live] cw-action[id='clearNotes'] [data-causeway-action-control], cw-preview[data-causeway-preview-live] cw-action[id='clearNotes'] button")
                 .first().click();
-        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPeekKey == null");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey == null");
         page.waitForFunction("() => !document.querySelector(\"cw-collection[id='pets']\")?.innerText.includes('Updated through row preview')");
         assertFocused("cw-collection[id='pets']");
 

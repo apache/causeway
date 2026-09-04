@@ -7,7 +7,7 @@
 const LOGICAL_TYPE_NAME = /^[A-Za-z_][A-Za-z0-9_$-]*(?:\.[A-Za-z_][A-Za-z0-9_$-]*)*$/;
 const MAXIMUM_PREVIEW_BYTES = 65536;
 const SUPPORTED_ELEMENTS = new Set([
-  'cw-peek', 'cw-object-header', 'cw-property', 'cw-action', 'cw-collection', 'cw-collection-column', 'cw-object-link',
+  'cw-preview', 'cw-object-header', 'cw-property', 'cw-action', 'cw-collection', 'cw-collection-column', 'cw-object-link',
   'cw-menubar', 'cw-menubar-primary', 'cw-menubar-secondary', 'cw-menubar-tertiary',
   'section', 'article', 'header', 'footer', 'main', 'nav', 'div', 'span', 'p', 'ul', 'ol', 'li',
   'dl', 'dt', 'dd', 'h2', 'h3', 'h4', 'h5', 'h6', 'strong', 'em', 'small', 'hr'
@@ -58,14 +58,14 @@ export function parseCausewayPreview(html, {documentRef = globalThis.document} =
   const template = documentRef.createElement('template');
   template.innerHTML = source;
   const roots = [...(template.content?.children ?? [])];
-  if (roots.length !== 1 || roots[0].localName !== 'cw-peek') {
-    throw new Error('A preview requires one cw-peek root.');
+  if (roots.length !== 1 || roots[0].localName !== 'cw-preview') {
+    throw new Error('A preview requires one cw-preview root.');
   }
   return validateCausewayPreviewRoot(roots[0]);
 }
 
 export function validateCausewayPreviewRoot(root) {
-  if (root.localName !== 'cw-peek') throw new Error('A preview requires one cw-peek root.');
+  if (root.localName !== 'cw-preview') throw new Error('A preview requires one cw-preview root.');
   if ([...(root.attributes ?? [])].length > 0) throw new Error('A preview root cannot declare attributes.');
   const elements = [root, ...(root.querySelectorAll?.('*') ?? [])];
   if (elements.some(element => !SUPPORTED_ELEMENTS.has(element.localName)

@@ -277,7 +277,7 @@ function resultOrigin(detail) {
 
 function actionResultOrigin(source) {
   if (!source) return null;
-  const previewCollection = source.closest?.('cw-peek[data-causeway-peek-live]')?.closest?.('cw-collection');
+  const previewCollection = source.closest?.('cw-preview[data-causeway-preview-live]')?.closest?.('cw-collection');
   if (previewCollection && typeof previewCollection.focus === 'function') return previewCollection;
   if (source.localName === 'cw-action') {
     return source.querySelector?.('[data-causeway-action-control]') ?? null;

@@ -36,12 +36,12 @@ class HtmxClasspathPreviewLoaderTest {
 
     @Test
     void loadsExactLogicalTypeAndHonorsCachedAndReloadModes() {
-        final var cachedResource = mutable("petclinic.PetOwner.html", "<cw-peek><cw-property id=\"name\"></cw-property></cw-peek>");
+        final var cachedResource = mutable("petclinic.PetOwner.html", "<cw-preview><cw-property id=\"name\"></cw-property></cw-preview>");
         final var cached = loader(HtmxViewerProperties.ResourcePageMode.CACHED, cachedResource).load().get(0);
         cachedResource.set("<p>changed</p>");
         assertThat(cached.logicalTypeName()).isEqualTo("petclinic.PetOwner");
         assertThat(cached.safeSourceIdentifier()).isEqualTo("resource:petclinic.PetOwner.html");
-        assertThat(cached.content()).contains("cw-peek");
+        assertThat(cached.content()).contains("cw-preview");
 
         final var reloadResource = mutable("petclinic.Reload.html", "<p>initial</p>");
         final var reload = loader(HtmxViewerProperties.ResourcePageMode.RELOAD, reloadResource).load().get(0);

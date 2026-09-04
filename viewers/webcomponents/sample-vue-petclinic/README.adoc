@@ -8,7 +8,7 @@ This module is the executable reference application for the generic Vue web-comp
 It uses the shared deterministic Petclinic domain, the Causeway GraphQL endpoint, Vue 3, Vue Router 4, and the framework-neutral `cw-` elements.
 The Vue application owns its HTML document, stable shell, router, history fallback, theme, and exact logical-type page registration.
 Its application-owned presentation follows the HTMX Petclinic shell and page compositions documented in link:PRESENTATION-PARITY.adoc[`PRESENTATION-PARITY.adoc`].
-The semantic web components remain authoritative for metadata, values, validation, interactions, collections, previews, and results.
+The semantic web components remain authoritative for metadata, values, validation, interactions, collections, `<cw-preview>` row previews, and results.
 
 == Run
 

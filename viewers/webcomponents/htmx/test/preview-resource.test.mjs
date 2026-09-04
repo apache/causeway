@@ -43,7 +43,7 @@ test('safe preview validation accepts semantic domain layout and returns only in
   const collectionColumn = element('cw-collection-column', {attributes: [attribute('id', 'pets')]});
   const collection = element('cw-collection', {attributes: [attribute('id', 'pets')], children: [collectionColumn]});
   const section = element('section', {attributes: [attribute('aria-label', 'Preview')], children: [property, collection]});
-  const root = element('cw-peek', {children: [section], innerHTML: '<section>safe</section>'});
+  const root = element('cw-preview', {children: [section], innerHTML: '<section>safe</section>'});
 
   assert.deepEqual(validateCausewayPreviewRoot(root), {html: '<section>safe</section>'});
 });
@@ -55,26 +55,26 @@ test('preview validation rejects executable unsupported and identity-bearing mar
     element('cw-object-link', {attributes: [attribute('object-id', 'secret-value')]}),
     element('img', {attributes: [attribute('src', 'secret-value')]})
   ]) {
-    const root = element('cw-peek', {children: [child]});
+    const root = element('cw-preview', {children: [child]});
     assert.throws(() => validateCausewayPreviewRoot(root), error => {
       assert.match(error.message, /unsupported/);
       assert.doesNotMatch(error.message, /secret-value/);
       return true;
     });
   }
-  assert.throws(() => validateCausewayPreviewRoot(element('cw-peek', {
+  assert.throws(() => validateCausewayPreviewRoot(element('cw-preview', {
     attributes: [attribute('data-row-id', 'secret-value')]
   })), /cannot declare attributes/);
 });
 
-test('preview parsing requires one bounded cw-peek root', () => {
-  const root = element('cw-peek', {innerHTML: '<p>safe</p>'});
+test('preview parsing requires one bounded cw-preview root', () => {
+  const root = element('cw-preview', {innerHTML: '<p>safe</p>'});
   const documentRef = {createElement: () => ({content: {children: [root]}, set innerHTML(_value) {}})};
-  assert.deepEqual(parseCausewayPreview('<cw-peek><p>safe</p></cw-peek>', {documentRef}), {html: '<p>safe</p>'});
+  assert.deepEqual(parseCausewayPreview('<cw-preview><p>safe</p></cw-preview>', {documentRef}), {html: '<p>safe</p>'});
   assert.throws(() => parseCausewayPreview('x'.repeat(65537), {documentRef}), /size limit/);
   assert.throws(() => parseCausewayPreview('<p>wrong</p>', {
     documentRef: {createElement: () => ({content: {children: [element('p')]}, set innerHTML(_value) {}})}
-  }), /one cw-peek root/);
+  }), /one cw-preview root/);
 });
 
 test('preview resolver caches immutable lookups and preserves endpoint policy', async () => {
@@ -85,7 +85,7 @@ test('preview resolver caches immutable lookups and preserves endpoint policy', 
     resourcePageMode: 'cached',
     fetchImpl: async (url, options) => {
       requests.push({url, options});
-      return response(200, '<cw-peek>safe</cw-peek>');
+      return response(200, '<cw-preview>safe</cw-preview>');
     },
     parse: html => Object.freeze({html}),
     diagnostic: value => diagnostics.push(value)
@@ -106,7 +106,7 @@ test('preview resolver reloads, caches missing resources, and retries bounded fa
   const reload = createCausewayPreviewResolver({
     basePath: '/viewer',
     resourcePageMode: 'reload',
-    fetchImpl: async () => response(200, `<cw-peek>${++reloadCount}</cw-peek>`),
+    fetchImpl: async () => response(200, `<cw-preview>${++reloadCount}</cw-preview>`),
     parse: html => ({html})
   });
   assert.notDeepEqual(
