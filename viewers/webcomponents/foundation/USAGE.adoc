@@ -708,7 +708,7 @@ Non-empty inline content completely defines the preview template and prevents ho
 An empty declaration asks the optional JavaScript-only `causewayCollectionRowPreviewResolver({logicalTypeName, collection, signal})` for a bounded `{html}` presentation using each row's authoritative runtime `_meta.logicalTypeName`.
 A missing, invalid, or failed default renders no disclosure for that runtime type while leaving the collection usable.
 
-Each disclosure keeps its established compact square control while a larger current-color chevron points in the collapsed inline direction or downward when `aria-expanded="true"`; the decorative icon remains hidden from assistive technology because the button label and state are authoritative.
+Each disclosure keeps its established compact square control while the same shared larger current-color SVG chevron in native and Vaadin Grid presentation points in the collapsed inline direction or downward when `aria-expanded="true"`; the decorative icon remains hidden from assistive technology because the button label and state are authoritative.
 Opening a disclosure creates a fresh live `<cw-preview>` after the selected native row or in Vaadin Grid row details.
 The collection creates a dedicated hydrated row context before connecting the cloned descendants, so selected values are reused and later properties, actions, and nested collections use the ordinary authorized lazy context behavior.
 Opening another row retires the prior live subtree and context.

@@ -19,7 +19,27 @@ const {
   normalizePreviewPresentation,
   OBJECT_CONTEXT_REQUEST_EVENT
 } = await import('../src/index.mjs');
+const {
+  createPreviewToggleIcon,
+  PREVIEW_TOGGLE_ICON_CLASS,
+  PREVIEW_TOGGLE_ICON_MARKUP,
+  PREVIEW_TOGGLE_ICON_PATH,
+  PREVIEW_TOGGLE_ICON_VIEW_BOX
+} = await import('../src/preview-toggle-icon.mjs');
 defineCausewayWebComponents();
+
+test('shared preview toggle icon has equivalent markup and DOM geometry', () => {
+  assert.match(PREVIEW_TOGGLE_ICON_MARKUP, new RegExp(`class="${PREVIEW_TOGGLE_ICON_CLASS}"`));
+  assert.match(PREVIEW_TOGGLE_ICON_MARKUP, new RegExp(`viewBox="${PREVIEW_TOGGLE_ICON_VIEW_BOX}"`));
+  assert.match(PREVIEW_TOGGLE_ICON_MARKUP, new RegExp(`d="${PREVIEW_TOGGLE_ICON_PATH}"`));
+
+  const icon = createPreviewToggleIcon(document);
+  assert.equal(icon.getAttribute('class'), PREVIEW_TOGGLE_ICON_CLASS);
+  assert.equal(icon.getAttribute('aria-hidden'), 'true');
+  assert.equal(icon.getAttribute('focusable'), 'false');
+  assert.equal(icon.getAttribute('viewBox'), PREVIEW_TOGGLE_ICON_VIEW_BOX);
+  assert.equal(icon.childNodes[0].getAttribute('d'), PREVIEW_TOGGLE_ICON_PATH);
+});
 
 test('registers only the preview custom element name', () => {
   assert.equal(globalThis.customElements.get('cw-preview'), CausewayPreviewElement);

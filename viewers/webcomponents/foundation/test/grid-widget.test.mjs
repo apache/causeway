@@ -159,8 +159,18 @@ test('Grid row details use one leading disclosure and preserve the projected ite
   const button = cell.childNodes[0];
   assert.equal(button.getAttribute('aria-expanded'), 'false');
   assert.equal(button.getAttribute('aria-controls'), 'causeway-grid-preview-example.Staff_1');
+  assert.equal(button.childNodes.length, 1);
+  assert.equal(button.childNodes[0].getAttribute('class'), 'causeway-collection-preview-icon');
+  assert.equal(button.childNodes[0].getAttribute('aria-hidden'), 'true');
+  assert.equal(button.childNodes[0].getAttribute('focusable'), 'false');
+  assert.equal(button.childNodes[0].getAttribute('viewBox'), '0 0 20 20');
+  assert.equal(button.childNodes[0].childNodes[0].getAttribute('d'), 'M7 4l6 6-6 6');
+  assert.doesNotMatch(button.textContent ?? '', /[▸▾]/);
   button.dispatchEvent(new Event('click'));
   assert.deepEqual(control.detailsOpenedItems, [item]);
+  control.childNodes[0].renderer(cell, control.childNodes[0], {item});
+  assert.equal(cell.childNodes[0].getAttribute('aria-expanded'), 'true');
+  assert.equal(cell.childNodes[0].childNodes[0].getAttribute('class'), 'causeway-collection-preview-icon');
 
   const details = document.createElement('div');
   control.rowDetailsRenderer(details, control, {item});

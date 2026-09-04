@@ -321,7 +321,15 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("visitAt,reason,notes");
         assertThat(page.locator("cw-collection#visits").getAttribute("paged")).isEqualTo("8");
         assertThat(page.locator("cw-collection#visits > cw-preview").count()).isEqualTo(1);
-        assertThat(page.locator("cw-collection#visits [data-causeway-preview-toggle]").count()).isGreaterThan(0);
+        final var petPreviewToggle = page.locator("cw-collection#pets [data-causeway-preview-toggle]").first();
+        final var visitPreviewToggle = page.locator("cw-collection#visits [data-causeway-preview-toggle]").first();
+        assertPreviewToggleIcon(petPreviewToggle, false);
+        assertPreviewToggleIcon(visitPreviewToggle, false);
+        final var petPreviewIconWidth = ((Number) petPreviewToggle.locator(".causeway-collection-preview-icon")
+                .evaluate("icon => icon.getBoundingClientRect().width")).doubleValue();
+        final var visitPreviewIconWidth = ((Number) visitPreviewToggle.locator(".causeway-collection-preview-icon")
+                .evaluate("icon => icon.getBoundingClientRect().width")).doubleValue();
+        assertThat(Math.abs(petPreviewIconWidth - visitPreviewIconWidth)).isLessThan(1.0);
 
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
