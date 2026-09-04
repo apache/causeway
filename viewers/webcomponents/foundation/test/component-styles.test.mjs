@@ -49,7 +49,8 @@ test('action result content is bounded above a persistent dismiss control', () =
 test('PDF reader styles expose bounded sizing, scrolling, and visible keyboard focus', () => {
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-pdf-viewport \{[\s\S]*?--causeway-pdf-viewport-height[\s\S]*?overflow: auto;[\s\S]*?overflow-anchor: none;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-pdf-pages \{[\s\S]*?flex-direction: column;/);
-    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-pdf-control:focus-visible,[\s\S]*?outline: var\(--causeway-pdf-focus/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-pdf-control:focus-visible,[\s\S]*?\.causeway-pdf-zoom-select:focus-visible,[\s\S]*?outline: var\(--causeway-pdf-focus/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-pdf-zoom-select \{[\s\S]*?max-inline-size: 8rem;[\s\S]*?min-inline-size: 6\.5rem;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-pdf-toolbar > \.causeway-value-lob \{[\s\S]*?flex: 1 1 14rem;[\s\S]*?overflow-wrap: anywhere;/);
     assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /causeway-pdf-accessibility-note/);
 });

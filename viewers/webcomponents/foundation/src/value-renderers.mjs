@@ -213,7 +213,7 @@ export function normalizePdfInitialPage(value) {
 
 export function normalizePdfZoom(value) {
     const normalized = String(value ?? '').trim().toLocaleLowerCase();
-    if (['page-width', 'page-fit', 'actual-size'].includes(normalized)) return normalized;
+    if (['page-width', 'page-height', 'page-fit', 'actual-size'].includes(normalized)) return normalized;
     const match = /^(\d{1,3})%$/.exec(normalized);
     const percentage = match ? Number(match[1]) : 0;
     return percentage >= 25 && percentage <= 400 ? percentage : 'page-width';
@@ -229,6 +229,16 @@ export function normalizePdfPresentation(presentation = {}) {
 
 function pdfMarkup(value, presentation) {
     const name = value.name || 'PDF document';
+    const selectedZoom = typeof presentation.zoom === 'number' ? String(presentation.zoom) : presentation.zoom;
+    const zoomChoices = [
+        ['page-width', 'Page width'],
+        ['page-height', 'Page height'],
+        ['page-fit', 'Page fit'],
+        ['actual-size', 'Actual size'],
+        ...[50, 75, 100, 125, 150, 175, 200].map(percentage => [String(percentage), `${percentage}%`])
+    ];
+    if (!zoomChoices.some(([optionValue]) => optionValue === selectedZoom)) zoomChoices.push([selectedZoom, `${selectedZoom}%`, 'dynamic']);
+    const zoomOptions = zoomChoices.map(([optionValue, label, kind]) => `<option value="${optionValue}"${kind === 'dynamic' ? ' data-causeway-pdf-dynamic-zoom' : ''}${optionValue === selectedZoom ? ' selected' : ''}>${label}</option>`).join('');
     const activate = presentation.mode === 'manual'
             ? '<button type="button" class="causeway-pdf-activate" data-causeway-pdf-activate>Preview document</button>'
             : '';
@@ -240,7 +250,7 @@ function pdfMarkup(value, presentation) {
     <span class="causeway-pdf-status" data-causeway-pdf-status role="status" aria-live="polite">${initialStatus}</span>
     <button type="button" class="causeway-pdf-control" data-causeway-pdf-next aria-label="Next page" disabled>Next</button>
     <button type="button" class="causeway-pdf-control" data-causeway-pdf-zoom-out aria-label="Zoom out" disabled>−</button>
-    <span class="causeway-pdf-zoom-status" data-causeway-pdf-zoom-status>${escapeHtml(typeof presentation.zoom === 'number' ? `${presentation.zoom}%` : presentation.zoom.replace('-', ' '))}</span>
+    <select class="causeway-pdf-zoom-select" data-causeway-pdf-zoom-select aria-label="Zoom level" disabled>${zoomOptions}</select>
     <button type="button" class="causeway-pdf-control" data-causeway-pdf-zoom-in aria-label="Zoom in" disabled>+</button>
     ${lobMarkup(value, 'bytes', 'Open PDF document')}
   </div>

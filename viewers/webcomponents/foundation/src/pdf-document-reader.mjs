@@ -124,6 +124,7 @@ export class CausewayPdfDocumentReaderController {
             if (next.disabled) previous?.focus?.();
         });
         this.container.querySelector?.('[data-causeway-pdf-zoom-out]')?.addEventListener?.('click', () => this.#changeZoom(-ZOOM_STEP, generation));
+        this.container.querySelector?.('[data-causeway-pdf-zoom-select]')?.addEventListener?.('change', event => this.#selectZoom(event.target?.value, generation));
         this.container.querySelector?.('[data-causeway-pdf-zoom-in]')?.addEventListener?.('click', () => this.#changeZoom(ZOOM_STEP, generation));
     }
 
@@ -237,7 +238,7 @@ export class CausewayPdfDocumentReaderController {
             this.resize = new this.ResizeObserver(() => {
                 clearTimeout(this.resizeTimer);
                 this.resizeTimer = setTimeout(() => {
-                    if (!this.#current(generation) || !['page-width', 'page-fit'].includes(this.zoom)) return;
+                    if (!this.#current(generation) || !['page-width', 'page-height', 'page-fit'].includes(this.zoom)) return;
                     this.#invalidateRenderedPages();
                     this.#scheduleVisiblePages(generation);
                 }, 100);
@@ -336,10 +337,9 @@ export class CausewayPdfDocumentReaderController {
         const base = page.getViewport({scale: 1});
         const viewport = this.container.querySelector?.('[data-causeway-pdf-viewport]');
         const availableWidth = Math.max(1, (viewport?.clientWidth ?? placeholder?.clientWidth ?? base.width) - 24);
-        if (this.zoom === 'page-fit') {
-            const availableHeight = Math.max(1, (viewport?.clientHeight ?? base.height) - 24);
-            return Math.min(availableWidth / base.width, availableHeight / base.height);
-        }
+        const availableHeight = Math.max(1, (viewport?.clientHeight ?? base.height) - 24);
+        if (this.zoom === 'page-height') return availableHeight / base.height;
+        if (this.zoom === 'page-fit') return Math.min(availableWidth / base.width, availableHeight / base.height);
         return availableWidth / base.width;
     }
 
@@ -367,9 +367,21 @@ export class CausewayPdfDocumentReaderController {
     }
 
     #changeZoom(delta, generation) {
-        if (!this.#current(generation) || !this.documentProxy) return;
         const current = typeof this.zoom === 'number' ? this.zoom : 100;
-        this.zoom = Math.max(25, Math.min(400, current + delta));
+        this.#applyZoom(Math.max(25, Math.min(400, current + delta)), generation);
+    }
+
+    #selectZoom(value, generation) {
+        const percentage = /^\d{1,3}$/.test(String(value ?? '')) ? Number(value) : null;
+        const zoom = percentage !== null && percentage >= 25 && percentage <= 400
+                ? percentage
+                : ['page-width', 'page-height', 'page-fit', 'actual-size'].includes(value) ? value : null;
+        if (zoom !== null) this.#applyZoom(zoom, generation);
+    }
+
+    #applyZoom(zoom, generation) {
+        if (!this.#current(generation) || !this.documentProxy || zoom === this.zoom) return;
+        this.zoom = zoom;
         this.#invalidateRenderedPages();
         this.#updateControls(generation);
         this.#scheduleVisiblePages(generation);
@@ -412,8 +424,23 @@ export class CausewayPdfDocumentReaderController {
         const numericZoom = typeof this.zoom === 'number' ? this.zoom : 100;
         if (zoomOut) zoomOut.disabled = !pageCount || numericZoom <= 25;
         if (zoomIn) zoomIn.disabled = !pageCount || numericZoom >= 400;
-        const zoomStatus = this.container.querySelector?.('[data-causeway-pdf-zoom-status]');
-        if (zoomStatus) zoomStatus.textContent = typeof this.zoom === 'number' ? `${this.zoom}%` : this.zoom.replace('-', ' ');
+        const zoomSelect = this.container.querySelector?.('[data-causeway-pdf-zoom-select]');
+        if (zoomSelect) {
+            const value = typeof this.zoom === 'number' ? String(this.zoom) : this.zoom;
+            for (const option of zoomSelect.querySelectorAll?.('[data-causeway-pdf-dynamic-zoom]') ?? []) option.remove?.();
+            const optionValues = [...(zoomSelect.options ?? [])].map(option => option.value);
+            if (!optionValues.includes(value)) {
+                const option = zoomSelect.ownerDocument?.createElement?.('option');
+                if (option) {
+                    option.value = value;
+                    option.textContent = typeof this.zoom === 'number' ? `${this.zoom}%` : this.zoom.replaceAll('-', ' ');
+                    option.setAttribute('data-causeway-pdf-dynamic-zoom', '');
+                    zoomSelect.append?.(option);
+                }
+            }
+            zoomSelect.value = value;
+            zoomSelect.disabled = !pageCount;
+        }
         if (pageCount) {
             const status = this.container.querySelector?.('[data-causeway-pdf-status]');
             if (status && this.container.dataset.causewayPdfState === 'ready') status.textContent = `Page ${this.currentPage} of ${pageCount}`;
