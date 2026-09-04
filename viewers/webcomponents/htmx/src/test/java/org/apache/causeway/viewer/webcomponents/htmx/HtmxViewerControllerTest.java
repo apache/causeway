@@ -61,7 +61,8 @@ class HtmxViewerControllerTest {
                 .contains("sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=")
                 .contains("sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=")
                 .contains("style-src-attr 'none'")
-                .doesNotContain("'unsafe-inline'");
+                .contains("worker-src 'self'")
+                .doesNotContain("worker-src blob:", "worker-src data:", "'unsafe-inline'", "'unsafe-eval'");
         assertThat(response.getBody())
                 .contains("data-causeway-component-toolkit=\"vaadin\"")
                 .contains("data-causeway-toolkit-source=\"default\"")

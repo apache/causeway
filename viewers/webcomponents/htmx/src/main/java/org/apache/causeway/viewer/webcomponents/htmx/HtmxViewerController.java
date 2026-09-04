@@ -39,7 +39,7 @@ public class HtmxViewerController {
 
     private static final MediaType HTML_UTF8 = MediaType.parseMediaType("text/html;charset=UTF-8");
     private static final String CONTENT_SECURITY_POLICY = "default-src 'self'; script-src 'self'; style-src 'self'; "
-            + "style-src-elem 'self'; style-src-attr 'none'; img-src 'self' data:; connect-src 'self'; "
+            + "style-src-elem 'self'; style-src-attr 'none'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; "
             + "object-src 'none'; base-uri 'self'; frame-ancestors 'self'";
     private static final List<String> VAADIN_REFERENCE_STYLE_HASHES = List.of(
             "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=",
@@ -163,12 +163,12 @@ public class HtmxViewerController {
         final var body = fragmentRequest
                 ? fragment
                 : renderer.renderShell(
-                        contextPath,
-                        fragment,
-                        canonicalPath,
-                        authenticationShell == null
-                                ? java.util.Optional.empty()
-                                : authenticationShell.state(request));
+                contextPath,
+                fragment,
+                canonicalPath,
+                authenticationShell == null
+                        ? java.util.Optional.empty()
+                        : authenticationShell.state(request));
         final var response = ResponseEntity.ok()
                 .contentType(HTML_UTF8)
                 .cacheControl(CacheControl.noStore().cachePrivate())

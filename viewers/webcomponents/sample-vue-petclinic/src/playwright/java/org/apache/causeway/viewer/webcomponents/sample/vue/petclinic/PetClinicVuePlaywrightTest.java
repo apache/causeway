@@ -116,6 +116,39 @@ class PetClinicVuePlaywrightTest {
     }
 
     @Test
+    void authoredPdfModesRemainFrameworkNeutralAndProgressive() {
+        open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
+        page.waitForFunction("() => document.querySelector('cw-property#pdfLink')?.dataset.renderer === 'blob'");
+        final var linked = page.locator("cw-property#pdfLink");
+        assertThat(linked.getAttribute("data-renderer")).isEqualTo("blob");
+        assertThat(linked.locator("[data-causeway-pdf-reader]").count()).isZero();
+        final var linkedHref = linked.locator(".causeway-value-lob-link").getAttribute("href");
+        assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", linkedHref)).isFalse();
+        assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
+
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.waitForFunction("() => document.querySelector('cw-property#pdfManual [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'inactive'");
+        final var manual = page.locator("cw-property#pdfManual [data-causeway-pdf-reader]");
+        assertThat(manual.getAttribute("data-causeway-pdf-state")).isEqualTo("inactive");
+        final var manualHref = manual.locator(".causeway-value-lob-link").getAttribute("href");
+        assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", manualHref)).isFalse();
+        assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
+        manual.locator("[data-causeway-pdf-activate]").click();
+        page.waitForFunction("() => document.querySelector('cw-property#pdfManual [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        assertThat(manual.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
+        assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/pdf.min.mjs'))")).isTrue();
+
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.waitForFunction("() => document.querySelector('cw-property#pdfAuto [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        final var automatic = page.locator("cw-property#pdfAuto [data-causeway-pdf-reader]");
+        assertThat(automatic.locator("[data-causeway-pdf-page]").count()).isEqualTo(3);
+        automatic.locator(".causeway-pdf-page-canvas").first().waitFor();
+        automatic.locator("[data-causeway-pdf-page='3']").scrollIntoViewIfNeeded();
+        automatic.locator("[data-causeway-pdf-page='3'] canvas").waitFor();
+        assertThat(automatic.locator(".causeway-value-lob-link").getAttribute("href")).isNotBlank();
+    }
+
+    @Test
     void semanticNavigationUsesExactPagesGenericFallbackAndBrowserHistory() {
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
@@ -157,7 +190,7 @@ class PetClinicVuePlaywrightTest {
         page.waitForFunction("() => document.querySelector('.petclinic-object-collections > section:last-child cw-collection#visits')?.collectionState?.rows?.length === 2");
         assertThat(page.locator(".petclinic-owner-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history");
+                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history,Documents");
         assertThat(page.locator(".petclinic-page-toolbar > cw-action")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("allOwners,noOwners,relatedOwners,delete");
@@ -179,20 +212,20 @@ class PetClinicVuePlaywrightTest {
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
         assertThat(page.locator(".petclinic-pet-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Details");
+                .isEqualTo("Identity,Details,Documents");
         assertThat(page.locator(".petclinic-pet-page cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("petOwner,name,species,notes");
+                .isEqualTo("petOwner,name,species,notes,pdfManual");
         assertThat(page.locator(".petclinic-pet-page cw-property#id, .petclinic-pet-page cw-property#version").count()).isZero();
 
         open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
         page.locator("[data-page-kind='visit'][data-route-state='ready']").waitFor();
         assertThat(page.locator(".petclinic-visit-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Appointment,Details");
+                .isEqualTo("Appointment,Details,Documents");
         assertThat(page.locator(".petclinic-visit-page cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("pet,visitAt,reason,notes");
+                .isEqualTo("pet,visitAt,reason,notes,pdfLink");
         assertThat(page.locator(".petclinic-visit-page cw-property#id, .petclinic-visit-page cw-property#version").count()).isZero();
     }
 

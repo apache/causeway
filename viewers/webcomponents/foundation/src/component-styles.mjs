@@ -1022,6 +1022,81 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
     position: static;
   }
 }
+.causeway-pdf-reader {
+  display: grid;
+  gap: var(--causeway-pdf-gap, 0.75rem);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+.causeway-pdf-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-pdf-control-gap, 0.5rem);
+}
+.causeway-pdf-control,
+.causeway-pdf-activate {
+  background: var(--causeway-pdf-control-background, ButtonFace);
+  border: var(--causeway-pdf-control-border, 1px solid ButtonBorder);
+  border-radius: var(--causeway-pdf-control-radius, 0.25rem);
+  color: var(--causeway-pdf-control-color, ButtonText);
+  font: inherit;
+  min-block-size: 2.25rem;
+  padding: 0.35rem 0.65rem;
+}
+.causeway-pdf-control:focus-visible,
+.causeway-pdf-activate:focus-visible,
+.causeway-pdf-viewport:focus-visible {
+  outline: var(--causeway-pdf-focus, 0.2rem solid Highlight);
+  outline-offset: 0.15rem;
+}
+.causeway-pdf-status {
+  min-inline-size: 8rem;
+  text-align: center;
+}
+.causeway-pdf-zoom-status {
+  min-inline-size: 4.5rem;
+  text-align: center;
+}
+.causeway-pdf-viewport {
+  background: var(--causeway-pdf-viewport-background, #525659);
+  block-size: var(--causeway-pdf-viewport-height, min(70vh, 52rem));
+  inline-size: 100%;
+  min-block-size: var(--causeway-pdf-viewport-min-height, 24rem);
+  overflow: auto;
+  padding: var(--causeway-pdf-viewport-padding, 0.75rem);
+  scrollbar-gutter: stable;
+}
+.causeway-pdf-pages {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--causeway-pdf-page-gap, 1rem);
+}
+.causeway-pdf-page {
+  align-items: center;
+  background: Canvas;
+  box-shadow: var(--causeway-pdf-page-shadow, 0 2px 10px rgb(0 0 0 / 35%));
+  color: CanvasText;
+  display: flex;
+  justify-content: center;
+  min-block-size: var(--causeway-pdf-page-placeholder-height, 18rem);
+  max-inline-size: 100%;
+  overflow: auto;
+}
+.causeway-pdf-page-canvas {
+  display: block;
+  max-inline-size: none;
+}
+.causeway-pdf-accessibility-note {
+  font-size: 0.875em;
+  margin: 0;
+}
+.causeway-pdf-reader[data-causeway-pdf-state="failed"] .causeway-pdf-viewport,
+.causeway-pdf-reader[data-causeway-pdf-state="safety-limit"] .causeway-pdf-viewport,
+.causeway-pdf-reader[data-causeway-pdf-state="unsupported-password"] .causeway-pdf-viewport {
+  display: none;
+}
 @media (prefers-reduced-motion: reduce) {
   cw-reference-editor {
     --lumo-animation-duration-s: 0ms;
@@ -1041,18 +1116,3 @@ vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
   }
 }
 `;
-
-export function installCausewayComponentStyles(documentRoot = globalThis.document) {
-  if (!documentRoot?.createElement || !documentRoot?.head) {
-    return null;
-  }
-  const existing = documentRoot.getElementById?.('causeway-component-styles');
-  if (existing) {
-    return existing;
-  }
-  const style = documentRoot.createElement('style');
-  style.id = 'causeway-component-styles';
-  style.textContent = CAUSEWAY_COMPONENT_STYLES;
-  documentRoot.head.appendChild(style);
-  return style;
-}

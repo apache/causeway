@@ -84,6 +84,7 @@ class PetClinicVueSecuredPlaywrightAcceptance {
         try (var context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1440, 900))) {
             final var page = context.newPage();
             final var menuBarRequests = new ArrayList<String>();
+            final var pdfRequests = new ArrayList<String>();
             page.onPageError(error -> browserFailures.add("page: " + error));
             page.onConsoleMessage(message -> {
                 if ("error".equals(message.type())) {
@@ -97,6 +98,9 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                 if (request.url().contains("/causeway-webcomponents/vaadin-menubar/")) {
                     menuBarRequests.add(request.url());
                 }
+                if (request.url().contains("/causeway-webcomponents/pdfjs/") || request.url().contains("/pdfAuto/")) {
+                    pdfRequests.add(request.url());
+                }
             });
 
             final var deepLink = "/vue/object/petclinic.PetOwner/s_owner-mary?toolkit=native";
@@ -104,6 +108,7 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             page.waitForURL("**/vue/login**");
             assertThat(page.locator("cw-graphql-client").count()).isZero();
             assertThat(menuBarRequests).isEmpty();
+            assertThat(pdfRequests).isEmpty();
             page.waitForFunction("() => document.activeElement?.id === 'username'");
 
             page.locator("#username").fill(PetClinicSecmanDataConfiguration.USERNAME);
@@ -125,6 +130,11 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                         + "; element=" + page.locator("cw-graphql-client").evaluate("element => element.outerHTML"), cause);
             }
             waitForReadyObject(page);
+            page.waitForFunction("() => document.querySelector('cw-property#pdfAuto [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+            assertThat(page.locator("cw-property#pdfAuto [data-causeway-pdf-page]").count()).isEqualTo(3);
+            assertThat(pdfRequests.stream().anyMatch(url -> url.contains("/causeway-webcomponents/pdfjs/pdf.min.mjs"))).isTrue();
+            assertThat(pdfRequests.stream().anyMatch(url -> url.contains("/pdfAuto/") || url.contains("pdfAuto"))).isTrue();
+            final var protectedPdfHref = page.locator("cw-property#pdfAuto .causeway-value-lob-link").getAttribute("href");
             assertThat(page.locator("[data-testid='vue-authentication-shell']").count()).isZero();
             assertThat(page.locator("[data-causeway-authentication-logout]").getAttribute("hidden")).isNotNull();
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
@@ -226,9 +236,12 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             browserFailures.removeIf(message -> message.contains("status of 403"));
 
             context.clearCookies();
+            final var protectedPdfStatus = (Number) page.evaluate("href => fetch(href, {redirect: 'manual'}).then(response => response.status)", protectedPdfHref);
+            assertThat(protectedPdfStatus.intValue()).isIn(0, 301, 302, 303, 307, 308, 401, 403);
             page.locator(".causeway-shell-brand").click();
             page.waitForURL("**/vue/login**");
             assertThat(page.locator("#username").isVisible()).isTrue();
+            assertThat(page.locator(".causeway-pdf-page-canvas").count()).isZero();
             assertThat(menuBarRequests).isEmpty();
             browserFailures.removeIf(message -> message.contains("status of 401"));
 
