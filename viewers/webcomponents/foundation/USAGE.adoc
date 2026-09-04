@@ -696,7 +696,6 @@ The declaration remains hidden and inert, and its authored descendants are captu
 ----
 <cw-collection id="pets" active>
   <cw-preview>
-    <cw-object-header></cw-object-header>
     <cw-property id="notes" editable></cw-property>
     <cw-action id="clearNotes"></cw-action>
   </cw-preview>

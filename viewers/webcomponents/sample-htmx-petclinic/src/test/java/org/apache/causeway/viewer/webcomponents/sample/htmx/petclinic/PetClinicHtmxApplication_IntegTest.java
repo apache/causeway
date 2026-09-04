@@ -169,12 +169,16 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo("petclinic.Visit");
         assertThat(visitPreview.body())
                 .contains("<cw-preview>")
-                .contains("<cw-property id=\"reason\" editable>");
+                .contains("<cw-property id=\"reason\" editable>")
+                .doesNotContain("<cw-object-header");
         assertThat(get("/htmx/_previews/petclinic.Pet").body())
-                .contains("Pet type-default preview");
+                .contains("Pet type-default preview")
+                .contains("<cw-property id=\"species\"")
+                .doesNotContain("<cw-object-header");
         assertThat(get("/htmx/_previews/petclinic.PetOwner").body())
                 .contains("Owner preview")
-                .contains("<cw-collection id=\"pets\"");
+                .contains("<cw-collection id=\"pets\"")
+                .doesNotContain("<cw-object-header");
         assertThat(get("/htmx/_previews/petclinic.Missing").statusCode()).isEqualTo(404);
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",

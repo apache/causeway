@@ -294,9 +294,22 @@ class PetClinicVuePlaywrightTest {
         ownerPreviewToggle.click();
         page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.expandedPreviewKey != null");
         assertPreviewToggleIcon(ownerPreviewToggle, true);
+        final var ownerPreview = page.locator("cw-collection#petOwners cw-preview[data-causeway-preview-live]");
+        assertThat(ownerPreview.locator("cw-object-header").count()).isZero();
+        ownerPreview.locator("cw-property#knownAs").waitFor();
+        ownerPreview.locator("cw-action#updateName").waitFor();
+        ownerPreview.locator("cw-collection#pets").waitFor();
         ownerPreviewToggle.click();
         page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.expandedPreviewKey == null");
         assertPreviewToggleIcon(ownerPreviewToggle, false);
+        final var futureVisitPreviewToggle = page.locator("cw-collection#futureVisits [data-causeway-preview-toggle]").first();
+        futureVisitPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#futureVisits')?.expandedPreviewKey != null");
+        final var futureVisitPreview = page.locator("cw-collection#futureVisits cw-preview[data-causeway-preview-live]");
+        assertThat(futureVisitPreview.locator("cw-object-header").count()).isZero();
+        futureVisitPreview.locator("cw-property#reason").waitFor();
+        futureVisitPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#futureVisits')?.expandedPreviewKey == null");
         assertThat(page.title()).endsWith(" · Pet Clinic");
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
@@ -330,6 +343,22 @@ class PetClinicVuePlaywrightTest {
         final var visitPreviewIconWidth = ((Number) visitPreviewToggle.locator(".causeway-collection-preview-icon")
                 .evaluate("icon => icon.getBoundingClientRect().width")).doubleValue();
         assertThat(Math.abs(petPreviewIconWidth - visitPreviewIconWidth)).isLessThan(1.0);
+        petPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey != null");
+        final var petPreview = page.locator("cw-collection#pets cw-preview[data-causeway-preview-live]");
+        assertThat(petPreview.locator("cw-object-header").count()).isZero();
+        petPreview.locator("cw-property#notes").waitFor();
+        petPreview.locator("cw-action#clearNotes").waitFor();
+        petPreview.locator("cw-collection#visits").waitFor();
+        petPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey == null");
+        visitPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.expandedPreviewKey != null");
+        final var visitPreview = page.locator(".petclinic-object-collections > section cw-collection#visits cw-preview[data-causeway-preview-live]");
+        assertThat(visitPreview.locator("cw-object-header").count()).isZero();
+        visitPreview.locator("cw-property#reason").waitFor();
+        visitPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.expandedPreviewKey == null");
 
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
