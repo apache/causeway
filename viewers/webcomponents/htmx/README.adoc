@@ -156,6 +156,12 @@ Custom pages can compose ordinary HTML, application custom elements, `<cw-object
 Those elements consume the one nearest route context and therefore do not create a parallel data plane.
 Removing an HTML file from the packaged application is the immediate rollback to retained grid-driven generic composition.
 
+== Collection preview resources
+
+A direct empty `<cw-preview>` declaration lets the HTMX host resolve a bounded default from `META-INF/causeway/webcomponents/previews/<logical-type-name>.html` for each authoritative runtime row type.
+Each resource must contain exactly one attribute-free `<cw-preview>` root and retains the established private endpoint, caching, reload, validation, and fail-closed behavior.
+Applications upgrading from the former `<cw-peek>` element must rename that tag in both page and preview resources; no legacy alias is registered.
+
 == Home and results
 
 The shell extends targeted application-entry discovery only far enough to read the established optional object-home metadata and its public `_meta` identity.

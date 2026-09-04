@@ -21,7 +21,7 @@ export const CAUSEWAY_COMPONENT_STYLES = `
 cw-parameter {
   display: none;
 }
-cw-peek:not([data-causeway-peek-live]) {
+cw-preview:not([data-causeway-preview-live]) {
   display: none;
 }
 cw-object {
@@ -745,7 +745,7 @@ cw-collection-grid {
   display: flex;
   gap: var(--causeway-space-2, 0.5rem);
 }
-.causeway-collection-peek-toggle {
+.causeway-collection-preview-toggle {
   align-items: center;
   block-size: var(--causeway-control-height, 2.35rem);
   display: inline-flex;
@@ -753,20 +753,20 @@ cw-collection-grid {
   justify-content: center;
   padding: 0;
 }
-.causeway-collection-peek-heading,
-.causeway-collection-peek-cell {
+.causeway-collection-preview-heading,
+.causeway-collection-preview-cell {
   inline-size: 3rem;
   text-align: center !important;
 }
-.causeway-collection-peek-details {
+.causeway-collection-preview-details {
   background: var(--causeway-surface-subtle, color-mix(in srgb, CanvasText 4%, Canvas));
   border-inline-start: 0.2rem solid var(--causeway-border, GrayText);
   padding: var(--causeway-space-3, 0.75rem);
 }
-.causeway-collection-peek-row > td {
+.causeway-collection-preview-row > td {
   padding: 0;
 }
-cw-peek[data-causeway-peek-live] {
+cw-preview[data-causeway-preview-live] {
   display: block;
   min-inline-size: 0;
 }

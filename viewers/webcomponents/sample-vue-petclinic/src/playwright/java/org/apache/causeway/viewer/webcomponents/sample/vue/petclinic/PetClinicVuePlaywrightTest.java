@@ -147,9 +147,9 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("Pet owners,Upcoming visits");
         assertThat(page.locator("cw-collection#petOwners").getAttribute("paged")).isEqualTo("5");
         assertThat(page.locator("cw-collection#futureVisits").getAttribute("paged")).isEqualTo("10");
-        assertThat(page.locator("cw-collection#petOwners > cw-peek").count()).isEqualTo(1);
-        assertThat(page.locator("cw-collection#futureVisits > cw-peek").count()).isEqualTo(1);
-        assertThat(page.locator("cw-collection#petOwners [data-causeway-peek-toggle]").count()).isGreaterThan(0);
+        assertThat(page.locator("cw-collection#petOwners > cw-preview").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#futureVisits > cw-preview").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#petOwners [data-causeway-preview-toggle]").count()).isGreaterThan(0);
         assertThat(page.title()).endsWith(" · Pet Clinic");
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
@@ -172,8 +172,8 @@ class PetClinicVuePlaywrightTest {
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("visitAt,reason,notes");
         assertThat(page.locator("cw-collection#visits").getAttribute("paged")).isEqualTo("8");
-        assertThat(page.locator("cw-collection#visits > cw-peek").count()).isEqualTo(1);
-        assertThat(page.locator("cw-collection#visits [data-causeway-peek-toggle]").count()).isGreaterThan(0);
+        assertThat(page.locator("cw-collection#visits > cw-preview").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#visits [data-causeway-preview-toggle]").count()).isGreaterThan(0);
 
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();

@@ -11,50 +11,55 @@ import {waitFor} from './fixtures/rich-schema-fixture.mjs';
 
 const {document} = installDomShim();
 const {
-  captureDeclarativeCollectionPeeks,
-  collectionPeekDeclaration,
+  captureDeclarativeCollectionPreviews,
+  collectionPreviewDeclaration,
   CausewayCollectionElement,
-  CausewayPeekElement,
+  CausewayPreviewElement,
   defineCausewayWebComponents,
-  normalizePeekPresentation,
+  normalizePreviewPresentation,
   OBJECT_CONTEXT_REQUEST_EVENT
 } = await import('../src/index.mjs');
 defineCausewayWebComponents();
 
-test('captures one inert inline peek declaration without connecting its descendants', () => {
+test('registers only the preview custom element name', () => {
+  assert.equal(globalThis.customElements.get('cw-preview'), CausewayPreviewElement);
+  assert.equal(globalThis.customElements.get('cw-peek'), undefined);
+});
+
+test('captures one inert inline preview declaration without connecting its descendants', () => {
   const collection = new CausewayCollectionElement();
-  const peek = document.createElement('cw-peek');
-  peek.innerHTML = '<cw-property id="name"></cw-property>';
-  collection.appendChild(peek);
+  const preview = document.createElement('cw-preview');
+  preview.innerHTML = '<cw-property id="name"></cw-property>';
+  collection.appendChild(preview);
 
-  captureDeclarativeCollectionPeeks({querySelectorAll: () => [collection]});
+  captureDeclarativeCollectionPreviews({querySelectorAll: () => [collection]});
 
-  assert.deepEqual(collectionPeekDeclaration(collection), {
+  assert.deepEqual(collectionPreviewDeclaration(collection), {
     count: 1,
     presentation: {html: '<cw-property id="name"></cw-property>', inline: true}
   });
-  assert.equal(peek.innerHTML, '');
-  assert.equal(peek.hidden, true);
+  assert.equal(preview.innerHTML, '');
+  assert.equal(preview.hidden, true);
 });
 
 test('empty, duplicate, and unsupported presentation values fail closed', () => {
   const emptyCollection = new CausewayCollectionElement();
-  emptyCollection.appendChild(document.createElement('cw-peek'));
-  captureDeclarativeCollectionPeeks({querySelectorAll: () => [emptyCollection]});
-  assert.deepEqual(collectionPeekDeclaration(emptyCollection), {
+  emptyCollection.appendChild(document.createElement('cw-preview'));
+  captureDeclarativeCollectionPreviews({querySelectorAll: () => [emptyCollection]});
+  assert.deepEqual(collectionPreviewDeclaration(emptyCollection), {
     count: 1,
     presentation: {html: '', inline: false}
   });
 
   const duplicateCollection = new CausewayCollectionElement();
-  duplicateCollection.appendChild(document.createElement('cw-peek'));
-  duplicateCollection.appendChild(document.createElement('cw-peek'));
-  assert.deepEqual(collectionPeekDeclaration(duplicateCollection), {count: 2, presentation: null});
-  assert.equal(normalizePeekPresentation({html: '  <!-- empty --> '}), null);
-  assert.deepEqual(normalizePeekPresentation({html: '<cw-property id="name"></cw-property>'}), {
+  duplicateCollection.appendChild(document.createElement('cw-preview'));
+  duplicateCollection.appendChild(document.createElement('cw-preview'));
+  assert.deepEqual(collectionPreviewDeclaration(duplicateCollection), {count: 2, presentation: null});
+  assert.equal(normalizePreviewPresentation({html: '  <!-- empty --> '}), null);
+  assert.deepEqual(normalizePreviewPresentation({html: '<cw-property id="name"></cw-property>'}), {
     html: '<cw-property id="name"></cw-property>'
   });
-  assert.equal(normalizePeekPresentation({html: `<p>${'x'.repeat(65536)}</p>`}), null);
+  assert.equal(normalizePreviewPresentation({html: `<p>${'x'.repeat(65536)}</p>`}), null);
 });
 
 test('collection resolves an inline preview lazily for an eligible row', async () => {
@@ -77,18 +82,18 @@ test('collection resolves an inline preview lazily for an eligible row', async (
   collection.id = 'staff';
   collection.active = true;
   collection.context = context;
-  const declaration = document.createElement('cw-peek');
+  const declaration = document.createElement('cw-preview');
   declaration.innerHTML = '<p>Inline preview</p>';
   collection.appendChild(declaration);
   document.body.appendChild(collection);
 
   await waitFor(() => collection.collectionState.status === 'ready');
-  assert.match(collection.innerHTML, /data-causeway-peek-toggle="example\.Staff:1"/);
+  assert.match(collection.innerHTML, /data-causeway-preview-toggle="example\.Staff:1"/);
   assert.match(collection.innerHTML, /aria-expanded="false"/);
   assert.equal(hydrationCount, 1);
 });
 
-test('empty collection peek resolves a type default and missing defaults disclose nothing', async () => {
+test('empty collection preview resolves a type default and missing defaults disclose nothing', async () => {
   const requested = [];
   globalThis.causewayCollectionRowPreviewResolver = async ({logicalTypeName}) => {
     requested.push(logicalTypeName);
@@ -112,32 +117,32 @@ test('empty collection peek resolves a type default and missing defaults disclos
   collection.id = 'staff';
   collection.active = true;
   collection.context = context;
-  collection.appendChild(document.createElement('cw-peek'));
+  collection.appendChild(document.createElement('cw-preview'));
   document.body.appendChild(collection);
 
   await waitFor(() => collection.collectionState.status === 'ready');
   assert.deepEqual(requested.sort(), ['example.Missing', 'example.Staff']);
-  assert.equal((collection.innerHTML.match(/data-causeway-peek-toggle=/g) ?? []).length, 1);
+  assert.equal((collection.innerHTML.match(/data-causeway-preview-toggle=/g) ?? []).length, 1);
   delete globalThis.causewayCollectionRowPreviewResolver;
 });
 
-test('live peek provides only its dedicated context and Escape requests collapse', () => {
+test('live preview provides only its dedicated context and Escape requests collapse', () => {
   const context = {identity: {logicalTypeName: 'example.Type', id: '1'}, disconnect() {}};
   let collapsed = 0;
   let provided = null;
-  const peek = new CausewayPeekElement();
-  peek.configureLive({context, label: 'Preview Example', collapse: () => collapsed += 1});
+  const preview = new CausewayPreviewElement();
+  preview.configureLive({context, label: 'Preview Example', collapse: () => collapsed += 1});
   const child = document.createElement('span');
-  peek.appendChild(child);
-  document.body.appendChild(peek);
+  preview.appendChild(child);
+  document.body.appendChild(preview);
 
   child.dispatchEvent(new CustomEvent(OBJECT_CONTEXT_REQUEST_EVENT, {
     bubbles: true,
     detail: {provide: candidate => provided = candidate}
   }));
   assert.equal(provided, context);
-  assert.equal(peek.getAttribute('role'), 'region');
-  assert.equal(peek.getAttribute('aria-label'), 'Preview Example');
+  assert.equal(preview.getAttribute('role'), 'region');
+  assert.equal(preview.getAttribute('aria-label'), 'Preview Example');
 
   const escape = new Event('keydown', {bubbles: true, cancelable: true});
   escape.key = 'Escape';

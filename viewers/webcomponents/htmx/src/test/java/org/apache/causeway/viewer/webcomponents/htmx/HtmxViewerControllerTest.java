@@ -481,7 +481,7 @@ class HtmxViewerControllerTest {
         final var definition = HtmxPreviewDefinition.resource(
                 "petclinic.Visit",
                 "resource:petclinic.Visit.html",
-                "<cw-peek><cw-property id=\"reason\"></cw-property></cw-peek>");
+                "<cw-preview><cw-property id=\"reason\"></cw-property></cw-preview>");
         final var pages = new HtmxPageFragmentRegistry(List.of(), List.of());
         final var controller = new HtmxViewerController(
                 codec,
@@ -493,7 +493,7 @@ class HtmxViewerControllerTest {
         assertThat(controller.preview("petclinic.Visit"))
                 .satisfies(response -> {
                     assertThat(response.getStatusCode().value()).isEqualTo(200);
-                    assertThat(response.getBody()).contains("cw-peek");
+                    assertThat(response.getBody()).contains("cw-preview");
                     assertThat(response.getHeaders().getFirst("X-Causeway-Preview"))
                             .isEqualTo("petclinic.Visit");
                     assertThat(response.getHeaders().getCacheControl()).contains("no-store");
