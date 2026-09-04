@@ -2667,12 +2667,14 @@ The declaration MUST remain hidden and inert until the collection creates a live
 
 ### Requirement: Single hydrated row preview lifecycle
 An opted-in collection SHALL keep at most one row preview expanded and SHALL provide its live `<cw-preview>` subtree with a dedicated hydrated object context created from the selected authoritative row identity, data, and selection.
+Each preview disclosure MUST present a clearly visible, appropriately sized directional indicator whose collapsed and expanded directions remain synchronized with its authoritative `aria-expanded` state.
 
 #### Scenario: User expands an eligible row
 - **WHEN** the user activates a collapsed row's preview disclosure
 - **THEN** the collection creates one live `<cw-preview>` after that row using a fresh clone of its effective template
 - **AND** it assigns the dedicated row context before descendant properties, actions, or collections connect
 - **AND** focus remains on the disclosure while ordinary forward navigation reaches the preview content
+- **AND** the visible indicator changes from the collapsed inline direction to the expanded downward direction without changing the button dimensions
 
 #### Scenario: Preview component requests hydrated data
 - **WHEN** a live preview descendant requests a member already selected into the collection row
@@ -2692,6 +2694,7 @@ An opted-in collection SHALL keep at most one row preview expanded and SHALL pro
 - **WHEN** the user activates the disclosure for the currently expanded row
 - **THEN** the preview and its context are retired
 - **AND** the disclosure reports the collapsed state
+- **AND** the visible indicator returns to the collapsed inline direction
 
 #### Scenario: User presses Escape inside the preview
 - **WHEN** focus is within a live preview and the user presses Escape
