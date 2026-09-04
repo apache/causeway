@@ -24,8 +24,10 @@ import java.util.List;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitUntilState;
 
 import org.junit.jupiter.api.AfterAll;
@@ -97,7 +99,7 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                 }
             });
 
-            final var deepLink = "/vue/object/petclinic.PetOwner/s_owner-mary";
+            final var deepLink = "/vue/object/petclinic.PetOwner/s_owner-mary?toolkit=native";
             page.navigate(origin() + deepLink, new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
             page.waitForURL("**/vue/login**");
             assertThat(page.locator("cw-graphql-client").count()).isZero();
@@ -126,8 +128,9 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             assertThat(page.locator("[data-testid='vue-authentication-shell']").count()).isZero();
             assertThat(page.locator("[data-causeway-authentication-logout]").getAttribute("hidden")).isNotNull();
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
-            page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
-            assertThat(menuBarRequests).hasSize(1);
+            page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation === 'native' && !element.querySelector('cw-menubar-control'))");
+            assertThat(menuBarRequests).isEmpty();
+            assertThat(page.locator("cw-menubar-secondary").count()).isZero();
             assertThat(page.locator("cw-menubar-tertiary").isVisible()).isTrue();
             assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("""
                     element => {
@@ -137,15 +140,48 @@ class PetClinicVueSecuredPlaywrightAcceptance {
                         ['causeway.conf.ConfigurationMenu#configuration', 'Configuration'],
                         ['causeway.security.LogoutMenu#logout', 'Sign out']
                       ]);
-                      return [...expected].every(([identity, label]) => {
-                        const action = actions.find(candidate => `${candidate.serviceLogicalTypeName}#${candidate.actionId}` === identity);
-                        return action?.label === label && action.role === 'tertiary';
-                      });
+                      const menuLabels = element._projection?.menus?.map(menu => menu.label) ?? [];
+                      return menuLabels.length === 1 && menuLabels[0] === 'sven'
+                        && [...expected].every(([identity, label]) => {
+                          const action = actions.find(candidate => `${candidate.serviceLogicalTypeName}#${candidate.actionId}` === identity);
+                          return action?.label === label
+                            && action.role === 'tertiary'
+                            && (identity !== 'causeway.security.LogoutMenu#logout' || action.appearance === 'sign-out');
+                        });
                     }
                     """))
                     .as(page.locator("cw-menubar-tertiary").evaluate("element => Object.values(element._projection?.actions ?? {}).map(action => `${action.serviceLogicalTypeName}#${action.actionId}:${action.label}:${action.role}`)").toString())
                     .isTrue();
             assertThat(graphQlCsrfHeaders).isNotEmpty().allSatisfy(value -> assertThat(value).isNotBlank());
+            final var userDisclosure = page.locator("[data-causeway-menu-disclosure]")
+                    .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("sven")).first();
+            userDisclosure.click();
+            final var signOutControl = page.locator(
+                    "[data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']");
+            assertThat(signOutControl.getAttribute("data-action-appearance")).isEqualTo("sign-out");
+            assertThat(signOutControl.evaluate("element => getComputedStyle(element).borderTopStyle")).isEqualTo("solid");
+            assertThat(page.locator("[data-service-logical-type='causeway.applib.UserMenu'][data-action-id='me']")
+                    .getAttribute("data-action-appearance")).isNull();
+            page.keyboard().press("Escape");
+
+            userDisclosure.click();
+            page.locator("[data-service-logical-type='causeway.applib.UserMenu'][data-action-id='me']").click();
+            page.waitForURL("**/vue/object/causeway.applib.UserMemento/**");
+            page.waitForFunction("() => { const route = document.querySelector('[data-causeway-route-page]'); return ['ready','partial-error'].includes(route?.dataset.routeState) && route.textContent.includes('Identity'); }");
+            assertThat(page.locator("body").innerText()).contains("Identity", "Name", "sven");
+            assertThat(page.locator("[data-testid='action-result']").count()).isZero();
+            assertThat(page.locator("cw-action-results[data-causeway-shell-result]").getAttribute("hidden")).isNotNull();
+
+            page.locator("[data-causeway-menu-disclosure]")
+                    .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("sven")).first().click();
+            page.locator("[data-service-logical-type='causeway.conf.ConfigurationMenu'][data-action-id='configuration']").click();
+            page.waitForURL("**/vue/object/causeway.conf.ConfigurationViewmodel/**");
+            page.waitForFunction("() => { const route = document.querySelector('[data-causeway-route-page]'); return ['ready','partial-error'].includes(route?.dataset.routeState) && route.textContent.includes('Configuration'); }");
+            assertThat(page.locator("body").innerText()).contains("Configuration").doesNotContain("me result");
+            assertThat(page.locator("[data-testid='action-result']").count()).isZero();
+            page.navigate(origin() + deepLink, new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+            waitForReadyObject(page);
+            page.waitForLoadState(LoadState.NETWORKIDLE);
 
             final var graphQlCountBeforeLogoutPolicy = graphQlCsrfHeaders.size();
             final var frameworkLogoutClaimed = (Boolean) page.locator("[data-testid='petclinic-vue-application-shell']")
@@ -193,7 +229,7 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             page.locator(".causeway-shell-brand").click();
             page.waitForURL("**/vue/login**");
             assertThat(page.locator("#username").isVisible()).isTrue();
-            assertThat(menuBarRequests).hasSize(1);
+            assertThat(menuBarRequests).isEmpty();
             browserFailures.removeIf(message -> message.contains("status of 401"));
 
             page.locator("#username").fill(PetClinicSecmanDataConfiguration.USERNAME);
@@ -201,17 +237,17 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             page.locator("button[type='submit']").click();
             page.waitForURL("**/vue**");
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState) && [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
-            assertThat(menuBarRequests).hasSize(2);
-            final var accountMenu = page.locator("vaadin-menu-bar-button")
-                    .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Account")).first();
-            accountMenu.click();
+            assertThat(menuBarRequests).hasSize(1);
+            final var userMenu = firstVisible(page.locator("vaadin-menu-bar-button")
+                    .filter(new Locator.FilterOptions().setHasText("sven")));
+            userMenu.click();
             final var signOutItem = page.locator("vaadin-menu-bar-item")
                     .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Sign out")).last();
             signOutItem.waitFor();
             signOutItem.click();
             page.waitForURL("**/vue/login?logout=true");
             assertThat(page.locator("[role='status']").textContent()).contains("signed out");
-            assertThat(menuBarRequests).hasSize(2);
+            assertThat(menuBarRequests).hasSize(1);
 
             page.goBack();
             page.waitForURL("**/vue/login**");
@@ -219,6 +255,16 @@ class PetClinicVueSecuredPlaywrightAcceptance {
             browserFailures.removeIf(message -> message.contains("status of 401"));
             assertThat(browserFailures).isEmpty();
         }
+    }
+
+    private static Locator firstVisible(final Locator candidates) {
+        for (var index = 0; index < candidates.count(); index++) {
+            var candidate = candidates.nth(index);
+            if (candidate.isVisible()) {
+                return candidate;
+            }
+        }
+        throw new AssertionError("No visible locator among " + candidates.count() + " candidates");
     }
 
     private void waitForReadyObject(final Page page) {

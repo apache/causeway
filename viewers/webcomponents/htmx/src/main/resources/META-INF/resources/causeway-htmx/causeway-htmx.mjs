@@ -49,7 +49,9 @@ import {
   standaloneCollectionPresentation
 } from '../causeway-webcomponents/standalone-collection-presentation.mjs';
 import {
+  authenticationActionAppearance,
   authenticationActionLabel,
+  authenticationMenuLabel,
   csrfHeaders,
   isExcludedAction,
   isUnsafeMethod,
@@ -147,7 +149,9 @@ configureCausewayMenubarWidgets({
   excludeAction: detail => isFrameworkLogoutAction(detail)
     ? !Boolean(authentication && isExcludedAction(authentication, detail))
     : Boolean(authentication && isExcludedAction(authentication, detail)),
-  actionLabel: detail => authenticationActionLabel(authentication, detail)
+  menuLabel: detail => authenticationMenuLabel(authentication, detail),
+  actionLabel: detail => authenticationActionLabel(authentication, detail),
+  actionAppearance: detail => authenticationActionAppearance(authentication, detail)
 });
 let activeRequest = null;
 let navigationGeneration = 0;

@@ -54,7 +54,9 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this._client = null;
     this._fetchImpl = null;
     this._excludeAction = null;
+    this._menuLabel = null;
     this._actionLabel = null;
+    this._actionAppearance = null;
     this.lastDiagnosticGeneration = -1;
     this._currentState = null;
     this._currentBar = null;
@@ -121,12 +123,30 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this.#renderCurrentReadyState();
   }
 
+  get menuLabel() {
+    return this._menuLabel;
+  }
+
+  set menuLabel(value) {
+    this._menuLabel = typeof value === 'function' ? value : null;
+    this.#renderCurrentReadyState();
+  }
+
   get actionLabel() {
     return this._actionLabel;
   }
 
   set actionLabel(value) {
     this._actionLabel = typeof value === 'function' ? value : null;
+    this.#renderCurrentReadyState();
+  }
+
+  get actionAppearance() {
+    return this._actionAppearance;
+  }
+
+  set actionAppearance(value) {
+    this._actionAppearance = typeof value === 'function' ? value : null;
     this.#renderCurrentReadyState();
   }
 
@@ -230,12 +250,18 @@ export class CausewayMenubarElement extends HTMLElementBase {
     const widgetPolicy = causewayMenubarWidgetConfiguration();
     const instanceExcludeAction = this._excludeAction;
     const globalExcludeAction = widgetPolicy.excludeAction;
+    const instanceMenuLabel = this._menuLabel;
+    const globalMenuLabel = widgetPolicy.menuLabel;
     const instanceActionLabel = this._actionLabel;
     const globalActionLabel = widgetPolicy.actionLabel;
+    const instanceActionAppearance = this._actionAppearance;
+    const globalActionAppearance = widgetPolicy.actionAppearance;
     const projection = projectCausewayMenuBar(bar, {
       generation: state.generation,
       excludeAction: detail => instanceExcludeAction?.(detail) === true || globalExcludeAction?.(detail) === true,
-      actionLabel: detail => instanceActionLabel?.(detail) ?? globalActionLabel?.(detail)
+      menuLabel: detail => instanceMenuLabel?.(detail) ?? globalMenuLabel?.(detail),
+      actionLabel: detail => instanceActionLabel?.(detail) ?? globalActionLabel?.(detail),
+      actionAppearance: detail => instanceActionAppearance?.(detail) ?? globalActionAppearance?.(detail)
     });
     const qualification = qualifyCausewayMenuBar({
       role: this.role,
@@ -586,8 +612,8 @@ function renderAction(action, sequence, role, menuIndex, sectionIndex, actionInd
   const reason = action.disabled
     ? `<span class="causeway-disabled-reason causeway-visually-hidden" id="${reasonId}">${escapeHtml(disabledReason)}</span>`
     : '';
-  return `<div class="causeway-service-action${tooltip ? ' causeway-action-control-tooltip' : ''}" data-causeway-service-action-region${dataHint('css-hint', action.cssHint)}${dataHint('icon-hint', action.iconHint)}${tooltipAttributes}>
-  <button class="causeway-service-action-control" type="button" data-causeway-service-action data-service-logical-type="${escapeHtml(action.serviceLogicalTypeName)}" data-action-id="${escapeHtml(action.actionId)}"${disabled}${describedBy}>${renderActionContent(presentation.name, presentation.icon)}</button>${description}${reason}
+  return `<div class="causeway-service-action${tooltip ? ' causeway-action-control-tooltip' : ''}" data-causeway-service-action-region${dataHint('action-appearance', action.appearance)}${dataHint('css-hint', action.cssHint)}${dataHint('icon-hint', action.iconHint)}${tooltipAttributes}>
+  <button class="causeway-service-action-control" type="button" data-causeway-service-action data-service-logical-type="${escapeHtml(action.serviceLogicalTypeName)}" data-action-id="${escapeHtml(action.actionId)}"${dataHint('action-appearance', action.appearance)}${disabled}${describedBy}>${renderActionContent(presentation.name, presentation.icon)}</button>${description}${reason}
 </div>`;
 }
 

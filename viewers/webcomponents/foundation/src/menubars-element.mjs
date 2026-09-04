@@ -41,7 +41,9 @@ export class CausewayMenubarsElement extends HTMLElementBase {
     this._client = null;
     this._fetchImpl = null;
     this._excludeAction = null;
+    this._menuLabel = null;
     this._actionLabel = null;
+    this._actionAppearance = null;
     this._context = null;
     this._release = null;
     this.lastDiagnosticGeneration = -1;
@@ -81,6 +83,15 @@ export class CausewayMenubarsElement extends HTMLElementBase {
     for (const child of this.#directBarChildren()) child.excludeAction = this._excludeAction;
   }
 
+  get menuLabel() {
+    return this._menuLabel;
+  }
+
+  set menuLabel(value) {
+    this._menuLabel = typeof value === 'function' ? value : null;
+    for (const child of this.#directBarChildren()) child.menuLabel = this._menuLabel;
+  }
+
   get actionLabel() {
     return this._actionLabel;
   }
@@ -88,6 +99,15 @@ export class CausewayMenubarsElement extends HTMLElementBase {
   set actionLabel(value) {
     this._actionLabel = typeof value === 'function' ? value : null;
     for (const child of this.#directBarChildren()) child.actionLabel = this._actionLabel;
+  }
+
+  get actionAppearance() {
+    return this._actionAppearance;
+  }
+
+  set actionAppearance(value) {
+    this._actionAppearance = typeof value === 'function' ? value : null;
+    for (const child of this.#directBarChildren()) child.actionAppearance = this._actionAppearance;
   }
 
   get context() {
@@ -161,7 +181,9 @@ export class CausewayMenubarsElement extends HTMLElementBase {
   #provideContextToDeclarativeBars() {
     for (const child of this.#directBarChildren()) {
       child.excludeAction = this._excludeAction;
+      child.menuLabel = this._menuLabel;
       child.actionLabel = this._actionLabel;
+      child.actionAppearance = this._actionAppearance;
       child.context = this._context;
     }
   }
@@ -180,7 +202,9 @@ export class CausewayMenubarsElement extends HTMLElementBase {
       if (bar) {
         bar.setAttribute('data-causeway-bar-order', String(index));
         bar.excludeAction = this._excludeAction;
+        bar.menuLabel = this._menuLabel;
         bar.actionLabel = this._actionLabel;
+        bar.actionAppearance = this._actionAppearance;
         bar.context = this._context;
         if (!present && bar.getAttribute('data-causeway-generated') === 'menubar') {
           this.removeChild(bar);

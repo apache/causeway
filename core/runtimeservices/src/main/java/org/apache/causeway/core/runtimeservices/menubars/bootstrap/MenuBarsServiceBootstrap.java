@@ -126,10 +126,22 @@ implements MenuBarsService {
                 .map(attributesAppender::appendAttributes)
                 .orElse(menuBarsFromAnnotationsOnly);
 
-        var unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
-        if (unreferencedActionsMenu == null)
-            // just use fallback
+        var unreferencedActionMenus = findUnreferencedActionMenus(menuBars);
+        if (unreferencedActionMenus.isEmpty()) {
+            // An authored layout may deliberately omit actions that it does not reference.
+            return menuBars;
+        }
+        if (unreferencedActionMenus.size() > 1) {
+            menuBars.setMetadataError(
+                    "At most one menu may have 'unreferencedActions' flag set; found "
+                            + unreferencedActionMenus.size() + " such menus");
+            if(metaModelContext.getSystemEnvironment().isPrototyping()) {
+                messageService.warnUser("Menubars metadata errors; check the error log");
+            }
+            log.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
             return menuBarsFromAnnotationsOnly;
+        }
+        var unreferencedActionsMenu = unreferencedActionMenus.get(0);
 
         // add in any missing actions from the fallback
         var referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
@@ -206,30 +218,14 @@ implements MenuBarsService {
         section.getServiceActions().add(serviceAction);
     }
 
-    private BSMenu validateAndGetUnreferencedActionMenu(final BSMenuBars menuBars) {
-
-        if (menuBars == null)
-            return null;
-
-        var menusWithUnreferencedActionsFlagSet = new ArrayList<BSMenu>();
+    private static List<BSMenu> findUnreferencedActionMenus(final BSMenuBars menuBars) {
+        var menus = new ArrayList<BSMenu>();
         menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
             if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
-                menusWithUnreferencedActionsFlagSet.add(menu);
+                menus.add(menu);
             }
         }));
-
-        var size = menusWithUnreferencedActionsFlagSet.size();
-        if (size == 1)
-            return menusWithUnreferencedActionsFlagSet.get(0);
-
-        menuBars.setMetadataError(
-                "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
-        if(metaModelContext.getSystemEnvironment().isPrototyping()) {
-            messageService.warnUser("Menubars metadata errors; check the error log");
-        }
-        log.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
-
-        return null;
+        return menus;
     }
 
     private BSMenuBars menuBarsFromAnnotationsOnly() {

@@ -104,16 +104,30 @@ describe('semantic policy bridge', () => {
     expect(collection.result).toEqual({kind: 'collection', value: [{_meta: {id: '1'}}]});
   });
 
-  it('routes object action results and removes listeners on dispose', async () => {
+  it('routes entity and view-model action results, clears stale outlets, dismisses sources, and removes listeners', async () => {
     const viewer = await runtime();
     const shell = authoredShell();
+    const outlet = shell.querySelector<HTMLElement>('[data-causeway-shell-result]')!;
+    outlet.replaceChildren(document.createTextNode('stale result'));
+    outlet.hidden = false;
+    const source = document.createElement('cw-service-action') as HTMLElement & {dismissResult: ReturnType<typeof vi.fn>};
+    source.dismissResult = vi.fn();
+    shell.append(source);
     const dispose = installSemanticBridge(viewer, shell);
-    shell.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
-      bubbles: true,
-      detail: {result: {kind: 'object', value: {_meta: {logicalTypeName: 'petclinic.Pet', id: 's_pet-1'}}}}
-    }));
-    await new Promise(resolve => setTimeout(resolve, 0));
-    expect(viewer.router.currentRoute.value.path).toBe('/object/petclinic.Pet/s_pet-1');
+    for (const target of [
+      {logicalTypeName: 'petclinic.Pet', id: 's_pet-1'},
+      {logicalTypeName: 'causeway.applib.UserMemento', id: 's_user-sven'}
+    ]) {
+      source.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
+        bubbles: true,
+        detail: {result: {kind: 'object', value: {_meta: target}}}
+      }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(viewer.router.currentRoute.value.path).toBe(`/object/${target.logicalTypeName}/${target.id}`);
+      expect(outlet.hidden).toBe(true);
+      expect(outlet.textContent).toBe('');
+    }
+    expect(source.dismissResult).toHaveBeenCalledTimes(2);
     dispose();
     await viewer.router.replace('/');
     shell.dispatchEvent(new CustomEvent(NAVIGATION_REQUEST_EVENT, {
@@ -122,6 +136,24 @@ describe('semantic policy bridge', () => {
     }));
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(viewer.router.currentRoute.value.path).toBe('/');
+  });
+
+  it('presents identity-incomplete object results as bounded replacements and dismisses the source', async () => {
+    const viewer = await runtime();
+    const shell = authoredShell();
+    const source = document.createElement('cw-service-action') as HTMLElement & {dismissResult: ReturnType<typeof vi.fn>};
+    source.dismissResult = vi.fn();
+    shell.append(source);
+    const dispose = installSemanticBridge(viewer, shell);
+    source.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
+      bubbles: true,
+      detail: {actionId: 'me', result: {kind: 'object', value: {_meta: {logicalTypeName: 'causeway.applib.UserMemento', title: 'sven'}}}}
+    }));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(viewer.router.currentRoute.value.path).toBe('/');
+    expect(shell.querySelector('[data-causeway-shell-result]')?.textContent).toContain('This result cannot be presented.');
+    expect(source.dismissResult).toHaveBeenCalledOnce();
+    dispose();
   });
 
   it('fails framework Logout closed before invocation and removes its menu control', async () => {
@@ -135,7 +167,9 @@ describe('semantic policy bridge', () => {
     expect(region.isConnected).toBe(false);
     const menuBoundary = shell.querySelector('cw-menubars') as HTMLElement & {
       excludeAction?: (detail: object) => boolean;
+      menuLabel?: (detail: object) => string | void;
       actionLabel?: (detail: object) => string | void;
+      actionAppearance?: (detail: object) => string | void;
     };
     expect(menuBoundary.excludeAction?.({serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout'})).toBe(true);
     expect(menuBoundary.excludeAction?.({serviceLogicalTypeName: 'example.LogoutMenu', actionId: 'logout'})).toBe(false);
@@ -152,24 +186,36 @@ describe('semantic policy bridge', () => {
     expect(shell.querySelector('[data-causeway-route-announcement]')?.textContent).toContain('host authentication');
     dispose();
     expect(menuBoundary.excludeAction).toBeUndefined();
+    expect(menuBoundary.menuLabel).toBeUndefined();
     expect(menuBoundary.actionLabel).toBeUndefined();
+    expect(menuBoundary.actionAppearance).toBeUndefined();
   });
 
-  it('retains and relabels exact framework Logout only with an explicit host menu policy', async () => {
+  it('maps utility title and exact framework Logout presentation only with explicit host menu policy', async () => {
+    const menuLabel = vi.fn((detail: {role: string; label: string}) => detail.role === 'tertiary' && detail.label === 'Account'
+      ? 'sven' : undefined);
     const menuActionLabel = vi.fn((detail: {serviceLogicalTypeName?: string; actionId: string}) => detail.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
       && detail.actionId === 'logout' ? 'Sign out' : undefined);
-    const viewer = await runtime({menuActionLabel});
+    const menuActionAppearance = vi.fn((detail: {serviceLogicalTypeName?: string; actionId: string}) => detail.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
+      && detail.actionId === 'logout' ? 'sign-out' : undefined);
+    const viewer = await runtime({menuLabel, menuActionLabel, menuActionAppearance});
     const shell = authoredShell();
     const dispose = installSemanticBridge(viewer, shell);
     const menuBoundary = shell.querySelector('cw-menubars') as HTMLElement & {
       excludeAction?: (detail: object) => boolean;
+      menuLabel?: (detail: object) => string | void;
       actionLabel?: (detail: object) => string | void;
+      actionAppearance?: (detail: object) => string | void;
     };
     const logout = {serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout'};
     const similar = {serviceLogicalTypeName: 'example.LogoutMenu', actionId: 'logout'};
     expect(menuBoundary.excludeAction?.(logout)).toBe(false);
+    expect(menuBoundary.menuLabel?.({role: 'tertiary', label: 'Account'})).toBe('sven');
+    expect(menuBoundary.menuLabel?.({role: 'primary', label: 'Account'})).toBeUndefined();
     expect(menuBoundary.actionLabel?.(logout)).toBe('Sign out');
     expect(menuBoundary.actionLabel?.(similar)).toBeUndefined();
+    expect(menuBoundary.actionAppearance?.(logout)).toBe('sign-out');
+    expect(menuBoundary.actionAppearance?.(similar)).toBeUndefined();
     expect(menuActionLabel).toHaveBeenCalled();
     dispose();
   });
@@ -204,18 +250,48 @@ describe('semantic policy bridge', () => {
     disposeAsync();
   });
 
-  it('lets the result policy claim local-resource navigation', async () => {
+  it('lets the result policy claim local-resource navigation without clearing or dismissing application-owned state', async () => {
     const result = vi.fn((_detail, claim) => claim.claim());
     const viewer = await runtime({result});
     const shell = authoredShell();
+    const outlet = shell.querySelector<HTMLElement>('[data-causeway-shell-result]')!;
+    outlet.textContent = 'application-owned';
+    const source = document.createElement('cw-service-action') as HTMLElement & {dismissResult: ReturnType<typeof vi.fn>};
+    source.dismissResult = vi.fn();
+    shell.append(source);
     const dispose = installSemanticBridge(viewer, shell);
-    shell.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
+    source.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
       bubbles: true,
       detail: {result: {kind: 'local-resource', value: {path: '/guide', openUrlStrategy: 'SAME_WINDOW'}}}
     }));
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(result).toHaveBeenCalledOnce();
     expect(viewer.router.currentRoute.value.path).toBe('/');
+    expect(outlet.textContent).toBe('application-owned');
+    expect(source.dismissResult).not.toHaveBeenCalled();
+    dispose();
+  });
+
+  it('ignores an asynchronous result after its route generation becomes obsolete', async () => {
+    let release!: () => void;
+    const result = vi.fn(() => new Promise<void>(resolve => { release = resolve; }));
+    const viewer = await runtime({result});
+    const shell = authoredShell();
+    const outlet = shell.querySelector<HTMLElement>('[data-causeway-shell-result]')!;
+    outlet.textContent = 'current route result';
+    const source = document.createElement('cw-service-action') as HTMLElement & {dismissResult: ReturnType<typeof vi.fn>};
+    source.dismissResult = vi.fn();
+    shell.append(source);
+    const dispose = installSemanticBridge(viewer, shell);
+    source.dispatchEvent(new CustomEvent(ACTION_RESULT_EVENT, {
+      bubbles: true,
+      detail: {result: {kind: 'scalar', value: 'obsolete'}}
+    }));
+    viewer.state.routeGeneration += 1;
+    release();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(outlet.textContent).toBe('current route result');
+    expect(source.dismissResult).not.toHaveBeenCalled();
     dispose();
   });
 });

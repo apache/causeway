@@ -1571,6 +1571,9 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void assertOrdinaryTertiaryActions() {
+        assertThat(page.locator("cw-menubar-secondary").count()).isZero();
+        assertThat(page.locator("cw-menubar-tertiary").evaluate(
+                "element => element._projection.menus.map(menu => menu.label).join(',')")).isEqualTo("Account");
         assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("""
                 element => {
                   const actions = Object.values(element._projection?.actions ?? {});

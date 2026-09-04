@@ -144,12 +144,14 @@ final class HtmxPageRenderer {
                 .sorted()
                 .collect(java.util.stream.Collectors.joining(","));
         return """
+                <meta name="causeway-auth-username" content="%s">
                 <meta name="causeway-auth-login" content="%s">
                 <meta name="causeway-auth-csrf-header" content="%s">
                 <meta name="causeway-auth-csrf-parameter" content="%s">
                 <meta name="causeway-auth-csrf-token" content="%s">
                 <meta name="causeway-auth-excluded-actions" content="%s">
                 """.formatted(
+                escape(value.username()),
                 escape(value.loginPath()),
                 escape(value.csrfHeaderName()),
                 escape(value.csrfParameterName()),

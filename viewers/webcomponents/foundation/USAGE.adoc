@@ -248,8 +248,11 @@ Service interaction events add `target: {kind: "service", logicalTypeName}`, `se
 Routing, result rendering, browser history, home behavior, authentication, and navigation remain host policy.
 Every action publishes one cancelable `causeway-action-request` before validation or invocation; a host that synchronously claims or cancels that request prevents validation, GraphQL invocation, and synthetic result emission.
 The reserved framework operation helper matches only `causeway.security.LogoutMenu#logout`, so similarly labelled application actions remain ordinary domain actions.
-A host can assign an `actionLabel` function to `<cw-menubars>` or one bar, or configure the same function through `configureCausewayMenubarWidgets`, to return bounded presentation text for an exact menu action.
-The callback cannot change identity, hierarchy, order, visibility, disabled state, metadata, or activation, and the same immutable projection feeds native and Vaadin controls.
+A host can assign `menuLabel`, `actionLabel`, and `actionAppearance` functions to `<cw-menubars>` or one bar, or configure the same functions through `configureCausewayMenubarWidgets`, to return bounded presentation values for an exact menu or action.
+`menuLabel` receives immutable role, menu-index, and authored-label context, while action callbacks receive exact logical service type, action ID, and authored label.
+Appearance values are bounded inert tokens exposed through `data-causeway-action-appearance` on native controls and Vaadin adapter content.
+These callbacks cannot change identity, hierarchy, order, visibility, disabled state, metadata, or activation, and the same immutable projection feeds native and Vaadin controls.
+Authentication-neutral components never discover a username or infer Logout from a label; an authenticated host can map its current display identity and exact `causeway.security.LogoutMenu#logout` presentation explicitly.
 Selecting an enabled menu action closes its transient menu before interaction presentation, clicking outside closes an expanded menu without moving focus, and cancellation restores focus to the visible originating disclosure.
 
 Each non-empty bar renders a labelled `nav` landmark.
@@ -265,7 +268,7 @@ Empty, malformed, unsupported, stale, disconnected, hidden, family-failed, or ex
 Menu Bar overflow preserves source order and every visible authorized action at narrow widths, while responsive transitions reuse current Causeway state without another semantic request.
 
 The composite and standalone bars expose `refresh()` to start a new authorization-sensitive and locale-sensitive generation and reject superseded metadata, resource, and service-state responses.
-Stable hooks include `data-menu-state`, `data-causeway-bar`, `data-causeway-bar-role`, `data-causeway-menu`, `data-causeway-menu-section`, `data-causeway-service-action`, `data-service-logical-type`, `data-action-id`, inert presentation-hint data, and the `causeway-menubar*`, `causeway-menu*`, and `causeway-service-action*` classes.
+Stable hooks include `data-menu-state`, `data-causeway-bar`, `data-causeway-bar-role`, `data-causeway-menu`, `data-causeway-menu-section`, `data-causeway-service-action`, `data-service-logical-type`, `data-action-id`, `data-causeway-action-appearance`, inert presentation-hint data, and the `causeway-menubar*`, `causeway-menu*`, and `causeway-service-action*` classes.
 `causeway-menubars-state-change` publishes lifecycle state.
 `causeway-menubars-diagnostic` publishes bounded redacted failures without response bodies, credentials, authorization rules, submitted values, or remote exception text.
 Internal presentation adds `data-causeway-menubar-presentation`, `data-causeway-menubar-responsive`, and bounded `data-causeway-menubar-fallback` diagnostics without making raw `vaadin-menu-bar`, item objects, item-selected events, properties, methods, theme internals, or Shadow DOM supported application APIs.

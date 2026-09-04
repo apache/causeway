@@ -222,6 +222,10 @@ class PetClinicVuePlaywrightTest {
         assertThat(page.locator("body").evaluate("element => getComputedStyle(element).fontFamily"))
                 .asString().contains("Inter");
         assertThat(page.locator("cw-menubars").innerText()).containsSubsequence("Pet Owners", "Visits", "Account");
+        assertThat(page.locator("cw-menubars").innerText()).doesNotContain("System");
+        assertThat(page.locator("cw-menubar-secondary").count()).isZero();
+        assertThat(page.locator("cw-menubar-tertiary").evaluate(
+                "element => element._projection.menus.map(menu => menu.label).join(',')")).isEqualTo("Account");
         assertThat(page.locator("footer").innerText()).contains("Powered by Apache Causeway", "Vue viewer");
         assertThat(page.locator(".causeway-object-identity").isVisible()).isFalse();
         assertThat(page.locator("[data-causeway-route-page]").evaluate("element => getComputedStyle(element).outlineStyle"))
@@ -332,6 +336,9 @@ class PetClinicVuePlaywrightTest {
             assertThat(page.locator("footer").count()).isEqualTo(1);
             page.locator("cw-menubars[data-menu-state='ready']").waitFor();
             assertThat(page.locator("cw-menubars[data-menu-state='ready']").count()).isEqualTo(1);
+            assertThat(page.locator("cw-menubar-secondary").count()).isZero();
+            assertThat(page.locator("cw-menubar-tertiary").evaluate(
+                    "element => element._projection.menus.map(menu => menu.label).join(',')")).isEqualTo("Account");
             assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("""
                     element => {
                       const actions = Object.values(element._projection?.actions ?? {});

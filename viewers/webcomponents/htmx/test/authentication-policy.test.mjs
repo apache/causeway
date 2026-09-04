@@ -21,7 +21,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  authenticationActionAppearance,
   authenticationActionLabel,
+  authenticationMenuLabel,
   csrfHeaders,
   isExcludedAction,
   isUnsafeMethod,
@@ -30,6 +32,7 @@ import {
 } from '../src/main/resources/META-INF/resources/causeway-htmx/authentication-policy.mjs';
 
 const metadata = {
+  'causeway-auth-username': 'sven',
   'causeway-auth-login': '/htmx/login',
   'causeway-auth-csrf-header': 'X-CSRF-TOKEN',
   'causeway-auth-csrf-parameter': '_csrf',
@@ -51,6 +54,7 @@ function documentWith(values = metadata, buttons = []) {
 
 test('authentication metadata is activated only as one complete bounded contract', () => {
   const authentication = readAuthenticationMetadata(documentWith());
+  assert.equal(authentication.username, 'sven');
   assert.equal(authentication.loginPath, '/htmx/login');
   assert.equal(authentication.csrfParameterName, '_csrf');
   assert.deepEqual(csrfHeaders(authentication), {'X-CSRF-TOKEN': 'bounded-token'});
@@ -87,8 +91,11 @@ test('legacy exclusion matches only the exact framework service and member', () 
   }), false);
 });
 
-test('menu policy relabels only exact host-managed framework Logout', () => {
+test('menu policy labels the utility menu and presents only exact host-managed framework Logout', () => {
   const authentication = readAuthenticationMetadata(documentWith());
+  assert.equal(authenticationMenuLabel(authentication, {role: 'tertiary', label: 'Account'}), 'sven');
+  assert.equal(authenticationMenuLabel(authentication, {role: 'primary', label: 'Account'}), undefined);
+  assert.equal(authenticationMenuLabel(null, {role: 'tertiary', label: 'Account'}), undefined);
   assert.equal(authenticationActionLabel(authentication, {
     serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', label: 'Logout'
   }), 'Sign out');
@@ -97,5 +104,11 @@ test('menu policy relabels only exact host-managed framework Logout', () => {
   }), undefined);
   assert.equal(authenticationActionLabel(null, {
     serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', label: 'Logout'
+  }), undefined);
+  assert.equal(authenticationActionAppearance(authentication, {
+    serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout'
+  }), 'sign-out');
+  assert.equal(authenticationActionAppearance(authentication, {
+    serviceLogicalTypeName: 'petclinic.LogoutMenu', actionId: 'logout'
   }), undefined);
 });

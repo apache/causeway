@@ -436,6 +436,7 @@ class HtmxViewerControllerTest {
         final var response = controller.route(request("/htmx", "", false));
 
         assertThat(response.getBody())
+                .contains("<meta name=\"causeway-auth-username\" content=\"Sven &amp; Co\">")
                 .contains("<meta name=\"causeway-auth-login\" content=\"/htmx/login\">")
                 .contains("<meta name=\"causeway-auth-csrf-header\" content=\"X-CSRF-TOKEN\">")
                 .contains("<meta name=\"causeway-auth-csrf-token\" content=\"token&lt;bounded&gt;\">")
