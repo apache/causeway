@@ -21,560 +21,617 @@ import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
 import {
-  boundedTooltipSection,
-  composeMemberTooltip,
-  DescriptionPresentation,
-  normalizeDescriptionPresentation
+    boundedTooltipSection,
+    composeMemberTooltip,
+    DescriptionPresentation,
+    normalizeDescriptionPresentation
 } from './description-presentation.mjs';
 import {
-  defaultEditorRegistry,
-  parseCausewayEditorValue,
-  renderCausewayEditor
+    defaultEditorRegistry,
+    parseCausewayEditorValue,
+    renderCausewayEditor
 } from './editor-registry.mjs';
 import {
-  CAUSEWAY_FIELD_WIDGET_POLICY_EVENT,
-  renderCausewayReadOnlyField,
-  supportsCausewayReadOnlyField
+    CAUSEWAY_FIELD_WIDGET_POLICY_EVENT,
+    renderCausewayReadOnlyField,
+    supportsCausewayReadOnlyField
 } from './field-widget.mjs';
 import {
-  connectMemberComposition,
-  disconnectMemberComposition,
-  eventOriginatesFromAssociatedAction,
-  refreshMemberComposition,
-  renderMemberPrimary
+    connectMemberComposition,
+    disconnectMemberComposition,
+    eventOriginatesFromAssociatedAction,
+    refreshMemberComposition,
+    renderMemberPrimary
 } from './member-composition.mjs';
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {namedType} from './introspection.mjs';
+import {CausewayPdfDocumentReaderController} from './pdf-document-reader.mjs';
 import {
-  CausewayTemporalRangeStatus,
-  resolveCausewayTemporalRange,
-  validateCausewayTemporalRange
+    CausewayTemporalRangeStatus,
+    resolveCausewayTemporalRange,
+    validateCausewayTemporalRange
 } from './temporal-range.mjs';
 import {InteractionStatus} from './types.mjs';
 import {CausewayValueCodecError, selectCausewayValueCodec, semanticTypeName} from './value-codecs.mjs';
-import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
+import {
+    defaultValueRendererRegistry,
+    normalizePdfInitialPage,
+    normalizePdfRenderMode,
+    normalizePdfZoom,
+    renderCausewayValue
+} from './value-renderers.mjs';
 
 let propertySequence = 0;
 
 export class CausewayPropertyElement extends CausewayContextConsumerElement {
-  static get observedAttributes() {
-    return ['id', 'named', 'described-as', 'description-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline', 'min', 'max'];
-  }
+    static get observedAttributes() {
+        return ['id', 'named', 'described-as', 'description-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline', 'min', 'max', 'pdf-render', 'pdf-initial-page', 'pdf-zoom'];
+    }
 
-  constructor() {
-    super();
-    const sequence = ++propertySequence;
-    this.labelId = `causeway-property-label-${sequence}`;
-    this.descriptionId = `causeway-property-description-${sequence}`;
-    this.reasonId = `causeway-property-reason-${sequence}`;
-    this.inputId = `causeway-property-input-${sequence}`;
-    this.errorId = `causeway-property-error-${sequence}`;
-    this._rendererRegistry = defaultValueRendererRegistry;
-    this._editorRegistry = defaultEditorRegistry;
-    this.interactionState = null;
-    this.interactionGeneration = 0;
-    this.validationTimer = null;
-    this.autoCompleteController = null;
-    this.autoCompleteGeneration = 0;
-    this.renderingInteraction = false;
-    this.restoreEditFocusAfterGeneration = null;
-    this.restoreClearFocus = false;
-    this.addEventListener('focusin', event => {
-      this.restoreClearFocus = event.target?.hasAttribute?.('data-causeway-field-clear') === true;
-    });
-    this.addEventListener('focusout', event => {
-      if (!this.renderingInteraction && !this.contains(event.relatedTarget)) {
+    constructor() {
+        super();
+        const sequence = ++propertySequence;
+        this.labelId = `causeway-property-label-${sequence}`;
+        this.descriptionId = `causeway-property-description-${sequence}`;
+        this.reasonId = `causeway-property-reason-${sequence}`;
+        this.inputId = `causeway-property-input-${sequence}`;
+        this.errorId = `causeway-property-error-${sequence}`;
+        this._rendererRegistry = defaultValueRendererRegistry;
+        this._editorRegistry = defaultEditorRegistry;
+        this.pdfReader = new CausewayPdfDocumentReaderController(this);
+        this.pdfDiagnosticSignature = '';
+        this.interactionState = null;
+        this.interactionGeneration = 0;
+        this.validationTimer = null;
+        this.autoCompleteController = null;
+        this.autoCompleteGeneration = 0;
+        this.renderingInteraction = false;
+        this.restoreEditFocusAfterGeneration = null;
         this.restoreClearFocus = false;
-      }
-    });
-    this.addEventListener('click', event => {
-      if (eventOriginatesFromAssociatedAction(this, event.target)) {
-        return;
-      }
-      const action = event.target?.getAttribute?.('data-causeway-action') ?? event.target?.dataset?.causewayAction;
-      if (action === 'edit') {
-        void this.beginEdit();
-      } else if (action === 'cancel') {
-        this.cancelEdit();
-      } else if (action === 'save' && event.target?.getAttribute?.('aria-disabled') !== 'true') {
-        void this.saveEdit();
-      }
-    });
-    this.addEventListener('input', event => {
-      if (!eventOriginatesFromAssociatedAction(this, event.target)) {
-        this.#captureEditorEvent(event, true);
-      }
-    });
-    this.addEventListener('change', event => {
-      if (!eventOriginatesFromAssociatedAction(this, event.target)) {
-        this.#captureEditorEvent(event, false);
-      }
-    });
-    this.addEventListener('causeway-reference-search', event => {
-      if (eventOriginatesFromAssociatedAction(this, event.target)
-          || event.detail?.name !== this.id
-          || !this.interactionState?.capabilities?.autoComplete) {
-        return;
-      }
-      event.stopPropagation();
-      const request = event.detail;
-      if (typeof request.respond === 'function') {
-        void this.loadAutoComplete(request.search, {
-          offset: request.offset,
-          size: request.size,
-          publish: false
-        }).then(result => request.respond(result));
-      } else {
-        void this.loadAutoComplete(request.search);
-      }
-    });
-    const cancelToolkitEditor = event => {
-      if (this.interactionState && !eventOriginatesFromAssociatedAction(this, event.target)) {
-        event.stopPropagation();
-        this.cancelEdit();
-      }
-    };
-    this.addEventListener('causeway-reference-escape', cancelToolkitEditor);
-    this.addEventListener('causeway-field-escape', cancelToolkitEditor);
-    const rerenderFailedToolkitEditor = event => {
-      if (!this.interactionState || eventOriginatesFromAssociatedAction(this, event.target)) {
-        return;
-      }
-      event.stopPropagation();
-      const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
-      this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
-      this.renderComponentState(this.componentState);
-      queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
-    };
-    this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
-    this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
-    this.addEventListener('causeway-field-view-load-failed', event => {
-      if (eventOriginatesFromAssociatedAction(this, event.target)) {
-        return;
-      }
-      event.stopPropagation();
-      this.renderComponentState(this.componentState);
-    });
-    this._fieldWidgetPolicyListener = () => this.#rerenderForFieldPolicyChange();
-  }
-
-  get editable() {
-    return this.hasAttribute('editable');
-  }
-
-  set editable(value) {
-    if (value) {
-      this.setAttribute('editable', '');
-    } else {
-      this.removeAttribute('editable');
-    }
-  }
-
-  get min() {
-    return this.getAttribute('min');
-  }
-
-  set min(value) {
-    setOptionalAttribute(this, 'min', value);
-  }
-
-  get max() {
-    return this.getAttribute('max');
-  }
-
-  set max(value) {
-    setOptionalAttribute(this, 'max', value);
-  }
-
-  get multiLine() {
-    return normalizedMultiLine(this.getAttribute('multi-line'))
-      || normalizedMultiLine(this.getAttribute('multiline'));
-  }
-
-  set multiLine(value) {
-    if (Number.isSafeInteger(value) && value > 1) {
-      this.setAttribute('multi-line', String(Math.min(value, 50)));
-    } else {
-      this.removeAttribute('multi-line');
-    }
-  }
-
-  get named() {
-    return this.getAttribute('named');
-  }
-
-  set named(value) {
-    setOptionalAttribute(this, 'named', value);
-  }
-
-  get describedAs() {
-    return this.getAttribute('described-as');
-  }
-
-  set describedAs(value) {
-    setOptionalAttribute(this, 'described-as', value);
-  }
-
-  get descriptionAs() {
-    return normalizeDescriptionPresentation(this.getAttribute('description-as'));
-  }
-
-  set descriptionAs(value) {
-    setOptionalAttribute(this, 'description-as', value);
-  }
-
-  get labelPosition() {
-    return normalizeLabelPosition(this.getAttribute('label-position'));
-  }
-
-  set labelPosition(value) {
-    const normalized = normalizeLabelPosition(value);
-    if (normalized) {
-      this.setAttribute('label-position', normalized);
-    } else {
-      this.removeAttribute('label-position');
-    }
-  }
-
-  get rendererRegistry() {
-    return this._rendererRegistry;
-  }
-
-  set rendererRegistry(value) {
-    this._rendererRegistry = value ?? defaultValueRendererRegistry;
-    if (this.componentState) {
-      this.renderComponentState(this.componentState);
-    }
-  }
-
-  get editorRegistry() {
-    return this._editorRegistry;
-  }
-
-  set editorRegistry(value) {
-    this._editorRegistry = value ?? defaultEditorRegistry;
-    if (this.componentState) {
-      this.renderComponentState(this.componentState);
-    }
-  }
-
-  connectedCallback() {
-    document.addEventListener(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, this._fieldWidgetPolicyListener);
-    connectMemberComposition(this);
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, this._fieldWidgetPolicyListener);
-    disconnectMemberComposition(this);
-    clearTimeout(this.validationTimer);
-    this.autoCompleteController?.abort();
-    this.autoCompleteController = null;
-    this.autoCompleteGeneration += 1;
-    super.disconnectedCallback();
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue === newValue || !this.isConnected) {
-      return;
-    }
-    if (name === 'id') {
-      this.interactionState = null;
-      this.restoreClearFocus = false;
-      refreshMemberComposition(this);
-      this.reconnectRequirement();
-    } else {
-      this.renderComponentState(this.componentState);
-    }
-  }
-
-  createRequirement() {
-    return {kind: 'property', member: this.id};
-  }
-
-  async beginEdit() {
-    const state = this.componentState;
-    if (!this.#canOfferEdit(state) || this.interactionState) {
-      return false;
-    }
-    this.restoreEditFocusAfterGeneration = null;
-    this.restoreClearFocus = false;
-    this.removeAttribute('data-causeway-temporal-range-status');
-    const generation = ++this.interactionGeneration;
-    this.#setInteraction({status: InteractionStatus.PREPARING, pendingValue: state.data?.get, error: null});
-    const result = await this._resolvedContext.prepareProperty(this.id);
-    if (generation !== this.interactionGeneration) {
-      return false;
-    }
-    if (result.status !== InteractionStatus.SUCCESS) {
-      this.#setInteraction({
-        status: result.status,
-        pendingValue: state.data?.get,
-        error: result.errors?.[0]?.message ?? 'Property editing is unavailable.'
-      });
-      return false;
-    }
-    const temporalRange = this.#resolveTemporalRange(result.data.capabilities);
-    this.#presentTemporalRangeStatus(temporalRange);
-    const editorContext = this.#editorContext({
-      pendingValue: state.data?.get,
-      capabilities: result.data.capabilities,
-      choices: result.data.choices,
-      temporalRange,
-      error: null
-    });
-    const renderedEditor = renderCausewayEditor(editorContext, this._editorRegistry);
-    if (renderedEditor.editorId === 'unsupported') {
-      this.#setInteraction({
-        status: InteractionStatus.UNSUPPORTED,
-        pendingValue: state.data?.get,
-        capabilities: result.data.capabilities,
-        choices: result.data.choices,
-        temporalRange,
-        editor: renderedEditor.editor,
-        error: `No editor supports '${result.data.capabilities.inputType?.name ?? 'this input type'}'.`
-      });
-      return false;
-    }
-    this.#setInteraction({
-      status: InteractionStatus.EDITING,
-      pendingValue: state.data?.get,
-      capabilities: result.data.capabilities,
-      choices: result.data.choices,
-      suggestions: Object.freeze([]),
-      temporalRange,
-      editor: renderedEditor.editor,
-      error: null
-    });
-    queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
-    return true;
-  }
-
-  cancelEdit() {
-    if (!this.interactionState) {
-      return false;
-    }
-    clearTimeout(this.validationTimer);
-    this.autoCompleteController?.abort();
-    this.autoCompleteController = null;
-    this.autoCompleteGeneration += 1;
-    this.interactionGeneration += 1;
-    const editor = this.interactionState.editor;
-    this.interactionState = null;
-    this.restoreEditFocusAfterGeneration = null;
-    this.restoreClearFocus = false;
-    this.removeAttribute('data-causeway-temporal-range-status');
-    this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
-      member: this.id,
-      status: InteractionStatus.CANCELLED,
-      value: publicInteractionValue(editor, this.componentState?.data?.get)
-    })));
-    this.renderComponentState(this.componentState);
-    queueMicrotask(() => this.querySelector?.('[data-causeway-action="edit"]')?.focus?.());
-    return true;
-  }
-
-  setPendingValue(value, {validate = false} = {}) {
-    if (!this.interactionState) {
-      return false;
-    }
-    if (this.interactionState.status === InteractionStatus.VALIDATING) {
-      this.interactionGeneration += 1;
-    }
-    this.interactionState = Object.freeze({...this.interactionState, status: InteractionStatus.EDITING, pendingValue: value, error: null});
-    this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
-      member: this.id,
-      status: InteractionStatus.EDITING,
-      value: publicInteractionValue(this.interactionState.editor, value),
-      error: null
-    })));
-    if (validate) {
-      clearTimeout(this.validationTimer);
-      this.validationTimer = setTimeout(async () => {
-        if (this.interactionState?.capabilities?.autoComplete) {
-          await this.loadAutoComplete(String(this.interactionState.pendingValue ?? ''));
-        }
-        await this.validatePending();
-      }, 250);
-    }
-    return true;
-  }
-
-  async loadAutoComplete(search, {offset = 0, size = null, publish = true} = {}) {
-    if (!this.interactionState?.capabilities?.autoComplete) {
-      return {status: InteractionStatus.UNSUPPORTED, data: null, errors: []};
-    }
-    this.autoCompleteController?.abort();
-    const controller = new AbortController();
-    this.autoCompleteController = controller;
-    const generation = ++this.autoCompleteGeneration;
-    const {maximumResults} = causewayReferenceWidgetConfiguration();
-    const requestedSize = size
-      ?? this.interactionState.capabilities?.autoCompleteWindowSize
-      ?? maximumResults;
-    const result = typeof this._resolvedContext.autoCompletePropertyWindow === 'function'
-      ? await this._resolvedContext.autoCompletePropertyWindow(this.id, search, {
-          offset,
-          size: requestedSize,
-          signal: controller.signal
-        })
-      : legacyWindowResult(await this._resolvedContext.autoCompleteProperty(
-          this.id, search, {signal: controller.signal}), offset, requestedSize);
-    if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.interactionState) {
-      return {...result, status: InteractionStatus.OBSOLETE};
-    }
-    if (result.status !== InteractionStatus.SUCCESS) {
-      if (result.status !== InteractionStatus.OBSOLETE) {
-        this.#setInteraction({
-          ...this.interactionState,
-          status: InteractionStatus.FAILED,
-          error: result.errors?.[0]?.message ?? 'Reference search failed.'
+        this.addEventListener('focusin', event => {
+            this.restoreClearFocus = event.target?.hasAttribute?.('data-causeway-field-clear') === true;
         });
-      }
-      return result;
+        this.addEventListener('focusout', event => {
+            if (!this.renderingInteraction && !this.contains(event.relatedTarget)) {
+                this.restoreClearFocus = false;
+            }
+        });
+        this.addEventListener('click', event => {
+            if (eventOriginatesFromAssociatedAction(this, event.target)) {
+                return;
+            }
+            const action = event.target?.getAttribute?.('data-causeway-action') ?? event.target?.dataset?.causewayAction;
+            if (action === 'edit') {
+                void this.beginEdit();
+            } else if (action === 'cancel') {
+                this.cancelEdit();
+            } else if (action === 'save' && event.target?.getAttribute?.('aria-disabled') !== 'true') {
+                void this.saveEdit();
+            }
+        });
+        this.addEventListener('input', event => {
+            if (!eventOriginatesFromAssociatedAction(this, event.target)) {
+                this.#captureEditorEvent(event, true);
+            }
+        });
+        this.addEventListener('change', event => {
+            if (!eventOriginatesFromAssociatedAction(this, event.target)) {
+                this.#captureEditorEvent(event, false);
+            }
+        });
+        this.addEventListener('causeway-reference-search', event => {
+            if (eventOriginatesFromAssociatedAction(this, event.target)
+                    || event.detail?.name !== this.id
+                    || !this.interactionState?.capabilities?.autoComplete) {
+                return;
+            }
+            event.stopPropagation();
+            const request = event.detail;
+            if (typeof request.respond === 'function') {
+                void this.loadAutoComplete(request.search, {
+                    offset: request.offset,
+                    size: request.size,
+                    publish: false
+                }).then(result => request.respond(result));
+            } else {
+                void this.loadAutoComplete(request.search);
+            }
+        });
+        const cancelToolkitEditor = event => {
+            if (this.interactionState && !eventOriginatesFromAssociatedAction(this, event.target)) {
+                event.stopPropagation();
+                this.cancelEdit();
+            }
+        };
+        this.addEventListener('causeway-reference-escape', cancelToolkitEditor);
+        this.addEventListener('causeway-field-escape', cancelToolkitEditor);
+        const rerenderFailedToolkitEditor = event => {
+            if (!this.interactionState || eventOriginatesFromAssociatedAction(this, event.target)) {
+                return;
+            }
+            event.stopPropagation();
+            const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
+            this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
+            this.renderComponentState(this.componentState);
+            queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+        };
+        this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
+        this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
+        this.addEventListener('causeway-field-view-load-failed', event => {
+            if (eventOriginatesFromAssociatedAction(this, event.target)) {
+                return;
+            }
+            event.stopPropagation();
+            this.renderComponentState(this.componentState);
+        });
+        this._fieldWidgetPolicyListener = () => this.#rerenderForFieldPolicyChange();
     }
-    const window = result.data;
-    const suggestions = [...(window?.items ?? [])];
-    if (window?.windowed !== true && suggestions.length > maximumResults) {
-      const message = `More than ${maximumResults} references matched. Refine the search.`;
-      this.#setInteraction({...this.interactionState, status: InteractionStatus.FAILED, suggestions: Object.freeze([]), error: message});
-      return {status: InteractionStatus.FAILED, data: null, errors: [{message, code: 'AUTOCOMPLETE_RESULT_LIMIT'}]};
-    }
-    if (publish) {
-      this.interactionState = Object.freeze({
-        ...this.interactionState,
-        status: InteractionStatus.EDITING,
-        suggestions: Object.freeze(suggestions),
-        autoCompleteWindow: window,
-        error: null
-      });
-      this.renderComponentState(this.componentState);
-    }
-    return result;
-  }
 
-  async validatePending() {
-    const localRangeError = validateCausewayTemporalRange(
-      this.interactionState?.pendingValue,
-      this.interactionState?.temporalRange
-    );
-    if (localRangeError) {
-      clearTimeout(this.validationTimer);
-      this.#setInteraction({
-        ...this.interactionState,
-        status: InteractionStatus.FAILED,
-        error: localRangeError.message
-      });
-      return {
-        status: InteractionStatus.FAILED,
-        data: null,
-        errors: [{message: localRangeError.message, extensions: {code: localRangeError.code}}]
-      };
+    get editable() {
+        return this.hasAttribute('editable');
     }
-    if (!this.interactionState?.capabilities?.validate) {
-      return {status: InteractionStatus.SUCCESS, data: null, errors: []};
-    }
-    clearTimeout(this.validationTimer);
-    const generation = ++this.interactionGeneration;
-    const pendingValue = this.interactionState.pendingValue;
-    this.#setInteraction({...this.interactionState, status: InteractionStatus.VALIDATING, error: null});
-    const result = await this._resolvedContext.validateProperty(this.id, pendingValue);
-    if (generation !== this.interactionGeneration || result.status === InteractionStatus.OBSOLETE) {
-      return result;
-    }
-    const validationReason = result.status === InteractionStatus.SUCCESS && typeof result.data === 'string'
-      ? result.data
-      : result.errors?.[0]?.message ?? null;
-    this.#setInteraction({
-      ...this.interactionState,
-      status: validationReason ? InteractionStatus.FAILED : InteractionStatus.EDITING,
-      error: validationReason
-    });
-    return result;
-  }
 
-  async saveEdit() {
-    if (!this.interactionState || [InteractionStatus.SAVING, InteractionStatus.VALIDATING].includes(this.interactionState.status)) {
-      return false;
+    set editable(value) {
+        if (value) {
+            this.setAttribute('editable', '');
+        } else {
+            this.removeAttribute('editable');
+        }
     }
-    const valueBeingValidated = this.interactionState.pendingValue;
-    const validation = await this.validatePending();
-    if (!this.interactionState
-        || this.interactionState.pendingValue !== valueBeingValidated
-        || this.interactionState.error
-        || validation.status !== InteractionStatus.SUCCESS) {
-      return false;
-    }
-    const generation = ++this.interactionGeneration;
-    const pendingValue = this.interactionState.pendingValue;
-    const focusGeneration = this.componentState?.generation ?? 0;
-    this.#setInteraction({...this.interactionState, status: InteractionStatus.SAVING, error: null});
-    const result = await this._resolvedContext.updateProperty(this.id, pendingValue);
-    if (generation !== this.interactionGeneration) {
-      return false;
-    }
-    if (result.status !== InteractionStatus.SUCCESS) {
-      this.#setInteraction({
-        ...this.interactionState,
-        status: InteractionStatus.FAILED,
-        error: result.errors?.[0]?.message ?? 'Property update failed.'
-      });
-      return false;
-    }
-    this.restoreEditFocusAfterGeneration = focusGeneration;
-    const editor = this.interactionState.editor;
-    this.interactionState = null;
-    this.restoreClearFocus = false;
-    this.removeAttribute('data-causeway-temporal-range-status');
-    this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_UPDATED, Object.freeze({
-      member: this.id,
-      value: publicInteractionValue(editor, pendingValue),
-      identity: this._resolvedContext?.identity ?? null,
-      result
-    })));
-    this.renderComponentState(this.componentState);
-    return true;
-  }
 
-  renderComponentState(state) {
-    if (!state) {
-      return;
+    get min() {
+        return this.getAttribute('min');
     }
-    if (this.interactionState) {
-      this.#renderInteraction(state);
-      return;
+
+    set min(value) {
+        setOptionalAttribute(this, 'min', value);
     }
-    const presentation = this.#presentation(state);
-    if (presentation.loading) {
-      renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="${presentation.fieldClass}"${presentation.fieldAttributes} role="status">Loading value…</span></div>`);
-      return;
+
+    get max() {
+        return this.getAttribute('max');
     }
-    if (presentation.error) {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="${presentation.fieldClass}"${presentation.fieldAttributes}>${escapeHtml(errorMessage(state))}</span></div>`);
-      return;
+
+    set max(value) {
+        setOptionalAttribute(this, 'max', value);
     }
-    const propertyState = state.data ?? {};
-    if (propertyState.hidden === true) {
-      renderMemberPrimary(this, '', {hidden: true});
-      this.removeAttribute('data-renderer');
-      return;
+
+    get multiLine() {
+        return normalizedMultiLine(this.getAttribute('multi-line'))
+                || normalizedMultiLine(this.getAttribute('multiline'));
     }
-    const rendered = renderCausewayValue({value: propertyState.get, descriptor: state.descriptor}, this._rendererRegistry);
-    const readOnlyContext = this.#readOnlyFieldContext(propertyState.get, state.descriptor, presentation);
-    const useFieldView = rendered.standard === true
-      && ['scalar', 'enum'].includes(rendered.rendererId)
-      && supportsCausewayReadOnlyField(readOnlyContext);
-    const valueMarkup = useFieldView ? renderCausewayReadOnlyField(readOnlyContext) : rendered.html;
-    const stringValueClass = namedType(state.descriptor?.value?.typeRef) === 'String'
-      ? ' causeway-property-value-string'
-      : '';
-    this.setAttribute('data-renderer', useFieldView ? 'vaadin-field-view' : rendered.rendererId);
-    const editLabel = `Edit ${presentation.label}`;
-    const editMarkup = this.#canOfferEdit(state)
-      ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit" aria-label="${escapeHtml(editLabel)}" title="${escapeHtml(editLabel)}"${this.#testId('edit')}><svg class="causeway-property-edit-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path><path d="m13.5 6.5 4 4"></path></svg></button>`
-      : '';
-    renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
+
+    set multiLine(value) {
+        if (Number.isSafeInteger(value) && value > 1) {
+            this.setAttribute('multi-line', String(Math.min(value, 50)));
+        } else {
+            this.removeAttribute('multi-line');
+        }
+    }
+
+    get named() {
+        return this.getAttribute('named');
+    }
+
+    set named(value) {
+        setOptionalAttribute(this, 'named', value);
+    }
+
+    get describedAs() {
+        return this.getAttribute('described-as');
+    }
+
+    set describedAs(value) {
+        setOptionalAttribute(this, 'described-as', value);
+    }
+
+    get descriptionAs() {
+        return normalizeDescriptionPresentation(this.getAttribute('description-as'));
+    }
+
+    set descriptionAs(value) {
+        setOptionalAttribute(this, 'description-as', value);
+    }
+
+    get labelPosition() {
+        return normalizeLabelPosition(this.getAttribute('label-position'));
+    }
+
+    set labelPosition(value) {
+        const normalized = normalizeLabelPosition(value);
+        if (normalized) {
+            this.setAttribute('label-position', normalized);
+        } else {
+            this.removeAttribute('label-position');
+        }
+    }
+
+    get pdfRender() {
+        return normalizePdfRenderMode(this.getAttribute('pdf-render'));
+    }
+
+    set pdfRender(value) {
+        setOptionalAttribute(this, 'pdf-render', value);
+    }
+
+    get pdfInitialPage() {
+        return normalizePdfInitialPage(this.getAttribute('pdf-initial-page'));
+    }
+
+    set pdfInitialPage(value) {
+        setOptionalAttribute(this, 'pdf-initial-page', value);
+    }
+
+    get pdfZoom() {
+        return normalizePdfZoom(this.getAttribute('pdf-zoom'));
+    }
+
+    set pdfZoom(value) {
+        setOptionalAttribute(this, 'pdf-zoom', value);
+    }
+
+    get rendererRegistry() {
+        return this._rendererRegistry;
+    }
+
+    set rendererRegistry(value) {
+        this._rendererRegistry = value ?? defaultValueRendererRegistry;
+        if (this.componentState) {
+            this.renderComponentState(this.componentState);
+        }
+    }
+
+    get editorRegistry() {
+        return this._editorRegistry;
+    }
+
+    set editorRegistry(value) {
+        this._editorRegistry = value ?? defaultEditorRegistry;
+        if (this.componentState) {
+            this.renderComponentState(this.componentState);
+        }
+    }
+
+    connectedCallback() {
+        document.addEventListener(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, this._fieldWidgetPolicyListener);
+        connectMemberComposition(this);
+        super.connectedCallback();
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, this._fieldWidgetPolicyListener);
+        disconnectMemberComposition(this);
+        clearTimeout(this.validationTimer);
+        this.autoCompleteController?.abort();
+        this.autoCompleteController = null;
+        this.autoCompleteGeneration += 1;
+        this.pdfReader.retire();
+        super.disconnectedCallback();
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue || !this.isConnected) {
+            return;
+        }
+        if (name === 'id') {
+            this.interactionState = null;
+            this.restoreClearFocus = false;
+            refreshMemberComposition(this);
+            this.reconnectRequirement();
+        } else {
+            this.renderComponentState(this.componentState);
+        }
+    }
+
+    createRequirement() {
+        return {kind: 'property', member: this.id};
+    }
+
+    async beginEdit() {
+        const state = this.componentState;
+        if (!this.#canOfferEdit(state) || this.interactionState) {
+            return false;
+        }
+        this.restoreEditFocusAfterGeneration = null;
+        this.restoreClearFocus = false;
+        this.removeAttribute('data-causeway-temporal-range-status');
+        const generation = ++this.interactionGeneration;
+        this.#setInteraction({status: InteractionStatus.PREPARING, pendingValue: state.data?.get, error: null});
+        const result = await this._resolvedContext.prepareProperty(this.id);
+        if (generation !== this.interactionGeneration) {
+            return false;
+        }
+        if (result.status !== InteractionStatus.SUCCESS) {
+            this.#setInteraction({
+                status: result.status,
+                pendingValue: state.data?.get,
+                error: result.errors?.[0]?.message ?? 'Property editing is unavailable.'
+            });
+            return false;
+        }
+        const temporalRange = this.#resolveTemporalRange(result.data.capabilities);
+        this.#presentTemporalRangeStatus(temporalRange);
+        const editorContext = this.#editorContext({
+            pendingValue: state.data?.get,
+            capabilities: result.data.capabilities,
+            choices: result.data.choices,
+            temporalRange,
+            error: null
+        });
+        const renderedEditor = renderCausewayEditor(editorContext, this._editorRegistry);
+        if (renderedEditor.editorId === 'unsupported') {
+            this.#setInteraction({
+                status: InteractionStatus.UNSUPPORTED,
+                pendingValue: state.data?.get,
+                capabilities: result.data.capabilities,
+                choices: result.data.choices,
+                temporalRange,
+                editor: renderedEditor.editor,
+                error: `No editor supports '${result.data.capabilities.inputType?.name ?? 'this input type'}'.`
+            });
+            return false;
+        }
+        this.#setInteraction({
+            status: InteractionStatus.EDITING,
+            pendingValue: state.data?.get,
+            capabilities: result.data.capabilities,
+            choices: result.data.choices,
+            suggestions: Object.freeze([]),
+            temporalRange,
+            editor: renderedEditor.editor,
+            error: null
+        });
+        queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+        return true;
+    }
+
+    cancelEdit() {
+        if (!this.interactionState) {
+            return false;
+        }
+        clearTimeout(this.validationTimer);
+        this.autoCompleteController?.abort();
+        this.autoCompleteController = null;
+        this.autoCompleteGeneration += 1;
+        this.interactionGeneration += 1;
+        const editor = this.interactionState.editor;
+        this.interactionState = null;
+        this.restoreEditFocusAfterGeneration = null;
+        this.restoreClearFocus = false;
+        this.removeAttribute('data-causeway-temporal-range-status');
+        this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
+            member: this.id,
+            status: InteractionStatus.CANCELLED,
+            value: publicInteractionValue(editor, this.componentState?.data?.get)
+        })));
+        this.renderComponentState(this.componentState);
+        queueMicrotask(() => this.querySelector?.('[data-causeway-action="edit"]')?.focus?.());
+        return true;
+    }
+
+    setPendingValue(value, {validate = false} = {}) {
+        if (!this.interactionState) {
+            return false;
+        }
+        if (this.interactionState.status === InteractionStatus.VALIDATING) {
+            this.interactionGeneration += 1;
+        }
+        this.interactionState = Object.freeze({
+            ...this.interactionState,
+            status: InteractionStatus.EDITING,
+            pendingValue: value,
+            error: null
+        });
+        this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
+            member: this.id,
+            status: InteractionStatus.EDITING,
+            value: publicInteractionValue(this.interactionState.editor, value),
+            error: null
+        })));
+        if (validate) {
+            clearTimeout(this.validationTimer);
+            this.validationTimer = setTimeout(async () => {
+                if (this.interactionState?.capabilities?.autoComplete) {
+                    await this.loadAutoComplete(String(this.interactionState.pendingValue ?? ''));
+                }
+                await this.validatePending();
+            }, 250);
+        }
+        return true;
+    }
+
+    async loadAutoComplete(search, {offset = 0, size = null, publish = true} = {}) {
+        if (!this.interactionState?.capabilities?.autoComplete) {
+            return {status: InteractionStatus.UNSUPPORTED, data: null, errors: []};
+        }
+        this.autoCompleteController?.abort();
+        const controller = new AbortController();
+        this.autoCompleteController = controller;
+        const generation = ++this.autoCompleteGeneration;
+        const {maximumResults} = causewayReferenceWidgetConfiguration();
+        const requestedSize = size
+                ?? this.interactionState.capabilities?.autoCompleteWindowSize
+                ?? maximumResults;
+        const result = typeof this._resolvedContext.autoCompletePropertyWindow === 'function'
+                ? await this._resolvedContext.autoCompletePropertyWindow(this.id, search, {
+                    offset,
+                    size: requestedSize,
+                    signal: controller.signal
+                })
+                : legacyWindowResult(await this._resolvedContext.autoCompleteProperty(
+                        this.id, search, {signal: controller.signal}), offset, requestedSize);
+        if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.interactionState) {
+            return {...result, status: InteractionStatus.OBSOLETE};
+        }
+        if (result.status !== InteractionStatus.SUCCESS) {
+            if (result.status !== InteractionStatus.OBSOLETE) {
+                this.#setInteraction({
+                    ...this.interactionState,
+                    status: InteractionStatus.FAILED,
+                    error: result.errors?.[0]?.message ?? 'Reference search failed.'
+                });
+            }
+            return result;
+        }
+        const window = result.data;
+        const suggestions = [...(window?.items ?? [])];
+        if (window?.windowed !== true && suggestions.length > maximumResults) {
+            const message = `More than ${maximumResults} references matched. Refine the search.`;
+            this.#setInteraction({
+                ...this.interactionState,
+                status: InteractionStatus.FAILED,
+                suggestions: Object.freeze([]),
+                error: message
+            });
+            return {
+                status: InteractionStatus.FAILED,
+                data: null,
+                errors: [{message, code: 'AUTOCOMPLETE_RESULT_LIMIT'}]
+            };
+        }
+        if (publish) {
+            this.interactionState = Object.freeze({
+                ...this.interactionState,
+                status: InteractionStatus.EDITING,
+                suggestions: Object.freeze(suggestions),
+                autoCompleteWindow: window,
+                error: null
+            });
+            this.renderComponentState(this.componentState);
+        }
+        return result;
+    }
+
+    async validatePending() {
+        const localRangeError = validateCausewayTemporalRange(
+                this.interactionState?.pendingValue,
+                this.interactionState?.temporalRange
+        );
+        if (localRangeError) {
+            clearTimeout(this.validationTimer);
+            this.#setInteraction({
+                ...this.interactionState,
+                status: InteractionStatus.FAILED,
+                error: localRangeError.message
+            });
+            return {
+                status: InteractionStatus.FAILED,
+                data: null,
+                errors: [{message: localRangeError.message, extensions: {code: localRangeError.code}}]
+            };
+        }
+        if (!this.interactionState?.capabilities?.validate) {
+            return {status: InteractionStatus.SUCCESS, data: null, errors: []};
+        }
+        clearTimeout(this.validationTimer);
+        const generation = ++this.interactionGeneration;
+        const pendingValue = this.interactionState.pendingValue;
+        this.#setInteraction({...this.interactionState, status: InteractionStatus.VALIDATING, error: null});
+        const result = await this._resolvedContext.validateProperty(this.id, pendingValue);
+        if (generation !== this.interactionGeneration || result.status === InteractionStatus.OBSOLETE) {
+            return result;
+        }
+        const validationReason = result.status === InteractionStatus.SUCCESS && typeof result.data === 'string'
+                ? result.data
+                : result.errors?.[0]?.message ?? null;
+        this.#setInteraction({
+            ...this.interactionState,
+            status: validationReason ? InteractionStatus.FAILED : InteractionStatus.EDITING,
+            error: validationReason
+        });
+        return result;
+    }
+
+    async saveEdit() {
+        if (!this.interactionState || [InteractionStatus.SAVING, InteractionStatus.VALIDATING].includes(this.interactionState.status)) {
+            return false;
+        }
+        const valueBeingValidated = this.interactionState.pendingValue;
+        const validation = await this.validatePending();
+        if (!this.interactionState
+                || this.interactionState.pendingValue !== valueBeingValidated
+                || this.interactionState.error
+                || validation.status !== InteractionStatus.SUCCESS) {
+            return false;
+        }
+        const generation = ++this.interactionGeneration;
+        const pendingValue = this.interactionState.pendingValue;
+        const focusGeneration = this.componentState?.generation ?? 0;
+        this.#setInteraction({...this.interactionState, status: InteractionStatus.SAVING, error: null});
+        const result = await this._resolvedContext.updateProperty(this.id, pendingValue);
+        if (generation !== this.interactionGeneration) {
+            return false;
+        }
+        if (result.status !== InteractionStatus.SUCCESS) {
+            this.#setInteraction({
+                ...this.interactionState,
+                status: InteractionStatus.FAILED,
+                error: result.errors?.[0]?.message ?? 'Property update failed.'
+            });
+            return false;
+        }
+        this.restoreEditFocusAfterGeneration = focusGeneration;
+        const editor = this.interactionState.editor;
+        this.interactionState = null;
+        this.restoreClearFocus = false;
+        this.removeAttribute('data-causeway-temporal-range-status');
+        this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_UPDATED, Object.freeze({
+            member: this.id,
+            value: publicInteractionValue(editor, pendingValue),
+            identity: this._resolvedContext?.identity ?? null,
+            result
+        })));
+        this.renderComponentState(this.componentState);
+        return true;
+    }
+
+    renderComponentState(state) {
+        this.pdfReader.retire();
+        if (!state) {
+            return;
+        }
+        if (this.interactionState) {
+            this.#renderInteraction(state);
+            return;
+        }
+        const presentation = this.#presentation(state);
+        if (presentation.loading) {
+            renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="${presentation.fieldClass}"${presentation.fieldAttributes} role="status">Loading value…</span></div>`);
+            return;
+        }
+        if (presentation.error) {
+            renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="${presentation.fieldClass}"${presentation.fieldAttributes}>${escapeHtml(errorMessage(state))}</span></div>`);
+            return;
+        }
+        const propertyState = state.data ?? {};
+        if (propertyState.hidden === true) {
+            renderMemberPrimary(this, '', {hidden: true});
+            this.removeAttribute('data-renderer');
+            return;
+        }
+        const rendered = renderCausewayValue({
+            value: propertyState.get,
+            descriptor: state.descriptor,
+            presentation: {
+                pdfRender: this.getAttribute('pdf-render'),
+                pdfInitialPage: this.getAttribute('pdf-initial-page'),
+                pdfZoom: this.getAttribute('pdf-zoom')
+            }
+        }, this._rendererRegistry);
+        const readOnlyContext = this.#readOnlyFieldContext(propertyState.get, state.descriptor, presentation);
+        const useFieldView = rendered.standard === true
+                && ['scalar', 'enum'].includes(rendered.rendererId)
+                && supportsCausewayReadOnlyField(readOnlyContext);
+        const valueMarkup = useFieldView ? renderCausewayReadOnlyField(readOnlyContext) : rendered.html;
+        const stringValueClass = namedType(state.descriptor?.value?.typeRef) === 'String'
+                ? ' causeway-property-value-string'
+                : '';
+        this.setAttribute('data-renderer', useFieldView ? 'vaadin-field-view' : rendered.rendererId);
+        const editLabel = `Edit ${presentation.label}`;
+        const editMarkup = this.#canOfferEdit(state)
+                ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit" aria-label="${escapeHtml(editLabel)}" title="${escapeHtml(editLabel)}"${this.#testId('edit')}><svg class="causeway-property-edit-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path><path d="m13.5 6.5 4 4"></path></svg></button>`
+                : '';
+        renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
   ${presentation.labelMarkup}
   ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
@@ -583,255 +640,293 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     ${editMarkup}
   </div>
 </div>`);
-    this.#restoreSavedEditFocus(state);
-  }
-
-  #rerenderForFieldPolicyChange() {
-    if (!this.componentState) return;
-    const restoreEditorFocus = Boolean(this.interactionState) && this.contains(document.activeElement);
-    if (this.interactionState) {
-      const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
-      this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
+        if (rendered.rendererId === 'pdf' && rendered.pdf) {
+            this.#publishPdfAttributeDiagnostics();
+            this.pdfReader.mount(this.querySelector?.('[data-causeway-pdf-reader]'), rendered.pdf);
+        } else {
+            this.pdfDiagnosticSignature = '';
+        }
+        this.#restoreSavedEditFocus(state);
     }
-    this.renderComponentState(this.componentState);
-    if (restoreEditorFocus) {
-      queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+
+    dispatchPdfState(detail) {
+        this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PDF_READER_STATE, Object.freeze({
+            member: this.id,
+            ...detail
+        })));
     }
-  }
 
-  #readOnlyFieldContext(value, descriptor, presentation) {
-    const inputType = descriptor?.value?.typeRef ?? descriptor?.fields?.get?.type ?? null;
-    const semanticType = this.componentState?.data?.datatype ?? namedType(inputType);
-    const enumValues = descriptor?.value?.typeDescription?.enumValues?.map?.(entry => entry.name ?? entry) ?? [];
-    const boundedChoice = descriptor?.fields?.has?.('choices') === true;
-    const base = {
-      name: this.id,
-      label: presentation.label,
-      value,
-      inputType,
-      semanticType,
-      enumValues,
-      choices: boundedChoice ? [{label: String(value), value: String(value)}] : [],
-      autoComplete: false,
-      required: true,
-      multiLine: this.#effectiveMultiLine(this.componentState),
-      inputId: `${this.inputId}-view`,
-      labelId: this.labelId,
-      descriptionId: presentation.describedBy,
-      testId: this.#testIdValue('value')
-    };
-    const codec = selectCausewayValueCodec(base);
-    return {
-      ...base,
-      codec,
-      controlValue: codec.toControlValue(value, base)
-    };
-  }
-
-  #restoreSavedEditFocus(state) {
-    if (this.restoreEditFocusAfterGeneration == null
-        || state.status !== 'ready'
-        || state.generation <= this.restoreEditFocusAfterGeneration) {
-      return;
+    dispatchPdfDiagnostic(detail) {
+        this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PDF_READER_DIAGNOSTIC, Object.freeze({
+            member: this.id,
+            ...detail
+        })));
     }
-    this.restoreEditFocusAfterGeneration = null;
-    queueMicrotask(() => this.querySelector?.('[data-causeway-action="edit"]')?.focus?.());
-  }
 
-  #captureEditorEvent(event, debounce) {
-    if (this.renderingInteraction
-        || ![InteractionStatus.EDITING, InteractionStatus.VALIDATING, InteractionStatus.FAILED].includes(this.interactionState?.status)
-        || !event.target?.getAttribute?.('data-causeway-editor')) {
-      return;
+    #publishPdfAttributeDiagnostics() {
+        const diagnostics = [];
+        const render = this.getAttribute('pdf-render');
+        if (render != null && !['auto', 'manual', 'link'].includes(String(render).trim().toLocaleLowerCase())) diagnostics.push('Invalid pdf-render; using auto.');
+        const page = this.getAttribute('pdf-initial-page');
+        if (page != null && normalizePdfInitialPage(page) === 1 && String(page).trim() !== '1') diagnostics.push('Invalid pdf-initial-page; using 1.');
+        const zoom = this.getAttribute('pdf-zoom');
+        if (zoom != null && normalizePdfZoom(zoom) === 'page-width' && String(zoom).trim().toLocaleLowerCase() !== 'page-width') diagnostics.push('Invalid pdf-zoom; using page-width.');
+        const signature = diagnostics.join('|');
+        if (!signature || signature === this.pdfDiagnosticSignature) return;
+        this.pdfDiagnosticSignature = signature;
+        for (const message of diagnostics) this.dispatchPdfDiagnostic({status: 'invalid-configuration', message});
     }
-    const editor = this.interactionState.editor;
-    if (editor.id === 'autocomplete' && debounce) {
-      clearTimeout(this.validationTimer);
-      const search = String(event.target.value ?? '');
-      this.validationTimer = setTimeout(() => void this.loadAutoComplete(search), 250);
-      return;
+
+    #rerenderForFieldPolicyChange() {
+        if (!this.componentState) return;
+        const restoreEditorFocus = Boolean(this.interactionState) && this.contains(document.activeElement);
+        if (this.interactionState) {
+            const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
+            this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
+        }
+        this.renderComponentState(this.componentState);
+        if (restoreEditorFocus) {
+            queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+        }
     }
-    try {
-      const value = parseCausewayEditorValue(editor, {
-        value: event.target.value,
-        checked: event.target.checked,
-        choices: this.interactionState.choices ?? [],
-        suggestions: this.interactionState.suggestions ?? [],
-        inputType: this.interactionState.capabilities?.inputType
-      });
-      const debouncedEditor = editor.debounced === true || ['text', 'multiline'].includes(editor.id);
-      this.setPendingValue(value, {validate: debouncedEditor});
-      if (!debouncedEditor) {
-        void this.validatePending();
-      }
-    } catch (error) {
-      if (!(error instanceof CausewayValueCodecError)) {
-        throw error;
-      }
-      this.#setInteraction({
-        ...this.interactionState,
-        status: InteractionStatus.FAILED,
-        pendingValue: event.target.value,
-        error: error.message
-      });
+
+    #readOnlyFieldContext(value, descriptor, presentation) {
+        const inputType = descriptor?.value?.typeRef ?? descriptor?.fields?.get?.type ?? null;
+        const semanticType = this.componentState?.data?.datatype ?? namedType(inputType);
+        const enumValues = descriptor?.value?.typeDescription?.enumValues?.map?.(entry => entry.name ?? entry) ?? [];
+        const boundedChoice = descriptor?.fields?.has?.('choices') === true;
+        const base = {
+            name: this.id,
+            label: presentation.label,
+            value,
+            inputType,
+            semanticType,
+            enumValues,
+            choices: boundedChoice ? [{label: String(value), value: String(value)}] : [],
+            autoComplete: false,
+            required: true,
+            multiLine: this.#effectiveMultiLine(this.componentState),
+            inputId: `${this.inputId}-view`,
+            labelId: this.labelId,
+            descriptionId: presentation.describedBy,
+            testId: this.#testIdValue('value')
+        };
+        const codec = selectCausewayValueCodec(base);
+        return {
+            ...base,
+            codec,
+            controlValue: codec.toControlValue(value, base)
+        };
     }
-  }
 
-  #canOfferEdit(state) {
-    const propertyState = state?.data ?? {};
-    return this.editable
-      && state?.status === 'ready'
-      && propertyState.hidden !== true
-      && !propertyState.disabled
-      && typeof this._resolvedContext?.prepareProperty === 'function';
-  }
-
-  #presentation(state) {
-    const metadata = state.data?.metadata ?? {};
-    const label = this.hasAttribute('named')
-      ? this.getAttribute('named')
-      : this.getAttribute('label') ?? metadata.friendlyName ?? humanize(this.id);
-    const candidateDescription = this.hasAttribute('described-as')
-      ? this.getAttribute('described-as')
-      : metadata.description ?? state.descriptor?.description ?? '';
-    const labelPosition = normalizeLabelPosition(this.getAttribute('label-position'))
-      || normalizeLabelPosition(metadata.labelPosition)
-      || 'LEFT';
-    const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
-      ? ''
-      : candidateDescription;
-    const descriptionPresentation = normalizeDescriptionPresentation(this.getAttribute('description-as'));
-    const descriptionVisible = Boolean(description)
-      && descriptionPresentation === DescriptionPresentation.LABEL
-      && labelPosition !== 'NONE';
-    const descriptionMarkup = description
-      ? `<span id="${this.descriptionId}" class="causeway-property-description${descriptionVisible ? '' : ' causeway-visually-hidden'}">${escapeHtml(description)}</span>`
-      : '';
-    const disabledReason = boundedTooltipSection(typeof state.data?.disabled === 'string'
-      ? state.data.disabled
-      : state.data?.disabled === true ? 'Disabled' : '');
-    const disabledMarkup = disabledReason
-      ? `<span id="${this.reasonId}" class="causeway-visually-hidden">${escapeHtml(disabledReason)}</span>`
-      : '';
-    const describedBy = [description ? this.descriptionId : '', disabledReason ? this.reasonId : '']
-      .filter(Boolean)
-      .join(' ');
-    const tooltipDescription = descriptionPresentation === DescriptionPresentation.TOOLTIP || disabledReason
-      ? description
-      : '';
-    const tooltip = composeMemberTooltip(tooltipDescription, disabledReason);
-    const labelOwnsTooltip = labelPosition !== 'NONE';
-    const labelAttributes = labelOwnsTooltip ? tooltipTriggerAttributes(tooltip, describedBy) : '';
-    const labelClass = `causeway-property-label${labelOwnsTooltip && tooltip ? ' causeway-member-tooltip' : ''}${disabledReason ? ' causeway-property-disabled-tooltip' : ''}`;
-    return {
-      label,
-      labelPosition,
-      labelMarkup: labelPosition === 'NONE'
-        ? `<span id="${this.labelId}" class="causeway-visually-hidden">${escapeHtml(label)}</span>`
-        : `<span id="${this.labelId}" class="${labelClass}"${labelAttributes}>${escapeHtml(label)}</span>`,
-      description,
-      descriptionMarkup,
-      disabledReason,
-      disabledMarkup,
-      describedBy,
-      fieldClass: `causeway-property-field${!labelOwnsTooltip && tooltip ? ' causeway-member-tooltip' : ''}`,
-      fieldAttributes: !labelOwnsTooltip ? tooltipTriggerAttributes(tooltip, describedBy) : '',
-      loading: ['idle', 'schema-loading', 'object-loading'].includes(state.status),
-      error: ['terminal-error', 'unsupported', 'partial-error'].includes(state.status)
-    };
-  }
-
-  #effectiveMultiLine(state) {
-    return normalizedMultiLine(this.getAttribute('multi-line'))
-      || normalizedMultiLine(this.getAttribute('multiline'))
-      || normalizedMultiLine(state?.data?.metadata?.multiLine);
-  }
-
-  #multiLineAttribute(state) {
-    const multiLine = this.#effectiveMultiLine(state);
-    return multiLine ? ` data-multi-line="${multiLine}"` : '';
-  }
-
-  #resolveTemporalRange(capabilities) {
-    const semanticType = semanticTypeName({
-      semanticType: this.componentState?.data?.datatype ?? capabilities?.semanticType,
-      inputType: capabilities?.inputType
-    });
-    return resolveCausewayTemporalRange({
-      semanticType,
-      min: this.hasAttribute('min') ? this.getAttribute('min') : null,
-      max: this.hasAttribute('max') ? this.getAttribute('max') : null
-    });
-  }
-
-  #presentTemporalRangeStatus(range) {
-    if ([CausewayTemporalRangeStatus.VALID, CausewayTemporalRangeStatus.INVALID].includes(range.status)) {
-      this.setAttribute('data-causeway-temporal-range-status', range.status);
-    } else {
-      this.removeAttribute('data-causeway-temporal-range-status');
+    #restoreSavedEditFocus(state) {
+        if (this.restoreEditFocusAfterGeneration == null
+                || state.status !== 'ready'
+                || state.generation <= this.restoreEditFocusAfterGeneration) {
+            return;
+        }
+        this.restoreEditFocusAfterGeneration = null;
+        queueMicrotask(() => this.querySelector?.('[data-causeway-action="edit"]')?.focus?.());
     }
-  }
 
-  #editorContext(interaction = this.interactionState) {
-    const presentation = this.#presentation(this.componentState);
-    return {
-      name: this.id,
-      label: presentation.label,
-      value: interaction.pendingValue,
-      choices: interaction.choices ?? [],
-      suggestions: interaction.suggestions ?? [],
-      autoComplete: interaction.capabilities?.autoComplete === true,
-      autoCompleteWindow: interaction.capabilities?.autoCompleteWindow === true,
-      autoCompletePageSize: interaction.capabilities?.autoCompleteWindowSize ?? null,
-      hasMoreSuggestions: interaction.autoCompleteWindow?.hasNext === true,
-      enumValues: interaction.capabilities?.enumValues ?? [],
-      inputType: interaction.capabilities?.inputType,
-      semanticType: this.componentState?.data?.datatype ?? interaction.capabilities?.semanticType ?? null,
-      min: interaction.temporalRange?.status === CausewayTemporalRangeStatus.VALID ? interaction.temporalRange.min : null,
-      max: interaction.temporalRange?.status === CausewayTemporalRangeStatus.VALID ? interaction.temporalRange.max : null,
-      required: interaction.capabilities?.inputType?.kind === 'NON_NULL',
-      multiLine: this.#effectiveMultiLine(this.componentState),
-      inputId: this.inputId,
-      labelId: this.labelId,
-      descriptionId: presentation.description ? this.descriptionId : '',
-      errorId: interaction.error ? this.errorId : '',
-      testId: this.#testIdValue('editor'),
-      disabled: interaction.status === InteractionStatus.SAVING
-    };
-  }
-
-  #renderInteraction(state) {
-    const presentation = this.#presentation(state);
-    const interaction = this.interactionState;
-    const activeElement = globalThis.document?.activeElement;
-    const ownsFocus = typeof this.contains === 'function' && this.contains(activeElement);
-    const activeEditor = ownsFocus && activeElement?.getAttribute?.('data-causeway-editor');
-    const activeAction = ownsFocus && activeElement?.getAttribute?.('data-causeway-action');
-    const activeClear = ownsFocus && activeElement?.hasAttribute?.('data-causeway-field-clear');
-    if (activeClear) {
-      this.restoreClearFocus = true;
-    } else if (ownsFocus && (activeEditor || activeAction)) {
-      this.restoreClearFocus = false;
+    #captureEditorEvent(event, debounce) {
+        if (this.renderingInteraction
+                || ![InteractionStatus.EDITING, InteractionStatus.VALIDATING, InteractionStatus.FAILED].includes(this.interactionState?.status)
+                || !event.target?.getAttribute?.('data-causeway-editor')) {
+            return;
+        }
+        const editor = this.interactionState.editor;
+        if (editor.id === 'autocomplete' && debounce) {
+            clearTimeout(this.validationTimer);
+            const search = String(event.target.value ?? '');
+            this.validationTimer = setTimeout(() => void this.loadAutoComplete(search), 250);
+            return;
+        }
+        try {
+            const value = parseCausewayEditorValue(editor, {
+                value: event.target.value,
+                checked: event.target.checked,
+                choices: this.interactionState.choices ?? [],
+                suggestions: this.interactionState.suggestions ?? [],
+                inputType: this.interactionState.capabilities?.inputType
+            });
+            const debouncedEditor = editor.debounced === true || ['text', 'multiline'].includes(editor.id);
+            this.setPendingValue(value, {validate: debouncedEditor});
+            if (!debouncedEditor) {
+                void this.validatePending();
+            }
+        } catch (error) {
+            if (!(error instanceof CausewayValueCodecError)) {
+                throw error;
+            }
+            this.#setInteraction({
+                ...this.interactionState,
+                status: InteractionStatus.FAILED,
+                pendingValue: event.target.value,
+                error: error.message
+            });
+        }
     }
-    const selectionStart = activeEditor ? activeElement.selectionStart : null;
-    const selectionEnd = activeEditor ? activeElement.selectionEnd : null;
-    const busy = [InteractionStatus.PREPARING, InteractionStatus.VALIDATING, InteractionStatus.SAVING].includes(interaction.status);
-    const renderedEditor = interaction.editor
-      ? {editor: interaction.editor, editorId: interaction.editor.id, html: interaction.editor.render(this.#editorContext())}
-      : {editorId: 'pending', html: '<span role="status">Preparing editor…</span>'};
-    const errorMarkup = interaction.error
-      ? `<p id="${this.errorId}" class="causeway-property-validation" role="alert">${escapeHtml(interaction.error)}</p>`
-      : '';
-    const statusLabel = interactionStatusLabel(interaction.status);
-    const statusMarkup = statusLabel
-      ? `<span class="causeway-property-interaction-status" role="status">${escapeHtml(statusLabel)}</span>`
-      : '';
-    const saveLabel = `Save ${presentation.label}`;
-    const cancelLabel = `Cancel editing ${presentation.label}`;
-    this.setAttribute('data-editor', renderedEditor.editorId);
-    this.renderingInteraction = true;
-    try {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="${busy}">
+
+    #canOfferEdit(state) {
+        const propertyState = state?.data ?? {};
+        return this.editable
+                && state?.status === 'ready'
+                && propertyState.hidden !== true
+                && !propertyState.disabled
+                && typeof this._resolvedContext?.prepareProperty === 'function';
+    }
+
+    #presentation(state) {
+        const metadata = state.data?.metadata ?? {};
+        const label = this.hasAttribute('named')
+                ? this.getAttribute('named')
+                : this.getAttribute('label') ?? metadata.friendlyName ?? humanize(this.id);
+        const candidateDescription = this.hasAttribute('described-as')
+                ? this.getAttribute('described-as')
+                : metadata.description ?? state.descriptor?.description ?? '';
+        const labelPosition = normalizeLabelPosition(this.getAttribute('label-position'))
+                || normalizeLabelPosition(metadata.labelPosition)
+                || 'LEFT';
+        const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
+                ? ''
+                : candidateDescription;
+        const descriptionPresentation = normalizeDescriptionPresentation(this.getAttribute('description-as'));
+        const descriptionVisible = Boolean(description)
+                && descriptionPresentation === DescriptionPresentation.LABEL
+                && labelPosition !== 'NONE';
+        const descriptionMarkup = description
+                ? `<span id="${this.descriptionId}" class="causeway-property-description${descriptionVisible ? '' : ' causeway-visually-hidden'}">${escapeHtml(description)}</span>`
+                : '';
+        const disabledReason = boundedTooltipSection(typeof state.data?.disabled === 'string'
+                ? state.data.disabled
+                : state.data?.disabled === true ? 'Disabled' : '');
+        const disabledMarkup = disabledReason
+                ? `<span id="${this.reasonId}" class="causeway-visually-hidden">${escapeHtml(disabledReason)}</span>`
+                : '';
+        const describedBy = [description ? this.descriptionId : '', disabledReason ? this.reasonId : '']
+                .filter(Boolean)
+                .join(' ');
+        const tooltipDescription = descriptionPresentation === DescriptionPresentation.TOOLTIP || disabledReason
+                ? description
+                : '';
+        const tooltip = composeMemberTooltip(tooltipDescription, disabledReason);
+        const labelOwnsTooltip = labelPosition !== 'NONE';
+        const labelAttributes = labelOwnsTooltip ? tooltipTriggerAttributes(tooltip, describedBy) : '';
+        const labelClass = `causeway-property-label${labelOwnsTooltip && tooltip ? ' causeway-member-tooltip' : ''}${disabledReason ? ' causeway-property-disabled-tooltip' : ''}`;
+        return {
+            label,
+            labelPosition,
+            labelMarkup: labelPosition === 'NONE'
+                    ? `<span id="${this.labelId}" class="causeway-visually-hidden">${escapeHtml(label)}</span>`
+                    : `<span id="${this.labelId}" class="${labelClass}"${labelAttributes}>${escapeHtml(label)}</span>`,
+            description,
+            descriptionMarkup,
+            disabledReason,
+            disabledMarkup,
+            describedBy,
+            fieldClass: `causeway-property-field${!labelOwnsTooltip && tooltip ? ' causeway-member-tooltip' : ''}`,
+            fieldAttributes: !labelOwnsTooltip ? tooltipTriggerAttributes(tooltip, describedBy) : '',
+            loading: ['idle', 'schema-loading', 'object-loading'].includes(state.status),
+            error: ['terminal-error', 'unsupported', 'partial-error'].includes(state.status)
+        };
+    }
+
+    #effectiveMultiLine(state) {
+        return normalizedMultiLine(this.getAttribute('multi-line'))
+                || normalizedMultiLine(this.getAttribute('multiline'))
+                || normalizedMultiLine(state?.data?.metadata?.multiLine);
+    }
+
+    #multiLineAttribute(state) {
+        const multiLine = this.#effectiveMultiLine(state);
+        return multiLine ? ` data-multi-line="${multiLine}"` : '';
+    }
+
+    #resolveTemporalRange(capabilities) {
+        const semanticType = semanticTypeName({
+            semanticType: this.componentState?.data?.datatype ?? capabilities?.semanticType,
+            inputType: capabilities?.inputType
+        });
+        return resolveCausewayTemporalRange({
+            semanticType,
+            min: this.hasAttribute('min') ? this.getAttribute('min') : null,
+            max: this.hasAttribute('max') ? this.getAttribute('max') : null
+        });
+    }
+
+    #presentTemporalRangeStatus(range) {
+        if ([CausewayTemporalRangeStatus.VALID, CausewayTemporalRangeStatus.INVALID].includes(range.status)) {
+            this.setAttribute('data-causeway-temporal-range-status', range.status);
+        } else {
+            this.removeAttribute('data-causeway-temporal-range-status');
+        }
+    }
+
+    #editorContext(interaction = this.interactionState) {
+        const presentation = this.#presentation(this.componentState);
+        return {
+            name: this.id,
+            label: presentation.label,
+            value: interaction.pendingValue,
+            choices: interaction.choices ?? [],
+            suggestions: interaction.suggestions ?? [],
+            autoComplete: interaction.capabilities?.autoComplete === true,
+            autoCompleteWindow: interaction.capabilities?.autoCompleteWindow === true,
+            autoCompletePageSize: interaction.capabilities?.autoCompleteWindowSize ?? null,
+            hasMoreSuggestions: interaction.autoCompleteWindow?.hasNext === true,
+            enumValues: interaction.capabilities?.enumValues ?? [],
+            inputType: interaction.capabilities?.inputType,
+            semanticType: this.componentState?.data?.datatype ?? interaction.capabilities?.semanticType ?? null,
+            min: interaction.temporalRange?.status === CausewayTemporalRangeStatus.VALID ? interaction.temporalRange.min : null,
+            max: interaction.temporalRange?.status === CausewayTemporalRangeStatus.VALID ? interaction.temporalRange.max : null,
+            required: interaction.capabilities?.inputType?.kind === 'NON_NULL',
+            multiLine: this.#effectiveMultiLine(this.componentState),
+            inputId: this.inputId,
+            labelId: this.labelId,
+            descriptionId: presentation.description ? this.descriptionId : '',
+            errorId: interaction.error ? this.errorId : '',
+            testId: this.#testIdValue('editor'),
+            disabled: interaction.status === InteractionStatus.SAVING
+        };
+    }
+
+    #renderInteraction(state) {
+        const presentation = this.#presentation(state);
+        const interaction = this.interactionState;
+        const activeElement = globalThis.document?.activeElement;
+        const ownsFocus = typeof this.contains === 'function' && this.contains(activeElement);
+        const activeEditor = ownsFocus && activeElement?.getAttribute?.('data-causeway-editor');
+        const activeAction = ownsFocus && activeElement?.getAttribute?.('data-causeway-action');
+        const activeClear = ownsFocus && activeElement?.hasAttribute?.('data-causeway-field-clear');
+        if (activeClear) {
+            this.restoreClearFocus = true;
+        } else if (ownsFocus && (activeEditor || activeAction)) {
+            this.restoreClearFocus = false;
+        }
+        const selectionStart = activeEditor ? activeElement.selectionStart : null;
+        const selectionEnd = activeEditor ? activeElement.selectionEnd : null;
+        const busy = [InteractionStatus.PREPARING, InteractionStatus.VALIDATING, InteractionStatus.SAVING].includes(interaction.status);
+        const renderedEditor = interaction.editor
+                ? {
+                    editor: interaction.editor,
+                    editorId: interaction.editor.id,
+                    html: interaction.editor.render(this.#editorContext())
+                }
+                : {editorId: 'pending', html: '<span role="status">Preparing editor…</span>'};
+        const errorMarkup = interaction.error
+                ? `<p id="${this.errorId}" class="causeway-property-validation" role="alert">${escapeHtml(interaction.error)}</p>`
+                : '';
+        const statusLabel = interactionStatusLabel(interaction.status);
+        const statusMarkup = statusLabel
+                ? `<span class="causeway-property-interaction-status" role="status">${escapeHtml(statusLabel)}</span>`
+                : '';
+        const saveLabel = `Save ${presentation.label}`;
+        const cancelLabel = `Cancel editing ${presentation.label}`;
+        this.setAttribute('data-editor', renderedEditor.editorId);
+        this.renderingInteraction = true;
+        try {
+            renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="${busy}">
   ${presentation.labelMarkup}
   ${presentation.descriptionMarkup}
   <div class="${presentation.fieldClass}"${presentation.fieldAttributes}>
@@ -844,103 +939,103 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   ${statusMarkup}
   </div>
 </div>`);
-    } finally {
-      this.renderingInteraction = false;
-    }
-    if (this.restoreClearFocus) {
-      this.querySelector?.('cw-field-editor')?.focusClear?.();
-    } else if (activeAction) {
-      this.querySelector?.(`[data-causeway-action="${activeAction}"]`)?.focus?.();
-    } else if (activeEditor) {
-      queueMicrotask(() => {
-        const focusTarget = this.querySelector?.('[data-causeway-editor]');
-        focusTarget?.focus?.();
-        if (selectionStart !== null && typeof focusTarget?.setSelectionRange === 'function') {
-          focusTarget.setSelectionRange(selectionStart, selectionEnd);
+        } finally {
+            this.renderingInteraction = false;
         }
-      });
+        if (this.restoreClearFocus) {
+            this.querySelector?.('cw-field-editor')?.focusClear?.();
+        } else if (activeAction) {
+            this.querySelector?.(`[data-causeway-action="${activeAction}"]`)?.focus?.();
+        } else if (activeEditor) {
+            queueMicrotask(() => {
+                const focusTarget = this.querySelector?.('[data-causeway-editor]');
+                focusTarget?.focus?.();
+                if (selectionStart !== null && typeof focusTarget?.setSelectionRange === 'function') {
+                    focusTarget.setSelectionRange(selectionStart, selectionEnd);
+                }
+            });
+        }
     }
-  }
 
-  #setInteraction(next) {
-    this.interactionState = Object.freeze({...next});
-    this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
-      member: this.id,
-      status: next.status,
-      value: publicInteractionValue(next.editor, next.pendingValue),
-      error: next.error ?? null
-    })));
-    this.renderComponentState(this.componentState);
-  }
+    #setInteraction(next) {
+        this.interactionState = Object.freeze({...next});
+        this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
+            member: this.id,
+            status: next.status,
+            value: publicInteractionValue(next.editor, next.pendingValue),
+            error: next.error ?? null
+        })));
+        this.renderComponentState(this.componentState);
+    }
 
-  #testId(suffix) {
-    const value = this.#testIdValue(suffix);
-    return value ? ` data-testid="${escapeHtml(value)}"` : '';
-  }
+    #testId(suffix) {
+        const value = this.#testIdValue(suffix);
+        return value ? ` data-testid="${escapeHtml(value)}"` : '';
+    }
 
-  #testIdValue(suffix) {
-    const host = this.getAttribute('data-testid');
-    return host ? `${host}-${suffix}` : '';
-  }
+    #testIdValue(suffix) {
+        const host = this.getAttribute('data-testid');
+        return host ? `${host}-${suffix}` : '';
+    }
 }
 
 function legacyWindowResult(result, offset, requestedSize) {
-  if (result?.status !== InteractionStatus.SUCCESS || !Array.isArray(result.data)) return result;
-  return {
-    ...result,
-    data: Object.freeze({
-      items: Object.freeze([...result.data]),
-      offset,
-      requestedSize,
-      returnedCount: result.data.length,
-      totalCount: result.data.length,
-      maximumSize: null,
-      hasPrevious: false,
-      hasNext: false,
-      ordering: 'LEGACY',
-      windowed: false
-    })
-  };
+    if (result?.status !== InteractionStatus.SUCCESS || !Array.isArray(result.data)) return result;
+    return {
+        ...result,
+        data: Object.freeze({
+            items: Object.freeze([...result.data]),
+            offset,
+            requestedSize,
+            returnedCount: result.data.length,
+            totalCount: result.data.length,
+            maximumSize: null,
+            hasPrevious: false,
+            hasNext: false,
+            ordering: 'LEGACY',
+            windowed: false
+        })
+    };
 }
 
 function publicInteractionValue(editor, value) {
-  return editor?.codec?.sensitive === true ? null : value;
+    return editor?.codec?.sensitive === true ? null : value;
 }
 
 function tooltipTriggerAttributes(tooltip, describedBy) {
-  if (!tooltip) return '';
-  return ` tabindex="0" data-tooltip="${escapeHtml(tooltip)}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}`;
+    if (!tooltip) return '';
+    return ` tabindex="0" data-tooltip="${escapeHtml(tooltip)}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}`;
 }
 
 function interactionStatusLabel(status) {
-  return {
-    [InteractionStatus.PREPARING]: 'Preparing editor',
-    [InteractionStatus.EDITING]: '',
-    [InteractionStatus.VALIDATING]: 'Validating',
-    [InteractionStatus.SAVING]: 'Saving',
-    [InteractionStatus.FAILED]: 'Correction required',
-    [InteractionStatus.UNSUPPORTED]: 'Editing unsupported'
-  }[status] ?? status;
+    return {
+        [InteractionStatus.PREPARING]: 'Preparing editor',
+        [InteractionStatus.EDITING]: '',
+        [InteractionStatus.VALIDATING]: 'Validating',
+        [InteractionStatus.SAVING]: 'Saving',
+        [InteractionStatus.FAILED]: 'Correction required',
+        [InteractionStatus.UNSUPPORTED]: 'Editing unsupported'
+    }[status] ?? status;
 }
 
 function normalizedMultiLine(value) {
-  const rows = Number(value);
-  return Number.isSafeInteger(rows) && rows > 1 ? Math.min(rows, 50) : 0;
+    const rows = Number(value);
+    return Number.isSafeInteger(rows) && rows > 1 ? Math.min(rows, 50) : 0;
 }
 
 function normalizeLabelPosition(value) {
-  const normalized = String(value ?? '').trim().toUpperCase();
-  return ['LEFT', 'TOP', 'NONE'].includes(normalized) ? normalized : '';
+    const normalized = String(value ?? '').trim().toUpperCase();
+    return ['LEFT', 'TOP', 'NONE'].includes(normalized) ? normalized : '';
 }
 
 function setOptionalAttribute(element, name, value) {
-  if (value == null) {
-    element.removeAttribute(name);
-  } else {
-    element.setAttribute(name, String(value));
-  }
+    if (value == null) {
+        element.removeAttribute(name);
+    } else {
+        element.setAttribute(name, String(value));
+    }
 }
 
 function humanize(value) {
-  return String(value || '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, character => character.toUpperCase());
+    return String(value || '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, character => character.toUpperCase());
 }

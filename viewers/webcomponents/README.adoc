@@ -100,7 +100,7 @@ jar tf viewers/webcomponents/foundation/target/causeway-viewer-webcomponents-fou
   | grep 'META-INF/resources/causeway-webcomponents/'
 ----
 
-The listing should include `META-INF/resources/causeway-webcomponents/index.mjs`, its imported modules, the independently lazy `vaadin-reference`, `vaadin-fields`, and `vaadin-actions` assets, their policy metadata, and their distributable legal files.
+The listing should include `META-INF/resources/causeway-webcomponents/index.mjs`, its imported modules, the independently lazy `vaadin-reference`, `vaadin-fields`, and `vaadin-actions` assets, and the pinned `pdfjs` display, worker, and support assets with their policy metadata and distributable legal files.
 
 == Manual browser verification
 
