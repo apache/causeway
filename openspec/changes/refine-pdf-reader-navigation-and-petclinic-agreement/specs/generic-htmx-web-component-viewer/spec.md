@@ -29,3 +29,9 @@ The agreement SHALL be presented in the PetOwner secondary column with its redun
 - **WHEN** headless browser coverage repeatedly activates next and previous on the agreement at wide and narrow viewport sizes
 - **THEN** requested PDF pages render within the reader viewport while the outer page position remains stable
 - **AND** the toolbar stays visible, focus remains within the available page controls, and no browser, worker, resource, or GraphQL failure occurs
+
+#### Scenario: HTMX user changes and restores agreement zoom
+
+- **WHEN** browser automation selects percentage, page-height, page-fit, and page-width zoom choices in the HTMX-hosted agreement reader
+- **THEN** the shared foundation selector reports each choice and preserves the current page
+- **AND** restoring page width requires no HTMX-specific behavior and causes no host-page movement or horizontal overflow

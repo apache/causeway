@@ -4,6 +4,7 @@
 
 The PDF reader SHALL keep page-control scrolling within its owned page viewport and SHALL keep its toolbar available without repositioning the surrounding host document.
 The reader toolbar SHALL contain the persistent authoritative resource link alongside page and zoom controls, and the reader SHALL NOT render a separate visible canvas-disclaimer sentence.
+The zoom control SHALL directly expose page-width, page-height, page-fit, actual-size, and standard percentage choices while retaining incremental zoom buttons with their established bounds.
 Removing that sentence MUST NOT cause the reader to claim that canvas pixels expose semantic PDF text.
 
 #### Scenario: User advances pages at a wide viewport
@@ -18,6 +19,25 @@ Removing that sentence MUST NOT cause the reader to claim that canvas pixels exp
 - **WHEN** the user activates page navigation after responsive layout has narrowed the reader
 - **THEN** the requested page remains reachable within the owned PDF viewport
 - **AND** the host page does not acquire horizontal overflow or an unexpected document-level jump
+
+#### Scenario: User restores page-width zoom
+
+- **GIVEN** the reader started in page-width mode and the user changed zoom with an incremental control
+- **WHEN** the user selects `Page width` from the zoom selector
+- **THEN** the current page is rerendered to the owned viewport's available width
+- **AND** the current page, host document position, resource authorization, and progressive-rendering limits remain unchanged
+
+#### Scenario: User selects page-height zoom
+
+- **WHEN** the user selects `Page height` from the zoom selector
+- **THEN** the reader scales pages from the owned viewport's available block size and the authoritative PDF page dimensions
+- **AND** the selector reports `Page height` without moving the host document
+
+#### Scenario: User selects percentage zoom
+
+- **WHEN** the user selects one of the offered bounded percentages or uses an incremental zoom button
+- **THEN** the selector reports the resulting percentage and the current page is preserved
+- **AND** incremental zoom cannot move outside the existing 25 to 400 percent bounds
 
 #### Scenario: Reader presents its resource link
 
