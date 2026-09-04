@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
@@ -118,34 +119,81 @@ class PetClinicVuePlaywrightTest {
     @Test
     void authoredPdfModesRemainFrameworkNeutralAndProgressive() {
         open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
-        page.waitForFunction("() => document.querySelector('cw-property#pdfLink')?.dataset.renderer === 'blob'");
-        final var linked = page.locator("cw-property#pdfLink");
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementDocument')?.dataset.renderer === 'blob'");
+        final var linked = page.locator("cw-property#ownerAgreementDocument");
         assertThat(linked.getAttribute("data-renderer")).isEqualTo("blob");
         assertThat(linked.locator("[data-causeway-pdf-reader]").count()).isZero();
+        assertThat(linked.locator(".causeway-value-lob-link").innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
         final var linkedHref = linked.locator(".causeway-value-lob-link").getAttribute("href");
         assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", linkedHref)).isFalse();
         assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
 
         open("/vue/object/petclinic.Pet/s_pet-basil");
-        page.waitForFunction("() => document.querySelector('cw-property#pdfManual [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'inactive'");
-        final var manual = page.locator("cw-property#pdfManual [data-causeway-pdf-reader]");
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementPreview [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'inactive'");
+        final var manual = page.locator("cw-property#ownerAgreementPreview [data-causeway-pdf-reader]");
         assertThat(manual.getAttribute("data-causeway-pdf-state")).isEqualTo("inactive");
+        assertThat(manual.locator(".causeway-pdf-toolbar .causeway-value-lob-link").innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        assertThat(manual.locator(".causeway-pdf-accessibility-note").count()).isZero();
         final var manualHref = manual.locator(".causeway-value-lob-link").getAttribute("href");
         assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", manualHref)).isFalse();
         assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
         manual.locator("[data-causeway-pdf-activate]").click();
-        page.waitForFunction("() => document.querySelector('cw-property#pdfManual [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementPreview [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
         assertThat(manual.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
         assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/pdf.min.mjs'))")).isTrue();
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
-        page.waitForFunction("() => document.querySelector('cw-property#pdfAuto [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
-        final var automatic = page.locator("cw-property#pdfAuto [data-causeway-pdf-reader]");
+        page.waitForFunction("() => document.querySelector('cw-collection#pets')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('cw-property#agreement [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        final var agreementProperty = page.locator("cw-property#agreement");
+        final var automatic = agreementProperty.locator("[data-causeway-pdf-reader]");
+        assertThat(agreementProperty.getAttribute("label-position")).isEqualTo("NONE");
+        final var agreementCard = page.locator(".petclinic-object-collections .petclinic-agreement-card");
+        assertThat(agreementCard.locator("cw-property#agreement").count()).isEqualTo(1);
+        assertThat(agreementProperty.locator(".causeway-property-label").isVisible()).isFalse();
+        assertThat(((Number) automatic.evaluate("(reader) => reader.getBoundingClientRect().width / reader.closest('.petclinic-agreement-card').getBoundingClientRect().width")).doubleValue()).isGreaterThan(0.9);
         assertThat(automatic.locator("[data-causeway-pdf-page]").count()).isEqualTo(3);
         automatic.locator(".causeway-pdf-page-canvas").first().waitFor();
-        automatic.locator("[data-causeway-pdf-page='3']").scrollIntoViewIfNeeded();
+        final var download = automatic.locator(".causeway-pdf-toolbar .causeway-value-lob-link");
+        assertThat(download.innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        assertThat(automatic.locator(".causeway-pdf-accessibility-note").count()).isZero();
+
+        assertContainedPdfNavigation(automatic, 1800);
+        assertContainedPdfNavigation(automatic, 720);
+        page.setViewportSize(1440, 900);
+
+        automatic.locator("[data-causeway-pdf-next]").click();
+        automatic.locator("[data-causeway-pdf-next]").click();
         automatic.locator("[data-causeway-pdf-page='3'] canvas").waitFor();
-        assertThat(automatic.locator(".causeway-value-lob-link").getAttribute("href")).isNotBlank();
+    }
+
+    private void assertContainedPdfNavigation(final Locator reader, final int width) {
+        page.setViewportSize(width, 900);
+        final var toolbar = reader.locator(".causeway-pdf-toolbar");
+        final var viewport = reader.locator("[data-causeway-pdf-viewport]");
+        final var next = reader.locator("[data-causeway-pdf-next]");
+        final var previous = reader.locator("[data-causeway-pdf-previous]");
+        toolbar.scrollIntoViewIfNeeded();
+        final var outerScrollBefore = ((Number) page.evaluate("() => window.scrollY")).doubleValue();
+
+        next.click();
+        page.waitForTimeout(350);
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
+        assertThat(((Number) viewport.evaluate("element => element.scrollTop")).doubleValue()).isGreaterThan(0);
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
+        assertThat(toolbar.isVisible()).isTrue();
+        assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue()).isLessThanOrEqualTo(1.0);
+
+        previous.click();
+        page.waitForTimeout(350);
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).contains("Page 1 of 3");
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
+        assertThat(toolbar.isVisible()).isTrue();
+        assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
     }
 
     @Test
@@ -187,10 +235,10 @@ class PetClinicVuePlaywrightTest {
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
         page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
-        page.waitForFunction("() => document.querySelector('.petclinic-object-collections > section:last-child cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.collectionState?.rows?.length === 2");
         assertThat(page.locator(".petclinic-owner-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history,Documents");
+                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history,Agreement");
         assertThat(page.locator(".petclinic-page-toolbar > cw-action")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("allOwners,noOwners,relatedOwners,delete");
@@ -200,7 +248,8 @@ class PetClinicVuePlaywrightTest {
         assertThat(page.locator(".petclinic-object-details cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit,daysSinceLastVisit");
-        assertThat(page.locator(".petclinic-object-collections > section").count()).isEqualTo(2);
+        assertThat(page.locator(".petclinic-object-collections > section").count()).isEqualTo(3);
+        assertThat(page.locator(".petclinic-object-collections > section:last-child cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
         assertThat(page.locator("cw-collection#visits > cw-collection-column")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("visitAt,reason,notes");
@@ -215,7 +264,7 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("Identity,Details,Documents");
         assertThat(page.locator(".petclinic-pet-page cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("petOwner,name,species,notes,pdfManual");
+                .isEqualTo("petOwner,name,species,notes,ownerAgreementPreview");
         assertThat(page.locator(".petclinic-pet-page cw-property#id, .petclinic-pet-page cw-property#version").count()).isZero();
 
         open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
@@ -225,7 +274,7 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("Appointment,Details,Documents");
         assertThat(page.locator(".petclinic-visit-page cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("pet,visitAt,reason,notes,pdfLink");
+                .isEqualTo("pet,visitAt,reason,notes,ownerAgreementDocument");
         assertThat(page.locator(".petclinic-visit-page cw-property#id, .petclinic-visit-page cw-property#version").count()).isZero();
     }
 

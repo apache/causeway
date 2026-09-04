@@ -51,6 +51,7 @@ causeway.viewer.webcomponents.htmx.component-toolkit=native
 The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
 It declares `worker-src 'self'` so an eligible PDF property can use the foundation's packaged PDF.js module worker without permitting remote, blob, or data workers and without adding `unsafe-inline` or `unsafe-eval`.
 The PDF.js display module, worker, support assets, and authorized PDF bytes remain same-origin and are requested only when an automatic reader or an activated manual reader initializes.
+Reader page controls scroll only the foundation-owned PDF viewport, while the persistent authorized download link occupies the reader toolbar and remains independent of HTMX routing.
 It loads the pinned Font Awesome WebJar stylesheet and fonts from the application origin so static `@ActionLayout(cssClassFa, cssClassFaPosition)` hints render without CDN access or inline styles.
 Malformed, absent, or dynamic action icon metadata remains icon-free without weakening the action or shell.
 The default Vaadin policy adds the deterministic deduplicated union of only the reviewed byte-exact `style-src` and `style-src-elem` SHA-256 sources, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.

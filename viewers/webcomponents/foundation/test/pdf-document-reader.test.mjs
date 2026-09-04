@@ -32,10 +32,13 @@ class FakeControl extends EventTarget {
     }
 
     click() {
+        this.focus();
         this.dispatchEvent(new Event('click'));
     }
 
     focus() {
+        if (FakeControl.active) FakeControl.active.focused = false;
+        FakeControl.active = this;
         this.focused = true;
     }
 }
@@ -59,21 +62,35 @@ class FakePage {
 
     scrollIntoView() {
         this.scrolled = true;
+        this.outerScroller.scrollTop = 0;
     }
 }
 
 function fixture({pageCount = 5, password = false, deferredModule = null, declaredBytes = null} = {}) {
+    const outerScroller = {scrollTop: 421};
+    FakePage.prototype.outerScroller = outerScroller;
     const controls = Object.fromEntries([
         'activate', 'previous', 'next', 'zoom-out', 'zoom-in', 'status', 'zoom-status', 'viewport'
     ].map(name => [name, new FakeControl()]));
     controls.viewport.clientWidth = 636;
     controls.viewport.clientHeight = 816;
+    controls.viewport.clientTop = 1;
+    controls.viewport.scrollTop = 0;
+    controls.viewport.getBoundingClientRect = () => ({top: 100});
+    controls.viewport.scrollTo = options => {
+        controls.viewport.scrollCalls ??= [];
+        controls.viewport.scrollCalls.push(options);
+        controls.viewport.scrollTop = options.top;
+    };
     const pages = new FakePage();
     pages.ownerDocument = {
         createElement(name) {
             const element = new FakePage();
             element.localName = name;
             element.ownerDocument = pages.ownerDocument;
+            element.getBoundingClientRect = () => ({
+                top: 101 + (Number(element.dataset.causewayPdfPage || 1) - 1) * 800 - controls.viewport.scrollTop
+            });
             if (name === 'canvas') element.getContext = () => ({});
             return element;
         }
@@ -176,7 +193,8 @@ function fixture({pageCount = 5, password = false, deferredModule = null, declar
         host,
         moduleValue,
         counts: () => ({moduleLoads, fetches}),
-        documentOptions: () => documentOptions
+        documentOptions: () => documentOptions,
+        outerScroller
     };
 }
 
@@ -206,6 +224,26 @@ test('manual mode loads neither PDF.js nor bytes until accessible activation', a
     assert.equal(value.controls.next.disabled, false);
     assert.deepEqual([...new Set(value.rendered)].sort(), [1, 2, 3]);
     assert.equal(value.controls.previous.focused, true);
+    assert.equal(value.controls.viewport.scrollTop, 800);
+    assert.equal(value.outerScroller.scrollTop, 421);
+    assert.ok(value.pages.children.every(page => !page.scrolled));
+});
+
+test('manual activation at the first page focuses the available next control', async () => {
+    const value = fixture({pageCount: 3});
+    value.controller.mount(value.container, {
+        url: '/document.pdf',
+        name: 'Document',
+        mode: 'manual',
+        initialPage: 1,
+        zoom: 'page-fit'
+    });
+
+    value.controls.activate.click();
+    await settle();
+
+    assert.equal(value.controls.previous.disabled, true);
+    assert.equal(value.controls.next.focused, true);
 });
 
 test('same-origin PDF assets retain an application context path', () => {
@@ -242,6 +280,21 @@ test('automatic mode creates every placeholder but initially renders only curren
     await settle();
     assert.equal(value.controls.previous.disabled, false);
     assert.match(value.controls.status.textContent, /Page 2 of 8/);
+    assert.equal(value.controls.viewport.scrollTop, 800);
+    value.controls.previous.click();
+    await settle();
+    assert.match(value.controls.status.textContent, /Page 1 of 8/);
+    assert.equal(value.controls.viewport.scrollTop, 0);
+    assert.equal(value.controls.next.focused, true);
+    for (let page = 2; page <= 8; page += 1) value.controls.next.click();
+    await settle();
+    assert.match(value.controls.status.textContent, /Page 8 of 8/);
+    assert.equal(value.controls.next.disabled, true);
+    assert.equal(value.controls.previous.focused, true);
+    assert.equal(value.controls.viewport.scrollTop, 5600);
+    assert.equal(value.outerScroller.scrollTop, 421);
+    assert.ok(value.pages.children.every(page => !page.scrolled));
+    assert.ok(value.controls.viewport.scrollCalls.every(call => call.behavior === 'auto'));
     value.controls['zoom-in'].click();
     await settle();
     assert.equal(value.controls['zoom-status'].textContent, '125%');

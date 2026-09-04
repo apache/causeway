@@ -105,7 +105,8 @@ The sample opts into `causeway.viewer.webcomponents.htmx.resource-page-mode=relo
 The files compose navigable breadcrumbs, object headers, ordinary application regions, properties, actions, collections, `<cw-preview>` row previews, and declared columns while GraphQL remains authoritative for identity, hierarchy, values, visibility, usability, validation, invocation, and results.
 `Pet.petOwner` and `Visit.pet` use `@PropertyLayout(navigable = Navigable.PARENT)`, producing the deterministic Mary Smith → Basil → visit hierarchy without application-specific breadcrumb rendering or route code.
 `petclinic.PetOwner.html` demonstrates natural member association by nesting `updateName` beneath `name`, `addPet` and `removePet` beneath `pets`, and `bookVisit` beneath `visits`.
-The retained `PetOwner.layout.xml` expresses the equivalent generated-grid associations, while the direct HTML needs no adjacent Petclinic-only association wrapper.
+It also presents Mary's deterministic multipage clinic agreement after Pets and Visits in the secondary column, using `label-position="NONE"` so the Agreement card heading replaces the redundant property label and the reader uses the available width.
+The retained `PetOwner.layout.xml` expresses the equivalent generated-grid associations and Agreement placement, while the direct HTML needs no adjacent Petclinic-only association wrapper.
 They use the configured `static/css/application.css`, public Causeway hooks, and design variables without inline styles or raw Vaadin elements.
 
 The existing `*.layout.xml`, `*.columnOrder.txt`, and `menubars.layout.xml` resources intentionally remain in the artifact.
@@ -144,4 +145,5 @@ No HTMX application console messages, failed GraphQL requests, page overflow, or
 == Provenance and omissions
 
 Read `PROVENANCE.adoc` before copying or expanding this sample.
-The port intentionally omits the upstream starter SimpleObject module and historical operational, security-administration, calendar, PDF, Flyway, Quartz, and deployment integrations that are not needed to demonstrate the generic viewer.
+The port intentionally omits the upstream starter SimpleObject module and historical operational, security-administration, calendar, Flyway, Quartz, and deployment integrations that are not needed to demonstrate the generic viewer.
+Instead of retaining the historical PDF integration, the shared domain generates a deterministic owner-specific clinic agreement used to exercise the framework-neutral foundation reader.
