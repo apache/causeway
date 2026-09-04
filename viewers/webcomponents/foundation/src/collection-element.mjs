@@ -950,7 +950,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const key = gridRowKey(row);
     const title = String(row?._meta?.title ?? row?._meta?.id ?? 'item');
     const expanded = this._expandedPreviewKey === key;
-    return `<button type="button" class="causeway-collection-preview-toggle" data-causeway-preview-toggle="${escapeHtml(key)}" data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_preview" data-causeway-grid-role="preview" aria-expanded="${expanded}" aria-controls="${this.#previewDetailsId(rowIndex)}" aria-label="${expanded ? 'Collapse' : 'Preview'} ${escapeHtml(title)}"><span aria-hidden="true">${expanded ? '▾' : '▸'}</span></button>`;
+    return `<button type="button" class="causeway-collection-preview-toggle" data-causeway-preview-toggle="${escapeHtml(key)}" data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_preview" data-causeway-grid-role="preview" aria-expanded="${expanded}" aria-controls="${this.#previewDetailsId(rowIndex)}" aria-label="${expanded ? 'Collapse' : 'Preview'} ${escapeHtml(title)}"><svg class="causeway-collection-preview-icon" aria-hidden="true" focusable="false" viewBox="0 0 20 20"><path d="M7 4l6 6-6 6"></path></svg></button>`;
   }
 
   #previewDetailsId(rowIndex) {

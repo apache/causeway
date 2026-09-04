@@ -753,6 +753,23 @@ cw-collection-grid {
   justify-content: center;
   padding: 0;
 }
+.causeway-collection-preview-icon {
+  block-size: var(--causeway-collection-preview-icon-size, 1.15rem);
+  fill: none;
+  inline-size: var(--causeway-collection-preview-icon-size, 1.15rem);
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.4;
+  transform: rotate(0deg);
+  transform-origin: center;
+}
+.causeway-collection-preview-toggle[aria-expanded="true"] .causeway-collection-preview-icon {
+  transform: rotate(90deg);
+}
+.causeway-collection-preview-toggle:dir(rtl)[aria-expanded="false"] .causeway-collection-preview-icon {
+  transform: rotate(180deg);
+}
 .causeway-collection-preview-heading,
 .causeway-collection-preview-cell {
   inline-size: 3rem;
