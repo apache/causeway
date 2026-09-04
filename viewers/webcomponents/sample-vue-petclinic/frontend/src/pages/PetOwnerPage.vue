@@ -168,19 +168,19 @@ defineProps<CausewayRoutePageProps>();
                 </cw-action>
               </cw-collection>
             </section>
+            <section class="petclinic-card petclinic-agreement-card" aria-labelledby="petclinic-owner-agreement-heading">
+              <h2 id="petclinic-owner-agreement-heading">Agreement</h2>
+              <cw-property
+                id="agreement"
+                label-position="NONE"
+                pdf-render="auto"
+                pdf-initial-page="1"
+                pdf-zoom="page-width"
+                data-testid="petclinic-owner-agreement"
+              />
+            </section>
           </div>
         </div>
-
-        <section class="petclinic-card" aria-labelledby="petclinic-owner-documents-heading">
-          <h2 id="petclinic-owner-documents-heading">Documents</h2>
-          <cw-property
-            id="pdfAuto"
-            pdf-render="auto"
-            pdf-initial-page="1"
-            pdf-zoom="page-width"
-            data-testid="petclinic-pdf-auto"
-          />
-        </section>
       </article>
       <cw-interaction-controller data-causeway-route-interactions />
     </cw-object-context>

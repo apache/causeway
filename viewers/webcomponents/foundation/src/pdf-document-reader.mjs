@@ -106,11 +106,23 @@ export class CausewayPdfDocumentReaderController {
             if (!this.#current(generation) || activate.disabled) return;
             activate.disabled = true;
             void this.#initialize(generation).then(() => {
-                if (this.#current(generation)) this.container.querySelector?.('[data-causeway-pdf-previous]')?.focus?.();
+                if (this.#current(generation)) {
+                    const previous = this.container.querySelector?.('[data-causeway-pdf-previous]');
+                    const next = this.container.querySelector?.('[data-causeway-pdf-next]');
+                    (previous?.disabled ? next : previous)?.focus?.();
+                }
             });
         }, {once: true});
-        this.container.querySelector?.('[data-causeway-pdf-previous]')?.addEventListener?.('click', () => this.#goToPage(this.currentPage - 1, generation));
-        this.container.querySelector?.('[data-causeway-pdf-next]')?.addEventListener?.('click', () => this.#goToPage(this.currentPage + 1, generation));
+        const previous = this.container.querySelector?.('[data-causeway-pdf-previous]');
+        const next = this.container.querySelector?.('[data-causeway-pdf-next]');
+        previous?.addEventListener?.('click', () => {
+            this.#goToPage(this.currentPage - 1, generation);
+            if (previous.disabled) next?.focus?.();
+        });
+        next?.addEventListener?.('click', () => {
+            this.#goToPage(this.currentPage + 1, generation);
+            if (next.disabled) previous?.focus?.();
+        });
         this.container.querySelector?.('[data-causeway-pdf-zoom-out]')?.addEventListener?.('click', () => this.#changeZoom(-ZOOM_STEP, generation));
         this.container.querySelector?.('[data-causeway-pdf-zoom-in]')?.addEventListener?.('click', () => this.#changeZoom(ZOOM_STEP, generation));
     }
@@ -337,9 +349,21 @@ export class CausewayPdfDocumentReaderController {
         this.currentPage = bounded;
         this.visiblePages.add(bounded);
         const target = this.container.querySelector?.(`[data-causeway-pdf-page="${bounded}"]`);
-        if (scroll) target?.scrollIntoView?.({block: 'start', behavior: 'smooth'});
+        if (scroll && target) this.#scrollPageIntoViewport(target);
         this.#updateControls(generation);
         this.#scheduleVisiblePages(generation);
+    }
+
+    #scrollPageIntoViewport(target) {
+        const viewport = this.container.querySelector?.('[data-causeway-pdf-viewport]');
+        if (!viewport) return;
+        const viewportTop = viewport.getBoundingClientRect?.().top ?? 0;
+        const targetTop = target.getBoundingClientRect?.().top;
+        const top = Number.isFinite(targetTop)
+                ? (viewport.scrollTop ?? 0) + targetTop - viewportTop - (viewport.clientTop ?? 0)
+                : target.offsetTop ?? 0;
+        if (typeof viewport.scrollTo === 'function') viewport.scrollTo({top: Math.max(0, top), behavior: 'auto'});
+        else viewport.scrollTop = Math.max(0, top);
     }
 
     #changeZoom(delta, generation) {
