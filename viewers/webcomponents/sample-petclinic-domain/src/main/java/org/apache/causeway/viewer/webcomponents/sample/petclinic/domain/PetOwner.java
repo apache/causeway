@@ -59,6 +59,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.applib.value.Blob;
 
 @Entity
 @Table(name = "petclinic_pet_owner")
@@ -221,6 +222,12 @@ public class PetOwner implements Comparable<PetOwner> {
         return lastVisit == null || clockService == null
                 ? null
                 : ChronoUnit.DAYS.between(lastVisit, clockService.getClock().nowAsLocalDate());
+    }
+
+    @Property
+    @PropertyLayout(fieldSetId = "documents", sequence = "1", named = "Automatic PDF reader")
+    public Blob getPdfAuto() {
+        return PetClinicPdfDocument.sample();
     }
 
     @Action

@@ -38,6 +38,7 @@ import org.apache.causeway.applib.annotation.Navigable;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.value.Blob;
 
 @Entity
 @Table(name = "petclinic_visit")
@@ -127,6 +128,12 @@ public class Visit implements Comparable<Visit> {
 
     public void setNotes(final String notes) {
         this.notes = notes;
+    }
+
+    @Property
+    @PropertyLayout(fieldSetId = "documents", sequence = "1", named = "PDF resource link")
+    public Blob getPdfLink() {
+        return PetClinicPdfDocument.sample();
     }
 
     @Override

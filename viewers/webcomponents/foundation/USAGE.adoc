@@ -281,6 +281,10 @@ Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete M
 == Values and renderer extension
 
 The standard renderer registry presents GraphQL scalars, enums, nulls, object references, and the rich-schema Blob and Clob resource shapes.
+An authoritative Blob whose normalized MIME type is exactly `application/pdf` and whose `bytes` value is an available same-origin URL uses the standard PDF document reader unless an application renderer wins or `pdf-render="link"` is authored.
+The Causeway-owned reader lazily loads pinned PDF.js display and module-worker assets, creates a continuously scrollable placeholder for every page, and progressively renders visible and nearby pages as canvas images.
+The ordinary authorized Blob link remains visible during loading, reading, unsupported-password, safety-limit, and failure states.
+The reader deliberately provides no search, selection, print, outline, thumbnail, annotation, form, attachment, XFA, embedded-script, or password-entry feature.
 Object references become semantic `<cw-object-link>` elements.
 Null values use an explicit em-dash presentation labelled as no value.
 Unsupported output shapes produce a diagnostic containing the introspected type identifier.
@@ -306,7 +310,7 @@ const release = defaultValueRendererRegistry.register({
 
 Higher priorities win and the most recently registered renderer wins a priority tie.
 Application registrations default to priority `100`, while standard registrations use lower priorities.
-Renderer input is normalized semantic state containing `value`, `descriptor`, `typeRef`, `typeDescription`, `namedTypeName`, and `typeKind`.
+Renderer input is normalized semantic state containing `value`, `descriptor`, `typeRef`, `typeDescription`, `presentation`, `namedTypeName`, and `typeKind`.
 
 == Properties and object links
 
@@ -320,6 +324,15 @@ Changing the native `id` releases the old requirement and registers the new one.
 The `named`, `described-as`, `description-as`, `multi-line`, and `label-position` attributes override canonical property metadata or its local presentation when custom page composition needs it.
 `label-position` accepts `LEFT`, `TOP`, or `NONE`; `LEFT` uses the shared `--causeway-property-label-column` ratio, `TOP` places the label and smaller description above the full-width field, and `NONE` suppresses their visible presentation while preserving an accessible field name.
 The legacy `label` and `multiline` attributes remain compatibility aliases below their canonical equivalents.
+For eligible PDFs, `pdf-render` accepts `auto`, `manual`, or `link` and defaults to `auto`.
+Automatic mode initializes when the ready property renders, manual mode waits for the keyboard-operable *Preview document* control, and link mode loads neither PDF.js nor inline bytes.
+`pdf-initial-page` accepts an integer from `1` through `100000` and defaults to `1`; the loaded document clamps it to the actual final page.
+`pdf-zoom` accepts `page-width`, `page-fit`, `actual-size`, or an integer percentage from `25%` through `400%` and defaults to `page-width`.
+Invalid PDF options use their bounded defaults and emit `causeway-pdf-reader-diagnostic`; lifecycle state is available through `causeway-pdf-reader-state-change`.
+These authored attributes are inert for non-PDF, application-rendered, unsupported, or link-only values and are not projected from effective grids.
+A future `@PdfJsViewer` proposal may add domain facets and GraphQL metadata with authored attribute → facet → foundation-default precedence, but this release includes no annotation, facet, or metadata mapping.
+Applications can size the reader with `--causeway-pdf-viewport-height`, `--causeway-pdf-viewport-min-height`, `--causeway-pdf-viewport-padding`, `--causeway-pdf-page-gap`, and `--causeway-pdf-page-placeholder-height`.
+Canvas pixels are labelled by page but are not represented as semantic document text, so the persistent resource link remains the route to an external accessible reader.
 
 [source,html]
 ----
@@ -329,6 +342,11 @@ The legacy `label` and `multiline` attributes remain compatibility aliases below
              description-as="tooltip"
              multi-line="3"
              label-position="TOP"></cw-property>
+
+<cw-property id="guide"
+             pdf-render="manual"
+             pdf-initial-page="2"
+             pdf-zoom="page-fit"></cw-property>
 ----
 
 Under the default toolkit policy, non-null standard text, multiline text, Boolean, enum or bounded choice, exact and machine numeric, local date, millisecond local time, and millisecond local date-time values use genuine read-only internal Vaadin controls.
