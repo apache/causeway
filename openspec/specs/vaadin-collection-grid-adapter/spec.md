@@ -385,10 +385,12 @@ The supplied action-result array MUST remain the complete row authority and Grid
 ### Requirement: Optional single-row Grid details presentation
 The Vaadin collection Grid adapter SHALL support an optional toolkit-neutral row-details descriptor while leaving expansion authority, effective preview templates, row contexts, and domain behavior with the owning `<cw-collection>`.
 The adapter MUST keep at most one details item open and MUST preserve native fallback equivalence.
+Its preview disclosure MUST use the same appropriately sized decorative direction indicator and state-driven presentation as the native collection disclosure.
 
 #### Scenario: Grid item has an effective preview
 - **WHEN** the collection projects a Grid item with a current safe preview descriptor
 - **THEN** the Grid renders a compact leading disclosure control with row-title-based accessible naming
+- **AND** the disclosure contains the shared non-focusable, assistive-technology-hidden SVG indicator instead of a Grid-specific text glyph
 - **AND** activation delegates the selected stable row key to the owning collection
 
 #### Scenario: Grid item has no effective preview
@@ -400,6 +402,7 @@ The adapter MUST keep at most one details item open and MUST preserve native fal
 - **WHEN** the collection accepts a disclosure for one current Grid item
 - **THEN** the adapter maps the collection-owned details renderer to Vaadin row details immediately after that item
 - **AND** `aria-expanded`, `aria-controls`, and the toolkit's opened-item state identify exactly one live details subtree
+- **AND** the shared visible indicator points downward in the expanded state just as it does in native presentation
 - **AND** the adapter does not interpret domain members, create object contexts, or clone preview declarations independently
 
 #### Scenario: A second Grid row is expanded
