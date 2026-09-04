@@ -197,6 +197,29 @@ class PetClinicVuePlaywrightTest {
         assertSelectablePdfZoom(reader, viewport, outerScrollBefore);
     }
 
+    private void assertPreviewToggleIcon(final Locator toggle, final boolean expanded) {
+        assertThat(toggle.getAttribute("aria-expanded")).isEqualTo(Boolean.toString(expanded));
+        final var icon = toggle.locator("svg.causeway-collection-preview-icon");
+        assertThat(icon.count()).isEqualTo(1);
+        assertThat(icon.getAttribute("aria-hidden")).isEqualTo("true");
+        assertThat(icon.getAttribute("focusable")).isEqualTo("false");
+        assertThat((Boolean) toggle.evaluate("""
+                (button, expanded) => {
+                  const icon = button.querySelector('.causeway-collection-preview-icon');
+                  const iconRect = icon.getBoundingClientRect();
+                  const buttonRect = button.getBoundingClientRect();
+                  const matrix = new DOMMatrix(getComputedStyle(icon).transform);
+                  const directionIsCorrect = expanded
+                    ? Math.abs(matrix.a) < 0.01 && Math.abs(matrix.b - 1) < 0.01
+                    : Math.abs(matrix.a - 1) < 0.01 && Math.abs(matrix.b) < 0.01;
+                  return iconRect.width >= 17 && Math.abs(iconRect.width - iconRect.height) < 1
+                    && iconRect.width < buttonRect.width && directionIsCorrect;
+                }
+                """, expanded)).isTrue();
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue())
+                .isLessThanOrEqualTo(1.0);
+    }
+
     private void assertSelectablePdfZoom(final Locator reader, final Locator viewport, final double outerScrollBefore) {
         final var select = reader.locator("[data-causeway-pdf-zoom-select]");
         assertThat(select.locator("option").allTextContents())
@@ -266,7 +289,14 @@ class PetClinicVuePlaywrightTest {
         assertThat(page.locator("cw-collection#futureVisits").getAttribute("paged")).isEqualTo("10");
         assertThat(page.locator("cw-collection#petOwners > cw-preview").count()).isEqualTo(1);
         assertThat(page.locator("cw-collection#futureVisits > cw-preview").count()).isEqualTo(1);
-        assertThat(page.locator("cw-collection#petOwners [data-causeway-preview-toggle]").count()).isGreaterThan(0);
+        final var ownerPreviewToggle = page.locator("cw-collection#petOwners [data-causeway-preview-toggle]").first();
+        assertPreviewToggleIcon(ownerPreviewToggle, false);
+        ownerPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.expandedPreviewKey != null");
+        assertPreviewToggleIcon(ownerPreviewToggle, true);
+        ownerPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.expandedPreviewKey == null");
+        assertPreviewToggleIcon(ownerPreviewToggle, false);
         assertThat(page.title()).endsWith(" · Pet Clinic");
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");

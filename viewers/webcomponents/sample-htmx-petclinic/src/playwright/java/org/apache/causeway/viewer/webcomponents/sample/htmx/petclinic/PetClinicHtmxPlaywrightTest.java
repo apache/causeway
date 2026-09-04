@@ -1360,6 +1360,7 @@ class PetClinicHtmxPlaywrightTest {
         final var ownerToggles = owners.locator("button[data-causeway-preview-toggle]");
         ownerToggles.first().waitFor();
         assertThat(ownerToggles.count()).isEqualTo(5);
+        assertPreviewToggleIcon(ownerToggles.first(), false);
         assertThat(page.locator("cw-collection[id='futureVisits'] button[data-causeway-preview-toggle]").count())
                 .isEqualTo(10);
         assertThat(previewRequests.stream().filter(url -> url.endsWith("/_previews/petclinic.PetOwner")).count())
@@ -1369,6 +1370,7 @@ class PetClinicHtmxPlaywrightTest {
 
         ownerToggles.first().click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.expandedPreviewKey != null");
+        assertPreviewToggleIcon(ownerToggles.first(), true);
         var live = owners.locator("cw-preview[data-causeway-preview-live]");
         assertThat(live.count()).isEqualTo(1);
         assertThat(live.getAttribute("role")).isEqualTo("region");
@@ -1381,6 +1383,8 @@ class PetClinicHtmxPlaywrightTest {
 
         ownerToggles.nth(1).click();
         page.waitForFunction("key => { const collection = document.querySelector(\"cw-collection[id='petOwners']\"); return collection?.expandedPreviewKey && collection.expandedPreviewKey !== key; }", firstKey);
+        assertPreviewToggleIcon(ownerToggles.first(), false);
+        assertPreviewToggleIcon(ownerToggles.nth(1), true);
         assertThat(owners.locator("cw-preview[data-causeway-preview-live]").count()).isEqualTo(1);
         live = owners.locator("cw-preview[data-causeway-preview-live]");
         final var escapeOrigin = live.locator("cw-action[id='updateName'] [data-causeway-action-control]").first();
@@ -1622,6 +1626,29 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(toolbar.isVisible()).isTrue();
         assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
         assertSelectablePdfZoom(reader, viewport, outerScrollBefore);
+    }
+
+    private void assertPreviewToggleIcon(final Locator toggle, final boolean expanded) {
+        assertThat(toggle.getAttribute("aria-expanded")).isEqualTo(Boolean.toString(expanded));
+        final var icon = toggle.locator("svg.causeway-collection-preview-icon");
+        assertThat(icon.count()).isEqualTo(1);
+        assertThat(icon.getAttribute("aria-hidden")).isEqualTo("true");
+        assertThat(icon.getAttribute("focusable")).isEqualTo("false");
+        assertThat((Boolean) toggle.evaluate("""
+                (button, expanded) => {
+                  const icon = button.querySelector('.causeway-collection-preview-icon');
+                  const iconRect = icon.getBoundingClientRect();
+                  const buttonRect = button.getBoundingClientRect();
+                  const matrix = new DOMMatrix(getComputedStyle(icon).transform);
+                  const directionIsCorrect = expanded
+                    ? Math.abs(matrix.a) < 0.01 && Math.abs(matrix.b - 1) < 0.01
+                    : Math.abs(matrix.a - 1) < 0.01 && Math.abs(matrix.b) < 0.01;
+                  return iconRect.width >= 17 && Math.abs(iconRect.width - iconRect.height) < 1
+                    && iconRect.width < buttonRect.width && directionIsCorrect;
+                }
+                """, expanded)).isTrue();
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue())
+                .isLessThanOrEqualTo(1.0);
     }
 
     private void assertSelectablePdfZoom(final Locator reader, final Locator viewport, final double outerScrollBefore) {
