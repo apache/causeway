@@ -47,3 +47,12 @@
 - [x] 6.3 Run ordinary and secured HTMX and Vue Playwright suites, including native and Vaadin PDF presentation coverage.
 - [x] 6.4 Run affected-module Maven packaging, RAT, license, and PDF.js verification.
 - [x] 6.5 Run IDE formatting and inspections, strict OpenSpec validation, and whitespace checks.
+
+## 7. Selectable Zoom Modes
+
+- [ ] 7.1 Replace the read-only zoom status with an accessible native selector containing page width, page height, page fit, and bounded percentage choices while retaining zoom-out and zoom-in buttons.
+- [ ] 7.2 Extend the foundation controller to apply selected fit or percentage modes, preserve the current page, and keep the selector synchronized after incremental zooming.
+- [ ] 7.3 Calculate page-height fitting from the owned viewport and PDF page geometry without moving a host scrolling ancestor or bypassing rendering limits.
+- [ ] 7.4 Add foundation unit, renderer, style, and accessibility coverage for selector options, synchronization, restoration, bounds, page preservation, and page-height scale.
+- [ ] 7.5 Extend HTMX and Vue browser coverage for percentage, page-height, page-fit, and restored page-width choices at wide and narrow sizes without host movement or horizontal overflow.
+- [ ] 7.6 Update reader documentation and rerun affected foundation, host, packaging, OpenSpec, IDE, and whitespace verification.

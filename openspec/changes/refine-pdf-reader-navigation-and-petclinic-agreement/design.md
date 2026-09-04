@@ -4,6 +4,7 @@ The shared PDF reader places its controls above an independently scrollable page
 A browser can scroll every eligible ancestor for that operation, so a wide Petclinic page may move the outer document as well as the reader viewport and leave the toolbar above the visible window.
 
 The resource link is currently below the viewport after a visible canvas-accessibility sentence.
+The zoom controls expose only a changing text label between decrement and increment buttons, so a user who leaves page-width fitting cannot select that mode again.
 The sample document contains reader-oriented test phrases rather than domain content, and the automatic reader is rendered in a full-width card below the PetOwner two-column layout.
 The original Apache Causeway Petclinic modeled an owner attachment as a PDF and placed it in the secondary column, which provides the domain precedent for a clinic-agreement fixture.
 
@@ -16,6 +17,7 @@ HTMX and Vue remain thin, equivalent hosts, while the existing GraphQL resource 
 
 - Keep page-control navigation within the PDF viewport and keep the surrounding page and toolbar stable.
 - Put the persistent authorized resource link in available toolbar space.
+- Make page width, page height, page fit, and bounded percentage zoom choices directly selectable while retaining incremental controls.
 - Remove the visible canvas disclaimer while retaining accurate, bounded accessibility semantics.
 - Replace reader-demo content with a deterministic, realistic multipage pet-owner clinic agreement.
 - Place the automatic agreement in the PetOwner secondary column in equivalent HTMX and Vue pages.
@@ -40,6 +42,17 @@ The outer document scroll position will remain unchanged within a small renderin
 
 An alternative was to make the toolbar sticky while retaining document-level scrolling.
 That would mask only part of the problem, could overlap host content, and would still mutate an ancestor the reader does not own.
+
+### Make zoom mode directly selectable
+
+The read-only zoom status will become an accessible native selector between the existing zoom-out and zoom-in buttons.
+It will offer `Page width`, `Page height`, `Page fit`, the existing `Actual size` mode, and the standard `50%`, `75%`, `100%`, `125%`, `150%`, `175%`, and `200%` choices.
+Selecting a fit mode will update the reader's zoom state, rerender pages through the existing bounded rendering pipeline, preserve the current page, and permit later restoration of that mode after incremental zooming.
+The existing buttons will remain available with their established 25-to-400-percent bounds; when used from a fit mode they will continue from 100 percent and the selector will reflect the resulting percentage, including a non-standard percentage when necessary.
+Page-height scale will be derived from the owned viewport's available block size and the PDF page height, without inspecting or moving a host scrolling ancestor.
+
+An alternative was to add a reset button dedicated to page width.
+That would solve only one restoration path and would not expose the reader's other existing fit mode or the requested page-height mode.
 
 ### Put the resource link in the reader toolbar
 
@@ -80,7 +93,8 @@ That would reduce useful reader width, diverge from the established Petclinic co
 ## Risks / Trade-offs
 
 - [Browser geometry and fractional layout can produce small outer-scroll differences] → Acceptance tests compare the outer scroll position with a bounded tolerance and assert toolbar visibility after repeated navigation.
-- [A toolbar containing the long filename can crowd controls] → Give the link a flexible, wrapping toolbar slot and test wide and narrow layouts without horizontal page overflow.
+- [A toolbar containing the zoom selector and long filename can crowd controls] → Keep selector labels concise, give the link a flexible wrapping slot, and test wide and narrow layouts without horizontal page overflow.
+- [Page-height fitting can be confused with page-fit behavior] → Expose both choices explicitly and calculate page height from only the available viewport block size while page fit remains bounded by both dimensions.
 - [Owner-specific PDF generation can become nondeterministic] → Use fixed content ordering, stable formatting, fixed document metadata, and byte-level repeatability tests.
 - [Removing visible explanatory text reduces discoverability of canvas limitations] → Preserve concise programmatic page labels and the prominent authorized download link for external document handling.
 - [Moving the card changes PetOwner heading and layout expectations] → Update HTMX/Vue parity assertions and screenshots around the explicit Agreement section and responsive order.
