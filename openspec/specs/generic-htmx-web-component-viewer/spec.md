@@ -1298,13 +1298,13 @@ Unexpected invocation, routing, focus, Escape, backdrop, overflow, responsive, r
 - **AND** presentation style cannot select a destination or reinterpret the result
 
 ### Requirement: Default collection row preview resources
-The generic HTMX viewer SHALL discover bounded runtime-type preview resources from `META-INF/causeway/webcomponents/previews/<logical-type-name>.html` and SHALL expose safe definitions to empty collection peek declarations through a host resolver.
+The generic HTMX viewer SHALL discover bounded runtime-type preview resources from `META-INF/causeway/webcomponents/previews/<logical-type-name>.html` and SHALL expose safe definitions to empty collection preview declarations through a host resolver.
 Preview resources MUST remain presentation-only and MUST NOT select row identity, alter collection projection, bypass member metadata, or invoke domain behavior independently.
 
 #### Scenario: One valid preview resource exists
-- **WHEN** exactly one bounded UTF-8 resource with one supported `<cw-peek>` root is discovered for a valid logical type
+- **WHEN** exactly one bounded UTF-8 resource with one supported `<cw-preview>` root is discovered for a valid logical type
 - **THEN** the viewer registers an immutable inert definition for that exact logical type
-- **AND** an empty collection peek can clone its content for an eligible row of that runtime type
+- **AND** an empty collection preview can clone its content for an eligible row of that runtime type
 
 #### Scenario: Preview resource is absent
 - **WHEN** no registered preview exists for a row's runtime logical type
@@ -1312,7 +1312,7 @@ Preview resources MUST remain presentation-only and MUST NOT select row identity
 - **AND** the collection renders no preview disclosure for that row
 
 #### Scenario: Inline preview content is authored
-- **WHEN** a collection's direct `<cw-peek>` has meaningful inline content
+- **WHEN** a collection's direct `<cw-preview>` has meaningful inline content
 - **THEN** the viewer performs no default preview lookup for that declaration
 - **AND** a registered runtime-type default cannot merge with or override the inline template
 
@@ -1327,7 +1327,7 @@ Preview resources MUST remain presentation-only and MUST NOT select row identity
 - **AND** classpath order does not select an arbitrary definition
 
 #### Scenario: Client resolves a preview
-- **WHEN** an empty peek resolves a valid runtime logical type through the private preview endpoint
+- **WHEN** an empty preview resolves a valid runtime logical type through the private preview endpoint
 - **THEN** the response is privately non-cacheable at the HTTP boundary and distinguished as a Causeway preview resource
 - **AND** cached viewer mode reuses the validated inert template while cloning fresh live content per expansion
 - **AND** reload mode re-resolves according to established resource-page policy
