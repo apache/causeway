@@ -4,6 +4,8 @@
  * The ASF licenses this file to you under the Apache License, Version 2.0.
  */
 
+import {createPreviewToggleIcon} from './preview-toggle-icon.mjs';
+
 export const CAUSEWAY_COLLECTION_GRID = 'cw-collection-grid';
 export const CAUSEWAY_GRID_WIDGET_POLICY_EVENT = 'causeway-grid-widget-policy';
 const DEFAULT_MODULE_URL = new URL('./vaadin-grid/vaadin-grid.js', import.meta.url).href;
@@ -226,7 +228,8 @@ export class CausewayCollectionGridElement extends HTMLElement {
         button.setAttribute('aria-expanded', String(expanded));
         button.setAttribute('aria-controls', gridPreviewDetailsId(model.item.key));
         button.setAttribute('aria-label', `${expanded ? 'Collapse' : 'Preview'} ${model.item.identity?.title ?? 'item'}`);
-        button.textContent = expanded ? '▾' : '▸';
+        const icon = createPreviewToggleIcon(document);
+        if (icon) button.appendChild(icon);
         button.addEventListener('click', event => {
           event.stopPropagation();
           const opened = presentation.rowDetails.toggle(model.item) === true;

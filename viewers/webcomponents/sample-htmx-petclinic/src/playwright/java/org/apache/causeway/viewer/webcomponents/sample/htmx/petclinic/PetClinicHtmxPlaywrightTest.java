@@ -1425,6 +1425,7 @@ class PetClinicHtmxPlaywrightTest {
         final var petToggles = pets.locator("button[data-causeway-preview-toggle]");
         petToggles.first().waitFor();
         pets.evaluate("element => { element.gridResizeObserver?.disconnect(); element.acceptGridResponsiveState(true); }");
+        assertPreviewToggleIcon(petToggles.first(), false);
         petToggles.first().click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.expandedPreviewKey != null");
         if (nativeToolkit()) {
