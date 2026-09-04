@@ -105,24 +105,49 @@ test('host label mapping changes presentation without changing semantic action s
   });
   const projection = projectCausewayMenuBar(source, {
     generation: 5,
+    menuLabel: menu => menu.role === 'primary' && menu.label === 'Administration' ? 'sven' : undefined,
     actionLabel: action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
-      && action.actionId === 'logout' ? 'Sign out' : undefined
+      && action.actionId === 'logout' ? 'Sign out' : undefined,
+    actionAppearance: action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
+      && action.actionId === 'logout' ? 'sign-out' : undefined
   });
   const logout = Object.values(projection.actions).find(action => action.actionId === 'logout');
+  assert.equal(projection.menus[0].label, 'sven');
   assert.equal(logout.label, 'Sign out');
+  assert.equal(logout.appearance, 'sign-out');
   assert.equal(logout.serviceLogicalTypeName, 'causeway.security.LogoutMenu');
   assert.equal(logout.role, 'primary');
   assert.equal(projection.menus[0].sections[1].actions.at(-1), logout);
-  assert.equal(JSON.stringify(createVaadinMenuItems(projection)).includes('Sign out'), true);
+  const vaadinItems = createVaadinMenuItems(projection);
+  assert.equal(JSON.stringify(vaadinItems).includes('Sign out'), true);
+  assert.equal(vaadinItems[0].children.at(-1).causewayActionAppearance, 'sign-out');
   assert.equal(projection.menus[0].sections[0].actions[0].label, 'Find people');
+  assert.equal(projection.menus[0].sections[0].actions[0].appearance, undefined);
 });
 
-test('defective host label mapping preserves bounded authoritative labels', () => {
-  const thrown = projectCausewayMenuBar(bar(), {actionLabel: () => { throw new Error('host failure'); }});
-  const unsupported = projectCausewayMenuBar(bar(), {actionLabel: () => ({label: '<script>'})});
-  const bounded = projectCausewayMenuBar(bar(), {actionLabel: () => `Sign\u0000 out${'!'.repeat(600)}`});
+test('defective host presentation mapping preserves bounded authoritative presentation', () => {
+  const thrown = projectCausewayMenuBar(bar(), {
+    menuLabel: () => { throw new Error('host failure'); },
+    actionLabel: () => { throw new Error('host failure'); },
+    actionAppearance: () => { throw new Error('host failure'); }
+  });
+  const unsupported = projectCausewayMenuBar(bar(), {
+    menuLabel: () => ({label: '<script>'}),
+    actionLabel: () => ({label: '<script>'}),
+    actionAppearance: () => 'not valid!'
+  });
+  const bounded = projectCausewayMenuBar(bar(), {
+    menuLabel: () => `sven\u0000${'!'.repeat(600)}`,
+    actionLabel: () => `Sign\u0000 out${'!'.repeat(600)}`
+  });
+  assert.equal(thrown.menus[0].label, 'Administration');
   assert.equal(thrown.menus[0].sections[0].actions[0].label, 'Find people');
+  assert.equal(thrown.menus[0].sections[0].actions[0].appearance, undefined);
+  assert.equal(unsupported.menus[0].label, 'Administration');
   assert.equal(unsupported.menus[0].sections[0].actions[0].label, 'Find people');
+  assert.equal(unsupported.menus[0].sections[0].actions[0].appearance, undefined);
+  assert.equal(bounded.menus[0].label.includes('\u0000'), false);
+  assert.equal(bounded.menus[0].label.length, 512);
   assert.equal(bounded.menus[0].sections[0].actions[0].label.includes('\u0000'), false);
   assert.equal(bounded.menus[0].sections[0].actions[0].label.length, 512);
 });

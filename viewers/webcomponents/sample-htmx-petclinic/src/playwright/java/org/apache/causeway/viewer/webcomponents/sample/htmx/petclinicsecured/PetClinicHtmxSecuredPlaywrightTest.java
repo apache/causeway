@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.WaitUntilState;
@@ -125,10 +126,12 @@ class PetClinicHtmxSecuredPlaywrightTest {
             }
             waitForReadyObject(page);
             assertThat(page.locator("[data-testid='causeway-shell-user']").count()).isZero();
+            assertThat(page.locator("meta[name='causeway-auth-username']").getAttribute("content")).isEqualTo("sven");
             assertThat(page.locator("[data-causeway-logout-form]").getAttribute("hidden")).isNotNull();
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
             page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
             assertThat(menuBarRequests).hasSize(1);
+            assertThat(page.locator("cw-menubar-secondary").count()).isZero();
             assertThat(page.locator("cw-menubar-tertiary").isVisible())
                     .as(page.locator("cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary")
                             .evaluateAll("elements => elements.map(element => ({role: element.role, hidden: element.hidden, actions: Object.values(element._projection?.actions ?? {}).map(action => `${action.serviceLogicalTypeName}#${action.actionId}:${action.label}`)}))").toString())
@@ -141,15 +144,30 @@ class PetClinicHtmxSecuredPlaywrightTest {
                         ['causeway.conf.ConfigurationMenu#configuration', 'Configuration'],
                         ['causeway.security.LogoutMenu#logout', 'Sign out']
                       ]);
-                      return [...expected].every(([identity, label]) => {
-                        const action = actions.find(candidate => `${candidate.serviceLogicalTypeName}#${candidate.actionId}` === identity);
-                        return action?.label === label && action.role === 'tertiary';
-                      });
+                      const menuLabels = element._projection?.menus?.map(menu => menu.label) ?? [];
+                      return menuLabels.length === 1 && menuLabels[0] === 'sven'
+                        && [...expected].every(([identity, label]) => {
+                          const action = actions.find(candidate => `${candidate.serviceLogicalTypeName}#${candidate.actionId}` === identity);
+                          return action?.label === label
+                            && action.role === 'tertiary'
+                            && (identity !== 'causeway.security.LogoutMenu#logout' || action.appearance === 'sign-out');
+                        });
                     }
                     """))
                     .as(page.locator("cw-menubar-tertiary").evaluate("element => Object.values(element._projection?.actions ?? {}).map(action => `${action.serviceLogicalTypeName}#${action.actionId}:${action.label}:${action.role}`)").toString())
                     .isTrue();
             assertThat(graphQlCsrfHeaders).isNotEmpty().allSatisfy(value -> assertThat(value).isNotBlank());
+            firstVisible(page.locator("vaadin-menu-bar-button")
+                    .filter(new Locator.FilterOptions().setHasText("sven"))).click();
+            final var presentedSignOutItem = page.locator("vaadin-menu-bar-item")
+                    .filter(new Locator.FilterOptions().setHasText("Sign out")).last();
+            presentedSignOutItem.waitFor();
+            assertThat(presentedSignOutItem.getAttribute("data-causeway-action-appearance")).isEqualTo("sign-out");
+            assertThat(presentedSignOutItem.evaluate("element => getComputedStyle(element).borderTopStyle")).isEqualTo("solid");
+            final var presentedMeItem = page.locator("vaadin-menu-bar-item")
+                    .filter(new Locator.FilterOptions().setHasText("Me")).last();
+            assertThat(presentedMeItem.getAttribute("data-causeway-action-appearance")).isNull();
+            page.keyboard().press("Escape");
 
             final var property = page.locator("cw-property[id='knownAs']");
             property.locator("[data-causeway-action='edit']").click();
@@ -187,9 +205,9 @@ class PetClinicHtmxSecuredPlaywrightTest {
             page.waitForURL("**/htmx**");
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState) && [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
             assertThat(menuBarRequests).hasSize(2);
-            final var accountMenu = page.locator("vaadin-menu-bar-button")
-                    .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Account")).first();
-            accountMenu.click();
+            final var userMenu = firstVisible(page.locator("vaadin-menu-bar-button")
+                    .filter(new Locator.FilterOptions().setHasText("sven")));
+            userMenu.click();
             final var signOutItem = page.locator("vaadin-menu-bar-item")
                     .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Sign out")).last();
             signOutItem.waitFor();
@@ -204,6 +222,16 @@ class PetClinicHtmxSecuredPlaywrightTest {
             browserFailures.removeIf(message -> message.contains("status of 401"));
             assertThat(browserFailures).isEmpty();
         }
+    }
+
+    private static Locator firstVisible(final Locator candidates) {
+        for (var index = 0; index < candidates.count(); index++) {
+            var candidate = candidates.nth(index);
+            if (candidate.isVisible()) {
+                return candidate;
+            }
+        }
+        throw new AssertionError("No visible locator among " + candidates.count() + " candidates");
     }
 
     private void waitForReadyObject(final Page page) {

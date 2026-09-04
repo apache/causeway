@@ -19,6 +19,7 @@
 
 export function readAuthenticationMetadata(document) {
   const value = name => document.querySelector(`meta[name="${name}"]`)?.content ?? '';
+  const username = value('causeway-auth-username').trim();
   const loginPath = value('causeway-auth-login');
   const csrfHeaderName = value('causeway-auth-csrf-header');
   const csrfParameterName = value('causeway-auth-csrf-parameter');
@@ -27,6 +28,7 @@ export function readAuthenticationMetadata(document) {
     return null;
   }
   return Object.freeze({
+    username,
     loginPath,
     csrfHeaderName,
     csrfParameterName,
@@ -56,10 +58,24 @@ export function isExcludedAction(authentication, detail) {
   return authentication?.excludedActions.has(identity) ?? false;
 }
 
+export function authenticationMenuLabel(authentication, detail) {
+  return authentication?.username
+    && detail?.role === 'tertiary'
+    && detail?.label === 'Account'
+    ? authentication.username
+    : undefined;
+}
+
 export function authenticationActionLabel(authentication, detail) {
+  return isFrameworkLogout(authentication, detail) ? 'Sign out' : undefined;
+}
+
+export function authenticationActionAppearance(authentication, detail) {
+  return isFrameworkLogout(authentication, detail) ? 'sign-out' : undefined;
+}
+
+function isFrameworkLogout(authentication, detail) {
   return isExcludedAction(authentication, detail)
     && detail?.serviceLogicalTypeName === 'causeway.security.LogoutMenu'
-    && detail?.actionId === 'logout'
-    ? 'Sign out'
-    : undefined;
+    && detail?.actionId === 'logout';
 }

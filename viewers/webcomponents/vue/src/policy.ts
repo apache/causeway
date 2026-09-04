@@ -21,6 +21,7 @@ import type {
   CausewayActionRequest,
   CausewayEventClaim,
   CausewayLocalResourceTarget,
+  CausewayMenuRequest,
   CausewayObjectTarget,
   CausewayPolicyContext,
   CausewaySemanticResult,
@@ -100,6 +101,15 @@ function replacePresentation(outlet: HTMLElement, ...nodes: Node[]): void {
   outlet.hidden = nodes.length === 0;
 }
 
+function clearViewerOwnedResults(shell: HTMLElement): void {
+  const outlets = shell.querySelectorAll<HTMLElement>(
+    'cw-action-results[data-causeway-page-result], cw-action-results[data-causeway-shell-result]'
+  );
+  for (const outlet of outlets) {
+    if (outlet.isConnected) replacePresentation(outlet);
+  }
+}
+
 export function presentSemanticResult(outlet: HTMLElement, detail: ActionResultDetail): void {
   const result = detail.result;
   const heading = document.createElement('h2');
@@ -157,12 +167,32 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
   const resumedActionEvents = new WeakSet<Event>();
   const menuBoundary = shell.querySelector<HTMLElement & {
     excludeAction?: (detail: CausewayActionRequest) => boolean;
+    menuLabel?: (detail: CausewayMenuRequest) => string | void;
     actionLabel?: (detail: CausewayActionRequest) => string | void;
+    actionAppearance?: (detail: CausewayActionRequest) => string | void;
   }>('cw-menubars');
+  const mappedMenuLabel = (detail: CausewayMenuRequest): string | undefined => {
+    try {
+      const label = runtime.policies.menuLabel?.(detail, context(runtime));
+      return typeof label === 'string' && label.trim() ? label : undefined;
+    } catch (error) {
+      runtime.policies.error?.(error, context(runtime));
+      return undefined;
+    }
+  };
   const mappedActionLabel = (detail: CausewayActionRequest): string | undefined => {
     try {
       const label = runtime.policies.menuActionLabel?.(detail, context(runtime));
       return typeof label === 'string' && label.trim() ? label : undefined;
+    } catch (error) {
+      runtime.policies.error?.(error, context(runtime));
+      return undefined;
+    }
+  };
+  const mappedActionAppearance = (detail: CausewayActionRequest): string | undefined => {
+    try {
+      const appearance = runtime.policies.menuActionAppearance?.(detail, context(runtime));
+      return typeof appearance === 'string' && appearance.trim() ? appearance : undefined;
     } catch (error) {
       runtime.policies.error?.(error, context(runtime));
       return undefined;
@@ -176,7 +206,9 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
     && !Boolean(mappedActionLabel(detail));
   if (menuBoundary) {
     menuBoundary.excludeAction = excludeFrameworkLogout;
+    menuBoundary.menuLabel = mappedMenuLabel;
     menuBoundary.actionLabel = mappedActionLabel;
+    menuBoundary.actionAppearance = mappedActionAppearance;
   }
   let unscopedDestination: HTMLElement | null = null;
   let active = true;
@@ -247,22 +279,39 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
   const onResult = (rawEvent: Event) => {
     const event = rawEvent as CustomEvent<ActionResultDetail>;
     const detail = event.detail ?? {};
+    const generation = runtime.state.routeGeneration;
+    const source = event.target as {dismissResult?: () => void} | null;
     void (async () => {
       const claim = createClaim();
       const handled = await runtime.policies.result?.(detail, claim, context(runtime));
       if (handled === true) claim.claim();
-      if (claim.claimed) return;
+      if (claim.claimed || !active || generation !== runtime.state.routeGeneration) return;
+      const dismissSource = () => {
+        try {
+          source?.dismissResult?.();
+        } catch (error) {
+          runtime.policies.error?.(error, context(runtime));
+        }
+      };
+      clearViewerOwnedResults(shell);
       if (detail.result?.kind === 'local-resource') {
         navigateLocalResource(detail.result.value as CausewayLocalResourceTarget, {applicationBase: runtime.applicationResourceBase});
-        (event.target as {dismissResult?: () => void} | null)?.dismissResult?.();
+        dismissSource();
         return;
       }
       const identity = objectIdentity(detail.result);
-      if (identity) return applyNavigation(runtime, identity);
-      const destination = detail.context && destinations.get(detail.context) || unscopedDestination || resolveResultOutlet(shell);
+      if (identity) {
+        dismissSource();
+        await applyNavigation(runtime, identity);
+        return;
+      }
+      const remembered = detail.context && destinations.get(detail.context) || unscopedDestination;
+      const destination = remembered?.isConnected ? remembered : resolveResultOutlet(shell);
+      if (detail.context) destinations.delete(detail.context);
+      unscopedDestination = null;
       if (detail.result?.kind === 'void') await refreshAfterVoid(runtime, detail);
       else presentSemanticResult(destination, detail);
-      (event.target as {dismissResult?: () => void} | null)?.dismissResult?.();
+      dismissSource();
     })().catch(error => runtime.policies.error?.(error, context(runtime)));
   };
   const onMenuState = () => queueMicrotask(() => {
@@ -276,7 +325,9 @@ export function installSemanticBridge(runtime: CausewayViewerRuntime, shell: HTM
   return () => {
     active = false;
     if (menuBoundary?.excludeAction === excludeFrameworkLogout) menuBoundary.excludeAction = undefined;
+    if (menuBoundary?.menuLabel === mappedMenuLabel) menuBoundary.menuLabel = undefined;
     if (menuBoundary?.actionLabel === mappedActionLabel) menuBoundary.actionLabel = undefined;
+    if (menuBoundary?.actionAppearance === mappedActionAppearance) menuBoundary.actionAppearance = undefined;
     shell.removeEventListener(ACTION_REQUEST_EVENT, onActionRequest, {capture: true});
     shell.removeEventListener(NAVIGATION_REQUEST_EVENT, onNavigation);
     shell.removeEventListener(ACTION_RESULT_EVENT, onResult);

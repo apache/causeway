@@ -39,6 +39,12 @@ export interface CausewaySemanticResult {
   readonly reason?: string;
 }
 
+export interface CausewayMenuRequest {
+  readonly role: 'primary' | 'secondary' | 'tertiary' | string;
+  readonly menuIndex: number;
+  readonly label: string;
+}
+
 export interface CausewayActionRequest {
   readonly actionId: string;
   readonly serviceLogicalTypeName?: string;
@@ -61,7 +67,9 @@ export interface CausewayPolicyContext {
 }
 
 export interface CausewayViewerPolicies {
+  readonly menuLabel?: (detail: CausewayMenuRequest, context: CausewayPolicyContext) => string | void;
   readonly menuActionLabel?: (detail: CausewayActionRequest, context: CausewayPolicyContext) => string | void;
+  readonly menuActionAppearance?: (detail: CausewayActionRequest, context: CausewayPolicyContext) => string | void;
   readonly action?: (detail: CausewayActionRequest, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
   readonly navigate?: (target: CausewayObjectTarget, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;
   readonly home?: (entry: unknown, claim: CausewayEventClaim, context: CausewayPolicyContext) => boolean | void | Promise<boolean | void>;

@@ -12,7 +12,13 @@ const MAX_SECTIONS = 128;
 const MAX_ACTIONS = 1024;
 const MAX_TEXT = 512;
 
-export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = null, actionLabel = null} = {}) {
+export function projectCausewayMenuBar(bar, {
+  generation = 0,
+  excludeAction = null,
+  menuLabel = null,
+  actionLabel = null,
+  actionAppearance = null
+} = {}) {
   const role = ROLES.includes(bar?.role) ? bar.role : null;
   if (!role) return rejected('role-unsupported', generation);
   if (!Number.isSafeInteger(generation) || generation < 0) return rejected('generation-invalid', 0, role);
@@ -39,11 +45,13 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
             if (seenActions.has(semanticIdentity)) throw projectionError('action-identity-duplicate');
             seenActions.add(semanticIdentity);
             const key = `${generation}:${role}:${menuIndex}:${sectionIndex}:${actionIndex}`;
-            const label = projectedActionLabel(actionLabel, {
+            const presentationDetail = Object.freeze({
               serviceLogicalTypeName,
               actionId,
               label: boundedText(action?.label || actionId)
             });
+            const label = projectedActionLabel(actionLabel, presentationDetail);
+            const appearance = projectedActionAppearance(actionAppearance, presentationDetail);
             const descriptor = Object.freeze({
               kind: 'action',
               key,
@@ -54,6 +62,7 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
               serviceLogicalTypeName,
               actionId,
               label,
+              ...(appearance ? {appearance} : {}),
               description: boundedText(action?.description),
               iconHint: boundedText(action?.iconHint, 128),
               iconPosition: action?.iconPosition === 'RIGHT' ? 'RIGHT' : 'LEFT',
@@ -79,11 +88,12 @@ export function projectCausewayMenuBar(bar, {generation = 0, excludeAction = nul
           generation
         });
       }).filter(section => section.actions.length > 0);
+      const authoredLabel = boundedText(menu?.label || `Menu ${menuIndex + 1}`);
       return Object.freeze({
         kind: 'menu',
         role,
         menuIndex,
-        label: boundedText(menu?.label || `Menu ${menuIndex + 1}`),
+        label: projectedMenuLabel(menuLabel, Object.freeze({role, menuIndex, label: authoredLabel})),
         description: boundedText(menu?.description),
         iconHint: boundedText(menu?.iconHint, 128),
         sections: Object.freeze(sections),
@@ -127,6 +137,7 @@ export function createVaadinMenuItems(projection) {
         disabled: action.disabled,
         causewayKind: 'action',
         causewayKey: action.key,
+        causewayActionAppearance: action.appearance,
         causewayIconHint: action.iconHint,
         causewayIconPosition: action.iconPosition,
         causewayDisabledReason: action.disabledReason
@@ -154,13 +165,33 @@ function isExcludedAction(predicate, action) {
   }
 }
 
-function projectedActionLabel(mapper, detail) {
+function projectedMenuLabel(mapper, detail) {
   if (typeof mapper !== 'function') return detail.label;
   try {
-    const mapped = mapper(Object.freeze({...detail}));
+    const mapped = mapper(detail);
     return typeof mapped === 'string' ? boundedText(mapped) || detail.label : detail.label;
   } catch (_error) {
     return detail.label;
+  }
+}
+
+function projectedActionLabel(mapper, detail) {
+  if (typeof mapper !== 'function') return detail.label;
+  try {
+    const mapped = mapper(detail);
+    return typeof mapped === 'string' ? boundedText(mapped) || detail.label : detail.label;
+  } catch (_error) {
+    return detail.label;
+  }
+}
+
+function projectedActionAppearance(mapper, detail) {
+  if (typeof mapper !== 'function') return '';
+  try {
+    const mapped = mapper(detail);
+    return typeof mapped === 'string' && /^[-_A-Za-z0-9]{1,64}$/.test(mapped) ? mapped : '';
+  } catch (_error) {
+    return '';
   }
 }
 

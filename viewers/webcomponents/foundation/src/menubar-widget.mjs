@@ -23,7 +23,9 @@ let configuration = Object.freeze({
   moduleUrl: DEFAULT_MODULE_URL,
   definitionTimeoutMs: DEFAULT_DEFINITION_TIMEOUT_MS,
   excludeAction: null,
-  actionLabel: null
+  menuLabel: null,
+  actionLabel: null,
+  actionAppearance: null
 });
 let modulePromise = null;
 let failed = false;
@@ -44,7 +46,9 @@ export function configureCausewayMenubarWidgets(options = {}) {
     moduleUrl: options.moduleUrl ? safeModuleUrl(options.moduleUrl) : DEFAULT_MODULE_URL,
     definitionTimeoutMs: boundedTimeout(options.definitionTimeoutMs),
     excludeAction: typeof options.excludeAction === 'function' ? options.excludeAction : null,
-    actionLabel: typeof options.actionLabel === 'function' ? options.actionLabel : null
+    menuLabel: typeof options.menuLabel === 'function' ? options.menuLabel : null,
+    actionLabel: typeof options.actionLabel === 'function' ? options.actionLabel : null,
+    actionAppearance: typeof options.actionAppearance === 'function' ? options.actionAppearance : null
   });
   modulePromise = null;
   failed = false;
@@ -245,6 +249,7 @@ function materializeMenuItems(items) {
     if (item.causewayKind === 'action' || item.title || item.causewayIconHint || item.causewayDisabledReason) {
       const menuItem = document.createElement('vaadin-menu-bar-item');
       if (item.causewayKey) menuItem.dataset.causewayKey = item.causewayKey;
+      if (item.causewayActionAppearance) menuItem.dataset.causewayActionAppearance = item.causewayActionAppearance;
       const label = document.createElement('span');
       const presentation = normalizeActionPresentation({
         name: item.text,
@@ -253,6 +258,7 @@ function materializeMenuItems(items) {
         cssClassFaPosition: item.causewayIconPosition
       });
       label.className = `causeway-menubar-item-label${item.title ? ' causeway-action-control-tooltip' : ''}`;
+      if (item.causewayActionAppearance) label.dataset.causewayActionAppearance = item.causewayActionAppearance;
       appendActionContent(label, item.text, presentation.icon);
       if (item.title) label.dataset.tooltip = item.title;
       if (item.causewayIconHint) label.dataset.iconHint = item.causewayIconHint;
