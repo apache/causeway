@@ -23,3 +23,9 @@ Vue wrapper markup MUST NOT duplicate or override foundation PDF navigation or r
 - **WHEN** browser automation activates next and previous controls in the Vue-hosted agreement reader
 - **THEN** navigation scrolls only the foundation-owned PDF viewport and leaves the host document position stable
 - **AND** focus, page status, progressive rendering, and resource authorization remain equivalent to HTMX
+
+#### Scenario: Vue user changes and restores agreement zoom
+
+- **WHEN** browser automation selects percentage, page-height, page-fit, and page-width zoom choices in the Vue-hosted agreement reader
+- **THEN** Vue delegates each choice to the same foundation selector and preserves the current page
+- **AND** behavior, host-page stability, and responsive overflow remain equivalent to HTMX
