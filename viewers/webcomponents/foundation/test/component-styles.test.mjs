@@ -55,6 +55,13 @@ test('PDF reader styles expose bounded sizing, scrolling, and visible keyboard f
     assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /causeway-pdf-accessibility-note/);
 });
 
+test('collection preview disclosure uses a larger state-driven directional icon without resizing its control', () => {
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-preview-toggle \{[\s\S]*?block-size: var\(--causeway-control-height, 2\.35rem\);[\s\S]*?inline-size: var\(--causeway-control-height, 2\.35rem\);/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-preview-icon \{[\s\S]*?block-size: var\(--causeway-collection-preview-icon-size, 1\.15rem\);[\s\S]*?stroke: currentColor;[\s\S]*?stroke-width: 2\.4;[\s\S]*?transform: rotate\(0deg\);/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-preview-toggle\[aria-expanded="true"\] \.causeway-collection-preview-icon \{\s+transform: rotate\(90deg\);/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-preview-toggle:dir\(rtl\)\[aria-expanded="false"\] \.causeway-collection-preview-icon \{\s+transform: rotate\(180deg\);/);
+});
+
 test('property edit affordance remains a compact deterministic icon control', async () => {
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit \{[\s\S]*?block-size: 2rem;[\s\S]*?inline-size: 2rem;[\s\S]*?padding: 0\.35rem;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit-icon \{[\s\S]*?block-size: 1rem;[\s\S]*?inline-size: 1rem;[\s\S]*?stroke: currentColor;/);

@@ -90,6 +90,9 @@ test('collection resolves an inline preview lazily for an eligible row', async (
   await waitFor(() => collection.collectionState.status === 'ready');
   assert.match(collection.innerHTML, /data-causeway-preview-toggle="example\.Staff:1"/);
   assert.match(collection.innerHTML, /aria-expanded="false"/);
+  assert.match(collection.innerHTML, /<svg class="causeway-collection-preview-icon" aria-hidden="true" focusable="false" viewBox="0 0 20 20">/);
+  assert.match(collection.innerHTML, /<path d="M7 4l6 6-6 6"><\/path><\/svg>/);
+  assert.doesNotMatch(collection.innerHTML, /[▸▾]/);
   assert.equal(hydrationCount, 1);
 });
 
