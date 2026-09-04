@@ -941,6 +941,23 @@ cw-menubar-control vaadin-menu-bar-button[focused] {
 .causeway-service-action-control {
   inline-size: 100%;
 }
+.causeway-service-action-control[data-action-appearance="sign-out"],
+.causeway-menubar-item-label[data-causeway-action-appearance="sign-out"],
+vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"] {
+  border: var(--causeway-sign-out-border, 1px solid currentColor);
+  border-radius: var(--causeway-sign-out-radius, 0.25rem);
+}
+.causeway-menubar-item-label[data-causeway-action-appearance="sign-out"],
+vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"] {
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding: var(--causeway-sign-out-padding, 0.35rem 0.6rem);
+}
+.causeway-service-action-control[data-action-appearance="sign-out"]:focus-visible,
+vaadin-menu-bar-item[data-causeway-action-appearance="sign-out"]:focus-within {
+  outline: var(--causeway-menubar-focus, 0.2rem solid LinkText);
+  outline-offset: 0.1rem;
+}
 .causeway-menu-icon {
   display: inline-block;
   inline-size: 0.75rem;

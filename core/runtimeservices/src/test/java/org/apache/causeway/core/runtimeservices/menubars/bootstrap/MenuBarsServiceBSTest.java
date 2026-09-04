@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -107,6 +108,22 @@ extends RuntimeServicesTestAbstract {
         var layoutData2 = menuBars2.stream().findFirst().get();
         assertEquals("Create Simple Object", layoutData2.getNamed());
         assertEquals(null, layoutData2.getNamedEscaped()); // deprecated: always escape
+    }
+
+    @Test
+    void authoredLayoutWithoutUnreferencedActionMenuIsRetained() {
+        var customNamed = "Deliberately selected action";
+        var xml = sampleMenuBarsXmlWithCustomName(customNamed)
+                .replace(" unreferencedActions=\"true\"", "");
+        assertFalse(xml.contains("unreferencedActions=\"true\""));
+
+        getSpecificationLoader().disposeMetaModel();
+        super.menubarsLayoutXmlResourceRef.set(new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8)));
+        getSpecificationLoader().createMetaModel();
+
+        var menuBars = menuBarsService.menuBars();
+        assertEquals(1L, menuBars.stream().count());
+        assertEquals(customNamed, menuBars.stream().findFirst().orElseThrow().getNamed());
     }
 
     @Test

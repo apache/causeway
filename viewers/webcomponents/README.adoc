@@ -125,7 +125,8 @@ Start the corresponding local SecMan and Spring Security variants with:
 ./viewers/webcomponents/sample-vue-petclinic/run-secured.sh
 ----
 
-Both secured applications use username `sven` and password `pass`, require current CSRF evidence for GraphQL and logout POSTs, restore safe viewer deep links after login, and present host-owned **Sign out** in the preserved tertiary Account menu without separate visible authentication chrome.
+Both secured applications use username `sven` and password `pass`, require current CSRF evidence for GraphQL and logout POSTs, restore safe viewer deep links after login, and consolidate utility actions into one tertiary menu labelled `sven` without separate visible authentication chrome.
+Exact host-owned **Sign out** receives a distinct outlined treatment in native and Vaadin-backed menus while retaining its CSRF-safe POST behavior.
 Run only one application at a time because all four use port 8080 by default.
 Open `http://localhost:8080/htmx` for HTMX or `http://localhost:8080/vue/` for Vue.
 The HTMX application also exposes `/wicket/`; sign in as `sven` with password `pass` for comparison.

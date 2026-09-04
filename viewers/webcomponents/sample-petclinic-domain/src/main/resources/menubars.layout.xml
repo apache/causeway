@@ -36,11 +36,6 @@
             </mb:section>
         </mb:menu>
     </mb:primary>
-    <mb:secondary>
-        <mb:menu unreferencedActions="true">
-            <mb:named>System</mb:named>
-        </mb:menu>
-    </mb:secondary>
     <mb:tertiary>
         <mb:menu>
             <mb:named>Account</mb:named>

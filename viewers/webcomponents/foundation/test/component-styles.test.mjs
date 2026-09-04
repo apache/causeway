@@ -68,6 +68,11 @@ test('object-link icons remain bounded, decorative markup is themeable and heade
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-breadcrumbs \.causeway-object-link-identity,\s+\.causeway-object-header-link \.causeway-object-link-identity \{\s+display: none;/);
 });
 
+test('sign-out appearance remains visibly bounded in native and Vaadin menu controls', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-service-action-control\[data-action-appearance="sign-out"\],[\s\S]*?vaadin-menu-bar-item\[data-causeway-action-appearance="sign-out"\] \{[\s\S]*?border: var\(--causeway-sign-out-border, 1px solid currentColor\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /vaadin-menu-bar-item\[data-causeway-action-appearance="sign-out"\]:focus-within \{[\s\S]*?outline: var\(--causeway-menubar-focus, 0\.2rem solid LinkText\);/);
+});
+
 test('action icons retain component-owned spacing in native and Vaadin controls', () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /gap: var\(--causeway-action-icon-gap, 0\.75rem\);/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-action-control > vaadin-button > \.causeway-action-icon:first-child \{\s+margin-inline-end: var\(--causeway-action-icon-gap, 0\.75rem\);/);

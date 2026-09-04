@@ -53,10 +53,10 @@ Open any `/vue` route and sign in with username `sven` and password `pass`.
 The secured launcher preserves the environment and additional Maven argument behavior of `run.sh` while selecting `PetClinicVueSecuredApplication`.
 The application restores only safe Vue GET deep links, fetches bounded no-store username and CSRF context before mounting, decorates every GraphQL POST with the current CSRF header, and retains an application-owned non-visual POST logout form.
 Invalid, absent, locked, and passwordless accounts have the same public failure, and successful authentication migrates the session identifier.
-The shared Account layout declares **Me**, **Configuration**, and framework Logout together in the tertiary application-menu hierarchy.
-The deterministic secured user receives the standard regular-user and configuration-access roles, so the secured menu preserves **Me** and **Configuration** while presenting exact framework action `causeway.security.LogoutMenu#logout` as **Sign out**.
+The shared layout declares **Me**, **Configuration**, and framework Logout together in one tertiary utility-menu hierarchy and omits a duplicate System catch-all.
+The deterministic secured user receives the standard regular-user and configuration-access roles, so host policy labels that menu `sven`, preserves **Me** and **Configuration**, and presents exact framework action `causeway.security.LogoutMenu#logout` as distinctly outlined **Sign out**.
 Host policy claims Sign out activation and submits the native form before GraphQL, while similarly named application actions and typed local-resource results remain independent.
-The secured shell adds no separate visible username or logout block.
+The secured shell adds no separate visible username or logout block, and the Vue result bridge dismisses transient menu-action results after canonical object handoff so **Me** and **Configuration** cannot leave stale result chrome.
 
 == Test
 
@@ -78,7 +78,7 @@ Install Playwright Chromium on the first run when necessary:
 ----
 
 The ordinary browser suite covers the HTMX presentation baseline, wide and narrow layout invariants, the four exact-type pages, stable application shell, direct links, refresh, back and forward navigation, generic fallback, invalid and absent objects, semantic navigation and results, menus, keyboard skip navigation, and both toolkit policies.
-The secured browser journey additionally covers generic invalid login, valid deep-link restoration, CSRF-bearing reads and mutation, missing-CSRF rejection, exact host Logout policy, native logout, browser history, and session expiry.
+The secured browser journey additionally covers generic invalid login, valid deep-link restoration, the username-labelled menu under native and Vaadin policies, `UserMemento` and Configuration navigation without stale results, CSRF-bearing reads and mutation, missing-CSRF rejection, exact host Logout policy and appearance, native logout, browser history, and session expiry.
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser.
 Any arguments after `--install-browser` are passed to the Maven test invocation.

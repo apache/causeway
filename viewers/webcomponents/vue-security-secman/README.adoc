@@ -100,7 +100,8 @@ Authentication, GraphQL, assets, malformed paths, unsafe methods, unrelated path
 Spring migrates the session identifier after login.
 
 The stable Vue shell retains a non-visual native POST logout form carrying the context's CSRF parameter and token.
-Its `menuActionLabel` policy presents exact `causeway.security.LogoutMenu#logout` as **Sign out** in the authorized tertiary semantic menu location, while the typed action policy claims only that identity and submits the form before GraphQL invocation.
+Its `menuLabel` policy presents the bounded authentication-context username as the utility-menu title, while `menuActionLabel` and `menuActionAppearance` present exact `causeway.security.LogoutMenu#logout` as distinctly outlined **Sign out** in the authorized tertiary semantic location.
+The typed action policy claims only that identity and submits the form before GraphQL invocation.
 Other tertiary actions remain subject to ordinary menu layout and SecMan authorization, so applications must grant any regular-user or configuration roles needed to preserve controls such as **Me** and **Configuration**.
 The shell renders no separate visible username or logout block.
 Successful logout clears authentication, invalidates the session, applies configured cookie cleanup, and redirects to the signed-out login page.

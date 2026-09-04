@@ -28,7 +28,10 @@ function projection(generation = 1) {
       {serviceLogicalTypeName: 'demo.People', actionId: 'find', label: 'Find people'},
       {serviceLogicalTypeName: 'demo.People', actionId: 'remove', label: 'Remove', disabled: 'Not permitted'}
     ]}]}]
-  }, {generation});
+  }, {
+    generation,
+    actionAppearance: action => action.actionId === 'find' ? 'sign-out' : undefined
+  });
 }
 
 async function connect(adapter) {
@@ -75,6 +78,8 @@ test('qualified adapter loads once and selects only current enabled leaves', asy
   assert.equal(section.component.getAttribute('role'), 'separator');
   assert.equal(section.component.getAttribute('aria-label'), 'People');
   assert.equal(enabled.component.localName, 'vaadin-menu-bar-item');
+  assert.equal(enabled.component.dataset.causewayActionAppearance, 'sign-out');
+  assert.equal(enabled.component.childNodes[0].dataset.causewayActionAppearance, 'sign-out');
   assert.equal(disabled.component.localName, 'vaadin-menu-bar-item');
   assert.equal(disabled.component.childNodes[0].getAttribute('aria-label'), 'Remove. Unavailable: Not permitted');
   assert.equal(disabled.component.childNodes[0].dataset.disabledReason, 'Not permitted');
