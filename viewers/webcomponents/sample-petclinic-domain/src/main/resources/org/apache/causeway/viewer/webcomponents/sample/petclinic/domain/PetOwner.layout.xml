@@ -46,7 +46,12 @@
                             <cpt:fieldSet name="Details" id="details" unreferencedProperties="true">
                                 <cpt:property id="notes" multiLine="5"/>
                                 <cpt:property id="lastVisit"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="Metadata" id="metadata">
                                 <cpt:property id="daysSinceLastVisit"/>
+                                <cpt:action id="delete">
+                                    <cpt:named>Remove this owner</cpt:named>
+                                </cpt:action>
                             </cpt:fieldSet>
                         </bs3:col>
                     </bs3:row>

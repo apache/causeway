@@ -109,6 +109,37 @@ export function renderObjectLayoutPlan(plan, {idPrefix = 'causeway-object', edit
   return (plan?.regions ?? []).map(region => renderNode(region, state)).join('');
 }
 
+export function extractCausewayLayoutFieldSet(plan, fieldSetId) {
+  const normalizedId = String(fieldSetId ?? '').trim();
+  if (!normalizedId) return null;
+  const matches = [];
+  walkPlanNodes(plan?.regions ?? [], node => {
+    if (node?.kind === 'group' && node.id === normalizedId) matches.push(node);
+  });
+  if (matches.length !== 1) return null;
+  const group = matches[0];
+  return deepFreeze({
+    id: normalizedId,
+    label: group.label || humanize(normalizedId),
+    properties: (group.children ?? []).filter(node => node.kind === 'member' && node.memberKind === 'property'),
+    actions: (group.children ?? []).filter(node => node.kind === 'member' && node.memberKind === 'action')
+  });
+}
+
+export function renderObjectLayoutMembers(nodes, {idPrefix = 'causeway-members', editable = false} = {}) {
+  const members = (nodes ?? []).filter(node => node?.kind === 'member');
+  const state = {idPrefix: safeId(idPrefix), editable: Boolean(editable), sequence: 0};
+  return renderChildren(members, state);
+}
+
+function walkPlanNodes(nodes, visitor) {
+  for (const node of nodes ?? []) {
+    visitor(node);
+    walkPlanNodes(node.children, visitor);
+    walkPlanNodes(node.tabs, visitor);
+  }
+}
+
 function claimExplicitMembers(root, members, diagnostics) {
   const claims = new Set();
   walk(root, node => {
