@@ -186,6 +186,48 @@ Stable hooks include `causeway-object`, `causeway-object-row`, `causeway-object-
 `causeway-object-layout-diagnostic` reports one redacted bounded diagnostic without response content or authorization rules.
 Applications that need different structure continue to author the established lower-level elements directly beneath the same context.
 
+== Declarative layout components
+
+Application-authored pages can compose `<cw-row>`, `<cw-column span="1..12">`, `<cw-fieldset name="...">`, `<cw-tabgroup name="...">`, and `<cw-tab name="...">` beneath an existing object context.
+These framework-neutral elements implement the same twelve-track responsive structure without owning identity, routing, GraphQL execution, or interaction policy.
+
+The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, and metadata, a fieldset accepts only properties, a tab group accepts only tabs, and a tab accepts only rows.
+Unsupported direct children fail closed with `data-causeway-layout-invalid` and a bounded redacted `causeway-layout-component-diagnostic` event.
+A missing or invalid column span uses twelve, and narrow viewports stack all columns without horizontal overflow.
+
+A tab group exposes an accessible `tablist`, one `tab` control per enabled authored tab, and corresponding `tabpanel` relationships.
+The first enabled tab is selected unless exactly one authored tab carries `selected`.
+Pointer activation, Home, End, horizontal arrows, and RTL direction update selection and focus deterministically, while disabled, inserted, removed, or renamed tabs are synchronized without rebuilding their authored panels.
+
+`<cw-metadata>` is the single automatic layout element.
+It registers the existing layout requirement with the nearest object context, follows only the authoritative same-origin effective-grid reference, and extracts the fieldset whose id is exactly `metadata`.
+It renders that fieldset's ordered authorized properties as ordinary `<cw-property>` children and its ordered authorized actions as ordinary `<cw-action>` children inside a closed `Actions` disclosure.
+It does not accept authored member children, infer metadata from names or labels, scan GraphQL members, synthesize actions, or fall back to all properties when the fieldset or grid is unavailable.
+Loading, empty, unavailable, malformed, superseded, and disconnected states fail closed and remain inspectable through `data-causeway-metadata-state` plus bounded layout diagnostics.
+
+[source,html]
+----
+<cw-row>
+  <cw-column span="8">
+    <cw-fieldset name="Identity">
+      <cw-property id="name"></cw-property>
+      <cw-property id="status"></cw-property>
+    </cw-fieldset>
+  </cw-column>
+  <cw-column span="4">
+    <cw-tabgroup name="Supplementary information">
+      <cw-tab name="Metadata" selected>
+        <cw-row>
+          <cw-column span="12">
+            <cw-metadata></cw-metadata>
+          </cw-column>
+        </cw-row>
+      </cw-tab>
+    </cw-tabgroup>
+  </cw-column>
+</cw-row>
+----
+
 == Application menu bars and service actions
 
 `<cw-menubars>` is the framework-neutral high-level coordinator for Causeway's effective primary, secondary, and tertiary application menu bars.

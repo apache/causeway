@@ -22,10 +22,12 @@ import test from 'node:test';
 import {
     CausewayGridError,
     createFallbackLayoutPlan,
+    extractCausewayLayoutFieldSet,
     MAX_GRID_XML_CHARACTERS,
     MAX_GRID_XML_DEPTH,
     MAX_MULTI_LINE_ROWS,
     parseCausewayGridXml,
+    renderObjectLayoutMembers,
     renderObjectLayoutPlan
 } from '../src/object-layout.mjs';
 import {
@@ -112,6 +114,23 @@ test('accepts standard XML entities while rejecting unknown references', () => {
             () => parseCausewayGridXml(`<bs:grid ${GRID_NAMESPACES}>&application;</bs:grid>`),
             error => error.code === 'GRID_XML_UNKNOWN_ENTITY'
     );
+});
+
+test('extracts and renders only exact authoritative metadata fieldset members', () => {
+    const members = objectLayoutMembers();
+    members.set('version', {id: 'version', kind: 'property'});
+    members.set('rebuildMetamodel', {id: 'rebuildMetamodel', kind: 'action'});
+    const xml = `<bs:grid ${GRID_NAMESPACES}><bs:row><bs:col><cpt:fieldSet id="metadata" name="Metadata"><cpt:property id="version"/><cpt:action id="rebuildMetamodel"/></cpt:fieldSet><cpt:fieldSet id="details" name="Details"><cpt:property id="name"/></cpt:fieldSet></bs:col></bs:row></bs:grid>`;
+    const result = parseCausewayGridXml(xml, {members});
+    const metadata = extractCausewayLayoutFieldSet(result.plan, 'metadata');
+
+    assert.equal(metadata.label, 'Metadata');
+    assert.deepEqual(metadata.properties.map(node => node.memberId), ['version']);
+    assert.deepEqual(metadata.actions.map(node => node.memberId), ['rebuildMetamodel']);
+    assert.match(renderObjectLayoutMembers(metadata.properties), /<cw-property[^>]*id="version"/);
+    assert.match(renderObjectLayoutMembers(metadata.actions), /<cw-action[^>]*id="rebuildMetamodel"/);
+    assert.doesNotMatch(renderObjectLayoutMembers(metadata.properties), /id="name"/);
+    assert.equal(extractCausewayLayoutFieldSet(result.plan, 'missing'), null);
 });
 
 test('creates a deterministic semantic fallback modeled on the canonical Causeway grid', () => {

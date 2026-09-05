@@ -58,15 +58,14 @@ defineProps<CausewayRoutePageProps>();
                 <cw-collection-column id="notes" label="Notes" />
               </cw-standalone-collection>
             </cw-action>
-            <cw-action id="delete" named="Remove this owner" />
           </div>
         </div>
 
         <div class="petclinic-object-grid">
           <div class="petclinic-object-details">
-            <section class="petclinic-card" aria-labelledby="petclinic-owner-identity-heading">
-              <h2 id="petclinic-owner-identity-heading">Identity</h2>
-              <div class="petclinic-field-list">
+            <cw-row>
+              <cw-column span="12">
+                <cw-fieldset name="Identity" class="petclinic-card">
                 <cw-property id="name" named="Full name">
                   <cw-action id="updateName" named="Change the owner's name" prompt-style="INLINE">
                     <cw-parameter
@@ -82,25 +81,44 @@ defineProps<CausewayRoutePageProps>();
                   editable
                   described-as="The familiar or preferred name used by this owner."
                 />
-              </div>
-            </section>
+                </cw-fieldset>
+              </cw-column>
+            </cw-row>
 
-            <section class="petclinic-card" aria-labelledby="petclinic-owner-contact-heading">
-              <h2 id="petclinic-owner-contact-heading">Contact</h2>
-              <div class="petclinic-field-list">
+            <cw-row>
+              <cw-column span="12">
+                <cw-fieldset name="Contact" class="petclinic-card">
                 <cw-property id="telephoneNumber" editable />
                 <cw-property id="emailAddress" editable />
-              </div>
-            </section>
+                </cw-fieldset>
+              </cw-column>
+            </cw-row>
 
-            <section class="petclinic-card" aria-labelledby="petclinic-owner-details-heading">
-              <h2 id="petclinic-owner-details-heading">Details</h2>
-              <div class="petclinic-field-list">
-                <cw-property id="notes" editable multi-line="5" />
-                <cw-property id="lastVisit" editable label-position="TOP" min="2000-01-01" max="today" />
-                <cw-property id="daysSinceLastVisit" />
-              </div>
-            </section>
+            <cw-row>
+              <cw-column span="12">
+                <cw-fieldset name="Details" class="petclinic-card">
+                  <cw-property id="notes" editable multi-line="5" />
+                  <cw-property id="lastVisit" editable label-position="TOP" min="2000-01-01" max="today" />
+                </cw-fieldset>
+              </cw-column>
+            </cw-row>
+
+            <cw-tabgroup name="Owner supplementary information" data-testid="petclinic-owner-layout-tabs">
+              <cw-tab name="Metadata" selected>
+                <cw-row>
+                  <cw-column span="12">
+                    <cw-metadata data-testid="petclinic-owner-metadata" />
+                  </cw-column>
+                </cw-row>
+              </cw-tab>
+              <cw-tab name="Layout help">
+                <cw-row>
+                  <cw-column span="12">
+                    <cw-fieldset name="Layout" class="petclinic-card" />
+                  </cw-column>
+                </cw-row>
+              </cw-tab>
+            </cw-tabgroup>
           </div>
 
           <div class="petclinic-object-collections">
