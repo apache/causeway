@@ -38,6 +38,12 @@ export const CausewayElementName = Object.freeze({
     PREVIEW: 'cw-preview',
     STANDALONE_COLLECTION: 'cw-standalone-collection',
     COLLECTION_COLUMN: 'cw-collection-column',
+    FIELDSET: 'cw-fieldset',
+    ROW: 'cw-row',
+    COLUMN: 'cw-column',
+    TABGROUP: 'cw-tabgroup',
+    TAB: 'cw-tab',
+    METADATA: 'cw-metadata',
     MENUBARS: 'cw-menubars',
     MENUBAR_PRIMARY: 'cw-menubar-primary',
     MENUBAR_SECONDARY: 'cw-menubar-secondary',
@@ -66,6 +72,12 @@ export const CausewayHostClass = Object.freeze({
     PREVIEW: 'causeway-preview',
     STANDALONE_COLLECTION: 'causeway-standalone-collection',
     COLLECTION_COLUMN: 'causeway-collection-column',
+    FIELDSET: 'causeway-layout-fieldset',
+    ROW: 'causeway-layout-row',
+    COLUMN: 'causeway-layout-column',
+    TABGROUP: 'causeway-layout-tabgroup',
+    TAB: 'causeway-layout-tab-panel',
+    METADATA: 'causeway-metadata-fieldset',
     MENUBARS: 'causeway-menubars',
     MENUBAR: 'causeway-menubar',
     MENU: 'causeway-menu',
@@ -102,7 +114,10 @@ export const CausewayAttribute = Object.freeze({
     TITLE: 'title',
     DISABLED: 'disabled',
     EDITABLE: 'editable',
-    BAR: 'bar'
+    BAR: 'bar',
+    NAME: 'name',
+    SPAN: 'span',
+    SELECTED: 'selected'
 });
 
 /**
@@ -127,6 +142,7 @@ export const CausewaySemanticEvent = Object.freeze({
     COLLECTION_PREVIEW_DIAGNOSTIC: 'causeway-collection-preview-diagnostic',
     OBJECT_LAYOUT_STATE: 'causeway-object-layout-state-change',
     OBJECT_LAYOUT_DIAGNOSTIC: 'causeway-object-layout-diagnostic',
+    LAYOUT_COMPONENT_DIAGNOSTIC: 'causeway-layout-component-diagnostic',
     MENU_BARS_STATE: 'causeway-menubars-state-change',
     MENU_BARS_DIAGNOSTIC: 'causeway-menubars-diagnostic'
 });

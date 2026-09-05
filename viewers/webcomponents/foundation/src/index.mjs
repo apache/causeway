@@ -42,6 +42,7 @@ export * from './host-operation-policy.mjs';
 export * from './interaction-controller-element.mjs';
 export * from './interaction-operations.mjs';
 export * from './introspection.mjs';
+export * from './layout-elements.mjs';
 export * from './local-resource-policy.mjs';
 export * from './menu-context-controller.mjs';
 export * from './menu-layout.mjs';

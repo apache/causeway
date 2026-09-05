@@ -79,6 +79,7 @@ test('rejects malformed Font Awesome hints and normalizes accepted classes and p
 test('composes tooltip sections and renders escaped positioned icon content', () => {
   assert.equal(composeActionTooltip('Creates an order', 'Credit is unavailable'),
     'Creates an order\n\nCredit is unavailable');
+  assert.equal(composeActionTooltip('Creates an order', false), 'Creates an order');
   const right = normalizeFontAwesomeIcon('cart-shopping', 'RIGHT');
   assert.equal(renderActionContent('Place <order>', right),
     '<span class="causeway-action-label">Place &lt;order&gt;</span><i class="causeway-action-icon fa-solid fa-cart-shopping" aria-hidden="true"></i>');

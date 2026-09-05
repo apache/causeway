@@ -137,7 +137,11 @@ class PetClinicHtmxApplication_IntegTest {
                 "s_owner-mary",
                 "petclinic-owner-page");
         assertThat(get("/htmx/object/petclinic.PetOwner/s_owner-mary").body())
-                .contains("<cw-action id=\"delete\" named=\"Remove this owner\"")
+                .contains("<cw-row>")
+                .contains("<cw-column span=\"12\">")
+                .contains("<cw-fieldset name=\"Identity\" class=\"petclinic-card\">")
+                .contains("<cw-tabgroup name=\"Owner supplementary information\"")
+                .contains("<cw-metadata data-testid=\"petclinic-owner-metadata\"></cw-metadata>")
                 .contains("<cw-action id=\"updateName\" named=\"Change the owner's name\" prompt-style=\"INLINE\"")
                 .contains("<cw-parameter id=\"name\"")
                 .contains("named=\"Owner's full name\"")

@@ -315,18 +315,20 @@ class PetClinicVuePlaywrightTest {
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
         page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
         page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.locator("cw-metadata[data-causeway-metadata-state='ready']").waitFor();
+        assertDeclarativeOwnerLayout();
         assertThat(page.locator(".petclinic-owner-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history,Agreement");
+                .isEqualTo("Identity,Contact,Details,Layout,Pets,Companion animals,Visits,Visit history,Agreement");
         assertThat(page.locator(".petclinic-page-toolbar > cw-action")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("allOwners,noOwners,relatedOwners,delete");
+                .isEqualTo("allOwners,noOwners,relatedOwners");
         assertThat(page.locator("cw-action#relatedOwners cw-standalone-collection > cw-collection-column")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,notes");
         assertThat(page.locator(".petclinic-object-details cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit,daysSinceLastVisit");
+                .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit,daysSinceLastVisit,version");
         assertThat(page.locator(".petclinic-object-collections > section").count()).isEqualTo(3);
         assertThat(page.locator(".petclinic-object-collections > section:last-child cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
         assertThat(page.locator("cw-collection#visits > cw-collection-column")
@@ -545,6 +547,40 @@ class PetClinicVuePlaywrightTest {
             page.keyboard().press("Enter");
             assertThat(page.evaluate("document.activeElement?.id")).isEqualTo("causeway-vue-route");
         }
+    }
+
+    private void assertDeclarativeOwnerLayout() {
+        final var details = page.locator(".petclinic-object-details");
+        assertThat(details.locator(":scope > cw-row").count()).isEqualTo(3);
+        assertThat(details.locator("cw-row > cw-column[span='12']").count()).isEqualTo(5);
+        assertThat(details.locator("cw-fieldset")
+                .evaluateAll("elements => elements.map(element => element.getAttribute('name')).join(',')"))
+                .isEqualTo("Identity,Contact,Details,Layout");
+        assertThat(details.locator("cw-fieldset > cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit");
+        final var tabs = details.locator("cw-tabgroup[data-testid='petclinic-owner-layout-tabs']");
+        final var tabButtons = tabs.locator(":scope > [role='tablist'] > [role='tab']");
+        assertThat(tabButtons.count()).isEqualTo(2);
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Metadata");
+        tabButtons.nth(1).click();
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Layout help");
+        tabButtons.nth(1).press("ArrowLeft");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Metadata");
+        assertThat(tabButtons.first().evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden])").count()).isEqualTo(1);
+        final var metadata = tabs.locator("cw-metadata[data-testid='petclinic-owner-metadata']");
+        assertThat(metadata.locator("fieldset > cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("daysSinceLastVisit,version");
+        final var actions = metadata.locator("details[data-causeway-metadata-actions]");
+        assertThat(actions.getAttribute("open")).isNull();
+        assertThat(actions.locator("summary").innerText()).isEqualTo("Actions");
+        assertThat(actions.locator("cw-action#delete").count()).isEqualTo(1);
+        assertThat(details.locator("[data-causeway-layout-invalid]").count()).isZero();
     }
 
     private void navigateTo(final String logicalTypeName, final String id) {

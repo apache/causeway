@@ -630,6 +630,50 @@ test('collection component does not read until activated and renders declared co
   assert.equal(collection.hidden, true);
 });
 
+test('collection component retries one inherited abort for the current object generation', async () => {
+  let loadCount = 0;
+  const context = {
+    registerRequirement(_requirement, listener) {
+      listener({
+        status: 'ready',
+        descriptor: {id: 'staffMembers', description: 'Staff members'},
+        data: {hidden: false, disabled: null},
+        errors: [],
+        generation: 7
+      });
+      return () => {};
+    },
+    async loadCollection({signal}) {
+      loadCount += 1;
+      if (loadCount === 1) {
+        assert.equal(signal.aborted, false);
+        const error = new Error('A superseded schema-discovery signal was inherited.');
+        error.name = 'AbortError';
+        throw error;
+      }
+      return {
+        descriptor: {id: 'staffMembers'},
+        data: {get: [row()]},
+        errors: [],
+        rowSelection: {_meta: {id: true}, name: {get: true}}
+      };
+    },
+    createHydratedRowContext() {
+      return {disconnect() {}};
+    }
+  };
+  const collection = new CausewayCollectionElement();
+  collection.id = 'staffMembers';
+  collection.active = true;
+  collection.context = context;
+  document.body.appendChild(collection);
+
+  await waitFor(() => collection.collectionState.status === 'ready');
+  assert.equal(loadCount, 2);
+  assert.equal(collection.collectionState.rows.length, 1);
+  document.body.removeChild(collection);
+});
+
 test('collection component resolves canonical and HTML headings without unmodifiable noise or rereads', async () => {
   let registrations = 0;
   let publish;

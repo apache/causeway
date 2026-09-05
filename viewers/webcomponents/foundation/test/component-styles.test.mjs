@@ -62,6 +62,14 @@ test('collection preview disclosure uses a larger state-driven directional icon 
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-preview-toggle:dir\(rtl\)\[aria-expanded="false"\] \.causeway-collection-preview-icon \{\s+transform: rotate\(180deg\);/);
 });
 
+test('declarative layout styles provide twelve tracks, responsive stacking, tabs and metadata actions', () => {
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-row \{[\s\S]*?grid-template-columns: repeat\(12, minmax\(0, 1fr\)\);/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-column\[data-causeway-layout-span="1"\][\s\S]*?\.causeway-layout-column\[data-causeway-layout-span="12"\]/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /@media \(max-width: 48rem\) \{[\s\S]*?\.causeway-layout-column \{[\s\S]*?grid-column: 1 \/ -1;/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-tablist \[role="tab"\]:focus-visible,[\s\S]*?\.causeway-metadata-actions > summary:focus-visible/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\[data-causeway-layout-invalid\] \{[\s\S]*?display: none !important;/);
+});
+
 test('property edit affordance remains a compact deterministic icon control', async () => {
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit \{[\s\S]*?block-size: 2rem;[\s\S]*?inline-size: 2rem;[\s\S]*?padding: 0\.35rem;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit-icon \{[\s\S]*?block-size: 1rem;[\s\S]*?inline-size: 1rem;[\s\S]*?stroke: currentColor;/);

@@ -29,7 +29,8 @@ export function normalizeDescriptionPresentation(value) {
 }
 
 export function boundedTooltipSection(value, maximum = 240) {
-  const text = String(value ?? '').trim();
+  if (value == null || value === false) return '';
+  const text = String(value).trim();
   return text.length > maximum ? `${text.slice(0, maximum - 1)}…` : text;
 }
 

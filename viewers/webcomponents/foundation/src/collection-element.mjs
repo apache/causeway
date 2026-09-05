@@ -123,6 +123,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.loadRevision = 0;
     this.loadAbortController = null;
     this.loadedGeneration = -1;
+    this.loadAbortRetryGeneration = -1;
     this.sortCriterion = null;
     this._gridOrderingBasis = null;
     this.searchText = '';
@@ -559,6 +560,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         .filter(row => row?._meta?.logicalTypeName && row?._meta?.id)
         .map(row => context.createHydratedRowContext(row, result.rowSelection));
       this.loadedGeneration = this.componentState.generation;
+      this.loadAbortRetryGeneration = -1;
       this.gridHostRevision += 1;
       this.authoritativeResult = result;
       if (!this.sortCriterion) {
@@ -582,7 +584,26 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       }
       return result;
     } catch (error) {
-      if (revision !== this.loadRevision || error?.name === 'AbortError') {
+      if (revision !== this.loadRevision) {
+        return null;
+      }
+      if (error?.name === 'AbortError') {
+        const generation = this.componentState?.generation ?? -1;
+        const retry = !abortController.signal.aborted
+          && this.isConnected
+          && this.componentState?.status === 'ready'
+          && this.loadAbortRetryGeneration !== generation;
+        if (this.loadAbortController === abortController) {
+          this.loadAbortController = null;
+        }
+        if (retry) {
+          this.loadAbortRetryGeneration = generation;
+          queueMicrotask(() => {
+            if (revision === this.loadRevision && this.isConnected && this.componentState?.status === 'ready') {
+              void this.load({force: true, offset, size: requestedSize});
+            }
+          });
+        }
         return null;
       }
       if (this.loadAbortController === abortController) {
