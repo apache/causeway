@@ -118,6 +118,53 @@ test('components render authoritative remaining members in kind-specific owned s
   document.body.removeChild(context);
 });
 
+test('a direct property catch-all contributes a conditional tab in authored order', async () => {
+  const context = document.createElement('cw-object-context');
+  context.context = fakeContext(new Map([['id', descriptor('id', 'property', 'Id')]]));
+  const group = document.createElement('cw-tabgroup');
+  group.setAttribute('name', 'Owner information');
+  const identity = document.createElement('cw-tab');
+  identity.setAttribute('name', 'Identity');
+  identity.setAttribute('selected', '');
+  identity.appendChild(document.createElement('cw-row'));
+  const remaining = document.createElement('cw-unreferenced-properties');
+  const metadata = document.createElement('cw-tab');
+  metadata.setAttribute('name', 'Metadata');
+  metadata.appendChild(document.createElement('cw-row'));
+  group.appendChild(identity);
+  group.appendChild(remaining);
+  group.appendChild(metadata);
+  context.appendChild(group);
+
+  await connect(context);
+
+  assert.equal(remaining.getAttribute('data-causeway-unreferenced-state'), 'ready');
+  assert.deepEqual([...group.tablist.children].map(button => button.textContent), ['Identity', 'Other', 'Metadata']);
+  assert.equal(remaining.getAttribute('role'), 'tabpanel');
+  assert.equal(remaining.hidden, true);
+  group.selectTab(remaining, {focus: true});
+  assert.equal(group.selectedTab, remaining);
+  assert.equal(document.activeElement, group.tabButtons.get(remaining));
+
+  const explicit = document.createElement('cw-property');
+  explicit.setAttribute('id', 'id');
+  explicit.hidden = true;
+  context.insertBefore(explicit, group);
+  await settle();
+
+  assert.equal(remaining.getAttribute('data-causeway-unreferenced-state'), 'empty');
+  assert.deepEqual([...group.tablist.children].map(button => button.textContent), ['Identity', 'Metadata']);
+  assert.equal(group.selectedTab, identity);
+  assert.equal(document.activeElement, group.tabButtons.get(identity));
+  assert.equal(remaining.getAttribute('role'), null);
+
+  context.removeChild(explicit);
+  await settle();
+  assert.deepEqual([...group.tablist.children].map(button => button.textContent), ['Identity', 'Other', 'Metadata']);
+  assert.equal(group.selectedTab, identity);
+  document.body.removeChild(context);
+});
+
 test('coordinator subtracts exact kind and id, blocks reserved kinds, and settles deterministically', async () => {
   const members = new Map([
     ['shared', descriptor('shared', 'property')],

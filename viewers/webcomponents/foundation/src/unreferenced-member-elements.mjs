@@ -17,8 +17,9 @@
  * under the License.
  */
 
+import {CausewaySemanticEvent} from './component-contracts.mjs';
+import {createSemanticEvent, requestObjectMemberAllocation} from './context-events.mjs';
 import {CausewayLayoutContainerElement} from './layout-elements.mjs';
-import {requestObjectMemberAllocation} from './context-events.mjs';
 import {escapeHtml} from './rendering.mjs';
 
 export const UNREFERENCED_MEMBER_KINDS = Object.freeze(['property', 'collection', 'action']);
@@ -298,13 +299,24 @@ class CausewayUnreferencedMemberElement extends CausewayLayoutContainerElement {
       if (state.diagnostic) {
         this.publishLayoutDiagnostic(state.diagnostic.code, state.diagnostic.message);
       }
+      this.publishAllocationState(state);
       return;
     }
     if (state.status !== 'ready') {
       this.innerHTML = '';
+      this.publishAllocationState(state);
       return;
     }
     this.innerHTML = this.renderMembers(state.members);
+    this.publishAllocationState(state);
+  }
+
+  publishAllocationState(state) {
+    this.dispatchEvent(createSemanticEvent(
+      CausewaySemanticEvent.UNREFERENCED_MEMBER_STATE,
+      Object.freeze({element: this, kind: this.unreferencedKind, status: state.status}),
+      {bubbles: true, composed: true}
+    ));
   }
 
   renderMembers() {
