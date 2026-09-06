@@ -313,7 +313,7 @@ class PetClinicHtmxPlaywrightTest {
                   return collections.left >= details.right && Math.abs(collections.top - details.top) < 1;
                 }
                 """)).isEqualTo(true);
-        page.locator("cw-metadata[data-causeway-metadata-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
         assertDeclarativeOwnerLayout();
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
@@ -400,6 +400,12 @@ class PetClinicHtmxPlaywrightTest {
         final var readsBeforeResponsiveSwitch = graphQLRequests.size();
         page.setViewportSize(500, 900);
         page.waitForFunction("() => [...document.querySelectorAll(\"cw-collection[id='pets'], cw-collection[id='visits']\")].every(element => element.dataset.causewayGridResponsive === 'narrow' && !element.querySelector('cw-collection-grid'))");
+        assertThat(page.locator("cw-tabgroup[data-testid='petclinic-owner-layout-tabs']")
+                .evaluate("element => { const rect = element.getBoundingClientRect(); return rect.left >= -0.5 && rect.right <= innerWidth + 0.5; }"))
+                .isEqualTo(true);
+        assertThat(page.locator("[data-causeway-metadata-actions][open] [role='menu']")
+                .evaluate("element => { const rect = element.getBoundingClientRect(); return rect.left >= -0.5 && rect.right <= innerWidth + 0.5; }"))
+                .isEqualTo(true);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
         assertIntegratedCollectionActionHeader("pets", "addPet", "removePet", true);
@@ -1494,35 +1500,62 @@ class PetClinicHtmxPlaywrightTest {
 
     private void assertDeclarativeOwnerLayout() {
         final var details = page.locator(".petclinic-object-details");
-        assertThat(details.locator(":scope > cw-row").count()).isEqualTo(3);
-        assertThat(details.locator("cw-row > cw-column[span='12']").count()).isEqualTo(5);
+        assertThat(details.locator(":scope > cw-row").count()).isEqualTo(2);
+        assertThat(details.locator("cw-row > cw-column[span='12']").count()).isEqualTo(4);
         assertThat(details.locator("cw-fieldset")
                 .evaluateAll("elements => elements.map(element => element.getAttribute('name')).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Layout");
+                .isEqualTo("Identity,Contact,Details");
         assertThat(details.locator("cw-fieldset > cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit");
         final var tabs = details.locator("cw-tabgroup[data-testid='petclinic-owner-layout-tabs']");
         final var tabButtons = tabs.locator(":scope > [role='tablist'] > [role='tab']");
         assertThat(tabButtons.count()).isEqualTo(2);
+        assertThat(tabButtons.evaluateAll("elements => elements.map(element => element.innerText).join(',')"))
+                .isEqualTo("Identity,Metadata");
+        assertThat(details.getByText("Layout help", new Locator.GetByTextOptions().setExact(true)).count()).isZero();
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
-                .isEqualTo("Metadata");
+                .isEqualTo("Identity");
+        assertThat(tabs.evaluate("element => getComputedStyle(element).backgroundColor === getComputedStyle(document.querySelector('.petclinic-card')).backgroundColor"))
+                .isEqualTo(true);
         tabButtons.nth(1).click();
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
-                .isEqualTo("Layout help");
+                .isEqualTo("Metadata");
+        assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden])")
+                .evaluate("element => getComputedStyle(element).backgroundColor === getComputedStyle(document.querySelector('.petclinic-card')).backgroundColor"))
+                .isEqualTo(true);
         tabButtons.nth(1).press("ArrowLeft");
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
-                .isEqualTo("Metadata");
+                .isEqualTo("Identity");
         assertThat(tabButtons.first().evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        tabButtons.first().press("ArrowRight");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Metadata");
         assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden])").count()).isEqualTo(1);
         final var metadata = tabs.locator("cw-metadata[data-testid='petclinic-owner-metadata']");
         assertThat(metadata.locator("fieldset > cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("daysSinceLastVisit,version");
         final var actions = metadata.locator("details[data-causeway-metadata-actions]");
+        final var actionTrigger = actions.locator("summary");
         assertThat(actions.getAttribute("open")).isNull();
-        assertThat(actions.locator("summary").innerText()).isEqualTo("Actions");
-        assertThat(actions.locator("cw-action#delete").count()).isEqualTo(1);
+        assertThat(actionTrigger.getAttribute("aria-label")).isEqualTo("Metadata actions");
+        assertThat(actionTrigger.getAttribute("aria-expanded")).isEqualTo("false");
+        assertThat(actionTrigger.innerText()).isEqualTo("⋮");
+        @SuppressWarnings("unchecked")
+        final var metadataHeadingCenters = (List<Number>) metadata.evaluate("element => { const title = element.querySelector('legend > span').getBoundingClientRect(); const trigger = element.querySelector('[data-causeway-metadata-actions] > summary').getBoundingClientRect(); return [(title.top + title.bottom) / 2, (trigger.top + trigger.bottom) / 2]; }");
+        assertThat(Math.abs(metadataHeadingCenters.get(0).doubleValue() - metadataHeadingCenters.get(1).doubleValue()))
+                .as("metadata heading and trigger centers %s", metadataHeadingCenters)
+                .isLessThanOrEqualTo(4);
+        actionTrigger.click();
+        assertThat(actions.getAttribute("open")).isNotNull();
+        page.waitForFunction("() => document.querySelector('[data-causeway-metadata-actions] > summary')?.getAttribute('aria-expanded') === 'true'");
+        assertThat(actions.locator("[role='menu'] cw-action#delete").count()).isEqualTo(1);
+        assertThat(actions.locator("[role='menu']").evaluate("element => { const rect = element.getBoundingClientRect(); return rect.left >= -0.5 && rect.right <= innerWidth + 0.5; }"))
+                .isEqualTo(true);
+        actionTrigger.press("Escape");
+        assertThat(actions.getAttribute("open")).isNull();
+        assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
         assertThat(details.locator("[data-causeway-layout-invalid]").count()).isZero();
     }
 
@@ -1954,24 +1987,28 @@ class PetClinicHtmxPlaywrightTest {
     private void assertDefaultOrNativeMemberPresentation(final String propertyMember, final String actionMember) {
         final var propertySelector = "cw-property[id='" + propertyMember + "']";
         page.waitForFunction("selector => document.querySelector(selector)?.dataset.renderer", propertySelector);
-        final var actionHost = page.locator("cw-action[id='" + actionMember + "']").first();
-        actionHost.evaluate("element => { const details = element.closest('details'); if (details) details.open = true; }");
-        final var actionSelector = "cw-action[id='" + actionMember + "'] [data-causeway-action-control]";
-        page.locator(actionSelector).first().waitFor();
+        final var propertyHost = page.locator(propertySelector).first();
+        revealContainingTab(propertyHost, propertyHost);
         if (nativeToolkit()) {
-            assertThat(page.locator(propertySelector).getAttribute("data-renderer")).isNotEqualTo("vaadin-field-view");
+            assertThat(propertyHost.getAttribute("data-renderer")).isNotEqualTo("vaadin-field-view");
             assertThat(page.locator(propertySelector + " cw-field-editor[data-mode='view']").count()).isZero();
+        } else {
+            final var field = page.locator(propertySelector + " cw-field-editor[data-mode='view']");
+            field.waitFor();
+            page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", propertySelector + " cw-field-editor[data-mode='view']");
+            assertThat(field.locator("vaadin-text-field").getAttribute("readonly")).isNotNull();
+            assertThat(toolkitRequests.stream().anyMatch(url -> url.contains("/vaadin-fields/vaadin-basic.js"))).isTrue();
+        }
+
+        final var actionHost = page.locator("cw-action[id='" + actionMember + "']").first();
+        final var actionSelector = "cw-action[id='" + actionMember + "'] [data-causeway-action-control]";
+        revealContainingTab(actionHost, page.locator(actionSelector).first());
+        if (nativeToolkit()) {
             assertThat(page.locator(actionSelector).first().evaluate("element => element.localName")).isEqualTo("button");
             return;
         }
-        final var field = page.locator(propertySelector + " cw-field-editor[data-mode='view']");
-        field.waitFor();
-        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", propertySelector + " cw-field-editor[data-mode='view']");
-        final var fieldControl = field.locator("vaadin-text-field");
-        assertThat(fieldControl.getAttribute("readonly")).isNotNull();
         assertThat(page.locator(actionSelector).first().evaluate("element => element.localName")).isEqualTo("cw-action-control");
         page.locator(actionSelector + " vaadin-button").waitFor();
-        assertThat(toolkitRequests.stream().anyMatch(url -> url.contains("/vaadin-fields/vaadin-basic.js"))).isTrue();
         assertThat(toolkitRequests.stream().anyMatch(url -> url.contains("/vaadin-actions/vaadin-actions.js"))).isTrue();
     }
 
@@ -2255,15 +2292,22 @@ class PetClinicHtmxPlaywrightTest {
             return;
         }
         final var panel = host.locator("xpath=ancestor::*[@role='tabpanel']");
-        if (panel.count() == 0) {
+        final var menu = host.locator("xpath=ancestor::details[@data-causeway-metadata-actions]");
+        if (panel.count() == 0 && menu.count() == 0) {
             throw new AssertionError("Control is not available at " + page.url()
                     + "; routeType=" + page.locator("#causeway-route cw-object-context").getAttribute("logical-type")
                     + "; host=" + host.evaluate("element => element.outerHTML")
                     + "; ancestors=" + host.evaluate("element => { const values = []; for (let current = element; current; current = current.parentElement) { const style = getComputedStyle(current); const rect = current.getBoundingClientRect(); values.push({tag: current.tagName, className: current.className, hidden: current.hidden, empty: current.dataset?.empty, display: style.display, visibility: style.visibility, width: rect.width, height: rect.height}); } return values; }"));
         }
-        final var panelId = panel.getAttribute("id");
-        assertThat(panelId).isNotBlank();
-        page.locator("[role='tab'][aria-controls='" + panelId + "']").click();
+        String panelId = null;
+        if (panel.count() > 0) {
+            panelId = panel.getAttribute("id");
+            assertThat(panelId).isNotBlank();
+            page.locator("[role='tab'][aria-controls='" + panelId + "']").click();
+        }
+        if (menu.count() > 0 && menu.getAttribute("open") == null) {
+            menu.locator("summary").click();
+        }
         try {
             control.waitFor();
         } catch (final com.microsoft.playwright.TimeoutError cause) {

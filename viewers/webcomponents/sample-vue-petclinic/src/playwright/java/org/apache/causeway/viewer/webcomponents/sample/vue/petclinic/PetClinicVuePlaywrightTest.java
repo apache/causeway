@@ -107,6 +107,8 @@ class PetClinicVuePlaywrightTest {
     void customOwnerPageUsesOneStableShellAndDeclarativeRouteBoundary() {
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
         page.locator("[data-causeway-route-page][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
+        page.locator("[data-causeway-route-page][data-route-state='ready']").waitFor();
 
         assertThat(page.locator("[data-testid='petclinic-vue-application-shell']").count()).isEqualTo(1);
         assertThat(page.locator("cw-graphql-client[data-causeway-shell-client]").count()).isEqualTo(1);
@@ -315,11 +317,11 @@ class PetClinicVuePlaywrightTest {
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
         page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
         page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.collectionState?.rows?.length === 2");
-        page.locator("cw-metadata[data-causeway-metadata-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
         assertDeclarativeOwnerLayout();
         assertThat(page.locator(".petclinic-owner-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Layout,Pets,Companion animals,Visits,Visit history,Agreement");
+                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history,Agreement");
         assertThat(page.locator(".petclinic-page-toolbar > cw-action")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("allOwners,noOwners,relatedOwners");
@@ -328,7 +330,7 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("name,knownAs,notes");
         assertThat(page.locator(".petclinic-object-details cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit,daysSinceLastVisit,version");
+                .isEqualTo("name,knownAs,daysSinceLastVisit,version,telephoneNumber,emailAddress,notes,lastVisit");
         assertThat(page.locator(".petclinic-object-collections > section").count()).isEqualTo(3);
         assertThat(page.locator(".petclinic-object-collections > section:last-child cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
         assertThat(page.locator("cw-collection#visits > cw-collection-column")
@@ -551,35 +553,61 @@ class PetClinicVuePlaywrightTest {
 
     private void assertDeclarativeOwnerLayout() {
         final var details = page.locator(".petclinic-object-details");
-        assertThat(details.locator(":scope > cw-row").count()).isEqualTo(3);
-        assertThat(details.locator("cw-row > cw-column[span='12']").count()).isEqualTo(5);
+        assertThat(details.locator(":scope > cw-row").count()).isEqualTo(2);
+        assertThat(details.locator("cw-row > cw-column[span='12']").count()).isEqualTo(4);
         assertThat(details.locator("cw-fieldset")
                 .evaluateAll("elements => elements.map(element => element.getAttribute('name')).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Layout");
+                .isEqualTo("Identity,Contact,Details");
         assertThat(details.locator("cw-fieldset > cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,telephoneNumber,emailAddress,notes,lastVisit");
         final var tabs = details.locator("cw-tabgroup[data-testid='petclinic-owner-layout-tabs']");
         final var tabButtons = tabs.locator(":scope > [role='tablist'] > [role='tab']");
         assertThat(tabButtons.count()).isEqualTo(2);
+        assertThat(tabButtons.evaluateAll("elements => elements.map(element => element.innerText).join(',')"))
+                .isEqualTo("Identity,Metadata");
+        assertThat(details.getByText("Layout help", new Locator.GetByTextOptions().setExact(true)).count()).isZero();
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
-                .isEqualTo("Metadata");
+                .isEqualTo("Identity");
+        assertThat(tabs.evaluate("element => getComputedStyle(element).backgroundColor === getComputedStyle(document.querySelector('.petclinic-card')).backgroundColor"))
+                .isEqualTo(true);
         tabButtons.nth(1).click();
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
-                .isEqualTo("Layout help");
+                .isEqualTo("Metadata");
+        assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden])")
+                .evaluate("element => getComputedStyle(element).backgroundColor === getComputedStyle(document.querySelector('.petclinic-card')).backgroundColor"))
+                .isEqualTo(true);
         tabButtons.nth(1).press("ArrowLeft");
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
-                .isEqualTo("Metadata");
+                .isEqualTo("Identity");
         assertThat(tabButtons.first().evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        tabButtons.first().press("ArrowRight");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Metadata");
         assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden])").count()).isEqualTo(1);
         final var metadata = tabs.locator("cw-metadata[data-testid='petclinic-owner-metadata']");
         assertThat(metadata.locator("fieldset > cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("daysSinceLastVisit,version");
         final var actions = metadata.locator("details[data-causeway-metadata-actions]");
+        final var actionTrigger = actions.locator("summary");
         assertThat(actions.getAttribute("open")).isNull();
-        assertThat(actions.locator("summary").innerText()).isEqualTo("Actions");
-        assertThat(actions.locator("cw-action#delete").count()).isEqualTo(1);
+        assertThat(actionTrigger.getAttribute("aria-label")).isEqualTo("Metadata actions");
+        assertThat(actionTrigger.getAttribute("aria-expanded")).isEqualTo("false");
+        assertThat(actionTrigger.innerText()).isEqualTo("⋮");
+        @SuppressWarnings("unchecked")
+        final var metadataHeadingCenters = (List<Number>) metadata.evaluate("element => { const title = element.querySelector('legend > span').getBoundingClientRect(); const trigger = element.querySelector('[data-causeway-metadata-actions] > summary').getBoundingClientRect(); return [(title.top + title.bottom) / 2, (trigger.top + trigger.bottom) / 2]; }");
+        assertThat(Math.abs(metadataHeadingCenters.get(0).doubleValue() - metadataHeadingCenters.get(1).doubleValue()))
+                .isLessThanOrEqualTo(4);
+        actionTrigger.click();
+        assertThat(actions.getAttribute("open")).isNotNull();
+        page.waitForFunction("() => document.querySelector('[data-causeway-metadata-actions] > summary')?.getAttribute('aria-expanded') === 'true'");
+        assertThat(actions.locator("[role='menu'] cw-action#delete").count()).isEqualTo(1);
+        assertThat(actions.locator("[role='menu']").evaluate("element => { const rect = element.getBoundingClientRect(); return rect.left >= -0.5 && rect.right <= innerWidth + 0.5; }"))
+                .isEqualTo(true);
+        actionTrigger.press("Escape");
+        assertThat(actions.getAttribute("open")).isNull();
+        assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
         assertThat(details.locator("[data-causeway-layout-invalid]").count()).isZero();
     }
 

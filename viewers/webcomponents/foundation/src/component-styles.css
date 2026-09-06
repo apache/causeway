@@ -56,6 +56,9 @@ cw-metadata {
   display: block;
   min-inline-size: 0;
 }
+cw-metadata {
+  position: relative;
+}
 .causeway-layout-row {
   display: grid;
   gap: var(--causeway-layout-gap, var(--causeway-object-gap, 1rem));
@@ -82,11 +85,21 @@ cw-metadata {
   min-inline-size: 0;
   padding: var(--causeway-object-group-padding, 1rem);
 }
+.causeway-layout-tabgroup,
+.causeway-layout-tab-panel {
+  background: var(--causeway-surface, Canvas);
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+}
 .causeway-layout-fieldset-heading,
 .causeway-metadata-fieldset > legend {
   font-size: 1.1rem;
   font-weight: 700;
   margin-block: 0 0.75rem;
+}
+.causeway-metadata-fieldset > legend {
+  padding-inline-end: 2.75rem;
 }
 .causeway-layout-tablist {
   border-block-end: var(--causeway-object-group-border, 1px solid color-mix(in srgb, currentColor 24%, transparent));
@@ -122,16 +135,48 @@ cw-metadata {
   inline-size: 100%;
 }
 .causeway-metadata-actions {
-  border-block-start: var(--causeway-object-group-border, 1px solid color-mix(in srgb, currentColor 24%, transparent));
-  margin-block-start: 0.75rem;
-  padding-block-start: 0.5rem;
+  inset-block-start: -0.2rem;
+  inset-inline-end: 0.65rem;
+  position: absolute;
+  z-index: 5;
 }
 .causeway-metadata-actions > summary {
+  align-items: center;
+  background: var(--causeway-surface, Canvas);
+  border: var(--causeway-object-group-border, 1px solid color-mix(in srgb, currentColor 24%, transparent));
+  border-radius: 0.35rem;
+  block-size: 2rem;
+  box-sizing: border-box;
   cursor: pointer;
+  display: inline-flex;
+  font-size: 1.35rem;
   font-weight: 700;
+  inline-size: 2rem;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  padding: 0;
 }
-.causeway-metadata-actions > .causeway-object-actions {
-  margin-block-start: 0.5rem;
+.causeway-metadata-actions > summary::-webkit-details-marker {
+  display: none;
+}
+.causeway-metadata-actions-menu {
+  background: var(--causeway-surface-raised, var(--causeway-surface, Canvas));
+  border: var(--causeway-object-group-border, 1px solid color-mix(in srgb, currentColor 24%, transparent));
+  border-radius: var(--causeway-object-group-radius, 0.5rem);
+  box-shadow: 0 0.5rem 1.25rem color-mix(in srgb, CanvasText 18%, transparent);
+  box-sizing: border-box;
+  inset-block-start: calc(100% + 0.35rem);
+  inset-inline-end: 0;
+  max-inline-size: min(22rem, calc(100vw - 2rem));
+  min-inline-size: min(14rem, calc(100vw - 2rem));
+  padding: 0.5rem;
+  position: absolute;
+}
+.causeway-metadata-actions-menu > .causeway-object-actions {
+  align-items: stretch;
+  display: grid;
+  margin: 0;
 }
 @media (max-width: 48rem) {
   .causeway-layout-column {
