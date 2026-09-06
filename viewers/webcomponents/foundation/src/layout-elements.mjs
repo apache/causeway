@@ -317,6 +317,26 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     this.metadataRevision = 0;
     this.metadataAbortController = null;
     this.metadataSignature = null;
+    this.metadataMenu = null;
+    this.metadataMenuTrigger = null;
+    this.metadataOutsideListener = event => {
+      const target = event.target;
+      const activePrompt = target?.closest?.('.causeway-action-prompt, [data-causeway-inline-action-prompt]');
+      if (this.metadataMenu?.hasAttribute('open') && !this.metadataMenu.contains(target) && !activePrompt) {
+        this.closeMetadataMenu();
+      }
+    };
+    this.metadataResultListener = event => {
+      const actionId = event.detail?.actionId;
+      const belongsToMenu = actionId && [...(this.metadataMenu?.querySelectorAll?.('cw-action') ?? [])]
+        .some(action => action.id === actionId);
+      if (!this.metadataMenu?.hasAttribute('open') || !belongsToMenu) return;
+      const trigger = this.metadataMenuTrigger;
+      this.closeMetadataMenu();
+      queueMicrotask(() => {
+        if (trigger?.isConnected) trigger.focus();
+      });
+    };
   }
 
   createRequirement() {
@@ -328,6 +348,7 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     this.metadataAbortController?.abort();
     this.metadataAbortController = null;
     this.metadataSignature = null;
+    this.retireMetadataMenu();
     super.disconnectedCallback();
   }
 
@@ -356,6 +377,7 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     this.metadataAbortController?.abort();
     this.metadataAbortController = null;
     this.metadataSignature = null;
+    this.retireMetadataMenu();
   }
 
   async prepareMetadata(state) {
@@ -398,17 +420,64 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
   }
 
   renderMetadata(metadata) {
+    this.retireMetadataMenu();
     const id = `${this.id || `causeway-metadata-${++layoutSequence}`}-legend`;
+    const menuId = `${id}-actions`;
     const properties = renderObjectLayoutMembers(metadata.properties, {idPrefix: `${id}-properties`});
-    const actions = renderObjectLayoutMembers(metadata.actions, {idPrefix: `${id}-actions`});
+    const actions = renderObjectLayoutMembers(metadata.actions, {idPrefix: menuId});
     const dropdown = metadata.actions.length > 0
-      ? `<details class="causeway-metadata-actions" data-causeway-metadata-actions><summary>Actions</summary>${actions}</details>`
+      ? `<details class="causeway-metadata-actions" data-causeway-metadata-actions><summary aria-label="Metadata actions" aria-controls="${escapeHtml(menuId)}" aria-expanded="false" title="Metadata actions"><span aria-hidden="true">&#8942;</span></summary><div id="${escapeHtml(menuId)}" class="causeway-metadata-actions-menu" role="menu" aria-label="Metadata actions">${actions}</div></details>`
       : '';
     this.setAttribute('data-causeway-metadata-state', 'ready');
-    this.innerHTML = `<fieldset class="causeway-layout-fieldset causeway-metadata-fieldset"><legend id="${escapeHtml(id)}">${escapeHtml(metadata.label || 'Metadata')}</legend>${properties}${dropdown}</fieldset>`;
+    this.innerHTML = `<fieldset class="causeway-layout-fieldset causeway-metadata-fieldset"><legend id="${escapeHtml(id)}"><span>${escapeHtml(metadata.label || 'Metadata')}</span></legend>${properties}${dropdown}</fieldset>`;
+    this.bindMetadataMenu();
+  }
+
+  bindMetadataMenu() {
+    const menu = this.querySelector?.('[data-causeway-metadata-actions]') ?? null;
+    const trigger = menu?.querySelector?.('summary') ?? null;
+    if (!menu || !trigger) return;
+    this.metadataMenu = menu;
+    this.metadataMenuTrigger = trigger;
+    menu.addEventListener('toggle', () => this.synchronizeMetadataMenu());
+    menu.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || !menu.hasAttribute('open')) return;
+      event.preventDefault();
+      event.stopPropagation();
+      this.closeMetadataMenu({restoreFocus: true});
+    });
+    this.synchronizeMetadataMenu();
+  }
+
+  synchronizeMetadataMenu() {
+    const open = this.metadataMenu?.hasAttribute('open') === true;
+    this.metadataMenuTrigger?.setAttribute('aria-expanded', String(open));
+    document.removeEventListener?.('pointerdown', this.metadataOutsideListener);
+    document.removeEventListener?.(CausewaySemanticEvent.ACTION_RESULT, this.metadataResultListener);
+    if (open) {
+      document.addEventListener?.('pointerdown', this.metadataOutsideListener);
+      document.addEventListener?.(CausewaySemanticEvent.ACTION_RESULT, this.metadataResultListener);
+    }
+  }
+
+  closeMetadataMenu({restoreFocus = false} = {}) {
+    const trigger = this.metadataMenuTrigger;
+    this.metadataMenu?.removeAttribute('open');
+    this.synchronizeMetadataMenu();
+    if (restoreFocus && trigger?.isConnected) trigger.focus();
+  }
+
+  retireMetadataMenu() {
+    document.removeEventListener?.('pointerdown', this.metadataOutsideListener);
+    document.removeEventListener?.(CausewaySemanticEvent.ACTION_RESULT, this.metadataResultListener);
+    this.metadataMenu?.removeAttribute('open');
+    this.metadataMenuTrigger?.setAttribute('aria-expanded', 'false');
+    this.metadataMenu = null;
+    this.metadataMenuTrigger = null;
   }
 
   renderMetadataStatus(state, message) {
+    this.retireMetadataMenu();
     this.setAttribute('data-causeway-metadata-state', state);
     this.innerHTML = `<p class="causeway-layout-status causeway-${state === 'error' ? 'error' : 'loading'}" role="status">${escapeHtml(message)}</p>`;
   }

@@ -125,6 +125,8 @@ An unregistered exact logical type uses the package's generic page containing `<
 Registrations are immutable after plugin creation and do not use type inheritance.
 Custom Vue pages can directly author `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` without a Vue wrapper or adapter.
 `<cw-metadata>` alone consumes the nearest route context's authorized effective layout and renders only the exact `metadata` fieldset's properties and actions.
+Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
+The PetOwner example demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.
 The Vue host continues to own routing and stable-shell policy but does not reconstruct or reinterpret these foundation components.
 
 == Public exports
