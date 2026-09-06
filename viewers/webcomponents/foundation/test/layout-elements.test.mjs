@@ -97,16 +97,21 @@ test('row and column enforce nesting and normalize spans', async () => {
   const fieldset = element('cw-fieldset');
   const collection = element('cw-collection');
   const metadata = element('cw-metadata');
-  const unsupported = element('cw-tabgroup');
+  const tabgroup = element('cw-tabgroup');
+  const unsupported = element('cw-row');
   valid.appendChild(fieldset);
   valid.appendChild(collection);
   valid.appendChild(metadata);
+  valid.appendChild(tabgroup);
   valid.appendChild(unsupported);
   await tick();
+  assert.deepEqual(valid.children, [fieldset, collection, metadata, tabgroup, unsupported]);
   assert.equal(fieldset.hidden, false);
   assert.equal(collection.hidden, false);
   assert.equal(metadata.hidden, false);
+  assert.equal(tabgroup.hidden, false);
   assert.equal(unsupported.hidden, true);
+  assert.equal(unsupported.hasAttribute('data-causeway-layout-invalid'), true);
   document.body.removeChild(row);
 });
 

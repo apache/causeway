@@ -126,7 +126,9 @@ Registrations are immutable after plugin creation and do not use type inheritanc
 Custom Vue pages can directly author `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` without a Vue wrapper or adapter.
 `<cw-metadata>` alone consumes the nearest route context's authorized effective layout and renders only the exact `metadata` fieldset's properties and actions.
 Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
-The PetOwner example demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.
+The PetOwner example uses the same foundation-owned 4/8 row as HTMX, with direct tabgroup, fieldset, and collection children and no Vue macro-grid wrappers.
+It demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.
+Within PetOwner, application wrappers remain only around the object heading and route-level structures that are outside the declarative macro grid; other representative pages keep their independently authored composition.
 The Vue host continues to own routing and stable-shell policy but does not reconstruct or reinterpret these foundation components.
 
 == Public exports
