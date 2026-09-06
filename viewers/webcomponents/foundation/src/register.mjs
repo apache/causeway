@@ -55,6 +55,11 @@ import {CausewayParameterElement} from './parameter-element.mjs';
 import {captureDeclarativeCollectionPreviews, CausewayPreviewElement} from './preview-element.mjs';
 import {CausewayPropertyElement} from './property-element.mjs';
 import {CausewayReferenceEditorElement} from './reference-widget.mjs';
+import {
+  CausewayUnreferencedActionsElement,
+  CausewayUnreferencedCollectionsElement,
+  CausewayUnreferencedPropertiesElement
+} from './unreferenced-member-elements.mjs';
 import {CausewayValueElement} from './value-element.mjs';
 
 const DEFINITIONS = Object.freeze([
@@ -85,6 +90,9 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.TABGROUP, CausewayTabgroupElement],
   [CausewayElementName.TAB, CausewayTabElement],
   [CausewayElementName.METADATA, CausewayMetadataElement],
+  [CausewayElementName.UNREFERENCED_PROPERTIES, CausewayUnreferencedPropertiesElement],
+  [CausewayElementName.UNREFERENCED_COLLECTIONS, CausewayUnreferencedCollectionsElement],
+  [CausewayElementName.UNREFERENCED_ACTIONS, CausewayUnreferencedActionsElement],
   [CausewayElementName.PREVIEW, CausewayPreviewElement],
   [CausewayElementName.COLLECTION, CausewayCollectionElement],
   [CausewayElementName.STANDALONE_COLLECTION, CausewayStandaloneCollectionElement],

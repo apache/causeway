@@ -191,7 +191,7 @@ Applications that need different structure continue to author the established lo
 Application-authored pages can compose `<cw-row>`, `<cw-column span="1..12">`, `<cw-fieldset name="...">`, `<cw-tabgroup name="...">`, and `<cw-tab name="...">` beneath an existing object context.
 These framework-neutral elements implement the same twelve-track responsive structure without owning identity, routing, GraphQL execution, or interaction policy.
 
-The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, metadata, and tab groups, a fieldset accepts only properties, a tab group accepts only tabs, and a tab accepts only rows.
+The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, metadata, tab groups, and the three unreferenced-member elements, a fieldset accepts only properties, a tab group accepts only tabs, and a tab accepts only rows.
 Columns stack multiple valid children in authored order with the shared layout gap while preserving each child's semantic and domain behavior.
 Unsupported direct children fail closed with `data-causeway-layout-invalid` and a bounded redacted `causeway-layout-component-diagnostic` event.
 A missing or invalid column span uses twelve, and narrow viewports stack all columns without horizontal overflow.
@@ -244,6 +244,26 @@ A page-level macro layout can place tabs and fieldsets directly in one column an
   </cw-column>
 </cw-row>
 ----
+
+The catch-all elements `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` allocate authorized members not explicitly referenced elsewhere in the nearest `<cw-object-context>`.
+The foundation owns one allocation coordinator per object context and subtracts exact member kind and semantic ID from the authoritative object-description order.
+Connected references count even when hidden, while nested object contexts, inert preview declarations, and catch-all-generated descendants do not consume the enclosing allocation.
+Composite `<cw-metadata>` and `<cw-object>` instances reserve their affected kinds while asynchronously resolving exact claims.
+Only the first valid catch-all destination of each kind in document order is effective; later destinations fail closed with a bounded diagnostic.
+Empty and loading destinations create no visible semantic container and expose their lifecycle through `data-causeway-unreferenced-state` values `loading`, `ready`, `empty`, and `error`.
+Generated properties are read-only unless `editable` is explicitly authored on `<cw-unreferenced-properties>`.
+`name` supplies the bounded accessible fieldset, tabgroup, or action-group name, with defaults `Other`, `Other collections`, and `Other actions`.
+
+[source,html]
+----
+<cw-column span="12">
+  <cw-unreferenced-properties name="Additional details"></cw-unreferenced-properties>
+  <cw-unreferenced-collections></cw-unreferenced-collections>
+  <cw-unreferenced-actions name="Available operations"></cw-unreferenced-actions>
+</cw-column>
+----
+
+Applications continue to own object contexts, interaction controllers, stable shells, routing, and host policy; the foundation owns allocation, generated ordinary member elements, and their lifecycle.
 
 == Application menu bars and service actions
 

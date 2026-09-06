@@ -19,7 +19,7 @@
 
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
-import {createSemanticEvent} from './context-events.mjs';
+import {createSemanticEvent, requestObjectMemberAllocation} from './context-events.mjs';
 import {
   extractCausewayLayoutFieldSet,
   parseCausewayGridXml,
@@ -173,7 +173,15 @@ export class CausewayColumnElement extends CausewayLayoutContainerElement {
         `Column span '${boundedName(authored, '')}' is invalid; span 12 is used.`
       );
     }
-    this.validDirectChildren(['cw-fieldset', 'cw-collection', 'cw-metadata', 'cw-tabgroup']);
+    this.validDirectChildren([
+      'cw-fieldset',
+      'cw-collection',
+      'cw-metadata',
+      'cw-tabgroup',
+      'cw-unreferenced-properties',
+      'cw-unreferenced-collections',
+      'cw-unreferenced-actions'
+    ]);
   }
 }
 
@@ -317,6 +325,7 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     this.metadataRevision = 0;
     this.metadataAbortController = null;
     this.metadataSignature = null;
+    this.metadataClaimSource = null;
     this.metadataMenu = null;
     this.metadataMenuTrigger = null;
     this.metadataOutsideListener = event => {
@@ -339,6 +348,14 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     };
   }
 
+  connectedCallback() {
+    this.metadataClaimSource = requestObjectMemberAllocation(this)?.registerClaimSource(
+      this,
+      ['property', 'action']
+    ) ?? null;
+    super.connectedCallback();
+  }
+
   createRequirement() {
     return {kind: 'layout'};
   }
@@ -349,12 +366,15 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     this.metadataAbortController = null;
     this.metadataSignature = null;
     this.retireMetadataMenu();
+    this.metadataClaimSource?.release();
+    this.metadataClaimSource = null;
     super.disconnectedCallback();
   }
 
   renderComponentState(state) {
     if (!state || ['idle', 'schema-loading', 'object-loading'].includes(state.status)) {
       if (this.getAttribute('data-causeway-metadata-state') !== 'ready') {
+        this.metadataClaimSource?.pending();
         this.renderMetadataStatus('loading', 'Loading metadata…');
       }
       return;
@@ -374,6 +394,7 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
 
   retireMetadataLoad() {
     this.metadataRevision += 1;
+    this.metadataClaimSource?.settle();
     this.metadataAbortController?.abort();
     this.metadataAbortController = null;
     this.metadataSignature = null;
@@ -386,6 +407,7 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
     const signature = gridPath ?? '';
     if (signature === this.metadataSignature) return;
     this.metadataSignature = signature;
+    this.metadataClaimSource?.pending();
     const revision = ++this.metadataRevision;
     this.metadataAbortController?.abort();
     const abortController = new AbortController();
@@ -421,6 +443,10 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
 
   renderMetadata(metadata) {
     this.retireMetadataMenu();
+    this.metadataClaimSource?.resolve([
+      ...metadata.properties.map(node => ({kind: 'property', id: node.memberId})),
+      ...metadata.actions.map(node => ({kind: 'action', id: node.memberId}))
+    ]);
     const id = `${this.id || `causeway-metadata-${++layoutSequence}`}-legend`;
     const menuId = `${id}-actions`;
     const properties = renderObjectLayoutMembers(metadata.properties, {idPrefix: `${id}-properties`});
@@ -483,6 +509,7 @@ export class CausewayMetadataElement extends CausewayContextConsumerElement {
   }
 
   failMetadata(code, message) {
+    this.metadataClaimSource?.settle();
     this.renderMetadataStatus('error', message);
     this.dispatchEvent(createSemanticEvent(
       CausewaySemanticEvent.LAYOUT_COMPONENT_DIAGNOSTIC,

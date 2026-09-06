@@ -20,6 +20,7 @@
 export const GRAPHQL_CLIENT_REQUEST_EVENT = 'causeway-graphql-client-request';
 export const OBJECT_CONTEXT_REQUEST_EVENT = 'causeway-object-context-request';
 export const OBJECT_CONTEXT_STATE_EVENT = 'causeway-object-context-state-change';
+export const OBJECT_MEMBER_ALLOCATION_REQUEST_EVENT = 'causeway-object-member-allocation-request';
 export const COMPONENT_STATE_EVENT = 'causeway-component-state-change';
 export const NAVIGATION_REQUEST_EVENT = 'causeway-navigation-request';
 export const ACTION_REQUEST_EVENT = 'causeway-action-request';
@@ -66,6 +67,16 @@ export function requestObjectContext(requester) {
     }
   }));
   return context;
+}
+
+export function requestObjectMemberAllocation(requester) {
+  let coordinator = null;
+  requester.dispatchEvent(createSemanticEvent(OBJECT_MEMBER_ALLOCATION_REQUEST_EVENT, {
+    provide(candidate) {
+      coordinator ??= candidate;
+    }
+  }));
+  return coordinator;
 }
 
 export function createSemanticEvent(type, detail, {bubbles = true, composed = true, cancelable = false} = {}) {

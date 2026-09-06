@@ -77,6 +77,28 @@ class HtmxDeclarativeTemplateTest {
     }
 
     @Test
+    void preservesFoundationOwnedUnreferencedMemberComponentsInResourcePages() {
+        final var page = """
+                <section data-route-state="loading" data-testid="causeway-route-page">
+                  <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}">
+                    <cw-column span="12">
+                      <cw-unreferenced-properties name="Other" editable></cw-unreferenced-properties>
+                      <cw-unreferenced-collections name="Other collections"></cw-unreferenced-collections>
+                      <cw-unreferenced-actions name="Other actions"></cw-unreferenced-actions>
+                    </cw-column>
+                    <cw-interaction-controller></cw-interaction-controller>
+                  </cw-object-context>
+                </section>
+                """;
+
+        HtmxDeclarativeTemplate.validateResourcePage(page, "fixture:catch-all");
+        assertThat(page).contains(
+                "<cw-unreferenced-properties",
+                "<cw-unreferenced-collections",
+                "<cw-unreferenced-actions");
+    }
+
+    @Test
     void rejectsUnknownAndUnusedBindingsWithoutDisclosingValues() {
         assertThatThrownBy(() -> HtmxDeclarativeTemplate.bind(
                 "{{causeway.unknown}}",

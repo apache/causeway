@@ -124,7 +124,11 @@ defineProps<CausewayRoutePageProps>();
 An unregistered exact logical type uses the package's generic page containing `<cw-object editable>`.
 Registrations are immutable after plugin creation and do not use type inheritance.
 Custom Vue pages can directly author `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` without a Vue wrapper or adapter.
-`<cw-metadata>` alone consumes the nearest route context's authorized effective layout and renders only the exact `metadata` fieldset's properties and actions.
+`<cw-metadata>` consumes the nearest route context's authorized effective layout and renders only the exact `metadata` fieldset's properties and actions.
+Vue pages may directly declare `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` as native custom elements without wrappers.
+Foundation allocates remaining authorized members by exact kind and ID in authoritative order; Vue performs no reactive member scanning, allocation, fetching, or reconstruction.
+One destination per kind is effective in document order, hidden connected references still count, and generated properties require explicit `editable` opt-in.
+The elements expose `loading`, `ready`, `empty`, and `error` through `data-causeway-unreferenced-state`, and empty destinations render no visible group.
 Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
 The PetOwner example uses the same foundation-owned 4/8 row as HTMX, with direct tabgroup, fieldset, and collection children and no Vue macro-grid wrappers.
 It demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.

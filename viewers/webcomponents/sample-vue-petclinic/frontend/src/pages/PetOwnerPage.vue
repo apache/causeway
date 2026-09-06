@@ -105,6 +105,8 @@ defineProps<CausewayRoutePageProps>();
               <cw-property id="notes" editable multi-line="5" />
               <cw-property id="lastVisit" editable label-position="TOP" min="2000-01-01" max="today" />
             </cw-fieldset>
+
+            <cw-unreferenced-properties data-testid="petclinic-owner-unreferenced-properties" />
           </cw-column>
 
           <cw-column span="8" data-testid="petclinic-owner-collections">
@@ -176,6 +178,9 @@ defineProps<CausewayRoutePageProps>();
                 data-testid="petclinic-owner-agreement"
               />
             </cw-fieldset>
+
+            <cw-unreferenced-collections data-testid="petclinic-owner-unreferenced-collections" />
+            <cw-unreferenced-actions data-testid="petclinic-owner-unreferenced-actions" />
           </cw-column>
         </cw-row>
       </article>

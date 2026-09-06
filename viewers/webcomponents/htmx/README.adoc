@@ -158,7 +158,11 @@ Only complete absence of an exact registration selects the declarative generic p
 
 
 Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, collection, and declarative layout elements.
-`<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` remain explicitly authored structure, while `<cw-metadata>` alone derives the exact `metadata` fieldset from the context's authorized effective layout.
+`<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` remain explicitly authored structure, while `<cw-metadata>` derives the exact `metadata` fieldset from the context's authorized effective layout.
+Custom pages may also directly declare `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` in a column.
+Foundation allocates remaining authorized members by exact kind and ID in authoritative order; HTMX performs no member scanning, allocation, fetching, or reconstruction.
+One destination per kind is effective in document order, hidden connected references still count, and generated properties require explicit `editable` opt-in.
+The elements expose `loading`, `ready`, `empty`, and `error` through `data-causeway-unreferenced-state`, and empty destinations render no visible group.
 Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
 The PetOwner example uses one foundation-owned 4/8 row for its details and collections columns, places its tab group and fieldsets directly in the details column, and lets each direct collection provide its own labelled semantic section.
 It demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.

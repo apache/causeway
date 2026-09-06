@@ -497,6 +497,31 @@ test('invokes a supplied scheduler without binding the object context as its rec
   assert.equal(executor.readCalls.length, 1);
 });
 
+test('publishes value-free member-reference provenance revisions and releases disconnected consumers', () => {
+  const context = createContext(createRichSchemaFixtureExecutor());
+  const revisions = [];
+  const consumer = {hidden: true};
+  const unsubscribe = context.subscribeMemberReferences(references => revisions.push(references));
+  const releases = [
+    context.registerRequirement({kind: 'property', member: 'name'}, () => {}, {consumer}),
+    context.registerRequirement({kind: 'collection', member: 'students'}, () => {}, {consumer}),
+    context.registerRequirement({kind: 'action', member: 'rename'}, () => {}, {consumer}),
+    context.registerRequirement({kind: 'property', member: 'stale'}, () => {}, {consumer}),
+    context.registerRequirement({kind: 'property', member: 'code'})
+  ];
+
+  assert.equal(revisions.at(-1).length, 5);
+  assert.equal(revisions.at(-1)[0].consumer, consumer);
+  assert.equal(revisions.at(-1)[0].requirement.member, 'name');
+  assert.equal(revisions.at(-1)[4].consumer, null);
+  assert.equal('data' in revisions.at(-1)[0], false);
+
+  for (const release of releases.reverse()) release();
+  assert.deepEqual(revisions.at(-1), []);
+  unsubscribe();
+  context.disconnect();
+});
+
 function createContext(executor, fetchImpl = globalThis.fetch) {
   return new ObjectContextController({
     client: new CausewayGraphQLClient({executor}),

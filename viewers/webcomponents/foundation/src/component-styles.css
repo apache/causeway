@@ -51,7 +51,10 @@ cw-column,
 cw-fieldset,
 cw-tabgroup,
 cw-tab,
-cw-metadata {
+cw-metadata,
+cw-unreferenced-properties,
+cw-unreferenced-collections,
+cw-unreferenced-actions {
   box-sizing: border-box;
   display: block;
   min-inline-size: 0;
@@ -59,6 +62,17 @@ cw-metadata {
 cw-metadata {
   display: flow-root;
   position: relative;
+}
+cw-unreferenced-properties[data-causeway-unreferenced-state="loading"],
+cw-unreferenced-properties[data-causeway-unreferenced-state="empty"],
+cw-unreferenced-properties[data-causeway-unreferenced-state="error"],
+cw-unreferenced-collections[data-causeway-unreferenced-state="loading"],
+cw-unreferenced-collections[data-causeway-unreferenced-state="empty"],
+cw-unreferenced-collections[data-causeway-unreferenced-state="error"],
+cw-unreferenced-actions[data-causeway-unreferenced-state="loading"],
+cw-unreferenced-actions[data-causeway-unreferenced-state="empty"],
+cw-unreferenced-actions[data-causeway-unreferenced-state="error"] {
+  display: none;
 }
 .causeway-layout-row {
   display: grid;

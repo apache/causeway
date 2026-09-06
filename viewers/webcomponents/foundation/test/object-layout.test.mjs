@@ -21,6 +21,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
     CausewayGridError,
+    causewayLayoutMemberClaims,
     createFallbackLayoutPlan,
     extractCausewayLayoutFieldSet,
     MAX_GRID_XML_CHARACTERS,
@@ -51,6 +52,15 @@ test('maps the supported Causeway grid subset into an immutable complete layout 
     ]);
     assert.equal(semanticNodes(result.plan).filter(node => node.kind === 'header').length, 1);
     assert.equal(new Set(memberIds(result.plan)).size, memberIds(result.plan).length);
+    assert.deepEqual(causewayLayoutMemberClaims(result.plan).map(claim => `${claim.kind}:${claim.id}`), [
+        'action:changeName',
+        'property:name',
+        'property:code',
+        'property:status',
+        'property:notes',
+        'collection:staffMembers',
+        'collection:formerStaff'
+    ]);
     assert.equal(result.diagnostics.length, 0);
     assert.equal(Object.isFrozen(result), true);
     assert.equal(Object.isFrozen(result.plan.regions), true);

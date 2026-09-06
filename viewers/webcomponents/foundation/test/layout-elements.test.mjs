@@ -98,18 +98,36 @@ test('row and column enforce nesting and normalize spans', async () => {
   const collection = element('cw-collection');
   const metadata = element('cw-metadata');
   const tabgroup = element('cw-tabgroup');
+  const unreferencedProperties = element('cw-unreferenced-properties');
+  const unreferencedCollections = element('cw-unreferenced-collections');
+  const unreferencedActions = element('cw-unreferenced-actions');
   const unsupported = element('cw-row');
   valid.appendChild(fieldset);
   valid.appendChild(collection);
   valid.appendChild(metadata);
   valid.appendChild(tabgroup);
+  valid.appendChild(unreferencedProperties);
+  valid.appendChild(unreferencedCollections);
+  valid.appendChild(unreferencedActions);
   valid.appendChild(unsupported);
   await tick();
-  assert.deepEqual(valid.children, [fieldset, collection, metadata, tabgroup, unsupported]);
+  assert.deepEqual(valid.children, [
+    fieldset,
+    collection,
+    metadata,
+    tabgroup,
+    unreferencedProperties,
+    unreferencedCollections,
+    unreferencedActions,
+    unsupported
+  ]);
   assert.equal(fieldset.hidden, false);
   assert.equal(collection.hidden, false);
   assert.equal(metadata.hidden, false);
   assert.equal(tabgroup.hidden, false);
+  assert.equal(unreferencedProperties.hidden, false);
+  assert.equal(unreferencedCollections.hidden, false);
+  assert.equal(unreferencedActions.hidden, false);
   assert.equal(unsupported.hidden, true);
   assert.equal(unsupported.hasAttribute('data-causeway-layout-invalid'), true);
   document.body.removeChild(row);

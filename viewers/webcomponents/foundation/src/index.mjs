@@ -70,6 +70,7 @@ export * from './structural-resource.mjs';
 export * from './structural-xml.mjs';
 export * from './temporal-range.mjs';
 export * from './types.mjs';
+export * from './unreferenced-member-elements.mjs';
 export * from './value-codecs.mjs';
 export * from './value-element.mjs';
 export * from './value-renderers.mjs';

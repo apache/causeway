@@ -83,6 +83,7 @@ export class ObjectContextController extends EventTarget {
     this.commandAbortControllers = new Map();
     this.mutationTail = Promise.resolve();
     this.registrations = new Map();
+    this.memberReferenceListeners = new Set();
     this.stateListeners = new Set();
     this.scheduled = false;
     this.revision = 0;
@@ -107,23 +108,34 @@ export class ObjectContextController extends EventTarget {
     }
   }
 
-  registerRequirement(requirement, listener = () => {}) {
+  registerRequirement(requirement, listener = () => {}, {consumer = null} = {}) {
     if (this.closed) {
       throw new Error('Cannot register a requirement on a disconnected object context.');
     }
     const normalized = normalizeRequirement(requirement);
     const token = Symbol(`${normalized.kind}:${normalized.member ?? ''}`);
-    this.registrations.set(token, {requirement: normalized, listener, error: null, descriptor: null});
+    this.registrations.set(token, {requirement: normalized, listener, consumer, error: null, descriptor: null});
     this.#notifyRegistration(this.registrations.get(token));
+    this.#publishMemberReferences();
     this.#scheduleFlush();
     let released = false;
     return () => {
       if (!released) {
         released = true;
         this.registrations.delete(token);
+        this.#publishMemberReferences();
         this.#scheduleFlush();
       }
     };
+  }
+
+  subscribeMemberReferences(listener) {
+    if (this.closed) {
+      throw new Error('Cannot observe member references on a disconnected object context.');
+    }
+    this.memberReferenceListeners.add(listener);
+    listener(this.#memberReferenceSnapshot());
+    return () => this.memberReferenceListeners.delete(listener);
   }
 
   async describeObject() {
@@ -859,6 +871,7 @@ export class ObjectContextController extends EventTarget {
     this.commandGenerations.clear();
     this.secondaryCache.clear();
     this.registrations.clear();
+    this.memberReferenceListeners.clear();
     this.stateListeners.clear();
   }
 
@@ -906,6 +919,21 @@ export class ObjectContextController extends EventTarget {
     const run = this.mutationTail.then(execute, execute);
     this.mutationTail = run.catch(() => {});
     return run.catch(error => interactionResult(InteractionStatus.FAILED, null, [commandError(error)]));
+  }
+
+  #memberReferenceSnapshot() {
+    return Object.freeze([...this.registrations.values()]
+      .filter(registration => ['property', 'collection', 'action'].includes(registration.requirement.kind))
+      .map(registration => Object.freeze({
+        requirement: registration.requirement,
+        consumer: registration.consumer
+      })));
+  }
+
+  #publishMemberReferences() {
+    if (this.memberReferenceListeners.size === 0) return;
+    const snapshot = this.#memberReferenceSnapshot();
+    for (const listener of this.memberReferenceListeners) listener(snapshot);
   }
 
   #scheduleFlush() {

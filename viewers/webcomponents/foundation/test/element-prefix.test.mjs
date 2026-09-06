@@ -162,7 +162,7 @@ test('application markup does not expose raw Vaadin elements', async () => {
 });
 
 test('compact element names retain established non-element Causeway contracts', () => {
-  assert.equal(Object.values(CausewayElementName).length, 27);
+  assert.equal(Object.values(CausewayElementName).length, 30);
   assert.ok(Object.values(CausewayElementName).every(name => name.startsWith('cw-')));
   assert.equal(CAUSEWAY_FIELD_EDITOR, 'cw-field-editor');
   assert.equal(CausewayHostClass.PROPERTY, 'causeway-property');
@@ -172,6 +172,9 @@ test('compact element names retain established non-element Causeway contracts', 
   assert.equal(CausewayHostClass.STANDALONE_COLLECTION, 'causeway-standalone-collection');
   assert.equal(CausewayHostClass.FIELDSET, 'causeway-layout-fieldset');
   assert.equal(CausewayHostClass.METADATA, 'causeway-metadata-fieldset');
+  assert.equal(CausewayHostClass.UNREFERENCED_PROPERTIES, 'causeway-unreferenced-properties');
+  assert.equal(CausewayHostClass.UNREFERENCED_COLLECTIONS, 'causeway-unreferenced-collections');
+  assert.equal(CausewayHostClass.UNREFERENCED_ACTIONS, 'causeway-unreferenced-actions');
   assert.equal(CausewaySemanticEvent.PROPERTY_UPDATED, 'causeway-property-updated');
   assert.equal(CausewaySemanticEvent.LAYOUT_COMPONENT_DIAGNOSTIC, 'causeway-layout-component-diagnostic');
 });
