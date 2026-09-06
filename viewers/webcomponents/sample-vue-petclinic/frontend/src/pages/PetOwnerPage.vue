@@ -87,6 +87,7 @@ defineProps<CausewayRoutePageProps>();
                   </cw-column>
                 </cw-row>
               </cw-tab>
+              <cw-unreferenced-properties data-testid="petclinic-owner-unreferenced-properties" />
               <cw-tab name="Metadata">
                 <cw-row>
                   <cw-column span="12">
@@ -105,8 +106,6 @@ defineProps<CausewayRoutePageProps>();
               <cw-property id="notes" editable multi-line="5" />
               <cw-property id="lastVisit" editable label-position="TOP" min="2000-01-01" max="today" />
             </cw-fieldset>
-
-            <cw-unreferenced-properties data-testid="petclinic-owner-unreferenced-properties" />
           </cw-column>
 
           <cw-column span="8" data-testid="petclinic-owner-collections">

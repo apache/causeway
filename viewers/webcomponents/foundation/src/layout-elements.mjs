@@ -235,6 +235,12 @@ export class CausewayTabgroupElement extends CausewayLayoutContainerElement {
     this.tablist = null;
     this.selectedTab = null;
     this.tabButtons = new Map();
+    this.addEventListener(CausewaySemanticEvent.UNREFERENCED_MEMBER_STATE, event => {
+      const candidate = event.detail?.element;
+      if (candidate?.parentNode === this && candidate.localName === 'cw-unreferenced-properties') {
+        this.scheduleLayoutSync();
+      }
+    });
   }
 
   get name() {
@@ -259,8 +265,12 @@ export class CausewayTabgroupElement extends CausewayLayoutContainerElement {
       this.insertBefore(this.tablist, this.firstChild);
     }
     this.tablist.setAttribute('aria-label', this.name);
-    const tabs = this.validDirectChildren(['cw-tab']);
+    const focusedTab = [...this.tabButtons.entries()]
+      .find(([, button]) => button === document.activeElement)?.[0] ?? null;
+    const previousSelected = this.selectedTab;
+    const tabs = this.layoutTabs();
     const available = tabs.filter(tab => !tab.hasAttribute('disabled'));
+    const selectionRetired = previousSelected != null && !available.includes(previousSelected);
     if (!available.includes(this.selectedTab)) {
       this.selectedTab = available.find(tab => tab.hasAttribute('selected')) ?? available[0] ?? null;
     }
@@ -273,7 +283,9 @@ export class CausewayTabgroupElement extends CausewayLayoutContainerElement {
       const button = document.createElement('button');
       button.type = 'button';
       button.id = tabId;
-      button.textContent = boundedName(tab.getAttribute('name'), `Tab ${index + 1}`);
+      button.textContent = tab.localName === 'cw-unreferenced-properties'
+        ? tab.name
+        : boundedName(tab.getAttribute('name'), `Tab ${index + 1}`);
       button.setAttribute('role', 'tab');
       button.setAttribute('aria-controls', panelId);
       button.setAttribute('aria-selected', String(selected));
@@ -290,10 +302,35 @@ export class CausewayTabgroupElement extends CausewayLayoutContainerElement {
       tab.setAttribute('data-causeway-layout-tab-panel', String(index));
       tab.hidden = !selected;
     });
+    if (selectionRetired) {
+      this.tabButtons.get(this.selectedTab)?.focus();
+    } else if (focusedTab) {
+      (this.tabButtons.get(focusedTab) ?? this.tabButtons.get(this.selectedTab))?.focus();
+    }
+  }
+
+  layoutTabs() {
+    const candidates = this.validDirectChildren(['cw-tab', 'cw-unreferenced-properties']);
+    const tabs = [];
+    for (const candidate of candidates) {
+      if (candidate.localName === 'cw-unreferenced-properties'
+          && candidate.getAttribute('data-causeway-unreferenced-state') !== 'ready') {
+        candidate.hidden = true;
+        candidate.removeAttribute('role');
+        candidate.removeAttribute('aria-labelledby');
+        candidate.removeAttribute('data-causeway-layout-tab-panel');
+        continue;
+      }
+      if (candidate.localName === 'cw-unreferenced-properties') {
+        candidate.setAttribute('class', mergeClass(candidate.getAttribute('class'), 'causeway-layout-tab-panel'));
+      }
+      tabs.push(candidate);
+    }
+    return tabs;
   }
 
   selectTab(tab, {focus = false} = {}) {
-    const tabs = this.validDirectChildren(['cw-tab']);
+    const tabs = this.layoutTabs();
     if (!tabs.includes(tab) || tab.hasAttribute('disabled')) return false;
     this.selectedTab = tab;
     this.synchronizeLayout();
@@ -302,7 +339,7 @@ export class CausewayTabgroupElement extends CausewayLayoutContainerElement {
   }
 
   handleTabKey(event, tab) {
-    const available = this.validDirectChildren(['cw-tab']).filter(candidate => !candidate.hasAttribute('disabled'));
+    const available = this.layoutTabs().filter(candidate => !candidate.hasAttribute('disabled'));
     const current = available.indexOf(tab);
     if (current < 0) return;
     let target = null;

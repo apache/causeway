@@ -177,4 +177,5 @@ test('compact element names retain established non-element Causeway contracts', 
   assert.equal(CausewayHostClass.UNREFERENCED_ACTIONS, 'causeway-unreferenced-actions');
   assert.equal(CausewaySemanticEvent.PROPERTY_UPDATED, 'causeway-property-updated');
   assert.equal(CausewaySemanticEvent.LAYOUT_COMPONENT_DIAGNOSTIC, 'causeway-layout-component-diagnostic');
+  assert.equal(CausewaySemanticEvent.UNREFERENCED_MEMBER_STATE, 'causeway-unreferenced-member-state-change');
 });

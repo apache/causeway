@@ -160,12 +160,13 @@ Only complete absence of an exact registration selects the declarative generic p
 Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, collection, and declarative layout elements.
 `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` remain explicitly authored structure, while `<cw-metadata>` derives the exact `metadata` fieldset from the context's authorized effective layout.
 Custom pages may also directly declare `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` in a column.
+A property catch-all may instead be authored directly among ordinary tabgroup children, where foundation exposes its bounded name as a tab only while remaining properties exist.
 Foundation allocates remaining authorized members by exact kind and ID in authoritative order; HTMX performs no member scanning, allocation, fetching, or reconstruction.
 One destination per kind is effective in document order, hidden connected references still count, and generated properties require explicit `editable` opt-in.
 The elements expose `loading`, `ready`, `empty`, and `error` through `data-causeway-unreferenced-state`, and empty destinations render no visible group.
 Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
 The PetOwner example uses one foundation-owned 4/8 row for its details and collections columns, places its tab group and fieldsets directly in the details column, and lets each direct collection provide its own labelled semantic section.
-It demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.
+It demonstrates Identity, conditional Other, and Metadata tabs without artificial placeholder content; Other is omitted automatically when no properties remain.
 Within PetOwner, application wrappers remain only around the object heading and route-level structures that are outside the declarative macro grid; other representative pages keep their independently authored composition.
 The HTMX host does not translate, enhance, or reconstruct these elements.
 Those elements consume the one nearest route context and therefore do not create a parallel data plane.

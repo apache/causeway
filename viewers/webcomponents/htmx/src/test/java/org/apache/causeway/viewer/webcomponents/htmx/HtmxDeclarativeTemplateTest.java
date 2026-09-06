@@ -82,7 +82,11 @@ class HtmxDeclarativeTemplateTest {
                 <section data-route-state="loading" data-testid="causeway-route-page">
                   <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}">
                     <cw-column span="12">
-                      <cw-unreferenced-properties name="Other" editable></cw-unreferenced-properties>
+                      <cw-tabgroup name="Details">
+                        <cw-tab name="Identity"><cw-row><cw-column span="12"></cw-column></cw-row></cw-tab>
+                        <cw-unreferenced-properties name="Other" editable></cw-unreferenced-properties>
+                        <cw-tab name="Metadata"><cw-row><cw-column span="12"></cw-column></cw-row></cw-tab>
+                      </cw-tabgroup>
                       <cw-unreferenced-collections name="Other collections"></cw-unreferenced-collections>
                       <cw-unreferenced-actions name="Other actions"></cw-unreferenced-actions>
                     </cw-column>
