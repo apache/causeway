@@ -330,7 +330,7 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("name,knownAs,notes");
         assertThat(page.locator("[data-testid='petclinic-owner-details'] cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("name,knownAs,id,daysSinceLastVisit,version,telephoneNumber,emailAddress,notes,lastVisit");
+                .isEqualTo("name,knownAs,daysSinceLastVisit,id,version,telephoneNumber,emailAddress,notes,lastVisit");
         assertThat(page.locator("[data-testid='petclinic-owner-collections'] > section").count()).isZero();
         assertThat(page.locator("[data-testid='petclinic-owner-collections'] > cw-fieldset[name='Agreement'] cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
         assertThat(page.locator("cw-collection#visits > cw-collection-column")
@@ -574,7 +574,7 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("Identity,Other,Contact,Details");
         assertThat(details.locator("cw-fieldset > cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("name,knownAs,id,telephoneNumber,emailAddress,notes,lastVisit");
+                .isEqualTo("name,knownAs,daysSinceLastVisit,telephoneNumber,emailAddress,notes,lastVisit");
         final var tabs = details.locator("cw-tabgroup[data-testid='petclinic-owner-layout-tabs']");
         final var tabButtons = tabs.locator(":scope > [role='tablist'] > [role='tab']");
         assertThat(tabButtons.count()).isEqualTo(3);
@@ -606,7 +606,7 @@ class PetClinicVuePlaywrightTest {
         final var metadata = tabs.locator("cw-metadata[data-testid='petclinic-owner-metadata']");
         assertThat(metadata.locator("fieldset > cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("daysSinceLastVisit,version");
+                .isEqualTo("id,version");
         final var actions = metadata.locator("details[data-causeway-metadata-actions]");
         final var actionTrigger = actions.locator("summary");
         assertThat(actions.getAttribute("open")).isNull();
@@ -634,14 +634,14 @@ class PetClinicVuePlaywrightTest {
                 """);
         assertThat(macro.locator("[data-testid^='petclinic-owner-unreferenced-']").count()).isEqualTo(3);
         final var remainingProperties = macro.locator("[data-testid='petclinic-owner-unreferenced-properties']");
-        assertThat(remainingProperties.locator(":scope > cw-fieldset[name='Other'] > cw-property#id").count()).isEqualTo(1);
-        assertThat(remainingProperties.locator("cw-property#id").getAttribute("editable")).isNull();
+        assertThat(remainingProperties.locator(":scope > cw-fieldset[name='Other'] > cw-property#daysSinceLastVisit").count()).isEqualTo(1);
+        assertThat(remainingProperties.locator("cw-property#daysSinceLastVisit").getAttribute("editable")).isNull();
         details.evaluate("""
                 element => {
                   const explicit = document.createElement('cw-property');
-                  explicit.id = 'id';
+                  explicit.id = 'daysSinceLastVisit';
                   explicit.hidden = true;
-                  explicit.dataset.testid = 'petclinic-parser-late-id';
+                  explicit.dataset.testid = 'petclinic-parser-late-days-since-last-visit';
                   element.insertBefore(explicit, element.querySelector('[data-testid="petclinic-owner-layout-tabs"]'));
                 }
                 """);
@@ -649,8 +649,8 @@ class PetClinicVuePlaywrightTest {
         assertThat(remainingProperties.locator(":scope > *").count()).isZero();
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText()).isEqualTo("Metadata");
         assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
-        details.locator("[data-testid='petclinic-parser-late-id']").evaluate("element => element.remove()");
-        page.waitForFunction("() => !!document.querySelector('[data-testid=petclinic-owner-unreferenced-properties][data-causeway-unreferenced-state=ready] cw-property#id')");
+        details.locator("[data-testid='petclinic-parser-late-days-since-last-visit']").evaluate("element => element.remove()");
+        page.waitForFunction("() => !!document.querySelector('[data-testid=petclinic-owner-unreferenced-properties][data-causeway-unreferenced-state=ready] cw-property#daysSinceLastVisit')");
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText()).isEqualTo("Metadata");
         assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
         assertThat(macro.locator("[data-testid='petclinic-owner-unreferenced-collections'] > *, [data-testid='petclinic-owner-unreferenced-actions'] > *").count()).isZero();
