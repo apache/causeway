@@ -72,6 +72,7 @@ public class PetOwner implements Comparable<PetOwner> {
 
     @Id
     @Column(nullable = false, length = 40)
+    @PropertyLayout(fieldSetId = "metadata", sequence = "1")
     private String id;
 
     @Version
