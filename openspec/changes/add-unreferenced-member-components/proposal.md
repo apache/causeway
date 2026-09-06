@@ -11,6 +11,7 @@ Causeway `layout.xml` already solves this through deterministic unreferenced-mem
 - Coordinate allocation once per object-context boundary so each remaining member is rendered exactly once in authoritative member order and asynchronous claim producers cannot cause stable duplication.
 - Permit exactly one effective catch-all destination per member kind; the first valid destination in document order wins and later duplicates fail closed with bounded diagnostics.
 - Render remaining properties as ordinary `<cw-property>` children of an **Other** fieldset, remaining collections as ordinary `<cw-collection>` children in one tab per collection, and remaining actions as ordinary `<cw-action>` controls in a wrapping horizontal group.
+- Permit `<cw-unreferenced-properties>` directly within `<cw-tabgroup>` so its non-empty **Other** fieldset becomes a conditional tab at the authored position while loading, empty, and error states contribute no tab.
 - Add explicit property editing opt-in, accessible group names, inspectable loading/ready/empty/error state, parser-late synchronization, supersession, and disconnection cleanup.
 - Extend strict column composition to admit the three new catch-all elements while continuing to reject arbitrary children.
 - Verify equivalent direct use from HTMX and Vue without host-owned allocation, data fetching, ordering, or interaction state.

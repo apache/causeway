@@ -3,6 +3,7 @@
 ### Requirement: Vue unreferenced member composition parity
 
 Application-authored Vue pages SHALL be able to use `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` directly as native custom elements beneath a valid object-context boundary.
+They SHALL also be able to place `<cw-unreferenced-properties>` directly among a tabgroup's ordinary tabs for conditional non-empty Other-tab presentation.
 Vue MUST NOT wrap the elements, mirror their allocation in reactive state, derive member identity, generate controls, or own their lifecycle.
 
 #### Scenario: Vue template declares catch-all elements
@@ -10,6 +11,12 @@ Vue MUST NOT wrap the elements, mirror their allocation in reactive state, deriv
 - **WHEN** a registered exact Vue page contains the three unreferenced member elements beneath its route context
 - **THEN** Vue treats them as native custom elements and preserves their bounded attributes
 - **AND** the existing application-owned GraphQL client, context, and interaction controller serve generated ordinary member descendants
+
+#### Scenario: Vue template declares a conditional property tab
+
+- **WHEN** a Vue page places `<cw-unreferenced-properties>` directly between ordinary tabs
+- **THEN** Vue preserves that native custom element and authored order
+- **AND** foundation alone adds or removes the Other tab according to the catch-all allocation state
 
 #### Scenario: Equivalent Vue and HTMX contexts resolve
 
