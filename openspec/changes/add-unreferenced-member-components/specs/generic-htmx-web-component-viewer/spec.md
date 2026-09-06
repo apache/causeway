@@ -3,6 +3,7 @@
 ### Requirement: HTMX unreferenced member composition
 
 Application-authored HTMX page resources SHALL be permitted to place `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` beneath valid columns in an existing object-context boundary.
+They SHALL also be permitted to place `<cw-unreferenced-properties>` directly among a tabgroup's ordinary tabs for conditional non-empty Other-tab presentation.
 The HTMX host MUST preserve these elements and MUST NOT calculate member inventories, inspect explicit claims, allocate destinations, generate member controls, or duplicate their interaction behavior.
 
 #### Scenario: Exact page declares catch-all elements
@@ -10,6 +11,12 @@ The HTMX host MUST preserve these elements and MUST NOT calculate member invento
 - **WHEN** a valid exact HTMX page resource contains the three unreferenced member elements beneath its route object context
 - **THEN** strict template validation preserves their names and bounded public attributes
 - **AND** the existing context and interaction controller serve all generated ordinary member descendants
+
+#### Scenario: Exact page declares a conditional property tab
+
+- **WHEN** a valid exact HTMX page places `<cw-unreferenced-properties>` directly between ordinary tabs
+- **THEN** strict template validation preserves that authored order
+- **AND** foundation alone adds or removes the Other tab according to the catch-all allocation state
 
 #### Scenario: Remaining members render in HTMX
 
