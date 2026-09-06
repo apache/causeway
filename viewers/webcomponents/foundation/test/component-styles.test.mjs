@@ -64,12 +64,13 @@ test('collection preview disclosure uses a larger state-driven directional icon 
 
 test('declarative layout styles provide responsive white tabs and a bounded metadata heading menu', () => {
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-row \{[\s\S]*?grid-template-columns: repeat\(12, minmax\(0, 1fr\)\);/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-column \{[\s\S]*?align-content: start;[\s\S]*?display: grid;[\s\S]*?gap: var\(--causeway-layout-gap,[\s\S]*?min-inline-size: 0;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-column\[data-causeway-layout-span="1"\][\s\S]*?\.causeway-layout-column\[data-causeway-layout-span="12"\]/);
-    assert.match(CAUSEWAY_COMPONENT_STYLES, /@media \(max-width: 48rem\) \{[\s\S]*?\.causeway-layout-column \{[\s\S]*?grid-column: 1 \/ -1;/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /@media \(max-width: 48rem\) \{[\s\S]*?\.causeway-layout-column\[data-causeway-layout-span\] \{[\s\S]*?grid-column: 1 \/ -1;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-tabgroup,[\s\S]*?\.causeway-layout-tab-panel \{[\s\S]*?background: var\(--causeway-surface, Canvas\);[\s\S]*?max-inline-size: 100%;/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-tablist \[role="tab"\]:focus-visible,[\s\S]*?\.causeway-metadata-actions > summary:focus-visible/);
-    assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-metadata \{\s+position: relative;\s+\}/);
-    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-metadata-actions \{[\s\S]*?inset-block-start: -0\.2rem;[\s\S]*?position: absolute;[\s\S]*?\.causeway-metadata-actions-menu \{[\s\S]*?max-inline-size: min\(22rem, calc\(100vw - 2rem\)\);/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-metadata \{[\s\S]*?display: flow-root;[\s\S]*?position: relative;/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-metadata-actions \{[\s\S]*?inset-block-start: 0\.3rem;[\s\S]*?position: absolute;[\s\S]*?\.causeway-metadata-actions-menu \{[\s\S]*?max-inline-size: min\(22rem, calc\(100vw - 2rem\)\);/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\[data-causeway-layout-invalid\] \{[\s\S]*?display: none !important;/);
 });
 

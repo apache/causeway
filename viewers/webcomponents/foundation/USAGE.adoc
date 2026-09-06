@@ -191,7 +191,8 @@ Applications that need different structure continue to author the established lo
 Application-authored pages can compose `<cw-row>`, `<cw-column span="1..12">`, `<cw-fieldset name="...">`, `<cw-tabgroup name="...">`, and `<cw-tab name="...">` beneath an existing object context.
 These framework-neutral elements implement the same twelve-track responsive structure without owning identity, routing, GraphQL execution, or interaction policy.
 
-The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, and metadata, a fieldset accepts only properties, a tab group accepts only tabs, and a tab accepts only rows.
+The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, metadata, and tab groups, a fieldset accepts only properties, a tab group accepts only tabs, and a tab accepts only rows.
+Columns stack multiple valid children in authored order with the shared layout gap while preserving each child's semantic and domain behavior.
 Unsupported direct children fail closed with `data-causeway-layout-invalid` and a bounded redacted `causeway-layout-component-diagnostic` event.
 A missing or invalid column span uses twelve, and narrow viewports stack all columns without horizontal overflow.
 
@@ -227,6 +228,21 @@ Loading, empty, unavailable, malformed, superseded, and disconnected states fail
     </cw-row>
   </cw-tab>
 </cw-tabgroup>
+----
+
+A page-level macro layout can place tabs and fieldsets directly in one column and collections in another without application grid wrappers:
+
+[source,html]
+----
+<cw-row>
+  <cw-column span="4">
+    <cw-tabgroup name="Object information">...</cw-tabgroup>
+    <cw-fieldset name="Contact">...</cw-fieldset>
+  </cw-column>
+  <cw-column span="8">
+    <cw-collection id="items" named="Items">...</cw-collection>
+  </cw-column>
+</cw-row>
 ----
 
 == Application menu bars and service actions

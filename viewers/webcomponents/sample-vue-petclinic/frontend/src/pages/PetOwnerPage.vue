@@ -61,8 +61,8 @@ defineProps<CausewayRoutePageProps>();
           </div>
         </div>
 
-        <div class="petclinic-object-grid">
-          <div class="petclinic-object-details">
+        <cw-row data-testid="petclinic-owner-macro-layout">
+          <cw-column span="4" data-testid="petclinic-owner-details">
             <cw-tabgroup name="Owner information" data-testid="petclinic-owner-layout-tabs">
               <cw-tab name="Identity" selected>
                 <cw-row>
@@ -96,30 +96,19 @@ defineProps<CausewayRoutePageProps>();
               </cw-tab>
             </cw-tabgroup>
 
-            <cw-row>
-              <cw-column span="12">
-                <cw-fieldset name="Contact" class="petclinic-card">
-                <cw-property id="telephoneNumber" editable />
-                <cw-property id="emailAddress" editable />
-                </cw-fieldset>
-              </cw-column>
-            </cw-row>
+            <cw-fieldset name="Contact" class="petclinic-card">
+              <cw-property id="telephoneNumber" editable />
+              <cw-property id="emailAddress" editable />
+            </cw-fieldset>
 
-            <cw-row>
-              <cw-column span="12">
-                <cw-fieldset name="Details" class="petclinic-card">
-                  <cw-property id="notes" editable multi-line="5" />
-                  <cw-property id="lastVisit" editable label-position="TOP" min="2000-01-01" max="today" />
-                </cw-fieldset>
-              </cw-column>
-            </cw-row>
+            <cw-fieldset name="Details" class="petclinic-card">
+              <cw-property id="notes" editable multi-line="5" />
+              <cw-property id="lastVisit" editable label-position="TOP" min="2000-01-01" max="today" />
+            </cw-fieldset>
+          </cw-column>
 
-          </div>
-
-          <div class="petclinic-object-collections">
-            <section class="petclinic-card" aria-labelledby="petclinic-owner-pets-heading">
-              <h2 id="petclinic-owner-pets-heading">Pets</h2>
-              <cw-collection id="pets" named="Companion animals" active paged="5" sortable filterable>
+          <cw-column span="8" data-testid="petclinic-owner-collections">
+            <cw-collection id="pets" class="petclinic-card" named="Pets" active paged="5" sortable filterable>
                 <cw-preview>
                   <section class="petclinic-preview" aria-label="Pet preview">
                     <cw-property id="name" />
@@ -144,14 +133,12 @@ defineProps<CausewayRoutePageProps>();
                   />
                 </cw-action>
                 <cw-action id="removePet" />
-              </cw-collection>
-            </section>
+            </cw-collection>
 
-            <section class="petclinic-card" aria-labelledby="petclinic-owner-visits-heading">
-              <h2 id="petclinic-owner-visits-heading">Visits</h2>
-              <cw-collection
-                id="visits"
-                named="Visit history"
+            <cw-collection
+              id="visits"
+              class="petclinic-card"
+              named="Visits"
                 described-as="All visits recorded for this owner's pets."
                 active
                 paged="8"
@@ -177,10 +164,9 @@ defineProps<CausewayRoutePageProps>();
                     multi-line="3"
                   />
                 </cw-action>
-              </cw-collection>
-            </section>
-            <section class="petclinic-card petclinic-agreement-card" aria-labelledby="petclinic-owner-agreement-heading">
-              <h2 id="petclinic-owner-agreement-heading">Agreement</h2>
+            </cw-collection>
+
+            <cw-fieldset name="Agreement" class="petclinic-card petclinic-agreement-card">
               <cw-property
                 id="agreement"
                 label-position="NONE"
@@ -189,9 +175,9 @@ defineProps<CausewayRoutePageProps>();
                 pdf-zoom="page-width"
                 data-testid="petclinic-owner-agreement"
               />
-            </section>
-          </div>
-        </div>
+            </cw-fieldset>
+          </cw-column>
+        </cw-row>
       </article>
       <cw-interaction-controller data-causeway-route-interactions />
     </cw-object-context>
