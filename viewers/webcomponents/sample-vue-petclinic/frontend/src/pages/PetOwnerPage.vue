@@ -63,27 +63,38 @@ defineProps<CausewayRoutePageProps>();
 
         <div class="petclinic-object-grid">
           <div class="petclinic-object-details">
-            <cw-row>
-              <cw-column span="12">
-                <cw-fieldset name="Identity" class="petclinic-card">
-                <cw-property id="name" named="Full name">
-                  <cw-action id="updateName" named="Change the owner's name" prompt-style="INLINE">
-                    <cw-parameter
-                      id="name"
-                      named="Owner's full name"
-                      described-as="The complete name used to identify this pet owner."
-                      description-as="tooltip"
+            <cw-tabgroup name="Owner information" data-testid="petclinic-owner-layout-tabs">
+              <cw-tab name="Identity" selected>
+                <cw-row>
+                  <cw-column span="12">
+                    <cw-fieldset name="Identity" class="petclinic-card">
+                    <cw-property id="name" named="Full name">
+                      <cw-action id="updateName" named="Change the owner's name" prompt-style="INLINE">
+                        <cw-parameter
+                          id="name"
+                          named="Owner's full name"
+                          described-as="The complete name used to identify this pet owner."
+                          description-as="tooltip"
+                        />
+                      </cw-action>
+                    </cw-property>
+                    <cw-property
+                      id="knownAs"
+                      editable
+                      described-as="The familiar or preferred name used by this owner."
                     />
-                  </cw-action>
-                </cw-property>
-                <cw-property
-                  id="knownAs"
-                  editable
-                  described-as="The familiar or preferred name used by this owner."
-                />
-                </cw-fieldset>
-              </cw-column>
-            </cw-row>
+                    </cw-fieldset>
+                  </cw-column>
+                </cw-row>
+              </cw-tab>
+              <cw-tab name="Metadata">
+                <cw-row>
+                  <cw-column span="12">
+                    <cw-metadata data-testid="petclinic-owner-metadata" />
+                  </cw-column>
+                </cw-row>
+              </cw-tab>
+            </cw-tabgroup>
 
             <cw-row>
               <cw-column span="12">
@@ -103,22 +114,6 @@ defineProps<CausewayRoutePageProps>();
               </cw-column>
             </cw-row>
 
-            <cw-tabgroup name="Owner supplementary information" data-testid="petclinic-owner-layout-tabs">
-              <cw-tab name="Metadata" selected>
-                <cw-row>
-                  <cw-column span="12">
-                    <cw-metadata data-testid="petclinic-owner-metadata" />
-                  </cw-column>
-                </cw-row>
-              </cw-tab>
-              <cw-tab name="Layout help">
-                <cw-row>
-                  <cw-column span="12">
-                    <cw-fieldset name="Layout" class="petclinic-card" />
-                  </cw-column>
-                </cw-row>
-              </cw-tab>
-            </cw-tabgroup>
           </div>
 
           <div class="petclinic-object-collections">

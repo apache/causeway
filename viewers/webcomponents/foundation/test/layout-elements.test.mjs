@@ -180,7 +180,7 @@ test('tab and tabgroup reject invalid direct children without disabling valid ta
   document.body.removeChild(group);
 });
 
-test('metadata renders only effective metadata properties and actions in a closed panel', async () => {
+test('metadata renders authoritative actions in an accessible heading menu with bounded dismissal', async () => {
   const members = objectLayoutMembers();
   members.set('version', {id: 'version', kind: 'property'});
   members.set('logicalTypeName', {id: 'logicalTypeName', kind: 'property'});
@@ -212,10 +212,13 @@ test('metadata renders only effective metadata properties and actions in a close
   assert.match(metadata.innerHTML, /<cw-property[^>]*id="version"/);
   assert.match(metadata.innerHTML, /<cw-property[^>]*id="logicalTypeName"/);
   assert.match(metadata.innerHTML, /<details[^>]*data-causeway-metadata-actions/);
-  assert.match(metadata.innerHTML, /<summary>Actions<\/summary>/);
+  assert.match(metadata.innerHTML, /<summary[^>]*aria-label="Metadata actions"[^>]*aria-expanded="false"/);
+  assert.match(metadata.innerHTML, /<span aria-hidden="true">&#8942;<\/span>/);
+  assert.match(metadata.innerHTML, /class="causeway-metadata-actions-menu" role="menu" aria-label="Metadata actions"/);
   assert.match(metadata.innerHTML, /<cw-action[^>]*id="rebuildMetamodel"/);
   assert.doesNotMatch(metadata.innerHTML, /id="name"/);
   assert.doesNotMatch(metadata.innerHTML, /<details[^>]*\sopen/);
+
   const rendered = metadata.innerHTML;
   requirementListener({status: 'object-loading', generation: 5, data: null});
   assert.equal(metadata.innerHTML, rendered);
@@ -223,6 +226,46 @@ test('metadata renders only effective metadata properties and actions in a close
   await tick();
   assert.equal(resourceLoads, 1);
   assert.equal(metadata.innerHTML, rendered);
+
+  // The bounded DOM shim intentionally does not parse innerHTML, so attach the
+  // equivalent controls to exercise the component-owned interaction lifecycle.
+  const menu = element('details', {'data-causeway-metadata-actions': ''});
+  const trigger = element('summary', {'aria-expanded': 'false'});
+  menu.appendChild(trigger);
+  menu.querySelector = selector => selector === 'summary' ? trigger : null;
+  menu.querySelectorAll = selector => selector === 'cw-action' ? [{id: 'rebuildMetamodel'}] : [];
+  metadata.appendChild(menu);
+  metadata.querySelector = selector => selector === '[data-causeway-metadata-actions]' ? menu : null;
+  metadata.bindMetadataMenu();
+  menu.setAttribute('open', '');
+  menu.dispatchEvent(new Event('toggle'));
+  assert.equal(trigger.getAttribute('aria-expanded'), 'true');
+  const escape = new Event('keydown', {bubbles: true, cancelable: true});
+  escape.key = 'Escape';
+  trigger.dispatchEvent(escape);
+  assert.equal(menu.hasAttribute('open'), false);
+  assert.equal(trigger.getAttribute('aria-expanded'), 'false');
+  assert.equal(document.activeElement, trigger);
+
+  menu.setAttribute('open', '');
+  menu.dispatchEvent(new Event('toggle'));
+  metadata.metadataOutsideListener({target: {closest: () => true}});
+  assert.equal(menu.hasAttribute('open'), true);
+  document.dispatchEvent(new Event('pointerdown'));
+  assert.equal(menu.hasAttribute('open'), false);
+  menu.setAttribute('open', '');
+  menu.dispatchEvent(new Event('toggle'));
+  metadata.metadataResultListener({detail: {actionId: 'unrelated'}});
+  assert.equal(menu.hasAttribute('open'), true);
+  metadata.metadataResultListener({detail: {actionId: 'rebuildMetamodel'}});
+  await tick();
+  assert.equal(menu.hasAttribute('open'), false);
+  assert.equal(document.activeElement, trigger);
+  menu.setAttribute('open', '');
+  menu.dispatchEvent(new Event('toggle'));
+  requirementListener({status: 'unsupported', generation: 6, data: null});
+  assert.equal(metadata.metadataMenu, null);
+  assert.doesNotMatch(metadata.innerHTML, /<cw-property|<cw-action/);
   document.body.removeChild(metadata);
 });
 
@@ -234,7 +277,8 @@ test('metadata omits an empty action panel and fails closed when authority is un
   metadata.context = contextFor({members, xml});
   await connect(metadata);
   await waitFor(() => metadata.getAttribute('data-causeway-metadata-state') === 'ready');
-  assert.doesNotMatch(metadata.innerHTML, /data-causeway-metadata-actions/);
+  assert.doesNotMatch(metadata.innerHTML, /data-causeway-metadata-actions|Metadata actions/);
+  assert.equal(metadata.metadataMenu, null);
   document.body.removeChild(metadata);
 
   const unavailable = element('cw-metadata');
