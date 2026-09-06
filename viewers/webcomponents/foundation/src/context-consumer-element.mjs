@@ -64,7 +64,8 @@ export class CausewayContextConsumerElement extends HTMLElementBase {
     }
     this._release = this._resolvedContext.registerRequirement(
       this.createRequirement(),
-      state => this.acceptComponentState(state)
+      state => this.acceptComponentState(state),
+      {consumer: this}
     );
   }
 

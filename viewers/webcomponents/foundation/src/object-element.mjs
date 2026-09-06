@@ -22,10 +22,12 @@ import {
   COMPONENT_STATE_EVENT,
   createSemanticEvent,
   OBJECT_LAYOUT_DIAGNOSTIC_EVENT,
-  OBJECT_LAYOUT_STATE_EVENT
+  OBJECT_LAYOUT_STATE_EVENT,
+  requestObjectMemberAllocation
 } from './context-events.mjs';
 import {
   CausewayGridError,
+  causewayLayoutMemberClaims,
   createFallbackLayoutPlan,
   parseCausewayGridXml,
   renderObjectLayoutPlan
@@ -44,6 +46,7 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
     this.layoutId = `causeway-object-${++objectSequence}`;
     this.layoutRevision = 0;
     this.layoutAbortController = null;
+    this.layoutClaimSource = null;
     this.currentPlan = null;
     this.currentGridPath = null;
     this.forceLayoutRefresh = false;
@@ -78,12 +81,18 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
+    this.layoutClaimSource = requestObjectMemberAllocation(this)?.registerClaimSource(
+      this,
+      ['property', 'collection', 'action']
+    ) ?? null;
     super.connectedCallback();
   }
 
   disconnectedCallback() {
     this.layoutAbortController?.abort();
     this.layoutAbortController = null;
+    this.layoutClaimSource?.release();
+    this.layoutClaimSource = null;
     super.disconnectedCallback();
   }
 
@@ -232,6 +241,7 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
   }
 
   #applyPlan(plan, layoutState, gridPath) {
+    this.layoutClaimSource?.resolve(causewayLayoutMemberClaims(plan));
     this.currentPlan = plan;
     this.currentGridPath = gridPath;
     this.#renderPlan(plan, layoutState);
@@ -258,12 +268,14 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
   }
 
   #renderStatus(state, message) {
+    if (!this.currentPlan) this.layoutClaimSource?.pending();
     this.#setLayoutState(state);
     this.innerHTML = `<section class="causeway-object causeway-object-layout-status" aria-busy="true"><span role="status">${escapeHtml(message)}</span></section>`;
     this.#publishState(state, null, [], null);
   }
 
   #renderError(message) {
+    this.layoutClaimSource?.settle();
     this.currentPlan = null;
     this.currentGridPath = null;
     this.#setLayoutState('error');

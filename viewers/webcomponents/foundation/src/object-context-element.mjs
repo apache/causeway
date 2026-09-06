@@ -21,9 +21,11 @@ import {
   createSemanticEvent,
   OBJECT_CONTEXT_REQUEST_EVENT,
   OBJECT_CONTEXT_STATE_EVENT,
+  OBJECT_MEMBER_ALLOCATION_REQUEST_EVENT,
   requestGraphQLClient
 } from './context-events.mjs';
 import {ObjectContextController} from './object-context-controller.mjs';
+import {CausewayUnreferencedMemberCoordinator} from './unreferenced-member-elements.mjs';
 
 const HTMLElementBase = globalThis.HTMLElement ?? class extends EventTarget {};
 
@@ -38,10 +40,17 @@ export class CausewayObjectContextElement extends HTMLElementBase {
     this._injectedContext = null;
     this._hydration = null;
     this._context = null;
+    this._allocationCoordinator = null;
     this._unsubscribe = null;
     this.addEventListener(OBJECT_CONTEXT_REQUEST_EVENT, event => {
       if (this._context && event.detail?.provide) {
         event.detail.provide(this._context);
+        event.stopPropagation();
+      }
+    });
+    this.addEventListener(OBJECT_MEMBER_ALLOCATION_REQUEST_EVENT, event => {
+      if (this._allocationCoordinator && event.detail?.provide) {
+        event.detail.provide(this._allocationCoordinator);
         event.stopPropagation();
       }
     });
@@ -127,6 +136,10 @@ export class CausewayObjectContextElement extends HTMLElementBase {
         hydration: this._hydration
       });
     }
+    this._allocationCoordinator = new CausewayUnreferencedMemberCoordinator({
+      boundary: this,
+      context: this._context
+    });
     this._unsubscribe = this._context.subscribe?.(state => {
       this.dispatchEvent(createSemanticEvent(
         OBJECT_CONTEXT_STATE_EVENT,
@@ -137,6 +150,8 @@ export class CausewayObjectContextElement extends HTMLElementBase {
   }
 
   #stop() {
+    this._allocationCoordinator?.disconnect();
+    this._allocationCoordinator = null;
     this._unsubscribe?.();
     this._unsubscribe = null;
     if (this._context && this._context !== this._injectedContext) {
