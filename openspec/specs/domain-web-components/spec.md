@@ -2950,7 +2950,8 @@ A fieldset MUST accept only direct `<cw-property>` element children, preserve th
 ### Requirement: Declarative twelve-column row layout
 
 The foundation SHALL register `<cw-row>` and `<cw-column>` as framework-neutral layout containers.
-A row MUST accept only direct column children, and a column MUST accept direct fieldset, collection, or metadata children without taking ownership of their domain behavior.
+A row MUST accept only direct column children, and a column MUST accept direct fieldset, collection, metadata, or tabgroup children without taking ownership of their domain behavior.
+A column SHALL stack multiple valid children in authored order with shared bounded layout spacing.
 
 #### Scenario: Row contains columns
 
@@ -2963,6 +2964,18 @@ A row MUST accept only direct column children, and a column MUST accept direct f
 - **WHEN** `<cw-column span="x">` declares an integer from 1 through 12
 - **THEN** it occupies exactly that many wide-layout tracks
 - **AND** the authored value remains inspectable as the column contract
+
+#### Scenario: Column contains multiple layout children
+
+- **WHEN** a column directly contains fieldsets, collections, metadata, or tabgroups
+- **THEN** it presents them vertically in authored order with the shared layout gap and start alignment
+- **AND** each child retains ownership of its semantic and domain behavior
+
+#### Scenario: Column contains a tab group
+
+- **WHEN** a column directly contains `<cw-tabgroup>`
+- **THEN** the tab group remains a valid connected child with its existing tab, panel, focus, mutation, and responsive behavior
+- **AND** the column does not translate or reconstruct the tab structure
 
 #### Scenario: Column span is absent or invalid
 
