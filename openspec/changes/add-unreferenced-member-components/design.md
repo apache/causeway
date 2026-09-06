@@ -75,6 +75,10 @@ Producer supersession and disconnection will retire reservations and trigger det
 `<cw-unreferenced-properties name="Other">` will generate one owned `<cw-fieldset>` containing an ordinary `<cw-property>` for each remaining property.
 Its optional boolean `editable` attribute will be the only mechanism that opts generated properties into edit affordances; domain capability remains authoritative after that application opt-in.
 
+When `<cw-unreferenced-properties>` is a direct child of `<cw-tabgroup>`, the tabgroup will treat the ready non-empty host as a conditional tab panel whose control label is the catch-all's bounded `name` and whose order is its authored position among ordinary tabs.
+Loading, empty, and error catch-all states will contribute neither a tab control nor a panel, while state transitions will preserve an existing selection or deterministically select and focus the first available ordinary tab if the disappearing conditional tab owned selection or keyboard focus.
+Outside a direct tabgroup position, the property catch-all retains its standalone fieldset presentation.
+
 `<cw-unreferenced-collections name="Other collections">` will generate one owned `<cw-tabgroup>` with one tab per remaining collection.
 Each tab will contain the required row and twelve-span column around one ordinary `<cw-collection>`, and the collection's authoritative friendly name will label the tab and collection.
 A single collection will remain a single tab rather than collapsing its tab group.
@@ -106,6 +110,7 @@ No response payload, authorization rule, or inferred member identity will be exp
 ### Keep host integration declarative
 
 HTMX resources and Vue templates may place the three custom elements directly beneath valid layout columns.
+They may also place `<cw-unreferenced-properties>` directly among a tabgroup's ordinary tabs when conditional **Other** tab presentation is desired.
 Both hosts will rely on foundation registration, context lookup, allocation, generated structure, state, styling, and interaction behavior.
 Browser coverage will exercise actual context boundaries and equivalent generated semantics without adding host adapters or host-specific state.
 

@@ -130,6 +130,29 @@ It MUST preserve authoritative action order and ordinary interaction ownership.
 - **WHEN** the application supplies a bounded `name`
 - **THEN** the group uses that value as its accessible name without changing action labels or identities
 
+### Requirement: Conditional unreferenced property tab
+
+A `<cw-tabgroup>` SHALL accept `<cw-unreferenced-properties>` as a direct automatic tab destination in addition to ordinary `<cw-tab>` children.
+The tabgroup MUST expose a tab control and associated panel for that destination only while its allocation state is `ready`, MUST use the catch-all's bounded `name` as the control label, and MUST preserve its authored position among ordinary tabs.
+
+#### Scenario: Remaining properties make the conditional tab available
+
+- **WHEN** a direct `<cw-unreferenced-properties>` child resolves one or more remaining authorized properties
+- **THEN** its containing tabgroup exposes one keyboard-operable tab at that child's authored position
+- **AND** the tab panel contains the catch-all's owned Other fieldset and ordinary property children
+
+#### Scenario: Conditional tab has no presentable allocation
+
+- **WHEN** the direct catch-all is loading, empty, or in error
+- **THEN** it contributes no tab control or presentable panel
+- **AND** no empty Other tab or heading remains visible
+
+#### Scenario: Conditional tab availability changes
+
+- **WHEN** parser-late claims or lifecycle changes make the direct catch-all appear or disappear
+- **THEN** the tab list synchronizes without changing an unaffected selected tab
+- **AND** if the disappearing conditional tab owned selection or keyboard focus, the first available ordinary tab becomes selected and receives valid focus
+
 ### Requirement: Unreferenced composition lifecycle and states
 
 Every unreferenced member component SHALL expose `data-causeway-unreferenced-state` as `loading`, `ready`, `empty`, or `error` and SHALL retire generation-scoped work on supersession or disconnection.
