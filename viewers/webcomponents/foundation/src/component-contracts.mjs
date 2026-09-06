@@ -149,6 +149,7 @@ export const CausewaySemanticEvent = Object.freeze({
     OBJECT_LAYOUT_STATE: 'causeway-object-layout-state-change',
     OBJECT_LAYOUT_DIAGNOSTIC: 'causeway-object-layout-diagnostic',
     LAYOUT_COMPONENT_DIAGNOSTIC: 'causeway-layout-component-diagnostic',
+    UNREFERENCED_MEMBER_STATE: 'causeway-unreferenced-member-state-change',
     MENU_BARS_STATE: 'causeway-menubars-state-change',
     MENU_BARS_DIAGNOSTIC: 'causeway-menubars-diagnostic'
 });

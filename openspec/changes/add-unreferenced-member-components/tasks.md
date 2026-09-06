@@ -41,7 +41,7 @@
 
 ## 6. Conditional Property Tab Refinement
 
-- [ ] 6.1 Permit `<cw-unreferenced-properties>` as a direct tabgroup child and synchronize a tab control and panel only while its allocation is ready and non-empty.
-- [ ] 6.2 Preserve authored tab order, unaffected selection, keyboard navigation, relationships, and deterministic focus fallback when the conditional tab appears or disappears.
-- [ ] 6.3 Move the HTMX and Vue PetOwner declarations between Identity and Metadata and verify the conditional Other tab without duplicate headings or members.
-- [ ] 6.4 Update foundation and host documentation, focused component tests, browser parity assertions, generated Vue assets, and complete validation.
+- [x] 6.1 Permit `<cw-unreferenced-properties>` as a direct tabgroup child and synchronize a tab control and panel only while its allocation is ready and non-empty.
+- [x] 6.2 Preserve authored tab order, unaffected selection, keyboard navigation, relationships, and deterministic focus fallback when the conditional tab appears or disappears.
+- [x] 6.3 Move the HTMX and Vue PetOwner declarations between Identity and Metadata and verify the conditional Other tab without duplicate headings or members.
+- [x] 6.4 Update foundation and host documentation, focused component tests, browser parity assertions, generated Vue assets, and complete validation.

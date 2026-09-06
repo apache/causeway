@@ -191,7 +191,7 @@ Applications that need different structure continue to author the established lo
 Application-authored pages can compose `<cw-row>`, `<cw-column span="1..12">`, `<cw-fieldset name="...">`, `<cw-tabgroup name="...">`, and `<cw-tab name="...">` beneath an existing object context.
 These framework-neutral elements implement the same twelve-track responsive structure without owning identity, routing, GraphQL execution, or interaction policy.
 
-The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, metadata, tab groups, and the three unreferenced-member elements, a fieldset accepts only properties, a tab group accepts only tabs, and a tab accepts only rows.
+The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, metadata, tab groups, and the three unreferenced-member elements, a fieldset accepts only properties, a tab group accepts ordinary tabs plus a conditional unreferenced-properties destination, and a tab accepts only rows.
 Columns stack multiple valid children in authored order with the shared layout gap while preserving each child's semantic and domain behavior.
 Unsupported direct children fail closed with `data-causeway-layout-invalid` and a bounded redacted `causeway-layout-component-diagnostic` event.
 A missing or invalid column span uses twelve, and narrow viewports stack all columns without horizontal overflow.
@@ -199,6 +199,8 @@ A missing or invalid column span uses twelve, and narrow viewports stack all col
 A tab group exposes an accessible `tablist`, one `tab` control per enabled authored tab, and corresponding `tabpanel` relationships on the regular contained viewer-panel surface.
 The first enabled tab is selected unless exactly one authored tab carries `selected`.
 Pointer activation, Home, End, horizontal arrows, and RTL direction update selection and focus deterministically, while disabled, inserted, removed, or renamed tabs are synchronized without rebuilding their authored panels.
+A direct `<cw-unreferenced-properties>` child contributes a tab at its authored position only while remaining properties exist; its bounded `name` labels the control, and loading, empty, or error states contribute no tab or panel.
+If that conditional tab disappears while selected or keyboard-focused, the first available ordinary tab receives selection and focus.
 
 `<cw-metadata>` is the single automatic layout element.
 It registers the existing layout requirement with the nearest object context, follows only the authoritative same-origin effective-grid reference, and extracts the fieldset whose id is exactly `metadata`.
@@ -252,6 +254,7 @@ Composite `<cw-metadata>` and `<cw-object>` instances reserve their affected kin
 Only the first valid catch-all destination of each kind in document order is effective; later destinations fail closed with a bounded diagnostic.
 Empty and loading destinations create no visible semantic container and expose their lifecycle through `data-causeway-unreferenced-state` values `loading`, `ready`, `empty`, and `error`.
 Generated properties are read-only unless `editable` is explicitly authored on `<cw-unreferenced-properties>`.
+The property catch-all may alternatively appear directly between ordinary `<cw-tab>` children to make its non-empty fieldset a conditional tab without an application placeholder.
 `name` supplies the bounded accessible fieldset, tabgroup, or action-group name, with defaults `Other`, `Other collections`, and `Other actions`.
 
 [source,html]
