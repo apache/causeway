@@ -132,6 +132,19 @@ export function renderObjectLayoutMembers(nodes, {idPrefix = 'causeway-members',
   return renderChildren(members, state);
 }
 
+export function causewayLayoutMemberClaims(plan) {
+  const claims = [];
+  const seen = new Set();
+  walkPlanNodes(plan?.regions ?? [], node => {
+    if (node?.kind !== 'member' || !MEMBER_KINDS.includes(node.memberKind) || !node.memberId) return;
+    const key = `${node.memberKind}:${node.memberId}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    claims.push(Object.freeze({kind: node.memberKind, id: node.memberId}));
+  });
+  return Object.freeze(claims);
+}
+
 function walkPlanNodes(nodes, visitor) {
   for (const node of nodes ?? []) {
     visitor(node);
