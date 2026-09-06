@@ -160,7 +160,9 @@ Only complete absence of an exact registration selects the declarative generic p
 Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, collection, and declarative layout elements.
 `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` remain explicitly authored structure, while `<cw-metadata>` alone derives the exact `metadata` fieldset from the context's authorized effective layout.
 Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
-The PetOwner example demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.
+The PetOwner example uses one foundation-owned 4/8 row for its details and collections columns, places its tab group and fieldsets directly in the details column, and lets each direct collection provide its own labelled semantic section.
+It demonstrates an initial Identity tab followed by Metadata without artificial placeholder content.
+Within PetOwner, application wrappers remain only around the object heading and route-level structures that are outside the declarative macro grid; other representative pages keep their independently authored composition.
 The HTMX host does not translate, enhance, or reconstruct these elements.
 Those elements consume the one nearest route context and therefore do not create a parallel data plane.
 Removing an HTML file from the packaged application is the immediate rollback to retained grid-driven generic composition.

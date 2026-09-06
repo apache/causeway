@@ -151,7 +151,7 @@ class PetClinicVuePlaywrightTest {
         final var agreementProperty = page.locator("cw-property#agreement");
         final var automatic = agreementProperty.locator("[data-causeway-pdf-reader]");
         assertThat(agreementProperty.getAttribute("label-position")).isEqualTo("NONE");
-        final var agreementCard = page.locator(".petclinic-object-collections .petclinic-agreement-card");
+        final var agreementCard = page.locator("[data-testid='petclinic-owner-collections'] > .petclinic-agreement-card");
         assertThat(agreementCard.locator("cw-property#agreement").count()).isEqualTo(1);
         assertThat(agreementProperty.locator(".causeway-property-label").isVisible()).isFalse();
         assertThat(((Number) automatic.evaluate("(reader) => reader.getBoundingClientRect().width / reader.closest('.petclinic-agreement-card').getBoundingClientRect().width")).doubleValue()).isGreaterThan(0.9);
@@ -316,23 +316,23 @@ class PetClinicVuePlaywrightTest {
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
         page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
-        page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-collections\"] > cw-collection#visits')?.collectionState?.rows?.length === 2");
         page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
         assertDeclarativeOwnerLayout();
         assertThat(page.locator(".petclinic-owner-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Contact,Details,Pets,Companion animals,Visits,Visit history,Agreement");
+                .isEqualTo("Identity,Contact,Details,Pets,Visits,Agreement");
         assertThat(page.locator(".petclinic-page-toolbar > cw-action")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("allOwners,noOwners,relatedOwners");
         assertThat(page.locator("cw-action#relatedOwners cw-standalone-collection > cw-collection-column")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,notes");
-        assertThat(page.locator(".petclinic-object-details cw-property")
+        assertThat(page.locator("[data-testid='petclinic-owner-details'] cw-property")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,daysSinceLastVisit,version,telephoneNumber,emailAddress,notes,lastVisit");
-        assertThat(page.locator(".petclinic-object-collections > section").count()).isEqualTo(3);
-        assertThat(page.locator(".petclinic-object-collections > section:last-child cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
+        assertThat(page.locator("[data-testid='petclinic-owner-collections'] > section").count()).isZero();
+        assertThat(page.locator("[data-testid='petclinic-owner-collections'] > cw-fieldset[name='Agreement'] cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
         assertThat(page.locator("cw-collection#visits > cw-collection-column")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("visitAt,reason,notes");
@@ -357,12 +357,12 @@ class PetClinicVuePlaywrightTest {
         petPreviewToggle.click();
         page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey == null");
         visitPreviewToggle.click();
-        page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.expandedPreviewKey != null");
-        final var visitPreview = page.locator(".petclinic-object-collections > section cw-collection#visits cw-preview[data-causeway-preview-live]");
+        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-collections\"] > cw-collection#visits')?.expandedPreviewKey != null");
+        final var visitPreview = page.locator("[data-testid='petclinic-owner-collections'] > cw-collection#visits cw-preview[data-causeway-preview-live]");
         assertThat(visitPreview.locator("cw-object-header").count()).isZero();
         visitPreview.locator("cw-property#reason").waitFor();
         visitPreviewToggle.click();
-        page.waitForFunction("() => document.querySelector('.petclinic-object-collections cw-collection#visits')?.expandedPreviewKey == null");
+        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-collections\"] > cw-collection#visits')?.expandedPreviewKey == null");
 
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
@@ -395,8 +395,8 @@ class PetClinicVuePlaywrightTest {
                 shell => {
                   const header = shell.querySelector('header').getBoundingClientRect();
                   const main = shell.querySelector('main').getBoundingClientRect();
-                  const details = shell.querySelector('.petclinic-object-details').getBoundingClientRect();
-                  const collections = shell.querySelector('.petclinic-object-collections').getBoundingClientRect();
+                  const details = shell.querySelector('[data-testid="petclinic-owner-details"]').getBoundingClientRect();
+                  const collections = shell.querySelector('[data-testid="petclinic-owner-collections"]').getBoundingClientRect();
                   return [header.height, main.left, details.left, details.right, collections.left, collections.top - details.top,
                     document.documentElement.scrollWidth - document.documentElement.clientWidth];
                 }
@@ -420,12 +420,20 @@ class PetClinicVuePlaywrightTest {
         assertThat(page.locator("[data-causeway-route-page]").evaluate("element => getComputedStyle(element).outlineStyle"))
                 .isEqualTo("none");
 
+        page.setViewportSize(800, 900);
+        assertThat(page.locator("[data-testid='petclinic-owner-macro-layout']").evaluate("""
+                element => {
+                  const details = element.querySelector(':scope > [data-testid="petclinic-owner-details"]').getBoundingClientRect();
+                  const collections = element.querySelector(':scope > [data-testid="petclinic-owner-collections"]').getBoundingClientRect();
+                  return collections.left >= details.right && Math.abs(collections.top - details.top) < 1;
+                }
+                """)).isEqualTo(true);
         page.setViewportSize(500, 900);
-        page.waitForFunction("() => { const grid = document.querySelector('.petclinic-object-grid'); return getComputedStyle(grid).gridTemplateColumns.split(' ').length === 1; }");
+        page.waitForFunction("() => getComputedStyle(document.querySelector('[data-testid=\"petclinic-owner-details\"]')).gridColumnEnd === '-1'");
         final var narrow = (List<Number>) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("""
                 shell => {
-                  const details = shell.querySelector('.petclinic-object-details').getBoundingClientRect();
-                  const collections = shell.querySelector('.petclinic-object-collections').getBoundingClientRect();
+                  const details = shell.querySelector('[data-testid="petclinic-owner-details"]').getBoundingClientRect();
+                  const collections = shell.querySelector('[data-testid="petclinic-owner-collections"]').getBoundingClientRect();
                   const footer = shell.querySelector('footer');
                   return [collections.top - details.bottom,
                     document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -552,9 +560,15 @@ class PetClinicVuePlaywrightTest {
     }
 
     private void assertDeclarativeOwnerLayout() {
-        final var details = page.locator(".petclinic-object-details");
-        assertThat(details.locator(":scope > cw-row").count()).isEqualTo(2);
-        assertThat(details.locator("cw-row > cw-column[span='12']").count()).isEqualTo(4);
+        final var macro = page.locator("cw-row[data-testid='petclinic-owner-macro-layout']");
+        final var details = macro.locator(":scope > cw-column[data-testid='petclinic-owner-details']");
+        final var collections = macro.locator(":scope > cw-column[data-testid='petclinic-owner-collections']");
+        assertThat(macro.locator(":scope > cw-column").count()).isEqualTo(2);
+        assertThat(details.getAttribute("span")).isEqualTo("4");
+        assertThat(collections.getAttribute("span")).isEqualTo("8");
+        assertThat(details.locator(":scope > cw-tabgroup").count()).isEqualTo(1);
+        assertThat(details.locator(":scope > cw-fieldset").count()).isEqualTo(2);
+        assertThat(details.locator("cw-tab > cw-row > cw-column[span='12']").count()).isEqualTo(2);
         assertThat(details.locator("cw-fieldset")
                 .evaluateAll("elements => elements.map(element => element.getAttribute('name')).join(',')"))
                 .isEqualTo("Identity,Contact,Details");
@@ -608,7 +622,11 @@ class PetClinicVuePlaywrightTest {
         actionTrigger.press("Escape");
         assertThat(actions.getAttribute("open")).isNull();
         assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
-        assertThat(details.locator("[data-causeway-layout-invalid]").count()).isZero();
+        assertThat(collections.locator(":scope > cw-collection").count()).isEqualTo(2);
+        assertThat(collections.locator(":scope > section").count()).isZero();
+        assertThat(collections.locator(":scope > cw-fieldset[name='Agreement'] > cw-property#agreement").count()).isEqualTo(1);
+        assertThat(macro.locator(":scope > div").count()).isZero();
+        assertThat(macro.locator("[data-causeway-layout-invalid]").count()).isZero();
     }
 
     private void navigateTo(final String logicalTypeName, final String id) {

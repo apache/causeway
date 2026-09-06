@@ -254,8 +254,6 @@ body {
   align-items: start;
 }
 
-.petclinic-object-details,
-.petclinic-object-collections,
 .petclinic-field-list {
   display: grid;
   gap: var(--causeway-space-3);

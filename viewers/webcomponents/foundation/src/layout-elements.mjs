@@ -173,7 +173,7 @@ export class CausewayColumnElement extends CausewayLayoutContainerElement {
         `Column span '${boundedName(authored, '')}' is invalid; span 12 is used.`
       );
     }
-    this.validDirectChildren(['cw-fieldset', 'cw-collection', 'cw-metadata']);
+    this.validDirectChildren(['cw-fieldset', 'cw-collection', 'cw-metadata', 'cw-tabgroup']);
   }
 }
 

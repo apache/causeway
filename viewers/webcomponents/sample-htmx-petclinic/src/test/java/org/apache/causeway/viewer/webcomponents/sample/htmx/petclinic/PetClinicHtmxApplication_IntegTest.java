@@ -398,14 +398,20 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
-                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active paged=\"5\" sortable filterable>")
+                .contains("<cw-row data-testid=\"petclinic-owner-macro-layout\">")
+                .contains("<cw-column span=\"4\" data-testid=\"petclinic-owner-details\">")
+                .contains("<cw-column span=\"8\" data-testid=\"petclinic-owner-collections\">")
+                .contains("<cw-collection id=\"pets\" class=\"petclinic-card\" named=\"Pets\" active paged=\"5\" sortable filterable>")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
-                .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
+                .contains("<cw-collection id=\"visits\" class=\"petclinic-card\" named=\"Visits\"")
                 .contains("described-as=\"All visits recorded for this owner's pets.\"")
                 .contains("active paged=\"8\"")
                 .contains("<cw-action id=\"bookVisit\"")
-                .doesNotContain("petclinic-associated-actions", "petclinic-member-composition", " offset=", " size=");
+                .contains("<cw-fieldset name=\"Agreement\" class=\"petclinic-card petclinic-agreement-card\">")
+                .doesNotContain("petclinic-object-grid", "petclinic-object-details", "petclinic-object-collections",
+                        "petclinic-owner-pets-heading", "petclinic-owner-visits-heading",
+                        "petclinic-associated-actions", "petclinic-member-composition", " offset=", " size=");
         final String homeHtml;
         try (var input = loader.getResource(
                 "META-INF/causeway/webcomponents/pages/petclinic.HomePage.html").openStream()) {
