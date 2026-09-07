@@ -25,7 +25,7 @@ public class InvalidException extends InteractionException {
 	private static final long serialVersionUID = 1L;
 
     public InvalidException(final Consent consent) {
-        super(consent.getReasonAsString().orElse("Invalid"));
+        super(consent.reasonAsString().orElse("Invalid"));
     }
     public InvalidException(final Identifier identifier) {
         super(identifier);

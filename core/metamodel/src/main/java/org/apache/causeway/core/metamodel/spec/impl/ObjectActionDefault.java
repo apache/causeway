@@ -24,6 +24,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -63,7 +65,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -406,12 +407,12 @@ implements ObjectAction {
         // use it?
         final Consent usability = isUsable(target, interactionInitiatedBy, where);
         if(usability.isVetoed())
-			throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
+			throw new DisabledException(usability.reasonAsString().orElse("no reason given"));
 
         // do it?
         final Consent validity = isArgumentSetValid(head, arguments, interactionInitiatedBy);
         if(validity.isVetoed())
-			throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
+			throw new RecoverableException(validity.reasonAsString().orElse("no reason given"));
 
         return execute(head, arguments, interactionInitiatedBy);
     }

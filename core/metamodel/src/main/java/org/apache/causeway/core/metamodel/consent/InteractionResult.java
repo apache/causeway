@@ -25,6 +25,8 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.Consent.Allow;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 
 public record InteractionResult(
@@ -40,7 +42,7 @@ public record InteractionResult(
             InteractionEvent interactionEvent,
             List<Consent.VetoReason> reasonBuf,
             List<InteractionAdvisor> advisors) {
-        public Builder(InteractionEvent interactionEvent) {
+        public Builder(final InteractionEvent interactionEvent) {
             this(interactionEvent, new ArrayList<>(), new ArrayList<>());
         }
         public void addAdvise(final VetoReason reason, final InteractionAdvisor facet) {
@@ -55,9 +57,9 @@ public record InteractionResult(
 
     // canonical constructor
     public InteractionResult(
-            InteractionEvent interactionEvent,
-            Optional<Consent.VetoReason> vetoReason,
-            Can<InteractionAdvisor> advisors) {
+            final InteractionEvent interactionEvent,
+            final Optional<Consent.VetoReason> vetoReason,
+            final Can<InteractionAdvisor> advisors) {
         this.interactionEvent = Objects.requireNonNull(interactionEvent);
         this.vetoReason = Objects.requireNonNull(vetoReason);
         this.advisors = Objects.requireNonNull(advisors);
@@ -73,8 +75,8 @@ public record InteractionResult(
 
     public Consent createConsent() {
         return isAllowing()
-            ? new Allow(this)
-            : new Veto(this);
+            ? new Allow(Optional.of(this))
+            : new Veto(Optional.of(this), vetoReason.get());
     }
 
     @Override

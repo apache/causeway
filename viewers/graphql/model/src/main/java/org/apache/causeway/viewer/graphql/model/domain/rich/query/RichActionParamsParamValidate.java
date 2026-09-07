@@ -59,9 +59,8 @@ public class RichActionParamsParamValidate extends Element {
 
         var sourcePojoClass = sourcePojo.getClass();
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
+        if (objectSpecification == null)
             return "Invalid";
-        }
 
         var objectAction = actionParamInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -73,7 +72,7 @@ public class RichActionParamsParamValidate extends Element {
         var argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         var usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return usable.isVetoed() ? usable.getReasonAsString().orElse("Invalid") : null;
+        return usable.isVetoed() ? usable.reasonAsString().orElse("Invalid") : null;
     }
 
 }

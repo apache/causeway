@@ -70,10 +70,9 @@ public class RichActionValidity extends Element {
         var sourcePojoClass = sourcePojo.getClass();
         var specificationLoader = objectAction.getSpecificationLoader();
         var objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
+        if (objectSpecification == null)
             // not expected
             return null;
-        }
 
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         var actionInteractionHead = objectAction.interactionHead(managedObject);
@@ -88,7 +87,7 @@ public class RichActionValidity extends Element {
 
         Consent consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
 
-        return consent.isVetoed() ? consent.getReasonAsString().orElse("Invalid") : null;
+        return consent.isVetoed() ? consent.reasonAsString().orElse("Invalid") : null;
     }
 
 }

@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.consent.Consent.Allow;
+
 public class InteractionResultSet {
 
-    private final List<InteractionResult> results = new ArrayList<InteractionResult>();
+    private final List<InteractionResult> results = new ArrayList<>();
     private InteractionResult firstResult = null;
 
     public InteractionResultSet() {
@@ -65,9 +67,8 @@ public class InteractionResultSet {
      */
     public Consent createConsent() {
         final InteractionResult interactionResult = getInteractionResult();
-        if (interactionResult == null) {
+        if (interactionResult == null)
             return Allow.DEFAULT;
-        }
         return interactionResult.createConsent();
     }
 

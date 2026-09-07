@@ -689,7 +689,7 @@ implements AttributeModelChangeListener, HasAttributeModel {
        if(usabilityAfter) {
            onMakeEditable();
        } else {
-           onMakeNotEditable(usabilityConsent.getReasonAsString().orElse(null));
+           onMakeNotEditable(usabilityConsent.reasonAsString().orElse(null));
        }
 
        if (visibilityBefore != visibilityAfter)

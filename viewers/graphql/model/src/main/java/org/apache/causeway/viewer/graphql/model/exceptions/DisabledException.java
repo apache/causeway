@@ -25,7 +25,7 @@ public class DisabledException extends InteractionException {
     private static final long serialVersionUID = 1L;
 
 	public DisabledException(final Consent consent) {
-        super(consent.getReasonAsString().orElse("Disabled"));
+        super(consent.reasonAsString().orElse("Disabled"));
     }
     public DisabledException(final Identifier identifier) {
         super(identifier);

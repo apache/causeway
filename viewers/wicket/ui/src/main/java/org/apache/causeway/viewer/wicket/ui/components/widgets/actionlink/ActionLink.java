@@ -139,7 +139,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     public String getReasonDisabledIfAny() {
         // no point evaluating if not visible
         return isVisible()
-                ? getActionModel().getUsabilityConsent(where).getReasonAsString().orElse(null)
+                ? getActionModel().getUsabilityConsent(where).reasonAsString().orElse(null)
                 : null;
     }
 

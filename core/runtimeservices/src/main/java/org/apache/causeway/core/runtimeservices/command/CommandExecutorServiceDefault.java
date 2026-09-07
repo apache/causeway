@@ -277,21 +277,18 @@ public record CommandExecutorServiceDefault(
             final InteractionHead interactionHead,
             final Can<ManagedObject> arguments) {
 
-        if (policy == InteractionAdvisorPolicy.NO_CHECK) {
+        if (policy == InteractionAdvisorPolicy.NO_CHECK)
             return;
-        }
 
         var visibility = action.isVisible(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
-        if (policy == InteractionAdvisorPolicy.CHECK && visibility.isVetoed()) {
+        if (policy == InteractionAdvisorPolicy.CHECK && visibility.isVetoed())
             throw new HiddenException(advised(
                     new ActionVisibilityEvent(target.getPojo(), action.getFeatureIdentifier()), visibility));
-        }
 
         var usability = action.isUsable(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
-        if (policy == InteractionAdvisorPolicy.CHECK && usability.isVetoed()) {
+        if (policy == InteractionAdvisorPolicy.CHECK && usability.isVetoed())
             throw new DisabledException(advised(
                     new ActionUsabilityEvent(target.getPojo(), action.getFeatureIdentifier()), usability));
-        }
 
         var validity = action.isArgumentSetValid(interactionHead, arguments, InteractionInitiatedBy.FRAMEWORK);
         if (policy == InteractionAdvisorPolicy.CHECK && validity.isVetoed()) {
@@ -309,35 +306,31 @@ public record CommandExecutorServiceDefault(
             final ManagedObject target,
             final ManagedObject proposedValue) {
 
-        if (policy == InteractionAdvisorPolicy.NO_CHECK) {
+        if (policy == InteractionAdvisorPolicy.NO_CHECK)
             return;
-        }
 
         var visibility = property.isVisible(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
-        if (policy == InteractionAdvisorPolicy.CHECK && visibility.isVetoed()) {
+        if (policy == InteractionAdvisorPolicy.CHECK && visibility.isVetoed())
             throw new HiddenException(advised(
                     new PropertyVisibilityEvent(target.getPojo(), property.getFeatureIdentifier()), visibility));
-        }
 
         var usability = property.isUsable(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
-        if (policy == InteractionAdvisorPolicy.CHECK && usability.isVetoed()) {
+        if (policy == InteractionAdvisorPolicy.CHECK && usability.isVetoed())
             throw new DisabledException(advised(
                     new PropertyUsabilityEvent(target.getPojo(), property.getFeatureIdentifier()), usability));
-        }
 
         var validity = property.isAssociationValid(target, proposedValue, InteractionInitiatedBy.FRAMEWORK);
-        if (policy == InteractionAdvisorPolicy.CHECK && validity.isVetoed()) {
+        if (policy == InteractionAdvisorPolicy.CHECK && validity.isVetoed())
             throw new InvalidException(advised(
                     new PropertyModifyEvent(
                             target.getPojo(),
                             property.getFeatureIdentifier(),
                             proposedValue.getPojo()),
                     validity));
-        }
     }
 
     private static <T extends InteractionEvent> T advised(final T event, final Consent consent) {
-        consent.getReasonAsString()
+        consent.reasonAsString()
                 .ifPresent(reason -> event.advised(reason, CommandExecutorServiceDefault.class));
         return event;
     }
@@ -450,9 +443,8 @@ public record CommandExecutorServiceDefault(
     private static final String PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX = "__causeway_navigate_to_one_of_";
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto, final ObjectAction objectAction) {
-        if (objectAction.getId().startsWith(PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX)) {
+        if (objectAction.getId().startsWith(PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX))
             return argAdaptersForParentedCollectionNavigation(actionDto, objectAction, valueMarshaller);
-        }
         return argAdaptersFor(actionDto);
     }
 

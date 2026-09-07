@@ -26,8 +26,8 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
-import org.apache.causeway.core.metamodel.consent.Veto;
 
 public record InteractionVeto(
     @NonNull VetoType vetoType,
@@ -94,14 +94,10 @@ public record InteractionVeto(
     }
 
     public Optional<VetoReason> getReason() {
-        return vetoConsent().getReason();
+        return vetoConsent().reason();
     }
     public Optional<String> getReasonAsString() {
-        return vetoConsent().getReasonAsString();
-    }
-
-    public String getDescription() {
-        return vetoConsent().getDescription();
+        return vetoConsent().reasonAsString();
     }
 
     @Override

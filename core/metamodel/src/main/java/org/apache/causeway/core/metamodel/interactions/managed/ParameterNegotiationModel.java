@@ -38,9 +38,9 @@ import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
-import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -187,7 +187,7 @@ public final class ParameterNegotiationModel {
                         actionInteractionHead.interactionHead(),
                         getParamValues(),
                         InteractionInitiatedBy.USER)
-                .getReasonAsString()
+                .reasonAsString()
                 .orElse(null);
     }
 
@@ -320,7 +320,7 @@ public final class ParameterNegotiationModel {
     private String actionValidationMessage() {
         var validityConsentForAction = this.validateParameterSetForAction();
         return validityConsentForAction!=null
-                ? validityConsentForAction.getReasonAsString().orElse(null)
+                ? validityConsentForAction.reasonAsString().orElse(null)
                 : null;
     }
 

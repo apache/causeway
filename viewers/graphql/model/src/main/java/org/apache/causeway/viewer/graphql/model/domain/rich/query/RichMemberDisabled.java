@@ -58,15 +58,14 @@ public class RichMemberDisabled<T extends ObjectMember> extends Element {
 
         var sourcePojoClass = sourcePojo.getClass();
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
+        if (objectSpecification == null)
             return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
-        }
 
         var objectMember = memberInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         var usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        return usable.getReasonAsString().orElse(null);
+        return usable.reasonAsString().orElse(null);
     }
 
 }
