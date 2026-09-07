@@ -14,6 +14,7 @@ Its strict CSP adds only the pinned deduplicated hashes for reviewed closures, p
 Causeway elements, codecs, GraphQL interactions, and semantic events remain authoritative, and the common native toolkit policy provides immediate rollback.
 The owner page demonstrates page-local action names such as `Change the owner's name`, `Register a pet`, and `Remove this owner` without changing semantic action IDs.
 Owner and service actions demonstrate canonical descriptions, parameter-prompt descriptions, disabled-reason tooltip composition, and static Font Awesome icons in native and Vaadin presentations.
+The owner toolbar also demonstrates a compact foundation-owned unreferenced-action group beside explicit actions, while a separate catch-all presents the remaining collection.
 
 == Run
 

@@ -21,8 +21,10 @@
   <div class="petclinic-object-heading">
     <cw-object-header></cw-object-header>
     <div class="petclinic-page-toolbar" aria-label="Owner actions">
+<!--
       <cw-action id="allOwners" named="Show all owners"></cw-action>
-      <cw-action id="noOwners" named="Show empty owner result"></cw-action>
+-->
+      <cw-unreferenced-actions data-testid="petclinic-owner-unreferenced-actions"></cw-unreferenced-actions>
       <cw-action id="relatedOwners" named="Show related owners">
         <cw-standalone-collection named="Related owners">
           <cw-collection-column id="name" label="Owner"></cw-collection-column>
@@ -125,8 +127,6 @@
         <cw-property id="agreement" label-position="NONE" pdf-render="auto" pdf-initial-page="1" pdf-zoom="page-width" data-testid="petclinic-owner-agreement"></cw-property>
       </cw-fieldset>
 
-      <cw-unreferenced-collections data-testid="petclinic-owner-unreferenced-collections"></cw-unreferenced-collections>
-      <cw-unreferenced-actions data-testid="petclinic-owner-unreferenced-actions"></cw-unreferenced-actions>
     </cw-column>
   </cw-row>
 </article>

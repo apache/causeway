@@ -256,13 +256,18 @@ Empty and loading destinations create no visible semantic container and expose t
 Generated properties are read-only unless `editable` is explicitly authored on `<cw-unreferenced-properties>`.
 The property catch-all may alternatively appear directly between ordinary `<cw-tab>` children to make its non-empty fieldset a conditional tab without an application placeholder.
 `name` supplies the bounded accessible fieldset, tabgroup, or action-group name, with defaults `Other`, `Other collections`, and `Other actions`.
+A ready `<cw-unreferenced-actions>` host is layout-transparent, so its accessible generated group remains an intrinsically sized, start-aligned, wrapping peer of explicit toolbar actions rather than creating a block or panel gap.
+Generated actions use an inventory label when one is authoritative and otherwise let the ordinary `<cw-action>` resolve its authoritative label.
 
 [source,html]
 ----
+<div class="object-toolbar" aria-label="Object actions">
+  <cw-action id="pinnedAction"></cw-action>
+  <cw-unreferenced-actions name="Available operations"></cw-unreferenced-actions>
+</div>
 <cw-column span="12">
   <cw-unreferenced-properties name="Additional details"></cw-unreferenced-properties>
   <cw-unreferenced-collections></cw-unreferenced-collections>
-  <cw-unreferenced-actions name="Available operations"></cw-unreferenced-actions>
 </cw-column>
 ----
 

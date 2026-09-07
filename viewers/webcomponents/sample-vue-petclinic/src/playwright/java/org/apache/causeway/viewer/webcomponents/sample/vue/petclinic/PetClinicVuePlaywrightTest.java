@@ -316,15 +316,15 @@ class PetClinicVuePlaywrightTest {
 
         open("/vue/object/petclinic.PetOwner/s_owner-mary");
         page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
-        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-collections\"] > cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-unreferenced-collections\"] cw-collection#visits')?.collectionState?.rows?.length === 2");
         page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
         assertDeclarativeOwnerLayout();
         assertThat(page.locator(".petclinic-owner-page h2")
                 .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
-                .isEqualTo("Identity,Other,Contact,Details,Pets,Visits,Agreement");
-        assertThat(page.locator(".petclinic-page-toolbar > cw-action")
+                .isEqualTo("Identity,Other,Contact,Details,Pets,Agreement,visits");
+        assertThat(page.locator(".petclinic-page-toolbar cw-action")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("allOwners,noOwners,relatedOwners");
+                .isEqualTo("allOwners,noOwners,bookVisit,relatedOwners");
         assertThat(page.locator("cw-action#relatedOwners cw-standalone-collection > cw-collection-column")
                 .evaluateAll("elements => elements.map(element => element.id).join(',')"))
                 .isEqualTo("name,knownAs,notes");
@@ -333,20 +333,13 @@ class PetClinicVuePlaywrightTest {
                 .isEqualTo("name,knownAs,daysSinceLastVisit,id,version,telephoneNumber,emailAddress,notes,lastVisit");
         assertThat(page.locator("[data-testid='petclinic-owner-collections'] > section").count()).isZero();
         assertThat(page.locator("[data-testid='petclinic-owner-collections'] > cw-fieldset[name='Agreement'] cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
-        assertThat(page.locator("cw-collection#visits > cw-collection-column")
-                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
-                .isEqualTo("visitAt,reason,notes");
-        assertThat(page.locator("cw-collection#visits").getAttribute("paged")).isEqualTo("8");
-        assertThat(page.locator("cw-collection#visits > cw-preview").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#visits > cw-collection-column").count()).isZero();
+        assertThat(((Number) page.locator("cw-collection#visits")
+                .evaluate("element => element.collectionState.rows.length")).intValue()).isEqualTo(2);
+        assertThat(page.locator("cw-collection#visits").getAttribute("paged")).isNull();
+        assertThat(page.locator("cw-collection#visits > cw-preview").count()).isZero();
         final var petPreviewToggle = page.locator("cw-collection#pets [data-causeway-preview-toggle]").first();
-        final var visitPreviewToggle = page.locator("cw-collection#visits [data-causeway-preview-toggle]").first();
         assertPreviewToggleIcon(petPreviewToggle, false);
-        assertPreviewToggleIcon(visitPreviewToggle, false);
-        final var petPreviewIconWidth = ((Number) petPreviewToggle.locator(".causeway-collection-preview-icon")
-                .evaluate("icon => icon.getBoundingClientRect().width")).doubleValue();
-        final var visitPreviewIconWidth = ((Number) visitPreviewToggle.locator(".causeway-collection-preview-icon")
-                .evaluate("icon => icon.getBoundingClientRect().width")).doubleValue();
-        assertThat(Math.abs(petPreviewIconWidth - visitPreviewIconWidth)).isLessThan(1.0);
         petPreviewToggle.click();
         page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey != null");
         final var petPreview = page.locator("cw-collection#pets cw-preview[data-causeway-preview-live]");
@@ -356,13 +349,15 @@ class PetClinicVuePlaywrightTest {
         petPreview.locator("cw-collection#visits").waitFor();
         petPreviewToggle.click();
         page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey == null");
-        visitPreviewToggle.click();
-        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-collections\"] > cw-collection#visits')?.expandedPreviewKey != null");
-        final var visitPreview = page.locator("[data-testid='petclinic-owner-collections'] > cw-collection#visits cw-preview[data-causeway-preview-live]");
-        assertThat(visitPreview.locator("cw-object-header").count()).isZero();
-        visitPreview.locator("cw-property#reason").waitFor();
-        visitPreviewToggle.click();
-        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-collections\"] > cw-collection#visits')?.expandedPreviewKey == null");
+        final var noOwnersInvocationsBefore = graphQLRequests.stream()
+                .filter(body -> body.contains("noOwners") && body.contains("results"))
+                .count();
+        page.locator("[data-testid='petclinic-owner-unreferenced-actions'] cw-action#noOwners [data-causeway-action-control]").click();
+        page.waitForFunction("() => !document.querySelector('cw-action-results[data-causeway-page-result]')?.hidden");
+        assertThat(graphQLRequests.stream()
+                .filter(body -> body.contains("noOwners") && body.contains("results"))
+                .count()).isGreaterThan(noOwnersInvocationsBefore);
+        assertThat(page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").count()).isEqualTo(1);
 
         open("/vue/object/petclinic.Pet/s_pet-basil");
         page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
@@ -627,13 +622,43 @@ class PetClinicVuePlaywrightTest {
         assertThat(actions.getAttribute("open")).isNull();
         assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
         page.waitForFunction("""
-                () => document.querySelector('[data-testid="petclinic-owner-unreferenced-properties"]')
-                        ?.getAttribute('data-causeway-unreferenced-state') === 'ready'
-                    && [...document.querySelectorAll('[data-testid="petclinic-owner-unreferenced-collections"], [data-testid="petclinic-owner-unreferenced-actions"]')]
-                        .every(element => element.getAttribute('data-causeway-unreferenced-state') === 'empty')
+                () => [...document.querySelectorAll('[data-testid^="petclinic-owner-unreferenced-"]')]
+                        .every(element => element.getAttribute('data-causeway-unreferenced-state') === 'ready')
                 """);
-        assertThat(macro.locator("[data-testid^='petclinic-owner-unreferenced-']").count()).isEqualTo(3);
+        assertThat(page.locator("[data-testid^='petclinic-owner-unreferenced-']").count()).isEqualTo(3);
+        assertThat(macro.locator("[data-testid^='petclinic-owner-unreferenced-']").count()).isEqualTo(1);
         final var remainingProperties = macro.locator("[data-testid='petclinic-owner-unreferenced-properties']");
+        final var remainingCollections = page.locator("[data-testid='petclinic-owner-unreferenced-collections']");
+        final var remainingActions = page.locator("[data-testid='petclinic-owner-unreferenced-actions']");
+        final var toolbar = page.locator(".petclinic-page-toolbar");
+        assertThat(toolbar.locator(":scope > cw-unreferenced-actions").count()).isEqualTo(1);
+        assertThat(remainingActions.evaluate("element => getComputedStyle(element).display")).isEqualTo("contents");
+        assertThat(remainingActions.locator(":scope > [role='group'].causeway-unreferenced-action-group").getAttribute("aria-label"))
+                .isEqualTo("Other actions");
+        assertThat(remainingActions.locator(":scope > [role='group'] > cw-action")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("noOwners");
+        assertThat(toolbar.locator("cw-action")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("allOwners,noOwners,bookVisit,relatedOwners");
+        @SuppressWarnings("unchecked")
+        final var actionGeometry = (List<Number>) toolbar.evaluate("element => { const groupElement = element.querySelector('.causeway-unreferenced-action-group'); const group = groupElement.getBoundingClientRect(); const actions = [...groupElement.querySelectorAll(':scope > cw-action')].map(action => action.getBoundingClientRect()); const gap = parseFloat(getComputedStyle(groupElement).columnGap) || 0; return [group.width, group.height, actions.reduce((sum, action) => sum + action.width, 0) + gap * Math.max(0, actions.length - 1), Math.max(...actions.map(action => action.height)), document.documentElement.scrollWidth - document.documentElement.clientWidth]; } ");
+        assertThat(actionGeometry.get(0).doubleValue()).as("compact action widths %s", actionGeometry)
+                .isLessThanOrEqualTo(actionGeometry.get(2).doubleValue() + 1);
+        assertThat(actionGeometry.get(1).doubleValue()).as("compact action heights %s", actionGeometry)
+                .isLessThanOrEqualTo(actionGeometry.get(3).doubleValue() + 1);
+        assertThat(actionGeometry.get(4).doubleValue()).as("horizontal document overflow %s", actionGeometry)
+                .isLessThanOrEqualTo(0);
+        assertThat((Boolean) toolbar.evaluate("async element => { const group = element.querySelector('.causeway-unreferenced-action-group'); const items = [group, ...element.querySelectorAll(':scope > cw-action')]; const width = Math.ceil(Math.max(...items.map(item => item.getBoundingClientRect().width)) + 1); element.style.inlineSize = `${width}px`; element.style.maxInlineSize = `${width}px`; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); const tops = new Set(items.map(item => Math.round(item.getBoundingClientRect().top))); element.style.removeProperty('inline-size'); element.style.removeProperty('max-inline-size'); return tops.size > 1; }"))
+                .as("generated action group wraps with toolbar peers in a narrow bounded toolbar")
+                .isTrue();
+        toolbar.evaluate("element => { const explicit = document.createElement('cw-action'); explicit.id = 'noOwners'; explicit.hidden = true; explicit.dataset.testid = 'petclinic-explicit-noOwners'; element.append(explicit); }");
+        page.waitForFunction("() => document.querySelector('[data-testid=petclinic-owner-unreferenced-actions]')?.getAttribute('data-causeway-unreferenced-state') === 'empty'");
+        assertThat(remainingActions.evaluate("element => getComputedStyle(element).display")).isEqualTo("none");
+        assertThat(remainingActions.locator(":scope > *").count()).isZero();
+        toolbar.locator("[data-testid^='petclinic-explicit-']").evaluateAll("elements => elements.forEach(element => element.remove())");
+        page.waitForFunction("() => document.querySelector('[data-testid=petclinic-owner-unreferenced-actions][data-causeway-unreferenced-state=ready] cw-action#noOwners') != null");
+        assertThat(remainingCollections.locator(":scope > cw-tabgroup cw-collection#visits").count()).isEqualTo(1);
         assertThat(remainingProperties.locator(":scope > cw-fieldset[name='Other'] > cw-property#daysSinceLastVisit").count()).isEqualTo(1);
         assertThat(remainingProperties.locator("cw-property#daysSinceLastVisit").getAttribute("editable")).isNull();
         details.evaluate("""
@@ -653,8 +678,7 @@ class PetClinicVuePlaywrightTest {
         page.waitForFunction("() => !!document.querySelector('[data-testid=petclinic-owner-unreferenced-properties][data-causeway-unreferenced-state=ready] cw-property#daysSinceLastVisit')");
         assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText()).isEqualTo("Metadata");
         assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
-        assertThat(macro.locator("[data-testid='petclinic-owner-unreferenced-collections'] > *, [data-testid='petclinic-owner-unreferenced-actions'] > *").count()).isZero();
-        assertThat(collections.locator(":scope > cw-collection").count()).isEqualTo(2);
+        assertThat(collections.locator(":scope > cw-collection").count()).isEqualTo(1);
         assertThat(collections.locator(":scope > section").count()).isZero();
         assertThat(collections.locator(":scope > cw-fieldset[name='Agreement'] > cw-property#agreement").count()).isEqualTo(1);
         assertThat(macro.locator(":scope > div").count()).isZero();

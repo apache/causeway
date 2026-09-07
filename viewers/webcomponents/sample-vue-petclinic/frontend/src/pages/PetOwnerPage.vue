@@ -50,7 +50,18 @@ defineProps<CausewayRoutePageProps>();
           <cw-object-header />
           <div class="petclinic-page-toolbar" aria-label="Owner actions">
             <cw-action id="allOwners" named="Show all owners" />
-            <cw-action id="noOwners" named="Show empty owner result" />
+            <cw-unreferenced-actions data-testid="petclinic-owner-unreferenced-actions" />
+            <cw-action id="bookVisit" prompt-style="DIALOG_MODAL">
+              <cw-parameter id="visitDate" min="tomorrow" />
+              <cw-parameter id="visitTime" min="08:00" max="17:00" />
+              <cw-parameter
+                id="reason"
+                named="Reason for visit"
+                described-as="Describe the purpose of the appointment."
+                description-as="label"
+                multi-line="3"
+              />
+            </cw-action>
             <cw-action id="relatedOwners" named="Show related owners">
               <cw-standalone-collection named="Related owners">
                 <cw-collection-column id="name" label="Owner" />
@@ -136,37 +147,6 @@ defineProps<CausewayRoutePageProps>();
                 <cw-action id="removePet" />
             </cw-collection>
 
-            <cw-collection
-              id="visits"
-              class="petclinic-card"
-              named="Visits"
-                described-as="All visits recorded for this owner's pets."
-                active
-                paged="8"
-              >
-                <cw-preview>
-                  <section class="petclinic-preview" aria-label="Visit preview">
-                    <cw-property id="visitAt" named="Appointment" />
-                    <cw-property id="reason" editable />
-                    <cw-property id="notes" editable multi-line="3" />
-                  </section>
-                </cw-preview>
-                <cw-collection-column id="visitAt" label="When" />
-                <cw-collection-column id="reason" label="Reason" />
-                <cw-collection-column id="notes" label="Notes" />
-                <cw-action id="bookVisit" prompt-style="DIALOG_MODAL">
-                  <cw-parameter id="visitDate" min="tomorrow" />
-                  <cw-parameter id="visitTime" min="08:00" max="17:00" />
-                  <cw-parameter
-                    id="reason"
-                    named="Reason for visit"
-                    described-as="Describe the purpose of the appointment."
-                    description-as="label"
-                    multi-line="3"
-                  />
-                </cw-action>
-            </cw-collection>
-
             <cw-fieldset name="Agreement" class="petclinic-card petclinic-agreement-card">
               <cw-property
                 id="agreement"
@@ -178,8 +158,11 @@ defineProps<CausewayRoutePageProps>();
               />
             </cw-fieldset>
 
+          </cw-column>
+        </cw-row>
+        <cw-row>
+          <cw-column>
             <cw-unreferenced-collections data-testid="petclinic-owner-unreferenced-collections" />
-            <cw-unreferenced-actions data-testid="petclinic-owner-unreferenced-actions" />
           </cw-column>
         </cw-row>
       </article>

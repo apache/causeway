@@ -81,6 +81,10 @@ class HtmxDeclarativeTemplateTest {
         final var page = """
                 <section data-route-state="loading" data-testid="causeway-route-page">
                   <cw-object-context logical-type="{{causeway.logicalType}}" object-id="{{causeway.objectId}}">
+                    <div class="object-toolbar" aria-label="Object actions">
+                      <cw-action id="explicit"></cw-action>
+                      <cw-unreferenced-actions name="Other actions"></cw-unreferenced-actions>
+                    </div>
                     <cw-column span="12">
                       <cw-tabgroup name="Details">
                         <cw-tab name="Identity"><cw-row><cw-column span="12"></cw-column></cw-row></cw-tab>
@@ -88,7 +92,6 @@ class HtmxDeclarativeTemplateTest {
                         <cw-tab name="Metadata"><cw-row><cw-column span="12"></cw-column></cw-row></cw-tab>
                       </cw-tabgroup>
                       <cw-unreferenced-collections name="Other collections"></cw-unreferenced-collections>
-                      <cw-unreferenced-actions name="Other actions"></cw-unreferenced-actions>
                     </cw-column>
                     <cw-interaction-controller></cw-interaction-controller>
                   </cw-object-context>
@@ -100,6 +103,8 @@ class HtmxDeclarativeTemplateTest {
                 "<cw-unreferenced-properties",
                 "<cw-unreferenced-collections",
                 "<cw-unreferenced-actions");
+        assertThat(page.indexOf("<cw-unreferenced-actions"))
+                .isBetween(page.indexOf("<div class=\"object-toolbar\""), page.indexOf("</div>"));
     }
 
     @Test

@@ -10,6 +10,7 @@ The Vue application owns its HTML document, stable shell, router, history fallba
 Its application-owned presentation follows the HTMX Petclinic shell and page compositions documented in link:PRESENTATION-PARITY.adoc[`PRESENTATION-PARITY.adoc`].
 The semantic web components remain authoritative for metadata, values, validation, interactions, collections, `<cw-preview>` row previews, and results.
 Inline preview bodies omit `<cw-object-header>` to match the concise HTMX reference while their owning rows retain authoritative titles and canonical links.
+The owner page matches HTMX by presenting remaining actions as a compact foundation-owned toolbar group and its remaining collection through a separate catch-all.
 
 == Run
 

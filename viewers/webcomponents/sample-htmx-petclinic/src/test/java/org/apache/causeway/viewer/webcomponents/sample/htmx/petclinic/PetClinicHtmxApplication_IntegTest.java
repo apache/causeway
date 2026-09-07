@@ -153,14 +153,14 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-preview>")
                 .contains("<cw-action id=\"clearNotes\" named=\"Clear pet notes\"></cw-action>")
                 .contains("<cw-collection id=\"visits\" named=\"Pet visits\" active paged=\"10\">")
-                .contains("<cw-preview></cw-preview>")
                 .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">")
                 .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
                 .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>")
                 .contains("<cw-action id=\"allOwners\" named=\"Show all owners\"></cw-action>")
-                .contains("<cw-action id=\"noOwners\" named=\"Show empty owner result\"></cw-action>")
+                .contains("<cw-unreferenced-actions data-testid=\"petclinic-owner-unreferenced-actions\"></cw-unreferenced-actions>")
                 .contains("<cw-action id=\"relatedOwners\"")
                 .contains("<cw-standalone-collection named=\"Related owners\"")
+                .contains("<cw-unreferenced-collections data-testid=\"petclinic-owner-unreferenced-collections\"></cw-unreferenced-collections>")
                 .contains("<cw-action-results class=\"petclinic-card\" data-testid=\"petclinic-action-results\" hidden></cw-action-results>");
         final var collectionPresentation = get("/htmx/_collection-presentations/petclinic.PetOwner");
         assertThat(collectionPresentation.statusCode()).isEqualTo(200);
@@ -391,7 +391,8 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-parameter id=\"name\"\n                          named=\"Pet name\"")
                 .contains("<cw-parameter id=\"visitDate\" min=\"tomorrow\"></cw-parameter>")
                 .contains("<cw-parameter id=\"visitTime\" min=\"08:00\" max=\"17:00\"></cw-parameter>")
-                .contains("<cw-parameter id=\"reason\"\n                          named=\"Reason for visit\"")
+                .contains("<cw-parameter id=\"reason\"")
+                .contains("named=\"Reason for visit\"")
                 .contains("multi-line=\"3\"")
                 .doesNotContain("<cw-parameter id=\"species\"", "<cw-action id=\"removePet\">\n            <cw-parameter")
                 .contains("id=\"knownAs\" editable")
@@ -404,9 +405,8 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-collection id=\"pets\" class=\"petclinic-card\" named=\"Pets\" active paged=\"5\" sortable filterable>")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
-                .contains("<cw-collection id=\"visits\" class=\"petclinic-card\" named=\"Visits\"")
-                .contains("described-as=\"All visits recorded for this owner's pets.\"")
-                .contains("active paged=\"8\"")
+                .contains("<cw-unreferenced-actions data-testid=\"petclinic-owner-unreferenced-actions\"")
+                .contains("<cw-unreferenced-collections data-testid=\"petclinic-owner-unreferenced-collections\"")
                 .contains("<cw-action id=\"bookVisit\"")
                 .contains("<cw-fieldset name=\"Agreement\" class=\"petclinic-card petclinic-agreement-card\">")
                 .doesNotContain("petclinic-object-grid", "petclinic-object-details", "petclinic-object-collections",

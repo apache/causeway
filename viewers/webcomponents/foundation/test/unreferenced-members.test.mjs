@@ -109,9 +109,13 @@ test('components render authoritative remaining members in kind-specific owned s
   assert.match(collections.innerHTML, /<cw-tab name="Pets" selected>/);
   assert.match(collections.innerHTML, /<cw-column span="12">/);
   assert.match(collections.innerHTML, /id="visits"/);
+  assert.match(actions.innerHTML, /class="causeway-object-actions causeway-unreferenced-action-group"/);
   assert.match(actions.innerHTML, /role="group"/);
   assert.match(actions.innerHTML, /aria-label="Other actions"/);
-  assert.match(actions.innerHTML, /<cw-action id="delete"/);
+  assert.match(actions.innerHTML, /<cw-action id="delete" named="Delete"/);
+  assert.equal(actions.getAttribute('data-causeway-unreferenced-state'), 'ready');
+  assert.match(actions.renderMembers([{id: 'bookVisit', kind: 'action'}]), /<cw-action id="bookVisit"><\/cw-action>/);
+  assert.doesNotMatch(actions.renderMembers([{id: 'bookVisit', kind: 'action'}]), / named=/);
 
   properties.setAttribute('editable', '');
   assert.match(properties.innerHTML, /<cw-property id="notes" editable>/);
