@@ -210,7 +210,7 @@ identified
         de.agilecoders.wicket.webjars:wicket-webjars -->
         <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--
         as served by wicket via webjars -->
-        <wicketstuff.version>10.9.2</wicketstuff.version><!-- 
+        <wicketstuff.version>10.10.0</wicketstuff.version><!-- 
             10.10.0 is broken because the dependence on select 4.1.0 is broken, see
             https://github.com/select2/select2/pull/6439
             Already fixed, but no release yet. 
