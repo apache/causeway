@@ -364,7 +364,11 @@ export class CausewayUnreferencedActionsElement extends CausewayUnreferencedMemb
   }
 
   renderMembers(members) {
-    const actions = members.map(member => `<cw-action id="${escapeHtml(member.id)}" named="${escapeHtml(memberLabel(member))}"></cw-action>`).join('');
+    const actions = members.map(member => {
+      const label = optionalMemberLabel(member);
+      const named = label ? ` named="${escapeHtml(label)}"` : '';
+      return `<cw-action id="${escapeHtml(member.id)}"${named}></cw-action>`;
+    }).join('');
     return `<div ${UNREFERENCED_OWNED_ATTRIBUTE} class="causeway-object-actions causeway-unreferenced-action-group" role="group" aria-label="${escapeHtml(this.name)}">${actions}</div>`;
   }
 }
@@ -439,6 +443,10 @@ function pluralKind(kind) {
 
 function memberLabel(member) {
   return boundedName(member?.label ?? member?.friendlyName ?? member?.id, 'Member');
+}
+
+function optionalMemberLabel(member) {
+  return boundedName(member?.label ?? member?.friendlyName, '') || null;
 }
 
 function boundedName(value, fallback) {

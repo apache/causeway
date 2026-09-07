@@ -62,6 +62,12 @@ test('collection preview disclosure uses a larger state-driven directional icon 
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-preview-toggle:dir\(rtl\)\[aria-expanded="false"\] \.causeway-collection-preview-icon \{\s+transform: rotate\(180deg\);/);
 });
 
+test('unreferenced actions form a compact transparent toolbar group without visible empty states', () => {
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-unreferenced-actions\[data-causeway-unreferenced-state="ready"\] \{\s+display: contents;/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-unreferenced-actions\[data-causeway-unreferenced-state="loading"\],[\s\S]*?cw-unreferenced-actions\[data-causeway-unreferenced-state="empty"\],[\s\S]*?cw-unreferenced-actions\[data-causeway-unreferenced-state="error"\] \{\s+display: none;/);
+    assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-unreferenced-action-group \{[\s\S]*?align-self: start;[\s\S]*?inline-size: fit-content;[\s\S]*?margin: 0;[\s\S]*?max-inline-size: 100%;[\s\S]*?padding: 0;/);
+});
+
 test('declarative layout styles provide responsive white tabs and a bounded metadata heading menu', () => {
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-row \{[\s\S]*?grid-template-columns: repeat\(12, minmax\(0, 1fr\)\);/);
     assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-layout-column \{[\s\S]*?align-content: start;[\s\S]*?display: grid;[\s\S]*?gap: var\(--causeway-layout-gap,[\s\S]*?min-inline-size: 0;/);

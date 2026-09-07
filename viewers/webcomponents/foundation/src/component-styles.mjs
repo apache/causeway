@@ -64,6 +64,9 @@ cw-metadata {
   display: flow-root;
   position: relative;
 }
+cw-unreferenced-actions[data-causeway-unreferenced-state="ready"] {
+  display: contents;
+}
 cw-unreferenced-properties[data-causeway-unreferenced-state="loading"],
 cw-unreferenced-properties[data-causeway-unreferenced-state="empty"],
 cw-unreferenced-properties[data-causeway-unreferenced-state="error"],
@@ -211,6 +214,14 @@ cw-unreferenced-actions[data-causeway-unreferenced-state="error"] {
   display: flex;
   flex-wrap: wrap;
   gap: var(--causeway-object-action-gap, 0.5rem);
+}
+.causeway-unreferenced-action-group {
+  align-self: start;
+  box-sizing: border-box;
+  inline-size: fit-content;
+  margin: 0;
+  max-inline-size: 100%;
+  padding: 0;
 }
 .causeway-object-member-composition {
   display: block;
