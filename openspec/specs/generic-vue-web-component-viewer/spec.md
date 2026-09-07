@@ -634,8 +634,8 @@ Vue MUST treat those elements as custom elements and MUST NOT own their responsi
 ### Requirement: Vue unreferenced member composition parity
 
 Application-authored Vue pages SHALL be able to use `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` directly as native custom elements beneath a valid object-context boundary.
-They SHALL also be able to place `<cw-unreferenced-properties>` directly among a tabgroup's ordinary tabs for conditional non-empty Other-tab presentation.
-Vue MUST NOT wrap the elements, mirror their allocation in reactive state, derive member identity, generate controls, or own their lifecycle.
+They SHALL also be able to place `<cw-unreferenced-properties>` directly among a tabgroup's ordinary tabs for conditional non-empty Other-tab presentation and `<cw-unreferenced-actions>` directly among ordinary controls in an action toolbar.
+Vue MUST NOT wrap the elements, mirror their allocation in reactive state, derive member identity, generate controls, own their lifecycle, or compensate for their layout with host-specific wrappers.
 
 #### Scenario: Vue template declares catch-all elements
 
@@ -649,11 +649,17 @@ Vue MUST NOT wrap the elements, mirror their allocation in reactive state, deriv
 - **THEN** Vue preserves that native custom element and authored order
 - **AND** foundation alone adds or removes the Other tab according to the catch-all allocation state
 
+#### Scenario: Vue template declares generated toolbar actions
+
+- **WHEN** a Vue page places `<cw-unreferenced-actions>` directly among ordinary toolbar actions
+- **THEN** Vue preserves that native custom element and authored position
+- **AND** foundation presents the generated group as a compact wrapping peer without a redundant block or panel-like gap
+
 #### Scenario: Equivalent Vue and HTMX contexts resolve
 
 - **WHEN** equivalent Vue and HTMX pages expose the same authorized inventory, explicit claims, pending producers, and catch-all destinations
-- **THEN** foundation generates equivalent property order, collection tabs, action order, empty states, and diagnostics
-- **AND** host framework choice does not affect member allocation
+- **THEN** foundation generates equivalent property order, collection tabs, compact action order, empty states, and diagnostics
+- **AND** host framework choice does not affect member allocation or action-group geometry
 
 #### Scenario: Vue route generation changes
 
@@ -665,10 +671,10 @@ Vue MUST NOT wrap the elements, mirror their allocation in reactive state, deriv
 
 - **WHEN** a user edits an opted-in remaining property, changes a generated collection tab, expands a preview, or invokes a generated action
 - **THEN** ordinary foundation components preserve validation, authorization, focus, invocation, navigation, and result semantics
-- **AND** Vue owns no parallel member or interaction state
+- **AND** Vue owns no parallel member, interaction, or layout state
 
 #### Scenario: Vue host has no remaining members
 
 - **WHEN** all members of a catch-all kind are explicitly claimed
-- **THEN** the catch-all remains inspectably empty without an empty visible container
+- **THEN** the catch-all remains inspectably empty without an empty visible container or layout gap
 - **AND** Vue supplies no placeholder or fallback member
