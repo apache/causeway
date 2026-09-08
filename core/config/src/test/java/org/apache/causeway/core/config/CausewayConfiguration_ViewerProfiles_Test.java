@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.springframework.boot.test.util.TestPropertyValues;
 
@@ -63,7 +64,7 @@ class CausewayConfiguration_ViewerProfiles_Test {
         @DisplayName("Should resolve profiles using default namespace for unmatched packages")
         void shouldResolveProfilesUsingDefaultNamespace() {
             ViewerProfiles profiles = new ViewerProfiles(null, null);
-            Set<String> resolved = profiles.resolveProfiles("java.lang");
+            Set<String> resolved = profiles.profilesForNamespace("java.lang");
 
             assertThat(resolved).containsExactly("web-ui", "api");
         }
@@ -71,20 +72,23 @@ class CausewayConfiguration_ViewerProfiles_Test {
         @Test
         @DisplayName("Should use longest prefix match for namespace resolution")
         void shouldUseLongestPrefixMatch() {
+            Map<String, String> viewer = Map.of(
+                    "viewer1", "api,web-ui,mobile"
+                );
             Map<String, String> namespace = Map.of(
                 "com.myapp", "api",
                 "com.myapp.orders", "web-ui",
                 "com.myapp.orders.impl", "mobile"
             );
-            ViewerProfiles profiles = new ViewerProfiles(null, namespace);
+            ViewerProfiles profiles = new ViewerProfiles(viewer, namespace);
 
-            assertThat(profiles.resolveProfiles("com.myapp.orders"))
+            assertThat(profiles.profilesForNamespace("com.myapp.orders"))
                 .containsExactly("web-ui");
 
-            assertThat(profiles.resolveProfiles("com.myapp.orders.impl"))
+            assertThat(profiles.profilesForNamespace("com.myapp.orders.impl"))
                 .containsExactly("mobile");
 
-            assertThat(profiles.resolveProfiles("com.myapp.payments.Payment"))
+            assertThat(profiles.profilesForNamespace("com.myapp.payments.Payment"))
                 .containsExactly("api");
         }
 
@@ -114,10 +118,19 @@ class CausewayConfiguration_ViewerProfiles_Test {
         configurationFactory.test(
             TestPropertyValues.of(
                     "causeway.viewer-profiles.map.viewer1=web-ui",
-                    "causeway.viewer-profiles.map.viewer2=web-ui,test"),
+                    "causeway.viewer-profiles.map.viewer2=test,api"),
                 causeway -> {
                     assertThat(causeway.viewerProfiles().profilesForViewer("viewer1")).containsExactly("web-ui");
-                    assertThat(causeway.viewerProfiles().profilesForViewer("viewer2")).containsExactly("web-ui", "test");
+                    assertThat(causeway.viewerProfiles().profilesForViewer("viewer2")).containsExactly("test", "api");
             });
+    }
+
+    @Test
+    void throwsWhenUnmapped() {
+        assertThrows(Exception.class, ()->
+            configurationFactory.test(
+                TestPropertyValues.of(
+                        "causeway.viewer-profiles.map.viewer1=web-ui"),
+                    causeway -> {}));
     }
 }
