@@ -113,7 +113,8 @@ public class ApplicationRole
 
     // necessary for integration tests
     public void addToUsers(final ApplicationUser applicationUser) {
-        getUsers().add(applicationUser);
+        applicationUser.getRoles().add(this);
+        users.add(applicationUser);
     }
 
 
