@@ -27,9 +27,7 @@ import java.lang.annotation.Target;
 /**
  * Layout hints for domain services.
  *
- * <p>
- * Also indicates the name, and menu ordering UI hints.
- * </p>
+ * <p>Also indicates the name, and menu ordering UI hints.
  *
  * @see DomainService
  * @see DomainObjectLayout
@@ -66,9 +64,7 @@ public @interface DomainServiceLayout {
     /**
      * Name of this class (overriding the name derived from its name in code).
      *
-     * <p>
-     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
-     * </p>
+     * <p>A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
      *
      * @see ActionLayout#named()
      * @see ParameterLayout#named()
@@ -79,4 +75,16 @@ public @interface DomainServiceLayout {
     String named()
             default "";
 
+    /**
+     * Profiles this domain service should be visible to.
+     * <ul>
+     * <li> "as-configured": Use global default or namespace-specific config.</li>
+     * <li> Empty array {}: Hide from all viewers.</li>
+     * <li> Specific profiles: e.g., {"web-ui", "api"}</li>
+     * </ul>
+     *
+     * @since 4.0
+     */
+    String[] showFor()
+        default "as-configured";
 }

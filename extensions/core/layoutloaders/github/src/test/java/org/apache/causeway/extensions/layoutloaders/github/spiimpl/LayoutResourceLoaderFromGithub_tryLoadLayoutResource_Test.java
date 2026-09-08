@@ -18,10 +18,14 @@
  */
 package org.apache.causeway.extensions.layoutloaders.github.spiimpl;
 
+import java.nio.charset.StandardCharsets;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
-
-import java.nio.charset.StandardCharsets;
 
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.internal.resources._Resources;
@@ -31,9 +35,6 @@ import org.apache.causeway.core.config.CausewayConfiguration.Extensions;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.LayoutLoaders;
 import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub;
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import lombok.SneakyThrows;
 
@@ -53,7 +54,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
         var github = new LayoutLoaders.Github("apache/causeway-app-simpleapp", getApiKey());
 
         var causewayConfiguration = new CausewayConfiguration(null, java.util.Optional.empty(),
-            new Causeway(null, null, null, null, null, null, null, null, null,
+            new Causeway(null, null, null, null, null, null, null, null, null, null,
                 new Extensions(null, null, null, null, null, null, new LayoutLoaders(github), null, null, null)));
 
         var module = new CausewayModuleExtLayoutLoadersGithub();
