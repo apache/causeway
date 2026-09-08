@@ -74,17 +74,4 @@ public @interface DomainServiceLayout {
      */
     String named()
             default "";
-
-    /**
-     * Profiles this domain service should be visible to.
-     * <ul>
-     * <li> "as-configured": Use global default or namespace-specific config.</li>
-     * <li> Empty array {}: Hide from all viewers.</li>
-     * <li> Specific profiles: e.g., {"web-ui", "api"}</li>
-     * </ul>
-     *
-     * @since 4.0
-     */
-    String[] showFor()
-        default "as-configured";
 }
