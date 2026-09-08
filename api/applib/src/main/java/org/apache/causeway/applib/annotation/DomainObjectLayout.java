@@ -183,18 +183,4 @@ public @interface DomainObjectLayout {
     Class<? extends TitleUiEvent<?>>
             titleUiEvent()
             default TitleUiEvent.Default.class;
-
-    /**
-     * Profiles this domain object should be visible to.
-     * <ul>
-     * <li> "as-configured": Use global default or namespace-specific config.</li>
-     * <li> Empty array {}: Hide from all viewers.</li>
-     * <li> Specific profiles: e.g., {"web-ui", "api"}</li>
-     * </ul>
-     *
-     * @since 4.0
-     */
-    String[] showFor()
-        default "as-configured";
-
 }
