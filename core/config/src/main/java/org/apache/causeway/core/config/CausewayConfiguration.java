@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
 import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -73,7 +72,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -101,6 +99,7 @@ import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.causeway.core.config.util.ViewerProfileUtil;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
 import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
@@ -3383,48 +3382,24 @@ public record CausewayConfiguration(
             namespace = namespace != null
                 ? namespace
                 : Map.of("default", "web-ui,api");
+            ViewerProfileUtil.validate(map, namespace);
         }
 
         /**
          * Resolves the default viewer profiles for a given namespace prefix on namespace configuration.
          * Uses longest-prefix matching. Falls back to {@code default} key.
          */
-        public Set<String> resolveProfiles(final String namespacePrefix) {
-            String matchedKey = null;
-            int longestPrefixLen = -1;
-
-            for (String ns : namespace.keySet()) {
-                if (namespacePrefix.startsWith(ns)) {
-                    if (ns.length() > longestPrefixLen) {
-                        longestPrefixLen = ns.length();
-                        matchedKey = ns;
-                    }
-                }
-            }
-
-            String rawProfiles = matchedKey != null
-                    ? namespace.get(matchedKey)
-                    : namespace.getOrDefault("default", "web-ui,api");
-
-            return parseProfiles(rawProfiles);
+        public Set<String> profilesForNamespace(final String namespacePrefix) {
+            return ViewerProfileUtil.profilesForNamespace(this, namespacePrefix);
         }
 
         /**
          * Returns all profile IDs that a specific viewer supports.
          */
         public Set<String> profilesForViewer(final String viewerId) {
-            String raw = map.getOrDefault(viewerId, "");
-            return parseProfiles(raw);
+            return ViewerProfileUtil.profilesForViewer(this, viewerId);
         }
-        // -- HELPER
-        private static Set<String> parseProfiles(final String raw) {
-            return StringUtils.hasLength(raw)
-                ? Arrays.stream(raw.split(","))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .collect(Collectors.toSet())
-                : Set.of();
-        }
+
     }
 
     public record ValueTypes(
