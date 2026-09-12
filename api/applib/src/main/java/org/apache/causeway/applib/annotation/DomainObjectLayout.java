@@ -98,9 +98,7 @@ public @interface DomainObjectLayout {
     /**
      * Name of this class (overriding the name derived from its name in code).
      *
-     * <p>
-     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
-     * </p>
+     * <p>A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
      *
      * @see ActionLayout#named()
      * @see ParameterLayout#named()
@@ -115,12 +113,10 @@ public @interface DomainObjectLayout {
      * The page size for instances of this class when rendered within
      * a table.
      *
-     * <p>
-     * If annotated on a collection, then the page size refers to
+     * <p>If annotated on a collection, then the page size refers to
      * parented collections (eg <tt>Order#lineItems</tt>).
      *
-     * <p>
-     * If annotated on a type, then the page size refers to standalone
+     * <p>If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
      *
      * @see CollectionLayout#paged()
@@ -139,9 +135,7 @@ public @interface DomainObjectLayout {
     /**
      * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
      *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
+     * <p>This subclass must provide a no-arg constructor; the fields are set reflectively.
      *
      * @see DomainObjectLayout#iconUiEvent()
      * @see DomainObjectLayout#layoutUiEvent()
@@ -154,9 +148,7 @@ public @interface DomainObjectLayout {
     /**
      * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
      *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
+     * <p>This subclass must provide a no-arg constructor; the fields are set reflectively.
      *
      * @see DomainObjectLayout#cssClassUiEvent()
      * @see DomainObjectLayout#layoutUiEvent()
@@ -169,10 +161,7 @@ public @interface DomainObjectLayout {
     /**
      * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
      *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     *
+     * <p>This subclass must provide a no-arg constructor; the fields are set reflectively.
      *
      * @see DomainObjectLayout#cssClassUiEvent()
      * @see DomainObjectLayout#iconUiEvent()
@@ -185,10 +174,7 @@ public @interface DomainObjectLayout {
     /**
      * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
      *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     *
+     * <p>This subclass must provide a no-arg constructor; the fields are set reflectively.
      *
      * @see DomainObjectLayout#cssClassUiEvent()
      * @see DomainObjectLayout#iconUiEvent()
@@ -197,6 +183,4 @@ public @interface DomainObjectLayout {
     Class<? extends TitleUiEvent<?>>
             titleUiEvent()
             default TitleUiEvent.Default.class;
-
-    // ...
 }

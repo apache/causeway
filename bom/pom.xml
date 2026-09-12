@@ -250,6 +250,11 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
+                <artifactId>causeway-core-kernel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-metamodel</artifactId>
                 <version>${project.version}</version>
             </dependency>
