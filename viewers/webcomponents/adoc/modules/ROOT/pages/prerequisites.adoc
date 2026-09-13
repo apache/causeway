@@ -1,0 +1,56 @@
+= Backend and Deployment Prerequisites
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Rich GraphQL
+
+Enable the xref:gqlv:ROOT:setup-and-configuration.adoc[GraphQL viewer] in the application backend.
+The components require the rich schema because they consume supporting metadata as well as domain values.
+A simple-schema-only endpoint is not sufficient.
+
+The Petclinic samples use these settings:
+
+[source,properties]
+----
+causeway.viewer.graphql.api-scope=ALL
+causeway.viewer.graphql.schema-style=SIMPLE_AND_RICH
+causeway.viewer.graphql.resources.structural-metadata-response-type=DIRECT
+causeway.viewer.graphql.resources.value-content-response-type=ATTACHMENT
+----
+
+Choose the API scope appropriate to your application rather than exposing additional types solely to match a sample.
+Structural resources supply effective layouts and icons; value-content resources supply authorised Blob and Clob content.
+Keep these policies separate: making layouts available does not require permitting every domain resource.
+See xref:gqlv:ROOT:about.adoc#resources-blobs-clobs-layouts-icons[GraphQL resource policy] for endpoint access checks and response behaviour.
+
+The backend endpoint and the host's configured GraphQL URL must agree.
+The current Spring property is `spring.graphql.http.path`; older sample configuration may still use the supported deprecated `spring.graphql.path` fallback.
+For a new deployment, prefer the current property and update the host endpoint consistently.
+
+== Same-origin resources
+
+The foundation Maven artifact packages browser resources beneath `META-INF/resources/causeway-webcomponents/`.
+Host setup must make the registration modules, styles, selected toolkit assets, and GraphQL endpoint available from the application origin.
+A Vue frontend bundle does not replace these backend-supplied resources.
+Do not rewrite GraphQL resource links or prepend the viewer route base to them.
+They are opaque origin-relative paths and can include deployment prefixes already supplied by the backend.
+
+Keep frontend fallback routing away from GraphQL, authentication endpoints, and static resources.
+A successful HTTP response containing `index.html` is not a successful JavaScript module or GraphQL response.
+
+== Identity and routing
+
+Both hosts use the canonical object route `<base-path>/object/<logical-type>/<identifier>`.
+Logical type and opaque identifier are independently encoded path segments, not display titles or database-key assumptions.
+Use the host's routing helpers rather than constructing URLs from visible text.
+Malformed or non-canonical identities are rejected before an object context is mounted.
+
+== Development environment
+
+The web-component Maven modules require JDK 17 or later.
+The Petclinic launchers select JDK 21 on macOS when `JAVA_HOME` is absent; setting `JAVA_HOME` explicitly avoids relying on that selection.
+Use the repository's supported Maven and Node.js environment for sample builds and frontend regeneration.
+Run one sample at a time because the default launchers use port 8080.
+
+These are source-checkout walkthroughs, not assertions that every snapshot package is already available from a public registry.
+Use matching Causeway artifacts and build/install the local modules when working with unreleased changes.

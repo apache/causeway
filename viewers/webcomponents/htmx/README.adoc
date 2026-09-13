@@ -8,6 +8,9 @@ The `causeway-viewer-webcomponents-htmx` module provides an optional server-rout
 HTMX owns canonical navigation, bounded binding of declarative templates, fragment replacement, browser history, loading, announcements, and route errors.
 Declarative HTML owns the GraphQL-client and object-context hierarchy, while the semantic components own GraphQL projections, effective layouts, menus, interactions, validation, mutations, and typed results.
 
+Application developers should start with the link:../adoc/modules/ROOT/pages/htmx/getting-started.adoc[HTMX Antora guide].
+This README also retains module-specific verification and release details.
+
 == Enablement
 
 Add `org.apache.causeway.viewer:causeway-viewer-webcomponents-htmx` and import `CausewayModuleViewerWebcomponentsHtmx` in the application bootstrap.

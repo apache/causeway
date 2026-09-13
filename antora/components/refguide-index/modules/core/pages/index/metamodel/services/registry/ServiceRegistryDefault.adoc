@@ -9,6 +9,7 @@ Default implementation of xref:refguide:applib:index/services/registry/ServiceRe
 .ServiceRegistryDefault.java
 ----
 class ServiceRegistryDefault {
+  ServiceRegistryDefault(CausewaySystemEnvironment causewaySystemEnvironment, CausewayBeanTypeRegistry causewayBeanTypeRegistry)
   Optional<SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id)
   Optional<?> lookupBeanById(String id)
   Stream<SingletonBeanProvider> streamRegisteredBeans()

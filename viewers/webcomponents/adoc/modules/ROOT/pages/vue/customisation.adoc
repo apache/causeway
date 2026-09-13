@@ -1,0 +1,74 @@
+= Vue: Custom Pages and Shells
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Exact-type pages
+
+Register application Vue components through the viewer's `pages` option using exact logical types such as `petclinic.PetOwner`.
+Registrations are immutable after plugin creation; they do not follow type inheritance.
+An unregistered type uses the generic page containing `<cw-object editable>`.
+
+A custom page receives immutable `logicalTypeName`, `objectId`, and `routeKey` props.
+For example, a minimal owner page is:
+
+[source,vue]
+----
+<script setup lang="ts">
+import type {CausewayRoutePageProps} from '@apache-causeway/vue-viewer';
+defineProps<CausewayRoutePageProps>();
+</script>
+
+<template>
+  <section data-causeway-route-page tabindex="-1" aria-label="Object page">
+    <cw-object-context
+      data-causeway-route-context
+      :logical-type="logicalTypeName"
+      :object-id="objectId"
+    >
+      <cw-object-header />
+      <cw-property id="knownAs" editable />
+      <cw-interaction-controller data-causeway-route-interactions />
+    </cw-object-context>
+  </section>
+</template>
+----
+
+Declare one marked route context and one marked interaction controller inside it.
+Do not recreate GraphQL values in Vue reactive state just to display them through another template.
+Use the shared xref:components.adoc[layout, property, action, and collection elements] directly.
+The Petclinic `frontend/src/pages/PetOwnerPage.vue` demonstrates authored rows, tabs, metadata, and unreferenced-member destinations.
+
+== Stable shell
+
+The application owns the visual hierarchy and declares protocol landmarks.
+Use `useCausewayViewer()` for viewer context and `useCausewayShell()` to bind the shell element.
+Keep a stable `<cw-graphql-client data-causeway-shell-client>` around menus and route content.
+Retain these landmarks:
+
+* `data-causeway-route-loading` with status/live-region semantics.
+* `data-causeway-route-announcement` for route announcements.
+* `<cw-action-results data-causeway-shell-result>` for global results.
+* `data-causeway-router-view` around the routed component outlet.
+
+Key routed components by the canonical route path so obsolete contexts are disposed while the shell remains connected.
+See the sample's root Vue component for a complete shell and its associated application CSS.
+Pass structured values as DOM properties, for example `:executor.prop="executor"`, rather than stringifying functions or objects into attributes.
+
+== Public host policy
+
+The package exposes route codecs and records, the plugin factory, shell helpers, boundary validators, TypeScript contracts, and generic route components.
+Viewer options allow application policy for pre-invocation actions, navigation, menus, home, results, and errors.
+Use the typed contracts from the installed package rather than depending on private implementation objects.
+
+A claimed semantic event is not handled again by the default policy.
+Pre-invocation policy can synchronously claim an action before validation or GraphQL invocation; unclaimed asynchronous decisions resume only while the route remains current.
+Late results must not replace a newer route's presentation.
+
+Complete entity or view-model results navigate canonically by default.
+Scalar, collection, void, and unsupported results use the established result presentation path.
+Typed `LocalResourcePathValue` results are validated same-origin full-document targets, not Vue Router object routes.
+`NEW_WINDOW` navigation uses opener isolation.
+
+Authentication remains application-owned.
+The generic viewer blocks the exact framework Logout action unless explicit host policy supplies the secure workflow; display text does not identify authentication actions.
+See xref:vue/security.adoc[secured host composition] before customising that policy.

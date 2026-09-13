@@ -7,6 +7,9 @@
 The package provides the thin Vue 3 and Vue Router 4 integration for Apache Causeway semantic web components.
 It owns route and host policy but does not duplicate GraphQL or domain state.
 
+Application developers should start with the link:../adoc/modules/ROOT/pages/vue/getting-started.adoc[Vue Antora guide].
+This README also retains package verification details.
+
 == Installation
 
 Install `@apache-causeway/vue-viewer`, `vue`, and `vue-router` in the application frontend.

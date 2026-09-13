@@ -35,15 +35,7 @@ causeway.extensions.command-log. +
 recording-support
 
 |  DISABLED
-| Whether command recording support is enabled.
-When enabled, ordinary safe actions and property edits use the normal command-publishing lifecycle.
-Eligible parented collections and scalar domain-object references also gain deterministic safe `Navigate To` actions whose ids start with `__causeway_navigate_to_`.
-Collection navigation parameters follow eligible visible columns, use partial matching for strings and exact matching for other values, and must identify exactly one child.
-Scalar-reference navigation actions have no parameters and return the referenced object.
-Empty collections and null references disable their corresponding actions while preserving stable metamodel identity.
-Explicit safe-action publishing disablement remains an opt-out, while property edits are included even when property command publishing is explicitly disabled so replay recordings remain complete.
-Marked targets and owners remain excluded by command-recording suppression, and marked owner types do not receive synthetic navigation actions.
-When disabled, existing action, property publishing, and association-navigation behavior is unchanged.
+| null
 
 
 |
@@ -53,8 +45,7 @@ replay-result-mapping. +
 on-conflict-policy
 
 |  THROW_EXCEPTION
-| Controls conflicts when a recorded replay result bookmark has already been mapped to a different actual bookmark.
-`THROW_EXCEPTION` fails and rolls back replay, while `LOG_AND_CONTINUE` retains the first mapping and logs the conflict.
+| null
 
 
 |
@@ -64,11 +55,7 @@ replay-result-mapping. +
 storage-strategy
 
 |  IN_MEMORY
-| Selects the built-in replay mapping listener storage strategy.
-`IN_MEMORY` provides instance-scoped mappings when no application listener exists.
-`PERSISTENT` uses the commandlog JPA module to retain identity and changed mappings across application restarts, including the originating command interaction id when available.
-Persistent mode requires a `CommandReplayResultMappingRepository`; without one, no built-in listener is installed.
-Applications can provide a `CommandReplayMappingListener` bean to replace the built-in listener.
+| null
 
 
 |

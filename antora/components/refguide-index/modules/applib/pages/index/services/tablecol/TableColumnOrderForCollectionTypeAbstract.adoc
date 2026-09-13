@@ -9,12 +9,12 @@ Convenience implementation of xref:refguide:applib:index/services/tablecol/Table
 .TableColumnOrderForCollectionTypeAbstract.java
 ----
 class TableColumnOrderForCollectionTypeAbstract<T> {
-  List<String> orderParented(Object parent, String collectionId, Class<?> elementType, List<String> associationIds)     // <.>
+  List<String> orderParented(Class<?> parentType, String collectionId, Class<?> elementType, List<String> associationIds)     // <.>
   List<String> orderStandalone(Class<?> domainType, List<String> associationIds)     // <.>
 }
 ----
 
-<.> xref:#orderParented_Object_String_Class_List[orderParented(Object, String, Class, List)]
+<.> xref:#orderParented_Class_String_Class_List[orderParented(Class, String, Class, List)]
 +
 --
 Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderParented(Object, String, List)_ .
@@ -27,8 +27,8 @@ Ignores any request for collections not of the _#getCollectionType() type specif
 
 == Members
 
-[#orderParented_Object_String_Class_List]
-=== orderParented(Object, String, Class, List)
+[#orderParented_Class_String_Class_List]
+=== orderParented(Class, String, Class, List)
 
 Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderParented(Object, String, List)_ .
 

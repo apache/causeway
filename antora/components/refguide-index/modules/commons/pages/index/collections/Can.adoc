@@ -77,6 +77,7 @@ interface Can<T> {
   Set<T> toSet()     // <.>
   Set<T> toSet(Consumer<T> onDuplicated)     // <.>
   T[] toArray(T[] a)     // <.>
+  T[] toArray(IntFunction<T[]> generator)
   T[] toArray(Class<T> elementType)     // <.>
   Map<K, T> toMap(Function<? super T, ? extends K> keyExtractor)     // <.>
   Map<K, T> toMap(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>

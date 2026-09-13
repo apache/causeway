@@ -432,6 +432,15 @@ strip-wicket-tags
 
 
 |
+[[causeway.viewer.wicket.summary-view-disabled]]
+causeway.viewer.wicket. +
+summary-view-disabled
+
+| 
+| null
+
+
+|
 [[causeway.viewer.wicket.suppress-password-reset]]
 causeway.viewer.wicket. +
 suppress-password-reset

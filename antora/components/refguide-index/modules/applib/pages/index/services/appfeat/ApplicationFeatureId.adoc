@@ -16,7 +16,7 @@ If there is a member name clash involving an _action_ and an _association_ , the
 ----
 class ApplicationFeatureId {
   public static final ApplicationFeatureId NAMESPACE_DEFAULT;
-  ApplicationFeatureId fromIdentifier(Identifier identifier)
+  ApplicationFeatureId fromIdentifier(Identifier identifier)     // <.>
   ApplicationFeatureId newFeature(ApplicationFeatureSort featureSort, String qualifiedLogicalName)
   ApplicationFeatureId newFeature(String namespace, String logicalTypeSimpleName, String memberName)
   ApplicationFeatureId newNamespace(String namespace)
@@ -47,6 +47,7 @@ class ApplicationFeatureId {
 }
 ----
 
+<.> xref:#fromIdentifier_Identifier[fromIdentifier(Identifier)]
 <.> xref:#newNamespace_LogicalType[newNamespace(LogicalType)]
 +
 --
@@ -89,6 +90,9 @@ Returns a new instance that is a clone of this feature (expected to be a _Applic
 --
 
 == Members
+
+[#fromIdentifier_Identifier]
+=== fromIdentifier(Identifier)
 
 [#newNamespace_LogicalType]
 === newNamespace(LogicalType)

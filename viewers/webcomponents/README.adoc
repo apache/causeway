@@ -8,7 +8,8 @@ It deliberately has no dependency on HTMX, React, Vue, Svelte, Wicket, Bootstrap
 The separate optional HTMX and Vue modules add thin host routing, stable application shells, history, exact page selection, and lifecycle above those components.
 Optional `security-secman`, `htmx-security-secman`, and `vue-security-secman` modules provide a shared local credential bridge plus viewer-owned browser-session policy without adding authentication to the generic viewers.
 
-This page explains how to run the automated verification and how to exercise the components manually against a Causeway application.
+Application developers should start with the link:adoc/modules/ROOT/pages/about.adoc[Web Component Viewers guide], which covers shared components, HTMX, Vue, and security integration.
+This README retains automated verification and manual contributor checks against a Causeway application.
 
 == Prerequisites
 

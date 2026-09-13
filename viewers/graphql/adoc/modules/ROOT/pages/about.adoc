@@ -57,7 +57,7 @@ In other words, it exposes not only the core data/behaviour but also of the supp
 The *simple schema* represents just the core data/behaviour, but does not include the supporting method facets.
 
 With the rich schema, the application logic and business domain logic remains the concern of the server, with the calling client app responsible only for presentation logic.
-In fact, the rich schemas is so rich that one could in theory implement a fully generic UI client.
+The xref:webcomponents:ROOT:about.adoc[HTMX and Vue web-component viewers] use this rich schema to provide generic domain-object presentation alongside application-authored pages.
 
 With the simple schema, although the main business domain logic remains the concern of the server, the application logic moves to the client.
 For example, if there is a drop-down list box, the client needs to know how to obtain the list of choices.

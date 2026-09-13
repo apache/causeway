@@ -1,0 +1,58 @@
+= Troubleshooting
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Empty page or unknown custom element
+
+Check browser console and network failures before changing the domain model.
+Confirm the component registration modules and styles are served from the expected origin and return the correct content rather than a login page or Vue fallback document.
+For Vue, confirm the build-time compiler recognises `cw-` tags and the application loads the backend-supplied registration modules.
+For HTMX, confirm the host module is imported; installing the foundation alone does not create viewer routes.
+
+== Unknown GraphQL type or lookup field
+
+Confirm that the configured endpoint exposes the rich schema and that the intended logical type is included in the application API scope.
+Use the public logical type and actual opaque identifier, not a display title or guessed numeric ID.
+Check the generated schema rather than manually deriving field names from Java class names.
+A host endpoint mismatch can also send an otherwise valid request to the wrong schema.
+See xref:prerequisites.adoc[prerequisites].
+
+== Missing layouts, icons, or PDF content
+
+Check structural-metadata and value-content resource policies separately.
+A forbidden structural policy prevents effective-layout resources even if ordinary scalar queries succeed.
+A published resource URL is not permission to access it forever; the backend rechecks visibility and authorization on dereference.
+Do not repair a URL by adding the viewer base path or normalising slash prefixes.
+For PDF, also check the same-origin worker/module/support asset requests and CSP diagnostics.
+
+== Custom page is ignored or fails startup
+
+Registration uses exact logical types, not inheritance.
+For HTMX, check the filename and private classpath directory, UTF-8 content, route boundary, required identity tokens, and duplicate registrations.
+Reload mode does not discover newly added or renamed files; restart after registration changes.
+Ensure the IDE has copied edited resources into the running classpath.
+For Vue, register the page before plugin creation and verify the route context and interaction markers.
+
+== Back, Forward, or results replace the wrong region
+
+Check that shell landmarks remain unique and connected, and that only the route content is replaced.
+Do not move the stable GraphQL client into the disposable page.
+For Vue, key routed components by canonical route and retain the marked router outlet.
+For HTMX, preserve the default shell's history boundary and disabled sensitive snapshots.
+Application policy that claims a result is responsible for its entire presentation lifecycle.
+
+== Login redirects or rejected POSTs
+
+Inspect status and response content without logging credentials, cookies, or CSRF tokens.
+A `401` indicates authentication/session handling; an authenticated `403` can indicate authorization or missing/stale CSRF evidence.
+GraphQL validation errors are a different layer from either transport failure.
+Check endpoint ownership, current session continuity, and CSRF decoration on every GraphQL POST.
+Do not disable CSRF or broaden domain permissions as a diagnostic shortcut.
+See the xref:htmx/security.adoc[HTMX] or xref:vue/security.adoc[Vue] integration guide.
+
+== Unexpected native presentation
+
+Not every field, collection, or menu is toolkit-eligible.
+Check the xref:presentation.adoc[supported boundaries], current viewport, collection ordering/window metadata, and selected policy.
+Native fallback preserves semantic behaviour and is not itself evidence of a failed GraphQL request.
+Compare with explicit native policy to separate an adapter issue from domain interaction or routing.

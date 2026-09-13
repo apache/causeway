@@ -263,6 +263,9 @@ content:
 
     # viewers
     - url: .
+      start_path: viewers/webcomponents/adoc
+      branches: HEAD
+    - url: .
       start_path: viewers/graphql/adoc
       branches: HEAD
     - url: .

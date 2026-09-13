@@ -16,7 +16,7 @@ The zip contains:
 
 - for `DomainClass` ' collection with id `collectionN` .
 
-These should be unzipped and copied in the domain class' package, and then their contents updated to specify the order in which the respective object's properties will be shown in the standalone or parented collections.
+These should be un-zipped and copied in the domain class' package, and then their contents updated to specify the order in which the respective object's properties will be shown in the standalone or parented collections.
 
 == API
 
