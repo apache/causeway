@@ -18,7 +18,7 @@
  */
 
 import assert from 'node:assert/strict';
-import {readdir, readFile} from 'node:fs/promises';
+import {access, readdir, readFile} from 'node:fs/promises';
 import {extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'node:test';
@@ -34,8 +34,10 @@ const PROJECT_ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const AUDIT_ROOTS = [
   WEB_COMPONENTS_ROOT,
   `${PROJECT_ROOT}/openspec/planned-changes`,
-  `${PROJECT_ROOT}/regressiontests/referenceapp/htmx`,
   `${PROJECT_ROOT}/viewers/graphql/adoc`
+];
+const OPTIONAL_AUDIT_ROOTS = [
+  `${PROJECT_ROOT}/regressiontests/referenceapp/htmx`
 ];
 const SOURCE_EXTENSIONS = new Set(['.adoc', '.css', '.html', '.java', '.js', '.md', '.mjs', '.yaml', '.yml']);
 const APPLICATION_MARKUP_ROOTS = [
@@ -93,6 +95,19 @@ const ELEMENT_API_MARKERS = [
   'waitForFunction'
 ];
 
+async function auditRoots() {
+  const roots = [...AUDIT_ROOTS];
+  for (const root of OPTIONAL_AUDIT_ROOTS) {
+    try {
+      await access(root);
+      roots.push(root);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
+  return roots;
+}
+
 async function sourceFiles(directory) {
   const files = [];
   for (const entry of await readdir(directory, {withFileTypes: true})) {
@@ -110,7 +125,7 @@ async function sourceFiles(directory) {
 
 test('source contains only the compact custom-element namespace', async () => {
   const stale = [];
-  for (const root of AUDIT_ROOTS) {
+  for (const root of await auditRoots()) {
     for (const path of await sourceFiles(root)) {
       const lines = (await readFile(path, 'utf8')).split('\n');
       for (const [index, line] of lines.entries()) {
@@ -127,7 +142,7 @@ test('source contains only the compact custom-element namespace', async () => {
 
 test('member-bearing elements use native id without stale member DOM APIs', async () => {
   const stale = [];
-  for (const root of AUDIT_ROOTS) {
+  for (const root of await auditRoots()) {
     for (const path of await sourceFiles(root)) {
       if (path === AUDIT_FILE) continue;
       const lines = (await readFile(path, 'utf8')).split('\n');

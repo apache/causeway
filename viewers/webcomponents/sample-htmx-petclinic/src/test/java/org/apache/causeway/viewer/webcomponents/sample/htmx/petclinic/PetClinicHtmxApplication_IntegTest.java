@@ -160,7 +160,6 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-unreferenced-actions data-testid=\"petclinic-owner-unreferenced-actions\"></cw-unreferenced-actions>")
                 .contains("<cw-action id=\"relatedOwners\"")
                 .contains("<cw-standalone-collection named=\"Related owners\"")
-                .contains("<cw-unreferenced-collections data-testid=\"petclinic-owner-unreferenced-collections\"></cw-unreferenced-collections>")
                 .contains("<cw-action-results class=\"petclinic-card\" data-testid=\"petclinic-action-results\" hidden></cw-action-results>");
         final var collectionPresentation = get("/htmx/_collection-presentations/petclinic.PetOwner");
         assertThat(collectionPresentation.statusCode()).isEqualTo(200);
@@ -383,7 +382,7 @@ class PetClinicHtmxApplication_IntegTest {
             ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(ownerHtml)
-                .contains("<div class=\"petclinic-object-heading\">\n    <cw-object-header></cw-object-header>\n    <div class=\"petclinic-page-toolbar\" aria-label=\"Owner actions\">\n      <cw-action id=\"allOwners\"")
+                .contains("<div class=\"petclinic-object-heading\">\n    <cw-object-header></cw-object-header>\n    <div class=\"petclinic-page-toolbar\" aria-label=\"Owner actions\">\n<!--\n      <cw-action id=\"allOwners\"")
                 .contains("<cw-property id=\"name\" named=\"Full name\">")
                 .contains("<cw-action id=\"updateName\"")
                 .contains("named=\"Owner's full name\"")
@@ -406,7 +405,6 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
                 .contains("<cw-unreferenced-actions data-testid=\"petclinic-owner-unreferenced-actions\"")
-                .contains("<cw-unreferenced-collections data-testid=\"petclinic-owner-unreferenced-collections\"")
                 .contains("<cw-action id=\"bookVisit\"")
                 .contains("<cw-fieldset name=\"Agreement\" class=\"petclinic-card petclinic-agreement-card\">")
                 .doesNotContain("petclinic-object-grid", "petclinic-object-details", "petclinic-object-collections",

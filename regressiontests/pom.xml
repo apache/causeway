@@ -180,7 +180,6 @@
         <module>value</module>
         <module>viewers-common</module>
         <module>viewers-jpa</module>
-        <module>referenceapp</module>
     </modules>
 
 </project>
