@@ -117,7 +117,7 @@
 							<dependency>
 								<groupId>org.jvnet.jaxb2_commons</groupId>
 								<artifactId>jaxb2-namespace-prefix</artifactId>
-								<version>1.3</version>  <!-- don't upgrade from 1.3 to 2.x, 
+								<version>2.0</version>  <!-- don't upgrade from 2.0 to 2.x, 
 										as this fragile combination of plugins will otherwise
 										produce invalid annotations -->
 							</dependency>
