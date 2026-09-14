@@ -1,0 +1,70 @@
+= Vue: Local SecMan Authentication
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+The optional `org.apache.causeway.viewer:causeway-viewer-webcomponents-vue-security-secman` server module provides local SecMan authentication for an application-owned Vue host.
+It combines the shared credential bridge with protected Vue routes, server-rendered login, safe request restoration, bounded authentication context, and native logout.
+The generic Vue package does not fetch credentials, create security endpoints, or persist tokens.
+
+== Server setup
+
+Use matching Causeway versions and select SecMan persistence and encryption modules, for example the JPA and Spring encryption implementations.
+Import `CausewayModuleViewerWebcomponentsVueSecuritySecman`, those selected SecMan modules, the GraphQL viewer, and the application-owned Vue route controller.
+The controller and the security integration must agree on the Vue route base.
+
+Enable CSRF filters explicitly and review the defaults:
+
+[source,properties]
+----
+causeway.security.spring.allow-csrf-filters=true
+causeway.viewer.webcomponents.vue.security.secman.base-path=/vue
+causeway.viewer.webcomponents.vue.security.secman.graph-ql-path=/graphql
+causeway.viewer.webcomponents.vue.security.secman.login-path=/login
+causeway.viewer.webcomponents.vue.security.secman.logout-path=/logout
+causeway.viewer.webcomponents.vue.security.secman.authentication-context-path=/authentication
+causeway.viewer.webcomponents.vue.security.secman.brand=Apache Causeway
+causeway.viewer.webcomponents.vue.security.secman.filter-chain-order=20
+causeway.viewer.webcomponents.vue.security.secman.cookies-to-delete=JSESSIONID
+----
+
+Review existing filter chains and endpoint ownership rather than blindly adding a competing chain.
+The module does not automatically combine session and bearer-token authentication on one GraphQL path.
+
+== Frontend composition
+
+The secured bootstrap fetches the authenticated no-store context endpoint before mounting.
+It receives only bounded username, CSRF header/parameter names and token, and login/logout paths.
+Do not embed live session evidence in cacheable frontend assets.
+The sample's `frontend/src/authentication.ts` demonstrates this bootstrap and performs no authentication work for the ordinary document.
+
+Bind its CSRF-decorating executor as a DOM property on the stable client.
+Every same-origin GraphQL POST carries current CSRF evidence, including read queries sent as POST.
+A GraphQL `401` initiates full-document login navigation with a safe Vue continuation.
+An authenticated `403` remains an authorization or CSRF failure, not an automatic login loop.
+
+The shell keeps a non-visual native POST logout form carrying the current token.
+Menu policies supply the bounded current-user title and *Sign out* appearance, and exact action policy claims `causeway.security.LogoutMenu#logout` to submit that form.
+Successful logout invalidates the session and performs configured cookie cleanup.
+A local-resource result pointing to `/logout` is ordinary navigation, not a substitute for that secure workflow.
+
+Use HTTPS and appropriately scoped `HttpOnly`, `Secure`, and `SameSite` session cookies.
+Server-side Causeway authorization continues to apply after authentication.
+Do not exempt GraphQL or logout from CSRF to make a custom executor work.
+
+== Secured Petclinic walkthrough
+
+Stop the ordinary sample and run from the repository root:
+
+[source,shell]
+----
+./viewers/webcomponents/sample-vue-petclinic/run-secured.sh
+----
+
+Open `http://localhost:8080/vue/object/petclinic.PetOwner/s_owner-mary` and sign in with `sven` / `pass`.
+These deterministic credentials are for development only.
+The safe requested Vue destination is restored after login.
+Check that the user-labelled utility menu remains available across navigation, perform an authorised interaction, then choose *Sign out*.
+A later protected request should require authentication again.
+
+For failures, check the authentication-context response, session cookie, and CSRF-bearing executor before investigating domain validation.
+See xref:troubleshooting.adoc[troubleshooting] for further distinctions.

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "directPackages": {
+    "@vaadin/a11y-base": "25.2.8",
+    "@vaadin/button": "25.2.8",
+    "@vaadin/component-base": "25.2.8",
+    "@vaadin/vaadin-themable-mixin": "25.2.8"
+  },
+  "bundleSha256": "1073fc9a396e5216e2701c5513ce3e55b44796f60e44bab08b89b6195970f5cb",
+  "maximumGzipBytes": 65536,
+  "cspStyleHashes": [
+    "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+  ]
+}

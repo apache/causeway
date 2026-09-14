@@ -1,0 +1,234 @@
+= Generic HTMX web-component viewer
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+The `causeway-viewer-webcomponents-htmx` module provides an optional server-routed application shell over the framework-neutral Causeway custom elements.
+HTMX owns canonical navigation, bounded binding of declarative templates, fragment replacement, browser history, loading, announcements, and route errors.
+Declarative HTML owns the GraphQL-client and object-context hierarchy, while the semantic components own GraphQL projections, effective layouts, menus, interactions, validation, mutations, and typed results.
+
+Application developers should start with the link:../adoc/modules/ROOT/pages/htmx/getting-started.adoc[HTMX Antora guide].
+This README also retains module-specific verification and release details.
+
+== Enablement
+
+Add `org.apache.causeway.viewer:causeway-viewer-webcomponents-htmx` and import `CausewayModuleViewerWebcomponentsHtmx` in the application bootstrap.
+Merely using the foundation component module does not install any HTMX route or asset.
+Applications requiring optional local SecMan-backed browser authentication can instead follow link:../htmx-security-secman/README.adoc[`htmx-security-secman/README.adoc`].
+
+The viewer packages `org.webjars.npm:htmx.org:2.0.6` and serves the module-owned browser bridge and shell stylesheet from `/causeway-htmx/`.
+The shell uses external same-origin scripts and styles and requires no inline script.
+
+== Configuration
+
+`causeway.viewer.webcomponents.htmx.base-path` defaults to `/htmx` and accepts a bounded non-root origin-relative mount path.
+`causeway.viewer.webcomponents.htmx.graph-ql-endpoint` defaults to `/graphql`.
+`causeway.viewer.webcomponents.htmx.brand` defaults to `Apache Causeway`.
+`causeway.viewer.webcomponents.htmx.language` defaults to `en`.
+`causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
+`causeway.viewer.webcomponents.htmx.resource-page-mode` accepts `cached` or `reload` and defaults to `cached`.
+Cached mode validates and retains private HTML page and application-shell content at startup, while reload mode additionally reopens and validates an already-registered resource whenever it renders.
+Reload mode is intended for development and adds one bounded classpath-resource read per custom page or full-page shell render.
+`causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
+`causeway.viewer.webcomponents.htmx.component-toolkit` accepts `vaadin` or `native` and defaults to `vaadin`.
+The Vaadin policy enables qualified reference editors, basic, numeric, and local-temporal editors and read-only fields, ordinary action buttons, deterministic wide collection Grid presentation, and qualified application Menu Bar tiers, while the native policy is the immediate complete rollback.
+`causeway.viewer.webcomponents.htmx.editor-toolkit`, `causeway.viewer.webcomponents.htmx.vaadin-reference-widgets`, and `causeway.viewer.webcomponents.htmx.vaadin-field-families` remain readable for a bounded deprecation period.
+An explicit component property wins over every deprecated property.
+When the component property is absent, an explicit deprecated editor property maps to the complete component policy so its former native rollback remains complete.
+When both common properties are absent but either older pilot property is explicit, the complete former editor-only policy is preserved: references default false and field families default empty unless their corresponding old value is supplied, while read-only fields, action buttons, Grid, and Menu Bar remain native.
+Unknown, blank, or repeated deprecated family entries fail bounded configuration rather than broadening policy.
+`causeway.viewer.webcomponents.htmx.reference-minimum-search-length` defaults to `2`.
+`causeway.viewer.webcomponents.htmx.reference-maximum-results` defaults to `50` and is the requested page-size fallback for advertised GraphQL autocomplete windows as well as the accepted complete-response bound for legacy non-windowed autocomplete.
+An advertised field's smaller introspected default window size takes precedence.
+
+[source,properties]
+----
+# Supported default
+causeway.viewer.webcomponents.htmx.component-toolkit=vaadin
+
+# Immediate complete rollback and diagnostic comparison
+causeway.viewer.webcomponents.htmx.component-toolkit=native
+----
+
+The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
+It declares `worker-src 'self'` so an eligible PDF property can use the foundation's packaged PDF.js module worker without permitting remote, blob, or data workers and without adding `unsafe-inline` or `unsafe-eval`.
+The PDF.js display module, worker, support assets, and authorized PDF bytes remain same-origin and are requested only when an automatic reader or an activated manual reader initializes.
+Reader page controls scroll only the foundation-owned PDF viewport, while the persistent authorized download link occupies the reader toolbar and remains independent of HTMX routing.
+The shared toolbar zoom selector restores page-width fitting and also offers page-height, page-fit, actual-size, and percentage choices without HTMX-specific state.
+It loads the pinned Font Awesome WebJar stylesheet and fonts from the application origin so static `@ActionLayout(cssClassFa, cssClassFaPosition)` hints render without CDN access or inline styles.
+Malformed, absent, or dynamic action icon metadata remains icon-free without weakening the action or shell.
+The default Vaadin policy adds the deterministic deduplicated union of only the reviewed byte-exact `style-src` and `style-src-elem` SHA-256 sources, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.
+The reference, basic, numeric, local-temporal, action-button, Grid, and Menu Bar JavaScript closures remain independent and are requested only when an eligible connected editor, read-only field, ordinary action, active wide qualified collection, or non-empty qualified stable-shell menu tier selects them.
+Menu Bar is shared by all tiers and later routes after its first qualified use, while login, challenge, authentication failure, logout, empty-menu, unsupported-menu, and explicit-native chrome request zero Menu Bar bytes.
+Landing, custom, narrow-collection, inactive-collection, unqualified-collection, and otherwise unaffected member regions therefore make zero member-local Vaadin asset requests even though their policy permits reviewed hashes.
+The native policy removes every Vaadin hash and asset request without changing routes, GraphQL, persisted data, or application markup.
+Applications adding other third-party resources must deliberately supply an equivalent deployment policy rather than weakening this module silently.
+
+== Toolkit release obligations
+
+The default toolkit is supported only through the checked-in selective reference, field-family, action-button, Grid, and Menu Bar closures.
+A dependency update must regenerate and review npm integrity, package entry points, production licenses, telemetry opt-out, raw and gzip budgets, SHA-256 checksums, exact style hashes, and same-origin assets as one change.
+Reproduce each closure from its `foundation/vaadin-reference`, `foundation/vaadin-fields`, `foundation/vaadin-actions`, `foundation/vaadin-grid`, or `foundation/vaadin-menubar` directory with `npm ci --ignore-scripts`, `npm run build`, `npm run verify`, and `npm run audit`.
+The independent `foundation/pdfjs` directory uses the same commands to reproduce and verify its pinned display module, module worker, CMaps, standard fonts, ICC profiles, image-decoder support assets, checksums, size budget, and Apache-2.0 legal material.
+Accepted gzip ceilings are 66560 bytes for references, 81920 bytes for basic fields, 66560 bytes for numeric fields, 102400 bytes for local-temporal fields, 204800 bytes for all field families, 65536 bytes for actions, 196608 bytes for Grid, 98304 bytes for Menu Bar, and 631808 bytes for the complete closure set.
+Release qualification runs deterministic build verification, zero-vulnerability production audit, enforcing CSP, axe, keyboard, focus, responsive, light, dark, reduced-motion, forced-colors, console, page-error, external-request, overflow, Petclinic, vanilla sample, Reference Application, and explicit-native rollback gates.
+A failed closure retains its existing Causeway-owned native fallback and fails independently from other presentation families.
+A deployment can roll back all adapters with the common native property without changing routes, GraphQL, persisted values, or application markup.
+Qualified read-only presentation is limited to non-null standard text, multiline text, Boolean, enum or bounded choice, exact and machine numeric, local date, millisecond local time, and millisecond local date-time values.
+Application renderers, protected values, nulls, references, resources, LOBs, offset, zoned, and legacy temporals, custom values, collections, and unsupported outputs retain their established renderers.
+Only ordinary `<cw-action>` buttons are eligible for the action adapter; property edit, save, cancel, and clear controls, action prompts, menus, and shell controls remain outside it.
+Menu Bar qualifies separately for connected non-empty representable primary, secondary, and tertiary tiers and delegates selected enabled leaves to the established Causeway service-action interaction path.
+It preserves native fallback, tier order, sections, disabled reasons, focus, responsive overflow, GraphQL, action-result, routing, and authentication ownership, and raw Vaadin items and events remain unsupported application APIs.
+Grid qualifies separately only for connected active collections wider than 48rem with bounded windows, `CONFIGURED` ordering, supported Causeway semantic projections, and either a safe total or normalized paging metadata.
+Grid never adds sorting, filtering, selection, editing, details, resizing, reordering, drag, row actions, GraphQL construction, routing, authorization, persistence pushdown, or application-facing Vaadin APIs.
+
+== Canonical routes
+
+The canonical object route is `<base-path>/object/<logical-type>/<identifier>`.
+The public logical type and opaque identifier are independently UTF-8 percent-encoded as path segments without interpreting or normalizing identity.
+Each source segment is bounded to 4,096 UTF-8 bytes and each final canonical encoded segment is bounded to 4,096 ASCII characters.
+The encoded bound is normally decisive and permits long ASCII-oriented view-model mementos while bounding browser history, request, decoding, and rendering cost.
+Browser generation and server parsing reject empty values, malformed Unicode or escapes, encoded separators, backslashes, controls, dot segments, overlong UTF-8 or encoded values, and non-canonical spellings.
+Deployments with a proxy or container in front of the viewer must permit the documented canonical route size without decoding path separators.
+
+An ordinary browser request receives a complete document containing one GraphQL client, stable menu bars, announcements, result presentation, and the requested route page.
+A request carrying `HX-Request: true` receives only the route fragment and an `HX-Push-Url` response header.
+A history-restore request receives only the route fragment and swaps it into the declared history element, so back and forward navigation never replace the stable shell or strand browser-bridge references.
+The shell disables authorization-sensitive HTMX history snapshots and re-fetches the authorized route fragment on a history cache miss.
+Normal home and result links remain canonical anchors, while the browser bridge enhances same-origin navigation with `htmx.ajax()` target, swap, push, and replace options.
+
+== Application shell
+
+The viewer-owned document scaffold declares the doctype, `<html>` runtime attributes, framework-sensitive `<head>`, HTMX configuration and scripts, common component styles, CSP-sensitive metadata, authentication metadata, title, and configured application stylesheet.
+An application can independently own the complete stable `<body>` shell by packaging one UTF-8 resource at `META-INF/causeway/webcomponents/shells/htmx.html`.
+The private shell resource is consumed only by server-side composition and is not exposed by Spring's ordinary static-resource handler.
+When no application shell exists, the viewer uses its separately packaged built-in default so existing applications require no migration.
+Exactly one application shell takes authority, while duplicate or defective application shells fail closed instead of being merged, selected by classpath order, repaired, or replaced by the default.
+
+The application shell has one `<body>` root and one stable `<cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">`.
+The client contains exactly one `<cw-menubars>`, route region identified by `causeway-route`, action-result outlet identified by `causeway-result`, loading region identified by `causeway-route-loading`, announcement region identified by `causeway-route-announcement`, `{{causeway.authenticationChrome}}` slot, and `{{causeway.routeContent}}` inside the route region.
+The shell may arrange those landmarks with any ordinary HTML wrappers, order, classes, body attributes, branding, header, aside, auxiliary regions, and footer content.
+It must not declare `<html>`, `<head>`, executable scripts, a route-level `<cw-object-context>`, an unknown reserved token, or duplicate protocol landmarks.
+A side region may contain `<cw-menubars>`, but this shell flexibility does not itself add vertical menu rendering or orientation behavior.
+
+The shell's closed escaped value bindings are `{{causeway.basePath}}`, `{{causeway.brand}}`, and `{{causeway.graphQlEndpoint}}`.
+Its validated structural bindings are `{{causeway.authenticationChrome}}`, `{{causeway.routeContent}}`, and `{{causeway.comparisonLink}}`.
+Brand and comparison-link bindings are optional, while the GraphQL endpoint, authentication slot, and route-content slot are required exactly where their contracts specify.
+Inserted structural fragments are not reparsed for token substitution, and no expression, request parameter, arbitrary configuration, metamodel value, persistence value, or GraphQL result is addressable through the vocabulary.
+
+The shell registration follows `resource-page-mode`.
+Cached mode validates and retains its bounded non-empty strict UTF-8 content at startup.
+Reload mode fixes the selected resource at startup but reopens and revalidates it for every ordinary full-page render.
+Adding or removing a shell requires an application-context restart, and a defective reload fails the affected full-page request without stale content or default fallback.
+HTMX fragment responses continue to contain only the route page, so the application shell, GraphQL client, menus, results, and other global state remain connected across route replacement.
+
+To migrate from the built-in shell, copy the body structure from the viewer's `default-shell.html` into the application convention and then change ordinary wrappers and CSS as needed.
+Removing the application resource immediately restores the built-in shell after application restart.
+Custom layouts own their corresponding application CSS, while the built-in classes continue to receive the default viewer styling.
+
+== Generic and custom pages
+
+Every custom or generic object-page definition declares exactly one route-level `<cw-object-context>`.
+The viewer binds canonical identity into that authored element and never creates or repairs it.
+Without an exact custom registration, the viewer selects its declarative generic page containing `<cw-object editable>`, and the component uses its effective or fallback Causeway grid.
+
+The preferred application customization is a UTF-8 HTML file beneath `META-INF/causeway/webcomponents/pages/`.
+The filename before `.html` is the exact public logical type, so `petclinic.PetOwner.html` registers `petclinic.PetOwner` without an application bean, annotation, manifest, template controller, or client-side fetch.
+The private resource is packaged in the application or a dependency jar but is not served by Spring's ordinary static-resource handler.
+The viewer discovers all direct `*.html` children during startup, accepts at most 512 pages, and accepts at most 256 KiB per page.
+In default `cached` mode it retains one immutable literal string for each accepted page.
+In opt-in `reload` mode it retains the immutable startup registration but reopens that resource and validates its current content for each render.
+Pages must be non-empty strict UTF-8, contain no NUL character, use a filename-safe Causeway logical type, and satisfy the complete declarative route-page contract.
+Reload does not rescan the classpath, so adding, deleting, or renaming a page requires an application restart.
+A defective reload fails the affected request instead of serving stale content or selecting generic layout.
+
+A page contains its route-page boundary, one token-bound route-level object context, application presentation, and one interaction controller.
+The exact required context attributes are `logical-type="{{causeway.logicalType}}"` and `object-id="{{causeway.objectId}}"`.
+The viewer performs escaped replacement only for those two closed tokens and rejects missing, duplicate, misplaced, or unresolved reserved bindings.
+It does not evaluate general expressions, interpolate metamodel or GraphQL data, sanitize trusted packaged content, add semantic wrappers, or expose the classpath resource as a public URL.
+Nested object contexts with their own explicit non-route identity remain valid because only the one token-bound context is the route boundary.
+These files are trusted packaged application code and must never contain arbitrary user-supplied HTML without an application-controlled sanitization boundary.
+Strict CSP remains active, so customization uses ordinary elements, classes, the configured same-origin application stylesheet, documented selectors, and `--causeway-*` variables rather than inline handlers or styles.
+
+The compatible dynamic extension remains one Spring bean implementing `HtmxPageFragmentFactory` for a public logical type.
+The factory returns the same complete route-page hierarchy and binds its declared object context to the escaped identity from `HtmxObjectRoute`.
+The factory receives only that public route value, not a metamodel object, persistence session, authorization object, or GraphQL response.
+The viewer validates the result but does not wrap it.
+Two resources, two factories, or one of each claiming the same logical type fail during startup without using bean or classpath order.
+A discovered resource that is unreadable, empty, oversized, malformed, invalidly named, or duplicated also fails startup rather than silently selecting the generic page.
+Only complete absence of an exact registration selects the declarative generic page containing `<cw-object editable>`.
+
+
+Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, collection, and declarative layout elements.
+`<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` remain explicitly authored structure, while `<cw-metadata>` derives the exact `metadata` fieldset from the context's authorized effective layout.
+Custom pages may also directly declare `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` in a column.
+An action catch-all may instead be authored directly among ordinary toolbar actions; its ready host is layout-transparent while its accessible generated group remains compact, start-aligned, and wrapping.
+A property catch-all may instead be authored directly among ordinary tabgroup children, where foundation exposes its bounded name as a tab only while remaining properties exist.
+Foundation allocates remaining authorized members by exact kind and ID in authoritative order; HTMX performs no member scanning, allocation, fetching, or reconstruction.
+One destination per kind is effective in document order, hidden connected references still count, and generated properties require explicit `editable` opt-in.
+The elements expose `loading`, `ready`, `empty`, and `error` through `data-causeway-unreferenced-state`, and empty destinations render no visible group.
+Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
+The PetOwner example uses one foundation-owned 4/8 row for its details and collections columns, places its tab group and fieldsets directly in the details column, and demonstrates catch-all collection composition below that row.
+Its toolbar keeps the result-bearing `relatedOwners` action explicit while a direct action catch-all presents eligible remaining actions without a redundant layout box.
+It demonstrates Identity, conditional Other, and Metadata tabs without artificial placeholder content; Other is omitted automatically when no properties remain.
+Within PetOwner, application wrappers remain only around the object heading and route-level structures that are outside the declarative macro grid; other representative pages keep their independently authored composition.
+The HTMX host does not translate, enhance, or reconstruct these elements.
+Those elements consume the one nearest route context and therefore do not create a parallel data plane.
+Removing an HTML file from the packaged application is the immediate rollback to retained grid-driven generic composition.
+
+== Collection preview resources
+
+A direct empty `<cw-preview>` declaration lets the HTMX host resolve a bounded default from `META-INF/causeway/webcomponents/previews/<logical-type-name>.html` for each authoritative runtime row type.
+Each resource must contain exactly one attribute-free `<cw-preview>` root and retains the established private endpoint, caching, reload, validation, and fail-closed behavior.
+Applications upgrading from the former `<cw-peek>` element must rename that tag in both page and preview resources; no legacy alias is registered.
+
+== Home and results
+
+The shell extends targeted application-entry discovery only far enough to read the established optional object-home metadata and its public `_meta` identity.
+A valid object home replaces the landing route with its canonical object route.
+Absent, hidden, invalid, unsupported, or partially failing home state leaves an accessible landing page and stable menus.
+The viewer does not invent a home service-action descriptor.
+
+Default result policy routes object results, presents scalar and collection results in the shell result region, and announces void completion before authoritatively replacing the current route context while preserving the result announcement.
+Typed `LocalResourcePathValue` results use the servlet context path published as `data-causeway-application-resource-base` and perform safe same-origin full-document navigation; they never enter HTMX fragment or object routing.
+Unsafe local-resource targets fail closed in the result region, and `NEW_WINDOW` requests an opener-isolated window.
+An application can provide `window.causewayHtmxPolicy.navigate`, `handleHome`, or `handleResult` functions and return `true` to claim the corresponding policy decision.
+These policy functions receive semantic public payloads and do not replace component interaction behavior.
+
+Without an authentication integration, the generic host removes and blocks the exact framework action `causeway.security.LogoutMenu#logout` before GraphQL invocation, exposes no logout endpoint, and announces that logout is unavailable; similarly named application actions remain available.
+An explicit authentication integration can retain that exact authorized action in its authoritative menu location, label it for host presentation, and claim it before GraphQL.
+Secure authentication integrations own their native logout form, HTTP method, CSRF evidence, session cleanup, and redirect independently of ordinary local-resource results.
+
+== Styling and accessibility
+
+The shell loads `/causeway-webcomponents/theme.css` and `/causeway-htmx/causeway-htmx.css`.
+The default theme follows the current Wicket viewer's application hierarchy with a sticky primary navigation surface, contained content, title and actions, cards, tabs, aligned properties, compact tables, bounded prompts, visible disabled state, and responsive collapse.
+It uses ordinary CSS variables and documented light-DOM hooks rather than Bootstrap or Wicket markup.
+
+The theme supports light, dark, reduced-motion, and forced-colors preferences.
+At narrow widths navigation becomes disclosed, object columns and property labels stack, tables scroll inside their own collection regions, and the page does not overflow horizontally.
+Applications may override the documented `--causeway-*` design tokens without replacing semantic behavior.
+
+Navigation exposes loading and route announcements, moves focus to the installed route page, preserves existing content until replacement succeeds, and maps non-disclosing terminal state locally.
+Escape, native controls, menu keyboard behavior, prompt focus containment, and visible focus remain component-owned.
+
+== Petclinic reference application
+
+Run the cohesive sample with:
+
+[source,bash]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic
+----
+
+Open `http://localhost:8080/htmx` for the generic viewer.
+Open `http://localhost:8080/wicket/` and sign in as `sven` with password `pass` for the current Wicket comparison over the same model and fixture data.
+See `../sample-htmx-petclinic/PROVENANCE.adoc` for the pinned Apache Petclinic source and porting boundaries.
+
+== Non-goals
+
+The module does not add routing awareness to `<cw-object>`.
+It does not construct domain GraphQL operations, translate GraphQL values, parse effective grid or menu XML, expose metamodel internals, manufacture semantic context elements, or define Vue, Svelte, or Angular lifecycle APIs.
+It does not require applications that use only the component library to adopt HTMX, Wicket, Petclinic, or the default theme.
+The default toolkit policy adds no Grid query contract, upload adapter, unsupported temporal adapter, Flow, Binder, Pro component, server-side Vaadin state, telemetry, CDN asset, or application-facing raw Vaadin API.

@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
@@ -35,7 +35,7 @@ public class RichPropertyGetClobName extends RichPropertyGetClobAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        return fetchDataFromBlob(environment, Blob::name);
+        return fetchDataFromClob(environment, Clob::name);
     }
 
 }

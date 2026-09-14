@@ -1,0 +1,19 @@
+{
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            hiddenPhoto {
+              validate(hiddenPhoto: {
+                name: "private.pdf",
+                mimeType: "application/pdf",
+                base64: "UFJJVkFURV9ISURERU5fUkVTT1VSQ0VfSU5QVVQ="
+              })
+            }
+          }
+        }
+      }
+    }
+  }
+}

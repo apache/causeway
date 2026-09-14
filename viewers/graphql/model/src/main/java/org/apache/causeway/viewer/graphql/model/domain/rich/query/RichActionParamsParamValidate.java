@@ -48,7 +48,7 @@ public class RichActionParamsParamValidate extends Element {
         var fieldBuilder = newFieldDefinition()
                 .name("validity")
                 .type(context.typeMapper.outputTypeFor(String.class));
-        actionParamInteractor.addGqlArgument(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, actionParamInteractor.getParamNum());
+        actionParamInteractor.addGqlArgument(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE, actionParamInteractor.getParamNum());
         setField(fieldBuilder.build());
     }
 
@@ -71,8 +71,8 @@ public class RichActionParamsParamValidate extends Element {
 
         var argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
-        var usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return usable.isVetoed() ? usable.reasonAsString().orElse("Invalid") : null;
+        var validity = objectActionParameter.isValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        return validity.isVetoed() ? validity.reasonAsString().orElse("Invalid") : null;
     }
 
 }

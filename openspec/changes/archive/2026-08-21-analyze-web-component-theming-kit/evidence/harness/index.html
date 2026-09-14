@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Causeway theming strategy analysis</title>
+  <link rel="stylesheet" href="./harness.css">
+  <style>
+    body { padding: 2rem; }
+    main { max-width: 72rem; margin-inline: auto; }
+    .candidate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+    .candidate-grid a { display: block; border: 1px solid #8c9199; border-radius: .5rem; padding: 1rem; color: inherit; text-decoration: none; }
+    .candidate-grid a:hover, .candidate-grid a:focus-visible { border-color: #075985; outline: .2rem solid #38bdf8; outline-offset: .15rem; }
+  </style>
+</head>
+<body>
+<main>
+  <p>Apache Causeway analysis harness</p>
+  <h1>Theming strategy prototypes</h1>
+  <p>Every candidate renders the same representative semantic fixture with pinned local assets.</p>
+  <div class="candidate-grid">
+    <a href="./prototype.html?candidate=baseline"><strong>Current Causeway baseline</strong><br>Existing Causeway theme and component styles.</a>
+    <a href="./prototype.html?candidate=bootstrap"><strong>Bootstrap 5.3</strong><br>CSS variables and selected classes with Causeway behavior.</a>
+    <a href="./prototype.html?candidate=webawesome"><strong>Web Awesome</strong><br>Web Components behind Causeway hosts.</a>
+    <a href="./prototype.html?candidate=openprops"><strong>Open Props + native</strong><br>Design tokens with Dialog and Popover APIs.</a>
+  </div>
+</main>
+</body>
+</html>

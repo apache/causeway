@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
@@ -36,6 +37,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
@@ -61,12 +63,17 @@ public class RichActionParamsParam
      * Populated iff there is an autocomplete for this param
      */
     private final RichActionParamsParamAutoComplete autoComplete;
+    private final RichActionParamsParamAutoCompleteWindow autoCompleteWindow;
     /**
      * Populated iff there is a default for this param
      */
     private final RichActionParamsParamDefault default_;
     private final RichActionParamsParamValidate validate;
     private final RichActionParamsParamDatatype datatype;
+    private final RichMemberMetadata metadata;
+    private final RichScalarMetadataField resourceFileAccept;
+    private final RichScalarMetadataField resourceInputMaxBytes;
+    private final RichScalarMetadataField resourceInputMode;
 
     public RichActionParamsParam(
             final ActionInteractor holder,
@@ -83,9 +90,14 @@ public class RichActionParamsParam
             this.disabled = null;
             this.choices = null;
             this.autoComplete = null;
+            this.autoCompleteWindow = null;
             this.default_ = null;
             this.validate = null;
             this.datatype = null;
+            this.metadata = null;
+            this.resourceFileAccept = null;
+            this.resourceInputMaxBytes = null;
+            this.resourceInputMode = null;
 
             // nothing else to be done
             return;
@@ -93,11 +105,38 @@ public class RichActionParamsParam
 
         addChildFieldFor(this.hidden = new RichActionParamsParamHidden(this, context));
         addChildFieldFor(this.disabled = new RichActionParamsParamDisabled(this, context));
+        addChildFieldFor(this.metadata = new RichMemberMetadata(context, oap, true));
         addChildFieldFor(this.choices = new RichActionParamsParamChoices(this, context));
         addChildFieldFor(this.autoComplete = new RichActionParamsParamAutoComplete(this, context));
+        addChildFieldFor(this.autoCompleteWindow = oap.hasAutoComplete()
+                ? new RichActionParamsParamAutoCompleteWindow(this, context)
+                : null);
         addChildFieldFor(this.default_ = new RichActionParamsParamDefault(this, context));
         addChildFieldFor(this.validate = new RichActionParamsParamValidate(this, context));
         addChildFieldFor(this.datatype = new RichActionParamsParamDatatype(this, context));
+
+        var resourceParameter = ResourceValueTypes.isResourceType(oap.getElementType().correspondingClass());
+        addChildFieldFor(this.resourceFileAccept = resourceParameter
+                ? new RichScalarMetadataField(
+                        context,
+                        "fileAccept",
+                        Scalars.GraphQLString,
+                        () -> ResourceValueTypes.fileAccept(oap).orElse(null))
+                : null);
+        addChildFieldFor(this.resourceInputMaxBytes = resourceParameter
+                ? new RichScalarMetadataField(
+                        context,
+                        "inlineInputMaxBytes",
+                        Scalars.GraphQLInt,
+                        () -> context.causewayConfiguration.viewer().graphql().resources().inlineInputMaxBytes())
+                : null);
+        addChildFieldFor(this.resourceInputMode = resourceParameter
+                ? new RichScalarMetadataField(
+                        context,
+                        "resourceInputMode",
+                        Scalars.GraphQLString,
+                        () -> ResourceValueTypes.inputMode(context))
+                : null);
 
         buildObjectTypeAndField(oap.asciiId(), oap.getCanonicalDescription().orElse(oap.getCanonicalFriendlyName()));
     }
@@ -121,6 +160,7 @@ public class RichActionParamsParam
 
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
+        metadata.addDataFetcher(this);
 
         if (choices != null) {
             choices.addDataFetcher(this);
@@ -128,6 +168,9 @@ public class RichActionParamsParam
 
         if (autoComplete != null) {
             autoComplete.addDataFetcher(this);
+        }
+        if (autoCompleteWindow != null) {
+            autoCompleteWindow.addDataFetcher(this);
         }
 
         if (default_ != null) {
@@ -137,6 +180,11 @@ public class RichActionParamsParam
         validate.addDataFetcher(this);
 
         datatype.addDataFetcher(this);
+        if (resourceFileAccept != null) {
+            resourceFileAccept.addDataFetcher(this);
+            resourceInputMaxBytes.addDataFetcher(this);
+            resourceInputMode.addDataFetcher(this);
+        }
     }
 
     @Override
@@ -162,8 +210,12 @@ public class RichActionParamsParam
     }
 
     @Override
-    public void addGqlArgument(final ObjectAction objectAction, final GraphQLFieldDefinition.Builder fieldBuilder, final TypeMapper.InputContext inputContext, final int paramNum) {
-        // TODO: what lives here?
+    public void addGqlArgument(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder fieldBuilder,
+            final TypeMapper.InputContext inputContext,
+            final int paramNum) {
+        actionInteractor.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum + 1);
     }
 
     @Override

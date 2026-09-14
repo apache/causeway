@@ -1,0 +1,190 @@
+= Apache Causeway Vue Web Component Viewer
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+The package provides the thin Vue 3 and Vue Router 4 integration for Apache Causeway semantic web components.
+It owns route and host policy but does not duplicate GraphQL or domain state.
+
+Application developers should start with the link:../adoc/modules/ROOT/pages/vue/getting-started.adoc[Vue Antora guide].
+This README also retains package verification details.
+
+== Installation
+
+Install `@apache-causeway/vue-viewer`, `vue`, and `vue-router` in the application frontend.
+Vue and Vue Router are peer dependencies of the viewer package.
+The Causeway component registration modules and any selected toolkit adapters remain same-origin application assets supplied by the Causeway backend.
+The same rule applies to the foundation's lazily loaded PDF.js display module, module worker, support assets, authorized PDF resource URLs, contained page navigation, toolbar zoom selector, and toolbar download link; Vue does not bundle or replace the reader.
+Page-width restoration, page-height and page-fit modes, actual size, and percentage choices remain foundation behavior rather than Vue state.
+
+Configure the Vue plugin so `cw-` tags compile as native custom elements.
+
+[source,typescript]
+----
+vue({
+  template: {
+    compilerOptions: {
+      isCustomElement: tag => tag.startsWith('cw-')
+    }
+  }
+})
+----
+
+Create the router with the application's browser-history base, add the exported route records, and install the returned plugin.
+
+[source,typescript]
+----
+const router = createRouter({
+  history: createWebHistory('/vue'),
+  routes: [
+    ...createCausewayRouteRecords(),
+    ...applicationRoutes
+  ]
+});
+
+const viewer = createCausewayVueViewer({
+  router,
+  endpoint: '/graphql',
+  basePath: '/vue',
+  applicationResourceBase: '/',
+  pages: {
+    'petclinic.PetOwner': PetOwnerPage,
+    'petclinic.HomePage': () => import('./pages/HomePage.vue')
+  }
+});
+
+createApp(App).use(router).use(viewer.plugin).mount('#app');
+----
+
+The application server must return its Vue `index.html` for `/vue`, `/vue/object/**`, and other intended client routes.
+That fallback must not capture `/graphql`, application assets, authentication endpoints, or unrelated backend routes.
+
+== Application-owned shell
+
+The root application component declares stable protocol landmarks rather than asking the viewer to manufacture them.
+The visual hierarchy remains application-owned.
+
+[source,vue]
+----
+<script setup lang="ts">
+import {ref} from 'vue';
+import {RouterView, useRoute} from 'vue-router';
+import {useCausewayShell, useCausewayViewer} from '@apache-causeway/vue-viewer';
+
+const viewer = useCausewayViewer();
+const route = useRoute();
+const shell = useCausewayShell(ref<HTMLElement | null>(null));
+</script>
+
+<template>
+  <div ref="shell">
+    <cw-graphql-client data-causeway-shell-client :endpoint="viewer.endpoint">
+      <header><cw-menubars /></header>
+      <div data-causeway-route-loading role="status" aria-live="polite" />
+      <div data-causeway-route-announcement aria-live="polite" aria-atomic="true" />
+      <cw-action-results data-causeway-shell-result hidden />
+      <main data-causeway-router-view>
+        <RouterView v-slot="{ Component }">
+          <component :is="Component" :key="route.path" />
+        </RouterView>
+      </main>
+    </cw-graphql-client>
+  </div>
+</template>
+----
+
+Use Vue's `.prop` modifier for structured custom-element values that are DOM properties rather than strings.
+For example, `:executor.prop="executor"` preserves the executor function instead of serializing it as an attribute.
+
+== Custom route pages
+
+A custom page receives immutable `logicalTypeName`, `objectId`, and `routeKey` props.
+It declares one marked route object context and one marked interaction controller inside that context.
+
+[source,vue]
+----
+<script setup lang="ts">
+import type {CausewayRoutePageProps} from '@apache-causeway/vue-viewer';
+defineProps<CausewayRoutePageProps>();
+</script>
+
+<template>
+  <section data-causeway-route-page tabindex="-1">
+    <cw-object-context
+      data-causeway-route-context
+      :logical-type="logicalTypeName"
+      :object-id="objectId"
+    >
+      <cw-object-header />
+      <cw-property id="name" editable />
+      <cw-interaction-controller data-causeway-route-interactions />
+    </cw-object-context>
+  </section>
+</template>
+----
+
+An unregistered exact logical type uses the package's generic page containing `<cw-object editable>`.
+Registrations are immutable after plugin creation and do not use type inheritance.
+Custom Vue pages can directly author `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` without a Vue wrapper or adapter.
+`<cw-metadata>` consumes the nearest route context's authorized effective layout and renders only the exact `metadata` fieldset's properties and actions.
+Vue pages may directly declare `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` as native custom elements without wrappers.
+An action catch-all may instead be authored directly among ordinary toolbar actions; its ready host is layout-transparent while its accessible generated group remains compact, start-aligned, and wrapping.
+A property catch-all may instead be authored directly among ordinary tabgroup children, where foundation exposes its bounded name as a tab only while remaining properties exist.
+Foundation allocates remaining authorized members by exact kind and ID in authoritative order; Vue performs no reactive member scanning, allocation, fetching, or reconstruction.
+One destination per kind is effective in document order, hidden connected references still count, and generated properties require explicit `editable` opt-in.
+The elements expose `loading`, `ready`, `empty`, and `error` through `data-causeway-unreferenced-state`, and empty destinations render no visible group.
+Tab content uses the regular contained viewer-panel surface, and metadata actions remain ordinary actions presented through the foundation-owned `Metadata actions` ellipsis menu.
+The PetOwner example uses the same foundation-owned 4/8 row as HTMX, with direct tabgroup, fieldset, and collection children and no Vue macro-grid wrappers.
+It uses equivalent action-toolbar and collection catch-alls while keeping the result-bearing `relatedOwners` action explicit.
+It demonstrates Identity, conditional Other, and Metadata tabs without artificial placeholder content; Other is omitted automatically when no properties remain.
+Within PetOwner, application wrappers remain only around the object heading and route-level structures that are outside the declarative macro grid; other representative pages keep their independently authored composition.
+The Vue host continues to own routing and stable-shell policy but does not reconstruct or reinterpret these foundation components.
+
+== Public exports
+
+The package exports route codecs, route names and records, the viewer plugin factory, shell binding helpers, boundary validators, policy helpers, public TypeScript contracts, and the generic route components.
+Applications may replace pre-invocation action, menu-title, menu-action label, menu-action appearance, navigation, home, result, and error policy through viewer options.
+The typed action policy receives canonical action-request detail, an idempotent single-claim capability, and immutable route context; a synchronous claim prevents validation and GraphQL invocation, while an unclaimed asynchronous decision resumes an ordinary action exactly once if the route remains current.
+Claimed semantic events are not also handled by the default policy.
+The default policy removes and blocks only the exact framework action `causeway.security.LogoutMenu#logout`.
+Applications with authentication can return a bounded current-user title from `menuLabel`, a bounded label from `menuActionLabel`, and a bounded appearance token from `menuActionAppearance` for exact identities while retaining the authoritative semantic menu location.
+The application still claims exact Logout activation and owns the secure workflow; the generic package discovers no authentication state and infers neither username nor Logout from display text.
+Without both explicit presentation and invocation policy, framework Logout fails closed before GraphQL and similarly named application actions remain ordinary.
+
+`applicationResourceBase` is independent of `basePath` and identifies the application-local deployment base used for typed `LocalResourcePathValue` results.
+The default result policy resolves those values as same-origin full-document targets, rejects unsafe or escaping paths, and uses opener isolation for `NEW_WINDOW`; it does not send them through Vue Router.
+A local-resource path named `/logout` remains ordinary navigation and is never treated as authentication.
+Hosts may claim result policy first to replace or further restrict this behavior.
+
+== Secured host composition
+
+Authentication remains an application responsibility.
+A secured application can fetch its current session and CSRF context before mounting, bind a CSRF-decorating executor with `:executor.prop` on its stable `<cw-graphql-client>`, retain a non-visual native POST logout form, label its utility menu through `menuLabel`, present **Sign out** through `menuActionLabel` and `menuActionAppearance`, and claim exact framework Logout activation through the typed action policy.
+The viewer neither fetches credentials nor CSRF evidence, creates endpoints, persists tokens, or infers authentication from routes or `LocalResourcePathValue` results.
+A host that does not supply this context makes no authentication bootstrap request and retains ordinary executor behavior.
+
+The optional `causeway-viewer-webcomponents-vue-security-secman` server module provides one local SecMan and Spring Security implementation of these application-owned integration points.
+It serves a JavaScript-independent login page and bounded no-store authentication context, protects Vue and GraphQL routes, restores safe Vue GET destinations, and owns CSRF-protected session logout.
+See `../vue-security-secman/README.adoc` and the secured Vue Petclinic variant for a complete host composition.
+
+The canonical route grammar is `<base-path>/object/<logical-type>/<identifier>` using independently canonical UTF-8 percent-encoded segments.
+Malformed, unsafe, non-canonical, or oversized segments fail before an object context is mounted.
+
+== Lifecycle and presentation
+
+The stable shell keeps its GraphQL provider and menus connected while canonical route keys dispose obsolete object contexts.
+Object-context state remains authoritative for loading, ready, partial-error, and terminal-error presentation.
+For unclaimed results, the default bridge transfers ownership exactly once: it clears obsolete viewer-owned outlets, dismisses transient source result chrome, routes complete entity or view-model identity canonically, and replaces scalar, collection, void, or unsupported presentation.
+A claimed result remains wholly application-owned, and a result that becomes obsolete while policy awaits cannot clear or repopulate a newer route.
+The application owns shell CSS and may copy or override the package reference theme through documented custom properties.
+The semantic components continue to own object layout, menus, validation, interactions, results, `<cw-preview>` collection previews, and toolkit selection.
+Vue applications upgrading from the former `<cw-peek>` spelling must migrate authored templates before rebuilding because no compatibility alias is registered.
+
+The first release supports client-rendered Vue applications only.
+Nuxt, server-side rendering, streaming hydration, runtime page-registry mutation, and inherited logical-type matching are not supported.
+
+== Verification
+
+Run `npm ci --ignore-scripts` followed by `npm run verify` to type-check, test, build, inspect, pack, install, and import the package.
+The Maven profile `regenerate-vue-viewer` performs the same locked regeneration for reactor maintainers.

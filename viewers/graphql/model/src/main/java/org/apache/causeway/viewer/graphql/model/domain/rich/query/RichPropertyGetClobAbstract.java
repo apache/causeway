@@ -24,8 +24,9 @@ import java.util.function.Function;
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
 
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -39,17 +40,26 @@ public abstract class RichPropertyGetClobAbstract extends Element {
 
     public RichPropertyGetClobAbstract(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context, String name) {
+            final Context context,
+            final String name) {
+        this(memberInteractor, context, name, Scalars.GraphQLString);
+    }
+
+    protected RichPropertyGetClobAbstract(
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
+            final Context context,
+            final String name,
+            final GraphQLOutputType outputType) {
         super(context);
         this.holder = memberInteractor;
 
         setField(GraphQLFieldDefinition.newFieldDefinition()
                     .name(name)
-                    .type(Scalars.GraphQLString)
+                    .type(outputType)
                     .build());
     }
 
-    protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
+    protected Object fetchDataFromClob(DataFetchingEnvironment environment, Function<Clob, ?> mapper) {
         var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         var sourcePojoClass = sourcePojo.getClass();
@@ -65,8 +75,8 @@ public abstract class RichPropertyGetClobAbstract extends Element {
 
         return Optional.ofNullable(resultManagedObject)
                 .map(ManagedObject::getPojo)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
+                .filter(Clob.class::isInstance)
+                .map(Clob.class::cast)
                 .map(mapper)
                 .orElse(null);
     }

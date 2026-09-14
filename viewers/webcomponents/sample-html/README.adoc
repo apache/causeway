@@ -1,0 +1,506 @@
+= Vanilla HTML Web-Component Sample
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for framework-neutral application-menu, composite-object, read-only, and interaction web components against a real rich GraphQL endpoint.
+Its frontend uses the packaged CSP-compatible structural stylesheet, cohesive Wicket-inspired design tokens, a small page-specific responsive layer, vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
+It has no npm build, HTMX, Playwright, or frontend-framework dependency.
+
+== Application architecture
+
+The application uses the Causeway GraphQL viewer, Causeway JPA persistence with EclipseLink, an in-memory H2 database, security bypass for local verification, and the packaged web-component foundation artifact.
+The sample HTML, foundation modules, and `/graphql` endpoint are served from the same origin.
+The sample explicitly enables direct structural metadata so `<cw-menubars>` can dereference the authorized effective application menu and `<cw-object>` can dereference the authorized effective grid.
+Applications that keep this policy forbidden receive bounded unavailable menu state and canonical object fallback composition without resource bodies.
+
+The module is an executable integration fixture and is skipped during Maven install and deployment.
+
+== Build and run
+
+JDK 17 or later is required.
+The preferred development launch uses the reactor's `run-sample-html` Maven profile:
+
+[source,shell]
+----
+export JAVA_HOME="$HOME/.sdkman/candidates/java/17.0.18-tem"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-html
+----
+
+The profile selects `spring-boot:run` as its default goal, builds the foundation and sample in reactor order, skips the non-application reactor modules for the run goal, and starts only `sample-html`.
+Running from the reactor ensures that the foundation resources, Causeway GraphQL viewer, JPA persistence, H2 database, and security-bypass runtime are all present on the application classpath.
+Stop the application with `Ctrl+C`.
+
+To use a different port, pass the Spring Boot application argument through the Maven plugin:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-html \
+    -Dspring-boot.run.arguments=--server.port=19186
+----
+
+Open the corresponding page:
+
+[source,text]
+----
+http://localhost:8080/sample-html/index.html
+----
+
+For the port-override example, open `http://localhost:19186/sample-html/index.html` instead.
+The page imports the foundation entry module from `/causeway-webcomponents/index.mjs` and sends GraphQL operations to the same-origin `/graphql` endpoint.
+Wait for `[data-testid="sample-app"]` to reach `data-state="ready"`; `terminal-error` indicates that the required GraphQL schema or object query did not become available.
+
+=== Packaged-jar alternative
+
+To verify the packaged artifact rather than run from compiled classes, build the complete reactor first:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -pl sample-html -am package
+
+JAR=$(find viewers/webcomponents/sample-html/target \
+    -name 'causeway-viewer-webcomponents-sample-html-*.jar' \
+    ! -name '*-sources.jar' \
+    ! -name '*-javadoc.jar' \
+    ! -name '*.original' | head -1)
+java -jar "$JAR"
+----
+
+== Deterministic sample data
+
+The application creates one root JPA entity and two related JPA entities during startup.
+The root identity and expected values are:
+
+[cols="1,2"]
+|===
+|Contract |Value
+
+|Logical type
+|`causeway.webcomponents.sample.SampleObject`
+
+|Persisted string identifier
+|`sample-1`
+
+|Causeway bookmark and component `object-id`
+|`s_sample-1`
+
+|Title
+|`Framework-neutral components [WC-001]`
+
+|Visible scalar property
+|`name = Framework-neutral components`
+
+|Disabled scalar property
+|`code = WC-001`, disabled because `The sample code is fixed.`
+
+|Hidden property
+|`secret` is present but its value is intentionally not reproduced by the page or this guide
+
+|Representative text
+|`summary = A deterministic reference page composed entirely from semantic Causeway web components.`
+
+|Representative number
+|`capacity = 24`
+
+|Representative boolean
+|`featured = true`
+
+|Enum property
+|`status = ACTIVE`
+
+|Null property
+|`notes = null`
+
+|Object-valued property
+|`relatedObject = causeway.webcomponents.sample.SampleRelatedObject:s_related-1`
+
+|Enabled action state
+|`inspect`, visible with no disabled reason
+
+|Disabled action state
+|`archive`, disabled because `Archiving is disabled in the read-only sample.`
+
+|Hidden action state
+|`hiddenAction`, present in the rich schema with `hidden = true`
+
+|Property validation
+|`summary` requires at least 12 characters and `capacity` must be between `1` and `100`
+
+|Safe scalar action
+|`inspect`, invoked through the rich query and returns the object title
+
+|Parameterized mutating action
+|`updateDetails(summary, status)`, with defaults, enum choices, validation, object result, and top-level mutation placement
+
+|Safe collection action
+|`findRelated(search)`, with autocomplete and a related-object collection result
+
+|Safe reference action
+|`selectRelated(related)`, with fixed object choices rendered through the default route-lazy reference adapter
+
+|Void mutating action
+|`clearNotes`, invoked through a top-level mutation and followed by context refresh
+|===
+
+The deterministic `causeway.webcomponents.sample.SampleMenu` service contributes effective actions across all three application bars:
+
+[cols="1,2"]
+|===
+|Action |Contract
+
+|`welcomeMessage`
+|Safe parameterless scalar result
+
+|`greet(name)`
+|Safe parameterized scalar result with default `Ada`, choices `Ada`, `Grace`, and `Linus`, and mandatory-name validation
+
+|`findSample`
+|Safe object result
+
+|`findRelatedObjects`
+|Safe object-collection result
+
+|`statusMessage(status)`
+|Safe enum-parameter scalar result with default `ACTIVE`
+
+|`clearSampleNotes`
+|Void mutating result through the top-level mutation
+
+|`disabledAction`
+|Visible and disabled because `Available to administrators only.`
+
+|`hiddenAction`
+|Hidden and omitted from the authorized effective menu
+|===
+
+The explicit menu layout also contains one malformed action reference so the application entry reports bounded `INVALID_ACTION_REFERENCE` while preserving valid bars and actions.
+The populated `relatedObjects` collection contains these deterministic rows:
+
+[cols="1,1,2,1"]
+|===
+|Bookmark |Logical type |Name |Code
+
+|`s_related-1`
+|`causeway.webcomponents.sample.SampleRelatedObject`
+|`Schema-driven components`
+|`ROW-001`
+
+|`s_related-2`
+|`causeway.webcomponents.sample.SampleRelatedObject`
+|`Framework-neutral composition`
+|`ROW-002`
+|===
+
+The `emptyRelatedObjects` collection returns no rows.
+The `s_` prefix is Causeway's string-identifier encoding used by bookmarks and rich GraphQL object lookups.
+The `_meta.version` values are supplied through the JPA `HasVersion` contract.
+
+== Expected page and interaction states
+
+The reference page groups semantic content into an application-menu shell and labelled object-summary, property, action, collection, live-diagnostic, and automatically composed object cards.
+The menu shell renders one shared `<cw-menubars>` generation plus independently loading primary, secondary, and tertiary examples.
+The shared composite reaches bounded `partial-error` because the fixture deliberately includes one invalid reference, while all three valid bars, hidden filtering, disabled reason, prompts, and typed service results remain available.
+The automatically composed card uses only an independent `<cw-object-context>`, `<cw-object editable>`, and the standard interaction controller.
+It retrieves the authorized effective fallback grid, discovers members through targeted schema introspection, and generates the established semantic children without page-authored member structure.
+The object header displays `Framework-neutral components [WC-001]` and the root bookmark.
+The `name`, `summary`, `capacity`, `featured`, `status`, null `notes`, and related-object link render through the standard value registry.
+Ordinary values are enabled at the Causeway metamodel level, while the `code` property, related-object property, and `archive` action display deliberate disabled reasons.
+The `secret` property and `hiddenAction` render no semantic content, and the coverage guide explains their absence without reproducing a hidden value.
+The `summary`, `capacity`, `featured`, `status`, and `notes` properties expose explicit edit affordances, while the page remains read-only for every property without `editable`.
+The standard interaction controller invokes `inspect` directly, opens accessible prompts for `updateDetails`, `findRelated`, and `selectRelated`, executes `clearNotes`, and publishes typed semantic results without automatic navigation.
+The page uses the foundation's supported default adapters, but no Vaadin asset is requested until an eligible semantic editor such as the `selectRelated` prompt connects.
+A plain-HTML diagnostic host can select native controls by calling `configureCausewayReferenceWidgets({enabled: false})` and `configureCausewayFieldWidgets({families: []})` before importing `index.mjs`.
+
+Both collections are activated declaratively by the sample page.
+`relatedObjects` loads through a secondary context-owned operation and renders the declared `name` and `code` columns.
+Its returned metadata and wrapper data hydrate row contexts without repeating the selected object reads.
+The diagnostics card reports `2 rows loaded` through `collection-related-count`.
+`emptyRelatedObjects` renders the accessible `No items` status.
+The page-specific cards, typography, focus treatment, and collection framing adapt to narrow and wide viewports and light and dark color schemes.
+
+== Browser-automation contract
+
+The stable page URL is `/sample-html/index.html`.
+The following selectors are intended as public test hooks for browser automation:
+
+[cols="1,2"]
+|===
+|Selector |Meaning
+
+|`[data-testid="sample-app"]`
+|Application readiness boundary
+
+|`[data-testid="sample-state"]`
+|Live textual context state
+
+|`[data-testid="graphql-client"]`
+|GraphQL client provider
+
+|`[data-testid="section-menubars"]`
+|Application-menu showcase
+
+|`[data-testid="menubars-composite"]`
+|Shared application-menu coordinator; wait for `data-menu-state="ready"` or bounded `partial-error`
+
+|`[data-testid="menubar-primary-standalone"]`
+|Independent primary bar
+
+|`[data-testid="menubar-secondary-standalone"]`
+|Independent secondary bar
+
+|`[data-testid="menubar-tertiary-standalone"]`
+|Independent tertiary bar
+
+|`[data-testid="menubars-state"]`
+|Live composite menu generation state
+
+|`[data-testid="sample-object"]`
+|Object context for the deterministic root entity
+
+|`[data-testid="composite-object-context"]`
+|Independent context for the automatic composition example
+
+|`[data-testid="composite-object"]`
+|Layout-aware `<cw-object>` host; wait for `data-layout-state="ready"` or `fallback`
+
+|`[data-testid="section-composite-object"]`
+|Automatically composed complete-object card
+
+|`[data-testid="section-object-summary"]`
+|Semantic identity card
+
+|`[data-testid="section-properties"]`
+|Representative property card
+
+|`[data-testid="section-actions"]`
+|Read-only action card
+
+|`[data-testid="section-collections"]`
+|Populated and empty collection card
+
+|`[data-testid="section-events"]`
+|Live diagnostics card
+
+|`[data-testid="sample-coverage"]`
+|Static semantic coverage guide
+
+|`[data-testid="object-header"]`
+|Rendered object header
+
+|`[data-testid="property-name"]`
+|Visible scalar property
+
+|`[data-testid="property-code"]`
+|Disabled scalar property
+
+|`[data-testid="property-secret"]`
+|Hidden property host
+
+|`[data-testid="property-summary"]`
+|Representative text property
+
+|`[data-testid="property-capacity"]`
+|Representative numeric property
+
+|`[data-testid="property-featured"]`
+|Representative boolean property
+
+|`[data-testid="property-status"]`
+|Enum property
+
+|`[data-testid="property-notes"]`
+|Null property
+
+|`[data-testid="property-related-object"]`
+|Object-valued property
+
+|`[data-testid="object-link-related-object"]`
+|Generated semantic link for the object-valued property
+
+|`[data-testid="action-inspect"]`
+|Enabled safe scalar action
+
+|`[data-testid="action-update-details"]`
+|Parameterized mutating object-result action
+
+|`[data-testid="action-find-related"]`
+|Parameterized safe autocomplete and collection-result action
+
+|`[data-testid="action-select-related"]`
+|Parameterized safe object-reference action and route-lazy reference trigger
+
+|`[data-testid="action-clear-notes"]`
+|Mutating void-result action
+
+|`[data-testid="action-interaction-controller"]`
+|Standard interaction-controller host
+
+|`[data-testid="action-archive"]`
+|Disabled action affordance and reason
+
+|`[data-testid="action-hidden"]`
+|Hidden action host
+
+|`[data-testid="collection-related-objects"]`
+|Populated activated collection
+
+|`[data-testid="collection-empty-related-objects"]`
+|Empty activated collection
+
+|`[data-testid="column-related-name"]`
+|Stable populated-collection name-column heading
+
+|`[data-testid="column-related-code"]`
+|Stable populated-collection code-column heading
+
+|`[data-testid="sample-event"]`
+|Live semantic navigation and action-request diagnostic
+
+|`[data-testid="sample-interaction-event"]`
+|Latest property, prompt, invocation, or result state
+
+|`[data-testid="action-prompt"]`
+|Standard parameterized-action prompt while open
+
+|`[data-testid="action-prompt-parameter-summary"]`
+|`updateDetails` summary parameter editor
+
+|`[data-testid="action-prompt-parameter-status"]`
+|`updateDetails` enum parameter editor
+
+|`[data-testid="action-prompt-submit"]`
+|Prompt invocation control
+
+|`[data-testid="action-prompt-cancel"]`
+|Prompt cancellation control
+
+|`[data-testid="action-result"]`
+|Standard typed action-result presentation
+
+|`[data-testid="collection-related-count"]`
+|Live populated-collection row count
+|===
+
+`[data-testid="sample-app"]` exposes the latest semantic object-context status through its `data-state` attribute.
+Automation should wait for `data-state="ready"` or fail with the diagnostic state when it becomes `partial-error` or `terminal-error`.
+The application also updates `aria-busy` during `schema-loading` and `object-loading`.
+
+A future Playwright test can therefore begin with a wait equivalent to:
+
+[source,javascript]
+----
+await page.goto('/sample-html/index.html');
+await page.locator('[data-testid="sample-app"][data-state="ready"]').waitFor();
+----
+
+Each editable property derives additive hooks from its existing host selector: for example, `property-summary-edit`, `property-summary-editor`, `property-summary-save`, and `property-summary-cancel`.
+Playwright itself is intentionally not introduced by this slice.
+
+== Manual event verification
+
+Open the composite `Samples` menu and select `Personal Greeting`.
+The standard prompt initializes the `name` choice editor from service-action defaults, validates the pending value, and reports a scalar result with service target `causeway.webcomponents.sample.SampleMenu`.
+Select `Find Sample` and `Related Objects` to observe object and collection results without automatic navigation.
+Select `Clear Sample Notes` in the tertiary bar to observe top-level mutation placement, void result, and menu-generation refresh.
+The disabled action remains represented with its reason, while the hidden and malformed actions remain absent.
+
+Select the object link rendered inside `property-related-object`.
+The page prevents no routing, but the plain application listener reports `navigate:causeway.webcomponents.sample.SampleRelatedObject:s_related-1` through `sample-event`.
+
+Select the enabled `inspect` action.
+The affordance first reports `action:inspect` through `sample-event`; the standard controller then invokes it and reports `result:inspect:scalar` through `sample-interaction-event`.
+Select `updateDetails` to open the standard prompt, observe its prompt states, and invoke a top-level mutation that reports `result:updateDetails:object`.
+The disabled `archive` action and hidden `hiddenAction` must not open a prompt or change the result diagnostic.
+After the populated collection loads, `collection-related-count` reports `2 rows loaded`.
+
+== Manual browser checklist
+
+. Start the sample with `mvn -f viewers/webcomponents/pom.xml -Prun-sample-html` and wait for `Started SampleHtmlApplication`.
+. Probe `/graphql` directly as shown below, open `/sample-html/index.html`, and wait for `sample-app[data-state="ready"]`.
+. Confirm the composite application menus reach bounded `partial-error`, render labelled primary, secondary, and tertiary navigation from one menu-resource request, preserve valid entries, omit hidden and malformed entries, and retain the disabled service action with its reason.
+. Confirm each standalone bar independently loads only its primary, secondary, or tertiary role and owns its interaction controller.
+. Open menu disclosures with pointer, Enter, and Space; use arrows, Home, and End among peers; close with Escape; and confirm focus restoration, sibling closing, and ordinary Tab order.
+. Invoke the greeting, object, collection, and void service actions and confirm defaults, choices, validation, typed service-target events, safe query or top-level mutation placement, and no automatic navigation.
+. Confirm the explicit-composition cards and automatically composed object card, interaction controls, static coverage guide, existing read-only values, deliberate disabled reasons, hidden states, two collection rows, row count, and empty collection.
+. Confirm `composite-object` reaches `data-layout-state="ready"`, contains generated header, property, action, collection, group, and tab regions, and exposes no hidden semantic content.
+. Select `Edit Summary`, cancel, and confirm that no mutation ran and the original value remains.
+. Enter a summary shorter than 12 characters, confirm the accessible validation reason and blocked Save control, then enter a valid value, save it, and confirm the refreshed semantic value.
+. Edit Capacity with `0` and confirm its range validation; cancel or restore `24`.
+. Edit Status, confirm `ACTIVE` and `PAUSED` choices, save a temporary choice, and restore `ACTIVE`.
+. Select `Inspect` and confirm a safe query, scalar result, semantic diagnostics, and no prompt.
+. Select `Update Details`, confirm defaults and enum choices, submit an invalid short summary, cancel once with Escape, then invoke valid values and confirm the object result and refreshed summary and status.
+. Select `Find Related`, type a search that exercises advertised autocomplete, invoke it, and confirm the collection result without navigation.
+. Select `Clear Notes` and confirm a void result and context refresh; confirm Archive remains disabled and the hidden action remains absent.
+. Repeat edit, cancel, prompt, and invoke flows with keyboard-only Tab, Enter, Space, and Escape operation and confirm focus returns to the originating control.
+. Repeat at narrow and wide viewports in light and dark color schemes.
+. Confirm property updates and mutating actions use top-level GraphQL mutations, safe actions use rich queries, every `/graphql` request succeeds, the browser console contains no errors, and the accessibility audit reports no failures.
+
+=== Recorded interaction verification
+
+On 2026-08-16 the exact Maven profile and direct GraphQL probe returned HTTP 200, and the page reached `sample-app[data-state="ready"]` with the stable read-only content intact.
+On 2026-08-18 the menu composite reached bounded `data-menu-state="partial-error"` from one authorized effective-menu request, preserved primary, secondary, and tertiary bars, exposed the disabled reason, omitted hidden and malformed entries, and published only the generic `INVALID_ACTION_REFERENCE` diagnostic.
+The three standalone examples each rendered only their own role with a private interaction controller and menu-resource generation.
+Pointer and keyboard checks covered native disclosure toggling, sibling closing, Tab order, arrow, Home, End, Enter, Space, and Escape focus restoration; narrow dark and wide light layouts retained visible focus and had no overflow.
+Service interaction checks covered default and choice recomputation, prompt cancellation, scalar, object, collection, and void outcomes, explicit service targets, top-level mutation placement, and generation refresh without automatic navigation.
+A synthetic capability-absent component reached bounded `unsupported` state without an application read or resource fetch.
+Cold concurrent startup completed without GraphQL schema races, and every browser GraphQL request succeeded without console errors.
+Desktop light-mode and mobile dark-mode Lighthouse navigation audits scored 100 for Accessibility, Best Practices, and SEO.
+The generic-viewer styling pass replaced the page's ad hoc visual system with packaged structural CSS, shared Wicket-inspired tokens, contained cards, consistent headings and controls, container-aware property alignment, internally scrollable tables, bounded modal prompts, restored editor focus, and accessible responsive menu disclosures.
+Desktop and mobile checks found no page overflow, control overlap, failed resources, or application console messages, and the repaired sample retained 100 for Accessibility, Best Practices, and SEO in light and dark navigation audits.
+On 2026-08-18 the object composite reached `data-layout-state="ready"` from one authorized effective-grid request with no diagnostics and generated one header, eight visible properties, five visible actions, and two collections while hidden members remained empty hosts.
+Pointer and keyboard checks covered composite property validation and cancellation, action-prompt opening and Escape focus restoration, ArrowRight tab selection, and bounded collection-window activation with two hydrated rows.
+A browser-injected partial-error context preserved a successful sibling property and announced the bounded failed member.
+Forced fallback produced canonical 12/4/8 spans without another grid request, and wide light-mode and narrow dark-mode layouts had no horizontal overflow or console errors.
+Lighthouse navigation audits again scored 100 for Accessibility, Best Practices, and SEO in both desktop light-mode and mobile dark-mode configurations.
+Pointer and keyboard checks covered property cancellation, invalid and corrected validation, authoritative save, enum choices, action defaults, autocomplete, invalid blocking, Escape cancellation, focus restoration, and disabled and hidden actions.
+The `inspect`, `updateDetails`, `findRelated`, `selectRelated`, and `clearNotes` flows produced scalar, object, collection, and void semantic results without automatic navigation.
+The `selectRelated` prompt loaded the default reference closure once, preserved stable object identity, restored focus on Escape, and left all earlier routes free of Vaadin requests.
+Network inspection confirmed rich queries for safe behavior, top-level mutations for property updates and mutating actions, typed enum and target variables, successful responses, and complete context refresh after mutation.
+Wide light-mode and narrow dark-mode checks remained usable and readable, with no application console errors.
+Lighthouse navigation audits scored 100 for Accessibility, Best Practices, and SEO in both desktop light-mode and mobile dark-mode configurations.
+
+== Automated integration verification
+
+Run the foundation and sample tests from the repository root:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -pl sample-html -am test
+----
+
+The sample integration test starts the application on a random port and verifies:
+
+* `/sample-html/index.html` is delivered with all documented selectors.
+* The rich application entry returns an authorized effective menu descriptor and bounded invalid-reference issue.
+* `/graphql/application/menu-bars` returns primary, secondary, and tertiary XML using `private, no-store`, retains the disabled action, and omits hidden, malformed, and sensitive content.
+* Real service wrappers expose current hidden and disabled state, defaults, choices, validation, and safe scalar invocation, while the void service mutation uses the existing top-level field.
+* `/causeway-webcomponents/index.mjs`, `component-styles.css`, and `theme.css` are delivered from the foundation dependency, with synchronized structural styles and light, dark, reduced-motion, and forced-colors support.
+* The authorized effective-grid resource returns XML with `private, no-store` and never contains the hidden value.
+* The page includes a context-plus-`<cw-object>` composition with stable acceptance selectors.
+* Independent targeted `__type` operations resolve the root, enum-property, and collection wrapper types without triggering GraphQL Java's bad-faith introspection rejection.
+* A real rich GraphQL object lookup resolves `s_sample-1`.
+* Object metadata, enabled ordinary properties, text, numeric, boolean, enum, null, reference, enabled-action, disabled-action, hidden-action, and hidden-property state have deterministic values.
+* Property validation, enum choices, top-level property mutation, safe query invocation, action defaults, autocomplete, action validation, mutating object result, safe collection result, void mutation, and authoritative restoration use the real endpoint.
+* The section, property, editor, action, prompt, result, coverage, event, and collection-count hooks are present while the hidden value is absent from the page source.
+* A real secondary-shaped collection operation returns deterministic row metadata and selected `name` and `code` wrappers.
+* The empty collection returns zero rows.
+
+The foundation's dependency-free Node tests verify targeted application and service discovery, shared safe menu and grid parsing, grouped service state, menu generations and refresh, declarative and standalone bars, service prompts and typed targets, deterministic member allocation, canonical object fallback, composite lifecycle and diagnostics, context-owned resource retrieval, renderer and editor selection, property state transitions, object prompts and results, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, mutation serialization, stale-response rejection, row hydration reuse, and delta reads without requiring a browser process.
+
+== GraphQL readiness probe and troubleshooting
+
+While the Maven run profile remains active, verify the same-origin endpoint directly:
+
+[source,shell]
+----
+curl -i \
+  -H 'Content-Type: application/json' \
+  --data '{"query":"query CausewayProbe { __typename }"}' \
+  http://localhost:8080/graphql
+----
+
+A healthy response is HTTP `200` with `{"data":{"__typename":"SimpleAndRich"}}`.
+If the page reaches `terminal-error`, first confirm the Maven output contains `Started SampleHtmlApplication`, check that port `8080` is not owned by an older process, run the probe, and hard-refresh with the browser cache disabled.
+Inspect `document.querySelector('[data-testid="sample-object"]').context.state.error` for the concrete schema or object failure.
+For interaction failures, inspect `sample-interaction-event`, the failing `/graphql` response, and the prompt or property alert before retrying.

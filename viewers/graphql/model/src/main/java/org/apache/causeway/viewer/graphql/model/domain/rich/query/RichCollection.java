@@ -33,6 +33,7 @@ public class RichCollection
     private final RichMemberHidden<OneToManyAssociation> hidden;
     private final RichMemberDisabled<OneToManyAssociation> disabled;
     private final RichCollectionGet get;
+    private final RichCollectionWindow window;
     private final RichCollectionDatatype datatype;
 
     public RichCollection(
@@ -46,12 +47,14 @@ public class RichCollection
             this.hidden = null;
             this.disabled = null;
             this.get = null;
+            this.window = null;
             this.datatype = null;
             return;
         }
         addChildFieldFor(this.hidden = new RichMemberHidden<>(this, context));
         addChildFieldFor(this.disabled = new RichMemberDisabled<>(this, context));
         addChildFieldFor(this.get = new RichCollectionGet(this, context));
+        addChildFieldFor(this.window = new RichCollectionWindow(this, context));
         addChildFieldFor(this.datatype = new RichCollectionDatatype(this, context));
 
         buildObjectTypeAndField(otma.asciiId(), otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()));
@@ -64,12 +67,14 @@ public class RichCollection
 
     @Override
     protected void addDataFetchersForChildren() {
+        addMemberMetadataDataFetchers();
         if(hidden == null) {
             return;
         }
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         get.addDataFetcher(this);
+        window.addDataFetcher(this);
         datatype.addDataFetcher(this);
     }
 

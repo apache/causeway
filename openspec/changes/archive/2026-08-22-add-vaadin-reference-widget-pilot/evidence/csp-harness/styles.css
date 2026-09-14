@@ -1,0 +1,28 @@
+html {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 56rem;
+  padding: 1rem;
+}
+
+#fixture {
+  border: 1px solid currentColor;
+  box-sizing: border-box;
+  min-height: 12rem;
+  padding: 1rem;
+}
+
+vaadin-combo-box,
+vaadin-multi-select-combo-box {
+  max-width: 100%;
+  width: 24rem;
+}

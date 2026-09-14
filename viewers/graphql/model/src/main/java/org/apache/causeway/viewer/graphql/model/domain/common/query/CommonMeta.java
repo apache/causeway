@@ -26,6 +26,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonMetaBreadcrumbs;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonMetaCssClass;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonMetaFetcher;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonMetaGrid;
@@ -44,6 +45,7 @@ public class CommonMeta extends ElementCustom {
     private final CommonMetaLogicalTypeName metaLogicalTypeName;
     private final CommonMetaVersion metaVersion;
     private final CommonMetaTitle metaTitle;
+    private final CommonMetaBreadcrumbs metaBreadcrumbs;
     private final CommonMetaIcon metaIcon;
     private final CommonMetaCssClass metaCssClass;
     private final CommonMetaLayout metaLayout;
@@ -66,6 +68,7 @@ public class CommonMeta extends ElementCustom {
             this.metaLogicalTypeName = null;
             this.metaVersion = null;
             this.metaTitle = null;
+            this.metaBreadcrumbs = null;
             this.metaIcon = null;
             this.metaCssClass = null;
             this.metaLayout = null;
@@ -78,19 +81,21 @@ public class CommonMeta extends ElementCustom {
         addChildFieldFor(this.metaLogicalTypeName = new CommonMetaLogicalTypeName(context));
         addChildFieldFor(this.metaVersion = isEntity() ? new CommonMetaVersion(context) : null);
         addChildFieldFor(this.metaTitle = new CommonMetaTitle(context));
+        addChildFieldFor(this.metaBreadcrumbs = new CommonMetaBreadcrumbs(context));
         addChildFieldFor(this.metaCssClass = new CommonMetaCssClass(context));
         addChildFieldFor(this.metaLayout = new CommonMetaLayout(context));
         addChildFieldFor(this.metaSaveAs = new CommonMetaSaveAs(context));
 
-        addChildFieldFor(this.metaIcon = isResourceNotForbidden() ? new CommonMetaIcon(context) : null);
-        addChildFieldFor(this.metaGrid = isResourceNotForbidden() ? new CommonMetaGrid(context) : null);
+        addChildFieldFor(this.metaIcon = isStructuralMetadataEnabled() ? new CommonMetaIcon(context) : null);
+        addChildFieldFor(this.metaGrid = isStructuralMetadataEnabled() ? new CommonMetaGrid(context) : null);
 
         var fieldName = graphqlConfiguration.metaData().fieldName();
         buildObjectTypeAndField(fieldName, "Object metadata");
     }
 
-    private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+    private boolean isStructuralMetadataEnabled() {
+        return graphqlConfiguration.resources().effectiveStructuralMetadataResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     private boolean isEntity() {
@@ -109,6 +114,7 @@ public class CommonMeta extends ElementCustom {
             metaVersion.addDataFetcher(this);
         }
         metaTitle.addDataFetcher(this);
+        metaBreadcrumbs.addDataFetcher(this);
         metaCssClass.addDataFetcher(this);
         metaLayout.addDataFetcher(this);
         metaSaveAs.addDataFetcher(this);

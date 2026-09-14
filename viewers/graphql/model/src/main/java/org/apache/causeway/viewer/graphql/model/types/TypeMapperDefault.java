@@ -20,7 +20,9 @@ package org.apache.causeway.viewer.graphql.model.types;
 
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
+import static graphql.schema.GraphQLUnionType.newUnionType;
 
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -28,6 +30,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.jspecify.annotations.Nullable;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -62,6 +65,10 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
         if (clazz.isEnum())
 			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
+        if (ResourceValueTypes.isResourceType(clazz))
+            return ResourceValueTypes.outputTypeFor(clazz, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(clazz))
+            return ResourceValueTypes.localResourcePathOutputType(contextProvider.get());
         return scalarMapper.scalarTypeFor(clazz);
     }
 
@@ -69,7 +76,11 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLInputType inputTypeFor(final Class<?> clazz){
         if (clazz.isEnum())
 			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
-        return scalarMapper.scalarTypeFor(clazz);
+        if (ResourceValueTypes.isResourceType(clazz))
+            return ResourceValueTypes.inputTypeFor(clazz, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(clazz))
+            return ResourceValueTypes.localResourcePathInputType(contextProvider.get());
+        return scalarMapper.inputScalarTypeFor(clazz);
     }
 
     @Override
@@ -79,6 +90,10 @@ public class TypeMapperDefault implements TypeMapper {
         var correspondingClass = targetObjectSpec.correspondingClass();
         if (correspondingClass.isEnum())
 			return gqlValue;
+        if (ResourceValueTypes.isResourceType(correspondingClass))
+            return ResourceValueTypes.unmarshal(correspondingClass, gqlValue, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(correspondingClass))
+            return ResourceValueTypes.unmarshalLocalResourcePath(gqlValue);
         return scalarMapper.unmarshal(gqlValue, correspondingClass);
     }
 
@@ -89,17 +104,20 @@ public class TypeMapperDefault implements TypeMapper {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
 
         return switch (otoaObjectSpec.beanSort()) {
-            case VIEW_MODEL, ENTITY -> typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
+            case ABSTRACT, VIEW_MODEL, ENTITY -> domainObjectTypePossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
             case VALUE-> scalarTypePossiblyOptional(oneToOneFeature, otoaObjectSpec);
             default -> null;
         };
     }
 
-    private static GraphQLOutputType typeRefPossiblyOptional(final OneToOneFeature oneToOneFeature, final SchemaType schemaType, final ObjectSpecification otoaObjectSpec) {
-        GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, schemaType));
+    private GraphQLOutputType domainObjectTypePossiblyOptional(
+            final OneToOneFeature oneToOneFeature,
+            final SchemaType schemaType,
+            final ObjectSpecification objectSpecification) {
+        var outputType = outputTypeFor(objectSpecification, schemaType);
         return oneToOneFeature.isOptional()
-                ? fieldTypeRef
-                : nonNull(fieldTypeRef);
+                ? outputType
+                : nonNull(outputType);
     }
 
     private GraphQLOutputType scalarTypePossiblyOptional(final OneToOneFeature oneToOneFeature, final ObjectSpecification otoaObjectSpec) {
@@ -116,7 +134,10 @@ public class TypeMapperDefault implements TypeMapper {
             final SchemaType schemaType){
 
         return switch (objectSpecification.beanSort()){
-            case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
+            case ABSTRACT -> schemaType == SchemaType.RICH
+                    ? polymorphicOutputTypeFor(objectSpecification, schemaType)
+                    : typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
+            case VIEW_MODEL, ENTITY -> typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
             case VALUE -> outputTypeFor(objectSpecification.correspondingClass());
             case COLLECTION -> null; // should be noop
             default -> Scalars.GraphQLString; // for now
@@ -136,12 +157,56 @@ public class TypeMapperDefault implements TypeMapper {
             final ObjectSpecification elementType,
             final SchemaType schemaType) {
         return switch (elementType.beanSort()) {
-            case VIEW_MODEL, ENTITY ->
-                GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, schemaType)));
+            case ABSTRACT, VIEW_MODEL, ENTITY ->
+                GraphQLList.list(outputTypeFor(elementType, schemaType));
             case VALUE ->
                 GraphQLList.list(outputTypeFor(elementType.correspondingClass()));
             default -> null;
         };
+    }
+
+    private GraphQLOutputType polymorphicOutputTypeFor(
+            final ObjectSpecification declaredType,
+            final SchemaType schemaType) {
+        var context = contextProvider.get();
+        var possibleTypes = context.concreteSpecificationsAssignableTo(declaredType);
+        if (possibleTypes.isEmpty()) {
+            return typeRef(TypeNames.objectTypeNameFor(declaredType, schemaType));
+        }
+
+        var unionTypeName = TypeNames.polymorphicTypeNameFor(declaredType, schemaType);
+        var unionBuilder = newUnionType()
+                .name(unionTypeName)
+                .description("Concrete rich object types assignable to " + declaredType.logicalTypeName());
+        possibleTypes.stream()
+                .map(specification -> TypeNames.objectTypeNameFor(specification, schemaType))
+                .distinct()
+                .map(GraphQLTypeReference::typeRef)
+                .forEach(unionBuilder::possibleType);
+        var unionType = context.graphQLTypeRegistry.addUnionTypeIfNotAlreadyPresent(unionBuilder.build());
+        context.codeRegistryBuilder.typeResolver(unionType, environment -> {
+            var pojo = environment.getObject();
+            if (pojo instanceof BookmarkedPojo bookmarkedPojo) {
+                pojo = bookmarkedPojo.getTargetPojo();
+            }
+            if (pojo instanceof ManagedObject managedObject) {
+                pojo = managedObject.getPojo();
+            }
+            if (pojo == null) {
+                return null;
+            }
+            var runtimeSpecification = context.specificationLoader.loadSpecification(pojo.getClass());
+            if (runtimeSpecification == null) {
+                return null;
+            }
+            var runtimeTypeName = TypeNames.objectTypeNameFor(runtimeSpecification, schemaType);
+            var isAdvertised = unionType.getTypes().stream()
+                    .anyMatch(possibleType -> possibleType.getName().equals(runtimeTypeName));
+            return isAdvertised
+                    ? environment.getSchema().getObjectType(runtimeTypeName)
+                    : null;
+        });
+        return typeRef(unionTypeName);
     }
 
     @Override
@@ -171,7 +236,7 @@ public class TypeMapperDefault implements TypeMapper {
             case VALUE -> inputTypeFor(elementObjectSpec.correspondingClass());
             case COLLECTION ->
                 throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
-            default -> Scalars.GraphQLString; // for now
+            default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
         };
     }
 
@@ -192,7 +257,7 @@ public class TypeMapperDefault implements TypeMapper {
             case VALUE -> inputTypeFor(elementType.correspondingClass());
             case COLLECTION ->
                 throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.fullIdentifier()));
-            default -> Scalars.GraphQLString; // for now
+            default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
         };
     }
 

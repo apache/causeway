@@ -1,0 +1,86 @@
+= Rich application entry points
+
+The rich GraphQL root exposes one framework-neutral `application` field for discovering the effective menu bars and the configured object home page.
+The capability is additive and does not replace object lookups, service-action wrappers, interaction mutations, or structural object resources.
+
+== Discovering the capability
+
+Clients should use standard targeted introspection on the configured rich root type and look for its `application` field.
+The application result exposes `menuBars` when structural metadata resources are enabled, `home` when a supported visible object is available, and bounded `issues` for non-disclosing diagnostics.
+
+[source,graphql]
+----
+query ApplicationEntry {
+  rich {
+    application {
+      menuBars {
+        href
+        mediaType
+        formatVersion
+        generation
+        cacheControl
+      }
+      home {
+        kind
+        logicalTypeName
+        object {
+          __typename
+        }
+      }
+      issues {
+        code
+        message
+      }
+    }
+  }
+}
+----
+
+The names of the outer rich field and generated object types still follow the configured rich-schema naming rules.
+
+== Effective menu-bars resource
+
+`menuBars.href` is an opaque origin-relative reference such as `/graphql/application/menu-bars`.
+It honors the configured servlet context, GraphQL endpoint path, and external resource prefix in the same way as object structural resources.
+The referenced media type is `application/xml` and the current format marker is the menu-bars namespace `https://causeway.apache.org/applib/layout/menubars/bootstrap3`.
+
+The resource is generated from `MenuBarsService.Type.DEFAULT`, so it represents either the explicit `menubars.layout.xml` or Causeway's generated fallback model.
+It preserves primary, secondary, tertiary, menu, section, service-action, label, description, icon hint, grouping, and document ordering semantics.
+Each action remains identified by public service logical type and semantic action ID, which address the established rich service-action wrapper rather than another invocation endpoint.
+
+The resource is cloned before request-specific filtering, so the shared effective framework model is not mutated.
+Missing or incompatible service-action references are omitted and reported using bounded generic issue codes.
+Hidden actions and empty sections or menus are omitted without disclosing the visibility rule.
+Visible disabled actions remain present because clients obtain their current disabled reason from the existing rich action contract.
+Optional labels, descriptions, icon classes, and other presentation hints do not affect whether an action is semantically invokable.
+
+== Authorization, localization, and delivery
+
+GraphQL metadata generation and resource dereference both run inside the current authenticated or configured-fallback Causeway interaction.
+Visibility is re-evaluated for every dereference.
+The implementation performs no cross-request effective-menu caching and returns `Cache-Control: private, no-store`.
+This prevents a representation from being reused across user, role, locale, layout generation, or other menu-affecting context.
+
+The `generation` value is the SHA-256 digest of the filtered XML and is also returned as the HTTP `ETag`.
+It identifies content for one response but does not weaken the no-store policy or authorize a later request.
+The response also uses `X-Content-Type-Options: nosniff` and the structural resource policy's direct or attachment disposition.
+When structural metadata response type is `FORBIDDEN`, the `menuBars` field is omitted from the generated application-entry type and HTTP dereference returns 403 with no body.
+
+Effective names follow the localization behavior of the Causeway menu model and managed actions in the current interaction.
+Explicit labels in the menu layout remain explicit structural labels.
+
+== Configured home object
+
+`HomePageResolverService` is invoked inside the current Causeway interaction.
+When it returns a visible entity or view model that is available in the configured GraphQL API scope, `home.kind` is `OBJECT`, `logicalTypeName` is its public logical type, and `object` is the concrete rich object.
+The generated `rich__gqlv_application_home_object` union permits clients to discover possible concrete types and use ordinary GraphQL inline fragments.
+No client-supplied object identifier is needed to construct the configured home instance.
+
+A null, hidden, unsupported, invalid, or unresolvable result produces documented absence and, where appropriate, a bounded generic issue.
+Causeway currently exposes no public home service-action descriptor, so the GraphQL enum advertises only `OBJECT` and does not invent an action configuration mechanism.
+The server does not automatically invoke, render, or navigate to the home object.
+
+== Viewer-policy boundary
+
+The application entry contract contains no HTML menus, routes, automatic home invocation, authentication screen, browser history, or action-result navigation policy.
+Framework-neutral components and generic HTMX, Vue, Svelte, or other hosts can apply their own shell and routing behavior over the same menu resource and home object.

@@ -16,19 +16,78 @@ class CommandDtoUtils {
   void setUserData(CommandDto dto, String key, String value)
   void setUserData(CommandDto dto, String key, Bookmark bookmark)
   void clearUserData(CommandDto dto, String key)
-  String toYaml(Iterable<CommandDto> commandDtos)
-  String toMultiDocYaml(Iterable<CommandDto> commandDtos)
-  String toYamlExport(Iterable<CommandExportDto> commandExports)
-  List<CommandDto> fromYaml(DataSource commandDtosYaml)
-  CommandDto copy(CommandDto commandDto)
-  class ImportedCommandDto
-  class CommandExportDto
-  class BookmarkDto
+  String toYaml(Iterable<CommandDto> commandDtos)     // <.>
+  String toMultiDocYaml(Iterable<CommandDto> commandDtos)     // <.>
+  String toYamlExport(Iterable<CommandExportDto> commandExports)     // <.>
+  List<CommandDto> fromYaml(DataSource commandDtosYaml)     // <.>
+  List<ImportedCommandDto> fromYamlForReplay(DataSource commandDtosYaml)     // <.>
+  CommandDto copy(CommandDto commandDto)     // <.>
 }
 ----
 
-`CommandExportDto` wraps an embedded `CommandDto` with optional result bookmark metadata.
-Its multi-document YAML representation uses `result.type` and `result.id`, omits a null result, and never emits the legacy `returnedObject` field.
-`ImportedCommandDto` carries the embedded command and optional applib `Bookmark` for later replay-import consumers.
-`copy(CommandDto)` creates a structurally independent copy using the complete JAXB command schema mapping.
+<.> xref:#toYaml_Iterable[toYaml(Iterable)]
++
+--
+Uses (regular) YAML-list format to represent a collection of _CommandDto_ entries.
+--
+<.> xref:#toMultiDocYaml_Iterable[toMultiDocYaml(Iterable)]
++
+--
+Uses multi-doc YAML format to represent a collection of _CommandDto_ entries.
+--
+<.> xref:#toYamlExport_Iterable[toYamlExport(Iterable)]
++
+--
+Uses multi-doc YAML format to represent a collection of _CommandExportDto_ entries.
+--
+<.> xref:#fromYaml_DataSource[fromYaml(DataSource)]
++
+--
+Either parses from (regular) YAML-list format or from multi-doc YAML format, any representing a collection of _CommandDto_ entries.
+--
+<.> xref:#fromYamlForReplay_DataSource[fromYamlForReplay(DataSource)]
++
+--
+Decodes the explicit multi-document formats accepted by command replay import.
+--
+<.> xref:#copy_CommandDto[copy(CommandDto)]
++
+--
+Creates a structurally independent copy using the complete JAXB command schema mapping.
+--
 
+== Members
+
+[#toYaml_Iterable]
+=== toYaml(Iterable)
+
+Uses (regular) YAML-list format to represent a collection of _CommandDto_ entries.
+
+[#toMultiDocYaml_Iterable]
+=== toMultiDocYaml(Iterable)
+
+Uses multi-doc YAML format to represent a collection of _CommandDto_ entries.
+
+[#toYamlExport_Iterable]
+=== toYamlExport(Iterable)
+
+Uses multi-doc YAML format to represent a collection of _CommandExportDto_ entries.
+
+Each document contains an embedded _command_ and, when available, a _result_ with _type_ and _id_ fields. Null results are omitted and the legacy _returnedObject_ field is never emitted.
+
+[#fromYaml_DataSource]
+=== fromYaml(DataSource)
+
+Either parses from (regular) YAML-list format or from multi-doc YAML format, any representing a collection of _CommandDto_ entries.
+
+[#fromYamlForReplay_DataSource]
+=== fromYamlForReplay(DataSource)
+
+Decodes the explicit multi-document formats accepted by command replay import.
+
+The canonical _CommandExportDto_ envelope is attempted first so optional result bookmarks remain available to the importer. Legacy multi-document _CommandDto_ input remains supported, while YAML list roots are deliberately rejected. The more permissive _#fromYaml(DataSource)_ API is unchanged.
+
+[#copy_CommandDto]
+=== copy(CommandDto)
+
+Creates a structurally independent copy using the complete JAXB command schema mapping.

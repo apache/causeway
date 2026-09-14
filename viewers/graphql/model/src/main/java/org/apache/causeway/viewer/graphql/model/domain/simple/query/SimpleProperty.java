@@ -24,6 +24,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -85,10 +86,18 @@ public class SimpleProperty
             addChildFieldFor(glqObjectTypeBuilder, lobMimeType = new SimplePropertyLobMimeType(this, context));
 
             if(isBlob(getObjectMember())) {
-                addChildFieldFor(glqObjectTypeBuilder, lobBytes = new SimplePropertyLobBytes(this, context));
+                if (isValueContentEnabled(context)) {
+                    addChildFieldFor(glqObjectTypeBuilder, lobBytes = new SimplePropertyLobBytes(this, context));
+                } else {
+                    lobBytes = null;
+                }
                 lobChars = null;
             } else {
-                addChildFieldFor(glqObjectTypeBuilder, lobChars = new SimplePropertyLobChars(this, context));
+                if (isValueContentEnabled(context)) {
+                    addChildFieldFor(glqObjectTypeBuilder, lobChars = new SimplePropertyLobChars(this, context));
+                } else {
+                    lobChars = null;
+                }
                 lobBytes = null;
             }
 
@@ -178,6 +187,11 @@ public class SimpleProperty
                     ? resultManagedObject.getPojo()
                     : null;
         }
+    }
+
+    private static boolean isValueContentEnabled(final Context context) {
+        return context.causewayConfiguration.viewer().graphql().resources().effectiveValueContentResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     private static boolean isBlobOrClob(final OneToOneAssociation otota) {

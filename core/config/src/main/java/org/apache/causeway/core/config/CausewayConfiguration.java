@@ -2384,6 +2384,12 @@ public record CausewayConfiguration(
             @DefaultValue
             ScalarMarshaller scalarMarshaller,
             @DefaultValue
+            Values values,
+            @DefaultValue
+            Collections collections,
+            @DefaultValue
+            Autocomplete autocomplete,
+            @DefaultValue
             Resources resources,
             @DefaultValue
             Authentication authentication
@@ -2593,9 +2599,83 @@ public record CausewayConfiguration(
             }
 
             /**
+             * Controls GraphQL behavior for values without an explicit marshaller or structured mapping.
+             */
+            public record Values(
+                    /**
+                     * How an unknown value is represented on output.
+                     * Input remains unsupported under every policy.
+                     */
+                    @DefaultValue("REDACTED")
+                    UnsupportedOutputPolicy unsupportedOutputPolicy) {
+
+                public enum UnsupportedOutputPolicy {
+                    /**
+                     * Return a constant non-disclosing unsupported representation without invoking the value's
+                     * {@code toString()} method.
+                     */
+                    REDACTED,
+                    /**
+                     * Temporarily retain the previous implicit GraphQL String serialization during migration.
+                     */
+                    LEGACY_STRING
+                }
+            }
+
+            /**
+             * Controls bounded rich GraphQL collection windows.
+             */
+            public record Collections(
+                    /**
+                     * Default row count used when a collection window omits its size.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("20")
+                    int defaultWindowSize,
+                    /**
+                     * Hard maximum row count accepted for one collection window.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("100")
+                    int maxWindowSize) {
+
+                public Collections {
+                    if (defaultWindowSize > maxWindowSize) {
+                        throw new IllegalArgumentException(
+                                "causeway.viewer.graphql.collections.default-window-size must not exceed max-window-size");
+                    }
+                }
+            }
+
+            /**
+             * Controls bounded rich GraphQL autocomplete response windows.
+             */
+            public record Autocomplete(
+                    /**
+                     * Default item count used when an autocomplete window omits its size.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("20")
+                    int defaultWindowSize,
+                    /**
+                     * Hard maximum item count accepted for one autocomplete window.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("100")
+                    int maxWindowSize) {
+
+                public Autocomplete {
+                    if (defaultWindowSize > maxWindowSize) {
+                        throw new IllegalArgumentException(
+                                "causeway.viewer.graphql.autocomplete.default-window-size must not exceed max-window-size");
+                    }
+                }
+            }
+
+            /**
              * The different ways in which resources ({@link org.apache.causeway.applib.value.Blob} bytes,
-             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
-             * resource controller.
+             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) are made available.
+             * For Blob and Clob values this policy also gates bounded GraphQL input and action-result content.
              */
             public enum ResponseType {
                 /**
@@ -2603,7 +2683,8 @@ public record CausewayConfiguration(
                  *
                  * <p>In this case any {@link org.apache.causeway.applib.value.Blob} and
                  * {@link org.apache.causeway.applib.value.Clob} properties will <i>not</i> provide a link to
-                 * the URL.  Attempting to download from the resource controller will result in a 403 (forbidden).
+                 * the URL, resource input is unsupported, and action results remain metadata-only.
+                 * Attempting to download from the resource controller will result in a 403 (forbidden).
                  */
                 FORBIDDEN,
                 /**
@@ -2625,16 +2706,62 @@ public record CausewayConfiguration(
 
             public record Resources(
                 /**
-                 * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
-                 * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
-                 * resource controller.
+                 * Compatibility setting used for a resource category whose category-specific response type is not
+                 * configured.
                  *
-                 * <p>By default the download of these resources if {@link ResponseType#FORBIDDEN}, but alternatively
-                 * they can be enabled to download either {@link ResponseType#DIRECT}ly or as an
-                 * {@link ResponseType#ATTACHMENT}.
+                 * <p>By default resources are {@link ResponseType#FORBIDDEN}.
+                 * Prefer {@link #structuralMetadataResponseType()} and {@link #valueContentResponseType()} for new
+                 * applications.
                  */
+                @Deprecated
                 @DefaultValue("FORBIDDEN")
-                ResponseType responseType) {
+                ResponseType responseType,
+                /**
+                 * How effective grids, icons, and other structural metadata resources are returned.
+                 * If unset, temporarily falls back to {@link #responseType()}.
+                 */
+                @Nullable
+                ResponseType structuralMetadataResponseType,
+                /**
+                 * How {@link org.apache.causeway.applib.value.Blob} bytes and
+                 * {@link org.apache.causeway.applib.value.Clob} characters are returned, and whether bounded
+                 * GraphQL resource input and action-result content are enabled.
+                 * If unset, temporarily falls back to {@link #responseType()}.
+                 */
+                @Nullable
+                ResponseType valueContentResponseType,
+                /**
+                 * Maximum decoded byte size accepted for inline Blob or UTF-8 Clob GraphQL input.
+                 */
+                @Min(value = 1)
+                @DefaultValue("1048576")
+                int inlineInputMaxBytes,
+                /**
+                 * Maximum byte size emitted inline for Blob or UTF-8 Clob action results.
+                 * Larger values remain metadata-only and property content continues to use secured resource links.
+                 */
+                @Min(value = 1)
+                @DefaultValue("1048576")
+                int inlineOutputMaxBytes,
+                /**
+                 * Optional externally visible path prefix for a deployment behind a path-rewriting reverse proxy.
+                 * The prefix is combined with the servlet context and configured GraphQL endpoint path when links are
+                 * published.
+                 */
+                @Nullable
+                String externalPathPrefix) {
+
+                public ResponseType effectiveStructuralMetadataResponseType() {
+                    return structuralMetadataResponseType != null
+                            ? structuralMetadataResponseType
+                            : Objects.requireNonNullElse(responseType, ResponseType.FORBIDDEN);
+                }
+
+                public ResponseType effectiveValueContentResponseType() {
+                    return valueContentResponseType != null
+                            ? valueContentResponseType
+                            : Objects.requireNonNullElse(responseType, ResponseType.FORBIDDEN);
+                }
             }
 
             public record Authentication(

@@ -1,0 +1,972 @@
+= Using the GraphQL web-component foundation
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at https://www.apache.org/licenses/LICENSE-2.0 .
+// Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and limitations under the License.
+
+== Package
+
+The `causeway-viewer-webcomponents-foundation` Maven artifact packages standards-based ECMAScript modules below `META-INF/resources/causeway-webcomponents/`.
+The entry module is `index.mjs`.
+Importing that module registers the public custom elements when a browser custom-element registry is available.
+The modules can also be imported individually for explicit registration or non-DOM testing.
+
+The runtime has no dependency on HTMX, React, Vue, Svelte, or a component-authoring framework.
+
+== Plain HTML composition
+
+[source,html]
+----
+<cw-graphql-client endpoint="/graphql">
+  <cw-object-context
+      logical-type="university.dept.Department"
+      object-id="42">
+    <cw-breadcrumbs></cw-breadcrumbs>
+    <cw-object-header></cw-object-header>
+    <cw-property id="name"></cw-property>
+    <cw-property id="status"></cw-property>
+    <cw-property id="chair"></cw-property>
+    <cw-action id="inspect"></cw-action>
+    <cw-collection id="staffMembers">
+      <cw-collection-column id="name" label="Name"></cw-collection-column>
+      <cw-collection-column id="code" label="Code"></cw-collection-column>
+    </cw-collection>
+  </cw-object-context>
+</cw-graphql-client>
+
+<script type="module">
+  const components = await import('/causeway-webcomponents/index.mjs');
+  components.installCausewayComponentStyles();
+</script>
+----
+
+The page identifies Causeway types and members semantically and does not construct generated GraphQL names or documents.
+The collection remains inactive until its load button is selected or its `active` attribute or property is set.
+
+== Public component contract
+
+The public vocabulary consists of `cw-graphql-client`, `cw-menubars`, `cw-menubar-primary`, `cw-menubar-secondary`, `cw-menubar-tertiary`, `cw-object-context`, `cw-object`, `cw-object-header`, `cw-breadcrumbs`, `cw-property`, `cw-value`, `cw-object-link`, `cw-action`, `cw-action-results`, `cw-interaction-controller`, `cw-field-editor`, `cw-reference-editor`, `cw-collection`, `cw-standalone-collection`, and `cw-collection-column`.
+`CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
+
+The `cw-` element namespace replaces the former `causeway-` element namespace without compatibility aliases.
+Applications upgrading across this breaking change must replace each former opening and closing custom-element tag and each element-name selector with its one-to-one `cw-` equivalent.
+Semantic `causeway-*` events, CSS classes, `data-causeway-*` attributes, `--causeway-*` variables, and `/causeway-*` asset paths keep their existing spelling.
+
+Properties, actions, collections, and collection columns use the standard `id` attribute and native reflected `id` property to identify their Causeway member.
+Properties and collection columns accept an optional `label` override.
+Actions accept `named` and the existing compatible `label` override, with `named` taking precedence over `label`, canonical `metadata.friendlyName`, and the humanized action ID.
+Actions also accept a reflected `prompt-style` presentation override with values `INLINE`, `DIALOG_MODAL`, or `DIALOG_SIDEBAR`.
+For example, `<cw-action id="placeOrder" named="Place a new order" prompt-style="DIALOG_SIDEBAR"></cw-action>` changes presentation only and continues to invoke the semantic `placeOrder` action.
+Collections accept `named` and `described-as` heading overrides; the existing `label` name override remains compatible, with `named` taking precedence.
+The former `member` attribute and custom `member` property are not compatibility aliases.
+Applications must keep authored IDs unique according to ordinary HTML identifier rules.
+A property exposes interaction only when its `editable` attribute or property is enabled.
+Object links use `logical-type`, `object-id`, `title`, and `disabled`.
+Collections use `active` and declarative collection-column children.
+Without HTML heading overrides, collections use canonical `metadata.friendlyName` and `metadata.description`, followed by a humanized member-id name and no-description fallback.
+Collection-level disabled or unmodifiable reasons are not presented as explanatory text or tooltips; individual cells and associated actions retain their own usability semantics.
+Actions use canonical metadata descriptions as bounded accessible tooltips and as introductory text in parameter prompts.
+When an action is disabled, its tooltip retains the description and adds the current disabled reason as a separate section.
+Static Font Awesome action metadata is rendered decoratively on the configured left or right side after conservative class-token validation; missing, dynamic, or malformed hints render no icon.
+
+The corresponding JavaScript properties support programmatic composition.
+A property or collection accepts a `rendererRegistry`.
+A collection accepts a structured `columns` array such as `[{member: 'name', label: 'Name'}]`.
+A value element accepts a structured `valueState` containing the value and its semantic descriptor or GraphQL type reference.
+A context consumer accepts an injected `context` for host-framework adapters and tests.
+
+The generated presentation is light DOM.
+No named Shadow DOM content slots are public in this read-only slice.
+Applications configure semantic content with attributes, structured properties, and declarative collection-column children, and customize presentation through the documented classes.
+
+== GraphQL execution
+
+Without an injected executor, `<cw-graphql-client>` posts the standard GraphQL JSON request shape to its `endpoint` using the browser Fetch API.
+The request carries the operation document, variables, operation name, and cancellation signal.
+
+A host application can inject authentication, tracing, testing, or an existing networking stack through the `executor` JavaScript property:
+
+[source,javascript]
+----
+const provider = document.querySelector('cw-graphql-client');
+provider.executor = async ({document, variables, operationName, signal}) => {
+  return myGraphQLStack.execute({document, variables, operationName, signal});
+};
+----
+
+An executor can be either a function or an object exposing `execute(request)`.
+It returns the standard GraphQL response shape containing `data` and optional `errors`.
+
+The GraphQL client uses a combined rich schema under the `rich` query field by default.
+Set `rich-root-field=""` for a rich-only schema whose generated object lookup fields are at the query root.
+The `lookup-argument-name`, `object-field-prefix`, and `object-field-suffix` attributes correspond to the configurable GraphQL viewer lookup grammar.
+
+== Schema discovery
+
+The client derives generated rich-schema names from the Causeway logical type and performs targeted standard GraphQL introspection.
+It describes the generated object type and then issues independent cached one-type introspection operations for reachable property, collection, action, parameter, metadata, and value wrapper types.
+This pattern is compatible with GraphQL Java's good-faith introspection limits because one operation does not repeat `__Type.fields` across many aliases.
+The client does not request an application-specific member-list field and does not access Causeway Java metamodel services.
+Application-entry discovery separately introspects the operation roots, configured rich root, `application` result, menu descriptor, optional object-home union, and referenced public service types through the same cached one-type operations.
+The read selects only menu metadata, bounded issues, and `_meta` identity for the supported object home; it does not project home members or invent a home action.
+One browser client serializes these initial targeted discovery requests so object and menu contexts do not race a cold GraphQL schema, while the viewer initializes its lazy execution source once without changing data-fetcher or mutation execution policy.
+
+Descriptions include member kind, advertised wrapper fields, output type reference, named type, innermost type kind, collection element type, concrete object metadata, and reachable value-shape fields.
+Concrete property values, preparation values, action results, and rows use one metadata-selection policy that requests the advertised subset of `id`, `logicalTypeName`, `title`, and `version`.
+Interface and union descriptions retain their advertised possible types.
+The internal `__fragments` selection node renders only validated sorted inline fragments and is never exposed as a public component API.
+Descriptions are cached by generated type name within one `<cw-graphql-client>` instance.
+Several object contexts under the same provider therefore share schema descriptions while retaining independent object snapshots.
+The cache is memory-only and is not shared across browser sessions or users.
+
+== Object contexts and coordinated reads
+
+`<cw-object-context>` represents one object bookmark using `logical-type` and `object-id`.
+Descendant components synchronously request the nearest context using a bubbling and composed `causeway-object-context-request` event.
+A host adapter or test can instead inject a context through a component's `context` JavaScript property.
+
+Components register semantic requirements such as object header metadata, a named property, action state, or collection state.
+Registrations made during one browser rendering turn are merged and deduplicated into one initial GraphQL object projection.
+A later component requests only selections absent from the current snapshot.
+Calling `refresh()` or `invalidate()` on the context controller executes the complete currently active projection.
+Disconnecting a component releases its requirement and shrinks future refreshes without causing a request by itself.
+Nested object contexts answer descendant requests at the nearest provider boundary.
+
+== Navigable breadcrumbs
+
+`<cw-breadcrumbs>` registers one semantic metadata requirement with the nearest object context.
+It renders a `nav` landmark containing root-to-parent `<cw-object-link>` ancestors followed by the current object's title marked with `aria-current="page"`.
+The rich GraphQL `_meta.breadcrumbs` field derives ancestors from Causeway's standard navigable-parent facet, normally declared with `@PropertyLayout(navigable = Navigable.PARENT)`.
+Traversal returns at most 32 bookmarkable ancestors, detects cycles, and reports facet or depth failures locally without exposing application exception details.
+The current object is supplied by the existing `_meta` identity and title and is not duplicated in the ancestor list.
+
+Ancestor links publish the established bubbling and composed `causeway-navigation-request` event.
+The component does not construct URLs, choose a router, require HTMX, infer parents from arbitrary reference properties, or execute GraphQL independently of the shared context.
+Applications opt into presentation by placing the element in their composition; `<cw-object>` does not insert it automatically.
+
+== Composite object and effective-grid layout
+
+`<cw-object>` is a context-only high-level projection that generates the established header, property, action, and collection elements in light DOM.
+It does not accept object identity, create a context, construct GraphQL documents, choose routes, or discover custom pages.
+A complete generic fragment remains ordinary HTML:
+
+[source,html]
+----
+<cw-object-context logical-type="demo.Customer" object-id="customer-1">
+  <cw-object editable></cw-object>
+  <cw-interaction-controller></cw-interaction-controller>
+</cw-object-context>
+----
+
+The optional `editable` attribute enables editing on generated property children.
+The `layout-mode` attribute accepts `auto`, the default, or `fallback`.
+Auto mode adds one layout-metadata requirement to the nearest context, obtains the opaque `grid` reference, and uses the context's same-origin no-store structural-resource operation.
+Fallback mode skips resource retrieval.
+The public `refreshLayout()` method explicitly re-evaluates a changed locale, authorization, or dynamic-layout context; ordinary authoritative object refreshes retain the current layout so active child interactions are not rebuilt.
+
+The safe parser supports Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action order, bounded property `multiLine` hints, `named` labels, and unreferenced actions, properties, and collections.
+Actions nested beneath a property remain immediately after it, while collection-associated actions become direct collection children that share a compact responsive header with the effective collection heading and consecutive unassociated actions render in a wrapping top-level action group.
+Explicit valid member references are reserved before unreferenced markers allocate remaining members in targeted-schema order.
+Stale, duplicate, and wrong-kind references never create broken or repeated semantic children.
+A usable explicit grid may intentionally omit members by omitting both their references and the corresponding unreferenced marker.
+
+The parser has a one-mebibyte character bound, a depth bound of 64, an element bound of 4,096, and rejects document types, entity declarations, CDATA, unknown entity references, non-XML processing instructions, scripts, styles, executable attributes, and malformed markup.
+Resource markup is never inserted into the page; only escaped semantic component markup is generated.
+Unknown safe nodes and unsupported attributes produce at most twenty deduplicated diagnostics while recognized descendants remain usable.
+Absent, forbidden, unreachable, wholly malformed, or semantically empty grids use a deterministic semantic plan modeled on `GridFallbackLayout.xml`: header and actions, a leading property region, and a larger collection tab region.
+The implementation uses twelve-column CSS Grid and a narrow container-query layout without Bootstrap.
+
+Stable hooks include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `data-causeway-region`, `data-span`, `data-layout-state`, and `data-layout-source`.
+`causeway-object-layout-state-change` reports loading, ready, fallback, and error transitions.
+`causeway-object-layout-diagnostic` reports one redacted bounded diagnostic without response content or authorization rules.
+Applications that need different structure continue to author the established lower-level elements directly beneath the same context.
+
+== Declarative layout components
+
+Application-authored pages can compose `<cw-row>`, `<cw-column span="1..12">`, `<cw-fieldset name="...">`, `<cw-tabgroup name="...">`, and `<cw-tab name="...">` beneath an existing object context.
+These framework-neutral elements implement the same twelve-track responsive structure without owning identity, routing, GraphQL execution, or interaction policy.
+
+The direct-child grammar is deliberate: a row accepts only columns, a column accepts fieldsets, collections, metadata, tab groups, and the three unreferenced-member elements, a fieldset accepts only properties, a tab group accepts ordinary tabs plus a conditional unreferenced-properties destination, and a tab accepts only rows.
+Columns stack multiple valid children in authored order with the shared layout gap while preserving each child's semantic and domain behavior.
+Unsupported direct children fail closed with `data-causeway-layout-invalid` and a bounded redacted `causeway-layout-component-diagnostic` event.
+A missing or invalid column span uses twelve, and narrow viewports stack all columns without horizontal overflow.
+
+A tab group exposes an accessible `tablist`, one `tab` control per enabled authored tab, and corresponding `tabpanel` relationships on the regular contained viewer-panel surface.
+The first enabled tab is selected unless exactly one authored tab carries `selected`.
+Pointer activation, Home, End, horizontal arrows, and RTL direction update selection and focus deterministically, while disabled, inserted, removed, or renamed tabs are synchronized without rebuilding their authored panels.
+A direct `<cw-unreferenced-properties>` child contributes a tab at its authored position only while remaining properties exist; its bounded `name` labels the control, and loading, empty, or error states contribute no tab or panel.
+If that conditional tab disappears while selected or keyboard-focused, the first available ordinary tab receives selection and focus.
+
+`<cw-metadata>` is the single automatic layout element.
+It registers the existing layout requirement with the nearest object context, follows only the authoritative same-origin effective-grid reference, and extracts the fieldset whose id is exactly `metadata`.
+It renders that fieldset's ordered authorized properties as ordinary `<cw-property>` children and its ordered authorized actions as ordinary `<cw-action>` children inside a compact vertical-ellipsis menu aligned with the Metadata heading.
+The ellipsis trigger is named `Metadata actions`, exposes expanded state, supports keyboard, pointer, Escape, and outside dismissal, and is omitted when there are no authorized actions.
+It does not accept authored member children, infer metadata from names or labels, scan GraphQL members, synthesize actions, or fall back to all properties when the fieldset or grid is unavailable.
+Loading, empty, unavailable, malformed, superseded, and disconnected states fail closed and remain inspectable through `data-causeway-metadata-state` plus bounded layout diagnostics.
+
+[source,html]
+----
+<cw-tabgroup name="Object information">
+  <cw-tab name="Identity" selected>
+    <cw-row>
+      <cw-column span="12">
+        <cw-fieldset name="Identity">
+          <cw-property id="name"></cw-property>
+          <cw-property id="status"></cw-property>
+        </cw-fieldset>
+      </cw-column>
+    </cw-row>
+  </cw-tab>
+  <cw-tab name="Metadata">
+    <cw-row>
+      <cw-column span="12">
+        <cw-metadata></cw-metadata>
+      </cw-column>
+    </cw-row>
+  </cw-tab>
+</cw-tabgroup>
+----
+
+A page-level macro layout can place tabs and fieldsets directly in one column and collections in another without application grid wrappers:
+
+[source,html]
+----
+<cw-row>
+  <cw-column span="4">
+    <cw-tabgroup name="Object information">...</cw-tabgroup>
+    <cw-fieldset name="Contact">...</cw-fieldset>
+  </cw-column>
+  <cw-column span="8">
+    <cw-collection id="items" named="Items">...</cw-collection>
+  </cw-column>
+</cw-row>
+----
+
+The catch-all elements `<cw-unreferenced-properties>`, `<cw-unreferenced-collections>`, and `<cw-unreferenced-actions>` allocate authorized members not explicitly referenced elsewhere in the nearest `<cw-object-context>`.
+The foundation owns one allocation coordinator per object context and subtracts exact member kind and semantic ID from the authoritative object-description order.
+Connected references count even when hidden, while nested object contexts, inert preview declarations, and catch-all-generated descendants do not consume the enclosing allocation.
+Composite `<cw-metadata>` and `<cw-object>` instances reserve their affected kinds while asynchronously resolving exact claims.
+Only the first valid catch-all destination of each kind in document order is effective; later destinations fail closed with a bounded diagnostic.
+Empty and loading destinations create no visible semantic container and expose their lifecycle through `data-causeway-unreferenced-state` values `loading`, `ready`, `empty`, and `error`.
+Generated properties are read-only unless `editable` is explicitly authored on `<cw-unreferenced-properties>`.
+The property catch-all may alternatively appear directly between ordinary `<cw-tab>` children to make its non-empty fieldset a conditional tab without an application placeholder.
+`name` supplies the bounded accessible fieldset, tabgroup, or action-group name, with defaults `Other`, `Other collections`, and `Other actions`.
+A ready `<cw-unreferenced-actions>` host is layout-transparent, so its accessible generated group remains an intrinsically sized, start-aligned, wrapping peer of explicit toolbar actions rather than creating a block or panel gap.
+Generated actions use an inventory label when one is authoritative and otherwise let the ordinary `<cw-action>` resolve its authoritative label.
+
+[source,html]
+----
+<div class="object-toolbar" aria-label="Object actions">
+  <cw-action id="pinnedAction"></cw-action>
+  <cw-unreferenced-actions name="Available operations"></cw-unreferenced-actions>
+</div>
+<cw-column span="12">
+  <cw-unreferenced-properties name="Additional details"></cw-unreferenced-properties>
+  <cw-unreferenced-collections></cw-unreferenced-collections>
+</cw-column>
+----
+
+Applications continue to own object contexts, interaction controllers, stable shells, routing, and host policy; the foundation owns allocation, generated ordinary member elements, and their lifecycle.
+
+== Application menu bars and service actions
+
+`<cw-menubars>` is the framework-neutral high-level coordinator for Causeway's effective primary, secondary, and tertiary application menu bars.
+It connects directly beneath a configured `<cw-graphql-client>` and does not require an object context:
+
+[source,html]
+----
+<cw-graphql-client endpoint="/graphql">
+  <cw-menubars></cw-menubars>
+</cw-graphql-client>
+----
+
+The composite uses targeted introspection to discover the rich root's optional `application.menuBars` capability.
+It reads the application descriptor once per generation, fetches the opaque origin-relative resource once with same-origin credentials and no-store semantics, and shares one immutable plan across generated or declarative bar children.
+It generates only effective non-empty roles in primary, secondary, tertiary order and preserves direct declarative bar children that existed before registration or custom-element upgrade.
+A direct authored `<cw-interaction-controller>` is reused; otherwise the composite generates one standard controller for all service actions.
+
+Each semantic bar is independently usable and owns an equivalent private generation when no composite provides one:
+
+[source,html]
+----
+<cw-graphql-client endpoint="/graphql">
+  <cw-menubar-secondary></cw-menubar-secondary>
+</cw-graphql-client>
+----
+
+A standalone bar fetches and parses the same effective application resource but renders only its own semantic role.
+It generates a private standard interaction controller unless it consumes composite state.
+No public application-context element is required.
+
+The server must enable structural metadata resources for `application.menuBars` to appear:
+
+[source,properties]
+----
+causeway.viewer.graphql.resources.structural-metadata-response-type=DIRECT
+----
+
+When the capability is omitted, the components report bounded `unsupported` state and do not issue an invalid operation or invent a client-side menu hierarchy.
+The server's explicit or generated effective menu remains the canonical structural source.
+
+The menu parser accepts the Causeway bootstrap menu-bars namespace and the documented `menuBars`, primary/secondary/tertiary, `menu`, `named`, `section`, and `serviceAction` subset.
+It shares the object-grid parser's one-mebibyte input limit, depth limit of 64, element limit of 4,096, and diagnostic limit of 20.
+Document types, entity declarations and references, CDATA, non-XML processing instructions, scripts, styles, executable attributes, malformed nesting, wrong namespaces, and oversized content are rejected.
+Resource markup is never inserted into the page.
+Labels and descriptions are escaped text, while CSS hints remain inert documented `data-*` attributes.
+Static Font Awesome action hints are token-bounded and rendered decoratively on the effective left or right side.
+
+Entries identify rich service-action wrappers by public logical service type and semantic action ID.
+Current hidden and disabled state is grouped into one read per logical service type for a generation rather than one operation per menu entry.
+Hidden actions expose no entry or presentation metadata.
+Disabled actions remain visible and counted, cannot be invoked, and associate their established reason accessibly.
+Action descriptions provide accessible tooltips for native and Vaadin controls, and disabled reasons are composed as a separate tooltip section rather than replacing those descriptions.
+Empty sections, menus, and bars collapse after current state has been applied.
+
+Service-bound adapters reuse the standard parameter editors, defaults, choices, autocomplete, validation, prompt, cancellation, stale-response, and typed-result behavior.
+Safe actions use their advertised rich query invocation, while mutating actions use the existing top-level mutation and are serialized within the application-menu coordinator.
+No object bookmark or `_target` is manufactured for a service action.
+`causeway-action-request`, `causeway-action-prompt-state-change`, and `causeway-action-result` retain their established names.
+Service interaction events add `target: {kind: "service", logicalTypeName}`, `serviceLogicalTypeName`, and `identity: null`; object interaction identities remain unchanged.
+Routing, result rendering, browser history, home behavior, authentication, and navigation remain host policy.
+Every action publishes one cancelable `causeway-action-request` before validation or invocation; a host that synchronously claims or cancels that request prevents validation, GraphQL invocation, and synthetic result emission.
+The reserved framework operation helper matches only `causeway.security.LogoutMenu#logout`, so similarly labelled application actions remain ordinary domain actions.
+A host can assign `menuLabel`, `actionLabel`, and `actionAppearance` functions to `<cw-menubars>` or one bar, or configure the same functions through `configureCausewayMenubarWidgets`, to return bounded presentation values for an exact menu or action.
+`menuLabel` receives immutable role, menu-index, and authored-label context, while action callbacks receive exact logical service type, action ID, and authored label.
+Appearance values are bounded inert tokens exposed through `data-causeway-action-appearance` on native controls and Vaadin adapter content.
+These callbacks cannot change identity, hierarchy, order, visibility, disabled state, metadata, or activation, and the same immutable projection feeds native and Vaadin controls.
+Authentication-neutral components never discover a username or infer Logout from a label; an authenticated host can map its current display identity and exact `causeway.security.LogoutMenu#logout` presentation explicitly.
+Selecting an enabled menu action closes its transient menu before interaction presentation, clicking outside closes an expanded menu without moving focus, and cancellation restores focus to the visible originating disclosure.
+
+Each non-empty bar renders a labelled `nav` landmark.
+Native buttons expose `aria-expanded` and `aria-controls` for menu and narrow bar disclosures.
+The native components deliberately avoid ARIA `menubar` and `menuitem` application-mode roles.
+Tab and Shift+Tab retain native order; Enter and Space toggle disclosures; Escape closes and restores focus; Home, End, and arrow keys traverse documented peer controls; opening a menu closes siblings within the same bar; and action selection or outside activation dismisses transient menu content.
+At the `48rem` narrow threshold, native bars and menus stack without changing semantic order or events.
+
+Under the default Vaadin component policy, each connected non-empty representable primary, secondary, or tertiary tier may use one internal independently packaged Vaadin Menu Bar.
+Causeway projects the current immutable menu, section, and leaf-action descriptors into private item objects, resolves selection through opaque generation-scoped identity, and delegates enabled leaves to the same service-action interaction path used by native controls.
+Vaadin does not own application metadata, menu resources, action preparation, authorization, validation, GraphQL, action results, refresh, routing, or navigation.
+Empty, malformed, unsupported, stale, disconnected, hidden, family-failed, or explicit-native tiers remain hidden or wholly native, and one Menu Bar family failure returns every connected tier natively without affecting other adapter families.
+Menu Bar overflow preserves source order and every visible authorized action at narrow widths, while responsive transitions reuse current Causeway state without another semantic request.
+
+The composite and standalone bars expose `refresh()` to start a new authorization-sensitive and locale-sensitive generation and reject superseded metadata, resource, and service-state responses.
+Stable hooks include `data-menu-state`, `data-causeway-bar`, `data-causeway-bar-role`, `data-causeway-menu`, `data-causeway-menu-section`, `data-causeway-service-action`, `data-service-logical-type`, `data-action-id`, `data-causeway-action-appearance`, inert presentation-hint data, and the `causeway-menubar*`, `causeway-menu*`, and `causeway-service-action*` classes.
+`causeway-menubars-state-change` publishes lifecycle state.
+`causeway-menubars-diagnostic` publishes bounded redacted failures without response bodies, credentials, authorization rules, submitted values, or remote exception text.
+Internal presentation adds `data-causeway-menubar-presentation`, `data-causeway-menubar-responsive`, and bounded `data-causeway-menubar-fallback` diagnostics without making raw `vaadin-menu-bar`, item objects, item-selected events, properties, methods, theme internals, or Shadow DOM supported application APIs.
+The same-origin Menu Bar closure is requested only after a qualified effective tier connects, is shared across tiers and routes, and is absent under explicit native policy and authentication chrome without effective menus.
+Its accepted bundle SHA-256 is `fb207a9548b8683f481f1961b27028e41fc9c94c9fcadd60cb5be42a5ab45192`, with 132197 raw bytes, 37040 gzip bytes, 19 production packages, and exact candidate style hash `sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=`.
+The closure has a 98304-byte gzip cap and participates in the 631808-byte aggregate closure cap.
+See `vaadin-menubar/README.adoc` for pinned inputs, legal metadata, audit evidence, regeneration, and verification.
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete Menu Bar and other adapter rollback without changing menu resources, GraphQL, routes, authentication, or application markup.
+
+== Values and renderer extension
+
+The standard renderer registry presents GraphQL scalars, enums, nulls, object references, and the rich-schema Blob and Clob resource shapes.
+An authoritative Blob whose normalized MIME type is exactly `application/pdf` and whose `bytes` value is an available same-origin URL uses the standard PDF document reader unless an application renderer wins or `pdf-render="link"` is authored.
+The Causeway-owned reader lazily loads pinned PDF.js display and module-worker assets, creates a continuously scrollable placeholder for every page, and progressively renders visible and nearby pages as canvas images.
+Previous-page and next-page controls scroll only the owned PDF viewport, keep the surrounding host document stable, and keep keyboard focus within the available page controls at document boundaries.
+The ordinary authorized Blob link is placed in the reader toolbar and remains visible during inactive manual presentation, loading, reading, unsupported-password, safety-limit, and failure states.
+The reader deliberately provides no search, selection, print, outline, thumbnail, annotation, form, attachment, XFA, embedded-script, or password-entry feature.
+Object references become semantic `<cw-object-link>` elements.
+Null values use an explicit em-dash presentation labelled as no value.
+Unsupported output shapes produce a diagnostic containing the introspected type identifier.
+
+Applications can register a more specific renderer without taking ownership of GraphQL execution:
+
+[source,javascript]
+----
+import {defaultValueRendererRegistry} from '/causeway-webcomponents/index.mjs';
+
+const release = defaultValueRendererRegistry.register({
+  id: 'money',
+  priority: 200,
+  test: state => state.namedTypeName === 'Money',
+  render: state => ({
+    kind: 'money',
+    html: `<data class="app-money">${state.value}</data>`
+  })
+});
+
+// Call release() when the application override is no longer required.
+----
+
+Higher priorities win and the most recently registered renderer wins a priority tie.
+Application registrations default to priority `100`, while standard registrations use lower priorities.
+Renderer input is normalized semantic state containing `value`, `descriptor`, `typeRef`, `typeDescription`, `presentation`, `namedTypeName`, and `typeKind`.
+
+== Properties and object links
+
+`<cw-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
+It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer or qualified internal read-only field, and an accessible disabled reason.
+`description-as="label"` keeps the effective description in the visible layout and is the default for absent, blank, or unsupported values.
+`description-as="tooltip"` instead makes the description available from the semantic label by pointer or keyboard while retaining hidden accessible description text.
+A disabled property uses the same bounded tooltip trigger, with the description above the disabled reason as separate sections, and keeps their accessible text independently referenced in the same order.
+A hidden property renders no label, value, or interactive content.
+Changing the native `id` releases the old requirement and registers the new one.
+The `named`, `described-as`, `description-as`, `multi-line`, and `label-position` attributes override canonical property metadata or its local presentation when custom page composition needs it.
+`label-position` accepts `LEFT`, `TOP`, or `NONE`; `LEFT` uses the shared `--causeway-property-label-column` ratio, `TOP` places the label and smaller description above the full-width field, and `NONE` suppresses their visible presentation while preserving an accessible field name.
+The legacy `label` and `multiline` attributes remain compatibility aliases below their canonical equivalents.
+For eligible PDFs, `pdf-render` accepts `auto`, `manual`, or `link` and defaults to `auto`.
+Automatic mode initializes when the ready property renders, manual mode waits for the keyboard-operable *Preview document* control, and link mode loads neither PDF.js nor inline bytes.
+`pdf-initial-page` accepts an integer from `1` through `100000` and defaults to `1`; the loaded document clamps it to the actual final page.
+`pdf-zoom` accepts `page-width`, `page-height`, `page-fit`, `actual-size`, or an integer percentage from `25%` through `400%` and defaults to `page-width`.
+The reader toolbar exposes those fit modes and standard percentages through an accessible zoom selector, keeps the existing incremental controls, and adds a temporary percentage choice when an incremental or authored value is outside the standard selector list.
+Invalid PDF options use their bounded defaults and emit `causeway-pdf-reader-diagnostic`; lifecycle state is available through `causeway-pdf-reader-state-change`.
+These authored attributes are inert for non-PDF, application-rendered, unsupported, or link-only values and are not projected from effective grids.
+A future `@PdfJsViewer` proposal may add domain facets and GraphQL metadata with authored attribute → facet → foundation-default precedence, but this release includes no annotation, facet, or metadata mapping.
+Applications can size the reader with `--causeway-pdf-viewport-height`, `--causeway-pdf-viewport-min-height`, `--causeway-pdf-viewport-padding`, `--causeway-pdf-page-gap`, and `--causeway-pdf-page-placeholder-height`.
+Canvas pixels have concise page labels but are not represented as semantic document text, and no separate visible disclaimer is added below the viewport.
+The persistent toolbar resource link remains the route to an external accessible reader.
+
+[source,html]
+----
+<cw-property id="firstName"
+             named="Given name"
+             described-as="The given or first name of this customer"
+             description-as="tooltip"
+             multi-line="3"
+             label-position="TOP"></cw-property>
+
+<cw-property id="guide"
+             pdf-render="manual"
+             pdf-initial-page="2"
+             pdf-zoom="page-fit"></cw-property>
+----
+
+Under the default toolkit policy, non-null standard text, multiline text, Boolean, enum or bounded choice, exact and machine numeric, local date, millisecond local time, and millisecond local date-time values use genuine read-only internal Vaadin controls.
+Causeway retains the visible label, description, disabled reason, authoritative value, renderer precedence, errors, responsive layout, alignment hooks, and semantic events.
+Application renderers, protected values, nulls, references, resources, LOBs, offset, zoned, and legacy temporals, custom values, collections, unsupported values, and unqualified precision retain their established native or application renderer.
+
+`<cw-object-link>` renders title and bookmark identity as a native button with link semantics.
+Its optional `icon` attribute renders a decorative image before the title through the `causeway-object-link-icon` class, with size and fit controlled by `--causeway-object-icon-size` and `--causeway-object-icon-fit`.
+A missing or failed icon leaves the title link usable and does not change its accessible name.
+Enabled activation publishes `causeway-navigation-request` with `{target: {logicalTypeName, id, title}, sourceContext}`.
+The event bubbles, crosses composed component boundaries, and is cancelable.
+The component does not invent a URL or select a router.
+
+== Property interactions and semantic editors
+
+A property remains read-only unless the application adds `editable`:
+
+[source,html]
+----
+<cw-property id="summary" editable></cw-property>
+----
+
+Editable authoritative `LocalDate`, `LocalTime`, and `LocalDateTime` properties can declare a closed interval with matching ISO `min` and `max` attributes or JavaScript properties.
+`LocalDate` additionally accepts `today` and `tomorrow`, while `LocalDateTime` accepts `now`.
+Relative tokens resolve from the browser's local calendar and clock when each edit begins and remain fixed until that edit ends.
+Valid bounds are propagated to native and qualified Vaadin editors and are checked locally before GraphQL validation or mutation.
+A rejected pending value remains available for correction, and values equal to either boundary are accepted.
+Malformed, blank, datatype-incompatible, or inverted authored intervals are ignored atomically so the canonical editor remains usable, with `data-causeway-temporal-range-status="invalid"` available as a deterministic diagnostic hook.
+A successfully resolved active interval exposes `data-causeway-temporal-range-status="valid"`; the status is removed when editing ends.
+Ranges do not affect non-local, offset, zoned, legacy, read-only, or unsupported temporal presentations.
+
+[source,html]
+----
+<cw-property id="appointmentDate" editable min="today"></cw-property>
+<cw-property id="officeTime" editable min="08:00" max="18:00"></cw-property>
+<cw-property id="startsAt" editable min="now" max="2027-12-31T18:00"></cw-property>
+----
+
+When the rich schema advertises a setter or top-level property mutation, the component prepares an editor lazily, resolves enum or dynamic choices, validates pending input, and executes the update through its object context.
+Cancel restores the authoritative value without a command.
+A successful save invalidates the complete active object projection so supporting-method changes are reflected by every mounted component.
+Hidden, disabled, query-only, and unsupported properties expose no enabled save path.
+
+The default editor registry covers single-line and effective-grid-directed multiline text, numeric, temporal, boolean, enum, fixed-choice, and advertised autocomplete inputs.
+A toolkit-neutral value codec is selected before the internal editor so native and optional toolkit controls submit identical semantic values.
+`Long`, `BigInteger`, and `BigDecimal` remain validated lexical strings and never pass through JavaScript `Number`.
+Nullable Boolean uses explicit no-value, true, and false states, while a required Boolean remains two-state.
+Local temporal values preserve local meaning, offset values preserve their offsets, and zoned values preserve named-zone information when the advertised representation supplies it.
+Password and protected inputs are write-only and their prior or pending values are redacted from markup and semantic state events.
+Blob, Clob, local-resource, presentation-only, and unknown custom inputs fail closed unless complete public metadata and a reversible codec are registered.
+A valid `multiLine` value greater than one selects a textarea and is capped at 50 rows; malformed and non-positive values retain the single-line editor.
+Applications can register a more-specific editor through `defaultEditorRegistry.register(...)`, or assign another `CausewayEditorRegistry` to a property's `editorRegistry` JavaScript property.
+Editors render pending semantic values but never execute GraphQL independently.
+Codecs own authoritative normalization, control conversion, parsing, local validation, and GraphQL-variable conversion.
+
+=== Default Vaadin reference widgets
+
+The foundation artifact packages a pinned free-core Vaadin Combo Box and Multi-Select Combo Box closure for qualified reference inputs.
+The internal adapter is enabled by default, but the closure is not requested until the semantic registry renders its first eligible reference editor.
+Routes without an eligible connected reference editor make no Vaadin reference request.
+
+A plain HTML application uses the supported default by importing `index.mjs` without a toolkit opt-in.
+It can select the native rollback before that import:
+
+[source,javascript]
+----
+const {configureCausewayReferenceWidgets} =
+  await import('/causeway-webcomponents/reference-widget.mjs');
+configureCausewayReferenceWidgets({enabled: false});
+await import('/causeway-webcomponents/index.mjs');
+----
+
+Eligible fixed choices must contain stable object identities and remain within `maximumResults`.
+Eligible autocomplete inputs prefer the advertised public `autoCompleteWindow` field, debounce filter changes, request the introspected default page size, cancel superseded work, and reject stale route generations.
+The window is an honest bounded server response slice over one authoritative application autocomplete execution.
+It reports total and continuation metadata but does not claim persistence query pushdown or a cross-request snapshot.
+The internal Vaadin data provider maps its filter, page, and page-size callback to semantic context requests and receives authoritative items and total count without exposing Vaadin APIs to applications.
+When only legacy `autoComplete` exists, `maximumResults` remains an accepted complete-response bound and an over-bound result produces a refinement error instead of silent truncation.
+Native autocomplete renders the bounded first window and states when more matches require refinement.
+
+A list-valued input selects Multi-Select Combo Box only when the introspected input and GraphQL interaction already provide authoritative list pending-value semantics.
+Unsupported shapes, explicit native configuration, over-bound fixed choices, module failure, and rollback retain or recover the existing editor.
+
+`<cw-reference-editor>` is a semantic Causeway adapter.
+Applications observe existing property and prompt state events and do not consume Vaadin tags, data-provider callbacks, or value events.
+Vaadin package names, internal tags, theme details, and bundle chunks are not a supported application extension tier.
+
+The supported reference bundle is 48,684 bytes gzip for the pinned closure, contains no Flow client or usage-statistics collector, and is served only from the foundation JAR.
+Its four byte-exact style elements require the documented CSP SHA-256 sources while `style-src-attr 'none'` remains in effect.
+Dependency or bundle updates must regenerate and review package metadata, licenses, checksums, CSP hashes, browser evidence, and the compressed budget together.
+
+Object contexts expose `prepareProperty`, `propertyChoices`, `autoCompleteProperty`, `validateProperty`, and `updateProperty` for application-controlled interaction presentation.
+Transient choice, autocomplete, and validation generations are cancellable; mutating commands are serialized per object context.
+Property state and successful updates publish `causeway-property-interaction-state-change` and `causeway-property-updated`.
+
+== Actions and the standard interaction controller
+
+`<cw-action>` continues to render rich action `hidden` and `disabled` state without querying parameters or invoking independently.
+Under the default toolkit policy, its ordinary ready control uses an internal route-lazy Vaadin Button; explicit native policy and action-family failure use the established native button.
+Either control publishes the same cancelable `causeway-action-request` with `{actionId, identity, context}` exactly once for pointer, Enter-key, or Space-key activation.
+A disabled action exposes its reason through `aria-describedby` and cannot publish a request.
+A hidden action renders no actionable content, and late closure work cannot restore it.
+GraphQL invocation, parameter prompts, validation, results, navigation policy, and focus restoration remain owned by the existing interaction controller.
+Property edit, save, cancel, and clear controls, prompt controls, menu controls, and shell controls remain native.
+
+Place one empty interaction controller as a sibling of action components beneath their shared object context:
+
+[source,html]
+----
+<cw-object-context logical-type="university.dept.Department" object-id="42">
+  <cw-action id="inspect"></cw-action>
+  <cw-action id="changeName"></cw-action>
+  <cw-interaction-controller></cw-interaction-controller>
+</cw-object-context>
+----
+
+The controller observes unclaimed action requests at the shared parent boundary.
+An ordinary parameterless action invokes directly, while a parameterized action opens the standard accessible light-DOM prompt using its effective style.
+A supported authored `prompt-style` takes precedence over canonical rich `metadata.promptStyle`; absent or invalid authored values defer to metadata, and unsupported or missing effective values safely use `DIALOG_MODAL`.
+Canonical `DIALOG` maps to `DIALOG_MODAL`, and canonical `INLINE_AS_IF_EDIT` maps to `INLINE` when a property association is available.
+`INLINE` temporarily replaces a directly authored or effective-grid associated property's presentation and action controls with a labelled non-modal region; an inline request without a property association falls back to `DIALOG_MODAL`.
+`DIALOG_MODAL` uses a bounded modal dialog whose heading can be dragged by pointer within the viewport.
+`DIALOG_SIDEBAR` uses a bounded vertical modal panel at the viewport's inline end.
+Modal and sidebar prompts contain focus, while inline prompts retain ordinary document Tab order; all styles support Escape cancellation and originating-control focus restoration.
+The prompt resolves parameters in schema order and consumes advertised hidden, disabled, default, choices, autocomplete, datatype, and validation semantics.
+Changing a parameter recomputes dependent later semantics using the current pending values.
+When canonical rich metadata reports `areYouSure`, the controller presents an additional confirmation before invocation: directly after parameterless activation or after successful parameter preparation and whole-action validation.
+Confirmation uses `[data-testid="action-confirmation"]`, with `[data-testid="action-confirmation-confirm"]` and `[data-testid="action-confirmation-cancel"]` controls.
+Declining parameterized confirmation returns to the parameter prompt with pending values intact, while declining parameterless confirmation closes the prompt and restores originating-action focus.
+Page markup has no confirmation override, so authored presentation cannot weaken canonical action semantics.
+Canonical confirmation always uses the modal alert dialog, including after inline or sidebar parameter entry; declining parameterized confirmation returns to the original style with pending values retained.
+Escape cancels an open parameter prompt or declines the current confirmation, and prompt completion restores focus according to the interaction flow.
+
+An authored action can optionally nest `<cw-parameter>` presentation hints for selected parameters.
+A declaration matches only an authoritative parameter with the same `id`; omitted declarations and omitted attributes retain canonical behavior.
+`named` overrides the humanized parameter name, `described-as` overrides its canonical description, and `description-as="label|tooltip"` selects visible or tooltip presentation with `label` as the default.
+A valid `multi-line` value greater than one requests the established bounded multiline string editor without changing parsing, validation, or invocation.
+Optional `min` and `max` attributes or JavaScript properties constrain matching authoritative `LocalDate`, `LocalTime`, and `LocalDateTime` parameter editors through the same closed-interval grammar as editable properties.
+`LocalDate` accepts `today` and `tomorrow`, while `LocalDateTime` accepts `now`; relative tokens resolve once when each prompt opens and remain stable until it closes.
+Valid ranges reach native and qualified Vaadin controls and reject out-of-range pending values before GraphQL preparation, action validation, confirmation, or invocation.
+Malformed, blank, datatype-incompatible, or inverted ranges are ignored atomically, with `data-causeway-temporal-range-status="invalid"` exposed on the rendered parameter wrapper.
+A successfully resolved active range exposes `data-causeway-temporal-range-status="valid"`.
+Declarations never add, remove, reorder, hide, disable, default, validate canonically, confirm, or invoke parameters.
+
+[source,html]
+----
+<cw-action id="bookVisit">
+  <cw-parameter id="visitDate" min="tomorrow"></cw-parameter>
+  <cw-parameter id="visitTime" min="08:00" max="17:00"></cw-parameter>
+  <cw-parameter id="reason"
+                named="Reason for visit"
+                described-as="Brief clinical reason for the appointment"
+                description-as="tooltip"
+                multi-line="3"></cw-parameter>
+</cw-action>
+----
+
+An application claims an action by calling `preventDefault()` on `causeway-action-request`; the standard controller then does nothing:
+
+[source,javascript]
+----
+document.addEventListener('causeway-action-request', async event => {
+  if (event.detail.actionId !== 'applicationWorkflow') {
+    return;
+  }
+  event.preventDefault();
+  const result = await event.detail.context.invokeAction(
+    event.detail.actionId,
+    await openApplicationPrompt()
+  );
+  presentApplicationResult(result);
+});
+----
+
+Applications can replace the standard editor registry, prompt, or result presentation while retaining the semantic object commands.
+A custom editor registration receives semantic pending state and remains independent of transport:
+
+[source,javascript]
+----
+const release = defaultEditorRegistry.register({
+  id: 'application-code',
+  priority: 1000,
+  supports: state => state.name === 'code',
+  render: state => `<input class="app-code" value="${state.value ?? ''}">`,
+  parse: input => input.value.trim().toUpperCase()
+});
+----
+
+Custom value input requires an explicit reversible codec registration:
+
+[source,javascript]
+----
+const releaseMoneyCodec = defaultValueCodecRegistry.register({
+  id: 'application-money',
+  priority: 1000,
+  supports: state => state.semanticType === 'rich__example_Money',
+  toControlValue: value => value?.amount ?? '',
+  parse: input => ({amount: input.value, currency: 'GBP'}),
+  toGraphQLValue: value => value
+});
+----
+
+A display renderer or editor alone never opts a custom value into GraphQL input.
+Custom prompts must preserve labels, validation associations, pending announcements, cancellation, focus restoration, and semantic result events.
+Call `release()` and `releaseMoneyCodec()` when the overrides are no longer required.
+The object context exposes `prepareAction`, `autoCompleteActionParameter`, `validateAction`, and `invokeAction` for those integrations.
+
+Safe and idempotent actions use an advertised nested `invoke` or `invokeIdempotent` query field.
+Mutating object and service actions use the discovered top-level mutation when available, while nested `invokeNonIdempotent` remains an explicit compatibility fallback only when no corresponding mutation is advertised.
+The shared dispatch planner emits only declared arguments, resolves an object target through its advertised generated input argument, and never manufactures a service target.
+Nested result envelopes are selected through an advertised `results` field, while direct mutation and invocation results are projected from their effective scalar, enum, object, collection, or void type.
+Object metadata selection includes only fields advertised by the effective metadata type, so a versionless view model does not receive a speculative `_meta.version` selection.
+Object, collection, scalar, and void outcomes are normalized and published through `causeway-action-result` without automatic navigation.
+The standard controller may render a local result summary; host routing remains responsible for object-result navigation.
+
+== Declarative member-associated actions
+
+An authored property or collection can place object actions directly beneath the owning semantic member:
+
+[source,html]
+----
+<cw-property id="name">
+  <cw-action id="updateName"></cw-action>
+</cw-property>
+
+<cw-collection id="pets" named="Companion animals" described-as="Pets registered to this owner." description-as="tooltip" active
+               paged="10" sortable filterable resizable-columns reorderable-columns>
+  <cw-collection-column id="name" label="Name"></cw-collection-column>
+  <cw-collection-column id="species" label="Species"></cw-collection-column>
+  <cw-action id="addPet"></cw-action>
+  <cw-action id="removePet"></cw-action>
+</cw-collection>
+----
+
+Only direct `<cw-action>` children declare association.
+An action inside an arbitrary descendant wrapper is not claimed by the property or collection, and association is never inferred from naming or proximity.
+Collection-column and action declarations are independent vocabularies, so they may be interleaved without adding action members to row projections.
+
+Association controls presentation only.
+Each nested action registers its own GraphQL requirement, retains its own visibility and usability, and publishes the standard action request to the nearest interaction controller.
+A hidden or disabled property or collection does not hide or disable an independently visible or enabled action.
+
+The owner renders its loading, value, editor, validation, collection, paging, and error states into a stable primary region without cloning, moving, or recreating direct action elements.
+Property primary regions precede their associated actions, while a collection promotes only its replaceable heading before the associated action declarations and keeps its stable primary body after them.
+Visual, DOM, and sequential keyboard order therefore encounter the heading, compact actions in declaration order, and then collection body controls.
+The heading and right-aligned toolbar share one bordered row at wide widths; at narrow widths, the title remains first and the toolbar wraps beneath it within the same header without overlap or horizontal overflow.
+Applications can tune this scoped density with `--causeway-collection-heading-action-height`, `--causeway-collection-heading-action-padding-block`, `--causeway-collection-heading-action-padding-inline`, and `--causeway-collection-heading-action-gap`.
+Action focus, pending prompt state, context generation, cancellation, stale-result protection, and request counts therefore survive owner rerendering.
+Adjacent ordinary HTML action groups remain compatible when semantic nesting is not wanted.
+
+Direct compositions expose `data-causeway-associated-member`, `data-causeway-action-group`, `data-causeway-associated-action`, and `causeway-member-primary` hooks.
+Use `--causeway-associated-action-gap` and `--causeway-associated-action-margin-block-end` to adjust wrapping presentation without inline styles or toolkit-specific elements.
+Generated `<cw-object>` layouts retain semantically equivalent associated-member and action-group hooks from effective grid XML.
+
+== Typed action results and local resources
+
+Object and service interactions use the same immutable result normalization.
+An exact GraphQL `LocalResourcePathValue` wrapper becomes `{kind: "local-resource", value: {path, openUrlStrategy}}`; malformed wrappers become bounded unsupported results rather than scalar or object values.
+Foundation exports a host-facing resolver and navigator that require an explicit application-local base, preserve a nested deployment context exactly once, and reject malformed, scheme-relative, cross-origin, credential-bearing, escaping, or unsupported targets.
+`SAME_WINDOW` performs full-document navigation and `NEW_WINDOW` requests an opener-isolated window.
+These values are navigation results, not authentication instructions: a path equal to `/logout` does not acquire logout semantics.
+Secure logout remains a host concern because only the host owns CSRF evidence, sessions, provider logout, and post-logout destinations.
+
+== Standalone action-result collections
+
+`<cw-standalone-collection>` presents a normalized collection-valued action result without pretending that the result is an object member.
+A host assigns the established result object through the JavaScript-only `result` property:
+
+[source,javascript]
+----
+const collection = document.querySelector('cw-standalone-collection');
+collection.result = actionResultDetail.result;
+----
+
+[source,html]
+----
+<cw-standalone-collection named="Matching owners" described-as="Owners returned by the action"
+                          description-as="tooltip" resizable-columns reorderable-columns>
+  <cw-collection-column id="name" label="Name"></cw-collection-column>
+</cw-standalone-collection>
+----
+
+The accepted shape is `{kind: "collection", value: [...]}` and is never reflected to an attribute or serialized into authored markup.
+Replacing `result` atomically retires the prior generation; assigning `null` produces the idle state, an empty array produces `No items`, and malformed or non-collection shapes produce a bounded unsupported state.
+The component emits `causeway-collection-state-change` with `standalone: true`, a null member, the current generation, and its immutable result state.
+
+Rows with authoritative `_meta.logicalTypeName` and `_meta.id` render semantic object links using the advertised title and optional icon.
+Supported scalar rows use the standard value-renderer registry without invented identity.
+Direct-child `<cw-collection-column>` declarations render only wrappers or values already present in the action result; an absent value is explicitly unavailable and never causes a follow-up read.
+Column declaration order and node identity survive component rerendering.
+
+The component owns no object context, member id, row hydration, associated action, activation, GraphQL load, paging, sorting, filtering, editing, or mutation capability.
+Attributes that would imply those member-only capabilities are inert.
+At wide widths, a complete object-valued snapshot may qualify for the internal Grid using the authoritative array length and a static generation-safe range provider; narrow, native-policy, unsupported, or failed qualification uses the accessible native list or table.
+Applications must not consume the internal Grid tag, projection objects, or range callback.
+
+A direct-child `<cw-standalone-collection>` inside `<cw-action>` is an inert reusable declaration for that action's collection result rather than a live result node.
+The declaration remains hidden under the action, preserves its authored node identity across action rerenders, and completely replaces any type-default heading and columns for that invocation.
+An authored zero-column declaration intentionally retains generic row presentation with its own heading and description.
+Duplicate declarations fail closed with `data-causeway-action-result-presentation-error="duplicate"`, while declarations on actions without authoritative collection element metadata fail closed with `inapplicable`.
+The host resolves the declaration or a type default before invocation so supported declared wrappers can be included in the original GraphQL result selection without row hydration.
+
+[source,html]
+----
+<cw-action id="findOwners">
+  <cw-standalone-collection named="Matching owners">
+    <cw-collection-column id="name" label="Name"></cw-collection-column>
+  </cw-standalone-collection>
+</cw-action>
+----
+
+`<cw-action-results>` is a passive accessible outlet into which the application host may mount non-navigating action outcomes.
+The element neither invokes actions nor listens globally for result events, and its `replacePresentation(node)` and `clear()` methods atomically replace host-owned content.
+An empty outlet remains hidden and occupies no layout space.
+Applications should author at most one outlet in the active route page; the HTMX host snapshots one unique connected outlet when invocation begins and otherwise uses the stable shell outlet.
+Object-valued results retain canonical navigation rather than being mounted into the outlet.
+
+`presentation-style` accepts case-insensitive `INLINE`, `DIALOG`, and `SIDEBAR` values and defaults safely to `INLINE`.
+Inline presentation retains direct result children and ordinary page flow.
+All three styles place the Dismiss control after the result content and keep it outside a bounded scrolling content area so it remains visible for long results.
+Applications may tune that content bound with `--causeway-action-results-content-max-block-size`.
+Dialog presentation uses a labelled modal surface with focus containment and Escape dismissal, while sidebar presentation uses a non-modal panel at the viewport's inline end with ordinary Tab navigation.
+Before mounting asynchronous results, a host may call `setPresentationContext({origin})` with the connected originating action control; `dismiss()` then clears the surface and restores that focus when it remains eligible.
+`requestDismiss(reason)` publishes a cancelable `causeway-action-results-dismiss-request` event so an owning host may retain dismissal policy.
+
+[source,html]
+----
+<cw-action-results
+    aria-label="Search results"
+    presentation-style="SIDEBAR"
+    hidden></cw-action-results>
+----
+
+== Collection row previews
+
+`<cw-preview>` replaces the former `<cw-peek>` spelling; this is a breaking custom-element rename, so applications must update that tag and any direct `peek-element.mjs` imports before upgrading.
+No compatibility alias is registered.
+
+A direct `<cw-preview>` child opts a `<cw-collection>` into one-at-a-time row previews without changing canonical row links, data, projection, navigation, or authorization.
+A collection accepts at most one direct declaration; duplicates emit a bounded `causeway-collection-preview-diagnostic` event, expose `data-causeway-preview-error="duplicate"`, and render no disclosure controls.
+The declaration remains hidden and inert, and its authored descendants are captured before they can connect or request context.
+
+[source,html]
+----
+<cw-collection id="pets" active>
+  <cw-preview>
+    <cw-property id="notes" editable></cw-property>
+    <cw-action id="clearNotes"></cw-action>
+  </cw-preview>
+  <cw-collection-column id="name" label="Name"></cw-collection-column>
+</cw-collection>
+----
+
+Non-empty inline content completely defines the preview template and prevents host default lookup.
+An empty declaration asks the optional JavaScript-only `causewayCollectionRowPreviewResolver({logicalTypeName, collection, signal})` for a bounded `{html}` presentation using each row's authoritative runtime `_meta.logicalTypeName`.
+A missing, invalid, or failed default renders no disclosure for that runtime type while leaving the collection usable.
+
+Each disclosure keeps its established compact square control while the same shared larger current-color SVG chevron in native and Vaadin Grid presentation points in the collapsed inline direction or downward when `aria-expanded="true"`; the decorative icon remains hidden from assistive technology because the button label and state are authoritative.
+Opening a disclosure creates a fresh live `<cw-preview>` after the selected native row or in Vaadin Grid row details.
+The collection creates a dedicated hydrated row context before connecting the cloned descendants, so selected values are reused and later properties, actions, and nested collections use the ordinary authorized lazy context behavior.
+Opening another row retires the prior live subtree and context.
+Escape inside the live preview collapses it and restores disclosure focus, while sorting, filtering, paging, reload, parent generation, responsive replacement, supersession, and disconnection may discard expansion state.
+A successful action or property update originating in the preview collapses it and performs one criteria-preserving forced reload of the parent collection.
+When that refresh retires the invoking control, the focusable collection host provides a stable fallback.
+The collection emits `causeway-collection-preview-state-change` for expanded and collapsed state without publishing row values.
+
+== Lazy collections and row hydration
+
+A collection's primary object requirement contains advertised `hidden` and `disabled` state plus supported canonical `metadata.friendlyName` and `metadata.description` heading fields.
+The heading resolves `named`, legacy `label`, canonical friendly name, and humanized member id in that order; its description resolves `described-as`, canonical description, and no text in that order.
+A distinct description is always associated with the collection and uses subdued smaller text below the heading by default.
+`description-as="tooltip"` removes it from visible layout and makes it available from the heading by pointer or keyboard; `label`, absent, blank, and unsupported values retain the default layout.
+A collection-level disabled reason remains out of ordinary visible layout but is available from the same heading tooltip, below the description as a separate bounded section, without changing row or associated-action authorization.
+A description equal to the resolved name is omitted from both presentations.
+The `get` field is loaded through a context-owned secondary operation after activation.
+Secondary operations are cached by member and structural row selection, support forced refresh, and are canceled when their component or object context is disconnected.
+
+Without columns, concrete object-valued rows request the advertised `_meta` subset and render object links when `id` and `logicalTypeName` are both present.
+`title` and `version` remain optional, so versionless view-model rows stay hydratable without an invented concurrency token.
+Declared columns merge their property wrappers into the secondary operation and use the configured value renderer for returned values.
+An abstract row type with at most eight advertised concrete types uses direct validated fragments.
+A broader abstract collection performs one typename-only probe, describes at most sixteen observed advertised concrete types, and replays the identical side-effect-free list or window read once with concrete fragments.
+Only the replay result is published, and an unobserved replay type remains a bounded partial projection without another retry.
+Mutating interactions never use probe and replay; an abstract result that exceeds the direct bound remains a successful typename-only result.
+Hidden cells emit no content, disabled cells expose their reasons, and row or member errors remain local while successful cells continue to render.
+An empty result renders the live `No items` status.
+
+Each object-valued result can create a hydrated `ObjectContextController` through `createHydratedRowContext(row, rowSelection)`.
+The hydrated context reuses the parent GraphQL client and serves selected metadata and properties without another object read.
+A later requirement outside the hydrated selection produces only a missing-field delta read.
+The collection's `rowContexts` property exposes the currently hydrated controllers to host adapters and is cleared on rerender or disconnect.
+
+When targeted introspection finds the additive rich `window(offset, size)` field, collections use bounded secondary window operations and retain the documented legacy-list fallback.
+`paged="N"` requests bounded windows of `N` rows and renders Causeway-owned previous and next controls when the advertised window permits them.
+A non-empty pager displays `Items <start>–<end> of <total>` when the server advertises a valid authoritative total, and omits the `of` suffix rather than inferring an unavailable count.
+The page size must be an integer from 1 through 100; absent, blank, malformed, fractional, zero, negative, and oversized values provide no override.
+Changing the effective page size retires stale collection work and restarts at offset zero.
+Paging remains available in native table presentation.
+
+`sortable` enables accessible three-state heading buttons only for declared columns advertised by the server as sortable.
+A heading cycles through ascending, descending, and unsorted states, and each change applies before server window slicing and restarts at offset zero.
+`filterable` enables one bounded, labelled, debounced quick-search field only when an applicable `CollectionFilterService` is advertised.
+Search is capped at 256 characters, Escape and Clear remove it, and each accepted change filters before sorting and paging.
+Both attributes are opt-in and default off.
+Causeway owns criteria across native and Grid presentations; an older schema or unsupported capability exposes no misleading control and retains existing loading.
+
+Under the default Vaadin component policy, an active connected collection wider than 48rem may use the internal independently packaged Grid closure when its window ordering is `CONFIGURED`, its semantic columns are fully projectable, and its total or paging metadata is safe.
+A safe positive total selects virtual Grid and maps only bounded range callbacks through the Causeway-owned range broker unless explicit `paged` presentation requires the bounded Grid.
+When that authoritative total is no greater than the currently projected rows, virtual Grid fits its header and complete row set instead of retaining an empty scrolling viewport; larger totals retain the bounded virtual viewport and range provider.
+An unavailable total selects bounded Grid only when normalized previous or next metadata exists, renders only the current window, and keeps accessible Causeway previous and next controls without inventing a logical size.
+Safe-zero, terminal-empty, narrow, inactive, hidden, legacy-list, encounter-ordered, malformed-window, unsupported-column, renderer-failure, family-failure, and explicit-native collections retain the established native presentation.
+The initial authoritative range seeds the bounded cache, identical ranges deduplicate, overlapping work has independent cancellation, retained windows and hydrated contexts are capped, and route, object, member, column, renderer, policy, width, refresh, or connection changes retire stale work.
+Causeway remains authoritative for rows, values, semantic renderers, object links, errors, focus identity, paging, associated actions, GraphQL, routes, authorization, and lifecycle.
+Applications continue to declare only `<cw-collection>` and `<cw-collection-column>` and must not consume internal Grid tags, item objects, data providers, render callbacks, events, properties, methods, or Shadow DOM.
+`resizable-columns` maps each generated internal Grid column to Vaadin's resize affordance, and `reorderable-columns` maps the generated Grid to Vaadin's column-reordering affordance.
+Both attributes are opt-in, default off, and have no effect in native fallback presentation.
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete collection and control rollback without changing GraphQL, routes, persisted data, or application markup.
+The Grid closure is same-origin and route-lazy, has a 196608-byte gzip cap, and participates with Menu Bar in the 631808-byte aggregate closure cap and exact-hash CSP policy.
+See `vaadin-grid/README.adoc` for pinned inputs, accepted checksum, legal metadata, CSP evidence, verification, and audit commands.
+Multi-column sorting, per-column filtering, page-local array criteria, selection, inline Grid editing, application-authored Grid details, drag, Grid Pro, Flow, Binder, telemetry, CDN resources, server-side Vaadin state, and backend query pushdown remain outside the component contract.
+Collection-owned `<cw-preview>` row details are the sole supported Grid details integration.
+Sorting, quick search, column resizing, and column reordering are supported only through the bounded public attributes above; no other Vaadin Grid API becomes application-facing.
+
+== Observable state, accessibility, and styling
+
+Object contexts publish immutable states named `idle`, `schema-loading`, `object-loading`, `ready`, `partial-error`, and `terminal-error`.
+Request generations and abort signals prevent superseded responses from replacing newer state.
+GraphQL responses containing both data and errors preserve successful data and map member-relative error paths to the corresponding component.
+
+The object-context element emits `causeway-object-context-state-change` with the semantic state and context.
+Consumer components emit `causeway-component-state-change` after rendering a requirement state.
+Collections additionally emit `causeway-collection-state-change` for secondary loading and result state.
+Composite objects emit `causeway-object-layout-state-change` and bounded `causeway-object-layout-diagnostic` events.
+Properties emit interaction-state and updated events, while the action controller emits prompt-state and typed result events.
+These are standard bubbling and composed `CustomEvent` instances where they cross component boundaries.
+
+Generated light DOM uses native buttons, headings, tables, outputs, live statuses, labels, `aria-busy`, `aria-disabled`, `aria-describedby`, and alert roles as appropriate.
+Stable classes include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `causeway-object-actions`, `causeway-object-associated-actions`, `causeway-object-header`, `causeway-member-primary`, `causeway-property`, `causeway-property-editor`, `causeway-property-disabled-indicator`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
+
+`installCausewayComponentStyles()` installs the optional minimal structural stylesheet once.
+The packaged `/causeway-webcomponents/theme.css` adds a cohesive Wicket-inspired visual system for applications that want a ready default.
+It defines `--causeway-*` tokens for typography, navigation, surfaces, borders, text, links, focus, status colors, spacing, radii, shadows, label width, content width, control height, and responsive layout.
+The theme covers light, dark, reduced-motion, and forced-colors preferences without adding Bootstrap, Wicket, or JavaScript behavior.
+Component-owned tooltips use a light neutral explanatory surface with dark text, a subtle border, and elevation so they remain visually distinct from filled action controls.
+The shared property, member, collection, parameter, action, and disabled-state tooltip families open below their semantic trigger so bounded headers do not clip the explanatory surface.
+Applications can customize that shared treatment with `--causeway-tooltip-background`, `--causeway-tooltip-color`, `--causeway-tooltip-border`, and `--causeway-tooltip-shadow`; standalone structural styles provide equivalent fallback values when the optional theme is absent.
+Applications can omit the theme, replace it, or override those rules with ordinary design-system CSS:
+
+[source,css]
+----
+cw-property .causeway-property-label {
+  color: var(--app-accent);
+}
+
+cw-action button {
+  border-radius: 0.4rem;
+}
+
+cw-collection .causeway-collection-table {
+  border: 1px solid var(--app-border);
+}
+
+cw-object {
+  --causeway-object-gap: 1.25rem;
+  --causeway-object-tab-accent: var(--app-accent);
+}
+
+:root {
+  --causeway-tooltip-background: #fffdf7;
+  --causeway-tooltip-color: #172033;
+  --causeway-tooltip-border: #c8bfa8;
+  --causeway-tooltip-shadow: 0 0.25rem 0.75rem rgb(23 32 51 / 0.18);
+}
+----
+
+== Default Vaadin semantic fields and ordinary actions
+
+The foundation qualifies internal Vaadin free-core controls for eligible read-only scalar fields, existing semantic editors, and ordinary action buttons without changing application markup or events.
+`basic`, `numeric`, and `local-temporal` are enabled by default and each remains independently route-lazy.
+Ordinary JavaScript can select the complete native rollback before importing `index.mjs`:
+
+[source,javascript]
+----
+import {configureCausewayFieldWidgets} from './field-widget.mjs';
+
+configureCausewayFieldWidgets({families: [], presentation: false});
+----
+
+`basic` covers reversible text, multiline, protected, Boolean, enum, bounded scalar choice, and URL inputs.
+`numeric` keeps `Long`, `BigInteger`, and `BigDecimal` lexical in text fields while using integer or number controls only for machine numeric codecs.
+`local-temporal` covers `LocalDate`, `LocalTime`, and `LocalDateTime`; values beyond millisecond fractional precision remain native because the picker cannot preserve them.
+Qualified read-only values preserve accepted precision, while editable local-time and local-date-time controls use Vaadin's minimum supported 900-second dropdown interval and present time without seconds through the existing Causeway codec.
+Local dates use the nonblank document `lang`, then the browser locale, then `en` to format and parse the visible date while preserving the ISO value passed to Causeway codecs and GraphQL.
+Localized numeric input and unambiguous ISO `yyyy-MM-dd` input are accepted, and available locale calendar names and first-weekday settings are applied to the picker.
+In an editable Vaadin date picker, Tab moves from the date input to the labelled calendar button, and Enter or Space opens the calendar without committing or cancelling the Causeway interaction.
+Editable standalone and date-time time inputs expose the equivalent labelled clock button for Tab, reverse Tab, Enter, Space, and pointer use.
+Enter and Space synchronously open the visible Vaadin time overlay while the trusted keyboard event is active.
+Application native-textarea styling applies only to unslotted controls, leaving Vaadin's slotted multiline input with one toolkit-owned boundary and focus ring.
+Read-only and disabled date and time controls do not expose those operable picker buttons.
+Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collection, and unsupported values never become eligible field adapters.
+References retain their separate adapter.
+
+Each family loads its own same-origin generated ESM asset on first eligible connection.
+A module failure disables only that family for the current document and rerenders through the established native value or editor with Causeway-owned authoritative or pending state.
+Protected values initialize empty and are absent from adapter markup, semantic events, diagnostics, errors, and operation evidence.
+The independent `vaadin-actions` closure imports only the pinned free-core Button entry point and loads when the first visible eligible ordinary action connects.
+Action failure disables only ordinary action adaptation for the current document and preserves every existing Causeway action state and interaction path.
+See `vaadin-fields/README.adoc` and `vaadin-actions/README.adoc` for pinned checksums, budgets, CSP hashes, legal metadata, verification, and audit commands.
+Raw `vaadin-*` elements, package APIs, events, callbacks, and Shadow DOM are unsupported application integration points; applications continue to use `<cw-*>`, Causeway semantic events, documented light-DOM hooks, and `--causeway-*` variables.
+
+== Deliberate exclusions
+
+This slice does not provide collection editing, filtering, bulk actions, automatic action-result navigation, routing, HTMX history, framework-specific custom-page selection, or persistent schema caching.
+Application menu rendering remains semantic and framework-neutral, while routing, shell lifecycle, history, and custom-page selection belong to host viewers.
+
+== Demonstrator and tests
+
+`demo/index.html` is a plain HTML object summary, composite object, reference, action, and lazy collection example that targets a same-origin rich GraphQL endpoint.
+Serve the module directory through an HTTP server or application resource mapping so browser modules and `/graphql` share an appropriate origin and authentication policy.
+
+Run the dependency-free tests directly:
+
+[source,shell]
+----
+node --test --test-concurrency=1
+----
+
+Or run them through Maven with JDK 17 or later:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml test
+----

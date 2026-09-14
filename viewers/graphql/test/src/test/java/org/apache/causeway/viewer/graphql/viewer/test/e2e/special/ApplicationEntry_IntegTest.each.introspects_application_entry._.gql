@@ -1,0 +1,16 @@
+query IntrospectsApplicationEntry {
+  __type(name: "rich__gqlv_application_entry") {
+    fields {
+      name
+      description
+      type {
+        kind
+        name
+        ofType {
+          kind
+          name
+        }
+      }
+    }
+  }
+}

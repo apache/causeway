@@ -1,0 +1,62 @@
+= HTMX: Local SecMan Authentication
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+The generic viewer does not authenticate users.
+The optional `org.apache.causeway.viewer:causeway-viewer-webcomponents-htmx-security-secman` module supplies local SecMan credential authentication and browser-session policy.
+Use matching Causeway versions for this dependency and the selected SecMan persistence and encryption dependencies, such as `causeway-extensions-secman-persistence-jpa` and `causeway-extensions-secman-encryption-spring` under `org.apache.causeway.extensions`.
+
+Import `CausewayModuleViewerWebcomponentsHtmxSecuritySecman` together with `CausewayModuleExtSecmanPersistenceJpa` and `CausewayModuleExtSecmanEncryptionSpring` when using those implementations.
+Enable Spring CSRF filters explicitly:
+
+[source,properties]
+----
+causeway.security.spring.allow-csrf-filters=true
+----
+
+The integration uses the generic viewer's base path, GraphQL endpoint, and optional application stylesheet.
+Its own defaults are:
+
+[source,properties]
+----
+causeway.viewer.webcomponents.htmx.security.secman.login-path=/login
+causeway.viewer.webcomponents.htmx.security.secman.logout-path=/logout
+causeway.viewer.webcomponents.htmx.security.secman.filter-chain-order=20
+causeway.viewer.webcomponents.htmx.security.secman.cookies-to-delete=JSESSIONID
+----
+
+Review ownership and ordering of existing security chains before adding another chain.
+Mixed browser-session and bearer-token access to the same GraphQL path is not automatically composed by this module.
+
+== Session and logout ownership
+
+Spring Security handles credentials, session-identifier migration, security-context persistence, request caching, CSRF, and logout invalidation.
+The shared SecMan bridge converts authenticated identity to Causeway identity but does not own viewer routes or browser chrome.
+The HTMX integration owns login presentation, session-expiry navigation, the current-user menu title, and exact framework Logout interception.
+
+The authorised tertiary menu presents `causeway.security.LogoutMenu#logout` as *Sign out*.
+Activation submits a non-visual native POST form carrying current CSRF evidence; it does not invoke GraphQL logout.
+A similarly named application action or a local-resource path `/logout` is not automatically authentication policy.
+
+Do not exempt GraphQL, login, or logout from CSRF protection when session cookies authenticate requests.
+Server-side visibility and authorization remain authoritative after login.
+Use HTTPS, `HttpOnly` cookies, `Secure` cookies in HTTPS deployments, and a deployment-appropriate `SameSite` policy.
+
+== Secured Petclinic walkthrough
+
+Stop the ordinary sample, then run from the repository root:
+
+[source,shell]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-secured.sh
+----
+
+Open `http://localhost:8080/htmx` and sign in with `sven` / `pass`.
+These are deterministic development-only credentials and must not be reused in production.
+The secured sample intentionally excludes Wicket and bypass security; it is not a demonstration of shared Wicket/HTMX CSRF integration.
+Navigate to an object, perform an authorised interaction, and use *Sign out* from the user menu.
+A subsequent protected request should require authentication again.
+
+A rejected POST can indicate missing/stale CSRF evidence, not invalid domain data.
+Check session continuity and current token transport without disabling protection.
+See xref:troubleshooting.adoc[troubleshooting] for distinguishing transport, schema, and authorization failures.

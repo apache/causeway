@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-08-21T20:01:08.136Z",
+  "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'",
+  "assertions": {
+    "optInAttributeAbsent": true,
+    "styleHashesAbsent": true,
+    "nativeEditorRestored": true,
+    "candidateEditorAbsent": true,
+    "candidateRequestAbsent": true,
+    "zeroConsoleErrors": true
+  }
+}

@@ -1,0 +1,1609 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import {
+  actionInvocationArguments,
+  actionInvocationResultPlan,
+  createActionInvocationPlan,
+  ensureActionInvocationResultTypes,
+  extractActionInvocationResult,
+  secureActionInvocationResult
+} from './action-dispatch.mjs';
+import {normalizeActionResult} from './action-result.mjs';
+import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.mjs';
+import {fieldsByName, namedType} from './introspection.mjs';
+import {
+  argumentsFromValues,
+  autoCompleteWindowPlan,
+  collectionResultSelectionForType,
+  commandSelection,
+  MAX_DIRECT_FRAGMENT_TYPES,
+  metadataSelectionForType,
+  normalizeAutoCompleteWindow,
+  resultSelectionForType
+} from './interaction-operations.mjs';
+import {
+  deepMerge,
+  differenceSelection,
+  INLINE_FRAGMENTS,
+  isSelectionEmpty,
+  mergeSelections,
+  selectionForRuntimeType
+} from './selection.mjs';
+import {assertGraphQLName} from './schema-names.mjs';
+import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
+import {InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
+
+export {StructuralResourceError} from './structural-resource.mjs';
+
+export class ObjectContextController extends EventTarget {
+  constructor({
+    client,
+    logicalTypeName,
+    objectId,
+    hydration = null,
+    fetchImpl = globalThis.fetch,
+    schedule = callback => globalThis.queueMicrotask(callback)
+  } = {}) {
+    super();
+    this.client = client ?? null;
+    this.identity = Object.freeze({logicalTypeName: logicalTypeName ?? '', id: objectId ?? ''});
+    this.fetchImpl = fetchImpl;
+    this.schedule = callback => schedule(callback);
+    this.description = hydration?.description ?? null;
+    this.snapshot = hydration?.data
+      ? deepFreeze({
+        data: hydration.data,
+        selection: hydration.selection ?? {},
+        errors: hydration.errors ?? [],
+        generation: hydration.generation ?? 0
+      })
+      : null;
+    this.secondaryCache = new Map();
+    this.secondaryAbortControllers = new Set();
+    this.secondaryRequests = new Map();
+    this.secondaryGeneration = 0;
+    this.commandGenerations = new Map();
+    this.commandAbortControllers = new Map();
+    this.mutationTail = Promise.resolve();
+    this.registrations = new Map();
+    this.memberReferenceListeners = new Set();
+    this.stateListeners = new Set();
+    this.scheduled = false;
+    this.revision = 0;
+    this.generation = 0;
+    this.forceFull = false;
+    this.abortController = null;
+    this.closed = false;
+    this.state = freezeState({
+      status: ObjectContextStatus.IDLE,
+      generation: 0,
+      snapshot: null,
+      errors: [],
+      error: null
+    });
+    const identityError = validateIdentity(this.identity, this.client);
+    if (identityError) {
+      this.#setState({
+        status: ObjectContextStatus.TERMINAL_ERROR,
+        error: identityError,
+        errors: [asGraphQLError(identityError)]
+      });
+    }
+  }
+
+  registerRequirement(requirement, listener = () => {}, {consumer = null} = {}) {
+    if (this.closed) {
+      throw new Error('Cannot register a requirement on a disconnected object context.');
+    }
+    const normalized = normalizeRequirement(requirement);
+    const token = Symbol(`${normalized.kind}:${normalized.member ?? ''}`);
+    this.registrations.set(token, {requirement: normalized, listener, consumer, error: null, descriptor: null});
+    this.#notifyRegistration(this.registrations.get(token));
+    this.#publishMemberReferences();
+    this.#scheduleFlush();
+    let released = false;
+    return () => {
+      if (!released) {
+        released = true;
+        this.registrations.delete(token);
+        this.#publishMemberReferences();
+        this.#scheduleFlush();
+      }
+    };
+  }
+
+  subscribeMemberReferences(listener) {
+    if (this.closed) {
+      throw new Error('Cannot observe member references on a disconnected object context.');
+    }
+    this.memberReferenceListeners.add(listener);
+    listener(this.#memberReferenceSnapshot());
+    return () => this.memberReferenceListeners.delete(listener);
+  }
+
+  async describeObject() {
+    if (this.closed) {
+      throw new Error('Cannot describe an object using a disconnected object context.');
+    }
+    const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
+    this.description ??= description;
+    return description;
+  }
+
+  async loadStructuralResource(resourcePath, {accept = 'application/xml', signal} = {}) {
+    if (this.closed) {
+      throw new StructuralResourceError('CONTEXT_DISCONNECTED', 'Cannot load a structural resource using a disconnected object context.');
+    }
+    const abortController = new AbortController();
+    this.secondaryAbortControllers.add(abortController);
+    const abort = () => abortController.abort();
+    signal?.addEventListener?.('abort', abort, {once: true});
+    if (signal?.aborted) {
+      abortController.abort();
+    }
+    try {
+      return await fetchStructuralResource(resourcePath, {
+        fetchImpl: this.fetchImpl,
+        accept,
+        signal: abortController.signal
+      });
+    } finally {
+      signal?.removeEventListener?.('abort', abort);
+      this.secondaryAbortControllers.delete(abortController);
+    }
+  }
+
+  async describePropertyInteraction(member) {
+    const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+    const mutationType = await this.client.describeMutation();
+    const mutationFieldName = mutationFieldNameFor(description, member);
+    const mutationField = mutationType ? fieldsByName(mutationType).get(mutationFieldName) ?? null : null;
+    const enumValues = descriptor.value?.typeDescription?.enumValues?.map(value => value.name) ?? [];
+    const autoCompleteWindow = autoCompleteWindowPlan(
+      descriptor.fields.get('autoCompleteWindow'), description.types);
+    return Object.freeze({
+      descriptor,
+      editable: descriptor.fields.has('set') || Boolean(mutationField),
+      validate: descriptor.fields.has('validate'),
+      choices: descriptor.fields.has('choices'),
+      autoComplete: descriptor.fields.has('autoComplete'),
+      autoCompleteWindow: Boolean(autoCompleteWindow),
+      autoCompleteWindowSize: autoCompleteWindow?.sizeDefault ?? null,
+      mutationFieldName: mutationField ? mutationFieldName : null,
+      inputType: propertyInputType(descriptor, mutationField, member),
+      enumValues: Object.freeze(enumValues)
+    });
+  }
+
+  async prepareProperty(member, {signal} = {}) {
+    const capabilities = await this.describePropertyInteraction(member);
+    if (!capabilities.editable) {
+      return interactionResult(InteractionStatus.UNSUPPORTED, {capabilities}, [commandError(`Property '${member}' does not expose an update capability.`)]);
+    }
+    let choices = capabilities.enumValues;
+    if (capabilities.choices) {
+      const result = await this.propertyChoices(member, {signal});
+      if (result.status === InteractionStatus.SUCCESS) {
+        choices = result.data ?? choices;
+      }
+    }
+    return interactionResult(InteractionStatus.SUCCESS, {
+      capabilities,
+      choices: Object.freeze([...(choices ?? [])])
+    });
+  }
+
+  async propertyChoices(member, {signal} = {}) {
+    return this.#runTransient(`property:${member}:choices`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const field = descriptor.fields.get('choices');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose choices.`)]);
+      }
+      await ensureResultTypes(this.client, description, field.type, commandSignal);
+      const selection = resultSelectionForType(field.type, description.types);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {choices: selection ?? true}},
+        operationName: 'CausewayPropertyChoices',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.choices ?? null);
+    });
+  }
+
+  async autoCompleteProperty(member, search, {signal} = {}) {
+    return this.#runTransient(`property:${member}:autocomplete`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const field = descriptor.fields.get('autoComplete');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose autocomplete.`)]);
+      }
+      const searchArgument = field.args.find(argument => argument.name === 'search')?.name ?? 'search';
+      await ensureResultTypes(this.client, description, field.type, commandSignal);
+      const selection = resultSelectionForType(field.type, description.types);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {autoComplete: commandSelection({[searchArgument]: search}, selection ?? true)}},
+        operationName: 'CausewayPropertyAutoComplete',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.autoComplete ?? null);
+    });
+  }
+
+  async autoCompletePropertyWindow(member, search, {offset = 0, size = null, signal} = {}) {
+    const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+    const field = descriptor.fields.get('autoCompleteWindow');
+    if (!field) {
+      const legacy = await this.autoCompleteProperty(member, search, {signal});
+      return legacy.status === InteractionStatus.SUCCESS
+        ? interactionResult(legacy.status, normalizeAutoCompleteWindow(legacy.data, {
+            legacy: true, offset, requestedSize: size
+          }), legacy.errors, legacy.operation)
+        : legacy;
+    }
+    return this.#runTransient(`property:${member}:autocomplete`, signal, async commandSignal => {
+      const plan = autoCompleteWindowPlan(field, description.types);
+      if (!plan) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(
+          `Property '${member}' exposes an incomplete autocomplete window.`)]);
+      }
+      const args = windowArguments(field, search, offset, size);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {autoCompleteWindow: commandSelection(args, plan.selection)}},
+        operationName: 'CausewayPropertyAutoCompleteWindow',
+        signal: commandSignal
+      });
+      return commandResponse(result, normalizeAutoCompleteWindow(
+        result.data?.[member]?.autoCompleteWindow ?? null,
+        {offset, requestedSize: size ?? plan.sizeDefault}
+      ));
+    });
+  }
+
+  async validateProperty(member, value, {signal} = {}) {
+    return this.#runTransient(`property:${member}:validate`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const field = descriptor.fields.get('validate');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose validation.`)]);
+      }
+      const argumentName = field.args[0]?.name ?? member;
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {validate: commandSelection({[argumentName]: value})}},
+        operationName: 'CausewayValidateProperty',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.validate ?? null);
+    });
+  }
+
+  updateProperty(member, value, {signal} = {}) {
+    return this.#serializeMutation(async () => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const setField = descriptor.fields.get('set');
+      let result;
+      if (setField) {
+        const argumentName = setField.args[0]?.name ?? member;
+        const selection = resultSelectionForType(setField.type, description.types) ?? {__typename: true};
+        result = await this.client.executeObjectInteraction({
+          description,
+          identity: this.identity,
+          selection: {[member]: {set: commandSelection({[argumentName]: value}, selection)}},
+          operationName: 'CausewayUpdateProperty',
+          signal
+        });
+        result = {...result, data: result.data?.[member]?.set ?? null};
+      } else {
+        const mutationType = await this.client.describeMutation({signal});
+        const fieldName = mutationFieldNameFor(description, member);
+        const mutationField = mutationType ? fieldsByName(mutationType).get(fieldName) : null;
+        if (!mutationField) {
+          return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose an update mutation.`)]);
+        }
+        const targetArgument = targetArgumentName(mutationField, description.generatedInputTypeName);
+        const selection = resultSelectionForType(mutationField.type, description.types) ?? {__typename: true};
+        result = await this.client.executeMutationInteraction({
+          description,
+          mutationType,
+          fieldName,
+          args: {[targetArgument]: {id: this.identity.id}, [member]: value},
+          resultSelection: selection,
+          operationName: 'CausewayUpdateProperty',
+          signal
+        });
+      }
+      const response = commandResponse(result, result.data);
+      if (response.status === InteractionStatus.SUCCESS) {
+        this.refresh();
+      }
+      return response;
+    });
+  }
+
+  async describeActionInteraction(member) {
+    const {description, descriptor} = await this.#memberDescriptor(member, 'action');
+    const paramsField = descriptor.fields.get('params');
+    const paramsType = paramsField ? description.types.get(namedType(paramsField.type)) ?? null : null;
+    const validateField = descriptor.fields.get('validate');
+    const parameters = (paramsType?.fields ?? []).map(field => {
+      const wrapper = description.types.get(namedType(field.type)) ?? null;
+      const actionArgument = validateField?.args.find(argument => argument.name === field.name) ?? null;
+      const inputType = actionArgument?.type ?? parameterInputType(wrapper);
+      const enumType = inputType ? description.types.get(namedType(inputType)) ?? null : null;
+      const fields = fieldsByName(wrapper);
+      return Object.freeze({
+        id: field.name,
+        description: field.description ?? null,
+        generatedTypeName: wrapper?.name ?? namedType(field.type),
+        fields,
+        autoCompleteWindow: autoCompleteWindowPlan(fields.get('autoCompleteWindow'), description.types),
+        inputType,
+        enumValues: Object.freeze(enumType?.enumValues?.map(value => value.name) ?? [])
+      });
+    });
+    const mutationType = await this.client.describeMutation();
+    const mutationFieldName = mutationFieldNameFor(description, member);
+    let invocationPlan;
+    let planningError = null;
+    try {
+      invocationPlan = createActionInvocationPlan({
+        targetKind: 'object',
+        description,
+        descriptor,
+        mutationType,
+        mutationFieldName
+      });
+    } catch (error) {
+      invocationPlan = Object.freeze({supported: false});
+      planningError = commandError({
+        message: 'The advertised object action cannot be dispatched safely.',
+        extensions: {code: error?.code ?? 'ACTION_DISPATCH_PLAN_FAILED'}
+      });
+    }
+    return Object.freeze({
+      descriptor,
+      parameters: Object.freeze(parameters),
+      validate: Boolean(validateField),
+      invocationPlan,
+      invocationField: invocationPlan.placement === 'root-mutation' ? null : invocationPlan.fieldName ?? null,
+      mutationFieldName: invocationPlan.mutationFieldName ?? null,
+      mutating: invocationPlan.mutating ?? false,
+      planningError,
+      invokable: invocationPlan.supported === true
+    });
+  }
+
+  async prepareAction(member, values = {}, {signal} = {}) {
+    const capabilities = await this.describeActionInteraction(member);
+    if (!capabilities.invokable) {
+      return interactionResult(
+        capabilities.planningError ? InteractionStatus.FAILED : InteractionStatus.UNSUPPORTED,
+        {capabilities},
+        [capabilities.planningError ?? commandError(`Action '${member}' does not expose an invocation capability.`)]);
+    }
+    if (capabilities.parameters.length === 0) {
+      return interactionResult(InteractionStatus.SUCCESS, {capabilities, parameters: []});
+    }
+    return this.#runTransient(`action:${member}:prepare`, signal, async commandSignal => {
+      const {description} = await this.#memberDescriptor(member, 'action');
+      const parameterSelection = {};
+      for (const parameter of capabilities.parameters) {
+        const stateSelection = {};
+        for (const fieldName of ['hidden', 'disabled', 'default', 'choices', 'validity', 'datatype']) {
+          const field = parameter.fields.get(fieldName);
+          if (!field) {
+            continue;
+          }
+          const args = argumentsFromValues(field, values);
+          const resultSelection = resultSelectionForType(field.type, description.types);
+          stateSelection[fieldName] = Object.keys(args).length > 0
+            ? commandSelection(args, resultSelection ?? true)
+            : resultSelection ?? true;
+        }
+        parameterSelection[parameter.id] = stateSelection;
+      }
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {params: parameterSelection}},
+        operationName: 'CausewayPrepareAction',
+        signal: commandSignal
+      });
+      const parameterData = result.data?.[member]?.params ?? null;
+      if (!parameterData && result.errors?.length) {
+        return commandResponse(result, null);
+      }
+      return interactionResult(InteractionStatus.SUCCESS, {
+        capabilities,
+        parameters: Object.freeze(capabilities.parameters.map(parameter => {
+          const parameterError = result.errors?.find(error => error.path?.includes(parameter.id));
+          return Object.freeze({
+            ...parameter,
+            state: Object.freeze({
+              ...(parameterData?.[parameter.id] ?? {}),
+              ...(parameterError ? {error: parameterError.message} : {})
+            })
+          });
+        }))
+      }, result.errors, result.operation);
+    });
+  }
+
+  async autoCompleteActionParameter(member, parameterId, search, values = {}, {signal} = {}) {
+    return this.#runTransient(`action:${member}:${parameterId}:autocomplete`, signal, async commandSignal => {
+      const {description} = await this.#memberDescriptor(member, 'action');
+      const capabilities = await this.describeActionInteraction(member);
+      const parameter = capabilities.parameters.find(candidate => candidate.id === parameterId);
+      const field = parameter?.fields.get('autoComplete');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Action parameter '${member}.${parameterId}' does not expose autocomplete.`)]);
+      }
+      const args = argumentsFromValues(field, values);
+      const searchArgument = field.args.find(argument => argument.name === 'search')?.name ?? field.args.at(-1)?.name;
+      if (searchArgument) {
+        args[searchArgument] = search;
+      }
+      await ensureResultTypes(this.client, description, field.type, commandSignal);
+      const selection = resultSelectionForType(field.type, description.types);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {
+          [member]: {
+            params: {
+              [parameterId]: {
+                autoComplete: commandSelection(args, selection ?? true)
+              }
+            }
+          }
+        },
+        operationName: 'CausewayActionParameterAutoComplete',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.params?.[parameterId]?.autoComplete ?? null);
+    });
+  }
+
+  async autoCompleteActionParameterWindow(
+    member,
+    parameterId,
+    search,
+    values = {},
+    {offset = 0, size = null, signal} = {}
+  ) {
+    const {description} = await this.#memberDescriptor(member, 'action');
+    const capabilities = await this.describeActionInteraction(member);
+    const parameter = capabilities.parameters.find(candidate => candidate.id === parameterId);
+    const field = parameter?.fields.get('autoCompleteWindow');
+    if (!field) {
+      const legacy = await this.autoCompleteActionParameter(member, parameterId, search, values, {signal});
+      return legacy.status === InteractionStatus.SUCCESS
+        ? interactionResult(legacy.status, normalizeAutoCompleteWindow(legacy.data, {
+            legacy: true, offset, requestedSize: size
+          }), legacy.errors, legacy.operation)
+        : legacy;
+    }
+    return this.#runTransient(`action:${member}:${parameterId}:autocomplete`, signal, async commandSignal => {
+      const plan = autoCompleteWindowPlan(field, description.types);
+      if (!plan) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(
+          `Action parameter '${member}.${parameterId}' exposes an incomplete autocomplete window.`)]);
+      }
+      const args = {...argumentsFromValues(field, values), ...windowArguments(field, search, offset, size)};
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {
+          [member]: {params: {[parameterId]: {autoCompleteWindow: commandSelection(args, plan.selection)}}}
+        },
+        operationName: 'CausewayActionParameterAutoCompleteWindow',
+        signal: commandSignal
+      });
+      return commandResponse(result, normalizeAutoCompleteWindow(
+        result.data?.[member]?.params?.[parameterId]?.autoCompleteWindow ?? null,
+        {offset, requestedSize: size ?? plan.sizeDefault}
+      ));
+    });
+  }
+
+  async validateAction(member, values = {}, {signal} = {}) {
+    return this.#runTransient(`action:${member}:validate`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'action');
+      const field = descriptor.fields.get('validate');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Action '${member}' does not expose argument validation.`)]);
+      }
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {validate: commandSelection(argumentsFromValues(field, values))}},
+        operationName: 'CausewayValidateAction',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.validate ?? null);
+    });
+  }
+
+  async invokeAction(member, values = {}, {signal, resultPresentation = null} = {}) {
+    const capabilities = await this.describeActionInteraction(member);
+    if (!capabilities.invokable) {
+      return interactionResult(
+        capabilities.planningError ? InteractionStatus.FAILED : InteractionStatus.UNSUPPORTED,
+        null,
+        [capabilities.planningError ?? commandError(`Action '${member}' does not expose an invocation capability.`)]);
+    }
+    const execute = async () => {
+      try {
+        const {description} = await this.#memberDescriptor(member, 'action');
+        const plan = capabilities.invocationPlan;
+        const resultColumns = resultPresentation?.columns ?? [];
+        await ensureActionInvocationResultTypes(this.client, description, plan, signal, resultColumns);
+        const resultPlan = actionInvocationResultPlan(plan, description.types, resultColumns);
+        const args = actionInvocationArguments(plan, values, this.identity);
+        let result;
+        if (plan.placement === 'root-mutation') {
+          const mutationType = await this.client.describeMutation({signal});
+          result = await this.client.executeMutationInteraction({
+            description,
+            mutationType,
+            fieldName: plan.mutationFieldName,
+            args,
+            resultSelection: resultPlan.selection === true ? null : resultPlan.selection,
+            operationName: 'CausewayInvokeAction',
+            signal
+          });
+        } else {
+          result = await this.client.executeObjectInteraction({
+            description,
+            identity: this.identity,
+            selection: {
+              [member]: {
+                [plan.fieldName]: commandSelection(args, resultPlan.selection)
+              }
+            },
+            operationName: 'CausewayInvokeAction',
+            signal
+          });
+          const invocationValue = result.data?.[member]?.[plan.fieldName] ?? null;
+          result = {...result, data: extractActionInvocationResult(invocationValue, resultPlan)};
+        }
+        result = secureActionInvocationResult(result, capabilities.parameters);
+        const response = commandResponse(result, normalizeActionResult(result.data, resultPlan.resultType));
+        if (response.status === InteractionStatus.SUCCESS && plan.mutating) {
+          this.refresh();
+        }
+        return response;
+      } catch (error) {
+        if (signal?.aborted) {
+          return interactionResult(InteractionStatus.OBSOLETE);
+        }
+        return interactionResult(InteractionStatus.FAILED, null, [commandError({
+          message: 'The object action could not be dispatched safely.',
+          extensions: {code: error?.code ?? 'ACTION_DISPATCH_FAILED'}
+        })]);
+      }
+    };
+    return capabilities.mutating ? this.#serializeMutation(execute) : execute();
+  }
+
+  async loadCollection({
+    member,
+    columns = [],
+    offset = 0,
+    size = null,
+    sortBy = null,
+    sortDirection = 'ASCENDING',
+    search = null,
+    requestKey = null,
+    force = false,
+    cache = true,
+    signal
+  } = {}) {
+    if (this.closed) {
+      throw new Error('Cannot load a collection from a disconnected object context.');
+    }
+    const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
+    this.description ??= description;
+    const descriptor = description.members.get(member);
+    const usesWindow = descriptor?.kind === 'collection' && descriptor.window && descriptor.fields.has('window');
+    if (!descriptor || descriptor.kind !== 'collection' || (!usesWindow && !descriptor.fields.has('get'))) {
+      throw new Error(`Collection '${member}' is not readable on '${description.logicalTypeName}'.`);
+    }
+    const abstractRows = ['INTERFACE', 'UNION'].includes(descriptor.value?.typeKind);
+    const requestedOffset = usesWindow ? integerAtLeast(offset, 0, 'Collection window offset') : 0;
+    const requestedSize = usesWindow
+      ? integerAtLeast(size ?? descriptor.window.sizeDefault, 1, 'Collection window size')
+      : null;
+    const requestedSortBy = usesWindow && descriptor.window.sortSupported
+      ? optionalGraphQLName(sortBy, 'Collection sort member')
+      : null;
+    const requestedSortDirection = requestedSortBy
+      ? collectionSortDirection(sortDirection)
+      : 'ASCENDING';
+    const requestedSearch = usesWindow && descriptor.window.searchSupported
+      ? boundedSearch(search)
+      : null;
+    let rowSelection = abstractRows
+      ? {__typename: true}
+      : collectionRowSelection(descriptor, columns, description.types);
+    const cacheKey = JSON.stringify({
+      member,
+      columns,
+      offset: requestedOffset,
+      size: requestedSize,
+      sortBy: requestedSortBy,
+      sortDirection: requestedSortDirection,
+      search: requestedSearch,
+      usesWindow
+    });
+    if (!force && cache && this.secondaryCache.has(cacheKey)) {
+      const cached = this.secondaryCache.get(cacheKey);
+      if (!cached.abortController.signal.aborted) {
+        return cached.promise;
+      }
+      this.secondaryCache.delete(cacheKey);
+    }
+
+    const abortController = new AbortController();
+    this.secondaryAbortControllers.add(abortController);
+    const abort = () => abortController.abort();
+    signal?.addEventListener?.('abort', abort, {once: true});
+    if (signal?.aborted) {
+      abortController.abort();
+    }
+
+    let requestGeneration = null;
+    if (requestKey != null) {
+      const previous = this.secondaryRequests.get(requestKey);
+      previous?.abortController.abort();
+      requestGeneration = ++this.secondaryGeneration;
+      this.secondaryRequests.set(requestKey, {abortController, generation: requestGeneration});
+    }
+
+    const readCollection = selection => usesWindow
+      ? this.client.readCollectionWindow({
+          description,
+          identity: this.identity,
+          member,
+          rowSelection: selection,
+          offset: requestedOffset,
+          size: requestedSize,
+          sortBy: requestedSortBy,
+          sortDirection: requestedSortDirection,
+          search: requestedSearch,
+          signal: abortController.signal
+        })
+      : this.client.readObject({
+          description,
+          identity: this.identity,
+          selection: {[member]: {get: selection}},
+          signal: abortController.signal
+        });
+    const readPromise = (async () => {
+      if (!abstractRows && descriptor.value?.typeKind === 'OBJECT' && descriptor.value?.namedTypeName) {
+        const concreteSelection = await polymorphicCollectionRowSelection({
+          client: this.client,
+          description,
+          descriptor,
+          columns,
+          observedTypeNames: [descriptor.value.namedTypeName],
+          signal: abortController.signal
+        });
+        rowSelection = selectionForRuntimeType(concreteSelection, descriptor.value.namedTypeName);
+      }
+      const advertisedTypeNames = [...(descriptor.value?.typeDescription?.possibleTypes ?? [])]
+        .map(candidate => candidate.name)
+        .sort();
+      const directTypeNames = abstractRows
+          && advertisedTypeNames.length > 0
+          && advertisedTypeNames.length <= MAX_DIRECT_FRAGMENT_TYPES
+        ? advertisedTypeNames
+        : null;
+      if (directTypeNames) {
+        rowSelection = await polymorphicCollectionRowSelection({
+          client: this.client,
+          description,
+          descriptor,
+          columns,
+          observedTypeNames: directTypeNames,
+          signal: abortController.signal
+        });
+      }
+      let result = await readCollection(rowSelection);
+      let probeOperation = null;
+      let projectedTypeNames = directTypeNames ? new Set(directTypeNames) : null;
+      if (abstractRows && !directTypeNames) {
+        const probeData = result.data?.[member] ?? null;
+        const probeRows = usesWindow ? probeData?.window?.rows : probeData?.get;
+        const observedTypeNames = [...new Set((probeRows ?? [])
+          .map(row => row?.__typename)
+          .filter(Boolean))].sort();
+        if (observedTypeNames.length > 0) {
+          if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
+            throw obsoleteRequestError();
+          }
+          rowSelection = await polymorphicCollectionRowSelection({
+            client: this.client,
+            description,
+            descriptor,
+            columns,
+            observedTypeNames,
+            signal: abortController.signal
+          });
+          probeOperation = result.operation;
+          projectedTypeNames = new Set(observedTypeNames);
+          result = await readCollection(rowSelection);
+        }
+      }
+      return {result, probeOperation, projectedTypeNames};
+    })();
+    const promise = readPromise.then(async ({result, probeOperation, projectedTypeNames}) => {
+      if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
+        throw obsoleteRequestError();
+      }
+      const data = result.data?.[member] ?? null;
+      const candidateRows = usesWindow
+        ? data?.window?.rows
+        : data?.get;
+      const rows = Array.isArray(candidateRows) ? candidateRows : [];
+      const firstObjectRow = rows.find?.(row => row?._meta?.logicalTypeName);
+      let rowDescription = null;
+      let errors = result.errors;
+      if (projectedTypeNames) {
+        const unprojected = rows.filter(row => row?.__typename && !projectedTypeNames.has(row.__typename));
+        if (unprojected.length > 0) {
+          errors = Object.freeze([...errors, asGraphQLError(new Error(
+            'The collection changed to an unprojected concrete type after its bounded typename probe.'))]);
+        }
+      }
+      if (firstObjectRow) {
+        try {
+          rowDescription = await this.client.describeObject(firstObjectRow._meta.logicalTypeName);
+        } catch (error) {
+          errors = Object.freeze([...errors, asGraphQLError(error)]);
+        }
+      }
+      if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
+        throw obsoleteRequestError();
+      }
+      return Object.freeze({
+        descriptor,
+        data,
+        rows: Object.freeze([...rows]),
+        window: usesWindow ? normalizeCollectionWindow(data?.window) : null,
+        errors,
+        rowDescription,
+        rowSelection,
+        selection: usesWindow ? null : {[member]: {get: rowSelection}},
+        probeOperation,
+        operation: result.operation
+      });
+    }).finally(() => {
+      signal?.removeEventListener?.('abort', abort);
+      this.secondaryAbortControllers.delete(abortController);
+      if (requestKey != null && requestGeneration === this.secondaryRequests.get(requestKey)?.generation) {
+        this.secondaryRequests.delete(requestKey);
+      }
+    });
+    if (cache) {
+      const cacheEntry = {promise, abortController};
+      this.secondaryCache.set(cacheKey, cacheEntry);
+      promise.catch(() => {
+        if (this.secondaryCache.get(cacheKey) === cacheEntry) {
+          this.secondaryCache.delete(cacheKey);
+        }
+      });
+    }
+    return promise;
+  }
+
+  createHydratedRowContext(row, rowSelection = {}) {
+    const metadata = row?._meta;
+    if (!metadata?.logicalTypeName || !metadata?.id) {
+      throw new Error('A hydrated row requires _meta.logicalTypeName and _meta.id.');
+    }
+    return new ObjectContextController({
+      client: this.client,
+      logicalTypeName: metadata.logicalTypeName,
+      objectId: metadata.id,
+      hydration: {data: row, selection: selectionForRuntimeType(rowSelection, row.__typename)},
+      fetchImpl: this.fetchImpl
+    });
+  }
+
+  subscribe(listener) {
+    this.stateListeners.add(listener);
+    listener(this.state);
+    return () => this.stateListeners.delete(listener);
+  }
+
+  refresh() {
+    this.forceFull = true;
+    this.secondaryCache.clear();
+    for (const abortController of this.secondaryAbortControllers) {
+      abortController.abort();
+    }
+    this.secondaryRequests.clear();
+    this.#scheduleFlush();
+  }
+
+  invalidate() {
+    this.refresh();
+  }
+
+  disconnect() {
+    this.closed = true;
+    this.abortController?.abort();
+    for (const abortController of this.secondaryAbortControllers) {
+      abortController.abort();
+    }
+    this.secondaryAbortControllers.clear();
+    this.secondaryRequests.clear();
+    for (const abortController of this.commandAbortControllers.values()) {
+      abortController.abort();
+    }
+    this.commandAbortControllers.clear();
+    this.commandGenerations.clear();
+    this.secondaryCache.clear();
+    this.registrations.clear();
+    this.memberReferenceListeners.clear();
+    this.stateListeners.clear();
+  }
+
+  async #memberDescriptor(member, kind) {
+    if (this.closed) {
+      throw new Error('Cannot execute a command on a disconnected object context.');
+    }
+    const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
+    this.description ??= description;
+    const descriptor = description.members.get(member);
+    if (!descriptor || descriptor.kind !== kind) {
+      throw new Error(`${kind[0].toUpperCase() + kind.slice(1)} '${member}' is not present on '${description.logicalTypeName}'.`);
+    }
+    return {description, descriptor};
+  }
+
+  async #runTransient(key, signal, execute) {
+    const generation = (this.commandGenerations.get(key) ?? 0) + 1;
+    this.commandGenerations.set(key, generation);
+    this.commandAbortControllers.get(key)?.abort();
+    const abortController = new AbortController();
+    this.commandAbortControllers.set(key, abortController);
+    const abort = () => abortController.abort();
+    signal?.addEventListener?.('abort', abort, {once: true});
+    try {
+      const result = await execute(abortController.signal);
+      if (generation !== this.commandGenerations.get(key)) {
+        return interactionResult(InteractionStatus.OBSOLETE, null);
+      }
+      return result;
+    } catch (error) {
+      if (error?.name === 'AbortError' || generation !== this.commandGenerations.get(key)) {
+        return interactionResult(InteractionStatus.OBSOLETE, null);
+      }
+      return interactionResult(InteractionStatus.FAILED, null, [commandError(error)]);
+    } finally {
+      signal?.removeEventListener?.('abort', abort);
+      if (this.commandAbortControllers.get(key) === abortController) {
+        this.commandAbortControllers.delete(key);
+      }
+    }
+  }
+
+  #serializeMutation(execute) {
+    const run = this.mutationTail.then(execute, execute);
+    this.mutationTail = run.catch(() => {});
+    return run.catch(error => interactionResult(InteractionStatus.FAILED, null, [commandError(error)]));
+  }
+
+  #memberReferenceSnapshot() {
+    return Object.freeze([...this.registrations.values()]
+      .filter(registration => ['property', 'collection', 'action'].includes(registration.requirement.kind))
+      .map(registration => Object.freeze({
+        requirement: registration.requirement,
+        consumer: registration.consumer
+      })));
+  }
+
+  #publishMemberReferences() {
+    if (this.memberReferenceListeners.size === 0) return;
+    const snapshot = this.#memberReferenceSnapshot();
+    for (const listener of this.memberReferenceListeners) listener(snapshot);
+  }
+
+  #scheduleFlush() {
+    if (this.closed || this.state.status === ObjectContextStatus.TERMINAL_ERROR && !this.description) {
+      return;
+    }
+    this.revision += 1;
+    if (this.scheduled) {
+      return;
+    }
+    this.scheduled = true;
+    this.schedule(() => {
+      this.scheduled = false;
+      void this.#flush(this.revision);
+    });
+  }
+
+  async #flush(revision) {
+    if (this.closed || this.registrations.size === 0) {
+      return;
+    }
+    if (!this.description) {
+      this.#setState({status: ObjectContextStatus.SCHEMA_LOADING, error: null, errors: []});
+      try {
+        const description = await this.client.describeObject(this.identity.logicalTypeName);
+        if (this.closed || revision !== this.revision) {
+          return;
+        }
+        this.description = description;
+      } catch (error) {
+        if (revision === this.revision) {
+          this.#setState({
+            status: ObjectContextStatus.TERMINAL_ERROR,
+            error,
+            errors: [asGraphQLError(error)]
+          });
+          this.#notifyAll();
+        }
+        return;
+      }
+    }
+
+    const selections = [];
+    for (const registration of this.registrations.values()) {
+      try {
+        const translated = translateRequirement(registration.requirement, this.description);
+        registration.error = null;
+        registration.descriptor = translated.descriptor;
+        selections.push(translated.selection);
+      } catch (error) {
+        registration.error = error;
+        registration.descriptor = null;
+      }
+    }
+    const activeSelection = mergeSelections(...selections);
+    if (isSelectionEmpty(activeSelection)) {
+      this.#notifyAll();
+      return;
+    }
+
+    const cachedSelection = this.snapshot?.selection ?? {};
+    const requestedSelection = this.forceFull
+      ? activeSelection
+      : differenceSelection(activeSelection, cachedSelection);
+    if (isSelectionEmpty(requestedSelection)) {
+      this.forceFull = false;
+      if (this.snapshot) {
+        this.#setState({
+          status: this.snapshot.errors.length > 0 ? ObjectContextStatus.PARTIAL_ERROR : ObjectContextStatus.READY,
+          generation: this.snapshot.generation,
+          snapshot: this.snapshot,
+          errors: this.snapshot.errors,
+          error: null
+        });
+      }
+      this.#notifyAll();
+      return;
+    }
+
+    this.forceFull = false;
+    const generation = ++this.generation;
+    this.abortController?.abort();
+    this.abortController = new AbortController();
+    this.#setState({status: ObjectContextStatus.OBJECT_LOADING, generation, error: null});
+    this.#notifyAll();
+
+    try {
+      const result = await this.client.readObject({
+        description: this.description,
+        identity: this.identity,
+        selection: requestedSelection,
+        signal: this.abortController.signal
+      });
+      if (this.closed || generation !== this.generation) {
+        return;
+      }
+      if (result.data === null) {
+        const error = new Error(result.errors[0]?.message ?? 'The requested object was not found.');
+        if (result.errors.length === 0) {
+          error.code = 'NOT_FOUND';
+        }
+        this.#setState({
+          status: ObjectContextStatus.TERMINAL_ERROR,
+          generation,
+          error,
+          errors: result.errors.length ? result.errors : [asGraphQLError(error)]
+        });
+        this.#notifyAll();
+        return;
+      }
+      const previousData = this.snapshot?.data ?? {};
+      const previousSelection = this.snapshot?.selection ?? {};
+      const errors = mergeErrors(this.snapshot?.errors ?? [], result.errors, requestedSelection);
+      this.snapshot = deepFreeze({
+        data: deepMerge(previousData, result.data),
+        selection: mergeSelections(previousSelection, requestedSelection),
+        errors,
+        generation
+      });
+      this.#setState({
+        status: errors.length > 0 ? ObjectContextStatus.PARTIAL_ERROR : ObjectContextStatus.READY,
+        generation,
+        snapshot: this.snapshot,
+        errors,
+        error: null
+      });
+      this.#notifyAll();
+    } catch (error) {
+      if (error?.name === 'AbortError' || generation !== this.generation || this.closed) {
+        return;
+      }
+      const errors = [asGraphQLError(error)];
+      if (this.snapshot) {
+        this.snapshot = deepFreeze({...this.snapshot, errors, generation});
+        this.#setState({
+          status: ObjectContextStatus.PARTIAL_ERROR,
+          generation,
+          snapshot: this.snapshot,
+          errors,
+          error
+        });
+      } else {
+        this.#setState({
+          status: ObjectContextStatus.TERMINAL_ERROR,
+          generation,
+          errors,
+          error
+        });
+      }
+      this.#notifyAll();
+    }
+  }
+
+  #setState(changes) {
+    this.state = freezeState({
+      status: changes.status ?? this.state.status,
+      generation: changes.generation ?? this.generation,
+      snapshot: changes.snapshot === undefined ? this.snapshot : changes.snapshot,
+      errors: changes.errors ?? this.state.errors,
+      error: changes.error === undefined ? this.state.error : changes.error
+    });
+    for (const listener of this.stateListeners) {
+      listener(this.state);
+    }
+    this.dispatchEvent(createSemanticEvent(OBJECT_CONTEXT_STATE_EVENT, {state: this.state}, {bubbles: false, composed: false}));
+  }
+
+  #notifyAll() {
+    for (const registration of this.registrations.values()) {
+      this.#notifyRegistration(registration);
+    }
+  }
+
+  #notifyRegistration(registration) {
+    const requirement = registration.requirement;
+    if (registration.error) {
+      registration.listener(freezeRequirementState({
+        status: RequirementStatus.UNSUPPORTED,
+        requirement,
+        descriptor: null,
+        data: null,
+        errors: [asGraphQLError(registration.error)],
+        generation: this.generation
+      }));
+      return;
+    }
+    const mappedStatus = mapRequirementStatus(this.state.status);
+    const pathHead = ['header', 'layout', 'breadcrumbs'].includes(requirement.kind)
+      ? this.description?.metadata?.id
+      : requirement.member;
+    const errors = this.snapshot?.errors.filter(error => errorMatchesRequirement(error, requirement, pathHead)) ?? [];
+    const data = this.snapshot && pathHead ? this.snapshot.data[pathHead] : null;
+    registration.listener(freezeRequirementState({
+      status: errors.length > 0 && mappedStatus === RequirementStatus.READY
+        ? RequirementStatus.PARTIAL_ERROR
+        : mappedStatus,
+      requirement,
+      descriptor: registration.descriptor,
+      data,
+      errors,
+      generation: this.generation
+    }));
+  }
+}
+
+async function ensureResultTypes(client, description, typeRef, signal) {
+  const resultTypeName = namedType(typeRef);
+  const resultKind = innermostType(typeRef)?.kind;
+  if (!resultTypeName || resultKind !== 'OBJECT' || description.types.has(resultTypeName)) {
+    return;
+  }
+  const resultTypes = await client.describeTypes([resultTypeName], {signal});
+  const resultType = resultTypes.get(resultTypeName);
+  if (!resultType) {
+    return;
+  }
+  description.types.set(resultTypeName, resultType);
+  const metadataTypeName = namedType(fieldsByName(resultType).get('_meta')?.type);
+  if (metadataTypeName && !description.types.has(metadataTypeName)) {
+    const metadataTypes = await client.describeTypes([metadataTypeName], {signal});
+    const metadataType = metadataTypes.get(metadataTypeName);
+    if (metadataType) {
+      description.types.set(metadataTypeName, metadataType);
+    }
+  }
+}
+
+function windowArguments(field, search, offset, size) {
+  const values = {search, offset};
+  if (size != null) values.size = size;
+  return argumentsFromValues(field, values);
+}
+
+function mutationFieldNameFor(description, member) {
+  return `${description.generatedFieldName}__${member}`;
+}
+
+function targetArgumentName(field, generatedInputTypeName) {
+  return field.args.find(argument => namedType(argument.type) === generatedInputTypeName)?.name
+    ?? field.args.find(argument => argument.name === '_target')?.name
+    ?? '_target';
+}
+
+function propertyInputType(descriptor, mutationField, member) {
+  return descriptor.fields.get('set')?.args.find(argument => argument.name === member)?.type
+    ?? descriptor.fields.get('validate')?.args.find(argument => argument.name === member)?.type
+    ?? mutationField?.args.find(argument => argument.name === member)?.type
+    ?? descriptor.value?.typeRef
+    ?? null;
+}
+
+function parameterInputType(wrapper) {
+  if (!wrapper) {
+    return null;
+  }
+  for (const fieldName of ['validity', 'default', 'choices', 'autoComplete']) {
+    const field = fieldsByName(wrapper).get(fieldName);
+    const type = field?.args.at(-1)?.type;
+    if (type) {
+      return type;
+    }
+  }
+  return null;
+}
+
+function commandResponse(result, data) {
+  if (result.errors?.length) {
+    return interactionResult(InteractionStatus.FAILED, data, result.errors, result.operation);
+  }
+  return interactionResult(InteractionStatus.SUCCESS, data, [], result.operation);
+}
+
+function interactionResult(status, data = null, errors = [], operation = null) {
+  return Object.freeze({
+    status,
+    data,
+    errors: Object.freeze([...(errors ?? [])]),
+    operation
+  });
+}
+
+function commandError(error) {
+  if (typeof error === 'string') {
+    return Object.freeze({message: error, path: [], extensions: Object.freeze({})});
+  }
+  return Object.freeze({
+    message: error?.message ?? String(error),
+    path: Object.freeze([...(error?.path ?? [])]),
+    extensions: Object.freeze({...error?.extensions})
+  });
+}
+
+function validateIdentity(identity, client) {
+  if (!client) {
+    return new Error('A Causeway GraphQL client is required.');
+  }
+  if (!identity.logicalTypeName) {
+    return new Error('The logical-type attribute is required.');
+  }
+  if (!identity.id) {
+    return new Error('The object-id attribute is required.');
+  }
+  return null;
+}
+
+function errorMatchesRequirement(error, requirement, pathHead) {
+  if (error.path?.[0] !== pathHead) {
+    return false;
+  }
+  if (requirement.kind === 'breadcrumbs') {
+    return error.path?.[1] === 'breadcrumbs';
+  }
+  if (requirement.kind === 'header' || requirement.kind === 'layout') {
+    return error.path?.[1] !== 'breadcrumbs';
+  }
+  return true;
+}
+
+function normalizeRequirement(requirement) {
+  if (['header', 'layout', 'breadcrumbs'].includes(requirement?.kind)) {
+    return Object.freeze({kind: requirement.kind});
+  }
+  if (['property', 'action', 'collection'].includes(requirement?.kind)
+      && typeof requirement.member === 'string'
+      && requirement.member.length > 0) {
+    return Object.freeze({kind: requirement.kind, member: requirement.member});
+  }
+  throw new Error(`Unsupported semantic read requirement '${JSON.stringify(requirement)}'.`);
+}
+
+function translateRequirement(requirement, description) {
+  if (['header', 'layout', 'breadcrumbs'].includes(requirement.kind)) {
+    const metadata = description.metadata;
+    if (!metadata) {
+      throw new Error(`Type '${description.generatedTypeName}' does not expose rich object metadata.`);
+    }
+    if (requirement.kind === 'breadcrumbs') {
+      const breadcrumbs = metadata.fields.get('breadcrumbs');
+      const breadcrumbType = description.types.get(namedType(breadcrumbs?.type));
+      const breadcrumbFields = fieldsByName(breadcrumbType);
+      const requiredFields = ['logicalTypeName', 'id', 'title'];
+      if (!breadcrumbs || requiredFields.some(field => !breadcrumbFields.has(field))) {
+        throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks navigable breadcrumb fields.`);
+      }
+      const breadcrumbFieldsToSelect = [
+        ...requiredFields,
+        ...(['icon'].filter(field => breadcrumbFields.has(field)))
+      ];
+      const currentFields = ['id', 'logicalTypeName', 'title'];
+      if (currentFields.some(field => !metadata.fields.has(field))) {
+        throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks object identity fields.`);
+      }
+      return {
+        descriptor: metadata,
+        selection: {[metadata.id]: {
+          ...Object.fromEntries(currentFields.map(field => [field, true])),
+          breadcrumbs: Object.fromEntries(breadcrumbFieldsToSelect.map(field => [field, true]))
+        }}
+      };
+    }
+    const requestedFields = requirement.kind === 'header'
+      ? ['id', 'logicalTypeName', 'title', 'version', 'icon']
+      : ['grid', 'layout', 'cssClass'];
+    const supportedFields = requestedFields.filter(field => metadata.fields.has(field));
+    if (requirement.kind === 'header'
+        && (!supportedFields.includes('id') || !supportedFields.includes('logicalTypeName'))) {
+      throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks object identity fields.`);
+    }
+    if (supportedFields.length === 0) {
+      throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks ${requirement.kind} fields.`);
+    }
+    return {
+      descriptor: metadata,
+      selection: {[metadata.id]: Object.fromEntries(supportedFields.map(field => [field, true]))}
+    };
+  }
+  const member = description.members.get(requirement.member);
+  if (!member || member.kind !== requirement.kind) {
+    const label = requirement.kind[0].toUpperCase() + requirement.kind.slice(1);
+    throw new Error(`${label} '${requirement.member}' is not present on '${description.logicalTypeName}'.`);
+  }
+  if (requirement.kind === 'property') {
+    if (!member.fields.has('get')) {
+      throw new Error(`Property '${requirement.member}' does not expose a readable value.`);
+    }
+    const memberSelection = Object.fromEntries(
+      ['hidden', 'disabled', 'datatype']
+        .filter(field => member.fields.has(field))
+        .map(field => [field, true])
+    );
+    const metadataFields = ['friendlyName', 'description', 'multiLine', 'labelPosition']
+      .filter(field => member.metadata?.fields.has(field));
+    if (metadataFields.length > 0) {
+      memberSelection.metadata = Object.fromEntries(metadataFields.map(field => [field, true]));
+    }
+    memberSelection.get = propertyValueSelection(member, description.types);
+    return {descriptor: member, selection: {[member.id]: memberSelection}};
+  }
+  if (requirement.kind === 'collection'
+      && !member.fields.has('window')
+      && !member.fields.has('get')) {
+    throw new Error(`Collection '${requirement.member}' does not expose readable contents.`);
+  }
+  const supportedFields = ['hidden', 'disabled'].filter(field => member.fields.has(field));
+  const memberSelection = Object.fromEntries(supportedFields.map(field => [field, true]));
+  const metadataFields = [
+    'friendlyName',
+    'description',
+    ...(requirement.kind === 'action'
+      ? ['cssClassFa', 'cssClassFaPosition', 'areYouSure', 'promptStyle', 'resultElementLogicalTypeName']
+      : [])
+  ].filter(field => member.metadata?.fields.has(field));
+  if (metadataFields.length > 0) {
+    memberSelection.metadata = Object.fromEntries(metadataFields.map(field => [field, true]));
+  }
+  return {
+    descriptor: member,
+    selection: {[member.id]: memberSelection}
+  };
+}
+
+function propertyValueSelection(member, types) {
+  const value = member.value;
+  if (!value || value.typeKind === 'SCALAR' || value.typeKind === 'ENUM') {
+    return true;
+  }
+  return resultSelectionForType(value.typeRef, types) ?? true;
+}
+
+function integerAtLeast(value, minimum, label) {
+  if (!Number.isSafeInteger(value) || value < minimum) {
+    throw new Error(`${label} must be an integer of at least ${minimum}.`);
+  }
+  return value;
+}
+
+function optionalGraphQLName(value, label) {
+  if (value == null || String(value).trim() === '') {
+    return null;
+  }
+  return assertGraphQLName(String(value).trim(), label);
+}
+
+function collectionSortDirection(value) {
+  if (value === 'ASCENDING' || value === 'DESCENDING') {
+    return value;
+  }
+  throw new Error('Collection sort direction must be ASCENDING or DESCENDING.');
+}
+
+function boundedSearch(value) {
+  if (value == null || String(value).trim() === '') {
+    return null;
+  }
+  const normalized = String(value).trim();
+  if (normalized.length > 256) {
+    throw new Error('Collection search must not exceed 256 characters.');
+  }
+  return normalized;
+}
+
+function normalizeCollectionWindow(window) {
+  if (!window) {
+    return null;
+  }
+  const offset = window.offset;
+  const requestedSize = window.requestedSize;
+  const returnedCount = window.returnedCount;
+  const hasPrevious = window.hasPrevious === true;
+  const hasNext = window.hasNext === true;
+  const normalized = {
+    offset,
+    requestedSize,
+    returnedCount,
+    totalCount: Number.isSafeInteger(window.totalCount) ? window.totalCount : null,
+    countAvailable: Number.isSafeInteger(window.totalCount),
+    maximumSize: window.maximumSize,
+    hasPrevious,
+    hasNext,
+    previousOffset: hasPrevious ? Math.max(0, offset - requestedSize) : null,
+    nextOffset: hasNext ? offset + returnedCount : null,
+    rangeStart: returnedCount > 0 ? offset + 1 : null,
+    rangeEnd: returnedCount > 0 ? offset + returnedCount : null,
+    ordering: window.ordering ?? null
+  };
+  if (Object.hasOwn(window, 'sortableMembers')) {
+    normalized.sortableMembers = Object.freeze(Array.isArray(window.sortableMembers)
+      ? window.sortableMembers.filter(member => typeof member === 'string')
+      : []);
+  }
+  if (Object.hasOwn(window, 'searchSupported')) {
+    normalized.searchSupported = window.searchSupported === true;
+  }
+  if (Object.hasOwn(window, 'searchPrompt')) {
+    normalized.searchPrompt = typeof window.searchPrompt === 'string' ? window.searchPrompt : null;
+  }
+  return Object.freeze(normalized);
+}
+
+function obsoleteRequestError() {
+  const error = new Error('Collection window response was superseded by a newer request.');
+  error.name = 'AbortError';
+  return error;
+}
+
+const MAX_OBSERVED_POLYMORPHIC_TYPES = 16;
+
+async function polymorphicCollectionRowSelection({
+  client,
+  description,
+  descriptor,
+  columns,
+  observedTypeNames,
+  signal
+}) {
+  if (observedTypeNames.length > MAX_OBSERVED_POLYMORPHIC_TYPES) {
+    throw new Error(`Collection row projection exceeds the ${MAX_OBSERVED_POLYMORPHIC_TYPES}-type bound.`);
+  }
+  const abstractType = descriptor.value?.typeDescription ?? null;
+  if (['INTERFACE', 'UNION'].includes(descriptor.value?.typeKind)) {
+    const advertised = new Set(abstractType?.possibleTypes?.map(candidate => candidate.name) ?? []);
+    for (const typeName of observedTypeNames) {
+      if (!advertised.has(typeName)) {
+        throw new Error(`Type '${typeName}' is not advertised by abstract row type '${abstractType?.name ?? 'unknown'}'.`);
+      }
+    }
+  }
+
+  await describeInto(client, description.types, observedTypeNames, signal);
+  const supportTypeNames = new Set();
+  for (const typeName of observedTypeNames) {
+    const concreteType = description.types.get(typeName);
+    const concreteFields = fieldsByName(concreteType);
+    for (const fieldName of ['_meta', ...columns.map(column => typeof column === 'string' ? column : column?.member)]) {
+      const field = fieldName ? concreteFields.get(fieldName) : null;
+      if (field) {
+        supportTypeNames.add(namedType(field.type));
+      }
+    }
+  }
+  await describeInto(client, description.types, [...supportTypeNames].filter(Boolean), signal);
+
+  const nestedTypeNames = new Set();
+  for (const supportTypeName of supportTypeNames) {
+    const supportType = description.types.get(supportTypeName);
+    for (const field of supportType?.fields ?? []) {
+      if (field.name === 'get' && ['OBJECT', 'INTERFACE', 'UNION'].includes(innermostType(field.type)?.kind)) {
+        nestedTypeNames.add(namedType(field.type));
+      }
+    }
+  }
+  await describeInto(client, description.types, [...nestedTypeNames].filter(Boolean), signal);
+  const nestedMetadataTypeNames = [...nestedTypeNames]
+    .map(typeName => fieldsByName(description.types.get(typeName)).get('_meta'))
+    .filter(Boolean)
+    .map(field => namedType(field.type));
+  await describeInto(client, description.types, nestedMetadataTypeNames, signal);
+
+  const fragments = Object.fromEntries(observedTypeNames.map(typeName => {
+    const concreteType = description.types.get(typeName);
+    const concreteFields = fieldsByName(concreteType);
+    const concreteRef = {kind: 'OBJECT', name: typeName, ofType: null};
+    const fragment = {...(metadataSelectionForType(concreteRef, description.types) ?? {__typename: true})};
+    for (const column of columns) {
+      const member = typeof column === 'string' ? column : column?.member;
+      const memberField = member ? concreteFields.get(member) : null;
+      const wrapper = memberField ? description.types.get(namedType(memberField.type)) ?? null : null;
+      if (!member || !wrapper) {
+        continue;
+      }
+      const wrapperFields = fieldsByName(wrapper);
+      const memberSelection = Object.fromEntries(
+        ['hidden', 'disabled', 'datatype']
+          .filter(fieldName => wrapperFields.has(fieldName))
+          .map(fieldName => [fieldName, true]));
+      const metadataField = wrapperFields.get('metadata');
+      const metadataType = metadataField ? description.types.get(namedType(metadataField.type)) : null;
+      const metadataFields = ['friendlyName', 'description', 'multiLine', 'labelPosition']
+        .filter(fieldName => fieldsByName(metadataType).has(fieldName));
+      if (metadataFields.length > 0) {
+        memberSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
+      }
+      const getField = wrapperFields.get('get');
+      if (getField) {
+        memberSelection.get = resultSelectionForType(getField.type, description.types) ?? true;
+      }
+      if (Object.keys(memberSelection).length > 0) {
+        fragment[member] = memberSelection;
+      }
+    }
+    return [typeName, fragment];
+  }));
+  return {__typename: true, [INLINE_FRAGMENTS]: fragments};
+}
+
+async function describeInto(client, types, typeNames, signal) {
+  const missing = [...new Set(typeNames)].filter(typeName => typeName && !types.has(typeName));
+  if (missing.length === 0) {
+    return;
+  }
+  const described = await client.describeTypes(missing, {signal});
+  for (const typeName of missing) {
+    const typeDescription = described.get(typeName) ?? null;
+    if (!typeDescription) {
+      throw new Error(`GraphQL type '${typeName}' required by a polymorphic projection is unavailable.`);
+    }
+    types.set(typeName, typeDescription);
+  }
+}
+
+function collectionRowSelection(descriptor, columns, types) {
+  const value = descriptor.value;
+  return collectionResultSelectionForType(value?.typeRef ?? value?.elementTypeRef ?? null, columns, types);
+}
+
+function innermostType(typeRef) {
+  let current = typeRef;
+  while (current?.ofType) {
+    current = current.ofType;
+  }
+  return current;
+}
+
+function mapRequirementStatus(objectStatus) {
+  return {
+    [ObjectContextStatus.IDLE]: RequirementStatus.IDLE,
+    [ObjectContextStatus.SCHEMA_LOADING]: RequirementStatus.SCHEMA_LOADING,
+    [ObjectContextStatus.OBJECT_LOADING]: RequirementStatus.OBJECT_LOADING,
+    [ObjectContextStatus.READY]: RequirementStatus.READY,
+    [ObjectContextStatus.PARTIAL_ERROR]: RequirementStatus.READY,
+    [ObjectContextStatus.TERMINAL_ERROR]: RequirementStatus.TERMINAL_ERROR
+  }[objectStatus] ?? RequirementStatus.TERMINAL_ERROR;
+}
+
+function mergeErrors(previousErrors, nextErrors, requestedSelection) {
+  const replacedHeads = new Set(Object.keys(requestedSelection));
+  return Object.freeze([
+    ...previousErrors.filter(error => !replacedHeads.has(error.path?.[0])),
+    ...nextErrors
+  ]);
+}
+
+function asGraphQLError(error) {
+  return Object.freeze({
+    message: error?.message ?? String(error),
+    path: [],
+    extensions: Object.freeze(error?.code ? {code: error.code} : {})
+  });
+}
+
+function freezeState(state) {
+  return Object.freeze({
+    status: state.status,
+    generation: state.generation,
+    snapshot: state.snapshot,
+    errors: Object.freeze([...(state.errors ?? [])]),
+    error: state.error ?? null
+  });
+}
+
+function freezeRequirementState(state) {
+  return Object.freeze({...state, errors: Object.freeze([...(state.errors ?? [])])});
+}
+
+function deepFreeze(value) {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const nested of Object.values(value)) {
+      deepFreeze(nested);
+    }
+  }
+  return value;
+}

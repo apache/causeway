@@ -57,6 +57,12 @@ public final class TypeNames {
         return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_input";
     }
 
+    public String polymorphicTypeNameFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_union";
+    }
+
     public String enumTypeNameFor(
             final ObjectSpecification objectSpec,
             final SchemaType schemaType) {
@@ -106,6 +112,20 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + otoa.asciiId() + "__gqlv_property";
     }
 
+    public String propertyAutocompleteWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToOneAssociation otoa,
+            final SchemaType schemaType) {
+        return propertyTypeNameFor(owningType, otoa, schemaType) + "_autocomplete_window";
+    }
+
+    public String actionParamAutocompleteWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectActionParameter oap,
+            final SchemaType schemaType) {
+        return actionParamTypeNameFor(owningType, oap, schemaType) + "_autocomplete_window";
+    }
+
     public String propertyLobTypeNameFor(
             final ObjectSpecification owningType,
             final OneToOneAssociation otoa,
@@ -118,6 +138,13 @@ public final class TypeNames {
             final OneToManyAssociation otma,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + otma.asciiId() + "__gqlv_collection";
+    }
+
+    public String collectionWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToManyAssociation otma,
+            final SchemaType schemaType) {
+        return collectionTypeNameFor(owningType, otma, schemaType) + "_window";
     }
 
     public String memberTypeNameFor(

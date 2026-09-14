@@ -35,7 +35,7 @@ public class ScalarMarshallerShortPrimitive extends ScalarMarshallerAbstract<Sho
 
     @Inject
     public ScalarMarshallerShortPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(short.class, ExtendedScalars.GraphQLShort, causewayConfiguration);
+        super(short.class, ExtendedScalars.GraphQLShort, causewayConfiguration, true);
     }
 
     @Override

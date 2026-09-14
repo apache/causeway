@@ -18,7 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -29,17 +35,20 @@ import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet
 import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ResourcePath;
 
 /**
  * Metadata for every domain object.
  */
 public class CommonMetaFetcher {
 
+    static final int MAXIMUM_BREADCRUMB_ANCESTORS = 32;
+
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
     private final CausewayConfiguration causewayConfiguration;
-    private final String graphqlPath;
+    private final ResourcePath resourcePath;
 
     public CommonMetaFetcher(
             final Bookmark bookmark,
@@ -51,7 +60,7 @@ public class CommonMetaFetcher {
         this.bookmarkService = bookmarkService;
         this.objectManager = objectManager;
         this.causewayConfiguration = causewayConfiguration;
-        this.graphqlPath = causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
+        this.resourcePath = ResourcePath.from(causewayConfiguration);
     }
 
     public String logicalTypeName() {
@@ -86,6 +95,77 @@ public class CommonMetaFetcher {
                 .orElse(null);
     }
 
+    public List<Map<String, String>> breadcrumbs() {
+        return managedObject()
+                .map(current -> traverseBreadcrumbs(
+                        bookmark,
+                        current.getPojo(),
+                        pojo -> objectManager.adapt(pojo).objSpec().getNavigableParent(pojo),
+                        bookmarkService::bookmarkFor,
+                        pojo -> objectManager.adapt(pojo).getTitle(),
+                        this::breadcrumbIcon))
+                .orElseGet(List::of);
+    }
+
+    static List<Map<String, String>> traverseBreadcrumbs(
+            final Bookmark currentBookmark,
+            final Object currentPojo,
+            final Function<Object, Object> parentResolver,
+            final Function<Object, Optional<Bookmark>> bookmarkResolver,
+            final Function<Object, String> titleResolver,
+            final Function<Bookmark, String> iconResolver) {
+        final var seen = new HashSet<Bookmark>();
+        seen.add(currentBookmark);
+        final var ancestors = new ArrayList<Map<String, String>>();
+        var pojo = currentPojo;
+        while (true) {
+            final Object parentPojo;
+            try {
+                parentPojo = parentResolver.apply(pojo);
+            } catch (RuntimeException ex) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_PARENT_FAILED", "Navigable parent evaluation failed.");
+            }
+            if (parentPojo == null) {
+                break;
+            }
+            final Optional<Bookmark> parentBookmark;
+            try {
+                parentBookmark = bookmarkResolver.apply(parentPojo);
+            } catch (RuntimeException ex) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_IDENTITY_FAILED", "Navigable parent identity resolution failed.");
+            }
+            if (parentBookmark.isEmpty()) {
+                break;
+            }
+            if (!seen.add(parentBookmark.get())) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_CYCLE", "Navigable parent hierarchy contains a cycle.");
+            }
+            if (ancestors.size() >= MAXIMUM_BREADCRUMB_ANCESTORS) {
+                throw breadcrumbFailure(
+                        "GRAPHQL_BREADCRUMB_DEPTH_EXCEEDED",
+                        "Navigable parent hierarchy exceeds " + MAXIMUM_BREADCRUMB_ANCESTORS + " ancestors.");
+            }
+            final String title;
+            try {
+                title = java.util.Objects.requireNonNull(titleResolver.apply(parentPojo));
+            } catch (RuntimeException ex) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_TITLE_FAILED", "Navigable parent title resolution failed.");
+            }
+            final var ancestor = new java.util.LinkedHashMap<String, String>();
+            ancestor.put("logicalTypeName", parentBookmark.get().logicalTypeName());
+            ancestor.put("id", parentBookmark.get().identifier());
+            ancestor.put("title", title);
+            final var icon = iconResolver.apply(parentBookmark.get());
+            if (icon != null) {
+                ancestor.put("icon", icon);
+            }
+            ancestors.add(Map.copyOf(ancestor));
+            pojo = parentPojo;
+        }
+        Collections.reverse(ancestors);
+        return List.copyOf(ancestors);
+    }
+
     public String cssClass() {
         return managedObject()
                 .map(managedObject -> {
@@ -112,17 +192,33 @@ public class CommonMetaFetcher {
         return resource("icon");
     }
 
+    private String breadcrumbIcon(final Bookmark ancestor) {
+        if (causewayConfiguration.viewer().graphql().resources().effectiveStructuralMetadataResponseType()
+                == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
+            return null;
+        }
+        return resourcePath.metadata(
+                ancestor,
+                causewayConfiguration.viewer().graphql().metaData().fieldName(),
+                "icon");
+    }
+
     private String resource(final String resource) {
         return managedObject()
-                .flatMap(Bookmarkable::getBookmark
-                ).map(bookmark -> String.format(
-                        "//%s/object/%s:%s/%s/%s",
-                        graphqlPath, bookmark.logicalTypeName(), bookmark.identifier(), causewayConfiguration.viewer().graphql().metaData().fieldName(), resource))
+                .flatMap(Bookmarkable::getBookmark)
+                .map(bookmark -> resourcePath.metadata(
+                        bookmark,
+                        causewayConfiguration.viewer().graphql().metaData().fieldName(),
+                        resource))
                 .orElse(null);
     }
 
     private Optional<ManagedObject> managedObject() {
         return bookmarkService.lookup(bookmark)
                 .map(objectManager::adapt);
+    }
+
+    private static IllegalStateException breadcrumbFailure(final String code, final String message) {
+        return new IllegalStateException(code + ": " + message);
     }
 }

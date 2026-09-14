@@ -1,0 +1,151 @@
+= HTMX Petclinic reference application
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This module is the cohesive executable acceptance application for the generic HTMX web-component viewer.
+It ports the Pet Owner, Pet, Visit, home, fixture, menu, and grid concepts from the pinned Apache Petclinic source recorded in `PROVENANCE.adoc`.
+
+The application runs the GraphQL, generic HTMX, and current Wicket viewers over one Causeway metamodel, H2 database, security policy, effective menu definition, effective grid definitions, and deterministic fixture.
+The Wicket viewer is a side-by-side presentation reference rather than a dependency of the generic HTMX module.
+The sample uses the supported default route-lazy Vaadin free-core reference adapter and qualified basic, numeric, and local-temporal field families without an application opt-in.
+Its strict CSP adds only the pinned deduplicated hashes for reviewed closures, preserves `style-src-attr 'none'`, and makes no Vaadin request until an eligible editor opens.
+Causeway elements, codecs, GraphQL interactions, and semantic events remain authoritative, and the common native toolkit policy provides immediate rollback.
+The owner page demonstrates page-local action names such as `Change the owner's name`, `Register a pet`, and `Remove this owner` without changing semantic action IDs.
+Owner and service actions demonstrate canonical descriptions, parameter-prompt descriptions, disabled-reason tooltip composition, and static Font Awesome icons in native and Vaadin presentations.
+The owner toolbar also demonstrates a compact foundation-owned unreferenced-action group beside explicit actions, while a separate catch-all presents the remaining collection.
+
+== Run
+
+Use JDK 17 or later and run this command from the repository root:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run.sh
+----
+
+The script respects an existing `JAVA_HOME`, discovers JDK 21 through macOS `/usr/libexec/java_home` when `JAVA_HOME` is unset, and uses `MVN` instead of `mvn` when that environment variable is supplied.
+Pass Maven properties such as `-Dspring-boot.run.arguments=--server.port=9090` to the script when needed.
+
+The root URL redirects to `http://localhost:8080/htmx`.
+The Wicket comparison is available at `http://localhost:8080/wicket/`.
+Sign in to Wicket with username `sven` and password `pass`; the bypass authenticator accepts the demonstration credentials.
+GraphiQL remains available through the configured Spring GraphQL endpoint when enabled.
+
+Run the separate local SecMan-authenticated configuration with:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-secured.sh
+----
+
+Open `http://localhost:8080/htmx` and sign in with username `sven` and password `pass`.
+This secured configuration enables Spring CSRF protection, consumes the shared presentation-neutral SecMan Spring bridge, and intentionally omits Wicket and bypass security.
+The shared layout declares **Me**, **Configuration**, and framework Logout together in one tertiary utility-menu hierarchy and omits a duplicate System catch-all.
+The deterministic secured user receives the standard regular-user and configuration-access roles, so host policy labels that menu `sven`, preserves **Me** and **Configuration**, and presents exact Logout as distinctly outlined **Sign out**.
+Sign out activation submits the host's non-visual current-CSRF POST form rather than invoking GraphQL, and the shell adds no separate visible username or logout block.
+The secured launcher preserves the same `JAVA_HOME`, `MVN`, and pass-through Maven argument behavior as `run.sh`.
+
+== Headless Playwright acceptance
+
+The opt-in `playwright` profile adds Playwright for Java only to the dedicated browser-test source set, so ordinary reactor builds do not resolve a browser or compile the Playwright suite.
+Playwright runs Chromium headlessly by default and does not take foreground focus.
+
+Run the integration, secured integration, and complete headless UI suites from the repository root:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/test.sh
+----
+
+Install Playwright Chromium on the first run when necessary:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/test.sh --install-browser
+----
+
+Any arguments after `--install-browser` are passed to the Maven test invocation.
+
+Add `-Dcauseway.viewer.webcomponents.htmx.component-toolkit=native` to run the same suite through complete explicit-native reference, read-only field, editor, and ordinary-action rollback.
+Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
+Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
+
+The suite starts the application on a random port and exercises all four resource-authored pages, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, route-lazy reference selection, every Petclinic service action, and every Pet Owner object action.
+It creates and deletes disposable data for destructive coverage and fails on unexpected browser console errors, failed resources, unsuccessful GraphQL responses, lost focus, undisclosed menus, incorrect member-associated action placement, or incorrect semantic results.
+
+== Stable fixture routes
+
+The HTMX root discovers the configured `petclinic.HomePage` object through targeted application-entry introspection and replaces the landing page with its canonical object route.
+The home memento identifier is execution-generated, so tests discover it rather than treating it as durable.
+
+Mary Smith is the stable representative entity.
+Her database identifier is `owner-mary`, her GraphQL object identifier is `s_owner-mary`, and her canonical HTML-authored route is `/htmx/object/petclinic.PetOwner/s_owner-mary`.
+The corresponding Wicket route is `/wicket/object/petclinic.PetOwner:s_owner-mary` after authentication.
+
+The sample contains four pet owners, five pets, and three upcoming visits.
+Mary owns Basil and Samantha and has two scheduled visits.
+The home owner and upcoming-visit collections and each owner's pet collection demonstrate server-backed bounded search using application `CollectionFilterService` implementations.
+
+== HTML-authored pages and fallback
+
+Petclinic contains no application-specific HTMX page-rendering Java class.
+Its complete page customization is visible beneath `src/main/resources/META-INF/causeway/webcomponents/pages/`:
+
+[source,text]
+----
+petclinic.HomePage.html
+petclinic.PetOwner.html
+petclinic.Pet.html
+petclinic.Visit.html
+----
+
+Each exact logical-type filename is discovered at startup and its literal UTF-8 content is placed beneath the viewer-provided route context.
+The sample opts into `causeway.viewer.webcomponents.htmx.resource-page-mode=reload`, while the viewer's production-oriented default remains `cached`.
+The files compose navigable breadcrumbs, object headers, ordinary application regions, properties, actions, collections, `<cw-preview>` row previews, and declared columns while GraphQL remains authoritative for identity, hierarchy, values, visibility, usability, validation, invocation, and results.
+Preview bodies omit `<cw-object-header>` because the owning collection row already presents the authoritative title and canonical object link.
+`Pet.petOwner` and `Visit.pet` use `@PropertyLayout(navigable = Navigable.PARENT)`, producing the deterministic Mary Smith → Basil → visit hierarchy without application-specific breadcrumb rendering or route code.
+`petclinic.PetOwner.html` demonstrates natural member association by nesting `updateName` beneath `name`, `addPet` and `removePet` beneath `pets`, and `bookVisit` beneath `visits`.
+It also presents Mary's deterministic multipage clinic agreement after Pets and Visits in the secondary column, using `label-position="NONE"` so the Agreement card heading replaces the redundant property label and the reader uses the available width.
+The retained `PetOwner.layout.xml` expresses the equivalent generated-grid associations and Agreement placement, while the direct HTML needs no adjacent Petclinic-only association wrapper.
+They use the configured `static/css/application.css`, public Causeway hooks, and design variables without inline styles or raw Vaadin elements.
+
+The existing `*.layout.xml`, `*.columnOrder.txt`, and `menubars.layout.xml` resources intentionally remain in the artifact.
+If an exact HTML page is removed from packaging before startup, the route falls back to `<cw-object editable>` and the retained effective grid and column order.
+An unreadable, malformed, duplicate, invalidly named, empty, or oversized discovered page fails startup instead of disguising the error as successful generic fallback.
+
+=== IntelliJ page-editing loop
+
+After starting `PetClinicHtmxApplication` from IntelliJ, edit an existing page under `src/main/resources/META-INF/causeway/webcomponents/pages/`.
+Run *Build > Build Project* so IntelliJ copies the resource into the running module's classpath output, then refresh the browser to render the current content without restarting Spring.
+To remove the explicit build action, enable IntelliJ automatic build and permit auto-make while an application is running in the IDE's advanced compiler settings.
+The precise setting names vary by IntelliJ release, so verify that the edited file is copied into the module output if refresh still shows old content.
+Reload mode rereads content only for pages registered at startup.
+Adding, deleting, or renaming a page changes registry identity and therefore still requires an application restart.
+An empty, unreadable, oversized, malformed UTF-8, or NUL-containing edit fails that request rather than serving stale HTML or generic layout; correct the file, rebuild it, and refresh again.
+
+The primary menus cover Pet Owner creation, search, list, count, and upcoming visits.
+HTML object pages cover editable properties, multiline notes, enum values, references, responsive cards, adjacent action groups, related Pets, contributed Visits, and contributed booking.
+The sample's current integration tests cover fixture identities, all four packaged pages, private-resource isolation, retained menu and grid resources, rich service and object operations including navigable ancestor metadata, shell and fragment responses, exact resource precedence, generic fallback contracts, browser assets, and Wicket availability.
+Browser acceptance verifies owner, pet, and visit breadcrumb order, current state, canonical ancestor navigation, responsive presentation, and ordinary clean-diagnostic gates.
+
+== Wicket-relative presentation
+
+The HTMX theme intentionally follows Wicket's recognizable hierarchy rather than copying its DOM.
+Both viewers present a primary-color application bar, ordered menus, contained page content, object title and actions, cards, labels and values, related-object links, compact collections, modal interactions, and responsive navigation.
+Framework-specific URLs, markup, table widgets, authentication chrome, and lifecycle behavior remain different.
+
+Browser acceptance records desktop and mobile screenshots of home and Mary Smith routes, checks responsive light and dark presentation, and verifies keyboard focus, prompts, navigation history, overflow, console output, and accessibility.
+
+On 2026-08-19 the current Wicket and HTMX home and Mary Smith pages were compared over the same running model.
+The HTMX shell matched Wicket's primary navigation, right-aligned system menu, contained content, object hierarchy, actions, tabs, labels, collection cards, related-object links, and responsive collapse while retaining independent semantic markup.
+Canonical direct loads, home replacement, custom-page precedence, retained generic fallback, menu-originated collection results, object-result routing, back, forward, invalid routes, absent objects, automatic first collection windows, prompt validation, Escape cancellation, and focus restoration were exercised in a real browser.
+Desktop light-mode and mobile dark-mode Lighthouse navigation audits each scored 100 for Accessibility, Best Practices, and SEO.
+No HTMX application console messages, failed GraphQL requests, page overflow, or overlapping controls were observed.
+
+== Provenance and omissions
+
+Read `PROVENANCE.adoc` before copying or expanding this sample.
+The port intentionally omits the upstream starter SimpleObject module and historical operational, security-administration, calendar, Flyway, Quartz, and deployment integrations that are not needed to demonstrate the generic viewer.
+Instead of retaining the historical PDF integration, the shared domain generates a deterministic owner-specific clinic agreement used to exercise the framework-neutral foundation reader.

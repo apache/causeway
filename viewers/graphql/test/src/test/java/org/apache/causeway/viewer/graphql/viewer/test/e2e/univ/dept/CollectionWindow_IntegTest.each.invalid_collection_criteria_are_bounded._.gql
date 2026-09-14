@@ -1,0 +1,17 @@
+{
+  rich {
+    university_dept_Departments {
+      findDepartmentByName {
+        invoke(name: "Physics") {
+          results {
+            staffMembers {
+              window(sortBy: "hiddenPhoto", size: 2) {
+                returnedCount
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

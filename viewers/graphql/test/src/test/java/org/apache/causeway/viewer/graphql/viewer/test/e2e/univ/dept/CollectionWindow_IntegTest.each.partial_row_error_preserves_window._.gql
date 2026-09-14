@@ -1,0 +1,26 @@
+{
+  rich {
+    university_dept_Departments {
+      findDepartmentByName {
+        invoke(name: "Physics") {
+          results {
+            configuredStaffMembers {
+              window(size: 13) {
+                offset
+                requestedSize
+                returnedCount
+                totalCount
+                hasPrevious
+                hasNext
+                rows {
+                  name { get }
+                  windowProbe { get }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

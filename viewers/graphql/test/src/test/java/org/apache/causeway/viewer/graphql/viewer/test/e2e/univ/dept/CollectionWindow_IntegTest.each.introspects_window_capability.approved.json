@@ -1,0 +1,121 @@
+{
+  "data" : {
+    "collection" : {
+      "fields" : [ {
+        "name" : "metadata",
+        "description" : "Canonical local member metadata.",
+        "args" : [ ],
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "OBJECT",
+            "name" : "RichMemberMetadata"
+          }
+        }
+      }, {
+        "name" : "hidden",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "Boolean",
+          "ofType" : null
+        }
+      }, {
+        "name" : "disabled",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "String",
+          "ofType" : null
+        }
+      }, {
+        "name" : "get",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "LIST",
+          "name" : null,
+          "ofType" : {
+            "kind" : "OBJECT",
+            "name" : "rich__university_dept_StaffMember"
+          }
+        }
+      }, {
+        "name" : "window",
+        "description" : "Returns a bounded zero-based collection window; the configured maximum size is 100.",
+        "args" : [ {
+          "name" : "offset",
+          "description" : "Zero-based row offset.",
+          "defaultValue" : "0",
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Int"
+            }
+          }
+        }, {
+          "name" : "size",
+          "description" : "Positive row count, not exceeding the configured maximum of 100.",
+          "defaultValue" : "20",
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Int"
+            }
+          }
+        }, {
+          "name" : "sortBy",
+          "description" : "Optional accepted Causeway table-column member id.",
+          "defaultValue" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          }
+        }, {
+          "name" : "sortDirection",
+          "description" : "Direction for an optional sort member.",
+          "defaultValue" : "ASCENDING",
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "ENUM",
+              "name" : "rich__gqlv_collection_window_sort_direction"
+            }
+          }
+        }, {
+          "name" : "search",
+          "description" : "Optional CollectionFilterService quick-search text, bounded to 256 characters.",
+          "defaultValue" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          }
+        } ],
+        "type" : {
+          "kind" : "OBJECT",
+          "name" : "rich__university_dept_Department__staffMembers__gqlv_collection_window",
+          "ofType" : null
+        }
+      }, {
+        "name" : "datatype",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "String",
+          "ofType" : null
+        }
+      } ]
+    }
+  }
+}

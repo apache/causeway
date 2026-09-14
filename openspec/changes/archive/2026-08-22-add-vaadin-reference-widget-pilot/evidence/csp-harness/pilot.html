@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:,">
+  <title>Causeway reference widget pilot</title>
+  <link rel="stylesheet" href="/foundation/component-styles.css">
+  <link rel="stylesheet" href="/foundation/theme.css">
+  <link rel="stylesheet" href="/pilot.css">
+  <script type="module" src="/pilot-bootstrap.mjs"></script>
+</head>
+<body>
+  <main data-testid="pilot-page">
+    <h1>Causeway semantic reference widget pilot</h1>
+    <p>The page uses ordinary HTML and Causeway semantic elements.</p>
+    <section id="generic" aria-labelledby="generic-heading">
+      <h2 id="generic-heading">Generic semantic editors</h2>
+      <div id="generic-editors"></div>
+    </section>
+    <section id="custom" aria-labelledby="custom-heading" data-custom-fragment>
+      <h2 id="custom-heading">Custom HTML fragment</h2>
+      <div id="custom-editors"></div>
+    </section>
+    <output id="status" aria-live="polite">Starting</output>
+  </main>
+</body>
+</html>

@@ -47,6 +47,42 @@ authentication.fallback.username
 
 
 |
+[[causeway.viewer.graphql.autocomplete.default-window-size]]
+causeway.viewer.graphql. +
+autocomplete.default-window-size
+
+|  20
+| null
+
+
+|
+[[causeway.viewer.graphql.autocomplete.max-window-size]]
+causeway.viewer.graphql. +
+autocomplete.max-window-size
+
+|  100
+| null
+
+
+|
+[[causeway.viewer.graphql.collections.default-window-size]]
+causeway.viewer.graphql. +
+collections.default-window-size
+
+|  20
+| null
+
+
+|
+[[causeway.viewer.graphql.collections.max-window-size]]
+causeway.viewer.graphql. +
+collections.max-window-size
+
+|  100
+| null
+
+
+|
 [[causeway.viewer.graphql.lookup.arg-name]]
 causeway.viewer.graphql.lookup. +
 arg-name
@@ -92,11 +128,47 @@ target-arg-name
 
 
 |
-[[causeway.viewer.graphql.resources.response-type]]
+[[causeway.viewer.graphql.resources.external-path-prefix]]
 causeway.viewer.graphql.resources. +
-response-type
+external-path-prefix
 
-|  FORBIDDEN
+| 
+| null
+
+
+|
+[[causeway.viewer.graphql.resources.inline-input-max-bytes]]
+causeway.viewer.graphql.resources. +
+inline-input-max-bytes
+
+|  1048576
+| null
+
+
+|
+[[causeway.viewer.graphql.resources.inline-output-max-bytes]]
+causeway.viewer.graphql.resources. +
+inline-output-max-bytes
+
+|  1048576
+| null
+
+
+|
+[[causeway.viewer.graphql.resources.structural-metadata-response-type]]
+causeway.viewer.graphql.resources. +
+structural-metadata-response-type
+
+| 
+| null
+
+
+|
+[[causeway.viewer.graphql.resources.value-content-response-type]]
+causeway.viewer.graphql.resources. +
+value-content-response-type
+
+| 
 | null
 
 
@@ -163,6 +235,24 @@ causeway.viewer.graphql.schema. +
 simple.top-level-field-name
 
 |  simple
+| null
+
+
+|
+[[causeway.viewer.graphql.values.unsupported-output-policy]]
+causeway.viewer.graphql.values. +
+unsupported-output-policy
+
+|  REDACTED
+| null
+
+
+|
+[[causeway.viewer.graphql.resources.response-type]]
+causeway.viewer.graphql.resources. +
+response-type
+
+|  FORBIDDEN
 | null
 
 

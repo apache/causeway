@@ -15,15 +15,13 @@ enum EntityState {
   ATTACHED     // <.>
   ATTACHED_NO_OID     // <.>
   DETACHED     // <.>
-  HOLLOW     // <.>
   TRANSIENT_OR_REMOVED     // <.>
   REMOVED     // <.>
   boolean isPersistable()     // <.>
   boolean isAttached()     // <.>
   boolean isAttachedNoOid()     // <.>
   boolean isDetached()     // <.>
-  boolean isHollow()     // <.>
-  boolean isTransientOrRemoved()     // <.>
+  boolean isTransientOrRemoved()
   boolean isRemoved()     // <.>
   boolean isAttachedOrRemoved()
 }
@@ -59,16 +57,6 @@ Is attached, has no OID yet. On pre-store.
 --
 Is detached, hence (per definition) has an OID.
 --
-<.> xref:#HOLLOW[HOLLOW]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
-====
---
 <.> xref:#TRANSIENT_OR_REMOVED[TRANSIENT_OR_REMOVED]
 +
 --
@@ -77,12 +65,7 @@ Object with this state is an entity that is transient or has been removed from t
 <.> xref:#REMOVED[REMOVED]
 +
 --
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
-====
+Set by the framework after entity removal.
 --
 <.> xref:#isPersistable_[isPersistable()]
 +
@@ -92,8 +75,6 @@ Object is an entity, hence is persistable to the database.
 <.> xref:#isAttached_[isAttached()]
 <.> xref:#isAttachedNoOid_[isAttachedNoOid()]
 <.> xref:#isDetached_[isDetached()]
-<.> xref:#isHollow_[isHollow()]
-<.> xref:#isTransientOrRemoved_[isTransientOrRemoved()]
 <.> xref:#isRemoved_[isRemoved()]
 
 == Members
@@ -128,16 +109,6 @@ Is attached, has no OID yet. On pre-store.
 
 Is detached, hence (per definition) has an OID.
 
-[#HOLLOW]
-=== HOLLOW
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
-====
-
 [#TRANSIENT_OR_REMOVED]
 === TRANSIENT_OR_REMOVED
 
@@ -146,12 +117,9 @@ Object with this state is an entity that is transient or has been removed from t
 [#REMOVED]
 === REMOVED
 
-[WARNING]
-====
-[red]#_deprecated:_#
+Set by the framework after entity removal.
 
-- This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
-====
+However, detecting an entity's state in the JPA context will never yield _#REMOVED_ .
 
 [#isPersistable_]
 === isPersistable()
@@ -166,12 +134,6 @@ Object is an entity, hence is persistable to the database.
 
 [#isDetached_]
 === isDetached()
-
-[#isHollow_]
-=== isHollow()
-
-[#isTransientOrRemoved_]
-=== isTransientOrRemoved()
 
 [#isRemoved_]
 === isRemoved()
