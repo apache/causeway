@@ -22,6 +22,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
@@ -64,6 +74,7 @@ import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDef
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
+import org.apache.causeway.core.metamodel.services.vwspecvis.ViewerSpecificDomainObjectVisibilityDefault;
 import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
@@ -108,14 +119,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSql
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
-import org.jspecify.annotations.NonNull;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-
-import jakarta.inject.Provider;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
@@ -196,6 +199,7 @@ import jakarta.inject.Provider;
         ServiceRegistryDefault.class,
         // TableColumnOrderServiceUsingTxtFile.class, NOT here ... use @ComponentScan instead, see below
         TitleServiceDefault.class,
+        ViewerSpecificDomainObjectVisibilityDefault.class,
 
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
