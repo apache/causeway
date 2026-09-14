@@ -29,6 +29,7 @@ public class CommandManager_replayOrRetryMultiple {
 
 
     public enum Limit {
+        ONE(1), // effectively allows the command to be executed even if it is disabled
         FIVE(5),
         TEN(10),
         TWENTY(20),
