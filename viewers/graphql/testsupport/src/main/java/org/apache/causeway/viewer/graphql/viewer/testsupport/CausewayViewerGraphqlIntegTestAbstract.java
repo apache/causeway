@@ -67,8 +67,6 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
@@ -157,7 +155,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     @Inject protected CausewaySystemEnvironment causewaySystemEnvironment;
-    @Inject protected MetaModelContext metaModelContext;
     @Inject protected SpecificationLoader specificationLoader;
     @Inject protected TransactionService transactionService;
     @Inject protected GraphQlSourceForCauseway graphQlSourceForCauseway;
@@ -170,9 +167,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     void init(final TestInfo testInfo) {
         this.testInfo = testInfo;
         assertNotNull(causewaySystemEnvironment);
-        assertNotNull(metaModelContext);
-        // Cached Spring contexts must reactivate their JVM-global metamodel before each test.
-        MetaModelContextFactory.setTestContext(metaModelContext);
         assertNotNull(specificationLoader);
         assertNotNull(transactionService);
         assertNotNull(graphQlSourceForCauseway);
