@@ -30,8 +30,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -39,6 +38,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
@@ -52,6 +52,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import lombok.val;
 
 public abstract class CommandLog_recordingSupport_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
@@ -84,6 +85,84 @@ public abstract class CommandLog_recordingSupport_IntegTestAbstract extends Caus
 
     protected abstract Counter newCounter(String name);
 
+    @Test
+    void recording_support_logs_safe_action() {
+
+        // when
+        wrapperFactory.wrap(counter1).findSelf();
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isPresent();
+
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#findSelf");
+        assertThat(commandLogEntry.getCommandDto()).isNotNull();
+        assertThat(commandLogEntry.getCommandDto().getMember()).isInstanceOf(ActionDto.class);
+        assertThat(commandLogEntry.getResult()).isEqualTo(bookmarkService.bookmarkForElseFail(counter1));
+
+        val exportDto = CommandDtoUtils.CommandExportDto.of(
+                commandLogEntry.getCommandDto(),
+                commandLogEntry.getResult());
+        assertThat(exportDto.getResult().getType()).isEqualTo("commandlog.test.Counter");
+    }
+
+    @Test
+    void recording_support_does_not_duplicate_explicitly_command_published_safe_action() {
+
+        // when
+        wrapperFactory.wrap(counter1).findSelfWithCommandPublishingEnabled();
+        interactionService.nextInteraction();
+
+        // then
+        List<? extends CommandLogEntry> entries = commandLogEntryRepository.findAll();
+        assertThat(entries).hasSize(1);
+        assertThat(entries.get(0).getLogicalMemberIdentifier())
+                .isEqualTo("commandlog.test.Counter#findSelfWithCommandPublishingEnabled");
+    }
+
+    @Test
+    void recording_support_logs_safe_action_null_list_and_scalar_results() {
+
+        // when
+        wrapperFactory.wrap(counter1).findNull();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findSelfAsList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findEmptyList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findSelfTwiceAsList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findNameAsScalar();
+        interactionService.nextInteraction();
+
+        // then
+        List<? extends CommandLogEntry> entries = commandLogEntryRepository.findAll();
+        assertThat(entries)
+                .extracting(CommandLogEntry::getLogicalMemberIdentifier)
+                .contains(
+                        "commandlog.test.Counter#findNull",
+                        "commandlog.test.Counter#findSelfAsList",
+                        "commandlog.test.Counter#findEmptyList",
+                        "commandlog.test.Counter#findSelfTwiceAsList",
+                        "commandlog.test.Counter#findNameAsScalar");
+        assertThat(entryFor(entries, "commandlog.test.Counter#findSelfAsList").getResult())
+                .isEqualTo(bookmarkService.bookmarkForElseFail(counter1));
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNull").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findEmptyList").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findSelfTwiceAsList").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNotNull();
+    }
+
+    private CommandLogEntry entryFor(
+            final List<? extends CommandLogEntry> entries,
+            final String logicalMemberIdentifier) {
+        return entries.stream()
+                .filter(entry -> logicalMemberIdentifier.equals(entry.getLogicalMemberIdentifier()))
+                .findFirst()
+                .orElseThrow();
+    }
 
     @Test
     void recording_support_logs_property_edit_without_command_publishing_annotation() {
@@ -140,7 +219,6 @@ public abstract class CommandLog_recordingSupport_IntegTestAbstract extends Caus
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject CausewayConfiguration causewayConfiguration;
     @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
     @Inject EventBusService eventBusService;
 

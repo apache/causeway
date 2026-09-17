@@ -22,12 +22,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 
@@ -39,6 +42,12 @@ extends ActionAnnotationFacetFactoryTest {
     private void processCommandPublishing(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processCommandPublishing(processMethodContext, actionIfAny);
+    }
+
+    private void processSemanticsAndCommandPublishing(final ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processSemantics(processMethodContext, actionIfAny);
         facetFactory.processCommandPublishing(processMethodContext, actionIfAny);
     }
 
@@ -67,6 +76,36 @@ extends ActionAnnotationFacetFactoryTest {
             processCommandPublishing(facetFactory, processMethodContext);
             // then
             assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        });
+    }
+
+    @Test
+    void given_safe_annotation_and_recording_support_disabled_then_facet_not_added() {
+
+        class Customer {
+            @Action(semantics = SemanticsOf.SAFE)
+            public void someAction() {}
+        }
+
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+            processSemanticsAndCommandPublishing(processMethodContext);
+            assertNull(facetedMethod.getFacet(CommandPublishingFacet.class));
+        });
+    }
+
+    @Test
+    void given_safe_annotation_and_recording_support_enabled_then_facet_added() {
+
+        class Customer {
+            @Action(semantics = SemanticsOf.SAFE)
+            public void someAction() {}
+        }
+
+        getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+            processSemanticsAndCommandPublishing(processMethodContext);
+            assertTrue(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
         });
     }
 

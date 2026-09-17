@@ -64,6 +64,8 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
         val publishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
 
         val safeSemantics = hasSafeSemantics(holder);
+        val safeActionRecordingEnabled = safeSemantics
+                && configuration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
 
         return actionsIfAny
                 .<CommandPublishingFacet>map(action -> {
@@ -78,23 +80,25 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
 
                     switch (publishing) {
                         case NOT_SPECIFIED:
-                            return safeSemantics
+                            return safeActionRecordingEnabled
                                     ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
                                             holder, servicesInjector, configuration)
                                     : null;
                         case AS_CONFIGURED:
                             switch (publishingPolicy) {
                                 case NONE:
-                                    return safeSemantics
+                                    return safeActionRecordingEnabled
                                             ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
                                                     holder, servicesInjector, configuration)
                                             : new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
                                 case IGNORE_QUERY_ONLY:
                                 case IGNORE_SAFE:
-                                    return safeSemantics
+                                    return safeActionRecordingEnabled
                                             ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
                                                     holder, servicesInjector, configuration)
-                                            : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
+                                            : safeSemantics
+                                                    ? new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder, servicesInjector)
+                                                    : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
                                 case ALL:
                                     return new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
                                 default:
@@ -109,7 +113,7 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                             throw new IllegalStateException(String.format("@Action#commandPublishing '%s' not recognised", publishing));
                     }
                 })
-                .or(() -> safeSemantics
+                .or(() -> safeActionRecordingEnabled
                         ? Optional.of((CommandPublishingFacet)new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
                                 holder, servicesInjector, configuration))
                         : Optional.empty());
