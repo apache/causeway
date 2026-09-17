@@ -47,6 +47,7 @@ public class CommandManager_replayOrRetryMultiple {
             extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetryMultiple> { }
 
     public enum Limit {
+        ONE(1),
         FIVE(5),
         TEN(10),
         TWENTY(20),
