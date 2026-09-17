@@ -197,6 +197,10 @@ implements ApplicationTenancyRepository {
     public void setParentOnTenancy(
             final @NonNull ApplicationTenancy tenancy,
             final @NonNull ApplicationTenancy parent) {
+        val previousParent = tenancy.getParent();
+        if(previousParent != null && !previousParent.equals(parent)) {
+            previousParent.getChildren().remove(tenancy);
+        }
         tenancy.setParent(parent);
         parent.getChildren().add(tenancy);
     }
