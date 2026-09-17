@@ -65,10 +65,10 @@ class CommandManagerBackgroundReplayTest {
     void limitsExposeMaintenanceBoundsAndDefaultToTen() {
         assertThat(CommandManager_replayOrRetryMultiple.Limit.values())
                 .extracting(CommandManager_replayOrRetryMultiple.Limit::limit)
-                .containsExactly(5L, 10L, 20L, 40L, 80L, 160L, 320L, (long) Integer.MAX_VALUE);
+                .containsExactly(1L, 5L, 10L, 20L, 40L, 80L, 160L, 320L, (long) Integer.MAX_VALUE);
         assertThat(CommandManager_replayOrRetryMultiple.Limit.values())
                 .extracting(CommandManager_replayOrRetryMultiple.Limit::title)
-                .containsExactly("5", "10", "20", "40", "80", "160", "320", "All");
+                .containsExactly("1", "5", "10", "20", "40", "80", "160", "320", "All");
         assertThat(new CommandManager_replayOrRetryMultiple(fixture(1, true).manager()).defaultLimit())
                 .isEqualTo(CommandManager_replayOrRetryMultiple.Limit.TEN);
     }
@@ -120,6 +120,20 @@ class CommandManagerBackgroundReplayTest {
                 .containsExactly(
                         ReplayState.OK, ReplayState.OK, ReplayState.OK,
                         ReplayState.OK, ReplayState.OK, ReplayState.PENDING);
+    }
+
+    @Test
+    void singleCommandBoundReplaysOnlyOldestPendingCommand() {
+        var fixture = fixture(2, false);
+        var action = new CommandManager_replayOrRetryMultiple(fixture.manager());
+
+        assertThat(action.act(CommandManager_replayOrRetryMultiple.Limit.ONE))
+                .isSameAs(fixture.manager());
+
+        assertThat(fixture.executions()).hasValue(1);
+        assertThat(fixture.entries()).extracting(EntryFixture::state)
+                .extracting(AtomicReference::get)
+                .containsExactly(ReplayState.OK, ReplayState.PENDING);
     }
 
     @Test

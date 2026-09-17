@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.jpa.tenancy.dom;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -104,7 +105,22 @@ public class ApplicationTenancy
     private ApplicationTenancy parent;
     @Override
     public void setParent(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
-        this.parent = _Casts.uncheckedCast(parent);
+        final ApplicationTenancy newParent = _Casts.uncheckedCast(parent);
+        if(Objects.equals(this.parent, newParent)) {
+            this.parent = newParent;
+            if(newParent != null) {
+                newParent.children.add(this);
+            }
+            return;
+        }
+        final ApplicationTenancy previousParent = this.parent;
+        this.parent = newParent;
+        if(previousParent != null) {
+            previousParent.children.remove(this);
+        }
+        if(newParent != null) {
+            newParent.children.add(this);
+        }
     }
 
     @OneToMany(mappedBy = Children.MAPPED_BY)
@@ -116,11 +132,21 @@ public class ApplicationTenancy
         return _Casts.uncheckedCast(children);
     }
     public void setChildren(final Set<org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
-        this.children = _Casts.uncheckedCast(children);
+        final Set<ApplicationTenancy> replacement = _Casts.uncheckedCast(children);
+        new TreeSet<>(this.children).stream()
+                .filter(child -> !replacement.contains(child))
+                .forEach(child -> child.setParent(null));
+        new TreeSet<>(replacement)
+                .forEach(child -> child.setParent(this));
     }
     // necessary for integration tests
     public void removeFromChildren(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy applicationTenancy) {
-        getChildren().remove(applicationTenancy);
+        final ApplicationTenancy child = _Casts.uncheckedCast(applicationTenancy);
+        if(Objects.equals(child.getParent(), this)) {
+            child.setParent(null);
+        } else {
+            children.remove(child);
+        }
     }
 
     @Override

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.dom;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -165,7 +166,8 @@ implements ApplicationRoleRepository {
     @Override
     public void deleteRole(final ApplicationRole role) {
 
-        role.getUsers().clear();
+        new ArrayList<>(role.getUsers())
+                .forEach(user -> removeRoleFromUser(role, user));
         var permissions = role.getPermissions();
         for (var permission : permissions) {
             var deleteMixin = factoryService.mixin(ApplicationPermission_delete.class, permission);
