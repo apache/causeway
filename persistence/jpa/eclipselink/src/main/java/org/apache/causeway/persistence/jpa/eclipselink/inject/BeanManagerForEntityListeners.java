@@ -200,16 +200,6 @@ public class BeanManagerForEntityListeners implements BeanManager {
     }
 
     @Override
-    public ELResolver getELResolver() {
-        throw _Exceptions.notImplemented();
-    }
-
-    @Override
-    public ExpressionFactory wrapExpressionFactory(final ExpressionFactory expressionFactory) {
-        throw _Exceptions.notImplemented();
-    }
-
-    @Override
     public <T> InjectionTargetFactory<T> getInjectionTargetFactory(final AnnotatedType<T> annotatedType) {
         return _Util.createInjectionTargetFactory(annotatedType, serviceInjectorProvider);
     }
@@ -292,5 +282,10 @@ public class BeanManagerForEntityListeners implements BeanManager {
             final Set<Annotation> observedEventQualifiers) {
         throw _Exceptions.notImplemented();
     }
+
+	@Override
+	public <T> T unwrapClientProxy(T reference) {
+		throw _Exceptions.notImplemented();
+	}
 
 }
