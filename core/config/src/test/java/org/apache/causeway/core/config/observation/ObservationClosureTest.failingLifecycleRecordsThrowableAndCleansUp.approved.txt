@@ -1,0 +1,17 @@
+Scenario: Failing observation lifecycle
+
+This approval checks:
+- The reported Throwable reaches the observation handler with its type and message.
+- The error callback occurs before scope closure and observation stop.
+- Cleanup closes the scope before stopping the observation.
+- No current observation remains after cleanup.
+
+Observed state:
+- current observation after close: <none>
+
+Observed callback order:
+1. onStart(name=causeway.test.failure)
+2. onScopeOpened(name=causeway.test.failure)
+3. onError(type=AssertionError, message=expected)
+4. onScopeClosed(name=causeway.test.failure)
+5. onStop(name=causeway.test.failure)

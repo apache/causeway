@@ -22,27 +22,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Collections;
 
-import io.micrometer.observation.Observation;
-import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.tracing.Tracer;
-import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
-import io.micrometer.tracing.otel.bridge.OtelBaggageManager;
-import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
-import io.micrometer.tracing.otel.bridge.OtelTracer;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.core.config.observation.CausewayObservationConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.ObservationClosure;
 
 /**
- * Runs in a child JVM so the compatibility test can attach the real OpenTelemetry Java agent.
+ * Child-process application launched by {@link MicrometerTracingCompatibilityTest}.
+ *
+ * <p>The fixture needs a {@code main} method because the automated JUnit test starts a new JVM
+ * with the real OpenTelemetry {@code -javaagent} attached before application classes load.</p>
  */
 @SpringBootConfiguration(proxyBeanMethods = false)
 @EnableAutoConfiguration
+@Import(CausewayObservationConfiguration.class)
 public final class MicrometerTracingAgentFixture {
 
     static final String OBSERVATION_NAME = "causeway.compatibility.jdbc";
@@ -52,46 +52,31 @@ public final class MicrometerTracingAgentFixture {
     }
 
     public static void main(final String[] args) throws Exception {
-        try (ConfigurableApplicationContext ignored = new SpringApplicationBuilder(
+        try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
                 MicrometerTracingAgentFixture.class)
                 .web(WebApplicationType.NONE)
+                .profiles("observation")
                 .logStartupInfo(false)
                 .properties("spring.main.banner-mode=off")
                 .run(args)) {
-            final ObservationRegistry observationRegistry = observationRegistry();
-            final Observation observation = Observation.createNotStarted(
-                    OBSERVATION_NAME, observationRegistry);
+            final CausewayObservationIntegration observationIntegration = context.getBean(
+                    CausewayObservationIntegration.class);
+            final ObservationClosure observationClosure = new ObservationClosure()
+                    .startAndOpenScope(observationIntegration.createNotStarted(
+                            MicrometerTracingAgentFixture.class,
+                            OBSERVATION_NAME));
 
-            observation.start();
-            try (Observation.Scope scope = observation.openScope()) {
+            try {
                 executeJdbcWork();
-            } catch (Exception ex) {
-                observation.error(ex);
+            } catch (Exception | Error ex) {
+                observationClosure.onError(ex);
                 throw ex;
             } finally {
-                observation.stop();
+                observationClosure.close();
             }
 
             System.out.println(SUCCESS_MARKER);
         }
-    }
-
-    private static ObservationRegistry observationRegistry() {
-        final OtelCurrentTraceContext currentTraceContext = new OtelCurrentTraceContext();
-        final OtelBaggageManager baggageManager = new OtelBaggageManager(
-                currentTraceContext,
-                Collections.emptyList(),
-                Collections.emptyList());
-        final Tracer tracer = new OtelTracer(
-                GlobalOpenTelemetry.getTracer("org.apache.causeway.compatibility"),
-                currentTraceContext,
-                event -> { },
-                baggageManager);
-
-        final ObservationRegistry observationRegistry = ObservationRegistry.create();
-        observationRegistry.observationConfig()
-                .observationHandler(new DefaultTracingObservationHandler(tracer));
-        return observationRegistry;
     }
 
     private static void executeJdbcWork() throws Exception {

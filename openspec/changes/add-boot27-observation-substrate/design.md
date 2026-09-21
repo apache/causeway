@@ -102,6 +102,14 @@ Its real-agent OTLP assertion will continue to prove that the production substra
 
 This avoids creating a second agent harness and turns the Phase 1 proof into a regression guard for the production integration.
 
+## Validated Phase 3 Integration Recipe
+
+Later core instrumentation should inject `CausewayObservationIntegration`, create an `ObservationProvider` for the concrete framework bean type, and optionally compose `withModuleName(...)` for stable low-cardinality module metadata.
+At the beginning of framework work, it should obtain an unstarted observation from that provider and pass it to a new `ObservationClosure` through `startAndOpenScope(...)`.
+A catch path should pass any `Throwable` to `onError(...)` and rethrow it, while a `finally` path should always invoke `close()`.
+Consumers should not inject the qualified registry directly, look up optional beans, or call OpenTelemetry APIs.
+This recipe behaves identically at the call site when the profile is inactive, active without an agent, or active with an agent.
+
 ## Risks / Trade-offs
 
 - **[Risk] Adding bridge dependencies to core configuration increases every application's runtime classpath even when observation is inactive.** → Keep initialization profile-gated, exclude SDK artifacts, and accept the small classpath cost in preference to a new maintenance-only abstraction layer.

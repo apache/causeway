@@ -1,0 +1,13 @@
+Scenario: Defensive cleanup without an active observation
+
+This approval checks:
+- A null observation is accepted as a no-op.
+- Reporting an error before start is accepted as a no-op.
+- Closing before start is accepted as a no-op.
+- Repeated close is accepted as a no-op.
+
+Observed operations:
+- start with null observation: completed
+- error before start: completed
+- first close: completed
+- second close: completed

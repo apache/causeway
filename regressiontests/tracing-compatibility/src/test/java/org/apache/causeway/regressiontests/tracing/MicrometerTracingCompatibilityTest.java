@@ -47,6 +47,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Automated JUnit coverage for the production observation substrate with and without the agent.
+ *
+ * <p>Each test launches {@link MicrometerTracingAgentFixture} in a child JVM because Java agents
+ * must be attached during JVM startup.</p>
+ */
 class MicrometerTracingCompatibilityTest {
 
     private static final Duration PROCESS_TIMEOUT = Duration.ofSeconds(45);

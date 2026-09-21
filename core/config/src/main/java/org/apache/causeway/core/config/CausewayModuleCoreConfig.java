@@ -30,6 +30,7 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
+import org.apache.causeway.core.config.observation.CausewayObservationConfiguration;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
@@ -41,6 +42,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
     CausewayBeanFactoryPostProcessorForSpring.class,
     CausewayLocaleInitializer.class,
     CausewayTimeZoneInitializer.class,
+    CausewayObservationConfiguration.class,
     PatternOptionalStringConstraintValidator.class,
     RestfulPathProvider.class,
 
