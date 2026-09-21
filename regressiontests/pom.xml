@@ -253,6 +253,7 @@
 		<!-- <module>publishing-jdo</module> code is still incubating -->
 		<module>publishing-jpa</module>
 		<module>rest</module>
+		<module>tracing-compatibility</module>
 		<module>value</module>
 		<module>viewers-common</module>
 		<module>viewers-jdo</module>
