@@ -110,7 +110,7 @@
             <dependency>
                 <groupId>com.github.jnr</groupId>
                 <artifactId>jnr-enxio</artifactId>
-                <version>0.33.1</version>
+                <version>0.33.3</version>
                 <exclusions>
                     <!-- convergence issues -->
                     <exclusion>
