@@ -37,6 +37,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <jnr-jffi.version>1.4.3</jnr-jffi.version>
     </properties>
 
     <dependencyManagement>
@@ -136,8 +137,14 @@
 			<dependency>
 				<groupId>com.github.jnr</groupId>
 				<artifactId>jffi</artifactId>
-				<version>1.4.0</version>
+				<version>${jnr-jffi.version}</version>
 			</dependency>
+			<dependency>
+                <groupId>com.github.jnr</groupId>
+                <artifactId>jffi</artifactId>
+                <classifier>native</classifier>
+                <version>${jnr-jffi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
