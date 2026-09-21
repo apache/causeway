@@ -23,7 +23,6 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import io.micrometer.observation.ObservationRegistry;
@@ -46,10 +45,6 @@ import org.apache.causeway.OrgApacheCauseway;
  * @since 2.2
  */
 @Configuration(proxyBeanMethods = false)
-@Import({
-        CausewayObservationConfiguration.Inactive.class,
-        CausewayObservationConfiguration.Active.class,
-})
 public class CausewayObservationConfiguration {
 
     public static final String REGISTRY_BEAN_NAME = "causewayObservationRegistry";
@@ -60,37 +55,29 @@ public class CausewayObservationConfiguration {
         return new CausewayObservationIntegration(observationRegistry);
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @Bean(name = REGISTRY_BEAN_NAME)
     @Profile("!observation")
-    public static class Inactive {
-
-        @Bean(name = REGISTRY_BEAN_NAME)
-        public ObservationRegistry causewayObservationRegistry() {
-            return ObservationRegistry.NOOP;
-        }
+    public ObservationRegistry inactiveCausewayObservationRegistry() {
+        return ObservationRegistry.NOOP;
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @Bean(name = REGISTRY_BEAN_NAME)
     @Profile("observation")
-    public static class Active {
+    public ObservationRegistry activeCausewayObservationRegistry() {
+        final OtelCurrentTraceContext currentTraceContext = new OtelCurrentTraceContext();
+        final OtelBaggageManager baggageManager = new OtelBaggageManager(
+                currentTraceContext,
+                Collections.emptyList(),
+                Collections.emptyList());
+        final Tracer tracer = new OtelTracer(
+                GlobalOpenTelemetry.getTracer(OrgApacheCauseway.class.getPackageName()),
+                currentTraceContext,
+                event -> { },
+                baggageManager);
 
-        @Bean(name = REGISTRY_BEAN_NAME)
-        public ObservationRegistry causewayObservationRegistry() {
-            final OtelCurrentTraceContext currentTraceContext = new OtelCurrentTraceContext();
-            final OtelBaggageManager baggageManager = new OtelBaggageManager(
-                    currentTraceContext,
-                    Collections.emptyList(),
-                    Collections.emptyList());
-            final Tracer tracer = new OtelTracer(
-                    GlobalOpenTelemetry.getTracer(OrgApacheCauseway.class.getPackageName()),
-                    currentTraceContext,
-                    event -> { },
-                    baggageManager);
-
-            final ObservationRegistry observationRegistry = ObservationRegistry.create();
-            observationRegistry.observationConfig()
-                    .observationHandler(new DefaultTracingObservationHandler(tracer));
-            return observationRegistry;
-        }
+        final ObservationRegistry observationRegistry = ObservationRegistry.create();
+        observationRegistry.observationConfig()
+                .observationHandler(new DefaultTracingObservationHandler(tracer));
+        return observationRegistry;
     }
 }

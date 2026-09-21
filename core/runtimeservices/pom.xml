@@ -108,6 +108,17 @@
             <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- required by ApprovalTests (version managed by Spring Boot) -->
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 		<!-- HSQL-DB -->
         <dependency>

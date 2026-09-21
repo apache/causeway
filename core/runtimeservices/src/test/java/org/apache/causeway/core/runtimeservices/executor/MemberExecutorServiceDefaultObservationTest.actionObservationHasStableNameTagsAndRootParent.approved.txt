@@ -1,0 +1,18 @@
+Scenario: Action observation name, metadata, and root parentage
+
+This approval checks:
+- The action uses one stable operation name.
+- The action identifier is an explicit low-cardinality attribute.
+- The initiation mode is an explicit low-cardinality attribute.
+- The action observation is a child of the current root observation.
+- Action arguments, results, targets, users, and tenancy values are not captured.
+
+Observed lifecycle:
+1. onStart(name=test root, parent=<none>, causeway.action.id=<absent>, causeway.execution.initiatedBy=<absent>)
+2. onScopeOpened(name=test root)
+3. onStart(name=causeway.action.invocation, parent=test root, causeway.action.id=demo.Customer#updateName(), causeway.execution.initiatedBy=PASS_THROUGH)
+4. onScopeOpened(name=causeway.action.invocation)
+5. onScopeClosed(name=causeway.action.invocation)
+6. onStop(name=causeway.action.invocation)
+7. onScopeClosed(name=test root)
+8. onStop(name=test root)

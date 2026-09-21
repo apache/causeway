@@ -47,6 +47,8 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -109,6 +111,17 @@ implements MemberExecutorService {
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
     private final Provider<CommandPublisher> commandPublisherProvider;
+    private final CausewayObservationIntegration observationIntegration;
+
+    private static final String ACTION_OBSERVATION_NAME = "causeway.action.invocation";
+    private static final String ACTION_ID_TAG = "causeway.action.id";
+    private static final String INITIATED_BY_TAG = "causeway.execution.initiatedBy";
+
+    private ObservationProvider observationProvider() {
+        return observationIntegration.provider(
+                getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
+    }
 
     private MetricsService metricsService() {
         return metricsServiceProvider.get();
@@ -128,14 +141,24 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
-                ? Try.call(()->
-                    invokeActionInternally(actionExecutor))
-                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
-                    invokeActionInternally(actionExecutor));
+        final String actionId = actionExecutor.getOwningAction()
+                .getFeatureIdentifier()
+                .getLogicalIdentityString("#");
+        return observationProvider().get(ACTION_OBSERVATION_NAME)
+                .contextualName(ACTION_OBSERVATION_NAME)
+                .lowCardinalityKeyValue(ACTION_ID_TAG, actionId)
+                .lowCardinalityKeyValue(
+                        INITIATED_BY_TAG,
+                        actionExecutor.getInteractionInitiatedBy().name())
+                .observe(() -> {
+                    val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+                            ? Try.call(()->
+                                invokeActionInternally(actionExecutor))
+                            : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
+                                invokeActionInternally(actionExecutor));
 
-        return executionResult
-                .valueAsNullableElseFail();
+                    return executionResult.valueAsNullableElseFail();
+                });
     }
 
     private ManagedObject invokeActionInternally(

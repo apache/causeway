@@ -29,7 +29,7 @@ This change therefore backports the semantics into the existing Boot 2.7 service
 
 ### Observe only the existing top-level interaction boundary
 
-`InteractionServiceDefault` will obtain an observation provider from `CausewayObservationIntegration` and start `Causeway Root Interaction` only when opening the first interaction layer on the thread.
+`InteractionServiceDefault` will obtain an observation provider from `CausewayObservationIntegration` and start `causeway.root.interaction` only when opening the first interaction layer on the thread.
 Nested layers and reused layers will participate in the current observation without creating another semantic span.
 
 The root observation lifecycle will be retained beside the existing thread-local interaction stack and closed when that stack is reduced to zero.
@@ -41,7 +41,7 @@ This is rejected because the roadmap deliberately limits the initial semantic sl
 
 ### Wrap the complete action invocation boundary
 
-`MemberExecutorServiceDefault.invokeAction(...)` will create `Causeway Action Invocation` before choosing pass-through or transactional execution and will execute the existing invocation logic through that observation.
+`MemberExecutorServiceDefault.invokeAction(...)` will create `causeway.action.invocation` before choosing pass-through or transactional execution and will execute the existing invocation logic through that observation.
 This placement includes transaction selection, action execution, result handling, and propagated failure while preserving the existing `Try` and transaction behavior.
 
 The action observation will naturally become a child of the current root-interaction observation through Micrometer's current trace context.
@@ -52,7 +52,7 @@ This is rejected because it would omit meaningful framework work and failures pe
 
 ### Use stable names and explicit bounded tags
 
-The observation names will be exactly `Causeway Root Interaction` and `Causeway Action Invocation`.
+The observation names will be exactly `causeway.root.interaction` and `causeway.action.invocation`.
 The action observation will include `causeway.action.id` containing the metamodel feature identifier and `causeway.execution.initiatedBy` containing the bounded `InteractionInitiatedBy` enum name.
 Both services will retain the existing `causeway.bean` and normalized `causeway.module` metadata supplied by `CausewayObservationIntegration`.
 
@@ -76,7 +76,7 @@ Focused runtime-service tests will use a recording observation handler to verify
 Inactive-registry tests will verify that the same code paths execute without retained observation state.
 
 The tracing compatibility harness will exercise the semantic names and nesting through the production observation substrate while attached to the real Java agent and will include an agent-instrumented HTTP entry and JDBC descendant.
-The exported trace assertion will verify the ordered ancestry `HTTP → Causeway Root Interaction → Causeway Action Invocation → JDBC` without depending on generated trace or span identifiers.
+The exported trace assertion will verify the ordered ancestry `HTTP → causeway.root.interaction → causeway.action.invocation → JDBC` without depending on generated trace or span identifiers and while allowing additional agent-created spans between those semantic boundaries.
 
 ## Risks / Trade-offs
 

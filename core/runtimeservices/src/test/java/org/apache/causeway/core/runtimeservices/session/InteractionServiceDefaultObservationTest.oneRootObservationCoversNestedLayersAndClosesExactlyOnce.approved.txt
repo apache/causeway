@@ -1,0 +1,17 @@
+Scenario: One root observation covers nested interaction layers
+
+This approval checks:
+- Opening the root layer starts and scopes one root observation.
+- Opening a nested layer creates no additional interaction observation.
+- Closing all layers closes the scope before stopping the root observation.
+- No interaction layer or current observation remains after cleanup.
+
+Observed lifecycle:
+1. onStart(name=causeway.root.interaction)
+2. onScopeOpened(name=causeway.root.interaction)
+3. layer count after root open: 1
+4. layer count after nested open: 2
+5. onScopeClosed(name=causeway.root.interaction)
+6. onStop(name=causeway.root.interaction)
+7. layer count after close: 0
+8. current observation after close: <none>

@@ -1,0 +1,16 @@
+Scenario: Root interaction work failure
+
+This approval checks:
+- The root observation records the original failure.
+- Existing transaction rollback behavior is retained.
+- The original failure is rethrown unchanged.
+- Observation scope and retained state are cleaned up.
+
+Observed lifecycle:
+1. onStart(name=causeway.root.interaction)
+2. onScopeOpened(name=causeway.root.interaction)
+3. onError(type=IllegalStateException, message=domain work failed)
+4. onScopeClosed(name=causeway.root.interaction)
+5. onStop(name=causeway.root.interaction)
+6. original failure rethrown: true
+7. current observation after close: <none>

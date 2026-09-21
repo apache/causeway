@@ -36,6 +36,9 @@ import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+
+import io.micrometer.observation.ObservationRegistry;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
@@ -200,7 +203,8 @@ class MemberExecutorServiceDefaultTest {
                 null,
                 null,
                 null,
-                commandPublisherProvider);
+                commandPublisherProvider,
+                new CausewayObservationIntegration(ObservationRegistry.NOOP));
     }
 
     static class SuppressedTarget implements CommandRecordingSuppressed {
