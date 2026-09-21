@@ -1,0 +1,280 @@
+= Boot 2.7 Micrometer Tracing Operations
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:toc:
+
+This runbook is for developers and operators using the Causeway `maintenance-branch` tracing backport.
+It is not Spring Boot 4 OpenTelemetry guidance.
+
+The validated baseline is Spring Boot 2.7.18, Java 11, and OpenTelemetry Java agent 1.31.0.
+Run the `regressiontests/tracing-compatibility` test on Java 11 before changing the agent version or this combination.
+
+The OpenTelemetry Java agent runs inside the application JVM and owns the SDK, HTTP and JDBC auto-instrumentation, sampling, and OTLP export.
+Do not add a Spring Boot OpenTelemetry starter, an application-owned `OpenTelemetrySdk`, `micrometer-registry-otlp`, or another in-process trace exporter.
+
+== Try It on a Laptop
+
+=== Start Jaeger
+
+Run the pinned Jaeger all-in-one image with its OTLP HTTP receiver and UI exposed:
+
+[source,bash]
+----
+docker run --rm --name jaeger \
+  -p 16686:16686 \
+  -p 4318:4318 \
+  cr.jaegertracing.io/jaegertracing/jaeger:2.21.0
+----
+
+Jaeger stores this local test data in memory.
+Its UI is available at http://localhost:16686.
+
+=== Obtain the Java Agent
+
+Download the agent from its official release and keep the version in the filename so that the artifact is unambiguous:
+
+[source,bash]
+----
+mkdir -p .local/otel
+curl --fail --location \
+  --output .local/otel/opentelemetry-javaagent-1.31.0.jar \
+  https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.31.0/opentelemetry-javaagent.jar
+----
+
+Verify the downloaded artifact against the checksum published with the release before sharing or promoting it into an image build.
+The repository's Java 11 tracing regression also copies the validated artifact to `regressiontests/tracing-compatibility/target/agents/opentelemetry-javaagent.jar` when that module is built.
+
+=== Start the Application
+
+From the application directory, set the following values and start its executable JAR:
+
+[source,bash]
+----
+export JAVA_TOOL_OPTIONS="-javaagent:$(pwd)/.local/otel/opentelemetry-javaagent-1.31.0.jar"
+export SPRING_PROFILES_INCLUDE="observation"
+export OTEL_SERVICE_NAME="my-causeway-app-local"
+export OTEL_TRACES_EXPORTER="otlp"
+export OTEL_METRICS_EXPORTER="none"
+export OTEL_LOGS_EXPORTER="none"
+export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
+export OTEL_TRACES_SAMPLER="always_on"
+
+java -jar path/to/application.jar
+----
+
+`SPRING_PROFILES_INCLUDE` adds `observation` without replacing profiles already selected through `SPRING_PROFILES_ACTIVE`.
+If the application already sets `spring.profiles.include`, append `observation` to that existing list instead of replacing it.
+Always-on sampling is appropriate for this short local test, not as an assumed production setting.
+
+Invoke an HTTP endpoint that executes a Causeway action and, ideally, performs JDBC work.
+Select `my-causeway-app-local` in Jaeger and look for these ordered boundaries:
+
+[source,text]
+----
+HTTP
+  -> causeway.root.interaction
+      -> causeway.action.invocation
+          -> JDBC
+----
+
+The Java agent can add controller, connection-pool, or other automatic spans between these boundaries, so the spans need not be immediate parent and child at every step.
+A request that does not execute JDBC work will not have the final JDBC span.
+Do not use generated trace or span IDs as operation identifiers.
+
+Stop the application and Jaeger, then clear the shell settings if they should not affect later Java processes:
+
+[source,bash]
+----
+unset JAVA_TOOL_OPTIONS SPRING_PROFILES_INCLUDE OTEL_SERVICE_NAME \
+  OTEL_TRACES_EXPORTER OTEL_METRICS_EXPORTER OTEL_LOGS_EXPORTER \
+  OTEL_EXPORTER_OTLP_PROTOCOL OTEL_EXPORTER_OTLP_ENDPOINT \
+  OTEL_TRACES_SAMPLER
+----
+
+== Change the Docker Image
+
+Fetch and checksum the agent in the trusted build pipeline, place it in the Docker build context, and copy it into the application image:
+
+[source,dockerfile]
+----
+# opentelemetry-javaagent-1.31.0.jar is downloaded and verified before docker build
+COPY opentelemetry-javaagent-1.31.0.jar \
+     /opt/opentelemetry/opentelemetry-javaagent.jar
+----
+
+Ensure that the image's runtime user can read the JAR.
+Do not download the agent when a replica starts, because startup would then depend on an external download and would no longer use a build-time verified artifact.
+
+Do not bake `JAVA_TOOL_OPTIONS`, the `observation` profile, service name, collector address, credentials, or sampling rate into an environment-specific image layer.
+The same immutable image should run with tracing disabled or be activated by runtime configuration.
+OTLP export is outbound, so the application container requires no additional inbound port.
+
+To enable tracing, attach the packaged JAR and activate `observation` at runtime.
+To disable it, remove those settings or roll back to the previous Container App revision; no application code change is required.
+
+== Configure Azure Container Apps
+
+There are two separate agents in the recommended Azure arrangement:
+
+* The *OpenTelemetry Java agent* is the JAR in the application image and instruments the JVM.
+* The *Azure Container Apps managed OpenTelemetry agent* is an environment-level collector that receives OTLP data and routes it to Application Insights or another configured destination.
+
+Enabling the Azure managed agent does not remove the need for the Java agent JAR.
+Do not attach the Application Insights Java agent or another OpenTelemetry Java agent alongside this one.
+
+=== Container App Revision Settings
+
+Set these non-secret environment variables on the application container, normally through the application's IaC definition:
+
+[cols="2a,3a",options="header"]
+|===
+|Variable
+|Value or policy
+
+|`JAVA_TOOL_OPTIONS`
+|`-javaagent:/opt/opentelemetry/opentelemetry-javaagent.jar` plus any existing JVM options that must be retained.
+An Azure value overrides an image value rather than appending to it.
+
+|`SPRING_PROFILES_INCLUDE`
+|Include `observation` and retain any profiles already in the include list.
+Do not replace the application's `SPRING_PROFILES_ACTIVE` value.
+
+|`OTEL_SERVICE_NAME`
+|A stable service name that distinguishes the application but not an individual revision or replica.
+
+|`OTEL_TRACES_EXPORTER`
+|`otlp`
+
+|`OTEL_METRICS_EXPORTER`
+|`none`, because this backport runbook enables tracing only.
+
+|`OTEL_LOGS_EXPORTER`
+|`none`, because this backport runbook enables tracing only.
+
+|`OTEL_TRACES_SAMPLER`
+|For example, `parentbased_traceidratio`.
+
+|`OTEL_TRACES_SAMPLER_ARG`
+|An explicitly agreed production fraction such as `0.1`, not an inherited local-test value.
+|===
+
+Changing Container App environment variables creates a new revision.
+Use normal revision traffic shifting and rollback practices when enabling tracing.
+
+=== Preferred Path: Azure Managed OpenTelemetry Agent
+
+Configure the managed OpenTelemetry agent on the *Container Apps managed environment*, not on the individual application image.
+Configure a trace destination such as Application Insights, Datadog, or an OTLP-compatible backend, and route traces to that destination.
+See link:https://learn.microsoft.com/en-us/azure/container-apps/opentelemetry-agents[Collect and read OpenTelemetry data in Azure Container Apps] for the current ARM, Bicep, Azure CLI, and Terraform forms.
+
+For applications in that environment, Azure injects:
+
+* `OTEL_EXPORTER_OTLP_ENDPOINT`, pointing to the managed agent;
+* `OTEL_EXPORTER_OTLP_PROTOCOL=grpc`, because the managed agent accepts gRPC;
+* `OTEL_RESOURCE_ATTRIBUTES`, containing Container Apps resource information.
+
+Do not set those three values on the Container App revision unless the application is deliberately bypassing the managed agent.
+In particular, replacing `OTEL_RESOURCE_ATTRIBUTES` can discard the Azure-provided application and environment attributes.
+
+The resulting path is:
+
+[source,text]
+----
+application JVM
+  -> OpenTelemetry Java agent
+      -> Azure managed OpenTelemetry agent (OTLP/gRPC)
+          -> configured trace destination
+----
+
+Managed-agent destinations and routing apply at the Container Apps environment level.
+Review Microsoft's current limitations before rollout, including the single managed-agent replica, gRPC-only ingestion, and destination-secret handling.
+
+=== Alternative Path: Direct External OTLP
+
+If the managed OpenTelemetry agent is not used, set the destination explicitly on the Container App revision:
+
+[source,text]
+----
+OTEL_EXPORTER_OTLP_ENDPOINT=https://collector.example/appropriate-base-path
+OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+----
+
+Use the protocol and endpoint shape required by that collector; `http/protobuf` is also supported by the Java agent when the destination expects it.
+Provide authentication through `OTEL_EXPORTER_OTLP_HEADERS` or the destination-specific mechanism.
+Store header values, tokens, and other credentials as Container Apps secrets and expose them through secret-referenced environment variables rather than putting them in the image or repository.
+See link:https://learn.microsoft.com/en-us/azure/container-apps/environment-variables[Manage environment variables on Azure Container Apps].
+
+== What Causeway Adds
+
+With the `observation` profile active, Causeway adds two stable semantic spans:
+
+* `causeway.root.interaction` covers one top-level Causeway interaction;
+* `causeway.action.invocation` covers an action invocation.
+
+Action spans carry the bounded attributes `causeway.action.id` and `causeway.execution.initiatedBy`.
+Causeway does not add action arguments, return values, target instance identifiers, user names, tenancy tokens, or other instance-specific application data to these semantic spans.
+
+The initial slice deliberately does not add Causeway semantic spans for transactions, property edits, execution publishing, persistence-specific operations, or viewer-specific operations.
+The Java agent can still produce automatic spans for supported libraries such as HTTP and JDBC.
+
+The behavior of the two activation controls is:
+
+[cols="1,1,3",options="header"]
+|===
+|Java agent
+|`observation` profile
+|Result
+
+|Off
+|Off
+|Causeway uses its no-op registry and exports nothing.
+
+|On
+|Off
+|The Java agent can export automatic spans, but the two Causeway semantic spans are absent.
+
+|Off
+|On
+|Application execution remains safe, but there is no SDK or exporter and therefore no exported spans.
+
+|On
+|On
+|Automatic and Causeway semantic spans share the agent-owned trace context and exporter.
+|===
+
+== Troubleshooting
+
+No spans arrive at Jaeger or the Azure destination::
+Confirm that the process startup log shows `-javaagent`, that Java 11 is in use, and that the agent reports version 1.31.0.
+Confirm that sampling is not `always_off` or zero, `OTEL_TRACES_EXPORTER=otlp`, the endpoint and protocol match the receiver, and the collector or destination is reachable.
+For the Azure managed path, confirm that trace destinations and routing are enabled on the managed environment and inspect the environment variables actually injected into the running replica.
+
+HTTP or JDBC spans exist but Causeway spans do not::
+Confirm that `observation` appears in the effective Spring profiles.
+Look for `causeway.root.interaction` and `causeway.action.invocation` by exact name.
+
+Causeway spans exist but JDBC is not below the action::
+Confirm that the JDBC call occurs synchronously during the action and uses a library supported by the agent.
+Intermediate automatic spans are expected, but all relevant spans must share the same trace.
+
+Duplicate spans or duplicate exports appear::
+Check for another `-javaagent`, an Application Insights Java agent, a Spring Boot 4 OpenTelemetry starter, an application-owned SDK, `micrometer-registry-otlp`, or another exporter.
+The application must have one in-process telemetry owner: the validated OpenTelemetry Java agent.
+
+The application fails before startup::
+Check that the JAR path in `JAVA_TOOL_OPTIONS` exists and is readable by the image's runtime user.
+Run the Java 11 tracing regression before adopting a different agent release.
+The pinned 1.31.0 agent is not expected to start unchanged on newer strongly encapsulated JDKs such as the project's Java 25 build JDK.
+
+For a regression-level check, run:
+
+[source,bash]
+----
+JAVA_HOME="$HOME/.sdkman/candidates/java/11.0.29-tem" \
+mvn -pl regressiontests/tracing-compatibility -am test \
+  -Dmodule-regressiontests \
+  -Drevision=2.2.0-SNAPSHOT \
+  -Dmaven.compiler.release=11 \
+  -Dmaven.compiler.proc=full
+----
