@@ -20,7 +20,9 @@ package org.apache.causeway.viewer.graphql.model.exceptions;
 
 public class InvalidCollectionWindowException extends InteractionException {
 
-    public InvalidCollectionWindowException(final String message) {
+    private static final long serialVersionUID = 1L;
+
+	public InvalidCollectionWindowException(final String message) {
         super(message);
     }
 }

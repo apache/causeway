@@ -20,13 +20,13 @@ package org.apache.causeway.viewer.graphql.model.domain.common.query;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 class ResourcePathTest {
 
@@ -93,7 +93,6 @@ class ResourcePathTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void categoryPoliciesFallBackToLegacySettingUnlessOverridden() {
         var legacy = new CausewayConfiguration.Viewer.Graphql.Resources(
                 CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT,

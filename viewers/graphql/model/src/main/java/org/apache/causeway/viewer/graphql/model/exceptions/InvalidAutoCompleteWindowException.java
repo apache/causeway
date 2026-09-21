@@ -20,7 +20,9 @@ package org.apache.causeway.viewer.graphql.model.exceptions;
 
 public class InvalidAutoCompleteWindowException extends InteractionException {
 
-    public InvalidAutoCompleteWindowException(final String message) {
+    private static final long serialVersionUID = 1L;
+
+	public InvalidAutoCompleteWindowException(final String message) {
         super(message);
     }
 }

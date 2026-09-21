@@ -18,9 +18,24 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+
+import graphql.Scalars;
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLTypeReference;
+
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
 import static graphql.schema.GraphQLUnionType.newUnionType;
+
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -31,18 +46,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.jspecify.annotations.Nullable;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import graphql.Scalars;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLTypeReference;
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -61,10 +65,11 @@ public class TypeMapperDefault implements TypeMapper {
     private final ScalarMapper scalarMapper;
     private final Provider<Context> contextProvider;
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
         if (clazz.isEnum())
-			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
+			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent((Class<? extends Enum<?>>) clazz, SchemaType.RICH);
         if (ResourceValueTypes.isResourceType(clazz))
             return ResourceValueTypes.outputTypeFor(clazz, contextProvider.get());
         if (ResourceValueTypes.isLocalResourcePathType(clazz))
@@ -72,10 +77,11 @@ public class TypeMapperDefault implements TypeMapper {
         return scalarMapper.scalarTypeFor(clazz);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public GraphQLInputType inputTypeFor(final Class<?> clazz){
         if (clazz.isEnum())
-			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
+			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent((Class<? extends Enum<?>>) clazz, SchemaType.RICH);
         if (ResourceValueTypes.isResourceType(clazz))
             return ResourceValueTypes.inputTypeFor(clazz, contextProvider.get());
         if (ResourceValueTypes.isLocalResourcePathType(clazz))
@@ -170,9 +176,8 @@ public class TypeMapperDefault implements TypeMapper {
             final SchemaType schemaType) {
         var context = contextProvider.get();
         var possibleTypes = context.concreteSpecificationsAssignableTo(declaredType);
-        if (possibleTypes.isEmpty()) {
-            return typeRef(TypeNames.objectTypeNameFor(declaredType, schemaType));
-        }
+        if (possibleTypes.isEmpty())
+			return typeRef(TypeNames.objectTypeNameFor(declaredType, schemaType));
 
         var unionTypeName = TypeNames.polymorphicTypeNameFor(declaredType, schemaType);
         var unionBuilder = newUnionType()
@@ -192,13 +197,11 @@ public class TypeMapperDefault implements TypeMapper {
             if (pojo instanceof ManagedObject managedObject) {
                 pojo = managedObject.getPojo();
             }
-            if (pojo == null) {
-                return null;
-            }
+            if (pojo == null)
+				return null;
             var runtimeSpecification = context.specificationLoader.loadSpecification(pojo.getClass());
-            if (runtimeSpecification == null) {
-                return null;
-            }
+            if (runtimeSpecification == null)
+				return null;
             var runtimeTypeName = TypeNames.objectTypeNameFor(runtimeSpecification, schemaType);
             var isAdvertised = unionType.getTypes().stream()
                     .anyMatch(possibleType -> possibleType.getName().equals(runtimeTypeName));

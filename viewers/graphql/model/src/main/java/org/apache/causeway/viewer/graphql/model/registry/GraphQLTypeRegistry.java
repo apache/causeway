@@ -74,17 +74,16 @@ public class GraphQLTypeRegistry {
     }
 
     public synchronized GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
-            final Class<?> typeToAdd,
+            final Class<? extends Enum<?>> typeToAdd,
             final SchemaType schemaType) {
         var objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
         var typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
         var enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
 
-        if (enumTypeIfAny.isPresent()) {
-            return enumTypeIfAny.get();
-        }
+        if (enumTypeIfAny.isPresent())
+			return enumTypeIfAny.get();
 
-        var enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
+        var enumTypeToAdd = typeToAdd;
         var enumType = newEnum()
                 .name(typeName)
                 .values(Stream.of(enumTypeToAdd.getEnumConstants())
