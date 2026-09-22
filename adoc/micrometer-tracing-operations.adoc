@@ -220,6 +220,32 @@ With the `observation` profile active, Causeway adds two stable semantic spans:
 Action spans carry the bounded attributes `causeway.action.id` and `causeway.execution.initiatedBy`.
 Causeway does not add action arguments, return values, target instance identifiers, user names, tenancy tokens, or other instance-specific application data to these semantic spans.
 
+=== Filter Foreground and Background Traces
+
+Causeway classifies Java-agent-created HTTP entry spans with `causeway.execution.mode=foreground` and the command-log extension's Quartz entry spans with `causeway.execution.mode=background`.
+In Jaeger's Attributes field, use one of these logfmt searches:
+
+[source,text]
+----
+causeway.execution.mode=foreground
+causeway.execution.mode=background
+----
+
+The maintenance publication transform renames these to `isis.execution.mode=foreground` and `isis.execution.mode=background`.
+Applications that provide their own Quartz job implementation must classify its entry span explicitly using the transformed helper:
+
+[source,java]
+----
+import org.apache.isis.core.config.observation.IsisTraceClassifier;
+
+IsisTraceClassifier.classifyCurrentSpan(
+        IsisTraceClassifier.ExecutionMode.BACKGROUND);
+----
+
+Classification is low-cardinality and does not add another span, SDK, or exporter.
+It makes traces easier to discover but does not reduce collection, export, retention, or Jaeger memory consumption.
+Use head sampling or a configurable collector's tail processing when background telemetry volume itself must be reduced.
+
 The initial slice deliberately does not add Causeway semantic spans for transactions, property edits, execution publishing, persistence-specific operations, or viewer-specific operations.
 The Java agent can still produce automatic spans for supported libraries such as HTTP and JDBC.
 

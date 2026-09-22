@@ -61,6 +61,11 @@
             <artifactId>causeway-core-runtimeservices</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-webapp</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Keep this version under Spring Boot 2.7.18 dependency management. -->
         <dependency>

@@ -29,7 +29,9 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
@@ -42,6 +44,7 @@ import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
 import org.junit.jupiter.api.Test;
 
+import static org.apache.causeway.core.config.observation.CausewayTraceClassifier.EXECUTION_MODE_ATTRIBUTE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -90,6 +93,7 @@ class MicrometerTracingCompatibilityTest {
                     result.output);
 
             assertFalse(httpSpan.name.isEmpty());
+            assertEquals("foreground", httpSpan.attributes.get(EXECUTION_MODE_ATTRIBUTE));
             assertEquals(httpSpan.traceId, rootSpan.traceId);
             assertEquals(rootSpan.traceId, actionSpan.traceId);
             assertEquals(actionSpan.traceId, jdbcSpan.traceId);
@@ -197,7 +201,8 @@ class MicrometerTracingCompatibilityTest {
                     .append(span.name)
                     .append(" traceId=").append(span.traceId)
                     .append(" spanId=").append(span.spanId)
-                    .append(" parentSpanId=").append(span.parentSpanId);
+                    .append(" parentSpanId=").append(span.parentSpanId)
+                    .append(" attributes=").append(span.attributes);
         }
         return buf.toString();
     }
@@ -253,11 +258,16 @@ class MicrometerTracingCompatibilityTest {
                     for (ResourceSpans resourceSpans : export.getResourceSpansList()) {
                         for (ScopeSpans scopeSpans : resourceSpans.getScopeSpansList()) {
                             for (Span span : scopeSpans.getSpansList()) {
+                                final Map<String, String> attributes = new LinkedHashMap<>();
+                                span.getAttributesList().forEach(attribute -> attributes.put(
+                                        attribute.getKey(),
+                                        attribute.getValue().getStringValue()));
                                 result.add(new ExportedSpan(
                                         span.getName(),
                                         hex(span.getTraceId()),
                                         hex(span.getSpanId()),
-                                        hex(span.getParentSpanId())));
+                                        hex(span.getParentSpanId()),
+                                        attributes));
                             }
                         }
                     }
@@ -287,16 +297,19 @@ class MicrometerTracingCompatibilityTest {
         private final String traceId;
         private final String spanId;
         private final String parentSpanId;
+        private final Map<String, String> attributes;
 
         private ExportedSpan(
                 final String name,
                 final String traceId,
                 final String spanId,
-                final String parentSpanId) {
+                final String parentSpanId,
+                final Map<String, String> attributes) {
             this.name = name;
             this.traceId = traceId;
             this.spanId = spanId;
             this.parentSpanId = parentSpanId;
+            this.attributes = attributes;
         }
     }
 }

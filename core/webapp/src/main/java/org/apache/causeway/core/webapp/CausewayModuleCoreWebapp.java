@@ -33,6 +33,7 @@ import org.apache.causeway.core.webapp.confmenu.ConfigurationViewServiceDefault;
 import org.apache.causeway.core.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.causeway.core.webapp.keyvaluestore.KeyValueStoreUsingHttpSession;
 import org.apache.causeway.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
+import org.apache.causeway.core.webapp.modules.observation.WebModuleTraceClassification;
 import org.apache.causeway.core.webapp.modules.templresources.WebModuleTemplateResources;
 import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
@@ -45,6 +46,7 @@ import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitialize
         ConfigurationViewServiceDefault.class,
         WebModuleLogOnExceptionLogger.class,
         WebModuleTemplateResources.class,
+        WebModuleTraceClassification.class,
 
         // @Component's
 

@@ -70,6 +70,7 @@ import org.apache.causeway.core.runtimeservices.executor.MemberExecutorServiceDe
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
+import org.apache.causeway.core.webapp.modules.observation.CausewayForegroundTraceFilter;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -85,6 +86,7 @@ import static org.mockito.Mockito.withSettings;
 @EnableAutoConfiguration
 @Import({
         CausewayObservationConfiguration.class,
+        CausewayForegroundTraceFilter.class,
         MicrometerTracingAgentFixture.SemanticTracingController.class,
 })
 public final class MicrometerTracingAgentFixture {
