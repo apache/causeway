@@ -8,6 +8,8 @@ Causeway already tracks the current `ActionInvocation`, so exposing a supported 
 - Add an application-facing API for determining whether a specified action on a specified target is the current framework-managed action invocation.
 - Match the target and logical member identifier, rather than merely reporting that some interaction or execution is active.
 - Define framework-managed invocation to include viewer, REST, and `WrapperFactory` execution, including wrappers configured to skip rule validation, while excluding plain Java calls and direct calls made from another executing action.
+- Record whether framework rule checking was performed, skipped, or is unknown for each action invocation.
+- Allow exact-current-action predicates to include the expected rule-checking status so domain code can distinguish a normally wrapped call from `wrapSkipRules`.
 - Preserve the existing interaction and execution APIs and add the capability without breaking existing callers.
 - Add regression coverage for top-level, nested, wrapped, skip-rules, and direct invocation paths.
 
@@ -15,7 +17,7 @@ Causeway already tracks the current `ActionInvocation`, so exposing a supported 
 
 ### New Capabilities
 
-- `current-action-invocation-context`: Allows application code to test whether an exact target action is currently executing through Causeway's metamodel invocation machinery.
+- `current-action-invocation-context`: Allows application code to test whether an exact target action is currently executing through Causeway's metamodel invocation machinery and whether framework rules were checked or skipped.
 
 ### Modified Capabilities
 

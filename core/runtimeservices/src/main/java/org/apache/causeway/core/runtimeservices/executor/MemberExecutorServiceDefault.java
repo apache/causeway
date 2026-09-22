@@ -35,6 +35,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
+import org.apache.causeway.applib.services.iactn.ActionInvocation.RuleChecking;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
@@ -194,8 +195,11 @@ implements MemberExecutorService {
                 .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
 
+        val ruleChecking = interactionInitiatedBy.isUser()
+                ? RuleChecking.CHECKED
+                : RuleChecking.SKIPPED;
         val actionInvocation = new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos);
+                interaction, actionId, targetPojo, argumentPojos, ruleChecking);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));

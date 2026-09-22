@@ -78,11 +78,11 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     private final Identifier logicalMemberIdentifier;
 
     /**
-     * The target of the action invocation.
+     * The object on which the action or property method is invoked.
      *
      * <p>
-     * If this interaction is for a mixin action, then will be the mixed-in
-     * target (not the transient mixin itself).
+     * For a mixin action this is the transient mixin instance, not the
+     * mixed-in domain object.
      * </p>
      */
     @Getter

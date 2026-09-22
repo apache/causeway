@@ -46,6 +46,13 @@ The interaction provider SHALL determine whether a supplied target and action id
 - **AND** the supplied logical member name equals the current action identifier's logical member name
 - **THEN** logical-member-name current-action matching returns true
 
+#### Scenario: Mixin action matching
+
+- **WHEN** a mixin action body supplies its own transient mixin instance as the target
+- **AND** it supplies `act` as the logical member name
+- **THEN** logical-member-name current-action matching returns true
+- **AND** the mixed-in domain object is not treated as the current action target
+
 ### Requirement: Nested action semantics
 
 The current action invocation API SHALL follow the existing interaction execution stack for nested framework-managed action calls.
@@ -62,19 +69,38 @@ The current action invocation API SHALL follow the existing interaction executio
 - **WHEN** a nested framework-managed action completes and control returns to its parent action
 - **THEN** the parent action is again reported as current
 
-### Requirement: Invocation status is independent of rule enforcement
+### Requirement: Rule-checking status
 
-The interaction provider SHALL describe whether an action is currently framework-managed without claiming whether business rules were evaluated.
+Each action invocation SHALL report whether Causeway checked rules, skipped rules, or cannot determine the status.
 
 #### Scenario: Wrapper invocation checks rules
 
 - **WHEN** an action is executing through a normal `WrapperFactory` invocation
 - **THEN** that action is reported as current
+- **AND** its rule-checking status is `CHECKED`
 
 #### Scenario: Wrapper invocation skips rules
 
 - **WHEN** an action is executing through a `WrapperFactory` invocation configured to skip rule validation
-- **THEN** that action is still reported as current
+- **THEN** that action is reported as current
+- **AND** its rule-checking status is `SKIPPED`
+
+#### Scenario: Rule-checking status was not supplied
+
+- **WHEN** an action invocation is reconstructed or created through the compatibility constructor without rule-checking information
+- **THEN** its rule-checking status is `UNKNOWN`
+
+#### Scenario: Matching includes rule-checking status
+
+- **WHEN** the supplied target and action identity match the current action
+- **AND** the expected rule-checking status matches the current invocation
+- **THEN** status-aware current-action matching returns true
+
+#### Scenario: Matching rule-checking status differs
+
+- **WHEN** the supplied target and action identity match the current action
+- **BUT** the expected rule-checking status differs from the current invocation
+- **THEN** status-aware current-action matching returns false
 
 #### Scenario: Plain Java invocation
 
