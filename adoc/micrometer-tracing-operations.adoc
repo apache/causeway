@@ -25,7 +25,10 @@ Run the helper from the Causeway checkout to start the pinned Jaeger all-in-one 
 
 The script limits the container to 512 MiB of memory with no additional swap allowance.
 Override the local default when necessary with a value such as `JAEGER_MEMORY_LIMIT=1g`, but do not remove the limit.
-Jaeger's in-memory store has no trace-count limit by default, so monitor actual consumption with:
+The script also limits the in-memory store to 10,000 traces by default.
+When the ring buffer is full, Jaeger discards the oldest trace as each new trace arrives.
+Override the trace-count limit with a positive integer such as `JAEGER_MAX_TRACES=2000`.
+The trace-count limit does not bound bytes because trace sizes vary, so monitor actual consumption with:
 
 [source,bash]
 ----
