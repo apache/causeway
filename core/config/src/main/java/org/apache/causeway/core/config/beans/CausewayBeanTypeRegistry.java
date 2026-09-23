@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -45,7 +46,8 @@ public interface CausewayBeanTypeRegistry {
     // -- SHORTCUTS
 
     default Stream<Class<?>> streamMixinTypes() {
-        return getMixinTypes().keySet().stream();
+        return getMixinTypes().keySet().stream()
+                .sorted(Comparator.comparing(Class::getName));
     }
 
     // -- LOOKUPS

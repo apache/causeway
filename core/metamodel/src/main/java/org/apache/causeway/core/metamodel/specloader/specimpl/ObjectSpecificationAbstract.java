@@ -234,6 +234,13 @@ public abstract class ObjectSpecificationAbstract
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
 
+    /**
+     * Framework-internal state exposed for specification-loading diagnostics.
+     */
+    public final IntrospectionState introspectionStateForDiagnostics() {
+        return introspectionState;
+    }
+
 
     // -- Constructor
     protected ObjectSpecificationAbstract(
