@@ -73,6 +73,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             final CollectionContentsSortableDataProvider dataProvider,
             final int rowsPerPage,
             final ToggleboxColumn toggleboxColumn,
+            final String ownerObjectType,
             final String elementObjectType,
             final String collectionId) {
 
@@ -83,6 +84,24 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
                 ? WicketRenderObservationDescriptor.row(
                         elementObjectType, collectionId)
                 : null;
+        if(collectionId != null) {
+            WicketRenderObservationBehavior.addTo(
+                    this,
+                    WicketRenderObservationDescriptor.table(
+                            ownerObjectType, collectionId));
+            WicketRenderObservationBehavior.addTo(
+                    getTopToolbars(),
+                    WicketRenderObservationDescriptor.tableHeader(
+                            ownerObjectType, collectionId));
+            WicketRenderObservationBehavior.addTo(
+                    getBody(),
+                    WicketRenderObservationDescriptor.tableBody(
+                            ownerObjectType, collectionId));
+            WicketRenderObservationBehavior.addTo(
+                    getBottomToolbars(),
+                    WicketRenderObservationDescriptor.tableFooter(
+                            ownerObjectType, collectionId));
+        }
         final WicketRenderObservationDescriptor rowPreparationDescriptor =
                 collectionId != null
                         ? WicketRenderObservationDescriptor.rowPreparation(

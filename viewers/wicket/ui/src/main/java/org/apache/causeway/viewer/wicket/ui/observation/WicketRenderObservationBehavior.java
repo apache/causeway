@@ -55,11 +55,12 @@ public final class WicketRenderObservationBehavior extends Behavior {
         if(activeClosure != null) {
             throw new IllegalStateException("Wicket render observation lifecycle is already active");
         }
-        if(!(component instanceof HasMetaModelContext)) {
+        final HasMetaModelContext context = metamodelContextOf(component);
+        if(context == null) {
             return;
         }
 
-        final CausewayObservationIntegration integration = ((HasMetaModelContext) component)
+        final CausewayObservationIntegration integration = context
                 .lookupService(CausewayObservationIntegration.class)
                 .orElse(null);
         if(integration == null || integration.isNoop()) {
@@ -89,6 +90,17 @@ public final class WicketRenderObservationBehavior extends Behavior {
         if(activeClosure != null) {
             WicketRenderObservationTracker.complete(component.getRequestCycle(), this);
         }
+    }
+
+    private static HasMetaModelContext metamodelContextOf(final Component component) {
+        Component candidate = component;
+        while(candidate != null) {
+            if(candidate instanceof HasMetaModelContext) {
+                return (HasMetaModelContext) candidate;
+            }
+            candidate = candidate.getParent();
+        }
+        return null;
     }
 
     void activate(final ObservationClosure closure) {

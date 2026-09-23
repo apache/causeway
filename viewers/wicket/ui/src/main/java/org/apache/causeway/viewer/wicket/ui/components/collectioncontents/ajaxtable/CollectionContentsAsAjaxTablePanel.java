@@ -119,6 +119,9 @@ implements CollectionCountProvider {
         addActionsColumnIfRequired(elementType, columns);
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
+        final String ownerObjectType = collectionModel.getVariant().isParented()
+                ? collectionModel.getIdentifier().logicalType().logicalName()
+                : null;
         final String collectionId = collectionModel.getVariant().isParented()
                 ? collectionModel.getIdentifier().getLogicalIdentityString("#")
                 : null;
@@ -128,6 +131,7 @@ implements CollectionCountProvider {
                 dataProvider,
                 collectionModel.getPageSize(),
                 toggleboxColumn,
+                ownerObjectType,
                 elementType.logicalTypeName(),
                 collectionId);
         addOrReplace(dataTable);

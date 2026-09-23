@@ -44,6 +44,8 @@ public final class WicketRenderObservationDescriptor implements Serializable {
     @Getter
     public enum Region {
         PAGE_PREPARATION("causeway.wicket.page.prepare", null, true),
+        COLLECTION_INITIALIZATION(
+                "causeway.wicket.collection.initialize", "causeway.collection.id", true),
         COLLECTION_PREPARATION(
                 "causeway.wicket.collection.prepare", "causeway.collection.id", true),
         ROW_PREPARATION(
@@ -52,6 +54,13 @@ public final class WicketRenderObservationDescriptor implements Serializable {
         FIELDSET("causeway.wicket.fieldset.render", "causeway.fieldset.id", false),
         PROPERTY("causeway.wicket.property.render", "causeway.property.id", false),
         COLLECTION("causeway.wicket.collection.render", "causeway.collection.id", false),
+        TABLE("causeway.wicket.collection.table.render", "causeway.collection.id", false),
+        TABLE_HEADER(
+                "causeway.wicket.collection.table.header.render", "causeway.collection.id", false),
+        TABLE_BODY(
+                "causeway.wicket.collection.table.body.render", "causeway.collection.id", false),
+        TABLE_FOOTER(
+                "causeway.wicket.collection.table.footer.render", "causeway.collection.id", false),
         ROW("causeway.wicket.collection.row.render", "causeway.collection.id", false),
         ACTION("causeway.wicket.action.render", "causeway.action.id", false),
         ACTION_PROMPT("causeway.wicket.action.prompt.render", "causeway.action.id", false);
@@ -94,6 +103,17 @@ public final class WicketRenderObservationDescriptor implements Serializable {
                 Region.PROPERTY, objectType, propertyId, "property");
     }
 
+    public static WicketRenderObservationDescriptor collectionInitialization(
+            final String objectType,
+            final String collectionId) {
+        return new WicketRenderObservationDescriptor(
+                Region.COLLECTION_INITIALIZATION,
+                objectType,
+                collectionId,
+                CausewayObservationNaming.forRegion(
+                        "initialize", "collection", collectionId));
+    }
+
     public static WicketRenderObservationDescriptor collectionPreparation(
             final String objectType,
             final String collectionId) {
@@ -121,6 +141,34 @@ public final class WicketRenderObservationDescriptor implements Serializable {
             final String collectionId) {
         return regionDescriptor(
                 Region.COLLECTION, objectType, collectionId, "collection");
+    }
+
+    public static WicketRenderObservationDescriptor table(
+            final String objectType,
+            final String collectionId) {
+        return regionDescriptor(
+                Region.TABLE, objectType, collectionId, "table");
+    }
+
+    public static WicketRenderObservationDescriptor tableHeader(
+            final String objectType,
+            final String collectionId) {
+        return regionDescriptor(
+                Region.TABLE_HEADER, objectType, collectionId, "table header");
+    }
+
+    public static WicketRenderObservationDescriptor tableBody(
+            final String objectType,
+            final String collectionId) {
+        return regionDescriptor(
+                Region.TABLE_BODY, objectType, collectionId, "table body");
+    }
+
+    public static WicketRenderObservationDescriptor tableFooter(
+            final String objectType,
+            final String collectionId) {
+        return regionDescriptor(
+                Region.TABLE_FOOTER, objectType, collectionId, "table footer");
     }
 
     public static WicketRenderObservationDescriptor row(

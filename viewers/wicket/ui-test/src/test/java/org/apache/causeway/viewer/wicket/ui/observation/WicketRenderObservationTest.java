@@ -89,6 +89,9 @@ class WicketRenderObservationTest {
         assertEquals("render fieldset identity",
                 WicketRenderObservationDescriptor.fieldset(
                         OBJECT_TYPE, "identity").getContextualName());
+        assertEquals("initialize collection orders",
+                WicketRenderObservationDescriptor.collectionInitialization(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
         assertEquals("prepare collection orders",
                 WicketRenderObservationDescriptor.collectionPreparation(
                         OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
@@ -97,6 +100,18 @@ class WicketRenderObservationTest {
                         "demo.Order", OBJECT_TYPE + "#orders").getContextualName());
         assertEquals("render collection orders",
                 WicketRenderObservationDescriptor.collection(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
+        assertEquals("render table orders",
+                WicketRenderObservationDescriptor.table(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
+        assertEquals("render table header orders",
+                WicketRenderObservationDescriptor.tableHeader(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
+        assertEquals("render table body orders",
+                WicketRenderObservationDescriptor.tableBody(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
+        assertEquals("render table footer orders",
+                WicketRenderObservationDescriptor.tableFooter(
                         OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
         assertEquals("render row demo.Order",
                 WicketRenderObservationDescriptor.row(
@@ -269,6 +284,51 @@ class WicketRenderObservationTest {
     }
 
     @Test
+    void collectionInitializationOwnsConstructionTimeWorkAndClosesSynchronously() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketTester tester = new WicketTester();
+        try {
+            final PreparedContainer page = new PreparedContainer(
+                    "component", integration, OBJECT_TYPE);
+            page.add(new WebMarkupContainer("collection") {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void onConfigure() {
+                    WicketPreparationObservation.observe(
+                            page,
+                            WicketRenderObservationDescriptor.collectionInitialization(
+                                    OBJECT_TYPE, OBJECT_TYPE + "#orders"),
+                            () -> integration.createNotStarted(
+                                    getClass(), "SELECT collection")
+                                    .contextualName("SELECT collection")
+                                    .observe(() -> {}));
+                    super.onConfigure();
+                }
+            });
+
+            tester.startComponentInPage(page, Markup.of(
+                    "<div wicket:id='component'><span wicket:id='collection'></span></div>"));
+
+            assertEquals(List.of(
+                    "causeway.wicket.page.prepare<-null",
+                    "causeway.wicket.collection.initialize<-causeway.wicket.page.prepare",
+                    "SELECT collection<-causeway.wicket.collection.initialize",
+                    "causeway.wicket.page.render<-null"), handler.parents);
+            assertEquals(List.of(
+                    "prepare demo.Customer",
+                    "initialize collection orders",
+                    "SELECT collection",
+                    "render demo.Customer"), handler.contextualNames);
+            assertNull(integration.observationRegistry().getCurrentObservation());
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
     void preparationWithNoopRegistryLeavesRenderingUnchanged() {
         final CausewayObservationIntegration integration =
                 new CausewayObservationIntegration(ObservationRegistry.NOOP);
@@ -314,6 +374,30 @@ class WicketRenderObservationTest {
         } finally {
             tester.destroy();
         }
+    }
+
+    @Test
+    void collectionInitializationFailureIsRecordedAndScopeIsClosed() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final HasMetaModelContext context = new ObservationContext(integration);
+
+        final IllegalStateException failure = assertThrows(
+                IllegalStateException.class,
+                () -> WicketPreparationObservation.observe(
+                        context,
+                        WicketRenderObservationDescriptor.collectionInitialization(
+                                OBJECT_TYPE, OBJECT_TYPE + "#orders"),
+                        () -> {
+                            throw new IllegalStateException("initialization failed");
+                        }));
+
+        assertEquals("initialization failed", failure.getMessage());
+        assertEquals(List.of(
+                "error:causeway.wicket.collection.initialize:initialization failed"),
+                handler.errors);
+        assertNull(integration.observationRegistry().getCurrentObservation());
     }
 
     @Test
@@ -386,15 +470,16 @@ class WicketRenderObservationTest {
         final WicketRenderObservationTracker.State state = new WicketRenderObservationTracker.State();
         final WicketRenderObservationBehavior page = behaviorFor(
                 WicketRenderObservationDescriptor.page(OBJECT_TYPE));
-        final WicketRenderObservationBehavior collection = behaviorFor(
-                WicketRenderObservationDescriptor.collection(OBJECT_TYPE, OBJECT_TYPE + "#orders"));
+        final WicketRenderObservationBehavior tableBody = behaviorFor(
+                WicketRenderObservationDescriptor.tableBody(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders"));
 
         final ObservationClosure pageClosure = closure(registry, page.descriptor());
-        final ObservationClosure collectionClosure = closure(registry, collection.descriptor());
+        final ObservationClosure tableBodyClosure = closure(registry, tableBody.descriptor());
         page.activate(pageClosure);
-        collection.activate(collectionClosure);
+        tableBody.activate(tableBodyClosure);
         state.register(page, pageClosure);
-        state.register(collection, collectionClosure);
+        state.register(tableBody, tableBodyClosure);
 
         final RuntimeException failure = new RuntimeException("render failed");
         state.cleanup(failure);
@@ -402,10 +487,10 @@ class WicketRenderObservationTest {
 
         assertNull(currentName(registry));
         assertFalse(page.isActive());
-        assertFalse(collection.isActive());
+        assertFalse(tableBody.isActive());
         assertTrue(state.isEmpty());
         assertEquals(List.of(
-                "error:causeway.wicket.collection.render:render failed",
+                "error:causeway.wicket.collection.table.body.render:render failed",
                 "error:causeway.wicket.page.render:render failed"), handler.errors);
     }
 
@@ -500,6 +585,71 @@ class WicketRenderObservationTest {
                     "render row demo.Order",
                     "render action update"),
                     handler.contextualNames);
+            assertNull(integration.observationRegistry().getCurrentObservation());
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    void aggregateTablePhasesNestRowsBeneathTheBodyUsingAncestorContext() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketTester tester = new WicketTester();
+        try {
+            final String collectionId = OBJECT_TYPE + "#orders";
+            final ObservedContainer collection = new ObservedContainer(
+                    "component", integration,
+                    WicketRenderObservationDescriptor.collection(
+                            OBJECT_TYPE, collectionId));
+            final WebMarkupContainer table = WicketRenderObservationBehavior.addTo(
+                    new WebMarkupContainer("table"),
+                    WicketRenderObservationDescriptor.table(
+                            OBJECT_TYPE, collectionId));
+            final WebMarkupContainer header = WicketRenderObservationBehavior.addTo(
+                    new WebMarkupContainer("header"),
+                    WicketRenderObservationDescriptor.tableHeader(
+                            OBJECT_TYPE, collectionId));
+            final WebMarkupContainer body = WicketRenderObservationBehavior.addTo(
+                    new WebMarkupContainer("body"),
+                    WicketRenderObservationDescriptor.tableBody(
+                            OBJECT_TYPE, collectionId));
+            final WebMarkupContainer footer = WicketRenderObservationBehavior.addTo(
+                    new WebMarkupContainer("footer"),
+                    WicketRenderObservationDescriptor.tableFooter(
+                            OBJECT_TYPE, collectionId));
+            body.add(new ObservedContainer(
+                    "row", integration,
+                    WicketRenderObservationDescriptor.row(
+                            "demo.Order", collectionId)));
+            table.add(header, body, footer);
+            collection.add(table);
+
+            tester.startComponentInPage(collection, Markup.of(
+                    "<div wicket:id='component'>"
+                    + "<div wicket:id='table'>"
+                    + "<div wicket:id='header'></div>"
+                    + "<div wicket:id='body'><div wicket:id='row'></div></div>"
+                    + "<div wicket:id='footer'></div>"
+                    + "</div>"
+                    + "</div>"));
+
+            assertEquals(List.of(
+                    "causeway.wicket.collection.render<-null",
+                    "causeway.wicket.collection.table.render<-causeway.wicket.collection.render",
+                    "causeway.wicket.collection.table.header.render<-causeway.wicket.collection.table.render",
+                    "causeway.wicket.collection.table.body.render<-causeway.wicket.collection.table.render",
+                    "causeway.wicket.collection.row.render<-causeway.wicket.collection.table.body.render",
+                    "causeway.wicket.collection.table.footer.render<-causeway.wicket.collection.table.render"),
+                    handler.parents);
+            assertEquals(List.of(
+                    "render collection orders",
+                    "render table orders",
+                    "render table header orders",
+                    "render table body orders",
+                    "render row demo.Order",
+                    "render table footer orders"), handler.contextualNames);
             assertNull(integration.observationRegistry().getCurrentObservation());
         } finally {
             tester.destroy();

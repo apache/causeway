@@ -38,10 +38,10 @@
 
 ## 6. Trace-Evidence Refinements
 
-- [ ] 6.1 Add a serializable `causeway.wicket.collection.initialize` descriptor with `initialize collection <collectionId>` naming and complete canonical owner-type and collection identifiers.
-- [ ] 6.2 Observe synchronous parented collection UI construction so collection-model loading and automatic JDBC spans that occur before `onBeforeRender()` inherit collection initialization, while sibling scopes remain separate and failures close safely.
-- [ ] 6.3 Add serializable table, header, body, and footer render descriptors with bounded collection-aware contextual names and complete canonical owner-type and collection identifiers.
-- [ ] 6.4 Instrument only parented `CausewayAjaxDataTable` instances and their aggregate top-toolbar, body, and bottom-toolbar containers, making row renders descendants of table body while retaining caption and other table work as table self-time.
-- [ ] 6.5 Extend descriptor, lifecycle, failure, serialization, inactive-profile, no-op, standalone-table, and hierarchy tests for collection initialization and table phases.
-- [ ] 6.6 Update the tracing operations guide and Java-agent compatibility fixture with the refined initialization and table-phase hierarchy and representative JDBC parentage.
-- [ ] 6.7 Run focused Wicket observation and Java-agent compatibility suites, capture validation evidence, validate the OpenSpec change strictly, and confirm bounded instance-data-free metadata.
+- [x] 6.1 Add a serializable `causeway.wicket.collection.initialize` descriptor with `initialize collection <collectionId>` naming and complete canonical owner-type and collection identifiers.
+- [x] 6.2 Observe synchronous parented collection UI construction so collection-model loading and automatic JDBC spans that occur before `onBeforeRender()` inherit collection initialization, while sibling scopes remain separate and failures close safely.
+- [x] 6.3 Add serializable table, header, body, and footer render descriptors with bounded collection-aware contextual names and complete canonical owner-type and collection identifiers.
+- [x] 6.4 Instrument only parented `CausewayAjaxDataTable` instances and their aggregate top-toolbar, body, and bottom-toolbar containers, making row renders descendants of table body while retaining caption and other table work as table self-time.
+- [x] 6.5 Extend descriptor, lifecycle, failure, serialization, inactive-profile, no-op, standalone-table, and hierarchy tests for collection initialization and table phases.
+- [x] 6.6 Update the tracing operations guide and Java-agent compatibility fixture with the refined initialization and table-phase hierarchy and representative JDBC parentage.
+- [x] 6.7 Run focused Wicket observation and Java-agent compatibility suites, capture validation evidence, validate the OpenSpec change strictly, and confirm bounded instance-data-free metadata.

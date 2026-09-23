@@ -52,8 +52,9 @@ import io.micrometer.observation.ObservationRegistry;
 
 class CausewayAjaxDataTableObservationTest {
 
+    private static final String OWNER_TYPE = "demo.Customer";
     private static final String ELEMENT_TYPE = "demo.Order";
-    private static final String COLLECTION_ID = "demo.Customer#orders";
+    private static final String COLLECTION_ID = OWNER_TYPE + "#orders";
 
     @Test
     void parentedRowsReceiveRenderObservationWhileStandaloneRowsDoNot() {
@@ -62,11 +63,33 @@ class CausewayAjaxDataTableObservationTest {
             final TestTable parented = new TestTable(ELEMENT_TYPE, COLLECTION_ID);
             final Item<DataRow> parentedRow = parented.newObservedRow();
 
+            assertEquals(1,
+                    parented.getBehaviors(WicketRenderObservationBehavior.class).size());
+            assertEquals(1,
+                    parented.getTopToolbars()
+                            .getBehaviors(WicketRenderObservationBehavior.class).size());
+            assertEquals(1,
+                    parented.getBody()
+                            .getBehaviors(WicketRenderObservationBehavior.class).size());
+            assertEquals(1,
+                    parented.getBottomToolbars()
+                            .getBehaviors(WicketRenderObservationBehavior.class).size());
             assertTrue(parentedRow instanceof HasMetaModelContext);
             assertEquals(1,
                     parentedRow.getBehaviors(WicketRenderObservationBehavior.class).size());
 
             final TestTable standalone = new TestTable(ELEMENT_TYPE, null);
+            assertEquals(0,
+                    standalone.getBehaviors(WicketRenderObservationBehavior.class).size());
+            assertEquals(0,
+                    standalone.getTopToolbars()
+                            .getBehaviors(WicketRenderObservationBehavior.class).size());
+            assertEquals(0,
+                    standalone.getBody()
+                            .getBehaviors(WicketRenderObservationBehavior.class).size());
+            assertEquals(0,
+                    standalone.getBottomToolbars()
+                            .getBehaviors(WicketRenderObservationBehavior.class).size());
             assertEquals(0,
                     standalone.newObservedRow()
                             .getBehaviors(WicketRenderObservationBehavior.class).size());
@@ -194,6 +217,7 @@ class CausewayAjaxDataTableObservationTest {
                     mock(CollectionContentsSortableDataProvider.class),
                     10,
                     null,
+                    collectionId != null ? OWNER_TYPE : null,
                     elementObjectType,
                     collectionId);
         }

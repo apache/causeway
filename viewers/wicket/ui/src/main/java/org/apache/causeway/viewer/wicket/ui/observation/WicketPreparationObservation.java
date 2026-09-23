@@ -30,8 +30,8 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 
 /**
- * Keeps semantic Wicket preparation in scope across component configuration
- * and descendant {@code onBeforeRender} callbacks.
+ * Observes synchronous initialization work or keeps semantic Wicket preparation
+ * in scope across component configuration and descendant {@code onBeforeRender} callbacks.
  *
  * @since 2.2
  */
@@ -46,7 +46,8 @@ public class WicketPreparationObservation implements Serializable {
             final WicketRenderObservationDescriptor descriptor) {
         this.descriptor = Objects.requireNonNull(descriptor, "descriptor");
         if(!descriptor.getRegion().isPreparation()) {
-            throw new IllegalArgumentException("Preparation descriptor required");
+            throw new IllegalArgumentException(
+                    "Initialization or preparation descriptor required");
         }
     }
 
@@ -104,7 +105,8 @@ public class WicketPreparationObservation implements Serializable {
         Objects.requireNonNull(descriptor, "descriptor");
         Objects.requireNonNull(work, "work");
         if(!descriptor.getRegion().isPreparation()) {
-            throw new IllegalArgumentException("Preparation descriptor required");
+            throw new IllegalArgumentException(
+                    "Initialization or preparation descriptor required");
         }
 
         final CausewayObservationIntegration integration = context

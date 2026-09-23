@@ -87,6 +87,18 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Page preparation span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
+            final ExportedSpan collectionInitializationSpan = childSpanNamed(
+                    spans,
+                    preparationSpan,
+                    MicrometerTracingAgentFixture.COLLECTION_INITIALIZATION_NAME,
+                    result.output);
+            final ExportedSpan initializationJdbcSpan = spans.stream()
+                    .filter(span -> collectionInitializationSpan.traceId.equals(span.traceId))
+                    .filter(span -> collectionInitializationSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> "h2".equals(span.attributes.get("db.system")))
+                    .findFirst()
+                    .orElseGet(() -> fail("Initialization JDBC span is not a child of collection initialization.\n"
+                            + describe(spans) + "\n" + result.output));
             final ExportedSpan collectionPreparationSpan = childSpanNamed(
                     spans,
                     preparationSpan,
@@ -131,9 +143,29 @@ class MicrometerTracingCompatibilityTest {
                     pageSpan,
                     MicrometerTracingAgentFixture.COLLECTION_RENDER_NAME,
                     result.output);
-            final ExportedSpan rowSpan = childSpanNamed(
+            final ExportedSpan tableSpan = childSpanNamed(
                     spans,
                     collectionSpan,
+                    MicrometerTracingAgentFixture.TABLE_RENDER_NAME,
+                    result.output);
+            final ExportedSpan tableHeaderSpan = childSpanNamed(
+                    spans,
+                    tableSpan,
+                    MicrometerTracingAgentFixture.TABLE_HEADER_RENDER_NAME,
+                    result.output);
+            final ExportedSpan tableBodySpan = childSpanNamed(
+                    spans,
+                    tableSpan,
+                    MicrometerTracingAgentFixture.TABLE_BODY_RENDER_NAME,
+                    result.output);
+            final ExportedSpan tableFooterSpan = childSpanNamed(
+                    spans,
+                    tableSpan,
+                    MicrometerTracingAgentFixture.TABLE_FOOTER_RENDER_NAME,
+                    result.output);
+            final ExportedSpan rowSpan = childSpanNamed(
+                    spans,
+                    tableBodySpan,
                     MicrometerTracingAgentFixture.ROW_RENDER_NAME,
                     result.output);
             final ExportedSpan rowPropertySpan = childSpanNamed(
@@ -173,6 +205,11 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     preparationSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    collectionInitializationSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    collectionInitializationSpan.attributes.get("causeway.collection.id"));
+            assertEquals("h2", initializationJdbcSpan.attributes.get("db.system"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     collectionPreparationSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
                     collectionPreparationSpan.attributes.get("causeway.collection.id"));
@@ -193,6 +230,14 @@ class MicrometerTracingCompatibilityTest {
                     propertySpan.attributes.get("causeway.property.id"));
             assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
                     collectionSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    tableSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    tableHeaderSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    tableBodySpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    tableFooterSpan.attributes.get("causeway.collection.id"));
             assertEquals(MicrometerTracingAgentFixture.ROW_OBJECT_TYPE,
                     rowSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
@@ -204,16 +249,22 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionRenderSpan.attributes.get("causeway.action.id"));
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s row=%s prompt=%s action=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionInitialize=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
                     preparationSpan.name,
+                    collectionInitializationSpan.name,
+                    initializationJdbcSpan.name,
                     collectionPreparationSpan.name,
                     rowPreparationSpan.name,
                     preparationJdbcSpan.name,
                     pageSpan.name,
                     collectionSpan.name,
+                    tableSpan.name,
+                    tableHeaderSpan.name,
+                    tableBodySpan.name,
+                    tableFooterSpan.name,
                     rowSpan.name,
                     promptSpan.name,
                     actionSpan.name,

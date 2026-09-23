@@ -242,8 +242,9 @@ When the Wicket viewer renders an entity page, Causeway adds semantic spans for 
 prepare demo.Customer
 ├── prop demo.Customer#calculatedTotal
 ├── coll demo.Customer#recentOrders
+├── initialize collection roles
+│   └── JDBC collection load
 └── prepare collection roles
-    ├── JDBC collection load
     ├── prepare row demo.Role
     │   └── JDBC lazy load
     └── prepare row demo.Role
@@ -252,10 +253,14 @@ render demo.Customer
 │   ├── render property emailAddress
 │   └── render action updateEmailAddress
 ├── render collection roles
-│   ├── render row demo.Role
-│   │   ├── render property name
-│   │   └── render action update
-│   └── render row demo.Role
+│   └── render table roles
+│       ├── render table header roles
+│       ├── render table body roles
+│       │   ├── render row demo.Role
+│       │   │   ├── render property name
+│       │   │   └── render action update
+│       │   └── render row demo.Role
+│       └── render table footer roles
 └── prompt demo.Customer#updateEmailAddress
 ----
 
@@ -264,16 +269,21 @@ Automatic JDBC spans become descendants of whichever preparation or render regio
 
 The entity-page preparation observation uses stable name `causeway.wicket.page.prepare` and a contextual display name such as `prepare demo.Customer`.
 It starts before Wicket delegates to `Page.onConfigure()`, so it covers initial page construction, descendant component configuration, visibility and usability evaluation, and other `onBeforeRender` preparation.
-Each visible parented entity collection adds a `causeway.wicket.collection.prepare` child such as `prepare collection roles` when it enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree.
-This collection preparation span owns data-provider sizing and iteration, collection loading, visible-row selection and population, and Java-agent JDBC spans initiated there.
+Each parented entity collection adds one synchronous `causeway.wicket.collection.initialize` child such as `initialize collection roles` around its UI construction and collection-model setup.
+This initialization span owns collection loading, visibility and presentation setup, child construction, and Java-agent JDBC spans initiated before the later Wicket lifecycle.
+Each visible parented collection also adds a `causeway.wicket.collection.prepare` child such as `prepare collection roles` when it enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree.
+This later preparation span owns data-provider sizing and iteration, visible-row selection and population, and Java-agent JDBC spans initiated there.
 Each synchronous visible-row population callback adds a `causeway.wicket.collection.row.prepare` child such as `prepare row demo.Role`.
-Collection-fetch work completed before iteration reaches an individual row remains directly beneath collection preparation.
+Collection-fetch work completed during later preparation but before iteration reaches an individual row remains directly beneath collection preparation.
 All preparation observations close before actual markup rendering begins.
 Mixed-in association evaluations during preparation therefore appear using their domain-facing `prop` or `coll` identity rather than the underlying implementation action.
 
 The entity-page rendering observation retains the stable name `causeway.wicket.page.render` but uses a contextual display name such as `render demo.Customer`.
-Fieldset, property, collection, row, and action-button observations use contextual display names of the forms `render fieldset <fieldsetId>`, `render property <propertyId>`, `render collection <collectionId>`, `render row <logicalTypeName>`, and `render action <actionId>`.
-Each `causeway.wicket.collection.row.render` observation encloses the actual Wicket render callback for one visible row, with logical property-cell and eligible row-action observations as children.
+Fieldset, property, collection, table, row, and action-button observations use contextual display names of the forms `render fieldset <fieldsetId>`, `render property <propertyId>`, `render collection <collectionId>`, `render table <collectionId>`, `render row <logicalTypeName>`, and `render action <actionId>`.
+Each parented Ajax table adds aggregate `render table header <collectionId>`, `render table body <collectionId>`, and `render table footer <collectionId>` children.
+Caption, column-group, component-tag, and table markup work outside those phase containers remains measurable as table self-time.
+Each `causeway.wicket.collection.row.render` observation is a child of table body and encloses the actual Wicket render callback for one visible row, with logical property-cell and eligible row-action observations as children.
+The header and footer are aggregate phases; individual header cells, sort links, navigation controls, and count labels do not create observations.
 The unnamed fieldset is displayed as `render fieldset default`.
 
 A parameterized action prompt creates one `causeway.wicket.action.prompt.render` observation around the enclosing prompt panel's actual render callback, with a display name such as `prompt demo.Customer#updateName`.
@@ -288,10 +298,11 @@ These identifiers describe static application structure.
 Causeway does not attach property values, rendered labels, object titles, bookmarks, action arguments, user names, tenancy tokens, collection-row identities, or generated Wicket component paths.
 
 Collection and row observations apply only to parented entity collections that have a canonical `causeway.collection.id`.
-Standalone action-result tables, action parameters, service menus, headers, navigation controls, selection checkboxes, presentation-only cells, empty placeholders, and browser-side rendering remain excluded.
+Standalone action-result tables, action parameters, service menus, individual headers and navigation controls, selection checkboxes, presentation-only cells, empty placeholders, and browser-side rendering remain excluded.
 Preparation and render row names deliberately repeat for rows of the same logical type, and no row index or instance identifier is added.
 
-Collection-heavy pages intentionally create observations in proportion to the visible rows and their logical property and action cells.
+Each parented collection adds one initialization observation and up to four aggregate table-render observations.
+Collection-heavy pages otherwise create observations in proportion to the visible rows and their logical property and action cells.
 Pagination and Ajax partial responses bound this growth to participating rows, and operators should use Java-agent or collector sampling and appropriate page sizes to control production trace volume.
 
 Without the `observation` profile, the existing no-op registry prevents these spans from being exported and Wicket output remains unchanged.
@@ -324,7 +335,7 @@ It makes traces easier to discover but does not reduce collection, export, reten
 Use head sampling or a configurable collector's tail processing when background telemetry volume itself must be reduced.
 
 Causeway does not add semantic spans for transactions, property edits, execution publishing, or persistence-specific operations.
-The Wicket viewer adds only the bounded render observations described above and does not add preparation or browser-side observations.
+The Wicket viewer adds only the bounded initialization, preparation, and render observations described above and does not add browser-side observations.
 The Java agent can still produce automatic spans for supported libraries such as HTTP and JDBC.
 
 The behavior of the two activation controls is:

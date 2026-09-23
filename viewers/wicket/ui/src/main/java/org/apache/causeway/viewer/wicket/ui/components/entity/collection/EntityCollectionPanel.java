@@ -99,7 +99,11 @@ implements HasDynamicallyVisibleContent {
                 this::getSelectorDropdownPanel,
                 EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
 
-        buildGui();
+        WicketPreparationObservation.observe(
+                this,
+                WicketRenderObservationDescriptor.collectionInitialization(
+                        objectType, collectionId),
+                this::buildGui);
     }
 
     /**

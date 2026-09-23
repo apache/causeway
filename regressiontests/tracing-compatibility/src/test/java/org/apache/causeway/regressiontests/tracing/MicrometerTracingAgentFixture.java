@@ -97,12 +97,17 @@ public final class MicrometerTracingAgentFixture {
     static final String ACTION_INVOCATION_NAME =
             "act causeway.TracingFixture#executeJdbc";
     static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
+    static final String COLLECTION_INITIALIZATION_NAME = "initialize collection roles";
     static final String COLLECTION_PREPARATION_NAME = "prepare collection roles";
     static final String ROW_PREPARATION_NAME = "prepare row causeway.TracingRole";
     static final String PAGE_RENDER_NAME = "render causeway.TracingFixture";
     static final String FIELDSET_RENDER_NAME = "render fieldset identity";
     static final String PROPERTY_RENDER_NAME = "render property emailAddress";
     static final String COLLECTION_RENDER_NAME = "render collection roles";
+    static final String TABLE_RENDER_NAME = "render table roles";
+    static final String TABLE_HEADER_RENDER_NAME = "render table header roles";
+    static final String TABLE_BODY_RENDER_NAME = "render table body roles";
+    static final String TABLE_FOOTER_RENDER_NAME = "render table footer roles";
     static final String ROW_RENDER_NAME = "render row causeway.TracingRole";
     static final String ROW_PROPERTY_RENDER_NAME = "render property name";
     static final String ACTION_RENDER_NAME = "render action executeJdbc";
@@ -177,6 +182,9 @@ public final class MicrometerTracingAgentFixture {
         private void renderPageAndPrompt() {
             final WicketRenderObservationDescriptor preparation =
                     WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE);
+            final WicketRenderObservationDescriptor collectionInitialization =
+                    WicketRenderObservationDescriptor.collectionInitialization(
+                            OBJECT_TYPE, COLLECTION_ID);
             final WicketRenderObservationDescriptor collectionPreparation =
                     WicketRenderObservationDescriptor.collectionPreparation(
                             OBJECT_TYPE, COLLECTION_ID);
@@ -193,6 +201,18 @@ public final class MicrometerTracingAgentFixture {
             final WicketRenderObservationDescriptor collection =
                     WicketRenderObservationDescriptor.collection(
                             OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor table =
+                    WicketRenderObservationDescriptor.table(
+                            OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor tableHeader =
+                    WicketRenderObservationDescriptor.tableHeader(
+                            OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor tableBody =
+                    WicketRenderObservationDescriptor.tableBody(
+                            OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor tableFooter =
+                    WicketRenderObservationDescriptor.tableFooter(
+                            OBJECT_TYPE, COLLECTION_ID);
             final WicketRenderObservationDescriptor row =
                     WicketRenderObservationDescriptor.row(
                             ROW_OBJECT_TYPE, COLLECTION_ID);
@@ -208,17 +228,23 @@ public final class MicrometerTracingAgentFixture {
             final WicketRenderObservationDescriptor prompt =
                     WicketRenderObservationDescriptor.actionPrompt(
                             OBJECT_TYPE, ACTION_ID, "executeJdbc");
-            observe(preparation, () -> observe(
-                    collectionPreparation,
-                    () -> observe(rowPreparation, this::executePreparationJdbc)));
+            observe(preparation, () -> {
+                observe(collectionInitialization, this::executePreparationJdbc);
+                observe(collectionPreparation,
+                        () -> observe(rowPreparation, this::executePreparationJdbc));
+            });
             observe(page, () -> {
                 observe(fieldset, () -> {
                     observe(property, () -> {});
                     observe(action, () -> {});
                 });
-                observe(collection, () -> observe(row, () -> {
-                    observe(rowProperty, () -> {});
-                    observe(rowAction, () -> {});
+                observe(collection, () -> observe(table, () -> {
+                    observe(tableHeader, () -> {});
+                    observe(tableBody, () -> observe(row, () -> {
+                        observe(rowProperty, () -> {});
+                        observe(rowAction, () -> {});
+                    }));
+                    observe(tableFooter, () -> {});
                 }));
                 observe(prompt, () -> {});
             });
