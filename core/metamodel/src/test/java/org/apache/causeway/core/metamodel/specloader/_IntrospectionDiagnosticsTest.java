@@ -121,16 +121,23 @@ class _IntrospectionDiagnosticsTest {
     }
 
     @Test
-    void representativeFixtureExposesMixinAndActionElementTypeLoading() {
+    void representativeFixturePrefiltersInapplicableMixinsBeforeFullIntrospection() {
         final List<List<_IntrospectionDiagnostics.Entry>> observed = new ArrayList<>();
         final List<String> reports = new ArrayList<>();
-        val mmc = newMetamodelContext(NodeC_as.class, NodeB_cs.class, NodeA_bs.class);
+        val mmc = newMetamodelContext(
+                NodeC_as.class,
+                NodeB_cs.class,
+                NodeB_ignoreAction1.class,
+                NodeB_ignoreAction2.class,
+                NodeB_ignoreAction3.class,
+                NodeB_ignoreAction4.class,
+                ZNodeA_bs.class);
 
         final ObjectSpecification nodeA;
         try (_IntrospectionDiagnostics.Observation observation = _IntrospectionDiagnostics.observe(snapshot -> {
             observed.add(snapshot);
             if(reports.isEmpty()
-                    && snapshot.stream().anyMatch(entry -> entry.typeName().equals(NodeA_bs.class.getName()))) {
+                    && snapshot.stream().anyMatch(entry -> entry.typeName().equals(ZNodeA_bs.class.getName()))) {
                 _IntrospectionDiagnostics.reportStackOverflow(reports::add);
             }
         })) {
@@ -142,24 +149,44 @@ class _IntrospectionDiagnosticsTest {
         }
 
         assertEquals(1, reports.size());
-        assertTrue(reports.get(0).contains(NodeA.class.getName()));
-        assertTrue(reports.get(0).contains(NodeA_bs.class.getName()));
+        assertTrue(reports.get(0).contains(ZNodeA_bs.class.getName()));
         assertTrue(reports.get(0).contains("createMixedInAssociation"));
 
         final List<_IntrospectionDiagnostics.Entry> entries = observed.stream()
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        assertTrue(entries.stream().anyMatch(entry -> entry.typeName().equals(NodeA_bs.class.getName())));
-        assertTrue(entries.stream().anyMatch(entry -> entry.typeName().equals(NodeB_cs.class.getName())));
-        assertTrue(entries.stream().anyMatch(entry -> entry.typeName().equals(NodeC_as.class.getName())));
-        assertTrue(entries.stream().anyMatch(entry -> entry.caller().contains("createMixedInAssociation")),
-                "expected mixed-in association loading in the diagnostic chain");
+        assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(entries, NodeB_cs.class);
+        assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(entries, NodeC_as.class);
+        assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(entries, NodeB_ignoreAction1.class);
+        assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(entries, NodeB_ignoreAction2.class);
+        assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(entries, NodeB_ignoreAction3.class);
+        assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(entries, NodeB_ignoreAction4.class);
+        assertTrue(entries.stream().anyMatch(entry ->
+                entry.typeName().equals(ZNodeA_bs.class.getName())
+                && entry.requestedState() == IntrospectionState.FULLY_INTROSPECTED
+                && entry.caller().contains("createMixedInAssociation")),
+                "expected applicable association mixin to be fully introspected");
         assertTrue(entries.stream().anyMatch(entry -> entry.caller().contains("elementSpec")),
                 () -> "expected action element-type loading in the diagnostic chain; callers were "
                         + entries.stream()
                                 .map(_IntrospectionDiagnostics.Entry::caller)
                                 .distinct()
                                 .collect(Collectors.toList()));
+    }
+
+    private void assertTypeCheckedButNotFullyIntrospectedByMixinDiscovery(
+            final List<_IntrospectionDiagnostics.Entry> entries,
+            final Class<?> mixinType) {
+        assertTrue(entries.stream().anyMatch(entry ->
+                entry.typeName().equals(mixinType.getName())
+                && entry.requestedState() == IntrospectionState.TYPE_INTROSPECTED
+                && entry.caller().contains("createMixedIn")),
+                () -> "expected type-level applicability check for " + mixinType.getName());
+        assertFalse(entries.stream().anyMatch(entry ->
+                entry.typeName().equals(mixinType.getName())
+                && entry.requestedState() == IntrospectionState.FULLY_INTROSPECTED
+                && entry.caller().contains("createMixedIn")),
+                () -> "inapplicable mixin was fully introspected: " + mixinType.getName());
     }
 
     private List<String> observeThread(
@@ -211,10 +238,10 @@ class _IntrospectionDiagnosticsTest {
 
     @RequiredArgsConstructor
     @org.apache.causeway.applib.annotation.Collection
-    static class NodeA_bs {
+    static class ZNodeA_bs {
         @SuppressWarnings("unused")
         private final NodeA mixee;
-        @MemberSupport public List<NodeB> coll() {
+        @MemberSupport public List<String> coll() {
             return new ArrayList<>();
         }
     }
@@ -227,6 +254,26 @@ class _IntrospectionDiagnosticsTest {
         @MemberSupport public List<NodeC> coll() {
             return new ArrayList<>();
         }
+    }
+
+    @Action @RequiredArgsConstructor static class NodeB_ignoreAction1 {
+        @SuppressWarnings("unused") private final NodeB mixee;
+        public void act() {}
+    }
+
+    @Action @RequiredArgsConstructor static class NodeB_ignoreAction2 {
+        @SuppressWarnings("unused") private final NodeB mixee;
+        public void act() {}
+    }
+
+    @Action @RequiredArgsConstructor static class NodeB_ignoreAction3 {
+        @SuppressWarnings("unused") private final NodeB mixee;
+        public void act() {}
+    }
+
+    @Action @RequiredArgsConstructor static class NodeB_ignoreAction4 {
+        @SuppressWarnings("unused") private final NodeB mixee;
+        public void act() {}
     }
 
     @Action(typeOf = NodeA.class)

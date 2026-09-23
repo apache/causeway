@@ -816,18 +816,13 @@ public abstract class ObjectSpecificationAbstract
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
 
+        val mixinFacet = applicableMixinFacet(mixinType).orElse(null);
+        if (mixinFacet == null) {
+            return Stream.empty();
+        }
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
-        if (mixinSpec == null
-                || mixinSpec == this) {
-            return Stream.empty();
-        }
-        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if (mixinFacet == null) {
-            // this shouldn't happen; to be covered by meta-model validation later
-            return Stream.empty();
-        }
-        if (!mixinFacet.isMixinFor(getCorrespondingClass())) {
+        if (mixinSpec == null) {
             return Stream.empty();
         }
         val mixinMethodName = mixinFacet.getMainMethodName();
@@ -851,23 +846,18 @@ public abstract class ObjectSpecificationAbstract
 
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
-        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
-                IntrospectionState.FULLY_INTROSPECTED);
-        if (mixinSpec == null
-                || mixinSpec == this) {
-            return Stream.empty();
-        }
-        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
+        val mixinFacet = applicableMixinFacet(mixinType).orElse(null);
         if (mixinFacet == null) {
-            // this shouldn't happen; to be covered by meta-model validation later
-            return Stream.empty();
-        }
-        if (!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return Stream.empty();
         }
         // don't mixin Object_ mixins to domain services
         if (getBeanSort().isManagedBeanContributing()
                 && mixinFacet.isMixinFor(java.lang.Object.class)) {
+            return Stream.empty();
+        }
+        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
+                IntrospectionState.FULLY_INTROSPECTED);
+        if (mixinSpec == null) {
             return Stream.empty();
         }
 
@@ -880,6 +870,20 @@ public abstract class ObjectSpecificationAbstract
                 .map(ObjectActionDefault.class::cast)
                 .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
                 .peek(facetProcessor::processMemberOrder);
+    }
+
+    /**
+     * Uses type-level mixin metadata to reject inapplicable candidates before their members are introspected.
+     */
+    private Optional<MixinFacet> applicableMixinFacet(final Class<?> mixinType) {
+        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
+                IntrospectionState.TYPE_INTROSPECTED);
+        if (mixinSpec == null
+                || mixinSpec == this) {
+            return Optional.empty();
+        }
+        return mixinSpec.mixinFacet()
+                .filter(mixinFacet -> mixinFacet.isMixinFor(getCorrespondingClass()));
     }
 
     /**

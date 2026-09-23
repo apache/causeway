@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 /**
  * Retains the active specification-loading chain so a {@link StackOverflowError} can report domain types,
@@ -93,7 +94,7 @@ final class _IntrospectionDiagnostics {
 
     private static String caller() {
         return STACK_WALKER.walk(frames -> frames
-                .filter(frame -> !isDiagnosticPlumbing(frame.getClassName()))
+                .filter(frame -> !isDiagnosticPlumbing(frame))
                 .findFirst()
                 .map(frame -> frame.getClassName()
                         + "#" + frame.getMethodName()
@@ -101,10 +102,13 @@ final class _IntrospectionDiagnostics {
                 .orElse("unknown"));
     }
 
-    private static boolean isDiagnosticPlumbing(final String className) {
+    private static boolean isDiagnosticPlumbing(final StackWalker.StackFrame frame) {
+        final String className = frame.getClassName();
         return className.equals(_IntrospectionDiagnostics.class.getName())
                 || className.equals(SpecificationLoaderDefault.class.getName())
-                || className.equals(SpecificationLoader.class.getName());
+                || className.equals(SpecificationLoader.class.getName())
+                || className.equals(ObjectSpecificationAbstract.class.getName())
+                    && frame.getMethodName().equals("applicableMixinFacet");
     }
 
     static final class Entry {
