@@ -79,8 +79,21 @@ Deploy with the existing deterministic mixin ordering and introspection diagnost
 Re-run the production application using the same command-recording configuration and compare the diagnostic depth if any failure remains.
 Rollback consists of reverting this isolated discovery change; no persisted state is modified.
 
+## Implementation Findings
+
+Characterization confirms that `@Action`, `@Property`, `@Collection`, and classic `@DomainObject(nature = MIXIN)` declarations expose holder-type applicability and main-method name at `TYPE_INTROSPECTED`.
+Constructor validation also runs during type introspection, so a malformed registered mixin still contributes a metamodel validation failure without needing a target or member introspection.
+
+The production failure provided the before baseline of 395 nested distinct specifications, including 201 full-introspection requests from mixed-in association discovery and 55 from mixed-in action discovery.
+The production-shaped unit fixture registers six deterministic inapplicable candidates before one applicable association mixin.
+Before the correction, mixed-in discovery requested full introspection for every candidate.
+After the correction, diagnostics show type-level requests for all six inapplicable candidates, zero mixed-in-discovery full requests for them, and a full request only for the applicable candidate.
+Action element-type resolution remains a legitimate nested path after applicable members are introspected.
+The full-boot recording-navigation regression passes with a constrained `-Xss256k` stack while retaining explicit ordering and navigation synthesis.
+
+Production deployment should now measure the remaining chain depth using the retained diagnostics.
+If depth remains excessive, the next candidate is an iterative postprocessing work queue rather than further applicability filtering.
+
 ## Open Questions
 
-- Does every supported mixin declaration style expose a complete `MixinFacet`, including target type and main method name, at `TYPE_INTROSPECTED`?
-- Are malformed but globally registered mixins guaranteed to receive full validation independently of being applicable to a particular target?
-- After prefiltering, what is the maximum observed production chain depth and which remaining transitions dominate it?
+- After deployment, what is the maximum observed production chain depth and which remaining transitions dominate it?
