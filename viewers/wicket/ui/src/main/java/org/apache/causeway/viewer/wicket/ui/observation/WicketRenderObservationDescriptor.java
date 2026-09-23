@@ -43,6 +43,7 @@ public final class WicketRenderObservationDescriptor implements Serializable {
     @RequiredArgsConstructor
     @Getter
     public enum Region {
+        PAGE_PREPARATION("causeway.wicket.page.prepare", null),
         PAGE("causeway.wicket.page.render", null),
         FIELDSET("causeway.wicket.fieldset.render", "causeway.fieldset.id"),
         PROPERTY("causeway.wicket.property.render", "causeway.property.id"),
@@ -52,6 +53,14 @@ public final class WicketRenderObservationDescriptor implements Serializable {
 
         private final String observationName;
         private final String memberTag;
+    }
+
+    public static WicketRenderObservationDescriptor pagePreparation(final String objectType) {
+        return new WicketRenderObservationDescriptor(
+                Region.PAGE_PREPARATION,
+                objectType,
+                null,
+                CausewayObservationNaming.forType("prepare", objectType));
     }
 
     public static WicketRenderObservationDescriptor page(final String objectType) {

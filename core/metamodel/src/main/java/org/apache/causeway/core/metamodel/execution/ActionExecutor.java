@@ -39,14 +39,18 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
@@ -125,6 +129,18 @@ implements
         return actionInvocationFacetAbstract.isPostable();
     }
 
+    public Optional<ObjectAssociation> mixedInAssociation() {
+        if(!(actionInvocationFacetAbstract
+                instanceof ActionInvocationFacetForMixedInPropertyOrCollection)) {
+            return Optional.empty();
+        }
+        return head.getOwner().objSpec()
+                .streamAssociations(MixedIn.INCLUDED)
+                .filter(MixedInMember.class::isInstance)
+                .filter(association -> ((MixedInMember) association)
+                        .hasMixinAction(owningAction))
+                .findFirst();
+    }
 
     @SneakyThrows
     @Override

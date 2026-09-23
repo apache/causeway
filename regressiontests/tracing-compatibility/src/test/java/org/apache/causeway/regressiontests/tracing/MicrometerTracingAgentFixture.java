@@ -95,7 +95,8 @@ public final class MicrometerTracingAgentFixture {
 
     static final String ROOT_INTERACTION_NAME = "causeway.root.interaction";
     static final String ACTION_INVOCATION_NAME =
-            "invoke causeway.TracingFixture#executeJdbc";
+            "act causeway.TracingFixture#executeJdbc";
+    static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
     static final String PAGE_RENDER_NAME = "render causeway.TracingFixture";
     static final String FIELDSET_RENDER_NAME = "render fieldset identity";
     static final String PROPERTY_RENDER_NAME = "render property emailAddress";
@@ -165,6 +166,8 @@ public final class MicrometerTracingAgentFixture {
         }
 
         private void renderPageAndPrompt() {
+            final WicketRenderObservationDescriptor preparation =
+                    WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE);
             final WicketRenderObservationDescriptor page =
                     WicketRenderObservationDescriptor.page(OBJECT_TYPE);
             final WicketRenderObservationDescriptor fieldset =
@@ -181,6 +184,7 @@ public final class MicrometerTracingAgentFixture {
             final WicketRenderObservationDescriptor prompt =
                     WicketRenderObservationDescriptor.actionPrompt(
                             OBJECT_TYPE, ACTION_ID, "executeJdbc");
+            observe(preparation, () -> {});
             observe(page, () -> {
                 observe(fieldset, () -> {
                     observe(property, () -> {});

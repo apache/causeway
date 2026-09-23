@@ -78,7 +78,7 @@ Select `my-causeway-app-local` in Jaeger and look for these ordered boundaries:
 ----
 HTTP
   -> causeway.root.interaction
-      -> invoke demo.Customer#updateName
+      -> act demo.Customer#updateName
           -> JDBC
 ----
 
@@ -215,10 +215,11 @@ See link:https://learn.microsoft.com/en-us/azure/container-apps/environment-vari
 
 == What Causeway Adds
 
-With the `observation` profile active, Causeway adds two core semantic observations:
+With the `observation` profile active, Causeway adds these core semantic observation categories:
 
 * `causeway.root.interaction` covers one top-level Causeway interaction and retains that stable span display name;
-* `causeway.action.invocation` covers an action invocation and uses a display name such as `invoke demo.Customer#updateName`.
+* `causeway.action.invocation` covers an action invocation and uses a display name such as `act demo.Customer#updateName`;
+* `causeway.property.access` and `causeway.collection.access` cover evaluation of mixed-in associations and use display names such as `prop demo.Customer#calculatedTotal` and `coll demo.Customer#recentOrders`.
 
 The stable observation name remains `causeway.action.invocation` even though the contextual name becomes the exported tracing span display name.
 Action spans carry the bounded attributes `causeway.action.id` and `causeway.execution.initiatedBy`.
@@ -228,7 +229,8 @@ The full `causeway.action.id` is authoritative for filtering and disambiguates a
 Contextual names preserve the declared casing of static logical type, member, and layout identifiers rather than using localized friendly names or lower-hyphen normalization.
 Causeway limits each semantic contextual name to 50 characters.
 For page, invocation, and prompt names, Causeway first tries the full logical identifier, then omits the logical-type namespace if necessary, and finally truncates at 50 characters.
-For example, `invoke isisExtSecMan.ApplicationUser#updateEmailAddress` falls back to `invoke ApplicationUser#updateEmailAddress`.
+For example, `act isisExtSecMan.ApplicationUser#updateEmailAddress` falls back to `act ApplicationUser#updateEmailAddress`.
+The same policy applies to `prop`, `coll`, `prepare`, `prompt`, and `render` contextual names.
 Causeway does not add action arguments, return values, target instance identifiers, object titles, bookmarks, user names, tenancy tokens, or other instance-specific application data to names or attributes on these semantic spans.
 
 === Wicket Entity Page Rendering
@@ -237,6 +239,9 @@ When the Wicket viewer renders an entity page, Causeway adds semantic spans for 
 
 [source,text]
 ----
+prepare demo.Customer
+├── prop demo.Customer#calculatedTotal
+└── coll demo.Customer#recentOrders
 render demo.Customer
 ├── render fieldset identity
 │   ├── render property emailAddress
@@ -248,7 +253,12 @@ render demo.Customer
 Ajax responses create spans only for the instrumented regions included in the partial render, so an Ajax trace need not contain `causeway.wicket.page.render`.
 Automatic JDBC spans become descendants of the active region span when database work occurs during that region's rendering.
 
-The entity-page observation retains the stable name `causeway.wicket.page.render` but uses a contextual display name such as `render demo.Customer`.
+The entity-page preparation observation uses stable name `causeway.wicket.page.prepare` and a contextual display name such as `prepare demo.Customer`.
+It starts before Wicket delegates to `Page.onConfigure()`, so it covers initial page construction, descendant component configuration, visibility and usability evaluation, and other `onBeforeRender` preparation.
+It closes before actual markup rendering begins.
+Mixed-in association evaluations during that phase therefore appear beneath the preparation span using their domain-facing `prop` or `coll` identity rather than the underlying implementation action.
+
+The entity-page rendering observation retains the stable name `causeway.wicket.page.render` but uses a contextual display name such as `render demo.Customer`.
 Fieldset, property, collection, and action-button observations retain their stable observation names but use contextual display names of the forms `render fieldset <fieldsetId>`, `render property <propertyId>`, `render collection <collectionId>`, and `render action <actionId>`.
 The unnamed fieldset is displayed as `render fieldset default`.
 
@@ -258,6 +268,7 @@ It does not cover defaults, choices, validation, visibility, usability, authoriz
 Individual action parameters do not create property render spans.
 
 Wicket spans use `causeway.object.type` together with the applicable bounded attribute `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id`, or `causeway.action.id`.
+Core mixed-in association access spans use the same canonical `causeway.property.id` and `causeway.collection.id` conventions and retain `causeway.execution.initiatedBy`.
 The full canonical attributes remain authoritative when any contextual name omits a namespace, is ambiguous, or is truncated.
 These identifiers describe static application structure.
 Causeway does not attach property values, rendered labels, object titles, bookmarks, action arguments, user names, tenancy tokens, collection-row identities, or generated Wicket component paths.
@@ -313,7 +324,7 @@ The behavior of the two activation controls is:
 
 |On
 |Off
-|The Java agent can export automatic spans, but the two Causeway semantic spans are absent.
+|The Java agent can export automatic spans, but Causeway semantic spans are absent.
 
 |Off
 |On

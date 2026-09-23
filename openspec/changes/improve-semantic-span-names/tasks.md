@@ -45,3 +45,23 @@
 - [x] 8.1 Update the tracing operations documentation with the final case-preserving taxonomy, fallback algorithm, examples, and authoritative-attribute guidance.
 - [x] 8.2 Update the Java-agent compatibility fixture to assert exact action, page, prompt, and fine-grained render names while automatic HTTP and JDBC naming remains unchanged.
 - [x] 8.3 Run the focused naming, configuration, runtime-services, Wicket, and Java-agent compatibility suites and record the refinement results.
+
+## 9. Programming-Model Operation Names
+
+- [x] 9.1 Replace the action contextual-name prefix `invoke` with `act` throughout naming code, tests, documentation, and Java-agent validation.
+- [x] 9.2 Resolve invocations implemented by mixed-in property and collection facets back to their domain-facing `ObjectAssociation`.
+- [x] 9.3 Emit mixed-in property and collection evaluation as `causeway.property.access` and `causeway.collection.access` with `prop` and `coll` contextual names and the applicable canonical association attribute.
+- [x] 9.4 Extend runtime observation tests for declared actions, mixed-in actions, mixed-in properties, mixed-in collections, canonical metadata, and unresolved-association fallback.
+
+## 10. Entity-Page Preparation Observation
+
+- [x] 10.1 Add a `causeway.wicket.page.prepare` descriptor using contextual name `prepare <logical-type-name>` and canonical `causeway.object.type`.
+- [x] 10.2 Start preparation before `EntityPage` delegates to `Page.onConfigure()`, keep it active through descendant pre-render preparation, and close it before actual page rendering.
+- [x] 10.3 Record preparation failures and provide detach-time cleanup without changing no-op behavior.
+- [x] 10.4 Extend Wicket observation tests for preparation/render ordering, association-access parentage, failure cleanup, no-op behavior, and logical-name fallback.
+
+## 11. Documentation and Validation
+
+- [x] 11.1 Update tracing operations documentation and trace-tree examples for `act`, `prop`, `coll`, and `prepare` spans.
+- [x] 11.2 Extend the Java-agent compatibility fixture to validate page-preparation parentage and the final action prefix while preserving automatic HTTP and JDBC behavior.
+- [x] 11.3 Run the focused core, runtime-services, Wicket, and Java-agent compatibility suites and record the results.

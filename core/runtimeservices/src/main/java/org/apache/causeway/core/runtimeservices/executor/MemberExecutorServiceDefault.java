@@ -30,6 +30,8 @@ import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import io.micrometer.observation.Observation;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
@@ -74,6 +76,7 @@ import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
@@ -116,7 +119,11 @@ implements MemberExecutorService {
     private final CausewayObservationIntegration observationIntegration;
 
     private static final String ACTION_OBSERVATION_NAME = "causeway.action.invocation";
+    private static final String PROPERTY_ACCESS_OBSERVATION_NAME = "causeway.property.access";
+    private static final String COLLECTION_ACCESS_OBSERVATION_NAME = "causeway.collection.access";
     private static final String ACTION_ID_TAG = "causeway.action.id";
+    private static final String PROPERTY_ID_TAG = "causeway.property.id";
+    private static final String COLLECTION_ID_TAG = "causeway.collection.id";
     private static final String INITIATED_BY_TAG = "causeway.execution.initiatedBy";
 
     private ObservationProvider observationProvider() {
@@ -143,25 +150,52 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
+        final Observation observation = actionExecutor.mixedInAssociation()
+                .map(association -> associationAccessObservation(
+                        actionExecutor, association))
+                .orElseGet(() -> actionObservation(actionExecutor));
+        return observation.observe(() -> {
+            val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+                    ? Try.call(()->
+                        invokeActionInternally(actionExecutor))
+                    : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
+                        invokeActionInternally(actionExecutor));
+
+            return executionResult.valueAsNullableElseFail();
+        });
+    }
+
+    private Observation actionObservation(final ActionExecutor actionExecutor) {
         final String logicalMemberIdentifier = IdentifierUtil.logicalMemberIdentifierFor(
                 actionExecutor.getHead(), actionExecutor.getOwningAction());
-        final String canonicalActionId = logicalMemberIdentifier + "()";
         return observationProvider().get(ACTION_OBSERVATION_NAME)
                 .contextualName(CausewayObservationNaming.forLogicalMember(
-                        "invoke", logicalMemberIdentifier))
-                .lowCardinalityKeyValue(ACTION_ID_TAG, canonicalActionId)
+                        "act", logicalMemberIdentifier))
+                .lowCardinalityKeyValue(
+                        ACTION_ID_TAG, logicalMemberIdentifier + "()")
                 .lowCardinalityKeyValue(
                         INITIATED_BY_TAG,
-                        actionExecutor.getInteractionInitiatedBy().name())
-                .observe(() -> {
-                    val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
-                            ? Try.call(()->
-                                invokeActionInternally(actionExecutor))
-                            : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
-                                invokeActionInternally(actionExecutor));
+                        actionExecutor.getInteractionInitiatedBy().name());
+    }
 
-                    return executionResult.valueAsNullableElseFail();
-                });
+    private Observation associationAccessObservation(
+            final ActionExecutor actionExecutor,
+            final ObjectAssociation association) {
+        final var identifier = association.getFeatureIdentifier();
+        final String logicalMemberIdentifier = identifier.logicalTypeName()
+                + "#" + identifier.memberLogicalName();
+        final boolean property = association.isSingular();
+        return observationProvider().get(property
+                    ? PROPERTY_ACCESS_OBSERVATION_NAME
+                    : COLLECTION_ACCESS_OBSERVATION_NAME)
+                .contextualName(CausewayObservationNaming.forLogicalMember(
+                        property ? "prop" : "coll", logicalMemberIdentifier))
+                .lowCardinalityKeyValue(
+                        property ? PROPERTY_ID_TAG : COLLECTION_ID_TAG,
+                        identifier.getLogicalIdentityString("#"))
+                .lowCardinalityKeyValue(
+                        INITIATED_BY_TAG,
+                        actionExecutor.getInteractionInitiatedBy().name());
     }
 
     private ManagedObject invokeActionInternally(

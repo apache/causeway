@@ -8,8 +8,10 @@ The pinned Micrometer Tracing 1.0.12 `DefaultTracingObservationHandler` converts
 That transformation obscures Causeway logical identifiers such as `isisExtSecMan.ApplicationUser#updateEmailAddress`, so Causeway needs a narrowly specialized handler for its dedicated observation registry.
 
 Action invocation instrumentation already resolves the owning action's `FeatureIdentifier` before opening the observation.
+Mixed-in properties and collections are evaluated through underlying no-argument `prop` and `coll` actions, so instrumentation at that shared boundary must recover the domain-facing `ObjectAssociation` from the mixee specification.
 Wicket entity pages already resolve the logical object type, and action prompt components retain an `ActionModel` that resolves the prompted action's `FeatureIdentifier`.
-These are bounded metamodel identifiers, unlike object titles, bookmarks, arguments, or other instance data.
+The current page-render behavior starts only when markup rendering begins, after page initialization and the component tree's configuration and `onBeforeRender` preparation have completed.
+These boundaries expose bounded metamodel identifiers, unlike object titles, bookmarks, arguments, or other instance data.
 
 ## Goals / Non-Goals
 
@@ -18,6 +20,8 @@ These are bounded metamodel identifiers, unlike object titles, bookmarks, argume
 - Make Causeway semantic spans understandable while scanning a trace tree.
 - Preserve logical identifier casing in exported span display names.
 - Resolve mixed-in action invocations to their domain-facing logical member identifiers.
+- Represent mixed-in property and collection evaluation as association access rather than action invocation.
+- Enclose entity-page initialization and pre-render component preparation in a meaningful page-preparation span.
 - Preserve stable observation names for conventions and any metric handling.
 - Keep full canonical logical identifiers in existing span attributes.
 - Add one enclosing render span for a Wicket action prompt without observing individual parameters.
@@ -36,8 +40,8 @@ These are bounded metamodel identifiers, unlike object titles, bookmarks, argume
 
 ### Keep observation names stable and specialize contextual names
 
-The stable observation names remain `causeway.action.invocation`, `causeway.wicket.page.render`, and `causeway.wicket.action.prompt.render`.
-Only the Micrometer contextual name will include a compact domain identifier.
+The stable observation names remain bounded operation categories such as `causeway.action.invocation`, `causeway.property.access`, `causeway.collection.access`, `causeway.wicket.page.prepare`, `causeway.wicket.page.render`, and `causeway.wicket.action.prompt.render`.
+Only the Micrometer contextual name will include a domain identifier.
 
 This preserves machine-oriented classification while improving the span name rendered by tracing backends.
 Replacing the observation name itself was rejected because it would unnecessarily increase metric and convention cardinality.
@@ -46,7 +50,10 @@ Replacing the observation name itself was rejected because it would unnecessaril
 
 Contextual names will use these forms:
 
-- `invoke <logical-type-name>#<action-id>` for action invocation;
+- `act <logical-type-name>#<action-id>` for action invocation;
+- `prop <logical-type-name>#<property-id>` for mixed-in property access;
+- `coll <logical-type-name>#<collection-id>` for mixed-in collection access;
+- `prepare <logical-type-name>` for entity-page preparation;
 - `prompt <logical-type-name>#<action-id>` for action-prompt rendering;
 - `render <logical-type-name>` for an entity page;
 - `render fieldset <fieldset-id>` for a fieldset, using `default` for the unnamed fieldset;
@@ -63,14 +70,31 @@ If that fallback still exceeds 50 characters, or if a member-region display name
 
 The full logical type and member identity remain available in canonical attributes and are authoritative when a display name omits the namespace or is truncated.
 
-### Resolve action invocations to their domain-facing identity
+### Resolve action invocations and association accesses to domain-facing identities
 
-`MemberExecutorServiceDefault` will use `IdentifierUtil.logicalMemberIdentifierFor(...)` with the action interaction head and owning action before starting the observation.
-This maps a mixin implementation such as `ApplicationUser_updateEmailAddress#act` to the domain-facing identity `isisExtSecMan.ApplicationUser#updateEmailAddress` and uses that same canonical value for `causeway.action.id`.
+`MemberExecutorServiceDefault` will use `IdentifierUtil.logicalMemberIdentifierFor(...)` with the action interaction head and owning action before starting an ordinary action observation.
+This maps a mixin action implementation such as `ApplicationUser_updateEmailAddress#act` to the domain-facing identity `isisExtSecMan.ApplicationUser#updateEmailAddress`.
+
+When the invocation facet implements a mixed-in property or collection, `ActionExecutor` will locate the corresponding mixed-in `ObjectAssociation` from the interaction owner's specification by matching `MixedInMember.hasMixinAction(...)`.
+The runtime service will then emit `causeway.property.access` or `causeway.collection.access`, use `prop` or `coll` in the contextual name, and attach the association's full logical identifier as `causeway.property.id` or `causeway.collection.id`.
+It will not expose the underlying mixin type or implementation method as an action span.
+
 No late mutation of the root interaction or inference from descendants is required.
 
 Renaming the root interaction was rejected because a single request can render an object, open a prompt, invoke an action, and render an Ajax response.
 A generic root with meaningful semantic children represents that request more accurately.
+
+### Enclose entity-page preparation separately from rendering
+
+`EntityPage.onConfigure()` is the earliest page lifecycle callback that runs immediately before rendering and calls `Page.onConfigure()`, which initializes an uninitialized page.
+The page-preparation observation will start before delegating to `super.onConfigure()`, remain in scope while the component tree is initialized, configured, and prepared through `onBeforeRender()`, and close after that preparation finishes.
+The existing page-render behavior will then open `causeway.wicket.page.render` only for actual markup rendering, leaving the preparation and render spans as consecutive semantic siblings.
+
+The preparation observation will use stable name `causeway.wicket.page.prepare`, contextual name `prepare <logical-type-name>`, and canonical `causeway.object.type`.
+Exceptions during configuration or pre-render preparation will be recorded before closure, and detach-time cleanup will prevent a leaked scope if rendering does not proceed.
+
+Extending the existing render span backward was rejected because it would conflate model/component preparation with actual markup rendering and obscure the duration of each phase.
+A Wicket pre-`onBeforeRender` listener was rejected because Wicket invokes that listener after the page's own `configure()` call and therefore after page initialization.
 
 ### Treat an action prompt as one Wicket render region
 
@@ -97,20 +121,24 @@ Changing Micrometer globally or renaming Java-agent-owned spans was rejected bec
 Dynamic contextual names will use only static metamodel structure.
 They MUST NOT use object titles, primary keys, bookmarks, property values, action arguments, user names, tenancy tokens, generated Wicket component paths, or localized friendly names.
 
-Canonical attributes remain unchanged for existing spans.
-The new prompt span follows the same `causeway.object.type` and `causeway.action.id` conventions as existing Wicket action render observations.
+Canonical attributes remain unchanged for existing action and render spans.
+Mixed-in association implementation calls move from `causeway.action.id` to the semantically appropriate complete `causeway.property.id` or `causeway.collection.id` attribute.
+The prompt span follows the same `causeway.object.type` and `causeway.action.id` conventions as existing Wicket action render observations.
+The page-preparation span follows the page-render span's `causeway.object.type` convention.
 
 ## Risks / Trade-offs
 
 - [Namespace fallback can make type names collide] → Keep the full logical type and action identity as authoritative attributes and document that display names are navigational aids.
 - [A logical identifier still exceeds 50 characters after namespace fallback] → Truncate deterministically at 50 characters and retain the complete canonical attribute.
-- [Prompt work can occur before actual rendering] → Name the span explicitly as prompt rendering and document that preparation, choices, defaults, validation, and authorization may remain outside it.
+- [Page preparation can fail before actual rendering] → Record the error and close the preparation observation from configuration, pre-render, and detach cleanup paths.
+- [A mixed-in association cannot be resolved from its implementation action] → Fall back to ordinary action instrumentation rather than dropping telemetry.
+- [Prompt work can occur before actual rendering] → Name the span explicitly as prompt rendering and document that prompt defaults, choices, validation, and authorization may remain outside it.
 - [A prompt component can be rendered more than once in an Ajax request] → Follow the existing component-render semantics and create one observation per actual enclosing prompt render callback.
 - [Changing display names can affect saved backend queries based on operation name] → Preserve stable attributes and document the display-name change so queries can use canonical attributes.
 
 ## Migration Plan
 
-Applications receive the new contextual display names and prompt span only when the existing `observation` profile is active.
+Applications receive the new contextual display names, association-access spans, page-preparation span, and prompt span only when the existing `observation` profile is active.
 No application configuration or persisted domain-data migration is required.
 Operators should update searches that match the old generic span display names to use canonical attributes or stable observation metadata where their backend exposes it.
 Rollback consists of reverting the instrumentation change; SDK ownership, sampling, and export configuration remain unchanged.

@@ -42,9 +42,9 @@ class CausewayObservationNamingTest {
 
     @Test
     void logicalMemberIdentifierPreservesNamespaceAndCaseWhenItFits() {
-        assertEquals("invoke demo.Customer#updateName",
+        assertEquals("act demo.Customer#updateName",
                 CausewayObservationNaming.forLogicalMember(
-                        "invoke", "demo.Customer#updateName"));
+                        "act", "demo.Customer#updateName"));
         assertEquals("prompt demo.Customer#createURL",
                 CausewayObservationNaming.forMember(
                         "prompt", "demo.Customer", "createURL"));
@@ -52,23 +52,23 @@ class CausewayObservationNamingTest {
 
     @Test
     void logicalMemberIdentifierFallsBackToSimpleTypeBeforeTruncating() {
-        assertEquals("invoke ApplicationUser#updateEmailAddress",
+        assertEquals("act ApplicationUser#updateEmailAddress",
                 CausewayObservationNaming.forLogicalMember(
-                        "invoke",
+                        "act",
                         "isisExtSecMan.ApplicationUser#updateEmailAddress"));
     }
 
     @Test
     void namespaceFreeNameIsTruncatedAtFiftyCharacters() {
         final String contextualName = CausewayObservationNaming.forMember(
-                "invoke",
+                "act",
                 "demo.CustomerWithAnUnusuallyLongLogicalTypeName",
                 "performAnUnusuallyLongAdministrativeOperation");
 
         assertEquals(CausewayObservationNaming.MAX_CONTEXTUAL_NAME_LENGTH,
                 contextualName.length());
         assertTrue(contextualName.startsWith(
-                "invoke CustomerWithAnUnusuallyLongLogicalTypeName#"));
+                "act CustomerWithAnUnusuallyLongLogicalTypeName#"));
     }
 
     @Test

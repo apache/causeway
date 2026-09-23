@@ -80,6 +80,13 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Action span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
+            final ExportedSpan preparationSpan = spans.stream()
+                    .filter(span -> MicrometerTracingAgentFixture.PAGE_PREPARATION_NAME.equals(span.name))
+                    .filter(span -> rootSpan.traceId.equals(span.traceId))
+                    .filter(span -> rootSpan.spanId.equals(span.parentSpanId))
+                    .findFirst()
+                    .orElseGet(() -> fail("Page preparation span is not a child of the root interaction.\n"
+                            + describe(spans) + "\n" + result.output));
             final ExportedSpan pageSpan = spans.stream()
                     .filter(span -> MicrometerTracingAgentFixture.PAGE_RENDER_NAME.equals(span.name))
                     .filter(span -> rootSpan.traceId.equals(span.traceId))
@@ -132,6 +139,8 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionSpan.attributes.get("causeway.action.id"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    preparationSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     pageSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     promptSpan.attributes.get("causeway.object.type"));
@@ -146,10 +155,11 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionRenderSpan.attributes.get("causeway.action.id"));
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s page=%s prompt=%s action=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s page=%s prompt=%s action=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
+                    preparationSpan.name,
                     pageSpan.name,
                     promptSpan.name,
                     actionSpan.name,

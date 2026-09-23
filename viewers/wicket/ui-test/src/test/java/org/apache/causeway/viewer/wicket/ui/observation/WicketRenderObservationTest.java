@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -99,6 +100,8 @@ class WicketRenderObservationTest {
     @Test
     void pageAndPromptDescriptorsUseMeaningfulContextualNames() {
         final ObservationRegistry registry = registryWith(new RecordingHandler());
+        final WicketRenderObservationDescriptor preparation =
+                WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE);
         final WicketRenderObservationDescriptor page =
                 WicketRenderObservationDescriptor.page(OBJECT_TYPE);
         final WicketRenderObservationDescriptor prompt =
@@ -107,11 +110,18 @@ class WicketRenderObservationTest {
                         OBJECT_TYPE + "#updateName()",
                         "updateName");
 
+        final Observation preparationObservation = preparation.customize(
+                Observation.createNotStarted(
+                        preparation.getRegion().getObservationName(), registry));
         final Observation pageObservation = page.customize(
                 Observation.createNotStarted(page.getRegion().getObservationName(), registry));
         final Observation promptObservation = prompt.customize(
                 Observation.createNotStarted(prompt.getRegion().getObservationName(), registry));
 
+        assertEquals("causeway.wicket.page.prepare",
+                preparationObservation.getContext().getName());
+        assertEquals("prepare demo.Customer",
+                preparationObservation.getContext().getContextualName());
         assertEquals("causeway.wicket.page.render", pageObservation.getContext().getName());
         assertEquals("render demo.Customer", pageObservation.getContext().getContextualName());
         assertEquals("causeway.wicket.action.prompt.render", promptObservation.getContext().getName());
@@ -130,6 +140,9 @@ class WicketRenderObservationTest {
         final String longObjectType =
                 "aVeryLongApplicationNamespaceThatExceedsTheLimit.Customer";
 
+        assertEquals("prepare Customer",
+                WicketRenderObservationDescriptor.pagePreparation(
+                        longObjectType).getContextualName());
         assertEquals("render Customer",
                 WicketRenderObservationDescriptor.page(
                         longObjectType).getContextualName());
@@ -138,6 +151,93 @@ class WicketRenderObservationTest {
                         longObjectType,
                         longObjectType + "#updateName()",
                         "updateName").getContextualName());
+    }
+
+    @Test
+    void preparationOwnsPreRenderWorkAndClosesBeforeRendering() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketTester tester = new WicketTester();
+        try {
+            final PreparedContainer page = new PreparedContainer(
+                    "component", integration, OBJECT_TYPE);
+            page.add(new WebMarkupContainer("child") {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void onConfigure() {
+                    integration.createNotStarted(
+                            getClass(), "causeway.property.access")
+                            .contextualName("prop demo.Customer#calculatedTotal")
+                            .observe(() -> {});
+                    super.onConfigure();
+                }
+            });
+
+            tester.startComponentInPage(page, Markup.of(
+                    "<div wicket:id='component'><span wicket:id='child'></span></div>"));
+
+            assertEquals(List.of(
+                    "causeway.wicket.page.prepare<-null",
+                    "causeway.property.access<-causeway.wicket.page.prepare",
+                    "causeway.wicket.page.render<-null"), handler.parents);
+            assertEquals(List.of(
+                    "prepare demo.Customer",
+                    "prop demo.Customer#calculatedTotal",
+                    "render demo.Customer"), handler.contextualNames);
+            assertNull(integration.observationRegistry().getCurrentObservation());
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    void preparationWithNoopRegistryLeavesRenderingUnchanged() {
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(ObservationRegistry.NOOP);
+        final WicketTester tester = new WicketTester();
+        try {
+            final PreparedContainer page = new PreparedContainer(
+                    "component", integration, OBJECT_TYPE);
+
+            tester.startComponentInPage(
+                    page, Markup.of("<div wicket:id='component'></div>"));
+
+            assertNull(integration.observationRegistry().getCurrentObservation());
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    void preparationFailureIsRecordedAndScopeIsClosed() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketTester tester = new WicketTester();
+        try {
+            final PreparedContainer page = new PreparedContainer(
+                    "component", integration, OBJECT_TYPE);
+            page.add(new WebMarkupContainer("child") {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void onConfigure() {
+                    throw new IllegalStateException("preparation failed");
+                }
+            });
+
+            assertThrows(RuntimeException.class, () -> tester.startComponentInPage(
+                    page,
+                    Markup.of("<div wicket:id='component'><span wicket:id='child'></span></div>")));
+
+            assertTrue(handler.errors.stream().anyMatch(
+                    error -> error.startsWith("error:causeway.wicket.page.prepare:")));
+            assertNull(integration.observationRegistry().getCurrentObservation());
+        } finally {
+            tester.destroy();
+        }
     }
 
     @Test
@@ -458,6 +558,49 @@ class WicketRenderObservationTest {
             super(id);
             this.integration = integration;
             WicketRenderObservationBehavior.addTo(this, descriptor);
+        }
+
+        @Override
+        public <T> Optional<T> lookupService(final Class<T> serviceClass) {
+            return serviceClass == CausewayObservationIntegration.class
+                    ? Optional.of(serviceClass.cast(integration))
+                    : Optional.empty();
+        }
+    }
+
+    private static final class PreparedContainer
+    extends WebMarkupContainer
+    implements HasMetaModelContext {
+
+        private static final long serialVersionUID = 1L;
+        private final CausewayObservationIntegration integration;
+        private final WicketPagePreparationObservation preparation;
+
+        private PreparedContainer(
+                final String id,
+                final CausewayObservationIntegration integration,
+                final String objectType) {
+            super(id);
+            this.integration = integration;
+            this.preparation = new WicketPagePreparationObservation(
+                    WicketRenderObservationDescriptor.pagePreparation(objectType));
+            WicketRenderObservationBehavior.addTo(this,
+                    WicketRenderObservationDescriptor.page(objectType));
+        }
+
+        @Override
+        protected void onConfigure() {
+            preparation.configure(this, () -> super.onConfigure());
+        }
+
+        @Override
+        protected void onBeforeRender() {
+            preparation.beforeRender(() -> super.onBeforeRender());
+        }
+
+        @Override
+        protected void onDetach() {
+            preparation.detach(() -> super.onDetach());
         }
 
         @Override

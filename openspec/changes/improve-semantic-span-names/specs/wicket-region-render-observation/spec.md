@@ -20,6 +20,31 @@ The stable observation name SHALL remain `causeway.wicket.page.render`, and `cau
 
 ## ADDED Requirements
 
+### Requirement: Entity-page preparation observation
+When observation is active, the Wicket viewer SHALL create one `causeway.wicket.page.prepare` observation for entity-page initialization, component configuration, visibility and usability evaluation, and component-tree preparation performed before actual markup rendering.
+The observation SHALL use contextual name `prepare <logical-type-name>` and SHALL carry the complete logical type as `causeway.object.type`.
+
+#### Scenario: Full entity page is prepared
+- **WHEN** Wicket configures an entity page before a full server-side render
+- **THEN** the preparation observation starts before `EntityPage` delegates to `Page.onConfigure()`
+- **AND** it encloses page initialization and descendant component configuration and `onBeforeRender` callbacks
+- **AND** it closes before `causeway.wicket.page.render` begins
+- **AND** the preparation and render observations are consecutive descendants of the current request or Causeway interaction span
+
+#### Scenario: Mixed-in associations are evaluated during preparation
+- **WHEN** a visibility check, component initialization, or other pre-render operation evaluates a mixed-in property or collection
+- **THEN** the resulting `causeway.property.access` or `causeway.collection.access` observation is a descendant of `causeway.wicket.page.prepare`
+
+#### Scenario: Page preparation fails
+- **WHEN** configuration or pre-render preparation throws
+- **THEN** the preparation observation records the error and closes
+- **AND** no preparation scope remains active after request cleanup
+
+#### Scenario: Observation is inactive during preparation
+- **WHEN** Wicket prepares an entity page without the `observation` profile active
+- **THEN** page lifecycle behavior remains unchanged
+- **AND** no exported page-preparation span is produced
+
 ### Requirement: Action-prompt render observation
 When observation is active, the Wicket viewer SHALL create one `causeway.wicket.action.prompt.render` observation around each actual render callback of an enclosing action-parameter prompt panel.
 The observation SHALL use the contextual display name `prompt <logical-member-identifier>` and SHALL use the existing Wicket render lifecycle infrastructure.

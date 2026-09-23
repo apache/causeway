@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.executor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Provider;
 
@@ -43,21 +44,26 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 class MemberExecutorServiceDefaultObservationTest {
 
@@ -102,9 +108,57 @@ class MemberExecutorServiceDefaultObservationTest {
 
         assertSame(expected, actual);
         assertTrue(handler.events.stream().anyMatch(event -> event.contains(
-                "contextualName=invoke demo.ApplicationUser#updateEmailAddress")));
+                "contextualName=act demo.ApplicationUser#updateEmailAddress")));
         assertTrue(handler.events.stream().anyMatch(event -> event.contains(
                 "causeway.action.id=demo.ApplicationUser#updateEmailAddress()")));
+    }
+
+    @Test
+    void mixedInPropertyUsesDomainFacingAssociationIdentity() throws Exception {
+        final RecordingHandler handler = new RecordingHandler();
+        final MemberExecutorServiceDefault service = newService(registryWith(handler));
+        final ManagedObject expected = mock(ManagedObject.class);
+
+        final ManagedObject actual = service.invokeAction(
+                mixedInAssociationExecutor(expected, true, true));
+
+        assertSame(expected, actual);
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "name=causeway.property.access, contextualName=prop demo.Property#salesArea")));
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "causeway.property.id=demo.Property#salesArea")));
+        assertTrue(handler.events.stream().noneMatch(event -> event.contains(
+                "causeway.action.id=demo.Property_salesArea#prop()")));
+    }
+
+    @Test
+    void mixedInCollectionUsesDomainFacingAssociationIdentity() throws Exception {
+        final RecordingHandler handler = new RecordingHandler();
+        final MemberExecutorServiceDefault service = newService(registryWith(handler));
+        final ManagedObject expected = mock(ManagedObject.class);
+
+        final ManagedObject actual = service.invokeAction(
+                mixedInAssociationExecutor(expected, false, true));
+
+        assertSame(expected, actual);
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "name=causeway.collection.access, contextualName=coll demo.Property#orders")));
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "causeway.collection.id=demo.Property#orders")));
+    }
+
+    @Test
+    void unresolvedMixedInAssociationFallsBackToActionObservation() throws Exception {
+        final RecordingHandler handler = new RecordingHandler();
+        final MemberExecutorServiceDefault service = newService(registryWith(handler));
+        final ManagedObject expected = mock(ManagedObject.class);
+
+        final ManagedObject actual = service.invokeAction(
+                mixedInAssociationExecutor(expected, true, false));
+
+        assertSame(expected, actual);
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "name=causeway.action.invocation, contextualName=act demo.Property_salesArea#prop")));
     }
 
     @Test
@@ -248,6 +302,65 @@ class MemberExecutorServiceDefaultObservationTest {
                 mock(ActionInvocationFacetAbstract.class));
     }
 
+    private static ActionExecutor mixedInAssociationExecutor(
+            final ManagedObject adaptedResult,
+            final boolean property,
+            final boolean resolveAssociation) throws Exception {
+        final InvocationTarget targetPojo = new InvocationTarget();
+        final ManagedObject target = mock(ManagedObject.class);
+        when(target.getPojo()).thenReturn(targetPojo);
+
+        final ObjectSpecification mixeeSpec = mock(ObjectSpecification.class);
+        when(mixeeSpec.logicalTypeName()).thenReturn("demo.Property");
+        final ManagedObject owner = mock(ManagedObject.class);
+        when(owner.objSpec()).thenReturn(mixeeSpec);
+        final InteractionHead head = mock(InteractionHead.class);
+        when(head.getTarget()).thenReturn(target);
+        when(head.getOwner()).thenReturn(owner);
+
+        final ObjectAction owningAction = mock(ObjectAction.class);
+        final ObjectSpecification mixinSpec = mock(ObjectSpecification.class);
+        when(mixinSpec.logicalTypeName()).thenReturn("demo.Property_salesArea");
+        when(owningAction.getDeclaringType()).thenReturn(mixinSpec);
+        when(owningAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
+                LogicalType.eager(InvocationTarget.class, "demo.Property_salesArea"),
+                property ? "prop" : "coll"));
+
+        if(resolveAssociation) {
+            final ObjectAssociation association = mock(
+                    ObjectAssociation.class,
+                    withSettings().extraInterfaces(MixedInMember.class));
+            when(((MixedInMember) association).hasMixinAction(owningAction)).thenReturn(true);
+            when(association.isSingular()).thenReturn(property);
+            when(association.getFeatureIdentifier()).thenReturn(property
+                    ? Identifier.propertyIdentifier(
+                            LogicalType.eager(InvocationTarget.class, "demo.Property"),
+                            "salesArea")
+                    : Identifier.collectionIdentifier(
+                            LogicalType.eager(InvocationTarget.class, "demo.Property"),
+                            "orders"));
+            when(mixeeSpec.streamAssociations(any())).thenReturn(Stream.of(association));
+        } else {
+            when(mixeeSpec.streamAssociations(any())).thenReturn(Stream.empty());
+        }
+
+        final ObjectManager objectManager = mock(ObjectManager.class);
+        when(objectManager.adapt("ok")).thenReturn(adaptedResult);
+        final FacetHolder facetHolder = mock(FacetHolder.class);
+        when(facetHolder.getObjectManager()).thenReturn(objectManager);
+
+        return new ActionExecutor(
+                mock(MetaModelContext.class),
+                facetHolder,
+                InteractionInitiatedBy.PASS_THROUGH,
+                owningAction,
+                _MethodFacades.testing.regular(
+                        InvocationTarget.class.getDeclaredMethod("succeed")),
+                head,
+                Can.empty(),
+                mock(ActionInvocationFacetForMixedInPropertyOrCollection.class));
+    }
+
     private static String report(
             final String scenario,
             final List<String> checks,
@@ -279,6 +392,8 @@ class MemberExecutorServiceDefaultObservationTest {
                     + ", contextualName=" + context.getContextualName()
                     + ", parent=" + parentName
                     + ", causeway.action.id=" + value(context, "causeway.action.id")
+                    + ", causeway.property.id=" + value(context, "causeway.property.id")
+                    + ", causeway.collection.id=" + value(context, "causeway.collection.id")
                     + ", causeway.execution.initiatedBy="
                     + value(context, "causeway.execution.initiatedBy") + ")");
         }

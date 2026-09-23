@@ -35,9 +35,9 @@ class CausewayTracingObservationHandlerTest {
     void preservesContextualNameCasingAndPunctuation() {
         final Observation.Context context = new Observation.Context();
         context.setName("causeway.action.invocation");
-        context.setContextualName("invoke ApplicationUser#updateEmailAddress");
+        context.setContextualName("act ApplicationUser#updateEmailAddress");
 
-        assertEquals("invoke ApplicationUser#updateEmailAddress",
+        assertEquals("act ApplicationUser#updateEmailAddress",
                 handler.getSpanName(context));
     }
 

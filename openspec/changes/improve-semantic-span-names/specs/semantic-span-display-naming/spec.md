@@ -1,12 +1,12 @@
 ## ADDED Requirements
 
 ### Requirement: Meaningful action-invocation display name
-Causeway SHALL retain `causeway.action.invocation` as the stable observation name and SHALL assign each action-invocation observation the contextual display name `invoke <logical-member-identifier>`.
+Causeway SHALL retain `causeway.action.invocation` as the stable observation name and SHALL assign each action-invocation observation the contextual display name `act <logical-member-identifier>`.
 The logical member identifier SHALL be the domain-facing identity of the invoked action, including for actions implemented by mixins.
 
 #### Scenario: Declared action identity is available
 - **WHEN** Causeway invokes a declared action with observation active
-- **THEN** the exported span display name begins with `invoke ` and contains the action's logical type name and member id separated by `#`
+- **THEN** the exported span display name begins with `act ` and contains the action's logical type name and member id separated by `#`
 - **AND** the observation name remains `causeway.action.invocation`
 - **AND** `causeway.action.id` retains the full canonical action identifier
 
@@ -25,6 +25,29 @@ Causeway MUST NOT include domain-object instance identifiers, object titles, boo
 - **THEN** its contextual name contains no target-instance identity, object title, bookmark, or argument value
 - **AND** two invocations of the same logical action use the same contextual name
 
+### Requirement: Mixed-in association access identity
+Causeway SHALL recognize when an action invocation is the implementation mechanism for a mixed-in property or collection and SHALL represent it using the domain-facing association identity.
+A mixed-in property access SHALL use stable observation name `causeway.property.access`, contextual name `prop <logical-member-identifier>`, and canonical attribute `causeway.property.id`.
+A mixed-in collection access SHALL use stable observation name `causeway.collection.access`, contextual name `coll <logical-member-identifier>`, and canonical attribute `causeway.collection.id`.
+
+#### Scenario: Mixed-in property getter is evaluated
+- **WHEN** Causeway evaluates a mixed-in property implemented by `Property_salesAreaNonFoodTotal#prop`
+- **THEN** the exported contextual name identifies the domain-facing association, such as `prop Property#salesAreaNonFoodTotal`
+- **AND** the stable observation name is `causeway.property.access`
+- **AND** `causeway.property.id` contains the complete domain-facing property identifier
+- **AND** the span does not expose the implementation action as `causeway.action.id`
+
+#### Scenario: Mixed-in collection getter is evaluated
+- **WHEN** Causeway evaluates a mixed-in collection implemented by a `coll` action
+- **THEN** the exported contextual name begins with `coll ` and contains the domain-facing collection identifier
+- **AND** the stable observation name is `causeway.collection.access`
+- **AND** `causeway.collection.id` contains the complete domain-facing collection identifier
+
+#### Scenario: Association cannot be recovered
+- **WHEN** an invocation uses the mixed-in association facet but its domain-facing association cannot be resolved safely
+- **THEN** Causeway falls back to ordinary action-invocation instrumentation
+- **AND** the invocation remains observable
+
 ### Requirement: Canonical identity remains authoritative
 Causeway SHALL retain full canonical logical identifiers as span attributes when it uses compact or truncated contextual display names.
 Operators SHALL be able to use those attributes to disambiguate equal display names and to identify spans whose contextual names were truncated by the tracing integration.
@@ -35,7 +58,7 @@ Operators SHALL be able to use those attributes to disambiguate equal display na
 - **AND** their `causeway.action.id` attributes distinguish the actions
 
 #### Scenario: Full logical member name exceeds tracing limit
-- **WHEN** `invoke <logical-member-identifier>` exceeds 50 characters
+- **WHEN** an `act`, `prop`, or `coll` contextual name using the full logical member identifier exceeds 50 characters
 - **THEN** Causeway retries the display name using the logical type name without its namespace
 - **AND** the full canonical identity attribute remains unchanged
 
@@ -55,7 +78,7 @@ The specialized handling SHALL apply only to Causeway's dedicated observation re
 
 ### Requirement: Generic root-interaction naming
 Causeway SHALL retain `causeway.root.interaction` as the contextual and stable observation name for the root interaction.
-Semantic child spans SHALL describe action invocation, prompt rendering, and domain-object rendering rather than assigning one inferred purpose to the root.
+Semantic child spans SHALL describe action invocation, association access, page preparation, prompt rendering, and domain-object rendering rather than assigning one inferred purpose to the root.
 
 #### Scenario: Request performs multiple semantic operations
 - **WHEN** one request performs more than one semantic operation

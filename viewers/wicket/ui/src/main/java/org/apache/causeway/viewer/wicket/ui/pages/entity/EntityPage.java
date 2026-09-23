@@ -41,6 +41,7 @@ import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketPagePreparationObservation;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
@@ -71,6 +72,7 @@ public class EntityPage extends PageAbstract {
             new CssResourceReference(EntityPage.class, "EntityPage.css");
 
     private final UiObjectWkt model;
+    private final WicketPagePreparationObservation preparationObservation;
 
     // -- FACTORIES
 
@@ -122,15 +124,27 @@ public class EntityPage extends PageAbstract {
             final UiObjectWkt entityModel) {
         super(pageParameters, null/*titleString*/, UiComponentType.ENTITY);
         this.model = entityModel;
+        final String objectType = entityModel.getTypeOfSpecification().logicalTypeName();
+        this.preparationObservation = new WicketPagePreparationObservation(
+                WicketRenderObservationDescriptor.pagePreparation(objectType));
         WicketRenderObservationBehavior.addTo(this,
-                WicketRenderObservationDescriptor.page(
-                        entityModel.getTypeOfSpecification().logicalTypeName()));
+                WicketRenderObservationDescriptor.page(objectType));
+    }
+
+    @Override
+    protected void onConfigure() {
+        preparationObservation.configure(this, () -> super.onConfigure());
     }
 
     @Override
     protected void onInitialize() {
         buildPage();
         super.onInitialize();
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        preparationObservation.beforeRender(() -> super.onBeforeRender());
     }
 
     @Override
@@ -228,9 +242,12 @@ public class EntityPage extends PageAbstract {
     
     @Override
     protected void onDetach() {
-    	super.onDetach();
-    	//model.detach(); //v4
-    	FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
+        try {
+            preparationObservation.detach(() -> super.onDetach());
+        } finally {
+            //model.detach(); //v4
+            FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
+        }
     }
 
     // -- REFRESH ENTITIES
