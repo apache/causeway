@@ -78,7 +78,7 @@ Select `my-causeway-app-local` in Jaeger and look for these ordered boundaries:
 ----
 HTTP
   -> causeway.root.interaction
-      -> causeway.action.invocation
+      -> invoke update-name on customer
           -> JDBC
 ----
 
@@ -215,13 +215,18 @@ See link:https://learn.microsoft.com/en-us/azure/container-apps/environment-vari
 
 == What Causeway Adds
 
-With the `observation` profile active, Causeway adds two stable semantic spans:
+With the `observation` profile active, Causeway adds two core semantic observations:
 
-* `causeway.root.interaction` covers one top-level Causeway interaction;
-* `causeway.action.invocation` covers an action invocation.
+* `causeway.root.interaction` covers one top-level Causeway interaction and retains that stable span display name;
+* `causeway.action.invocation` covers an action invocation and uses a compact display name such as `invoke update-name on customer`.
 
+The stable observation name remains `causeway.action.invocation` even though the contextual name becomes the exported tracing span display name.
 Action spans carry the bounded attributes `causeway.action.id` and `causeway.execution.initiatedBy`.
-Causeway does not add action arguments, return values, target instance identifiers, user names, tenancy tokens, or other instance-specific application data to these semantic spans.
+The full `causeway.action.id` is authoritative for filtering and disambiguates actions whose compact display names are equal or truncated.
+
+Contextual names use normalized, lower-hyphen forms of static logical type and member names rather than localized friendly names.
+Micrometer Tracing 1.0.12 limits its normalized display name to 50 characters, so tracing backends can show a truncated contextual name while the canonical attributes remain complete.
+Causeway does not add action arguments, return values, target instance identifiers, object titles, bookmarks, user names, tenancy tokens, or other instance-specific application data to names or attributes on these semantic spans.
 
 === Wicket Entity Page Rendering
 
@@ -229,18 +234,28 @@ When the Wicket viewer renders an entity page, Causeway adds semantic spans for 
 
 [source,text]
 ----
-causeway.wicket.page.render
+render customer
 ├── causeway.wicket.fieldset.render
 │   ├── causeway.wicket.property.render
 │   └── causeway.wicket.action.render
 ├── causeway.wicket.collection.render
-└── causeway.wicket.action.render
+├── causeway.wicket.action.render
+└── prompt update-name on customer
 ----
 
 Ajax responses create spans only for the instrumented regions included in the partial render, so an Ajax trace need not contain `causeway.wicket.page.render`.
 Automatic JDBC spans become descendants of the active region span when database work occurs during that region's rendering.
 
+The entity-page observation retains the stable name `causeway.wicket.page.render` but uses a compact contextual display name such as `render customer`.
+Fieldset, property, collection, and action-button observations retain their stable names as display names.
+
+A parameterized action prompt creates one `causeway.wicket.action.prompt.render` observation around the enclosing prompt panel's actual render callback, with a compact display name such as `prompt update-name on customer`.
+The same semantic boundary applies to inline, modal, and sidebar presentation styles.
+It does not cover defaults, choices, validation, visibility, usability, authorization, or other prompt preparation completed outside that render callback.
+Individual action parameters do not create property render spans.
+
 Wicket spans use `causeway.object.type` together with the applicable bounded attribute `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id`, or `causeway.action.id`.
+The full canonical attributes remain authoritative when a page or prompt contextual name is compact, ambiguous, or truncated.
 These identifiers describe static application structure.
 Causeway does not attach property values, rendered labels, object titles, bookmarks, action arguments, user names, tenancy tokens, collection-row identities, or generated Wicket component paths.
 

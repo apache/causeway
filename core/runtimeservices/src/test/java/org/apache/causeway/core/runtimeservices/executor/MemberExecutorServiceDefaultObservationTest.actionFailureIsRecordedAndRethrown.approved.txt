@@ -7,10 +7,10 @@ This approval checks:
 - No current observation remains after failure.
 
 Observed lifecycle:
-1. onStart(name=causeway.action.invocation, parent=<none>, causeway.action.id=demo.Customer#updateName(), causeway.execution.initiatedBy=PASS_THROUGH)
+1. onStart(name=causeway.action.invocation, contextualName=invoke update-name on customer, parent=<none>, causeway.action.id=demo.Customer#updateName(), causeway.execution.initiatedBy=PASS_THROUGH)
 2. onScopeOpened(name=causeway.action.invocation)
 3. onScopeClosed(name=causeway.action.invocation)
 4. onError(type=ReflectiveActionException, message=IllegalStateException thrown while invoking fail action failed)
-5. onStop(name=causeway.action.invocation)
+5. onStop(name=causeway.action.invocation, contextualName=invoke update-name on customer)
 6. failure returned to caller: ReflectiveActionException: IllegalStateException thrown while invoking fail action failed
 7. current observation after failure: <none>

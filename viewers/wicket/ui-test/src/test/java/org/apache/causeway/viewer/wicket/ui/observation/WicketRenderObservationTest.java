@@ -49,6 +49,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationHandler;
@@ -82,6 +83,35 @@ class WicketRenderObservationTest {
         assertNull(observation.getContext().getLowCardinalityKeyValue("causeway.action.id"));
         assertEquals("<default>",
                 WicketRenderObservationDescriptor.fieldset(OBJECT_TYPE, null).getMemberId());
+    }
+
+    @Test
+    void pageAndPromptDescriptorsUseMeaningfulContextualNames() {
+        final ObservationRegistry registry = registryWith(new RecordingHandler());
+        final WicketRenderObservationDescriptor page =
+                WicketRenderObservationDescriptor.page(OBJECT_TYPE);
+        final WicketRenderObservationDescriptor prompt =
+                WicketRenderObservationDescriptor.actionPrompt(
+                        OBJECT_TYPE,
+                        OBJECT_TYPE + "#updateName()",
+                        "updateName");
+
+        final Observation pageObservation = page.customize(
+                Observation.createNotStarted(page.getRegion().getObservationName(), registry));
+        final Observation promptObservation = prompt.customize(
+                Observation.createNotStarted(prompt.getRegion().getObservationName(), registry));
+
+        assertEquals("causeway.wicket.page.render", pageObservation.getContext().getName());
+        assertEquals("render customer", pageObservation.getContext().getContextualName());
+        assertEquals("causeway.wicket.action.prompt.render", promptObservation.getContext().getName());
+        assertEquals("prompt update-name on customer",
+                promptObservation.getContext().getContextualName());
+        assertEquals(OBJECT_TYPE,
+                promptObservation.getContext().getLowCardinalityKeyValue(
+                        "causeway.object.type").getValue());
+        assertEquals(OBJECT_TYPE + "#updateName()",
+                promptObservation.getContext().getLowCardinalityKeyValue(
+                        "causeway.action.id").getValue());
     }
 
     @Test
@@ -164,23 +194,29 @@ class WicketRenderObservationTest {
                     "component", integration,
                     WicketRenderObservationDescriptor.page(OBJECT_TYPE));
             page.add(new ObservedContainer(
-                    "property", integration,
-                    WicketRenderObservationDescriptor.property(
-                            OBJECT_TYPE, OBJECT_TYPE + "#name")));
+                    "prompt", integration,
+                    WicketRenderObservationDescriptor.actionPrompt(
+                            OBJECT_TYPE,
+                            OBJECT_TYPE + "#updateName()",
+                            "updateName")));
 
             tester.startComponentInPage(page, Markup.of(
-                    "<div wicket:id='component'><span wicket:id='property'></span></div>"));
+                    "<div wicket:id='component'><span wicket:id='prompt'></span></div>"));
 
             assertEquals(List.of(
                     "causeway.wicket.page.render<-null",
-                    "causeway.wicket.property.render<-causeway.wicket.page.render"), handler.parents);
+                    "causeway.wicket.action.prompt.render<-causeway.wicket.page.render"),
+                    handler.parents);
+            assertEquals(List.of(
+                    "render customer",
+                    "prompt update-name on customer"), handler.contextualNames);
             assertEquals(List.of(
                     "start:causeway.wicket.page.render",
                     "scope-opened:causeway.wicket.page.render",
-                    "start:causeway.wicket.property.render",
-                    "scope-opened:causeway.wicket.property.render",
-                    "scope-closed:causeway.wicket.property.render",
-                    "stop:causeway.wicket.property.render",
+                    "start:causeway.wicket.action.prompt.render",
+                    "scope-opened:causeway.wicket.action.prompt.render",
+                    "scope-closed:causeway.wicket.action.prompt.render",
+                    "stop:causeway.wicket.action.prompt.render",
                     "scope-closed:causeway.wicket.page.render",
                     "stop:causeway.wicket.page.render"), handler.events);
             assertNull(integration.observationRegistry().getCurrentObservation());
@@ -195,12 +231,14 @@ class WicketRenderObservationTest {
                 new CausewayObservationIntegration(ObservationRegistry.NOOP);
         final WicketTester tester = new WicketTester();
         try {
-            final ObservedContainer property = new ObservedContainer(
+            final ObservedContainer prompt = new ObservedContainer(
                     "component", integration,
-                    WicketRenderObservationDescriptor.property(
-                            OBJECT_TYPE, OBJECT_TYPE + "#name"));
+                    WicketRenderObservationDescriptor.actionPrompt(
+                            OBJECT_TYPE,
+                            OBJECT_TYPE + "#updateName()",
+                            "updateName"));
 
-            tester.startComponentInPage(property, Markup.of(
+            tester.startComponentInPage(prompt, Markup.of(
                     "<span wicket:id='component'>value</span>"));
 
             tester.assertComponent("component", ObservedContainer.class);
@@ -255,16 +293,40 @@ class WicketRenderObservationTest {
     @Test
     void serializationRetainsDescriptorButNotActiveTelemetry() throws Exception {
         final WicketRenderObservationBehavior original = behaviorFor(
-                WicketRenderObservationDescriptor.fieldset(OBJECT_TYPE, "identity"));
+                WicketRenderObservationDescriptor.actionPrompt(
+                        OBJECT_TYPE, OBJECT_TYPE + "#updateName()", "updateName"));
         original.activate(new ObservationClosure());
 
         final WicketRenderObservationBehavior restored = roundTrip(original);
 
         assertFalse(restored.isActive());
-        assertEquals("causeway.wicket.fieldset.render",
+        assertEquals("causeway.wicket.action.prompt.render",
                 restored.descriptor().getRegion().getObservationName());
+        assertEquals("prompt update-name on customer",
+                restored.descriptor().getContextualName());
         assertEquals(OBJECT_TYPE, restored.descriptor().getObjectType());
-        assertEquals("identity", restored.descriptor().getMemberId());
+        assertEquals(OBJECT_TYPE + "#updateName()", restored.descriptor().getMemberId());
+    }
+
+    @Test
+    void actionParametersPanelHasOnePromptObservationBehavior() {
+        final Identifier actionId = Identifier.actionIdentifier(
+                LogicalType.eager(Object.class, OBJECT_TYPE), "updateName");
+        final ObjectAction action = mock(ObjectAction.class);
+        when(action.getFeatureIdentifier()).thenReturn(actionId);
+        final ActionModel actionModel = mock(ActionModel.class);
+        when(actionModel.getAction()).thenReturn(action);
+
+        final WicketTester tester = new WicketTester();
+        try {
+            final ActionParametersPanel panel =
+                    new ActionParametersPanel("prompt", actionModel);
+
+            assertEquals(1,
+                    panel.getBehaviors(WicketRenderObservationBehavior.class).size());
+        } finally {
+            tester.destroy();
+        }
     }
 
     @Test
@@ -386,6 +448,7 @@ class WicketRenderObservationTest {
         private final List<String> events = new ArrayList<>();
         private final List<String> errors = new ArrayList<>();
         private final List<String> parents = new ArrayList<>();
+        private final List<String> contextualNames = new ArrayList<>();
 
         @Override
         public boolean supportsContext(final Observation.Context context) {
@@ -395,6 +458,7 @@ class WicketRenderObservationTest {
         @Override
         public void onStart(final Observation.Context context) {
             events.add("start:" + context.getName());
+            contextualNames.add(context.getContextualName());
             parents.add(context.getName() + "<-" + (context.getParentObservation() != null
                     ? context.getParentObservation().getContextView().getName()
                     : "null"));
