@@ -18,15 +18,22 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
@@ -70,6 +77,7 @@ class RecordingNavigation_IntegTest extends CausewayIntegrationTestAbstract {
             ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX;
 
     @Inject private SpecificationLoader specificationLoader;
+    @Inject private CausewayBeanTypeRegistry beanTypeRegistry;
 
     @Test
     void cyclic_mixedIn_collections_boot_and_synthesize_navigation_actions() {
@@ -88,6 +96,37 @@ class RecordingNavigation_IntegTest extends CausewayIntegrationTestAbstract {
 
         assertTrue(parentSpec.getAction(PREFIX + "children", MixedIn.INCLUDED).isPresent(),
                 "expected navigation action for own collection 'children' on RecNavParent");
+    }
+
+    @Test
+    void action_element_type_is_introspected_and_explicit_member_order_is_retained() {
+        val specB = specificationLoader.specForTypeElseFail(RecNavCycleB.class);
+
+        val alpha = specB.getAction("alpha", MixedIn.INCLUDED).orElseThrow();
+        assertEquals(RecNavCycleA.class, alpha.getElementType().getCorrespondingClass());
+
+        val actionIds = specB.streamActions(ActionScope.ANY, MixedIn.INCLUDED)
+                .map(action -> action.getId())
+                .collect(Collectors.toList());
+        assertTrue(actionIds.indexOf("zulu") < actionIds.indexOf("alpha"),
+                "explicit member order must override class-name traversal order");
+    }
+
+    @Test
+    void registered_mixins_have_a_repeatable_class_name_order() {
+        final List<String> first = beanTypeRegistry.streamMixinTypes()
+                .map(Class::getName)
+                .collect(Collectors.toList());
+        final List<String> second = beanTypeRegistry.streamMixinTypes()
+                .map(Class::getName)
+                .collect(Collectors.toList());
+        final List<String> sorted = new ArrayList<>(first);
+        sorted.sort(String::compareTo);
+
+        assertEquals(sorted, first);
+        assertEquals(first, second);
+        assertTrue(first.contains("org.apache.causeway.testdomain.domainmodel.recordingnav.RecNavCycleB_alpha"));
+        assertTrue(first.contains("org.apache.causeway.testdomain.domainmodel.recordingnav.RecNavCycleB_zulu"));
     }
 
 }

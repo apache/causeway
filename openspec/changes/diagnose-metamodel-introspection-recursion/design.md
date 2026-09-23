@@ -91,6 +91,17 @@ Compare repeated starts and collect the emitted type chain if a failure occurs.
 Rollback consists of reverting the change; no persisted state is altered.
 Use the resulting chain to decide whether a follow-up should defer navigation synthesis, avoid fully introspecting inapplicable mixins, or otherwise flatten the dependency traversal.
 
+## Implementation Findings and Follow-up Recommendations
+
+The representative full-boot fixture now combines cyclic mixed-in collections with a plural action mixin whose element type loads another specification.
+It boots repeatedly with deterministic class-name mixin traversal, retains explicit action ordering that intentionally conflicts with class-name order, and passes with a constrained `-Xss256k` test JVM.
+The diagnostic test seam captures the participating type chain and confirms both `createMixedInAssociation` and action `elementSpec` loading paths.
+The previously failing external application was not available in this repository, and its exact JVM stack size remains unknown, so production capture is still needed to identify its domain-specific chain.
+
+A corrective follow-up should first consider filtering mixins by target metadata before requesting `FULLY_INTROSPECTED`, because the current implementation introspects every registered mixin before checking applicability.
+It should also consider moving navigation synthesis to an iterative phase after ordinary member post-processing has stabilized, rather than allowing synthesis and element-type derivation to recursively demand more fully introspected specifications.
+An explicit work queue is preferable to increasing JVM stack size because it bounds call depth while preserving dependency discovery.
+
 ## Open Questions
 
 - What JVM stack size was used by the failing process, and does it match the integration-test runtime?
