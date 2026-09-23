@@ -38,7 +38,7 @@ public final class WicketRenderObservationPolicy {
     public static Optional<WicketRenderObservationDescriptor> propertyDescriptor(
             final ScalarModel scalarModel) {
         if(!(scalarModel instanceof ScalarPropertyModel)
-                || scalarModel.getRenderingHint() != RenderingHint.REGULAR) {
+                || !isObservedPropertyHint(scalarModel.getRenderingHint())) {
             return Optional.empty();
         }
         final var featureId = scalarModel.getMetaModel().getFeatureIdentifier();
@@ -50,12 +50,23 @@ public final class WicketRenderObservationPolicy {
     public static Optional<WicketRenderObservationDescriptor> actionDescriptor(
             final ActionModel actionModel,
             final Where where) {
-        if(where != Where.OBJECT_FORMS || actionModel.getAssociatedParameter().isPresent()) {
+        if(!isObservedActionContext(where)
+                || actionModel.getAssociatedParameter().isPresent()) {
             return Optional.empty();
         }
         final var featureId = actionModel.getAction().getFeatureIdentifier();
         return Optional.of(WicketRenderObservationDescriptor.action(
                 featureId.logicalTypeName(),
                 featureId.getLogicalIdentityString("#")));
+    }
+
+    private static boolean isObservedPropertyHint(final RenderingHint renderingHint) {
+        return renderingHint == RenderingHint.REGULAR
+                || renderingHint == RenderingHint.PARENTED_PROPERTY_COLUMN;
+    }
+
+    private static boolean isObservedActionContext(final Where where) {
+        return where == Where.OBJECT_FORMS
+                || where == Where.PARENTED_TABLES;
     }
 }

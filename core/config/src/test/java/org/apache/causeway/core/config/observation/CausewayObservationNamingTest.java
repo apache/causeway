@@ -90,6 +90,9 @@ class CausewayObservationNamingTest {
         assertEquals("render collection roles",
                 CausewayObservationNaming.forRenderRegion(
                         "collection", "isisExtSecMan.ApplicationUser#roles"));
+        assertEquals("prepare collection roles",
+                CausewayObservationNaming.forRegion(
+                        "prepare", "collection", "isisExtSecMan.ApplicationUser#roles"));
         assertEquals("render action updateEmailAddress",
                 CausewayObservationNaming.forRenderRegion(
                         "action", "isisExtSecMan.ApplicationUser#updateEmailAddress()"));

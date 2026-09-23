@@ -87,6 +87,23 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Page preparation span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
+            final ExportedSpan collectionPreparationSpan = childSpanNamed(
+                    spans,
+                    preparationSpan,
+                    MicrometerTracingAgentFixture.COLLECTION_PREPARATION_NAME,
+                    result.output);
+            final ExportedSpan rowPreparationSpan = childSpanNamed(
+                    spans,
+                    collectionPreparationSpan,
+                    MicrometerTracingAgentFixture.ROW_PREPARATION_NAME,
+                    result.output);
+            final ExportedSpan preparationJdbcSpan = spans.stream()
+                    .filter(span -> rowPreparationSpan.traceId.equals(span.traceId))
+                    .filter(span -> rowPreparationSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> "h2".equals(span.attributes.get("db.system")))
+                    .findFirst()
+                    .orElseGet(() -> fail("Preparation JDBC span is not a child of row preparation.\n"
+                            + describe(spans) + "\n" + result.output));
             final ExportedSpan pageSpan = spans.stream()
                     .filter(span -> MicrometerTracingAgentFixture.PAGE_RENDER_NAME.equals(span.name))
                     .filter(span -> rootSpan.traceId.equals(span.traceId))
@@ -113,6 +130,21 @@ class MicrometerTracingCompatibilityTest {
                     spans,
                     pageSpan,
                     MicrometerTracingAgentFixture.COLLECTION_RENDER_NAME,
+                    result.output);
+            final ExportedSpan rowSpan = childSpanNamed(
+                    spans,
+                    collectionSpan,
+                    MicrometerTracingAgentFixture.ROW_RENDER_NAME,
+                    result.output);
+            final ExportedSpan rowPropertySpan = childSpanNamed(
+                    spans,
+                    rowSpan,
+                    MicrometerTracingAgentFixture.ROW_PROPERTY_RENDER_NAME,
+                    result.output);
+            final ExportedSpan rowActionSpan = childSpanNamed(
+                    spans,
+                    rowSpan,
+                    MicrometerTracingAgentFixture.ROW_ACTION_RENDER_NAME,
                     result.output);
             final ExportedSpan promptSpan = childSpanNamed(
                     spans,
@@ -141,6 +173,15 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     preparationSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    collectionPreparationSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    collectionPreparationSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.ROW_OBJECT_TYPE,
+                    rowPreparationSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    rowPreparationSpan.attributes.get("causeway.collection.id"));
+            assertEquals("h2", preparationJdbcSpan.attributes.get("db.system"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     pageSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     promptSpan.attributes.get("causeway.object.type"));
@@ -150,17 +191,30 @@ class MicrometerTracingCompatibilityTest {
                     fieldsetSpan.attributes.get("causeway.fieldset.id"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE + "#emailAddress",
                     propertySpan.attributes.get("causeway.property.id"));
-            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE + "#roles",
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
                     collectionSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.ROW_OBJECT_TYPE,
+                    rowSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
+                    rowSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.ROW_PROPERTY_ID,
+                    rowPropertySpan.attributes.get("causeway.property.id"));
+            assertEquals(MicrometerTracingAgentFixture.ROW_ACTION_ID,
+                    rowActionSpan.attributes.get("causeway.action.id"));
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionRenderSpan.attributes.get("causeway.action.id"));
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s page=%s prompt=%s action=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s row=%s prompt=%s action=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
                     preparationSpan.name,
+                    collectionPreparationSpan.name,
+                    rowPreparationSpan.name,
+                    preparationJdbcSpan.name,
                     pageSpan.name,
+                    collectionSpan.name,
+                    rowSpan.name,
                     promptSpan.name,
                     actionSpan.name,
                     jdbcSpan.spanId);

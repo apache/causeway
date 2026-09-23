@@ -7,7 +7,7 @@ The same trace showed the role collection query followed by sixteen per-role que
 The standard Ajax table is built by `CollectionContentsAsAjaxTablePanel` and `CausewayAjaxDataTable`.
 Wicket invokes data-provider iteration and row population during the table's `onBeforeRender()` lifecycle, before behavior-based actual-render observations begin.
 `CausewayAjaxDataTable.newRowItem(...)` is the common server-side render boundary for each visible `DataRow`, the row item-factory callback encloses synchronous row population, and `GenericColumnAbstract.populateItem(...)` creates each cell beneath that row.
-Property cells become `ScalarPanelAbstract` components with `RenderingHint.PARENTED_PROPERTY_COLUMN`, and action-column cells create `ActionLink` components using the `Where.ALL_TABLES` context.
+Property cells become `ScalarPanelAbstract` components with `RenderingHint.PARENTED_PROPERTY_COLUMN`, and action-column cells create `ActionLink` components using the concrete parented or standalone table context.
 
 The existing `WicketRenderObservationBehavior`, request-local tracker, serializable descriptors, case-preserving naming helper, and no-op observation integration already provide the required lifecycle and trace-parenting infrastructure.
 
@@ -39,12 +39,13 @@ The existing `WicketRenderObservationBehavior`, request-local tracker, serializa
 ### Separate collection preparation from collection rendering
 
 A parented entity collection will create a `causeway.wicket.collection.prepare` observation with contextual name `prepare collection <collectionId>`.
-The observation will start before the collection subtree's Wicket configuration and `onBeforeRender()` work and stop after descendant preparation completes, while the enclosing page preparation observation remains current.
+The observation will start when the visible collection enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree, and stop after descendant preparation completes while the enclosing page preparation observation remains current.
 It therefore owns data-provider sizing and iteration, collection loading, visible-row selection and population, and automatic JDBC work initiated by those operations.
 The existing `causeway.wicket.collection.render` observation remains a separate sibling phase that owns only actual markup rendering.
 
 The preparation implementation will reuse or generalize the page-preparation lifecycle coordinator so failures are recorded, scopes close in order, detach provides cleanup, active state remains transient, and inactive observation remains a no-op.
-Starting collection preparation from `WicketRenderObservationBehavior.beforeRender(...)` was rejected because Wicket invokes that callback only after data-provider iteration and descendant `onBeforeRender()` work have completed.
+Starting collection preparation during the collection component's `onConfigure()` was rejected because an invisible component might never receive `onBeforeRender()` and could leave its scope active until detach.
+Starting it from `WicketRenderObservationBehavior.beforeRender(...)` was also rejected because Wicket invokes that callback only after data-provider iteration and descendant `onBeforeRender()` work have completed.
 
 ### Observe synchronous row preparation
 
@@ -82,7 +83,7 @@ Bookmarks and titles were rejected as instance-specific and potentially sensitiv
 `WicketRenderObservationPolicy.propertyDescriptor(...)` will include scalar property models using `RenderingHint.PARENTED_PROPERTY_COLUMN` in addition to regular object-form properties.
 The existing stable name `causeway.wicket.property.render`, contextual name `render property <propertyId>`, and canonical `causeway.property.id` will remain unchanged.
 
-`WicketRenderObservationPolicy.actionDescriptor(...)` will include applicable action links rendered in the `Where.ALL_TABLES` context.
+`ActionColumn` will pass its concrete collection variant context, and `WicketRenderObservationPolicy.actionDescriptor(...)` will include applicable action links rendered in the `Where.PARENTED_TABLES` context while excluding `Where.STANDALONE_TABLES`.
 The existing stable name `causeway.wicket.action.render`, contextual name `render action <actionId>`, and canonical `causeway.action.id` will remain unchanged.
 
 Because these components are descendants of the row item, the existing behavior and tracker will establish row parentage without explicit trace-parent wiring.
@@ -126,4 +127,4 @@ Rollback consists of reverting collection and row preparation, removing row rend
 - Confirm during implementation the narrowest parented collection lifecycle callback that encloses data-provider iteration without extending into actual rendering.
 - Confirm whether the Ajax table item-reuse strategy provides one synchronous preparation callback for both newly created and reused visible rows, or whether reused rows need an equivalent boundary.
 - Confirm during implementation whether every supported parented collection table presentation uses `CausewayAjaxDataTable.newRowItem(...)` or whether an additional server-side row render boundary requires equivalent instrumentation.
-- Confirm that row actions created outside `ActionColumn` but rendered with `Where.ALL_TABLES` should follow the same inclusion rule without capturing service-menu actions.
+- Confirm that row actions created outside `ActionColumn` but rendered in the concrete `Where.PARENTED_TABLES` context follow the same inclusion rule without capturing standalone-table or service-menu actions.

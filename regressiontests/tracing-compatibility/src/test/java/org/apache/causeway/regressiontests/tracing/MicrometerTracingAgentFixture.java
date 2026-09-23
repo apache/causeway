@@ -97,15 +97,24 @@ public final class MicrometerTracingAgentFixture {
     static final String ACTION_INVOCATION_NAME =
             "act causeway.TracingFixture#executeJdbc";
     static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
+    static final String COLLECTION_PREPARATION_NAME = "prepare collection roles";
+    static final String ROW_PREPARATION_NAME = "prepare row causeway.TracingRole";
     static final String PAGE_RENDER_NAME = "render causeway.TracingFixture";
     static final String FIELDSET_RENDER_NAME = "render fieldset identity";
     static final String PROPERTY_RENDER_NAME = "render property emailAddress";
     static final String COLLECTION_RENDER_NAME = "render collection roles";
+    static final String ROW_RENDER_NAME = "render row causeway.TracingRole";
+    static final String ROW_PROPERTY_RENDER_NAME = "render property name";
     static final String ACTION_RENDER_NAME = "render action executeJdbc";
+    static final String ROW_ACTION_RENDER_NAME = "render action update";
     static final String PROMPT_RENDER_NAME =
             "prompt causeway.TracingFixture#executeJdbc";
     static final String ACTION_ID = "causeway.TracingFixture#executeJdbc()";
     static final String OBJECT_TYPE = "causeway.TracingFixture";
+    static final String COLLECTION_ID = OBJECT_TYPE + "#roles";
+    static final String ROW_OBJECT_TYPE = "causeway.TracingRole";
+    static final String ROW_PROPERTY_ID = ROW_OBJECT_TYPE + "#name";
+    static final String ROW_ACTION_ID = ROW_OBJECT_TYPE + "#update()";
     static final String SUCCESS_MARKER = "CAUSEWAY_TRACING_FIXTURE_OK";
 
     private MicrometerTracingAgentFixture() {
@@ -168,6 +177,12 @@ public final class MicrometerTracingAgentFixture {
         private void renderPageAndPrompt() {
             final WicketRenderObservationDescriptor preparation =
                     WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE);
+            final WicketRenderObservationDescriptor collectionPreparation =
+                    WicketRenderObservationDescriptor.collectionPreparation(
+                            OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor rowPreparation =
+                    WicketRenderObservationDescriptor.rowPreparation(
+                            ROW_OBJECT_TYPE, COLLECTION_ID);
             final WicketRenderObservationDescriptor page =
                     WicketRenderObservationDescriptor.page(OBJECT_TYPE);
             final WicketRenderObservationDescriptor fieldset =
@@ -177,20 +192,34 @@ public final class MicrometerTracingAgentFixture {
                             OBJECT_TYPE, OBJECT_TYPE + "#emailAddress");
             final WicketRenderObservationDescriptor collection =
                     WicketRenderObservationDescriptor.collection(
-                            OBJECT_TYPE, OBJECT_TYPE + "#roles");
+                            OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor row =
+                    WicketRenderObservationDescriptor.row(
+                            ROW_OBJECT_TYPE, COLLECTION_ID);
+            final WicketRenderObservationDescriptor rowProperty =
+                    WicketRenderObservationDescriptor.property(
+                            ROW_OBJECT_TYPE, ROW_PROPERTY_ID);
+            final WicketRenderObservationDescriptor rowAction =
+                    WicketRenderObservationDescriptor.action(
+                            ROW_OBJECT_TYPE, ROW_ACTION_ID);
             final WicketRenderObservationDescriptor action =
                     WicketRenderObservationDescriptor.action(
                             OBJECT_TYPE, ACTION_ID);
             final WicketRenderObservationDescriptor prompt =
                     WicketRenderObservationDescriptor.actionPrompt(
                             OBJECT_TYPE, ACTION_ID, "executeJdbc");
-            observe(preparation, () -> {});
+            observe(preparation, () -> observe(
+                    collectionPreparation,
+                    () -> observe(rowPreparation, this::executePreparationJdbc)));
             observe(page, () -> {
                 observe(fieldset, () -> {
                     observe(property, () -> {});
                     observe(action, () -> {});
                 });
-                observe(collection, () -> {});
+                observe(collection, () -> observe(row, () -> {
+                    observe(rowProperty, () -> {});
+                    observe(rowAction, () -> {});
+                }));
                 observe(prompt, () -> {});
             });
         }
@@ -201,6 +230,22 @@ public final class MicrometerTracingAgentFixture {
             descriptor.customize(observationIntegration.createNotStarted(
                     getClass(), descriptor.getRegion().getObservationName()))
                     .observe(rendering);
+        }
+
+        private void executePreparationJdbc() {
+            try {
+                Class.forName("org.h2.Driver");
+                try (Connection connection = DriverManager.getConnection(
+                        "jdbc:h2:mem:causeway-tracing;DB_CLOSE_DELAY=-1");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("select 1")) {
+                    if(!resultSet.next() || resultSet.getInt(1) != 1) {
+                        throw new IllegalStateException("Unexpected preparation JDBC probe result");
+                    }
+                }
+            } catch (Exception ex) {
+                throw new IllegalStateException("Preparation JDBC probe failed", ex);
+            }
         }
     }
 

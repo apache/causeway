@@ -37,6 +37,7 @@ import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketPreparationObservation;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
@@ -78,16 +79,20 @@ implements HasDynamicallyVisibleContent {
 
     private final CollectionLayoutData layoutData;
     private final WebMarkupContainer div;
+    private final WicketPreparationObservation preparationObservation;
 
     public EntityCollectionPanel(final String id, final UiObjectWkt entityModel, final CollectionLayoutData layoutData) {
         super(id, entityModel);
 
         this.layoutData = layoutData;
+        final String objectType = entityModel.getTypeOfSpecification().logicalTypeName();
+        final String collectionId = objectType + "#" + layoutData.getId();
+        this.preparationObservation = new WicketPreparationObservation(
+                WicketRenderObservationDescriptor.collectionPreparation(
+                        objectType, collectionId));
         WicketRenderObservationBehavior.addTo(this,
                 WicketRenderObservationDescriptor.collection(
-                        entityModel.getTypeOfSpecification().logicalTypeName(),
-                        entityModel.getTypeOfSpecification().logicalTypeName()
-                                + "#" + layoutData.getId()));
+                        objectType, collectionId));
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
@@ -115,10 +120,20 @@ implements HasDynamicallyVisibleContent {
     }
 
     @Override
+    protected void onBeforeRender() {
+        preparationObservation.prepare(this, () -> super.onBeforeRender());
+    }
+
+    @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         tableDecorator().ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
+    }
+
+    @Override
+    protected void onDetach() {
+        preparationObservation.detach(() -> super.onDetach());
     }
 
     // -- HELPER

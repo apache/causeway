@@ -241,25 +241,39 @@ When the Wicket viewer renders an entity page, Causeway adds semantic spans for 
 ----
 prepare demo.Customer
 ├── prop demo.Customer#calculatedTotal
-└── coll demo.Customer#recentOrders
+├── coll demo.Customer#recentOrders
+└── prepare collection roles
+    ├── JDBC collection load
+    ├── prepare row demo.Role
+    │   └── JDBC lazy load
+    └── prepare row demo.Role
 render demo.Customer
 ├── render fieldset identity
 │   ├── render property emailAddress
 │   └── render action updateEmailAddress
 ├── render collection roles
+│   ├── render row demo.Role
+│   │   ├── render property name
+│   │   └── render action update
+│   └── render row demo.Role
 └── prompt demo.Customer#updateEmailAddress
 ----
 
-Ajax responses create spans only for the instrumented regions included in the partial render, so an Ajax trace need not contain `causeway.wicket.page.render`.
-Automatic JDBC spans become descendants of the active region span when database work occurs during that region's rendering.
+Ajax responses create spans only for the instrumented regions included in the partial response, so an Ajax trace need not contain `causeway.wicket.page.render` and contains no row observations for off-page rows.
+Automatic JDBC spans become descendants of whichever preparation or render region is active when the database work occurs.
 
 The entity-page preparation observation uses stable name `causeway.wicket.page.prepare` and a contextual display name such as `prepare demo.Customer`.
 It starts before Wicket delegates to `Page.onConfigure()`, so it covers initial page construction, descendant component configuration, visibility and usability evaluation, and other `onBeforeRender` preparation.
-It closes before actual markup rendering begins.
-Mixed-in association evaluations during that phase therefore appear beneath the preparation span using their domain-facing `prop` or `coll` identity rather than the underlying implementation action.
+Each visible parented entity collection adds a `causeway.wicket.collection.prepare` child such as `prepare collection roles` when it enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree.
+This collection preparation span owns data-provider sizing and iteration, collection loading, visible-row selection and population, and Java-agent JDBC spans initiated there.
+Each synchronous visible-row population callback adds a `causeway.wicket.collection.row.prepare` child such as `prepare row demo.Role`.
+Collection-fetch work completed before iteration reaches an individual row remains directly beneath collection preparation.
+All preparation observations close before actual markup rendering begins.
+Mixed-in association evaluations during preparation therefore appear using their domain-facing `prop` or `coll` identity rather than the underlying implementation action.
 
 The entity-page rendering observation retains the stable name `causeway.wicket.page.render` but uses a contextual display name such as `render demo.Customer`.
-Fieldset, property, collection, and action-button observations retain their stable observation names but use contextual display names of the forms `render fieldset <fieldsetId>`, `render property <propertyId>`, `render collection <collectionId>`, and `render action <actionId>`.
+Fieldset, property, collection, row, and action-button observations use contextual display names of the forms `render fieldset <fieldsetId>`, `render property <propertyId>`, `render collection <collectionId>`, `render row <logicalTypeName>`, and `render action <actionId>`.
+Each `causeway.wicket.collection.row.render` observation encloses the actual Wicket render callback for one visible row, with logical property-cell and eligible row-action observations as children.
 The unnamed fieldset is displayed as `render fieldset default`.
 
 A parameterized action prompt creates one `causeway.wicket.action.prompt.render` observation around the enclosing prompt panel's actual render callback, with a display name such as `prompt demo.Customer#updateName`.
@@ -273,12 +287,15 @@ The full canonical attributes remain authoritative when any contextual name omit
 These identifiers describe static application structure.
 Causeway does not attach property values, rendered labels, object titles, bookmarks, action arguments, user names, tenancy tokens, collection-row identities, or generated Wicket component paths.
 
-The initial Wicket instrumentation deliberately excludes collection table cells, collection row actions, action parameters, service menus, and browser-side rendering.
-It measures the actual Wicket render callback and descendant work performed during that callback.
-Component construction, initialization, configuration, visibility, usability, and authorization work performed before rendering can therefore remain directly beneath the request or root-interaction span.
+Collection and row observations apply only to parented entity collections that have a canonical `causeway.collection.id`.
+Standalone action-result tables, action parameters, service menus, headers, navigation controls, selection checkboxes, presentation-only cells, empty placeholders, and browser-side rendering remain excluded.
+Preparation and render row names deliberately repeat for rows of the same logical type, and no row index or instance identifier is added.
+
+Collection-heavy pages intentionally create observations in proportion to the visible rows and their logical property and action cells.
+Pagination and Ajax partial responses bound this growth to participating rows, and operators should use Java-agent or collector sampling and appropriate page sizes to control production trace volume.
 
 Without the `observation` profile, the existing no-op registry prevents these spans from being exported and Wicket output remains unchanged.
-The Java agent continues to own sampling and export when Wicket observations are active.
+The Java agent continues to own automatic HTTP and JDBC instrumentation, sampling, and export when Wicket observations are active.
 
 === Filter Foreground and Background Traces
 

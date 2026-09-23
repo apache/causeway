@@ -74,8 +74,15 @@ public final class CausewayObservationNaming {
     public static String forRenderRegion(
             final String region,
             final String identifier) {
-        return bounded("render "
-                + requireText(region, "region")
+        return forRegion("render", region, identifier);
+    }
+
+    public static String forRegion(
+            final String operation,
+            final String region,
+            final String identifier) {
+        return bounded(requireText(operation, "operation")
+                + " " + requireText(region, "region")
                 + " " + regionIdentifier(identifier));
     }
 

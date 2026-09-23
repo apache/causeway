@@ -119,8 +119,17 @@ implements CollectionCountProvider {
         addActionsColumnIfRequired(elementType, columns);
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
+        final String collectionId = collectionModel.getVariant().isParented()
+                ? collectionModel.getIdentifier().getLogicalIdentityString("#")
+                : null;
         val dataTable = new CausewayAjaxDataTable(
-                ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
+                ID_TABLE,
+                columns,
+                dataProvider,
+                collectionModel.getPageSize(),
+                toggleboxColumn,
+                elementType.logicalTypeName(),
+                collectionId);
         addOrReplace(dataTable);
     }
 

@@ -43,16 +43,22 @@ public final class WicketRenderObservationDescriptor implements Serializable {
     @RequiredArgsConstructor
     @Getter
     public enum Region {
-        PAGE_PREPARATION("causeway.wicket.page.prepare", null),
-        PAGE("causeway.wicket.page.render", null),
-        FIELDSET("causeway.wicket.fieldset.render", "causeway.fieldset.id"),
-        PROPERTY("causeway.wicket.property.render", "causeway.property.id"),
-        COLLECTION("causeway.wicket.collection.render", "causeway.collection.id"),
-        ACTION("causeway.wicket.action.render", "causeway.action.id"),
-        ACTION_PROMPT("causeway.wicket.action.prompt.render", "causeway.action.id");
+        PAGE_PREPARATION("causeway.wicket.page.prepare", null, true),
+        COLLECTION_PREPARATION(
+                "causeway.wicket.collection.prepare", "causeway.collection.id", true),
+        ROW_PREPARATION(
+                "causeway.wicket.collection.row.prepare", "causeway.collection.id", true),
+        PAGE("causeway.wicket.page.render", null, false),
+        FIELDSET("causeway.wicket.fieldset.render", "causeway.fieldset.id", false),
+        PROPERTY("causeway.wicket.property.render", "causeway.property.id", false),
+        COLLECTION("causeway.wicket.collection.render", "causeway.collection.id", false),
+        ROW("causeway.wicket.collection.row.render", "causeway.collection.id", false),
+        ACTION("causeway.wicket.action.render", "causeway.action.id", false),
+        ACTION_PROMPT("causeway.wicket.action.prompt.render", "causeway.action.id", false);
 
         private final String observationName;
         private final String memberTag;
+        private final boolean preparation;
     }
 
     public static WicketRenderObservationDescriptor pagePreparation(final String objectType) {
@@ -88,11 +94,44 @@ public final class WicketRenderObservationDescriptor implements Serializable {
                 Region.PROPERTY, objectType, propertyId, "property");
     }
 
+    public static WicketRenderObservationDescriptor collectionPreparation(
+            final String objectType,
+            final String collectionId) {
+        return new WicketRenderObservationDescriptor(
+                Region.COLLECTION_PREPARATION,
+                objectType,
+                collectionId,
+                CausewayObservationNaming.forRegion(
+                        "prepare", "collection", collectionId));
+    }
+
+    public static WicketRenderObservationDescriptor rowPreparation(
+            final String elementObjectType,
+            final String collectionId) {
+        return new WicketRenderObservationDescriptor(
+                Region.ROW_PREPARATION,
+                elementObjectType,
+                collectionId,
+                CausewayObservationNaming.forType(
+                        "prepare row", elementObjectType));
+    }
+
     public static WicketRenderObservationDescriptor collection(
             final String objectType,
             final String collectionId) {
         return regionDescriptor(
                 Region.COLLECTION, objectType, collectionId, "collection");
+    }
+
+    public static WicketRenderObservationDescriptor row(
+            final String elementObjectType,
+            final String collectionId) {
+        return new WicketRenderObservationDescriptor(
+                Region.ROW,
+                elementObjectType,
+                collectionId,
+                CausewayObservationNaming.forType(
+                        "render row", elementObjectType));
     }
 
     public static WicketRenderObservationDescriptor action(
