@@ -66,6 +66,11 @@
             <artifactId>causeway-core-webapp</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-wicket-ui</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Keep this version under Spring Boot 2.7.18 dependency management. -->
         <dependency>

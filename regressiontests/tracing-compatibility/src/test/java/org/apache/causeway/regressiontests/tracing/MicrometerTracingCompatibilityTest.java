@@ -80,6 +80,20 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Action span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
+            final ExportedSpan pageSpan = spans.stream()
+                    .filter(span -> MicrometerTracingAgentFixture.PAGE_RENDER_NAME.equals(span.name))
+                    .filter(span -> rootSpan.traceId.equals(span.traceId))
+                    .filter(span -> rootSpan.spanId.equals(span.parentSpanId))
+                    .findFirst()
+                    .orElseGet(() -> fail("Page render span is not a child of the root interaction.\n"
+                            + describe(spans) + "\n" + result.output));
+            final ExportedSpan promptSpan = spans.stream()
+                    .filter(span -> MicrometerTracingAgentFixture.PROMPT_RENDER_NAME.equals(span.name))
+                    .filter(span -> pageSpan.traceId.equals(span.traceId))
+                    .filter(span -> pageSpan.spanId.equals(span.parentSpanId))
+                    .findFirst()
+                    .orElseGet(() -> fail("Prompt render span is not a child of the page render.\n"
+                            + describe(spans) + "\n" + result.output));
             final ExportedSpan jdbcSpan = spans.stream()
                     .filter(span -> actionSpan.traceId.equals(span.traceId))
                     .filter(span -> actionSpan.spanId.equals(span.parentSpanId))
@@ -97,12 +111,22 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(httpSpan.traceId, rootSpan.traceId);
             assertEquals(rootSpan.traceId, actionSpan.traceId);
             assertEquals(actionSpan.traceId, jdbcSpan.traceId);
+            assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
+                    actionSpan.attributes.get("causeway.action.id"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    pageSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    promptSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
+                    promptSpan.attributes.get("causeway.action.id"));
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s actionSpanId=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s page=%s prompt=%s action=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
-                    actionSpan.spanId,
+                    pageSpan.name,
+                    promptSpan.name,
+                    actionSpan.name,
                     jdbcSpan.spanId);
         }
     }

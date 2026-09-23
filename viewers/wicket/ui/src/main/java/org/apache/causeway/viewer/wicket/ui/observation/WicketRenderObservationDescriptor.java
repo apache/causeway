@@ -26,6 +26,8 @@ import io.micrometer.observation.Observation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+
 /**
  * Serializable, instance-data-free description of a semantic Wicket render region.
  *
@@ -45,20 +47,25 @@ public final class WicketRenderObservationDescriptor implements Serializable {
         FIELDSET("causeway.wicket.fieldset.render", "causeway.fieldset.id"),
         PROPERTY("causeway.wicket.property.render", "causeway.property.id"),
         COLLECTION("causeway.wicket.collection.render", "causeway.collection.id"),
-        ACTION("causeway.wicket.action.render", "causeway.action.id");
+        ACTION("causeway.wicket.action.render", "causeway.action.id"),
+        ACTION_PROMPT("causeway.wicket.action.prompt.render", "causeway.action.id");
 
         private final String observationName;
         private final String memberTag;
     }
 
     public static WicketRenderObservationDescriptor page(final String objectType) {
-        return new WicketRenderObservationDescriptor(Region.PAGE, objectType, null);
+        return new WicketRenderObservationDescriptor(
+                Region.PAGE,
+                objectType,
+                null,
+                CausewayObservationNaming.forType("render", objectType));
     }
 
     public static WicketRenderObservationDescriptor fieldset(
             final String objectType,
             final String fieldsetId) {
-        return new WicketRenderObservationDescriptor(
+        return stableDescriptor(
                 Region.FIELDSET,
                 objectType,
                 fieldsetId != null && !fieldsetId.isEmpty() ? fieldsetId : "<default>");
@@ -67,31 +74,54 @@ public final class WicketRenderObservationDescriptor implements Serializable {
     public static WicketRenderObservationDescriptor property(
             final String objectType,
             final String propertyId) {
-        return new WicketRenderObservationDescriptor(Region.PROPERTY, objectType, propertyId);
+        return stableDescriptor(Region.PROPERTY, objectType, propertyId);
     }
 
     public static WicketRenderObservationDescriptor collection(
             final String objectType,
             final String collectionId) {
-        return new WicketRenderObservationDescriptor(Region.COLLECTION, objectType, collectionId);
+        return stableDescriptor(Region.COLLECTION, objectType, collectionId);
     }
 
     public static WicketRenderObservationDescriptor action(
             final String objectType,
             final String actionId) {
-        return new WicketRenderObservationDescriptor(Region.ACTION, objectType, actionId);
+        return stableDescriptor(Region.ACTION, objectType, actionId);
+    }
+
+    public static WicketRenderObservationDescriptor actionPrompt(
+            final String objectType,
+            final String actionId,
+            final String actionMemberName) {
+        return new WicketRenderObservationDescriptor(
+                Region.ACTION_PROMPT,
+                objectType,
+                actionId,
+                CausewayObservationNaming.forMember(
+                        "prompt", objectType, actionMemberName));
+    }
+
+    private static WicketRenderObservationDescriptor stableDescriptor(
+            final Region region,
+            final String objectType,
+            final String memberId) {
+        return new WicketRenderObservationDescriptor(
+                region, objectType, memberId, region.getObservationName());
     }
 
     private final Region region;
     private final String objectType;
     private final String memberId;
+    private final String contextualName;
 
     private WicketRenderObservationDescriptor(
             final Region region,
             final String objectType,
-            final String memberId) {
+            final String memberId,
+            final String contextualName) {
         this.region = Objects.requireNonNull(region, "region");
         this.objectType = Objects.requireNonNull(objectType, "objectType");
+        this.contextualName = Objects.requireNonNull(contextualName, "contextualName");
         if(region.getMemberTag() != null) {
             this.memberId = Objects.requireNonNull(memberId, "memberId");
         } else {
@@ -101,7 +131,7 @@ public final class WicketRenderObservationDescriptor implements Serializable {
 
     public Observation customize(final Observation observation) {
         Observation customized = observation
-                .contextualName(region.getObservationName())
+                .contextualName(contextualName)
                 .lowCardinalityKeyValue(OBJECT_TYPE_TAG, objectType);
         if(region.getMemberTag() != null) {
             customized = customized.lowCardinalityKeyValue(region.getMemberTag(), memberId);

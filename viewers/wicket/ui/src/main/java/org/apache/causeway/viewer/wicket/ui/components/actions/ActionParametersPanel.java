@@ -24,6 +24,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -48,6 +50,12 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
     public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
+        final var actionIdentifier = actionModel.getAction().getFeatureIdentifier();
+        WicketRenderObservationBehavior.addTo(this,
+                WicketRenderObservationDescriptor.actionPrompt(
+                        actionIdentifier.logicalTypeName(),
+                        actionIdentifier.getLogicalIdentityString("#"),
+                        actionIdentifier.memberLogicalName()));
     }
 
     ActionModel getActionModel() {

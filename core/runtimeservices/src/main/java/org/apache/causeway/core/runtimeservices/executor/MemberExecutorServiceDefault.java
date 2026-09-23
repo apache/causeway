@@ -50,6 +50,7 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -142,11 +143,13 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        final String actionId = actionExecutor.getOwningAction()
-                .getFeatureIdentifier()
-                .getLogicalIdentityString("#");
+        final var actionIdentifier = actionExecutor.getOwningAction().getFeatureIdentifier();
+        final String actionId = actionIdentifier.getLogicalIdentityString("#");
         return observationProvider().get(ACTION_OBSERVATION_NAME)
-                .contextualName(ACTION_OBSERVATION_NAME)
+                .contextualName(CausewayObservationNaming.forMember(
+                        "invoke",
+                        actionIdentifier.logicalTypeName(),
+                        actionIdentifier.memberLogicalName()))
                 .lowCardinalityKeyValue(ACTION_ID_TAG, actionId)
                 .lowCardinalityKeyValue(
                         INITIATED_BY_TAG,

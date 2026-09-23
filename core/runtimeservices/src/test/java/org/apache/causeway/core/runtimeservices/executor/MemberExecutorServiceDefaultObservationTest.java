@@ -79,7 +79,7 @@ class MemberExecutorServiceDefaultObservationTest {
         Approvals.verify(report(
                 "Action observation name, metadata, and root parentage",
                 List.of(
-                        "The action uses one stable operation name.",
+                        "The action keeps one stable observation name and adds a meaningful contextual name.",
                         "The action identifier is an explicit low-cardinality attribute.",
                         "The initiation mode is an explicit low-cardinality attribute.",
                         "The action observation is a child of the current root observation.",
@@ -208,6 +208,7 @@ class MemberExecutorServiceDefaultObservationTest {
                     ? context.getParentObservation().getContextView().getName()
                     : "<none>";
             record("onStart(name=" + context.getName()
+                    + ", contextualName=" + context.getContextualName()
                     + ", parent=" + parentName
                     + ", causeway.action.id=" + value(context, "causeway.action.id")
                     + ", causeway.execution.initiatedBy="
@@ -232,7 +233,8 @@ class MemberExecutorServiceDefaultObservationTest {
 
         @Override
         public void onStop(final Observation.Context context) {
-            record("onStop(name=" + context.getName() + ")");
+            record("onStop(name=" + context.getName()
+                    + ", contextualName=" + context.getContextualName() + ")");
         }
 
         @Override

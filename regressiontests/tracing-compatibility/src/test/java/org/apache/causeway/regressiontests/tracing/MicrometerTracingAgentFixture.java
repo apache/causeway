@@ -71,6 +71,7 @@ import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.webapp.modules.observation.CausewayForegroundTraceFilter;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -92,7 +93,11 @@ import static org.mockito.Mockito.withSettings;
 public final class MicrometerTracingAgentFixture {
 
     static final String ROOT_INTERACTION_NAME = "causeway.root.interaction";
-    static final String ACTION_INVOCATION_NAME = "causeway.action.invocation";
+    static final String ACTION_INVOCATION_NAME = "invoke execute-jdbc on tracing-fixture";
+    static final String PAGE_RENDER_NAME = "render tracing-fixture";
+    static final String PROMPT_RENDER_NAME = "prompt execute-jdbc on tracing-fixture";
+    static final String ACTION_ID = "causeway.TracingFixture#executeJdbc()";
+    static final String OBJECT_TYPE = "causeway.TracingFixture";
     static final String SUCCESS_MARKER = "CAUSEWAY_TRACING_FIXTURE_OK";
 
     private MicrometerTracingAgentFixture() {
@@ -128,12 +133,14 @@ public final class MicrometerTracingAgentFixture {
     @RestController
     public static final class SemanticTracingController {
 
+        private final CausewayObservationIntegration observationIntegration;
         private final InteractionServiceDefault interactionService;
         private final MemberExecutorServiceDefault memberExecutorService;
         private final ActionExecutor actionExecutor;
 
         public SemanticTracingController(
                 final CausewayObservationIntegration observationIntegration) throws Exception {
+            this.observationIntegration = observationIntegration;
             this.interactionService = interactionService(observationIntegration);
             this.memberExecutorService = memberExecutorService(observationIntegration);
             this.actionExecutor = actionExecutor();
@@ -144,7 +151,23 @@ public final class MicrometerTracingAgentFixture {
         public void trace() {
             interactionService.call(
                     mock(InteractionContext.class),
-                    () -> memberExecutorService.invokeAction(actionExecutor));
+                    () -> {
+                        renderPageAndPrompt();
+                        return memberExecutorService.invokeAction(actionExecutor);
+                    });
+        }
+
+        private void renderPageAndPrompt() {
+            final WicketRenderObservationDescriptor page =
+                    WicketRenderObservationDescriptor.page(OBJECT_TYPE);
+            final WicketRenderObservationDescriptor prompt =
+                    WicketRenderObservationDescriptor.actionPrompt(
+                            OBJECT_TYPE, ACTION_ID, "executeJdbc");
+            page.customize(observationIntegration.createNotStarted(
+                    getClass(), page.getRegion().getObservationName()))
+                    .observe(() -> prompt.customize(observationIntegration.createNotStarted(
+                            getClass(), prompt.getRegion().getObservationName()))
+                            .observe(() -> {}));
         }
     }
 
@@ -211,7 +234,7 @@ public final class MicrometerTracingAgentFixture {
 
         final ObjectAction owningAction = mock(ObjectAction.class);
         when(owningAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
-                LogicalType.eager(JdbcAction.class, "causeway.TracingFixture"),
+                LogicalType.eager(JdbcAction.class, OBJECT_TYPE),
                 "executeJdbc"));
 
         return new ActionExecutor(
