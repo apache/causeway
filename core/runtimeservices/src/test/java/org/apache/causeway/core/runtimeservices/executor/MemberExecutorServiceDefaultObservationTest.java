@@ -44,15 +44,18 @@ import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -85,6 +88,23 @@ class MemberExecutorServiceDefaultObservationTest {
                         "The action observation is a child of the current root observation.",
                         "Action arguments, results, targets, users, and tenancy values are not captured."),
                 handler.events));
+    }
+
+    @Test
+    void mixedInActionUsesDomainFacingLogicalIdentity() throws Exception {
+        final RecordingHandler handler = new RecordingHandler();
+        final ObservationRegistry registry = registryWith(handler);
+        final ManagedObject expected = mock(ManagedObject.class);
+        final MemberExecutorServiceDefault service = newService(registry);
+
+        final ManagedObject actual = service.invokeAction(
+                mixedInActionExecutor(expected));
+
+        assertSame(expected, actual);
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "contextualName=invoke demo.ApplicationUser#updateEmailAddress")));
+        assertTrue(handler.events.stream().anyMatch(event -> event.contains(
+                "causeway.action.id=demo.ApplicationUser#updateEmailAddress()")));
     }
 
     @Test
@@ -163,7 +183,10 @@ class MemberExecutorServiceDefaultObservationTest {
         final FacetHolder facetHolder = mock(FacetHolder.class);
         when(facetHolder.getObjectManager()).thenReturn(objectManager);
 
+        final ObjectSpecification declaringType = mock(ObjectSpecification.class);
+        when(declaringType.logicalTypeName()).thenReturn("demo.Customer");
         final ObjectAction owningAction = mock(ObjectAction.class);
+        when(owningAction.getDeclaringType()).thenReturn(declaringType);
         when(owningAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
                 LogicalType.eager(InvocationTarget.class, "demo.Customer"),
                 "updateName"));
@@ -175,6 +198,51 @@ class MemberExecutorServiceDefaultObservationTest {
                 InteractionInitiatedBy.PASS_THROUGH,
                 owningAction,
                 _MethodFacades.testing.regular(method),
+                head,
+                Can.empty(),
+                mock(ActionInvocationFacetAbstract.class));
+    }
+
+    private static ActionExecutor mixedInActionExecutor(
+            final ManagedObject adaptedResult) throws Exception {
+        final InvocationTarget targetPojo = new InvocationTarget();
+        final ManagedObject target = mock(ManagedObject.class);
+        when(target.getPojo()).thenReturn(targetPojo);
+
+        final ObjectSpecification mixeeSpec = mock(ObjectSpecification.class);
+        when(mixeeSpec.logicalTypeName()).thenReturn("demo.ApplicationUser");
+        final ManagedObject owner = mock(ManagedObject.class);
+        when(owner.objSpec()).thenReturn(mixeeSpec);
+
+        final ObjectAction mixedInAction = mock(ObjectAction.class);
+        when(mixedInAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
+                LogicalType.eager(InvocationTarget.class, "demo.ApplicationUser"),
+                "updateEmailAddress"));
+        final ActionInteractionHead head = mock(ActionInteractionHead.class);
+        when(head.getTarget()).thenReturn(target);
+        when(head.getOwner()).thenReturn(owner);
+        when(head.getMetaModel()).thenReturn(mixedInAction);
+
+        final ObjectManager objectManager = mock(ObjectManager.class);
+        when(objectManager.adapt("ok")).thenReturn(adaptedResult);
+        final FacetHolder facetHolder = mock(FacetHolder.class);
+        when(facetHolder.getObjectManager()).thenReturn(objectManager);
+
+        final ObjectAction owningAction = mock(ObjectAction.class);
+        when(owningAction.isDeclaredOnMixin()).thenReturn(true);
+        when(owningAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
+                LogicalType.eager(
+                        InvocationTarget.class,
+                        "demo.ApplicationUser_updateEmailAddress"),
+                "act"));
+
+        return new ActionExecutor(
+                mock(MetaModelContext.class),
+                facetHolder,
+                InteractionInitiatedBy.PASS_THROUGH,
+                owningAction,
+                _MethodFacades.testing.regular(
+                        InvocationTarget.class.getDeclaredMethod("succeed")),
                 head,
                 Can.empty(),
                 mock(ActionInvocationFacetAbstract.class));

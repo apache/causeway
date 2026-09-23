@@ -65,28 +65,32 @@ public final class WicketRenderObservationDescriptor implements Serializable {
     public static WicketRenderObservationDescriptor fieldset(
             final String objectType,
             final String fieldsetId) {
-        return stableDescriptor(
+        return regionDescriptor(
                 Region.FIELDSET,
                 objectType,
-                fieldsetId != null && !fieldsetId.isEmpty() ? fieldsetId : "<default>");
+                fieldsetId != null && !fieldsetId.isEmpty() ? fieldsetId : "<default>",
+                "fieldset");
     }
 
     public static WicketRenderObservationDescriptor property(
             final String objectType,
             final String propertyId) {
-        return stableDescriptor(Region.PROPERTY, objectType, propertyId);
+        return regionDescriptor(
+                Region.PROPERTY, objectType, propertyId, "property");
     }
 
     public static WicketRenderObservationDescriptor collection(
             final String objectType,
             final String collectionId) {
-        return stableDescriptor(Region.COLLECTION, objectType, collectionId);
+        return regionDescriptor(
+                Region.COLLECTION, objectType, collectionId, "collection");
     }
 
     public static WicketRenderObservationDescriptor action(
             final String objectType,
             final String actionId) {
-        return stableDescriptor(Region.ACTION, objectType, actionId);
+        return regionDescriptor(
+                Region.ACTION, objectType, actionId, "action");
     }
 
     public static WicketRenderObservationDescriptor actionPrompt(
@@ -101,12 +105,17 @@ public final class WicketRenderObservationDescriptor implements Serializable {
                         "prompt", objectType, actionMemberName));
     }
 
-    private static WicketRenderObservationDescriptor stableDescriptor(
+    private static WicketRenderObservationDescriptor regionDescriptor(
             final Region region,
             final String objectType,
-            final String memberId) {
+            final String memberId,
+            final String regionName) {
         return new WicketRenderObservationDescriptor(
-                region, objectType, memberId, region.getObservationName());
+                region,
+                objectType,
+                memberId,
+                CausewayObservationNaming.forRenderRegion(
+                        regionName, memberId));
     }
 
     private final Region region;

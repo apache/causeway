@@ -63,6 +63,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
@@ -93,9 +94,15 @@ import static org.mockito.Mockito.withSettings;
 public final class MicrometerTracingAgentFixture {
 
     static final String ROOT_INTERACTION_NAME = "causeway.root.interaction";
-    static final String ACTION_INVOCATION_NAME = "invoke execute-jdbc on tracing-fixture";
-    static final String PAGE_RENDER_NAME = "render tracing-fixture";
-    static final String PROMPT_RENDER_NAME = "prompt execute-jdbc on tracing-fixture";
+    static final String ACTION_INVOCATION_NAME =
+            "invoke causeway.TracingFixture#executeJdbc";
+    static final String PAGE_RENDER_NAME = "render causeway.TracingFixture";
+    static final String FIELDSET_RENDER_NAME = "render fieldset identity";
+    static final String PROPERTY_RENDER_NAME = "render property emailAddress";
+    static final String COLLECTION_RENDER_NAME = "render collection roles";
+    static final String ACTION_RENDER_NAME = "render action executeJdbc";
+    static final String PROMPT_RENDER_NAME =
+            "prompt causeway.TracingFixture#executeJdbc";
     static final String ACTION_ID = "causeway.TracingFixture#executeJdbc()";
     static final String OBJECT_TYPE = "causeway.TracingFixture";
     static final String SUCCESS_MARKER = "CAUSEWAY_TRACING_FIXTURE_OK";
@@ -160,14 +167,36 @@ public final class MicrometerTracingAgentFixture {
         private void renderPageAndPrompt() {
             final WicketRenderObservationDescriptor page =
                     WicketRenderObservationDescriptor.page(OBJECT_TYPE);
+            final WicketRenderObservationDescriptor fieldset =
+                    WicketRenderObservationDescriptor.fieldset(OBJECT_TYPE, "identity");
+            final WicketRenderObservationDescriptor property =
+                    WicketRenderObservationDescriptor.property(
+                            OBJECT_TYPE, OBJECT_TYPE + "#emailAddress");
+            final WicketRenderObservationDescriptor collection =
+                    WicketRenderObservationDescriptor.collection(
+                            OBJECT_TYPE, OBJECT_TYPE + "#roles");
+            final WicketRenderObservationDescriptor action =
+                    WicketRenderObservationDescriptor.action(
+                            OBJECT_TYPE, ACTION_ID);
             final WicketRenderObservationDescriptor prompt =
                     WicketRenderObservationDescriptor.actionPrompt(
                             OBJECT_TYPE, ACTION_ID, "executeJdbc");
-            page.customize(observationIntegration.createNotStarted(
-                    getClass(), page.getRegion().getObservationName()))
-                    .observe(() -> prompt.customize(observationIntegration.createNotStarted(
-                            getClass(), prompt.getRegion().getObservationName()))
-                            .observe(() -> {}));
+            observe(page, () -> {
+                observe(fieldset, () -> {
+                    observe(property, () -> {});
+                    observe(action, () -> {});
+                });
+                observe(collection, () -> {});
+                observe(prompt, () -> {});
+            });
+        }
+
+        private void observe(
+                final WicketRenderObservationDescriptor descriptor,
+                final Runnable rendering) {
+            descriptor.customize(observationIntegration.createNotStarted(
+                    getClass(), descriptor.getRegion().getObservationName()))
+                    .observe(rendering);
         }
     }
 
@@ -232,7 +261,10 @@ public final class MicrometerTracingAgentFixture {
         final FacetHolder facetHolder = mock(FacetHolder.class);
         when(facetHolder.getObjectManager()).thenReturn(objectManager);
 
+        final ObjectSpecification declaringType = mock(ObjectSpecification.class);
+        when(declaringType.logicalTypeName()).thenReturn(OBJECT_TYPE);
         final ObjectAction owningAction = mock(ObjectAction.class);
+        when(owningAction.getDeclaringType()).thenReturn(declaringType);
         when(owningAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
                 LogicalType.eager(JdbcAction.class, OBJECT_TYPE),
                 "executeJdbc"));

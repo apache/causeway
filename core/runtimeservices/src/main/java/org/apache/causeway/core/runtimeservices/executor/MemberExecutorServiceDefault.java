@@ -143,14 +143,13 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        final var actionIdentifier = actionExecutor.getOwningAction().getFeatureIdentifier();
-        final String actionId = actionIdentifier.getLogicalIdentityString("#");
+        final String logicalMemberIdentifier = IdentifierUtil.logicalMemberIdentifierFor(
+                actionExecutor.getHead(), actionExecutor.getOwningAction());
+        final String canonicalActionId = logicalMemberIdentifier + "()";
         return observationProvider().get(ACTION_OBSERVATION_NAME)
-                .contextualName(CausewayObservationNaming.forMember(
-                        "invoke",
-                        actionIdentifier.logicalTypeName(),
-                        actionIdentifier.memberLogicalName()))
-                .lowCardinalityKeyValue(ACTION_ID_TAG, actionId)
+                .contextualName(CausewayObservationNaming.forLogicalMember(
+                        "invoke", logicalMemberIdentifier))
+                .lowCardinalityKeyValue(ACTION_ID_TAG, canonicalActionId)
                 .lowCardinalityKeyValue(
                         INITIATED_BY_TAG,
                         actionExecutor.getInteractionInitiatedBy().name())

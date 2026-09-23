@@ -1,18 +1,23 @@
 ## ADDED Requirements
 
 ### Requirement: Meaningful action-invocation display name
-Causeway SHALL retain `causeway.action.invocation` as the stable observation name and SHALL assign each action-invocation observation a contextual display name derived from the action's stable logical type and logical member name.
-The display name SHALL identify the invocation operation and prompted member without requiring an operator to inspect span attributes.
+Causeway SHALL retain `causeway.action.invocation` as the stable observation name and SHALL assign each action-invocation observation the contextual display name `invoke <logical-member-identifier>`.
+The logical member identifier SHALL be the domain-facing identity of the invoked action, including for actions implemented by mixins.
 
-#### Scenario: Action identity is available
-- **WHEN** Causeway invokes an action with observation active
-- **THEN** the exported span display name identifies the operation as an invocation
-- **AND** it contains a compact form of the action's logical member and declaring type
+#### Scenario: Declared action identity is available
+- **WHEN** Causeway invokes a declared action with observation active
+- **THEN** the exported span display name begins with `invoke ` and contains the action's logical type name and member id separated by `#`
 - **AND** the observation name remains `causeway.action.invocation`
 - **AND** `causeway.action.id` retains the full canonical action identifier
 
+#### Scenario: Mixed-in action is invoked
+- **WHEN** Causeway invokes a mixed-in action whose implementation identity is `ApplicationUser_updateEmailAddress#act`
+- **THEN** the contextual name uses the domain-facing logical member identifier such as `isisExtSecMan.ApplicationUser#updateEmailAddress`
+- **AND** neither the contextual name nor `causeway.action.id` uses the implementation member `act`
+
 ### Requirement: Bounded contextual naming
-Causeway SHALL derive semantic span contextual names only from bounded operation names and static metamodel identifiers.
+Causeway SHALL derive semantic span contextual names only from bounded operation names and static metamodel or layout identifiers.
+Causeway SHALL preserve the declared casing of those identifiers.
 Causeway MUST NOT include domain-object instance identifiers, object titles, bookmarks, values, arguments, localized labels, user identities, or tenancy identifiers in contextual names.
 
 #### Scenario: Invocation has instance-specific context
@@ -29,9 +34,24 @@ Operators SHALL be able to use those attributes to disambiguate equal display na
 - **THEN** their contextual names MAY be equal
 - **AND** their `causeway.action.id` attributes distinguish the actions
 
-#### Scenario: Contextual name exceeds tracing limit
-- **WHEN** a generated contextual name exceeds the tracing integration's display-name limit
-- **THEN** truncation does not remove or alter the full canonical identity attributes
+#### Scenario: Full logical member name exceeds tracing limit
+- **WHEN** `invoke <logical-member-identifier>` exceeds 50 characters
+- **THEN** Causeway retries the display name using the logical type name without its namespace
+- **AND** the full canonical identity attribute remains unchanged
+
+#### Scenario: Namespace-free logical member name still exceeds tracing limit
+- **WHEN** the namespace-free action display name still exceeds 50 characters
+- **THEN** Causeway truncates the contextual name to 50 characters
+- **AND** truncation does not remove or alter the full canonical identity attribute
+
+### Requirement: Case-preserving Causeway trace export
+Causeway SHALL export its semantic observation contextual names without Micrometer's lower-hyphen conversion.
+The specialized handling SHALL apply only to Causeway's dedicated observation registry and SHALL preserve existing tracing lifecycle, parentage, tags, errors, and scope behavior.
+
+#### Scenario: Logical identifier contains uppercase characters
+- **WHEN** a Causeway contextual name contains a logical identifier such as `isisExtSecMan.ApplicationUser`
+- **THEN** the exported span name retains that exact identifier casing
+- **AND** automatic Java-agent HTTP and JDBC span naming remains unchanged
 
 ### Requirement: Generic root-interaction naming
 Causeway SHALL retain `causeway.root.interaction` as the contextual and stable observation name for the root interaction.

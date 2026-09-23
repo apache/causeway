@@ -27,28 +27,84 @@ import java.util.Objects;
  */
 public final class CausewayObservationNaming {
 
+    public static final int MAX_CONTEXTUAL_NAME_LENGTH = 50;
+
     private CausewayObservationNaming() {}
 
     public static String forType(
             final String operation,
             final String logicalTypeName) {
-        return token(operation) + " " + token(simpleTypeName(logicalTypeName));
+        final String prefix = requireText(operation, "operation") + " ";
+        final String typeName = requireText(logicalTypeName, "logicalTypeName");
+        final String fullName = prefix + typeName;
+        return fullName.length() <= MAX_CONTEXTUAL_NAME_LENGTH
+                ? fullName
+                : bounded(prefix + simpleTypeName(typeName));
     }
 
     public static String forMember(
             final String operation,
             final String logicalTypeName,
             final String memberLogicalName) {
-        return token(operation)
-                + " " + token(memberLogicalName)
-                + " on " + token(simpleTypeName(logicalTypeName));
+        final String typeName = requireText(logicalTypeName, "logicalTypeName");
+        final String memberName = requireText(memberLogicalName, "memberLogicalName");
+        return forLogicalMember(operation, typeName + "#" + memberName);
+    }
+
+    public static String forLogicalMember(
+            final String operation,
+            final String logicalMemberIdentifier) {
+        final String prefix = requireText(operation, "operation") + " ";
+        final String identifier = requireText(
+                logicalMemberIdentifier, "logicalMemberIdentifier");
+        final String fullName = prefix + identifier;
+        if(fullName.length() <= MAX_CONTEXTUAL_NAME_LENGTH) {
+            return fullName;
+        }
+
+        final int memberSeparator = identifier.indexOf('#');
+        if(memberSeparator < 1 || memberSeparator + 1 >= identifier.length()) {
+            return bounded(fullName);
+        }
+        final String typeName = identifier.substring(0, memberSeparator);
+        final String memberName = identifier.substring(memberSeparator + 1);
+        return bounded(prefix + simpleTypeName(typeName) + "#" + memberName);
+    }
+
+    public static String forRenderRegion(
+            final String region,
+            final String identifier) {
+        return bounded("render "
+                + requireText(region, "region")
+                + " " + regionIdentifier(identifier));
+    }
+
+    public static String bounded(final String contextualName) {
+        final String name = requireText(contextualName, "contextualName");
+        return name.length() <= MAX_CONTEXTUAL_NAME_LENGTH
+                ? name
+                : name.substring(0, MAX_CONTEXTUAL_NAME_LENGTH);
+    }
+
+    private static String regionIdentifier(final String identifier) {
+        final String canonicalIdentifier = requireText(identifier, "identifier");
+        if("<default>".equals(canonicalIdentifier)) {
+            return "default";
+        }
+        final int memberSeparator = canonicalIdentifier.lastIndexOf('#');
+        final String memberName = memberSeparator >= 0
+                ? canonicalIdentifier.substring(memberSeparator + 1)
+                : canonicalIdentifier;
+        final int parameterSeparator = memberName.indexOf('(');
+        return parameterSeparator >= 0
+                ? memberName.substring(0, parameterSeparator)
+                : memberName;
     }
 
     private static String simpleTypeName(final String logicalTypeName) {
-        final String typeName = requireText(logicalTypeName, "logicalTypeName");
         int separator = -1;
-        for (int i = 0; i < typeName.length(); i++) {
-            switch (typeName.charAt(i)) {
+        for (int i = 0; i < logicalTypeName.length(); i++) {
+            switch (logicalTypeName.charAt(i)) {
                 case '.':
                 case '/':
                 case '\\':
@@ -60,44 +116,9 @@ public final class CausewayObservationNaming {
                     break;
             }
         }
-        return separator >= 0 && separator + 1 < typeName.length()
-                ? typeName.substring(separator + 1)
-                : typeName;
-    }
-
-    private static String token(final String value) {
-        final String text = requireText(value, "contextual name token");
-        final StringBuilder normalized = new StringBuilder(text.length());
-        boolean separatorPending = false;
-        char previous = 0;
-        for (int i = 0; i < text.length(); i++) {
-            final char current = text.charAt(i);
-            if(Character.isLetterOrDigit(current)) {
-                if(normalized.length() > 0
-                        && (separatorPending
-                                || Character.isUpperCase(current)
-                                        && (Character.isLowerCase(previous)
-                                                || Character.isDigit(previous)))) {
-                    appendSeparator(normalized);
-                }
-                normalized.append(Character.toLowerCase(current));
-                separatorPending = false;
-                previous = current;
-            } else {
-                separatorPending = normalized.length() > 0;
-                previous = 0;
-            }
-        }
-        if(normalized.length() == 0) {
-            throw new IllegalArgumentException("contextual name token must contain a letter or digit");
-        }
-        return normalized.toString();
-    }
-
-    private static void appendSeparator(final StringBuilder normalized) {
-        if(normalized.charAt(normalized.length() - 1) != '-') {
-            normalized.append('-');
-        }
+        return separator >= 0 && separator + 1 < logicalTypeName.length()
+                ? logicalTypeName.substring(separator + 1)
+                : logicalTypeName;
     }
 
     private static String requireText(final String value, final String name) {

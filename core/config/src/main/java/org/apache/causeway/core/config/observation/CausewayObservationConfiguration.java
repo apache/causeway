@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Profile;
 
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.tracing.Tracer;
-import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
 import io.micrometer.tracing.otel.bridge.OtelBaggageManager;
 import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
 import io.micrometer.tracing.otel.bridge.OtelTracer;
@@ -77,7 +76,7 @@ public class CausewayObservationConfiguration {
 
         final ObservationRegistry observationRegistry = ObservationRegistry.create();
         observationRegistry.observationConfig()
-                .observationHandler(new DefaultTracingObservationHandler(tracer));
+                .observationHandler(new CausewayTracingObservationHandler(tracer));
         return observationRegistry;
     }
 }

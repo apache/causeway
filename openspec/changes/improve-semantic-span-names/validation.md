@@ -1,14 +1,16 @@
 ## Automated Validation
 
-Production compilation succeeded through `viewers/wicket/ui` with Java 11 release output and tests skipped.
+Production compilation succeeded through `viewers/wicket/ui` with Java 25 producing Java 11 release output and tests skipped.
 
 The focused suites were run in the Maven reactor with Java 25, `maven.compiler.release=11`, and `maven.compiler.proc=full`:
 
-- `CausewayObservationNamingTest`: 4 tests, 0 failures, 0 errors, 0 skipped.
-- `MemberExecutorServiceDefaultObservationTest`: 3 tests, 0 failures, 0 errors, 0 skipped.
-- `WicketRenderObservationTest`: 11 tests, 0 failures, 0 errors, 0 skipped.
+- `CausewayObservationNamingTest`: 7 tests, 0 failures, 0 errors, 0 skipped.
+- `CausewayTracingObservationHandlerTest`: 3 tests, 0 failures, 0 errors, 0 skipped.
+- `CausewayObservationConfigurationTest`: 3 tests, 0 failures, 0 errors, 0 skipped.
+- `MemberExecutorServiceDefaultObservationTest`: 4 tests, 0 failures, 0 errors, 0 skipped.
+- `WicketRenderObservationTest`: 12 tests, 0 failures, 0 errors, 0 skipped.
 
-The tracing compatibility fixture was compiled in the reactor and then run on its validated Java 11 and OpenTelemetry Java agent 1.31.0 baseline:
+The tracing compatibility test was compiled in the Java 25 reactor while its application fixture was launched on the validated Java 11 and OpenTelemetry Java agent 1.31.0 baseline:
 
 - `MicrometerTracingCompatibilityTest`: 2 tests, 0 failures, 0 errors, 0 skipped.
 
@@ -21,14 +23,20 @@ The observed semantic hierarchy included:
 [source,text]
 ----
 causeway.root.interaction
-├── render tracing-fixture
-│   └── prompt execute-jdbc on tracing-fixture
-└── invoke execute-jdbc on tracing-fixture
+├── render causeway.TracingFixture
+│   ├── render fieldset identity
+│   │   ├── render property emailAddress
+│   │   └── render action executeJdbc
+│   ├── render collection roles
+│   └── prompt causeway.TracingFixture#executeJdbc
+└── invoke causeway.TracingFixture#executeJdbc
     └── JDBC
 ----
 
 The page span exported `causeway.object.type=causeway.TracingFixture`.
 The prompt span exported `causeway.object.type=causeway.TracingFixture` and `causeway.action.id=causeway.TracingFixture#executeJdbc()`.
-The action span exported the same canonical action identifier, and the JDBC span remained a child of the action invocation.
+The action span exported the same complete domain-facing canonical identifier, and the automatic JDBC span remained a child of the action invocation.
+The automatic HTTP entry span retained the Java-agent name `GET /trace` and the Causeway foreground classification.
 
 The Wicket focused suite additionally verified that the enclosing action prompt receives one render behavior, individual parameter models remain excluded from property spans, no-op rendering is unchanged, descriptors remain serializable without active telemetry, and prompt rendering retains page parentage.
+It also verified full logical identifiers, namespace fallback, member-region identifiers, and the `default` display for an unnamed fieldset.

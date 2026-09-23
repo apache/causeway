@@ -10,9 +10,9 @@ This approval checks:
 Observed lifecycle:
 1. onStart(name=test root, contextualName=null, parent=<none>, causeway.action.id=<absent>, causeway.execution.initiatedBy=<absent>)
 2. onScopeOpened(name=test root)
-3. onStart(name=causeway.action.invocation, contextualName=invoke update-name on customer, parent=test root, causeway.action.id=demo.Customer#updateName(), causeway.execution.initiatedBy=PASS_THROUGH)
+3. onStart(name=causeway.action.invocation, contextualName=invoke demo.Customer#updateName, parent=test root, causeway.action.id=demo.Customer#updateName(), causeway.execution.initiatedBy=PASS_THROUGH)
 4. onScopeOpened(name=causeway.action.invocation)
 5. onScopeClosed(name=causeway.action.invocation)
-6. onStop(name=causeway.action.invocation, contextualName=invoke update-name on customer)
+6. onStop(name=causeway.action.invocation, contextualName=invoke demo.Customer#updateName)
 7. onScopeClosed(name=test root)
 8. onStop(name=test root, contextualName=null)

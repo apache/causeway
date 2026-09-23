@@ -75,14 +75,25 @@ class WicketRenderObservationTest {
                         descriptor.getRegion().getObservationName(), registry));
 
         assertEquals("causeway.wicket.property.render", observation.getContext().getName());
-        assertEquals("causeway.wicket.property.render", observation.getContext().getContextualName());
+        assertEquals("render property name", observation.getContext().getContextualName());
         assertEquals(OBJECT_TYPE,
                 observation.getContext().getLowCardinalityKeyValue("causeway.object.type").getValue());
         assertEquals(OBJECT_TYPE + "#name",
                 observation.getContext().getLowCardinalityKeyValue("causeway.property.id").getValue());
         assertNull(observation.getContext().getLowCardinalityKeyValue("causeway.action.id"));
-        assertEquals("<default>",
-                WicketRenderObservationDescriptor.fieldset(OBJECT_TYPE, null).getMemberId());
+        final WicketRenderObservationDescriptor defaultFieldset =
+                WicketRenderObservationDescriptor.fieldset(OBJECT_TYPE, null);
+        assertEquals("<default>", defaultFieldset.getMemberId());
+        assertEquals("render fieldset default", defaultFieldset.getContextualName());
+        assertEquals("render fieldset identity",
+                WicketRenderObservationDescriptor.fieldset(
+                        OBJECT_TYPE, "identity").getContextualName());
+        assertEquals("render collection orders",
+                WicketRenderObservationDescriptor.collection(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
+        assertEquals("render action updateName",
+                WicketRenderObservationDescriptor.action(
+                        OBJECT_TYPE, OBJECT_TYPE + "#updateName()").getContextualName());
     }
 
     @Test
@@ -102,9 +113,9 @@ class WicketRenderObservationTest {
                 Observation.createNotStarted(prompt.getRegion().getObservationName(), registry));
 
         assertEquals("causeway.wicket.page.render", pageObservation.getContext().getName());
-        assertEquals("render customer", pageObservation.getContext().getContextualName());
+        assertEquals("render demo.Customer", pageObservation.getContext().getContextualName());
         assertEquals("causeway.wicket.action.prompt.render", promptObservation.getContext().getName());
-        assertEquals("prompt update-name on customer",
+        assertEquals("prompt demo.Customer#updateName",
                 promptObservation.getContext().getContextualName());
         assertEquals(OBJECT_TYPE,
                 promptObservation.getContext().getLowCardinalityKeyValue(
@@ -112,6 +123,21 @@ class WicketRenderObservationTest {
         assertEquals(OBJECT_TYPE + "#updateName()",
                 promptObservation.getContext().getLowCardinalityKeyValue(
                         "causeway.action.id").getValue());
+    }
+
+    @Test
+    void pageAndPromptNamesFallBackToSimpleLogicalType() {
+        final String longObjectType =
+                "aVeryLongApplicationNamespaceThatExceedsTheLimit.Customer";
+
+        assertEquals("render Customer",
+                WicketRenderObservationDescriptor.page(
+                        longObjectType).getContextualName());
+        assertEquals("prompt Customer#updateName",
+                WicketRenderObservationDescriptor.actionPrompt(
+                        longObjectType,
+                        longObjectType + "#updateName()",
+                        "updateName").getContextualName());
     }
 
     @Test
@@ -208,8 +234,8 @@ class WicketRenderObservationTest {
                     "causeway.wicket.action.prompt.render<-causeway.wicket.page.render"),
                     handler.parents);
             assertEquals(List.of(
-                    "render customer",
-                    "prompt update-name on customer"), handler.contextualNames);
+                    "render demo.Customer",
+                    "prompt demo.Customer#updateName"), handler.contextualNames);
             assertEquals(List.of(
                     "start:causeway.wicket.page.render",
                     "scope-opened:causeway.wicket.page.render",
@@ -302,7 +328,7 @@ class WicketRenderObservationTest {
         assertFalse(restored.isActive());
         assertEquals("causeway.wicket.action.prompt.render",
                 restored.descriptor().getRegion().getObservationName());
-        assertEquals("prompt update-name on customer",
+        assertEquals("prompt demo.Customer#updateName",
                 restored.descriptor().getContextualName());
         assertEquals(OBJECT_TYPE, restored.descriptor().getObjectType());
         assertEquals(OBJECT_TYPE + "#updateName()", restored.descriptor().getMemberId());

@@ -5,12 +5,14 @@ The framework already has stable logical type and member identifiers at the rele
 
 ## What Changes
 
-- Give action-invocation spans concise contextual display names derived from the invoked action's stable logical identifier while preserving `causeway.action.invocation` as the observation name and `causeway.action.id` as the canonical attribute.
-- Give Wicket entity-page render spans concise contextual display names derived from the rendered domain object's stable logical type while preserving `causeway.wicket.page.render` as the observation name and `causeway.object.type` as the canonical attribute.
+- Give action-invocation spans contextual display names based on the domain-facing logical member identifier, including correct mixin resolution, while preserving `causeway.action.invocation` as the observation name and `causeway.action.id` as the canonical attribute.
+- Give Wicket entity-page render spans contextual display names based on the rendered domain object's full logical type while preserving `causeway.wicket.page.render` as the observation name and `causeway.object.type` as the canonical attribute.
 - Add one bounded Wicket action-prompt render observation identified by the prompted action, without creating spans for individual parameter fields.
-- Keep root-interaction and fine-grained fieldset, property, collection, and action-button render display names stable in this change.
+- Give Wicket fieldset, property, collection, and action-button render spans contextual display names based on their static layout or metamodel member identifiers.
+- Preserve logical-identifier casing in exported Causeway span names and enforce a deterministic 50-character limit with namespace fallback for logical type and member identifiers.
+- Keep the root-interaction display name stable.
 - Continue to prohibit object titles, bookmarks, primary keys, argument values, user identities, tenancy identifiers, and other instance-specific data from span names and attributes.
-- Document display-name normalization and truncation constraints and require canonical attributes to remain authoritative for filtering and correlation.
+- Keep canonical attributes authoritative for filtering and correlation when display names omit a namespace or are truncated.
 
 ## Capabilities
 
@@ -25,4 +27,4 @@ The framework already has stable logical type and member identifiers at the rele
 ## Impact
 
 The change affects core runtime action instrumentation, Wicket render observation descriptors and attachment points, focused observation tests, and the Micrometer tracing operations documentation.
-It changes exported span display names for action invocations and Wicket entity-page rendering but does not change activation, trace parentage, sampling, SDK ownership, dependencies, or canonical span attributes.
+It changes exported span display names for action invocations and Wicket page, prompt, fieldset, property, collection, and action-button rendering but does not change activation, trace parentage, sampling, SDK ownership, dependencies, or canonical span attributes.

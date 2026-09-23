@@ -2,14 +2,15 @@
 
 ### Requirement: Entity-page render observation
 When observation is active, the Wicket viewer SHALL create one `causeway.wicket.page.render` observation for each server-side render of an entity page.
-The observation SHALL join the current Java-agent-owned trace, SHALL use the Wicket viewer module metadata convention, and SHALL have a contextual display name derived from the rendered object's stable logical type.
+The observation SHALL join the current Java-agent-owned trace, SHALL use the Wicket viewer module metadata convention, and SHALL have the contextual display name `render <logical-type-name>`.
 The stable observation name SHALL remain `causeway.wicket.page.render`, and `causeway.object.type` SHALL retain the full canonical logical type.
 
 #### Scenario: Full entity-page render
 - **WHEN** Wicket renders an entity page during a full HTTP response with observation active
 - **THEN** one `causeway.wicket.page.render` observation covers the page's actual server-side rendering
 - **AND** the observation is a descendant of the current request or Causeway interaction span
-- **AND** its contextual display name identifies the render operation and a compact form of the logical object type
+- **AND** its contextual display name begins with `render ` and contains the full logical type name when that name fits within 50 characters
+- **AND** an overlength name falls back to the namespace-free logical type before truncation
 - **AND** its `causeway.object.type` attribute contains the full canonical logical type
 
 #### Scenario: Observation is inactive
@@ -21,12 +22,13 @@ The stable observation name SHALL remain `causeway.wicket.page.render`, and `cau
 
 ### Requirement: Action-prompt render observation
 When observation is active, the Wicket viewer SHALL create one `causeway.wicket.action.prompt.render` observation around each actual render callback of an enclosing action-parameter prompt panel.
-The observation SHALL use a contextual display name derived from the prompted action's stable logical type and logical member name and SHALL use the existing Wicket render lifecycle infrastructure.
+The observation SHALL use the contextual display name `prompt <logical-member-identifier>` and SHALL use the existing Wicket render lifecycle infrastructure.
 
 #### Scenario: Parameterized action prompt is rendered
 - **WHEN** Wicket renders the enclosing prompt panel for a parameterized action
 - **THEN** one `causeway.wicket.action.prompt.render` observation covers the panel's actual render callback and descendant rendering
-- **AND** its contextual display name identifies the prompt operation and a compact form of the action's logical member and declaring type
+- **AND** its contextual display name begins with `prompt ` and uses the full domain-facing logical member identifier when that name fits within 50 characters
+- **AND** an overlength name falls back to the namespace-free logical type and member id before truncation
 - **AND** it joins the current request trace with the active render region as its parent when one exists
 
 #### Scenario: Prompt presentation styles
@@ -57,11 +59,37 @@ The observation SHALL represent rendering only and SHALL NOT be presented as cov
 - **THEN** that work is not attributed to `causeway.wicket.action.prompt.render`
 - **AND** operational documentation describes the render-only boundary
 
-### Requirement: Stable fine-grained render display names
-The Wicket viewer SHALL retain the existing stable contextual names for fieldset, property, collection, and action-button render observations in this change.
+### Requirement: Meaningful fine-grained render display names
+The Wicket viewer SHALL retain stable observation names while assigning member-level contextual names to fieldset, property, collection, and action-button render observations.
+The contextual names SHALL preserve the casing of static layout or metamodel identifiers and SHALL be truncated to 50 characters when necessary.
 Their canonical layout and metamodel attributes SHALL continue to identify the rendered region.
 
-#### Scenario: Entity member region is rendered
-- **WHEN** Wicket renders an observed fieldset, property, collection, or action-button region
-- **THEN** its contextual name remains the applicable stable `causeway.wicket.*.render` name
-- **AND** its existing canonical region attributes remain available for identification
+#### Scenario: Named fieldset is rendered
+- **WHEN** Wicket renders an observed fieldset with id `identity`
+- **THEN** its contextual name is `render fieldset identity`
+- **AND** its observation name remains `causeway.wicket.fieldset.render`
+
+#### Scenario: Unnamed fieldset is rendered
+- **WHEN** Wicket renders the default unnamed fieldset
+- **THEN** its contextual name is `render fieldset default`
+- **AND** the internal marker `<default>` is not exposed in the contextual name
+
+#### Scenario: Property is rendered
+- **WHEN** Wicket renders an observed property with member id `emailAddress`
+- **THEN** its contextual name is `render property emailAddress`
+- **AND** its observation name remains `causeway.wicket.property.render`
+
+#### Scenario: Collection is rendered
+- **WHEN** Wicket renders an observed collection with member id `roles`
+- **THEN** its contextual name is `render collection roles`
+- **AND** its observation name remains `causeway.wicket.collection.render`
+
+#### Scenario: Action button is rendered
+- **WHEN** Wicket renders an observed action button with member id `updateEmailAddress`
+- **THEN** its contextual name is `render action updateEmailAddress`
+- **AND** its observation name remains `causeway.wicket.action.render`
+
+#### Scenario: Fine-grained display name exceeds the limit
+- **WHEN** a fieldset or member render contextual name exceeds 50 characters
+- **THEN** Causeway truncates the contextual name to 50 characters
+- **AND** its full canonical region attribute remains unchanged

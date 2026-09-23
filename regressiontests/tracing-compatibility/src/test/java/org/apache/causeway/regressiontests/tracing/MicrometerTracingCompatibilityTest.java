@@ -87,13 +87,31 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Page render span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
-            final ExportedSpan promptSpan = spans.stream()
-                    .filter(span -> MicrometerTracingAgentFixture.PROMPT_RENDER_NAME.equals(span.name))
-                    .filter(span -> pageSpan.traceId.equals(span.traceId))
-                    .filter(span -> pageSpan.spanId.equals(span.parentSpanId))
-                    .findFirst()
-                    .orElseGet(() -> fail("Prompt render span is not a child of the page render.\n"
-                            + describe(spans) + "\n" + result.output));
+            final ExportedSpan fieldsetSpan = childSpanNamed(
+                    spans,
+                    pageSpan,
+                    MicrometerTracingAgentFixture.FIELDSET_RENDER_NAME,
+                    result.output);
+            final ExportedSpan propertySpan = childSpanNamed(
+                    spans,
+                    fieldsetSpan,
+                    MicrometerTracingAgentFixture.PROPERTY_RENDER_NAME,
+                    result.output);
+            final ExportedSpan actionRenderSpan = childSpanNamed(
+                    spans,
+                    fieldsetSpan,
+                    MicrometerTracingAgentFixture.ACTION_RENDER_NAME,
+                    result.output);
+            final ExportedSpan collectionSpan = childSpanNamed(
+                    spans,
+                    pageSpan,
+                    MicrometerTracingAgentFixture.COLLECTION_RENDER_NAME,
+                    result.output);
+            final ExportedSpan promptSpan = childSpanNamed(
+                    spans,
+                    pageSpan,
+                    MicrometerTracingAgentFixture.PROMPT_RENDER_NAME,
+                    result.output);
             final ExportedSpan jdbcSpan = spans.stream()
                     .filter(span -> actionSpan.traceId.equals(span.traceId))
                     .filter(span -> actionSpan.spanId.equals(span.parentSpanId))
@@ -119,6 +137,14 @@ class MicrometerTracingCompatibilityTest {
                     promptSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     promptSpan.attributes.get("causeway.action.id"));
+            assertEquals("identity",
+                    fieldsetSpan.attributes.get("causeway.fieldset.id"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE + "#emailAddress",
+                    propertySpan.attributes.get("causeway.property.id"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE + "#roles",
+                    collectionSpan.attributes.get("causeway.collection.id"));
+            assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
+                    actionRenderSpan.attributes.get("causeway.action.id"));
             System.out.printf(
                     "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s page=%s prompt=%s action=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
@@ -179,7 +205,12 @@ class MicrometerTracingCompatibilityTest {
         final String executable = System.getProperty("os.name").toLowerCase().contains("win")
                 ? "java.exe"
                 : "java";
-        return Paths.get(System.getProperty("java.home"), "bin", executable).toString();
+        return Paths.get(
+                System.getProperty(
+                        "causeway.tracing.fixture.java.home",
+                        System.getProperty("java.home")),
+                "bin",
+                executable).toString();
     }
 
     private static ExportedSpan spanNamed(
@@ -190,6 +221,20 @@ class MicrometerTracingCompatibilityTest {
                 .filter(span -> name.equals(span.name))
                 .findFirst()
                 .orElseGet(() -> fail("Span not exported: " + name + "\n"
+                        + describe(spans) + "\n" + processOutput));
+    }
+
+    private static ExportedSpan childSpanNamed(
+            final List<ExportedSpan> spans,
+            final ExportedSpan parent,
+            final String name,
+            final String processOutput) {
+        return spans.stream()
+                .filter(span -> name.equals(span.name))
+                .filter(span -> parent.traceId.equals(span.traceId))
+                .filter(span -> parent.spanId.equals(span.parentSpanId))
+                .findFirst()
+                .orElseGet(() -> fail("Span is not a child of its expected parent: " + name + "\n"
                         + describe(spans) + "\n" + processOutput));
     }
 

@@ -26,41 +26,72 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CausewayObservationNamingTest {
 
     @Test
-    void typeNameIsCompactAndNormalized() {
-        assertEquals("render customer",
-                CausewayObservationNaming.forType("render", "demo.Customer"));
-        assertEquals("render customer",
-                CausewayObservationNaming.forType("render", "other/context:Customer"));
+    void logicalTypeNamePreservesNamespaceAndCaseWhenItFits() {
+        assertEquals("render isisExtSecMan.ApplicationUser",
+                CausewayObservationNaming.forType(
+                        "render", "isisExtSecMan.ApplicationUser"));
     }
 
     @Test
-    void memberNameIsOperationFirstAndNormalized() {
-        assertEquals("invoke update-name on customer",
-                CausewayObservationNaming.forMember(
-                        "invoke", "demo.Customer", "updateName"));
-        assertEquals("prompt create-url on customer",
+    void logicalTypeNameFallsBackToSimpleTypeBeforeTruncating() {
+        assertEquals("render ApplicationUser",
+                CausewayObservationNaming.forType(
+                        "render",
+                        "aVeryLongApplicationNamespaceThatExceedsTheLimit.ApplicationUser"));
+    }
+
+    @Test
+    void logicalMemberIdentifierPreservesNamespaceAndCaseWhenItFits() {
+        assertEquals("invoke demo.Customer#updateName",
+                CausewayObservationNaming.forLogicalMember(
+                        "invoke", "demo.Customer#updateName"));
+        assertEquals("prompt demo.Customer#createURL",
                 CausewayObservationNaming.forMember(
                         "prompt", "demo.Customer", "createURL"));
     }
 
     @Test
-    void compactNamesCanCollideWhileCanonicalIdentifiersRemainExternal() {
-        assertEquals(
-                CausewayObservationNaming.forMember(
-                        "invoke", "sales.Customer", "updateName"),
-                CausewayObservationNaming.forMember(
-                        "invoke", "support.Customer", "updateName"));
+    void logicalMemberIdentifierFallsBackToSimpleTypeBeforeTruncating() {
+        assertEquals("invoke ApplicationUser#updateEmailAddress",
+                CausewayObservationNaming.forLogicalMember(
+                        "invoke",
+                        "isisExtSecMan.ApplicationUser#updateEmailAddress"));
     }
 
     @Test
-    void longNameKeepsDiagnosticOperationAndMemberBeforeType() {
+    void namespaceFreeNameIsTruncatedAtFiftyCharacters() {
         final String contextualName = CausewayObservationNaming.forMember(
                 "invoke",
                 "demo.CustomerWithAnUnusuallyLongLogicalTypeName",
                 "performAnUnusuallyLongAdministrativeOperation");
 
+        assertEquals(CausewayObservationNaming.MAX_CONTEXTUAL_NAME_LENGTH,
+                contextualName.length());
         assertTrue(contextualName.startsWith(
-                "invoke perform-an-unusually-long-administrative-operation on "));
-        assertTrue(contextualName.length() > 50);
+                "invoke CustomerWithAnUnusuallyLongLogicalTypeName#"));
+    }
+
+    @Test
+    void exactlyFiftyCharactersAreNotAltered() {
+        final String contextualName = "render " + "X".repeat(43);
+
+        assertEquals(contextualName,
+                CausewayObservationNaming.bounded(contextualName));
+    }
+
+    @Test
+    void renderRegionsUseMemberIdsAndDefaultFieldsetName() {
+        assertEquals("render fieldset default",
+                CausewayObservationNaming.forRenderRegion(
+                        "fieldset", "<default>"));
+        assertEquals("render property emailAddress",
+                CausewayObservationNaming.forRenderRegion(
+                        "property", "isisExtSecMan.ApplicationUser#emailAddress"));
+        assertEquals("render collection roles",
+                CausewayObservationNaming.forRenderRegion(
+                        "collection", "isisExtSecMan.ApplicationUser#roles"));
+        assertEquals("render action updateEmailAddress",
+                CausewayObservationNaming.forRenderRegion(
+                        "action", "isisExtSecMan.ApplicationUser#updateEmailAddress()"));
     }
 }
