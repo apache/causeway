@@ -37,6 +37,8 @@ import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -81,6 +83,11 @@ implements HasDynamicallyVisibleContent {
         super(id, entityModel);
 
         this.layoutData = layoutData;
+        WicketRenderObservationBehavior.addTo(this,
+                WicketRenderObservationDescriptor.collection(
+                        entityModel.getTypeOfSpecification().logicalTypeName(),
+                        entityModel.getTypeOfSpecification().logicalTypeName()
+                                + "#" + layoutData.getId()));
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),

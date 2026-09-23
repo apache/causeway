@@ -223,6 +223,34 @@ With the `observation` profile active, Causeway adds two stable semantic spans:
 Action spans carry the bounded attributes `causeway.action.id` and `causeway.execution.initiatedBy`.
 Causeway does not add action arguments, return values, target instance identifiers, user names, tenancy tokens, or other instance-specific application data to these semantic spans.
 
+=== Wicket Entity Page Rendering
+
+When the Wicket viewer renders an entity page, Causeway adds semantic spans for the page and its rendered logical regions:
+
+[source,text]
+----
+causeway.wicket.page.render
+├── causeway.wicket.fieldset.render
+│   ├── causeway.wicket.property.render
+│   └── causeway.wicket.action.render
+├── causeway.wicket.collection.render
+└── causeway.wicket.action.render
+----
+
+Ajax responses create spans only for the instrumented regions included in the partial render, so an Ajax trace need not contain `causeway.wicket.page.render`.
+Automatic JDBC spans become descendants of the active region span when database work occurs during that region's rendering.
+
+Wicket spans use `causeway.object.type` together with the applicable bounded attribute `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id`, or `causeway.action.id`.
+These identifiers describe static application structure.
+Causeway does not attach property values, rendered labels, object titles, bookmarks, action arguments, user names, tenancy tokens, collection-row identities, or generated Wicket component paths.
+
+The initial Wicket instrumentation deliberately excludes collection table cells, collection row actions, action parameters, service menus, and browser-side rendering.
+It measures the actual Wicket render callback and descendant work performed during that callback.
+Component construction, initialization, configuration, visibility, usability, and authorization work performed before rendering can therefore remain directly beneath the request or root-interaction span.
+
+Without the `observation` profile, the existing no-op registry prevents these spans from being exported and Wicket output remains unchanged.
+The Java agent continues to own sampling and export when Wicket observations are active.
+
 === Filter Foreground and Background Traces
 
 Causeway classifies Java-agent-created HTTP entry spans with `causeway.execution.mode=foreground` and the command-log extension's Quartz entry spans with `causeway.execution.mode=background`.
@@ -249,7 +277,8 @@ Classification is low-cardinality and does not add another span, SDK, or exporte
 It makes traces easier to discover but does not reduce collection, export, retention, or Jaeger memory consumption.
 Use head sampling or a configurable collector's tail processing when background telemetry volume itself must be reduced.
 
-The initial slice deliberately does not add Causeway semantic spans for transactions, property edits, execution publishing, persistence-specific operations, or viewer-specific operations.
+Causeway does not add semantic spans for transactions, property edits, execution publishing, or persistence-specific operations.
+The Wicket viewer adds only the bounded render observations described above and does not add preparation or browser-side observations.
 The Java agent can still produce automatic spans for supported libraries such as HTTP and JDBC.
 
 The behavior of the two activation controls is:

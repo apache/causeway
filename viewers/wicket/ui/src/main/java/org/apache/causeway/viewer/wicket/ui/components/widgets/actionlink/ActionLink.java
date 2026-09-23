@@ -42,6 +42,8 @@ import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersP
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationPolicy;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -104,6 +106,8 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
         this.commonContext = model.getMetaModelContext();
 
         this.where = where;
+        WicketRenderObservationPolicy.actionDescriptor(model, where)
+                .ifPresent(descriptor->WicketRenderObservationBehavior.addTo(this, descriptor));
         
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =

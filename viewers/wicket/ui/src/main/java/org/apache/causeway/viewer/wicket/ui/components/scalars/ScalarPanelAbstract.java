@@ -52,6 +52,8 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.Causeway
 import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ObjectChoicesSelect2Panel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ValueChoicesSelect2Panel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationPolicy;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -244,6 +246,9 @@ implements ScalarModelChangeListener {
 
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
+
+        WicketRenderObservationPolicy.propertyDescriptor(scalarModel)
+                .ifPresent(descriptor->WicketRenderObservationBehavior.addTo(this, descriptor));
 
         val formatModifiers = EnumSet.noneOf(FormatModifier.class);
         setupFormatModifiers(formatModifiers);
