@@ -91,17 +91,12 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Page preparation span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
-            final ExportedSpan collectionInitializationSpan = childSpanNamed(
-                    spans,
-                    preparationSpan,
-                    MicrometerTracingAgentFixture.COLLECTION_INITIALIZATION_NAME,
-                    result.output);
             final ExportedSpan initializationJdbcSpan = spans.stream()
-                    .filter(span -> collectionInitializationSpan.traceId.equals(span.traceId))
-                    .filter(span -> collectionInitializationSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> preparationSpan.traceId.equals(span.traceId))
+                    .filter(span -> preparationSpan.spanId.equals(span.parentSpanId))
                     .filter(span -> "h2".equals(span.attributes.get("db.system")))
                     .findFirst()
-                    .orElseGet(() -> fail("Initialization JDBC span is not a child of collection initialization.\n"
+                    .orElseGet(() -> fail("Construction-time JDBC span is not a child of page preparation.\n"
                             + describe(spans) + "\n" + result.output));
             final ExportedSpan collectionPreparationSpan = childSpanNamed(
                     spans,
@@ -284,11 +279,11 @@ class MicrometerTracingCompatibilityTest {
             assertFalse(auditTrailWriteSpan.attributes.containsKey("causeway.audit.entry.count"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     preparationSpan.attributes.get("causeway.object.type"));
-            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
-                    collectionInitializationSpan.attributes.get("causeway.object.type"));
-            assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
-                    collectionInitializationSpan.attributes.get("causeway.collection.id"));
             assertEquals("h2", initializationJdbcSpan.attributes.get("db.system"));
+            assertFalse(spans.stream().anyMatch(span ->
+                    "causeway.wicket.collection.initialize".equals(
+                            span.attributes.get("causeway.observation.name"))
+                    || "initialize collection roles".equals(span.name)));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     collectionPreparationSpan.attributes.get("causeway.object.type"));
             assertEquals(MicrometerTracingAgentFixture.COLLECTION_ID,
@@ -395,12 +390,11 @@ class MicrometerTracingCompatibilityTest {
             assertEquals("500", failedEntrySpan.attributes.get("http.status_code"));
             assertEquals("STATUS_CODE_ERROR", failedEntrySpan.statusCode);
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionInitialize=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s entityChange=%s entityChangeJdbc=%s audit=%s auditInserts=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s entityChange=%s entityChangeJdbc=%s audit=%s auditInserts=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
                     preparationSpan.name,
-                    collectionInitializationSpan.name,
                     initializationJdbcSpan.name,
                     collectionPreparationSpan.name,
                     rowPreparationSpan.name,

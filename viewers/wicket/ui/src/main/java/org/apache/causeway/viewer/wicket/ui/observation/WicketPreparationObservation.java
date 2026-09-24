@@ -24,10 +24,7 @@ import java.util.function.Supplier;
 
 import org.apache.wicket.Component;
 
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
-import org.apache.causeway.core.config.observation.ObservationClosure;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 
 /**
  * Observes synchronous initialization work or keeps semantic Wicket preparation
@@ -40,7 +37,7 @@ public class WicketPreparationObservation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final WicketRenderObservationDescriptor descriptor;
-    private transient ObservationClosure activeClosure;
+    private transient WicketObservationCoordinator.Admission activeAdmission;
 
     public WicketPreparationObservation(
             final WicketRenderObservationDescriptor descriptor) {
@@ -109,62 +106,46 @@ public class WicketPreparationObservation implements Serializable {
                     "Initialization or preparation descriptor required");
         }
 
-        final CausewayObservationIntegration integration = context
-                .lookupService(CausewayObservationIntegration.class)
-                .orElse(null);
-        if(integration == null || integration.isNoop()) {
-            return work.get();
-        }
-
-        final ObservationClosure closure = start(integration, descriptor);
+        final WicketObservationCoordinator.Admission admission =
+                WicketObservationCoordinator.begin(
+                        context, descriptor, WicketPreparationObservation.class);
         try {
             return work.get();
         } catch (RuntimeException | Error ex) {
-            closure.onError(ex);
+            admission.onError(ex);
             throw ex;
         } finally {
-            closure.close();
+            admission.finish();
         }
     }
 
     boolean isActive() {
-        return activeClosure != null;
+        return activeAdmission != null;
     }
 
     private void start(final Component component) {
-        if(activeClosure != null || !(component instanceof HasMetaModelContext)) {
+        if(activeAdmission != null || !(component instanceof HasMetaModelContext)) {
             return;
         }
-        final CausewayObservationIntegration integration =
-                ((HasMetaModelContext) component)
-                        .lookupService(CausewayObservationIntegration.class)
-                        .orElse(null);
-        if(integration == null || integration.isNoop()) {
-            return;
+        final WicketObservationCoordinator.Admission admission =
+                WicketObservationCoordinator.begin(
+                        (HasMetaModelContext) component,
+                        descriptor,
+                        WicketPreparationObservation.class);
+        if(admission.isTracked()) {
+            activeAdmission = admission;
         }
-        activeClosure = start(integration, descriptor);
-    }
-
-    private static ObservationClosure start(
-            final CausewayObservationIntegration integration,
-            final WicketRenderObservationDescriptor descriptor) {
-        return new ObservationClosure().startAndOpenScope(
-                descriptor.customize(integration.provider(
-                        WicketPreparationObservation.class,
-                        CausewayObservationIntegration.withModuleName(
-                                CausewayModuleViewerWicketUi.NAMESPACE))
-                        .get(descriptor.getRegion().getObservationName())));
     }
 
     private void complete(final Throwable failure) {
-        if(activeClosure == null) {
+        if(activeAdmission == null) {
             return;
         }
-        final ObservationClosure closure = activeClosure;
-        activeClosure = null;
+        final WicketObservationCoordinator.Admission admission = activeAdmission;
+        activeAdmission = null;
         if(failure != null) {
-            closure.onError(failure);
+            admission.onError(failure);
         }
-        closure.close();
+        admission.finish();
     }
 }

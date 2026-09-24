@@ -407,8 +407,7 @@ When the Wicket viewer renders an entity page, Causeway adds semantic spans for 
 prepare demo.Customer
 ├── prop demo.Customer#calculatedTotal
 ├── coll demo.Customer#recentOrders
-├── initialize collection roles
-│   └── JDBC collection load
+├── JDBC collection load
 └── prepare collection roles
     ├── prepare row demo.Role
     │   └── JDBC lazy load
@@ -434,9 +433,9 @@ Automatic JDBC spans become descendants of whichever preparation or render regio
 
 The entity-page preparation observation uses stable name `causeway.wicket.page.prepare` and a contextual display name such as `prepare demo.Customer`.
 It starts before Wicket delegates to `Page.onConfigure()`, so it covers initial page construction, descendant component configuration, visibility and usability evaluation, and other `onBeforeRender` preparation.
-Each parented entity collection adds one synchronous `causeway.wicket.collection.initialize` child such as `initialize collection roles` around its UI construction and collection-model setup.
-This initialization span owns collection loading, visibility and presentation setup, child construction, and Java-agent JDBC spans initiated before the later Wicket lifecycle.
-Each visible parented collection also adds a `causeway.wicket.collection.prepare` child such as `prepare collection roles` when it enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree.
+Collection UI construction and model setup remain within page preparation or the nearest natural context and do not create a separate collection-initialization observation.
+Java-agent JDBC spans initiated during construction inherit that naturally active parent.
+Each visible parented collection adds a `causeway.wicket.collection.prepare` child such as `prepare collection roles` when it enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree.
 This later preparation span owns data-provider sizing and iteration, visible-row selection and population, and Java-agent JDBC spans initiated there.
 Each synchronous visible-row population callback adds a `causeway.wicket.collection.row.prepare` child such as `prepare row demo.Role`.
 Collection-fetch work completed during later preparation but before iteration reaches an individual row remains directly beneath collection preparation.
@@ -466,11 +465,58 @@ Collection and row observations apply only to parented entity collections that h
 Standalone action-result tables, action parameters, service menus, individual headers and navigation controls, selection checkboxes, presentation-only cells, empty placeholders, and browser-side rendering remain excluded.
 Preparation and render row names deliberately repeat for rows of the same logical type, and no row index or instance identifier is added.
 
-Each parented collection adds one initialization observation and up to four aggregate table-render observations.
-Collection-heavy pages otherwise create observations in proportion to the visible rows and their logical property and action cells.
-Pagination and Ajax partial responses bound this growth to participating rows, and operators should use Java-agent or collector sampling and appropriate page sizes to control production trace volume.
+The Wicket observation controls are configured beneath `causeway.viewer.wicket.observation`.
+The compatibility defaults are `detail=MEMBERS` and `max-spans-per-request=0`, where zero means unlimited.
+The accepted detail levels form this monotonic hierarchy:
 
-Without the `observation` profile, the existing no-op registry prevents these spans from being exported and Wicket output remains unchanged.
+[cols="1,4",options="header"]
+|===
+|Level
+|Eligible Causeway Wicket observations
+
+|`NONE`
+|None.
+
+|`PAGE`
+|Page preparation, page rendering, and action prompts.
+
+|`REGIONS`
+|Page detail plus fieldsets, collection preparation and rendering, and table/header/body/footer regions.
+
+|`ROWS`
+|Region detail plus visible-row preparation and rendering.
+
+|`MEMBERS`
+|Row detail plus logical properties and eligible action buttons.
+|===
+
+For example, this configuration retains region boundaries while excluding row and member spans and enforces a hard maximum of 100 Causeway Wicket observations in each full-page or Ajax request:
+
+[source,properties]
+----
+causeway.viewer.wicket.observation.detail=REGIONS
+causeway.viewer.wicket.observation.max-spans-per-request=100
+----
+
+A positive maximum counts only Causeway Wicket observations and never counts Java-agent HTTP or JDBC spans or other Causeway observations.
+Ten percent of a finite maximum, with a minimum of one and a maximum of sixteen, is reserved for later page and region observations before rows and members are admitted.
+The absolute configured maximum is never exceeded.
+Suppressed observations create no scope, and admitted descendants attach to the nearest active emitted Wicket ancestor or the naturally current non-Wicket context.
+
+The nearest active page or region observation reports fixed-key numeric `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` attributes when candidates are suppressed.
+An emitted collection preparation observation reports visible-row callback count and total and maximum monotonic duration using `causeway.wicket.collection.row.count`, `causeway.wicket.collection.row.duration.total.nanos`, and `causeway.wicket.collection.row.duration.max.nanos`.
+An emitted collection render observation reports the same row aggregates plus `causeway.wicket.collection.logical-cell.count`.
+`causeway.wicket.collection.suppressed.children` counts row and member callbacks whose individual observations were omitted while their work still contributed to the collection aggregate.
+These diagnostics contain no row identity, domain value, total collection size, or off-page count.
+
+Collection-heavy pages create observations in proportion to the participating rows and logical cells only at detail levels that enable them.
+Pagination, detail selection, the request budget, Java-agent or collector sampling, and appropriate page sizes provide complementary production volume controls.
+Changing the startup-bound Wicket settings requires an application restart or deployment revision replacement and does not change policy midway through an in-flight request.
+
+`causeway.wicket.collection.initialize` has been removed because representative spans were generally only hundreds of microseconds to a few milliseconds while substantially amplifying traces.
+Use page preparation for construction-time work and collection preparation for later data-provider and visible-row work.
+
+Without the `observation` profile, the existing no-op registry prevents these spans and aggregate metadata from being exported and Wicket output remains unchanged.
 The Java agent continues to own automatic HTTP and JDBC instrumentation, sampling, and export when Wicket observations are active.
 
 === Filter Foreground and Background Traces
@@ -500,7 +546,7 @@ It makes traces easier to discover but does not reduce collection, export, reten
 Use head sampling or a configurable collector's tail processing when background telemetry volume itself must be reduced.
 
 Causeway does not add semantic spans for transactions, property edits, execution publishing, or persistence-specific operations.
-The Wicket viewer adds only the bounded initialization, preparation, and render observations described above and does not add browser-side observations.
+The Wicket viewer adds only the bounded preparation and render observations described above and does not add browser-side observations.
 The Java agent can still produce automatic spans for supported libraries such as HTTP and JDBC.
 
 The behavior of the two activation controls is:

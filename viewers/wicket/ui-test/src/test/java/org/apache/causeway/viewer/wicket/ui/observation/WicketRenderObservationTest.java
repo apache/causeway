@@ -23,12 +23,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
 
 import io.opentelemetry.api.trace.Span;
+import io.micrometer.common.KeyValue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,6 +49,7 @@ import static org.mockito.Mockito.when;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.observation.ObservationClosure;
@@ -95,9 +100,6 @@ class WicketRenderObservationTest {
         assertEquals("render fieldset identity",
                 WicketRenderObservationDescriptor.fieldset(
                         OBJECT_TYPE, "identity").getContextualName());
-        assertEquals("initialize collection orders",
-                WicketRenderObservationDescriptor.collectionInitialization(
-                        OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
         assertEquals("prepare collection orders",
                 WicketRenderObservationDescriptor.collectionPreparation(
                         OBJECT_TYPE, OBJECT_TYPE + "#orders").getContextualName());
@@ -343,51 +345,6 @@ class WicketRenderObservationTest {
     }
 
     @Test
-    void collectionInitializationOwnsConstructionTimeWorkAndClosesSynchronously() {
-        final RecordingHandler handler = new RecordingHandler();
-        final CausewayObservationIntegration integration =
-                new CausewayObservationIntegration(registryWith(handler));
-        final WicketTester tester = new WicketTester();
-        try {
-            final PreparedContainer page = new PreparedContainer(
-                    "component", integration, OBJECT_TYPE);
-            page.add(new WebMarkupContainer("collection") {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void onConfigure() {
-                    WicketPreparationObservation.observe(
-                            page,
-                            WicketRenderObservationDescriptor.collectionInitialization(
-                                    OBJECT_TYPE, OBJECT_TYPE + "#orders"),
-                            () -> integration.createNotStarted(
-                                    getClass(), "SELECT collection")
-                                    .contextualName("SELECT collection")
-                                    .observe(() -> {}));
-                    super.onConfigure();
-                }
-            });
-
-            tester.startComponentInPage(page, Markup.of(
-                    "<div wicket:id='component'><span wicket:id='collection'></span></div>"));
-
-            assertEquals(List.of(
-                    "causeway.wicket.page.prepare<-null",
-                    "causeway.wicket.collection.initialize<-causeway.wicket.page.prepare",
-                    "SELECT collection<-causeway.wicket.collection.initialize",
-                    "causeway.wicket.page.render<-null"), handler.parents);
-            assertEquals(List.of(
-                    "prepare demo.Customer",
-                    "initialize collection orders",
-                    "SELECT collection",
-                    "render demo.Customer"), handler.contextualNames);
-            assertNull(integration.observationRegistry().getCurrentObservation());
-        } finally {
-            tester.destroy();
-        }
-    }
-
-    @Test
     void preparationWithNoopRegistryLeavesRenderingUnchanged() {
         final CausewayObservationIntegration integration =
                 new CausewayObservationIntegration(ObservationRegistry.NOOP);
@@ -433,30 +390,6 @@ class WicketRenderObservationTest {
         } finally {
             tester.destroy();
         }
-    }
-
-    @Test
-    void collectionInitializationFailureIsRecordedAndScopeIsClosed() {
-        final RecordingHandler handler = new RecordingHandler();
-        final CausewayObservationIntegration integration =
-                new CausewayObservationIntegration(registryWith(handler));
-        final HasMetaModelContext context = new ObservationContext(integration);
-
-        final IllegalStateException failure = assertThrows(
-                IllegalStateException.class,
-                () -> WicketPreparationObservation.observe(
-                        context,
-                        WicketRenderObservationDescriptor.collectionInitialization(
-                                OBJECT_TYPE, OBJECT_TYPE + "#orders"),
-                        () -> {
-                            throw new IllegalStateException("initialization failed");
-                        }));
-
-        assertEquals("initialization failed", failure.getMessage());
-        assertEquals(List.of(
-                "error:causeway.wicket.collection.initialize:initialization failed"),
-                handler.errors);
-        assertNull(integration.observationRegistry().getCurrentObservation());
     }
 
     @Test
@@ -840,6 +773,154 @@ class WicketRenderObservationTest {
     }
 
     @Test
+    void descriptorDetailClassificationIsMonotonic() {
+        assertEquals(Detail.PAGE,
+                WicketRenderObservationDescriptor.page(OBJECT_TYPE).minimumDetail());
+        assertEquals(Detail.PAGE,
+                WicketRenderObservationDescriptor.actionPrompt(
+                        OBJECT_TYPE, OBJECT_TYPE + "#updateName()", "updateName")
+                        .minimumDetail());
+        assertEquals(Detail.REGIONS,
+                WicketRenderObservationDescriptor.collection(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders").minimumDetail());
+        assertEquals(Detail.ROWS,
+                WicketRenderObservationDescriptor.row(
+                        "demo.Order", OBJECT_TYPE + "#orders").minimumDetail());
+        assertEquals(Detail.MEMBERS,
+                WicketRenderObservationDescriptor.property(
+                        "demo.Order", "demo.Order#total").minimumDetail());
+    }
+
+    @Test
+    void regionDetailSuppressesRowsAndMembersAndReportsBoundedCounts() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketObservationCoordinator.State state =
+                new WicketObservationCoordinator.State(
+                        new WicketObservationCoordinator.Settings(Detail.REGIONS, 0),
+                        System::nanoTime);
+
+        final WicketObservationCoordinator.Admission collection = state.begin(
+                integration,
+                WicketRenderObservationDescriptor.collection(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders"));
+        final WicketObservationCoordinator.Admission row = state.begin(
+                integration,
+                WicketRenderObservationDescriptor.row(
+                        "demo.Order", OBJECT_TYPE + "#orders"));
+        final WicketObservationCoordinator.Admission property = state.begin(
+                integration,
+                WicketRenderObservationDescriptor.property(
+                        "demo.Order", "demo.Order#total"));
+        property.finish();
+        row.finish();
+        collection.finish();
+
+        assertEquals(List.of("causeway.wicket.collection.render<-null"), handler.parents);
+        assertEquals("2", handler.highValue(
+                "causeway.wicket.collection.render",
+                WicketObservationCoordinator.SUPPRESSED_DETAIL_TAG));
+        assertEquals("2", handler.highValue(
+                "causeway.wicket.collection.render",
+                WicketObservationCoordinator.SUPPRESSED_CHILD_TAG));
+        assertEquals("1", handler.highValue(
+                "causeway.wicket.collection.render",
+                WicketObservationCoordinator.ROW_COUNT_TAG));
+        assertEquals("1", handler.highValue(
+                "causeway.wicket.collection.render",
+                WicketObservationCoordinator.CELL_COUNT_TAG));
+    }
+
+    @Test
+    void finiteBudgetReservesStructuralCapacityAndNeverExceedsMaximum() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketObservationCoordinator.State state =
+                new WicketObservationCoordinator.State(
+                        new WicketObservationCoordinator.Settings(Detail.MEMBERS, 10),
+                        System::nanoTime);
+
+        final WicketObservationCoordinator.Admission page = state.begin(
+                integration, WicketRenderObservationDescriptor.page(OBJECT_TYPE));
+        for (int i = 0; i < 12; i++) {
+            state.begin(integration, WicketRenderObservationDescriptor.property(
+                    OBJECT_TYPE, OBJECT_TYPE + "#name")).finish();
+        }
+        final WicketObservationCoordinator.Admission collection = state.begin(
+                integration, WicketRenderObservationDescriptor.collection(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders"));
+        collection.finish();
+        page.finish();
+
+        assertEquals(10, handler.parents.size());
+        assertTrue(handler.parents.stream().anyMatch(
+                parent -> parent.startsWith("causeway.wicket.collection.render<-")));
+        assertEquals("4", handler.highValue(
+                "causeway.wicket.page.render",
+                WicketObservationCoordinator.SUPPRESSED_BUDGET_TAG));
+    }
+
+    @Test
+    void collectionAggregatesUseCallbackTimingEvenWhenChildSpansAreSuppressed() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final AtomicInteger tick = new AtomicInteger();
+        final long[] ticks = {10L, 25L, 40L, 70L};
+        final WicketObservationCoordinator.State state =
+                new WicketObservationCoordinator.State(
+                        new WicketObservationCoordinator.Settings(Detail.REGIONS, 0),
+                        () -> ticks[tick.getAndIncrement()]);
+
+        final WicketObservationCoordinator.Admission collection = state.begin(
+                integration,
+                WicketRenderObservationDescriptor.collectionPreparation(
+                        OBJECT_TYPE, OBJECT_TYPE + "#orders"));
+        state.begin(integration, WicketRenderObservationDescriptor.rowPreparation(
+                "demo.Order", OBJECT_TYPE + "#orders")).finish();
+        state.begin(integration, WicketRenderObservationDescriptor.rowPreparation(
+                "demo.Order", OBJECT_TYPE + "#orders")).finish();
+        collection.finish();
+
+        assertEquals("2", handler.highValue(
+                "causeway.wicket.collection.prepare",
+                WicketObservationCoordinator.ROW_COUNT_TAG));
+        assertEquals("45", handler.highValue(
+                "causeway.wicket.collection.prepare",
+                WicketObservationCoordinator.ROW_TOTAL_NANOS_TAG));
+        assertEquals("30", handler.highValue(
+                "causeway.wicket.collection.prepare",
+                WicketObservationCoordinator.ROW_MAX_NANOS_TAG));
+        assertEquals("2", handler.highValue(
+                "causeway.wicket.collection.prepare",
+                WicketObservationCoordinator.SUPPRESSED_CHILD_TAG));
+    }
+
+    @Test
+    void noDetailStartsNoWicketObservations() {
+        final RecordingHandler handler = new RecordingHandler();
+        final CausewayObservationIntegration integration =
+                new CausewayObservationIntegration(registryWith(handler));
+        final WicketObservationCoordinator.State state =
+                new WicketObservationCoordinator.State(
+                        new WicketObservationCoordinator.Settings(Detail.NONE, 0),
+                        System::nanoTime);
+
+        state.begin(integration,
+                WicketRenderObservationDescriptor.page(OBJECT_TYPE)).finish();
+
+        assertTrue(handler.parents.isEmpty());
+    }
+
+    @Test
+    void negativeBudgetIsRejected() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new WicketObservationCoordinator.Settings(Detail.MEMBERS, -1));
+    }
+
+    @Test
     void serializationRetainsDescriptorButNotActiveTelemetry() throws Exception {
         final WicketRenderObservationBehavior original = behaviorFor(
                 WicketRenderObservationDescriptor.actionPrompt(
@@ -1081,6 +1162,13 @@ class WicketRenderObservationTest {
         private final List<String> errors = new ArrayList<>();
         private final List<String> parents = new ArrayList<>();
         private final List<String> contextualNames = new ArrayList<>();
+        private final Map<String, Map<String, String>> highCardinalityByName =
+                new LinkedHashMap<>();
+
+        private String highValue(final String observationName, final String key) {
+            final Map<String, String> values = highCardinalityByName.get(observationName);
+            return values != null ? values.get(key) : null;
+        }
 
         @Override
         public boolean supportsContext(final Observation.Context context) {
@@ -1114,6 +1202,11 @@ class WicketRenderObservationTest {
         @Override
         public void onStop(final Observation.Context context) {
             events.add("stop:" + context.getName());
+            final Map<String, String> values = new LinkedHashMap<>();
+            for (KeyValue keyValue : context.getHighCardinalityKeyValues()) {
+                values.put(keyValue.getKey(), keyValue.getValue());
+            }
+            highCardinalityByName.put(context.getName(), values);
         }
     }
 }

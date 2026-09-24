@@ -48,12 +48,20 @@ public final class WicketRenderObservationTracker {
         state(requestCycle).register(owner, closure);
     }
 
+    static void register(
+            final RequestCycle requestCycle,
+            final WicketRenderObservationBehavior owner,
+            final WicketObservationCoordinator.Admission admission) {
+        state(requestCycle).register(owner, admission);
+    }
+
     static void complete(
             final RequestCycle requestCycle,
             final WicketRenderObservationBehavior owner) {
         final State state = requestCycle.getMetaData(STATE_KEY);
         if(state == null) {
             owner.clearActiveClosure();
+            owner.clearActiveAdmission();
             return;
         }
         state.complete(owner);
@@ -67,8 +75,12 @@ public final class WicketRenderObservationTracker {
             final @Nullable Throwable failure) {
         final State state = requestCycle.getMetaData(STATE_KEY);
         requestCycle.setMetaData(STATE_KEY, null);
-        if(state != null) {
-            state.cleanup(failure);
+        try {
+            if(state != null) {
+                state.cleanup(failure);
+            }
+        } finally {
+            WicketObservationCoordinator.cleanup(requestCycle, failure);
         }
     }
 
@@ -91,6 +103,12 @@ public final class WicketRenderObservationTracker {
             activeObservations.addLast(new ActiveObservation(owner, closure));
         }
 
+        void register(
+                final WicketRenderObservationBehavior owner,
+                final WicketObservationCoordinator.Admission admission) {
+            activeObservations.addLast(new ActiveObservation(owner, admission));
+        }
+
         void complete(final WicketRenderObservationBehavior owner) {
             ActiveObservation matching = null;
             for (ActiveObservation active : activeObservations) {
@@ -103,6 +121,7 @@ public final class WicketRenderObservationTracker {
                 matching.close(null);
             } else {
                 owner.clearActiveClosure();
+                owner.clearActiveAdmission();
             }
         }
 
@@ -121,22 +140,43 @@ public final class WicketRenderObservationTracker {
 
         private final WicketRenderObservationBehavior owner;
         private final ObservationClosure closure;
+        private final WicketObservationCoordinator.Admission admission;
 
         private ActiveObservation(
                 final WicketRenderObservationBehavior owner,
                 final ObservationClosure closure) {
             this.owner = owner;
             this.closure = closure;
+            this.admission = null;
+        }
+
+        private ActiveObservation(
+                final WicketRenderObservationBehavior owner,
+                final WicketObservationCoordinator.Admission admission) {
+            this.owner = owner;
+            this.closure = null;
+            this.admission = admission;
         }
 
         private void close(final @Nullable Throwable failure) {
             try {
-                closure.onError(failure);
+                if(closure != null) {
+                    closure.onError(failure);
+                }
+                if(admission != null) {
+                    admission.onError(failure);
+                }
             } finally {
                 try {
-                    closure.close();
+                    if(closure != null) {
+                        closure.close();
+                    }
+                    if(admission != null) {
+                        admission.finish();
+                    }
                 } finally {
                     owner.clearActiveClosure();
+                    owner.clearActiveAdmission();
                 }
             }
         }

@@ -2995,6 +2995,43 @@ public class CausewayConfiguration {
         @Data
         public static class Wicket {
 
+            /**
+             * Controls the volume of semantic Wicket observations.
+             */
+            private final Observation observation = new Observation();
+            @Data
+            public static class Observation {
+
+                /**
+                 * The finest semantic category eligible for observation.
+                 */
+                @NotNull
+                private Detail detail = Detail.MEMBERS;
+
+                /**
+                 * Hard maximum number of Causeway Wicket observations per request;
+                 * {@code 0} means unlimited.
+                 */
+                @javax.validation.constraints.Min(0)
+                private int maxSpansPerRequest = 0;
+
+                public void setMaxSpansPerRequest(final int maxSpansPerRequest) {
+                    if(maxSpansPerRequest < 0) {
+                        throw new IllegalArgumentException(
+                                "max-spans-per-request must not be negative");
+                    }
+                    this.maxSpansPerRequest = maxSpansPerRequest;
+                }
+
+                public enum Detail {
+                    NONE,
+                    PAGE,
+                    REGIONS,
+                    ROWS,
+                    MEMBERS
+                }
+            }
+
         	/**
              * Whether actions, that have explicit <code>hidden = Where</code> semantics
              * to enable them in tables,

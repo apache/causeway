@@ -26,6 +26,7 @@ import io.micrometer.observation.Observation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail;
 import org.apache.causeway.core.config.observation.CausewayObservationNaming;
 import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 
@@ -45,8 +46,6 @@ public final class WicketRenderObservationDescriptor implements Serializable {
     @Getter
     public enum Region {
         PAGE_PREPARATION("causeway.wicket.page.prepare", null, true),
-        COLLECTION_INITIALIZATION(
-                "causeway.wicket.collection.initialize", "causeway.collection.id", true),
         COLLECTION_PREPARATION(
                 "causeway.wicket.collection.prepare", "causeway.collection.id", true),
         ROW_PREPARATION(
@@ -102,17 +101,6 @@ public final class WicketRenderObservationDescriptor implements Serializable {
             final String propertyId) {
         return regionDescriptor(
                 Region.PROPERTY, objectType, propertyId, "property");
-    }
-
-    public static WicketRenderObservationDescriptor collectionInitialization(
-            final String objectType,
-            final String collectionId) {
-        return new WicketRenderObservationDescriptor(
-                Region.COLLECTION_INITIALIZATION,
-                objectType,
-                collectionId,
-                CausewayObservationNaming.forRegion(
-                        "initialize", "collection", collectionId));
     }
 
     public static WicketRenderObservationDescriptor collectionPreparation(
@@ -233,6 +221,47 @@ public final class WicketRenderObservationDescriptor implements Serializable {
         } else {
             this.memberId = null;
         }
+    }
+
+    public Detail minimumDetail() {
+        switch (region) {
+            case PAGE_PREPARATION:
+            case PAGE:
+            case ACTION_PROMPT:
+                return Detail.PAGE;
+            case COLLECTION_PREPARATION:
+            case FIELDSET:
+            case COLLECTION:
+            case TABLE:
+            case TABLE_HEADER:
+            case TABLE_BODY:
+            case TABLE_FOOTER:
+                return Detail.REGIONS;
+            case ROW_PREPARATION:
+            case ROW:
+                return Detail.ROWS;
+            case PROPERTY:
+            case ACTION:
+                return Detail.MEMBERS;
+            default:
+                throw new IllegalStateException("Unclassified Wicket observation region " + region);
+        }
+    }
+
+    public boolean isStructural() {
+        return minimumDetail().ordinal() <= Detail.REGIONS.ordinal();
+    }
+
+    public boolean isCollectionAggregate() {
+        return region == Region.COLLECTION_PREPARATION || region == Region.COLLECTION;
+    }
+
+    public boolean isRowCallback() {
+        return region == Region.ROW_PREPARATION || region == Region.ROW;
+    }
+
+    public boolean isLogicalCellCallback() {
+        return region == Region.PROPERTY || region == Region.ACTION;
     }
 
     /**

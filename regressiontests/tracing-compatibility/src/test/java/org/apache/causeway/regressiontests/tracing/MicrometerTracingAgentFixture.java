@@ -103,7 +103,6 @@ public final class MicrometerTracingAgentFixture {
     static final String ENTITY_CHANGE_EVALUATION_NAME = "evaluate property changes";
     static final String AUDIT_TRAIL_WRITE_NAME = "write audit trail";
     static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
-    static final String COLLECTION_INITIALIZATION_NAME = "initialize collection roles";
     static final String COLLECTION_PREPARATION_NAME = "prepare collection roles";
     static final String ROW_PREPARATION_NAME = "prepare row causeway.TracingRole";
     static final String PAGE_RENDER_NAME = "render causeway.TracingFixture";
@@ -271,9 +270,6 @@ public final class MicrometerTracingAgentFixture {
         private void renderPageAndPrompt() {
             final WicketRenderObservationDescriptor preparation =
                     WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE);
-            final WicketRenderObservationDescriptor collectionInitialization =
-                    WicketRenderObservationDescriptor.collectionInitialization(
-                            OBJECT_TYPE, COLLECTION_ID);
             final WicketRenderObservationDescriptor collectionPreparation =
                     WicketRenderObservationDescriptor.collectionPreparation(
                             OBJECT_TYPE, COLLECTION_ID);
@@ -318,7 +314,7 @@ public final class MicrometerTracingAgentFixture {
                     WicketRenderObservationDescriptor.actionPrompt(
                             OBJECT_TYPE, ACTION_ID, "executeJdbc");
             observe(preparation, () -> {
-                observe(collectionInitialization, this::executePreparationJdbc);
+                executePreparationJdbc();
                 observe(collectionPreparation,
                         () -> observe(rowPreparation, this::executePreparationJdbc));
             });

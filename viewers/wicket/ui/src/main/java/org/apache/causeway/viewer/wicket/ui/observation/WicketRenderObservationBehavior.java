@@ -22,10 +22,8 @@ import java.util.Objects;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.ObservationClosure;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 
 /**
  * Opens a semantic observation for the actual rendering of one Wicket component subtree.
@@ -45,6 +43,7 @@ public final class WicketRenderObservationBehavior extends Behavior {
 
     private final WicketRenderObservationDescriptor descriptor;
     private transient ObservationClosure activeClosure;
+    private transient WicketObservationCoordinator.Admission activeAdmission;
 
     public WicketRenderObservationBehavior(final WicketRenderObservationDescriptor descriptor) {
         this.descriptor = Objects.requireNonNull(descriptor, "descriptor");
@@ -52,7 +51,7 @@ public final class WicketRenderObservationBehavior extends Behavior {
 
     @Override
     public void beforeRender(final Component component) {
-        if(activeClosure != null) {
+        if(activeClosure != null || activeAdmission != null) {
             throw new IllegalStateException("Wicket render observation lifecycle is already active");
         }
         final HasMetaModelContext context = metamodelContextOf(component);
@@ -60,36 +59,28 @@ public final class WicketRenderObservationBehavior extends Behavior {
             return;
         }
 
-        final CausewayObservationIntegration integration = context
-                .lookupService(CausewayObservationIntegration.class)
-                .orElse(null);
-        if(integration == null || integration.isNoop()) {
-            return;
-        }
-
         descriptor.nominateSemanticTraceName();
 
-        final ObservationClosure closure = new ObservationClosure();
-        closure.startAndOpenScope(descriptor.customize(integration.provider(
-                getClass(),
-                CausewayObservationIntegration.withModuleName(
-                        CausewayModuleViewerWicketUi.NAMESPACE))
-                .get(descriptor.getRegion().getObservationName())));
-
-        activate(closure);
+        final WicketObservationCoordinator.Admission admission =
+                WicketObservationCoordinator.begin(context, descriptor, getClass());
+        if(!admission.isTracked()) {
+            return;
+        }
+        activeAdmission = admission;
         try {
-            WicketRenderObservationTracker.register(component.getRequestCycle(), this, closure);
+            WicketRenderObservationTracker.register(
+                    component.getRequestCycle(), this, admission);
         } catch (RuntimeException | Error ex) {
-            clearActiveClosure();
-            closure.onError(ex);
-            closure.close();
+            clearActiveAdmission();
+            admission.onError(ex);
+            admission.finish();
             throw ex;
         }
     }
 
     @Override
     public void afterRender(final Component component) {
-        if(activeClosure != null) {
+        if(activeClosure != null || activeAdmission != null) {
             WicketRenderObservationTracker.complete(component.getRequestCycle(), this);
         }
     }
@@ -113,11 +104,15 @@ public final class WicketRenderObservationBehavior extends Behavior {
         activeClosure = null;
     }
 
+    void clearActiveAdmission() {
+        activeAdmission = null;
+    }
+
     WicketRenderObservationDescriptor descriptor() {
         return descriptor;
     }
 
     boolean isActive() {
-        return activeClosure != null;
+        return activeClosure != null || activeAdmission != null;
     }
 }

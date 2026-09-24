@@ -25,14 +25,29 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationHandler;
 import io.micrometer.observation.ObservationRegistry;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CausewayObservationConfigurationTest {
+
+    @Test
+    void wicketObservationVolumeDefaultsPreserveCompatibility() {
+        final CausewayConfiguration.Viewer.Wicket wicket =
+                new CausewayConfiguration.Viewer.Wicket();
+
+        assertEquals(Detail.MEMBERS, wicket.getObservation().getDetail());
+        assertEquals(0, wicket.getObservation().getMaxSpansPerRequest());
+        assertThrows(IllegalArgumentException.class,
+                () -> wicket.getObservation().setMaxSpansPerRequest(-1));
+    }
 
     @Test
     void inactiveProfileUsesCausewayNoopRegistryAndIgnoresApplicationRegistry() {
