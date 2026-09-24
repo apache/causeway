@@ -98,6 +98,7 @@ public final class MicrometerTracingAgentFixture {
     static final String ROOT_INTERACTION_NAME = "causeway.root.interaction";
     static final String ACTION_INVOCATION_NAME =
             "act causeway.TracingFixture#executeJdbc";
+    static final String AUDIT_TRAIL_WRITE_NAME = "write audit trail";
     static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
     static final String COLLECTION_INITIALIZATION_NAME = "initialize collection roles";
     static final String COLLECTION_PREPARATION_NAME = "prepare collection roles";
@@ -176,7 +177,7 @@ public final class MicrometerTracingAgentFixture {
             this.observationIntegration = observationIntegration;
             this.interactionService = interactionService(observationIntegration);
             this.memberExecutorService = memberExecutorService(observationIntegration);
-            this.actionExecutor = actionExecutor();
+            this.actionExecutor = actionExecutor(this::writeAuditTrail);
         }
 
         @GetMapping("/trace")
@@ -312,6 +313,15 @@ public final class MicrometerTracingAgentFixture {
                     .observe(rendering);
         }
 
+        private void writeAuditTrail() {
+            observationIntegration.provider(
+                    getClass(),
+                    CausewayObservationIntegration.withModuleName("causeway.ext.auditTrail"))
+                    .get("causeway.audittrail.write")
+                    .contextualName(AUDIT_TRAIL_WRITE_NAME)
+                    .observe(MicrometerTracingAgentFixture::executeAuditJdbc);
+        }
+
         private void executePreparationJdbc() {
             try {
                 Class.forName("org.h2.Driver");
@@ -326,6 +336,24 @@ public final class MicrometerTracingAgentFixture {
             } catch (Exception ex) {
                 throw new IllegalStateException("Preparation JDBC probe failed", ex);
             }
+        }
+    }
+
+    private static void executeAuditJdbc() {
+        try {
+            Class.forName("org.h2.Driver");
+            try (Connection connection = DriverManager.getConnection(
+                    "jdbc:h2:mem:causeway-tracing;DB_CLOSE_DELAY=-1");
+                    Statement statement = connection.createStatement()) {
+                statement.execute("create table audit_probe "
+                        + "(id integer primary key, property_name varchar(32))");
+                statement.executeUpdate(
+                        "insert into audit_probe (id, property_name) values (1, 'status')");
+                statement.executeUpdate(
+                        "insert into audit_probe (id, property_name) values (2, 'total')");
+            }
+        } catch (Exception ex) {
+            throw new IllegalStateException("Audit JDBC probe failed", ex);
         }
     }
 
@@ -377,8 +405,9 @@ public final class MicrometerTracingAgentFixture {
                 observationIntegration);
     }
 
-    private static ActionExecutor actionExecutor() throws Exception {
-        final JdbcAction targetPojo = new JdbcAction();
+    private static ActionExecutor actionExecutor(
+            final Runnable auditTrailWrite) throws Exception {
+        final JdbcAction targetPojo = new JdbcAction(auditTrailWrite);
         final ManagedObject target = mock(ManagedObject.class);
         when(target.getPojo()).thenReturn(targetPojo);
         final InteractionHead head = mock(InteractionHead.class);
@@ -410,6 +439,13 @@ public final class MicrometerTracingAgentFixture {
     }
 
     public static final class JdbcAction {
+
+        private final Runnable auditTrailWrite;
+
+        private JdbcAction(final Runnable auditTrailWrite) {
+            this.auditTrailWrite = auditTrailWrite;
+        }
+
         public String executeJdbc() throws Exception {
             Class.forName("org.h2.Driver");
             try (Connection connection = DriverManager.getConnection(
@@ -425,6 +461,7 @@ public final class MicrometerTracingAgentFixture {
                     }
                 }
             }
+            auditTrailWrite.run();
             return "compatible";
         }
     }

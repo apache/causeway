@@ -257,6 +257,36 @@ For example, `act isisExtSecMan.ApplicationUser#updateEmailAddress` falls back t
 The same policy applies to `prop`, `coll`, `prepare`, `prompt`, and `render` contextual names.
 Causeway does not add action arguments, return values, target instance identifiers, object titles, bookmarks, user names, tenancy tokens, or other instance-specific application data to names or attributes on these semantic spans.
 
+=== Audit-Trail Persistence
+
+When the audit-trail extension is enabled with the `observation` profile active, Causeway adds `causeway.audittrail.write` around each audit subscriber persistence callback.
+The exported contextual display name is `write audit trail`.
+
+A bulk property-change callback creates one aggregate audit observation around all entry creation, persistence, flushing, and automatic JDBC work in that callback:
+
+[source,text]
+----
+act demo.InvoiceSummary#invoiceAll
+└── write audit trail
+    ├── SELECT audit metadata
+    ├── INSERT AuditTrailEntry
+    ├── SELECT audit metadata
+    └── INSERT AuditTrailEntry
+----
+
+An individual property-change callback creates one observation around that individual repository operation.
+The extension does not add one framework observation per entry within a bulk callback.
+Small publications can contain multiple sibling audit observations when the core publisher delivers separate individual callbacks according to its existing threshold.
+
+The audit observation inherits whichever action, interaction, request, or background trace context is current when the callback begins.
+It does not retain an action context or fabricate action parentage when publication occurs at another transaction boundary.
+The OpenTelemetry Java agent continues to own the descendant JDBC spans, context propagation, sampling, and export.
+
+The observation carries only the existing static `causeway.bean` and `causeway.module` framework metadata.
+It does not attach changed property identifiers, targets, bookmarks, pre-values, post-values, interaction or transaction identifiers, sequence numbers, users, tenants, or entry counts.
+When audit persistence is disabled, no audit observation is created.
+Without the `observation` profile, audit persistence remains unchanged and the no-op registry exports no audit span.
+
 === Wicket Entity Page Rendering
 
 When the Wicket viewer renders an entity page, Causeway adds semantic spans for the page and its rendered logical regions:
