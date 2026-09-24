@@ -41,6 +41,10 @@ import org.apache.causeway.applib.services.priming.PrimingRegistry;
 import org.apache.causeway.applib.services.priming.ViewPrimer;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.ObservationClosure;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -59,6 +63,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public final class PrimingRegistryDefault
 implements PrimingRegistry, PrimingService, MetamodelListener {
+
+    static final String ACTION_OBSERVATION_NAME = "causeway.priming.action";
+    static final String VIEW_OBSERVATION_NAME = "causeway.priming.view";
+    static final String OBJECT_TYPE_TAG = "causeway.object.type";
+    static final String ACTION_ID_TAG = "causeway.action.id";
 
     private final SpecificationLoader specificationLoader;
     private final ServiceRegistry serviceRegistry;
@@ -123,9 +132,15 @@ implements PrimingRegistry, PrimingService, MetamodelListener {
         final ObjectSpecification specification = exactSpecification(domainType);
         for (String actionLogicalName : actionLogicalNames) {
             validateLocalActionName(specification, domainType, actionLogicalName);
-            final String key = actionKey(specification, actionLogicalName);
-            mutableActionPrimers().computeIfAbsent(key, __ -> new ArrayList<>())
-                    .add(new RegisteredActionPrimer<>(domainType, primer));
+            final String logicalMemberIdentifier = actionKey(
+                    specification, actionLogicalName);
+            mutableActionPrimers().computeIfAbsent(
+                    logicalMemberIdentifier, __ -> new ArrayList<>())
+                    .add(new RegisteredActionPrimer<>(
+                            domainType,
+                            primer,
+                            specification.logicalTypeName(),
+                            logicalMemberIdentifier));
         }
     }
 
@@ -137,8 +152,9 @@ implements PrimingRegistry, PrimingService, MetamodelListener {
         ensureAcceptingRegistrations();
         Objects.requireNonNull(primer, "primer");
         final ObjectSpecification specification = exactSpecification(domainType);
-        mutableViewPrimers().computeIfAbsent(specification.logicalTypeName(), __ -> new ArrayList<>())
-                .add(new RegisteredViewPrimer<>(domainType, primer));
+        final String logicalTypeName = specification.logicalTypeName();
+        mutableViewPrimers().computeIfAbsent(logicalTypeName, __ -> new ArrayList<>())
+                .add(new RegisteredViewPrimer<>(domainType, primer, logicalTypeName));
     }
 
     @Override
@@ -154,7 +170,9 @@ implements PrimingRegistry, PrimingService, MetamodelListener {
             return;
         }
         final ActionArguments actionArguments = ActionArguments.of(arguments);
-        matching.forEach(registered -> registered.prime(target, actionArguments));
+        final ObservationProvider observationProvider = observationProvider();
+        matching.forEach(registered -> registered.prime(
+                target, actionArguments, observationProvider));
     }
 
     @Override
@@ -167,7 +185,18 @@ implements PrimingRegistry, PrimingService, MetamodelListener {
         if(matching == null) {
             return;
         }
-        matching.forEach(registered -> registered.prime(target));
+        final ObservationProvider observationProvider = observationProvider();
+        matching.forEach(registered -> registered.prime(target, observationProvider));
+    }
+
+    private ObservationProvider observationProvider() {
+        return serviceRegistry.lookupService(CausewayObservationIntegration.class)
+                .filter(integration -> !integration.isNoop())
+                .map(integration -> integration.provider(
+                        getClass(),
+                        CausewayObservationIntegration.withModuleName(
+                                CausewayModuleCoreMetamodel.NAMESPACE)))
+                .orElse(null);
     }
 
     private <T> ObjectSpecification exactSpecification(final Class<T> domainType) {
@@ -248,32 +277,83 @@ implements PrimingRegistry, PrimingService, MetamodelListener {
     private static final class RegisteredActionPrimer<T> {
         private final Class<T> domainType;
         private final ActionPrimer<? super T> primer;
+        private final String logicalTypeName;
+        private final String logicalMemberIdentifier;
 
         private RegisteredActionPrimer(
                 final Class<T> domainType,
-                final ActionPrimer<? super T> primer) {
+                final ActionPrimer<? super T> primer,
+                final String logicalTypeName,
+                final String logicalMemberIdentifier) {
             this.domainType = domainType;
             this.primer = primer;
+            this.logicalTypeName = logicalTypeName;
+            this.logicalMemberIdentifier = logicalMemberIdentifier;
         }
 
-        private void prime(final Object target, final ActionArguments arguments) {
-            primer.prime(domainType.cast(target), arguments);
+        private void prime(
+                final Object target,
+                final ActionArguments arguments,
+                final ObservationProvider observationProvider) {
+            final Runnable callback = () ->
+                    primer.prime(domainType.cast(target), arguments);
+            if(observationProvider == null) {
+                callback.run();
+                return;
+            }
+            final ObservationClosure observation = new ObservationClosure()
+                    .startAndOpenScope(observationProvider.get(ACTION_OBSERVATION_NAME)
+                            .contextualName(CausewayObservationNaming.forLogicalMember(
+                                    "prime action", logicalMemberIdentifier))
+                            .lowCardinalityKeyValue(OBJECT_TYPE_TAG, logicalTypeName)
+                            .lowCardinalityKeyValue(
+                                    ACTION_ID_TAG, logicalMemberIdentifier + "()"));
+            try {
+                callback.run();
+            } catch (RuntimeException | Error ex) {
+                observation.onError(ex);
+                throw ex;
+            } finally {
+                observation.close();
+            }
         }
     }
 
     private static final class RegisteredViewPrimer<T> {
         private final Class<T> domainType;
         private final ViewPrimer<? super T> primer;
+        private final String logicalTypeName;
 
         private RegisteredViewPrimer(
                 final Class<T> domainType,
-                final ViewPrimer<? super T> primer) {
+                final ViewPrimer<? super T> primer,
+                final String logicalTypeName) {
             this.domainType = domainType;
             this.primer = primer;
+            this.logicalTypeName = logicalTypeName;
         }
 
-        private void prime(final Object target) {
-            primer.prime(domainType.cast(target));
+        private void prime(
+                final Object target,
+                final ObservationProvider observationProvider) {
+            final Runnable callback = () -> primer.prime(domainType.cast(target));
+            if(observationProvider == null) {
+                callback.run();
+                return;
+            }
+            final ObservationClosure observation = new ObservationClosure()
+                    .startAndOpenScope(observationProvider.get(VIEW_OBSERVATION_NAME)
+                            .contextualName(CausewayObservationNaming.forType(
+                                    "prime view", logicalTypeName))
+                            .lowCardinalityKeyValue(OBJECT_TYPE_TAG, logicalTypeName));
+            try {
+                callback.run();
+            } catch (RuntimeException | Error ex) {
+                observation.onError(ex);
+                throw ex;
+            } finally {
+                observation.close();
+            }
         }
     }
 }

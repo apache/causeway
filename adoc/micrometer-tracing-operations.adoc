@@ -322,6 +322,7 @@ With the `observation` profile active, Causeway adds these core semantic observa
 * `causeway.application.span` covers an application-defined synchronous operation and uses a display name such as `demo.Customer#updateName load`;
 * `causeway.root.interaction` covers one top-level Causeway interaction and retains that stable span display name;
 * `causeway.action.invocation` covers an action invocation and uses a display name such as `act demo.Customer#updateName`;
+* `causeway.priming.action` and `causeway.priming.view` cover application primer callbacks and use display names such as `prime action demo.Customer#updateName` and `prime view demo.Customer`;
 * `causeway.property.access` and `causeway.collection.access` cover evaluation of mixed-in associations and use display names such as `prop demo.Customer#calculatedTotal` and `coll demo.Customer#recentOrders`.
 
 The stable observation name remains `causeway.action.invocation` even though the contextual name becomes the exported tracing span display name.
@@ -333,8 +334,50 @@ Contextual names preserve the declared casing of static logical type, member, an
 Causeway limits each semantic contextual name to 50 characters.
 For page, invocation, and prompt names, Causeway first tries the full logical identifier, then omits the logical-type namespace if necessary, and finally truncates at 50 characters.
 For example, `act isisExtSecMan.ApplicationUser#updateEmailAddress` falls back to `act ApplicationUser#updateEmailAddress`.
-The same policy applies to `prop`, `coll`, `prepare`, `prompt`, and `render` contextual names.
+The same policy applies to `prop`, `coll`, `prime`, `prepare`, `prompt`, and `render` contextual names.
 Causeway does not add action arguments, return values, target instance identifiers, object titles, bookmarks, user names, tenancy tokens, or other instance-specific application data to names or attributes on these semantic spans.
+
+=== Application Primer Callbacks
+
+When an application registers `ActionPrimer` or `ViewPrimer` callbacks and the `observation` profile is active, Causeway creates one semantic observation around every matching callback that is actually invoked.
+Action primers use stable name `causeway.priming.action` and contextual name `prime action <logical-member-identifier>`.
+View primers use stable name `causeway.priming.view` and contextual name `prime view <logical-object-type>`.
+The contextual names use the same case-preserving namespace fallback and deterministic 50-character bound as other semantic names.
+
+An action primer runs within the current action invocation immediately before the action method, so its JDBC preload work appears beneath that primer:
+
+[source,text]
+----
+act demo.Order#submit
+├── prime action demo.Order#submit
+│   ├── SELECT Customer
+│   └── SELECT OrderLine
+└── application action work
+----
+
+A view primer runs before Wicket page preparation begins, so it is a sibling of later preparation and rendering beneath the naturally current request or interaction context:
+
+[source,text]
+----
+HTTP
+└── causeway.root.interaction
+    ├── prime view demo.Order
+    │   └── SELECT OrderLine
+    ├── prepare demo.Order
+    └── render demo.Order
+----
+
+When several primers match the same action or logical type, Causeway creates separate sequential sibling observations with the same semantic name and canonical attributes.
+It does not add an aggregate priming span or identify callbacks by implementation class, generated lambda name, or registration sequence.
+Separate durations and Java-agent JDBC children show the work performed by each callback.
+
+Action-primer observations carry complete `causeway.object.type` and `causeway.action.id` attributes.
+View-primer observations carry the complete `causeway.object.type` attribute.
+They do not attach targets, arguments, values, bookmarks, titles, users, tenants, transaction or interaction identifiers, or Wicket component paths.
+A primer failure is recorded on its observation, its scope closes, and the original exception or error propagates unchanged with the existing fail-fast callback behavior.
+No observation is created when no primer matches, a repeated Wicket visit is excluded by the existing guard, or observation is inactive.
+The Java agent continues to own JDBC spans, propagation, sampling, and export.
+Primer observations are core semantic observations and do not consume the Causeway Wicket per-request observation budget.
 
 === Entity Property-Change Evaluation
 

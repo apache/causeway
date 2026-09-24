@@ -10,7 +10,7 @@ A semantic observation around every invoked primer will expose its duration and 
 - Use stable observation names, bounded domain-facing contextual names, and complete canonical action or object-type attributes.
 - Preserve natural action, interaction, HTTP, and Wicket parentage without creating observations when no primer matches.
 - Record callback failures and propagate them unchanged while preserving inactive-observation behavior.
-- Keep primer targets, arguments, values, bookmarks, users, tenants, implementation class names, registration order, and other instance data out of observation names and attributes.
+- Keep primer targets, arguments, values, bookmarks, users, tenants, primer implementation class names, registration order, and other instance data out of observation names and attributes.
 - Preserve Java-agent ownership of JDBC spans, propagation, sampling, and export.
 
 ## Capabilities

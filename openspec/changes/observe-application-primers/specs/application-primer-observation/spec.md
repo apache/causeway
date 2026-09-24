@@ -79,7 +79,7 @@ Contextual names SHALL preserve declared casing, reduce the logical-type namespa
 
 Each action-primer observation SHALL carry the complete domain-facing `causeway.object.type` and `causeway.action.id` attributes.
 Each view-primer observation SHALL carry the complete domain-facing `causeway.object.type` attribute.
-Primer observations MUST NOT attach implementation class names, generated lambda names, registration order, target identity, arguments, values, bookmarks, object titles, users, tenants, transaction identifiers, interaction identifiers, or generated component paths.
+Primer observations MUST NOT attach primer implementation class names, generated lambda names, registration order, target identity, arguments, values, bookmarks, object titles, users, tenants, transaction identifiers, interaction identifiers, or generated component paths.
 
 #### Scenario: Action-primer metadata is exported
 

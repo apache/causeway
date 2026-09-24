@@ -84,6 +84,30 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("Action span is not a child of the root interaction.\n"
                             + describe(spans) + "\n" + result.output));
+            final ExportedSpan actionPrimerSpan = childSpanNamed(
+                    spans,
+                    actionSpan,
+                    MicrometerTracingAgentFixture.ACTION_PRIMER_NAME,
+                    result.output);
+            final ExportedSpan actionPrimerJdbcSpan = spans.stream()
+                    .filter(span -> actionPrimerSpan.traceId.equals(span.traceId))
+                    .filter(span -> actionPrimerSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> "h2".equals(span.attributes.get("db.system")))
+                    .findFirst()
+                    .orElseGet(() -> fail("Primer JDBC span is not a child of action primer.\n"
+                            + describe(spans) + "\n" + result.output));
+            final ExportedSpan viewPrimerSpan = childSpanNamed(
+                    spans,
+                    rootSpan,
+                    MicrometerTracingAgentFixture.VIEW_PRIMER_NAME,
+                    result.output);
+            final ExportedSpan viewPrimerJdbcSpan = spans.stream()
+                    .filter(span -> viewPrimerSpan.traceId.equals(span.traceId))
+                    .filter(span -> viewPrimerSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> "h2".equals(span.attributes.get("db.system")))
+                    .findFirst()
+                    .orElseGet(() -> fail("Primer JDBC span is not a child of view primer.\n"
+                            + describe(spans) + "\n" + result.output));
             final ExportedSpan preparationSpan = spans.stream()
                     .filter(span -> MicrometerTracingAgentFixture.PAGE_PREPARATION_NAME.equals(span.name))
                     .filter(span -> rootSpan.traceId.equals(span.traceId))
@@ -277,6 +301,27 @@ class MicrometerTracingCompatibilityTest {
             assertFalse(auditTrailWriteSpan.attributes.containsKey("causeway.user"));
             assertFalse(auditTrailWriteSpan.attributes.containsKey("causeway.tenant"));
             assertFalse(auditTrailWriteSpan.attributes.containsKey("causeway.audit.entry.count"));
+            assertEquals(1L, spans.stream()
+                    .filter(span -> actionSpan.traceId.equals(span.traceId))
+                    .filter(span -> MicrometerTracingAgentFixture.ACTION_PRIMER_NAME
+                            .equals(span.name))
+                    .count());
+            assertEquals(1L, spans.stream()
+                    .filter(span -> rootSpan.traceId.equals(span.traceId))
+                    .filter(span -> MicrometerTracingAgentFixture.VIEW_PRIMER_NAME
+                            .equals(span.name))
+                    .count());
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    actionPrimerSpan.attributes.get("causeway.object.type"));
+            assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
+                    actionPrimerSpan.attributes.get("causeway.action.id"));
+            assertEquals("h2", actionPrimerJdbcSpan.attributes.get("db.system"));
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    viewPrimerSpan.attributes.get("causeway.object.type"));
+            assertFalse(viewPrimerSpan.attributes.containsKey("causeway.action.id"));
+            assertEquals("h2", viewPrimerJdbcSpan.attributes.get("db.system"));
+            assertFalse(actionPrimerSpan.attributes.containsKey("causeway.primer.class"));
+            assertFalse(viewPrimerSpan.attributes.containsKey("causeway.primer.class"));
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     preparationSpan.attributes.get("causeway.object.type"));
             assertEquals("h2", initializationJdbcSpan.attributes.get("db.system"));
@@ -390,10 +435,12 @@ class MicrometerTracingCompatibilityTest {
             assertEquals("500", failedEntrySpan.attributes.get("http.status_code"));
             assertEquals("STATUS_CODE_ERROR", failedEntrySpan.statusCode);
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s entityChange=%s entityChangeJdbc=%s audit=%s auditInserts=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s viewPrimer=%s viewPrimerJdbc=%s prepare=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s actionPrimer=%s actionPrimerJdbc=%s entityChange=%s entityChangeJdbc=%s audit=%s auditInserts=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
+                    viewPrimerSpan.name,
+                    viewPrimerJdbcSpan.name,
                     preparationSpan.name,
                     initializationJdbcSpan.name,
                     collectionPreparationSpan.name,
@@ -408,6 +455,8 @@ class MicrometerTracingCompatibilityTest {
                     rowSpan.name,
                     promptSpan.name,
                     actionSpan.name,
+                    actionPrimerSpan.name,
+                    actionPrimerJdbcSpan.name,
                     entityChangeEvaluationSpan.name,
                     entityChangeJdbcSpanCount,
                     auditTrailWriteSpan.name,

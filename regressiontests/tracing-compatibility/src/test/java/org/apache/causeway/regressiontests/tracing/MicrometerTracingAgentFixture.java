@@ -24,6 +24,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Provider;
@@ -47,6 +49,8 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.priming.PrimingRegistrar;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.span.ApplicationSpanService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.commons.collections.Can;
@@ -65,8 +69,10 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.services.priming.PrimingRegistryDefault;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
@@ -78,6 +84,7 @@ import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSp
 import org.apache.causeway.core.webapp.modules.observation.CausewayForegroundTraceFilter;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
@@ -102,6 +109,9 @@ public final class MicrometerTracingAgentFixture {
             "act causeway.TracingFixture#executeJdbc";
     static final String ENTITY_CHANGE_EVALUATION_NAME = "evaluate property changes";
     static final String AUDIT_TRAIL_WRITE_NAME = "write audit trail";
+    static final String ACTION_PRIMER_NAME =
+            "prime action causeway.TracingFixture#executeJdbc";
+    static final String VIEW_PRIMER_NAME = "prime view causeway.TracingFixture";
     static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
     static final String COLLECTION_PREPARATION_NAME = "prepare collection roles";
     static final String ROW_PREPARATION_NAME = "prepare row causeway.TracingRole";
@@ -180,6 +190,8 @@ public final class MicrometerTracingAgentFixture {
         private final MemberExecutorServiceDefault memberExecutorService;
         private final ApplicationSpanService applicationSpanService;
         private final ActionExecutor actionExecutor;
+        private final JdbcAction actionTarget;
+        private final PrimerFixture primerFixture;
 
         public SemanticTracingController(
                 final CausewayObservationIntegration observationIntegration) throws Exception {
@@ -188,9 +200,13 @@ public final class MicrometerTracingAgentFixture {
             this.memberExecutorService = memberExecutorService(observationIntegration);
             this.applicationSpanService = new ApplicationSpanServiceDefault(
                     interactionService, observationIntegration);
-            this.actionExecutor = actionExecutor(
+            this.primerFixture = primerFixture(observationIntegration);
+            this.actionTarget = new JdbcAction(
                     this::completeEntityChanges,
-                    applicationSpanService);
+                    applicationSpanService,
+                    primerFixture);
+            this.actionExecutor = actionExecutor(
+                    actionTarget, primerFixture.specification);
         }
 
         @GetMapping("/trace")
@@ -268,6 +284,8 @@ public final class MicrometerTracingAgentFixture {
         }
 
         private void renderPageAndPrompt() {
+            primerFixture.registry.primeView(
+                    primerFixture.specification, actionTarget);
             final WicketRenderObservationDescriptor preparation =
                     WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE);
             final WicketRenderObservationDescriptor collectionPreparation =
@@ -474,15 +492,14 @@ public final class MicrometerTracingAgentFixture {
     }
 
     private static ActionExecutor actionExecutor(
-            final Runnable auditTrailWrite,
-            final ApplicationSpanService applicationSpanService) throws Exception {
-        final JdbcAction targetPojo = new JdbcAction(
-                auditTrailWrite,
-                applicationSpanService);
+            final JdbcAction targetPojo,
+            final ObjectSpecification specification) throws Exception {
         final ManagedObject target = mock(ManagedObject.class);
         when(target.getPojo()).thenReturn(targetPojo);
+        when(target.objSpec()).thenReturn(specification);
         final InteractionHead head = mock(InteractionHead.class);
         when(head.getTarget()).thenReturn(target);
+        when(head.getOwner()).thenReturn(target);
 
         final ManagedObject adaptedResult = mock(ManagedObject.class);
         final ObjectManager objectManager = mock(ObjectManager.class);
@@ -490,8 +507,7 @@ public final class MicrometerTracingAgentFixture {
         final FacetHolder facetHolder = mock(FacetHolder.class);
         when(facetHolder.getObjectManager()).thenReturn(objectManager);
 
-        final ObjectSpecification declaringType = mock(ObjectSpecification.class);
-        when(declaringType.logicalTypeName()).thenReturn(OBJECT_TYPE);
+        final ObjectSpecification declaringType = specification;
         final ObjectAction owningAction = mock(ObjectAction.class);
         when(owningAction.getDeclaringType()).thenReturn(declaringType);
         when(owningAction.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
@@ -509,19 +525,90 @@ public final class MicrometerTracingAgentFixture {
                 mock(ActionInvocationFacetAbstract.class));
     }
 
+    private static PrimerFixture primerFixture(
+            final CausewayObservationIntegration observationIntegration) {
+        final SpecificationLoader specificationLoader = mock(SpecificationLoader.class);
+        final ServiceRegistry serviceRegistry = mock(ServiceRegistry.class);
+        final ObjectSpecification specification = mock(ObjectSpecification.class);
+        doReturn(JdbcAction.class).when(specification).getCorrespondingClass();
+        when(specification.logicalTypeName()).thenReturn(OBJECT_TYPE);
+        final ObjectAction action = mock(ObjectAction.class);
+        when(action.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
+                LogicalType.eager(JdbcAction.class, OBJECT_TYPE),
+                "executeJdbc"));
+        when(specification.getAction("executeJdbc", MixedIn.INCLUDED))
+                .thenReturn(Optional.of(action));
+        when(specificationLoader.snapshotSpecifications())
+                .thenReturn(Can.of(specification));
+
+        final PrimingRegistrar registrar = registry -> {
+            registry.action(
+                    JdbcAction.class,
+                    "executeJdbc",
+                    (target, arguments) -> executePrimerJdbc());
+            registry.view(JdbcAction.class, target -> executePrimerJdbc());
+        };
+        when(serviceRegistry.select(PrimingRegistrar.class))
+                .thenReturn(Can.of(registrar));
+        doReturn(Optional.of(observationIntegration)).when(serviceRegistry)
+                .lookupService(CausewayObservationIntegration.class);
+
+        final PrimingRegistryDefault registry = new PrimingRegistryDefault(
+                specificationLoader, serviceRegistry);
+        registry.onMetamodelAboutToBeLoaded();
+        registry.onMetamodelLoaded();
+        return new PrimerFixture(registry, specification);
+    }
+
+    private static void executePrimerJdbc() {
+        try {
+            Class.forName("org.h2.Driver");
+            try (Connection connection = DriverManager.getConnection(
+                    "jdbc:h2:mem:causeway-tracing;DB_CLOSE_DELAY=-1");
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery("select 1")) {
+                if(!resultSet.next() || resultSet.getInt(1) != 1) {
+                    throw new IllegalStateException("Unexpected primer JDBC probe result");
+                }
+            }
+        } catch (Exception ex) {
+            throw new IllegalStateException("Primer JDBC probe failed", ex);
+        }
+    }
+
+    private static final class PrimerFixture {
+        private final PrimingRegistryDefault registry;
+        private final ObjectSpecification specification;
+
+        private PrimerFixture(
+                final PrimingRegistryDefault registry,
+                final ObjectSpecification specification) {
+            this.registry = registry;
+            this.specification = specification;
+        }
+    }
+
     public static final class JdbcAction {
 
         private final Runnable auditTrailWrite;
         private final ApplicationSpanService applicationSpanService;
+        private final PrimerFixture primerFixture;
 
         private JdbcAction(
                 final Runnable auditTrailWrite,
-                final ApplicationSpanService applicationSpanService) {
+                final ApplicationSpanService applicationSpanService,
+                final PrimerFixture primerFixture) {
             this.auditTrailWrite = auditTrailWrite;
             this.applicationSpanService = applicationSpanService;
+            this.primerFixture = primerFixture;
         }
 
         public String executeJdbc() {
+            primerFixture.registry.primeAction(
+                    primerFixture.specification,
+                    "executeJdbc",
+                    this,
+                    Collections.emptyList());
             final String result = applicationSpanService.call("jdbcWork", () -> {
                 Class.forName("org.h2.Driver");
                 try (Connection connection = DriverManager.getConnection(
