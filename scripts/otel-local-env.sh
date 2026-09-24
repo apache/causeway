@@ -62,6 +62,60 @@ case ",${SPRING_PROFILES_INCLUDE:-}," in
 esac
 
 export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-my-causeway-app-local}"
+
+_otel_service_version_was_git_derived=false
+if [[ -z "${OTEL_SERVICE_VERSION:-}" ]]; then
+    if OTEL_SERVICE_VERSION="$(git -C "$PWD" rev-parse --verify HEAD 2>/dev/null)"; then
+        export OTEL_SERVICE_VERSION
+        _otel_service_version_was_git_derived=true
+    else
+        unset OTEL_SERVICE_VERSION
+        echo "OpenTelemetry service version could not be derived from Git." >&2
+        echo "Set OTEL_SERVICE_VERSION explicitly if version filtering is required." >&2
+    fi
+else
+    export OTEL_SERVICE_VERSION
+fi
+
+if [[ "$_otel_service_version_was_git_derived" == true ]] \
+        && [[ -n "$(git -C "$PWD" status --porcelain --untracked-files=normal 2>/dev/null)" ]]; then
+    echo "Warning: service.version identifies commit $OTEL_SERVICE_VERSION," >&2
+    echo "but the current Git worktree contains uncommitted changes." >&2
+fi
+
+if [[ -n "${OTEL_SERVICE_ROLE:-}" ]]; then
+    export OTEL_SERVICE_ROLE
+fi
+
+_otel_set_resource_attribute() {
+    local attribute_key="$1"
+    local attribute_value="$2"
+    local existing_attributes="${OTEL_RESOURCE_ATTRIBUTES:-}"
+    local updated_attributes=""
+    local attribute
+    local attributes
+
+    IFS=',' read -r -a attributes <<< "$existing_attributes"
+    for attribute in "${attributes[@]}"; do
+        if [[ -z "$attribute" || "$attribute" == "$attribute_key="* ]]; then
+            continue
+        fi
+        updated_attributes="${updated_attributes:+$updated_attributes,}$attribute"
+    done
+    updated_attributes="${updated_attributes:+$updated_attributes,}$attribute_key=$attribute_value"
+    export OTEL_RESOURCE_ATTRIBUTES="$updated_attributes"
+}
+
+if [[ -n "${OTEL_SERVICE_ROLE:-}" ]]; then
+    _otel_set_resource_attribute "service.role" "$OTEL_SERVICE_ROLE"
+fi
+if [[ -n "${OTEL_SERVICE_VERSION:-}" ]]; then
+    _otel_set_resource_attribute "service.version" "$OTEL_SERVICE_VERSION"
+fi
+
+unset -f _otel_set_resource_attribute
+unset _otel_service_version_was_git_derived
+
 export OTEL_TRACES_EXPORTER="otlp"
 export OTEL_METRICS_EXPORTER="none"
 export OTEL_LOGS_EXPORTER="none"
@@ -70,5 +124,11 @@ export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
 export OTEL_TRACES_SAMPLER="always_on"
 
 echo "Local tracing environment enabled for service '$OTEL_SERVICE_NAME'."
+if [[ -n "${OTEL_SERVICE_ROLE:-}" ]]; then
+    echo "OpenTelemetry service role: $OTEL_SERVICE_ROLE"
+fi
+if [[ -n "${OTEL_SERVICE_VERSION:-}" ]]; then
+    echo "OpenTelemetry service version: $OTEL_SERVICE_VERSION"
+fi
 echo "OpenTelemetry Java agent: $OTEL_JAVA_AGENT_PATH"
 echo "OTLP traces endpoint: $OTEL_EXPORTER_OTLP_ENDPOINT"

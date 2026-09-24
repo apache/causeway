@@ -71,6 +71,51 @@ The script preserves existing `JAVA_TOOL_OPTIONS`, rejects a conflicting Java ag
 It exports traces to local Jaeger over OTLP HTTP/protobuf, disables metrics and logs exporters, and enables always-on sampling.
 Always-on sampling is appropriate for this short local test, not as an assumed production setting.
 
+=== Compare a Baseline and Candidate
+
+Use the same `OTEL_SERVICE_NAME` for baseline and candidate processes so that Jaeger presents them as one logical service.
+Set the helper-owned `OTEL_SERVICE_ROLE` variable to the low-cardinality value `baseline` or `candidate` before sourcing the helper.
+The helper maps that value to the custom OpenTelemetry resource attribute `service.role`.
+
+In the baseline terminal or worktree, run:
+
+[source,bash]
+----
+export OTEL_SERVICE_NAME=my-application-regression
+export OTEL_SERVICE_ROLE=baseline
+source /path/to/causeway/scripts/otel-local-env.sh
+java -jar path/to/baseline-application.jar
+----
+
+In the candidate terminal or worktree, run:
+
+[source,bash]
+----
+export OTEL_SERVICE_NAME=my-application-regression
+export OTEL_SERVICE_ROLE=candidate
+source /path/to/causeway/scripts/otel-local-env.sh
+java -jar path/to/candidate-application.jar
+----
+
+When `OTEL_SERVICE_VERSION` is not already set, the helper resolves the full `HEAD` commit SHA from the current working directory and maps it to the standard `service.version` resource attribute.
+Source the helper from the application worktree whose commit should identify the process, rather than from the Causeway script directory.
+If the worktree has tracked or untracked changes, the helper warns that the SHA does not fully identify the executed content but leaves the exact commit SHA unchanged.
+If the current directory has no resolvable Git commit, tracing remains enabled without a synthesized `service.version` and the helper prints a warning.
+
+Set `OTEL_SERVICE_VERSION` explicitly when another identifier is more useful than the application commit, such as a locally installed Causeway release candidate:
+
+[source,bash]
+----
+export OTEL_SERVICE_VERSION=causeway-2.2.0-RC2
+----
+
+The helper preserves unrelated entries already present in `OTEL_RESOURCE_ATTRIBUTES` and replaces conflicting `service.role` or `service.version` entries with its resolved values.
+This preservation is important when a platform has already supplied cloud, application, or environment resource metadata.
+
+Select `my-application-regression` in Jaeger and filter with `service.role=baseline` or `service.role=candidate`.
+Use `service.version=<commit-or-override>` to select one exact source version.
+Route-oriented comparisons should continue to use `http.route` and `http.method`, especially when the compared versions produce different semantic operation names.
+
 Invoke an HTTP endpoint that executes a Causeway action and, ideally, performs JDBC work.
 Select `my-causeway-app-local` in Jaeger and look for these ordered boundaries:
 
@@ -117,6 +162,7 @@ Stop the application and Jaeger, then restore any pre-existing values or clear t
 /path/to/causeway/scripts/jaeger-local-stop.sh
 
 unset JAVA_TOOL_OPTIONS SPRING_PROFILES_INCLUDE OTEL_SERVICE_NAME \
+  OTEL_SERVICE_ROLE OTEL_SERVICE_VERSION OTEL_RESOURCE_ATTRIBUTES \
   OTEL_JAVA_AGENT_PATH OTEL_TRACES_EXPORTER OTEL_METRICS_EXPORTER \
   OTEL_LOGS_EXPORTER OTEL_EXPORTER_OTLP_PROTOCOL \
   OTEL_EXPORTER_OTLP_ENDPOINT OTEL_TRACES_SAMPLER
