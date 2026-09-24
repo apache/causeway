@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.span;
 
+import lombok.SneakyThrows;
+
 import java.util.concurrent.Callable;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
@@ -64,4 +66,21 @@ public interface ApplicationSpanService {
      * @param runnable work to execute exactly once
      */
     void run(String suffix, ThrowingRunnable runnable);
+
+    /**
+     * For unit testing etc.
+     */
+    ApplicationSpanService NOOP = new ApplicationSpanService() {
+        @SneakyThrows
+        @Override
+        public <T> T call(String suffix, Callable<T> callable) {
+            return callable.call();
+        }
+
+        @SneakyThrows
+        @Override
+        public void run(String suffix, ThrowingRunnable runnable) {
+            runnable.run();
+        }
+    };
 }
