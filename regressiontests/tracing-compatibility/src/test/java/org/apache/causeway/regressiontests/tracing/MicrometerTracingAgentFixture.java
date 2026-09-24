@@ -98,6 +98,7 @@ public final class MicrometerTracingAgentFixture {
     static final String ROOT_INTERACTION_NAME = "causeway.root.interaction";
     static final String ACTION_INVOCATION_NAME =
             "act causeway.TracingFixture#executeJdbc";
+    static final String ENTITY_CHANGE_EVALUATION_NAME = "evaluate property changes";
     static final String AUDIT_TRAIL_WRITE_NAME = "write audit trail";
     static final String PAGE_PREPARATION_NAME = "prepare causeway.TracingFixture";
     static final String COLLECTION_INITIALIZATION_NAME = "initialize collection roles";
@@ -177,7 +178,7 @@ public final class MicrometerTracingAgentFixture {
             this.observationIntegration = observationIntegration;
             this.interactionService = interactionService(observationIntegration);
             this.memberExecutorService = memberExecutorService(observationIntegration);
-            this.actionExecutor = actionExecutor(this::writeAuditTrail);
+            this.actionExecutor = actionExecutor(this::completeEntityChanges);
         }
 
         @GetMapping("/trace")
@@ -313,6 +314,21 @@ public final class MicrometerTracingAgentFixture {
                     .observe(rendering);
         }
 
+        private void completeEntityChanges() {
+            evaluatePropertyChanges();
+            writeAuditTrail();
+        }
+
+        private void evaluatePropertyChanges() {
+            observationIntegration.provider(
+                    getClass(),
+                    CausewayObservationIntegration.withModuleName(
+                            "causeway.persistence.commons"))
+                    .get("causeway.entitychange.evaluate")
+                    .contextualName(ENTITY_CHANGE_EVALUATION_NAME)
+                    .observe(MicrometerTracingAgentFixture::executeEntityChangeJdbc);
+        }
+
         private void writeAuditTrail() {
             observationIntegration.provider(
                     getClass(),
@@ -336,6 +352,28 @@ public final class MicrometerTracingAgentFixture {
             } catch (Exception ex) {
                 throw new IllegalStateException("Preparation JDBC probe failed", ex);
             }
+        }
+    }
+
+    private static void executeEntityChangeJdbc() {
+        try {
+            Class.forName("org.h2.Driver");
+            try (Connection connection = DriverManager.getConnection(
+                    "jdbc:h2:mem:causeway-tracing;DB_CLOSE_DELAY=-1");
+                    Statement statement = connection.createStatement()) {
+                for (int id = 1; id <= 2; id++) {
+                    try (ResultSet resultSet = statement.executeQuery(
+                            "select name from trace_probe where id = " + id)) {
+                        if(id == 1 && (!resultSet.next()
+                                || !"compatible".equals(resultSet.getString(1)))) {
+                            throw new IllegalStateException(
+                                    "Unexpected entity-change JDBC probe result");
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            throw new IllegalStateException("Entity-change JDBC probe failed", ex);
         }
     }
 

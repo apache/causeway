@@ -187,6 +187,16 @@ class MicrometerTracingCompatibilityTest {
                     pageSpan,
                     MicrometerTracingAgentFixture.PROMPT_RENDER_NAME,
                     result.output);
+            final ExportedSpan entityChangeEvaluationSpan = childSpanNamed(
+                    spans,
+                    actionSpan,
+                    MicrometerTracingAgentFixture.ENTITY_CHANGE_EVALUATION_NAME,
+                    result.output);
+            final long entityChangeJdbcSpanCount = spans.stream()
+                    .filter(span -> entityChangeEvaluationSpan.traceId.equals(span.traceId))
+                    .filter(span -> entityChangeEvaluationSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> "h2".equals(span.attributes.get("db.system")))
+                    .count();
             final ExportedSpan auditTrailWriteSpan = childSpanNamed(
                     spans,
                     actionSpan,
@@ -228,6 +238,21 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(actionSpan.traceId, jdbcSpan.traceId);
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionSpan.attributes.get("causeway.action.id"));
+            assertEquals(1L, spans.stream()
+                    .filter(span -> actionSpan.traceId.equals(span.traceId))
+                    .filter(span -> MicrometerTracingAgentFixture.ENTITY_CHANGE_EVALUATION_NAME
+                            .equals(span.name))
+                    .count());
+            assertEquals(2L, entityChangeJdbcSpanCount);
+            assertEquals("SemanticTracingController",
+                    entityChangeEvaluationSpan.attributes.get("causeway.bean"));
+            assertEquals("persistence.commons",
+                    entityChangeEvaluationSpan.attributes.get("causeway.module"));
+            assertFalse(entityChangeEvaluationSpan.attributes.containsKey("causeway.property.id"));
+            assertFalse(entityChangeEvaluationSpan.attributes.containsKey("causeway.object.type"));
+            assertFalse(entityChangeEvaluationSpan.attributes.containsKey("causeway.user"));
+            assertFalse(entityChangeEvaluationSpan.attributes.containsKey("causeway.tenant"));
+            assertFalse(entityChangeEvaluationSpan.attributes.containsKey("causeway.change.count"));
             assertEquals(1L, spans.stream()
                     .filter(span -> actionSpan.traceId.equals(span.traceId))
                     .filter(span -> MicrometerTracingAgentFixture.AUDIT_TRAIL_WRITE_NAME
@@ -320,7 +345,7 @@ class MicrometerTracingCompatibilityTest {
             assertEquals("500", failedEntrySpan.attributes.get("http.status_code"));
             assertEquals("STATUS_CODE_ERROR", failedEntrySpan.statusCode);
             System.out.printf(
-                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionInitialize=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s audit=%s auditInserts=%s jdbcSpanId=%s%n",
+                    "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionInitialize=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s entityChange=%s entityChangeJdbc=%s audit=%s auditInserts=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
                     httpSpan.name,
                     rootSpan.spanId,
@@ -339,6 +364,8 @@ class MicrometerTracingCompatibilityTest {
                     rowSpan.name,
                     promptSpan.name,
                     actionSpan.name,
+                    entityChangeEvaluationSpan.name,
+                    entityChangeJdbcSpanCount,
                     auditTrailWriteSpan.name,
                     auditJdbcSpanCount,
                     jdbcSpan.spanId);

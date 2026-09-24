@@ -303,6 +303,38 @@ For example, `act isisExtSecMan.ApplicationUser#updateEmailAddress` falls back t
 The same policy applies to `prop`, `coll`, `prepare`, `prompt`, and `render` contextual names.
 Causeway does not add action arguments, return values, target instance identifiers, object titles, bookmarks, user names, tenancy tokens, or other instance-specific application data to names or attributes on these semantic spans.
 
+=== Entity Property-Change Evaluation
+
+When entity property-change publication has enlisted candidate records and the `observation` profile is active, Causeway adds `causeway.entitychange.evaluate` around their transaction-completion evaluation.
+The exported contextual display name is `evaluate property changes`.
+
+The phase obtains current post-values and compares them with the enlisted pre-values before property-change subscribers run.
+JDO evaluation can invoke derived property accessors as well as read persisted state, so application queries made by those accessors appear as automatic JDBC descendants:
+
+[source,text]
+----
+act demo.InvoiceSummary#invoiceAll
+├── UPDATE CommandWithArchive
+├── evaluate property changes
+│   ├── SELECT CodaTax
+│   └── SELECT CodaTax
+└── write audit trail
+    ├── INSERT AuditTrailEntry
+    └── INSERT AuditTrailEntry
+----
+
+One aggregate evaluation observation encloses all candidate records and the existing defensive-copy retry if evaluation modifies the enlisted collection.
+Causeway does not create one observation per entity, property, accessor, or retry attempt.
+A transaction with no enlisted property-change records creates no evaluation observation, while evaluation that ultimately finds no publishable difference still produces one observation because the post-value work occurred.
+
+Evaluation closes before subscribers are invoked, so `evaluate property changes` and `write audit trail` are sibling phases rather than nested phases.
+The evaluation observation inherits the naturally current action, interaction, request, or background context and does not fabricate action parentage.
+The OpenTelemetry Java agent continues to own descendant JDBC spans, context propagation, sampling, and export.
+
+The observation carries only static `causeway.bean` and `causeway.module` framework metadata.
+It does not attach entity types, property identifiers, targets, bookmarks, pre-values, post-values, users, tenants, transaction or interaction identifiers, sequence numbers, candidate or changed counts, or retry counts.
+Without the `observation` profile, property-change evaluation and publication remain unchanged and the no-op registry exports no evaluation span.
+
 === Audit-Trail Persistence
 
 When the audit-trail extension is enabled with the `observation` profile active, Causeway adds `causeway.audittrail.write` around each audit subscriber persistence callback.
