@@ -28,19 +28,25 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import io.opentelemetry.api.trace.Span;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.observation.ObservationClosure;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -157,6 +163,59 @@ class WicketRenderObservationTest {
         assertEquals(OBJECT_TYPE + "#updateName()",
                 promptObservation.getContext().getLowCardinalityKeyValue(
                         "causeway.action.id").getValue());
+    }
+
+    @Test
+    void onlyFullPageAndPromptDescriptorsNominateSemanticTraceNames() {
+        final Span pageSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(pageSpan)) {
+            WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE)
+                    .nominateSemanticTraceName();
+            WicketRenderObservationDescriptor.property(
+                    OBJECT_TYPE, OBJECT_TYPE + "#name")
+                    .nominateSemanticTraceName();
+            WicketRenderObservationDescriptor.page(OBJECT_TYPE)
+                    .nominateSemanticTraceName();
+        }
+        verify(pageSpan).updateName("view demo.Customer");
+        verify(pageSpan).setAttribute(
+                CausewaySemanticTraceNamer.OBJECT_TYPE_ATTRIBUTE, OBJECT_TYPE);
+
+        final Span promptSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(promptSpan)) {
+            WicketRenderObservationDescriptor.actionPrompt(
+                    OBJECT_TYPE, OBJECT_TYPE + "#updateName()", "updateName")
+                    .nominateSemanticTraceName();
+        }
+        verify(promptSpan).updateName("prompt demo.Customer#updateName");
+        verify(promptSpan).setAttribute(
+                CausewaySemanticTraceNamer.ACTION_ID_ATTRIBUTE,
+                OBJECT_TYPE + "#updateName()");
+
+        final Span ajaxSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(ajaxSpan)) {
+            WicketRenderObservationDescriptor.collection(
+                    OBJECT_TYPE, OBJECT_TYPE + "#orders")
+                    .nominateSemanticTraceName();
+            WicketRenderObservationDescriptor.table(
+                    OBJECT_TYPE, OBJECT_TYPE + "#orders")
+                    .nominateSemanticTraceName();
+            WicketRenderObservationDescriptor.property(
+                    OBJECT_TYPE, OBJECT_TYPE + "#name")
+                    .nominateSemanticTraceName();
+        }
+        verify(ajaxSpan, never()).updateName(anyString());
+
+        final Span preparationSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(preparationSpan)) {
+            WicketRenderObservationDescriptor.pagePreparation(OBJECT_TYPE)
+                    .nominateSemanticTraceName();
+        }
+        verify(preparationSpan, never()).updateName(anyString());
     }
 
     @Test
@@ -1007,6 +1066,12 @@ class WicketRenderObservationTest {
                     ? Optional.of(serviceClass.cast(integration))
                     : Optional.empty();
         }
+    }
+
+    private static Span recordingSpan() {
+        final Span span = mock(Span.class);
+        when(span.isRecording()).thenReturn(true);
+        return span;
     }
 
     private static final class RecordingHandler

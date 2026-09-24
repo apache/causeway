@@ -20,6 +20,7 @@ package org.apache.causeway.core.webapp.modules.observation;
 
 import java.io.IOException;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterRegistration;
@@ -30,10 +31,12 @@ import javax.servlet.ServletResponse;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.Scope;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -49,13 +52,20 @@ class CausewayForegroundTraceFilterTest {
         final FilterChain chain = mock(FilterChain.class);
         final ServletRequest request = mock(ServletRequest.class);
         final ServletResponse response = mock(ServletResponse.class);
-        final CausewayForegroundTraceFilter filter = new CausewayForegroundTraceFilter(classifier);
+        final Scope scope = mock(Scope.class);
+        @SuppressWarnings("unchecked")
+        final Supplier<Scope> scopeFactory = mock(Supplier.class);
+        when(scopeFactory.get()).thenReturn(scope);
+        final CausewayForegroundTraceFilter filter =
+                new CausewayForegroundTraceFilter(classifier, scopeFactory);
 
         filter.doFilter(request, response, chain);
 
-        final var inOrder = inOrder(classifier, chain);
+        final var inOrder = inOrder(classifier, scopeFactory, chain, scope);
         inOrder.verify(classifier).accept(ExecutionMode.FOREGROUND);
+        inOrder.verify(scopeFactory).get();
         inOrder.verify(chain).doFilter(request, response);
+        inOrder.verify(scope).close();
     }
 
     @Test
@@ -67,7 +77,12 @@ class CausewayForegroundTraceFilterTest {
         final ServletResponse response = mock(ServletResponse.class);
         final IOException failure = new IOException("request failed");
         doThrow(failure).when(chain).doFilter(request, response);
-        final CausewayForegroundTraceFilter filter = new CausewayForegroundTraceFilter(classifier);
+        final Scope scope = mock(Scope.class);
+        @SuppressWarnings("unchecked")
+        final Supplier<Scope> scopeFactory = mock(Supplier.class);
+        when(scopeFactory.get()).thenReturn(scope);
+        final CausewayForegroundTraceFilter filter =
+                new CausewayForegroundTraceFilter(classifier, scopeFactory);
 
         final IOException thrown = assertThrows(
                 IOException.class,
@@ -75,6 +90,35 @@ class CausewayForegroundTraceFilterTest {
 
         assertSame(failure, thrown);
         verify(classifier).accept(ExecutionMode.FOREGROUND);
+        verify(scope).close();
+    }
+
+    @Test
+    void nestedDispatchScopesCloseInReverseOrder() throws Exception {
+        @SuppressWarnings("unchecked")
+        final Consumer<ExecutionMode> classifier = mock(Consumer.class);
+        final ServletRequest request = mock(ServletRequest.class);
+        final ServletResponse response = mock(ServletResponse.class);
+        final FilterChain outerChain = mock(FilterChain.class);
+        final FilterChain innerChain = mock(FilterChain.class);
+        final Scope outerScope = mock(Scope.class);
+        final Scope innerScope = mock(Scope.class);
+        @SuppressWarnings("unchecked")
+        final Supplier<Scope> scopeFactory = mock(Supplier.class);
+        when(scopeFactory.get()).thenReturn(outerScope, innerScope);
+        final CausewayForegroundTraceFilter filter =
+                new CausewayForegroundTraceFilter(classifier, scopeFactory);
+        doAnswer(invocation -> {
+            filter.doFilter(request, response, innerChain);
+            return null;
+        }).when(outerChain).doFilter(request, response);
+
+        filter.doFilter(request, response, outerChain);
+
+        final var inOrder = inOrder(innerChain, innerScope, outerScope);
+        inOrder.verify(innerChain).doFilter(request, response);
+        inOrder.verify(innerScope).close();
+        inOrder.verify(outerScope).close();
     }
 
     @Test

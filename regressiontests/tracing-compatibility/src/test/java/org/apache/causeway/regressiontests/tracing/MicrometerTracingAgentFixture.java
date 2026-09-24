@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -52,6 +53,7 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -114,6 +116,7 @@ public final class MicrometerTracingAgentFixture {
     static final String ROW_ACTION_RENDER_NAME = "render action update";
     static final String PROMPT_RENDER_NAME =
             "prompt causeway.TracingFixture#executeJdbc";
+    static final String VIEW_TRACE_NAME = "view causeway.TracingFixture";
     static final String ACTION_ID = "causeway.TracingFixture#executeJdbc()";
     static final String OBJECT_TYPE = "causeway.TracingFixture";
     static final String COLLECTION_ID = OBJECT_TYPE + "#roles";
@@ -135,19 +138,27 @@ public final class MicrometerTracingAgentFixture {
                         "server.port=0",
                         "spring.main.banner-mode=off")
                 .run(args)) {
-            executeHttpRequest(context);
+            executeHttpRequest(context, "/trace", 204);
+            executeHttpRequest(context, "/trace/prompt", 204);
+            executeHttpRequest(context, "/trace/view", 204);
+            executeHttpRequest(context, "/trace/unsupported", 204);
+            executeHttpRequest(context, "/trace/failure", 500);
             System.out.println(SUCCESS_MARKER);
         }
     }
 
     private static void executeHttpRequest(
-            final ConfigurableApplicationContext context) throws Exception {
+            final ConfigurableApplicationContext context,
+            final String path,
+            final int expectedStatus) throws Exception {
         final int port = context.getEnvironment().getProperty("local.server.port", Integer.class);
-        final URL url = new URL("http://127.0.0.1:" + port + "/trace");
+        final URL url = new URL("http://127.0.0.1:" + port + path);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-        if (connection.getResponseCode() != 204) {
-            throw new IllegalStateException("Semantic tracing HTTP fixture failed");
+        final int actualStatus = connection.getResponseCode();
+        if (actualStatus != expectedStatus) {
+            throw new IllegalStateException("Semantic tracing HTTP fixture failed for "
+                    + path + ": expected " + expectedStatus + " but got " + actualStatus);
         }
         connection.disconnect();
     }
@@ -175,8 +186,50 @@ public final class MicrometerTracingAgentFixture {
                     mock(InteractionContext.class),
                     () -> {
                         renderPageAndPrompt();
+                        CausewaySemanticTraceNamer.nominateAction(
+                                "causeway.TracingFixture#executeJdbc");
+                        CausewaySemanticTraceNamer.nominateAction(
+                                "causeway.TracingFixture#ignoredEqualPriority");
                         return memberExecutorService.invokeAction(actionExecutor);
                     });
+        }
+
+        @GetMapping("/trace/prompt")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void prompt() {
+            interactionService.call(
+                    mock(InteractionContext.class),
+                    () -> {
+                        observe(
+                                WicketRenderObservationDescriptor.actionPrompt(
+                                        OBJECT_TYPE, ACTION_ID, "executeJdbc"),
+                                () -> {});
+                        return null;
+                    });
+        }
+
+        @GetMapping("/trace/view")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void view() {
+            interactionService.call(
+                    mock(InteractionContext.class),
+                    () -> {
+                        observe(
+                                WicketRenderObservationDescriptor.page(OBJECT_TYPE),
+                                () -> {});
+                        return null;
+                    });
+        }
+
+        @GetMapping("/trace/unsupported")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void unsupported() {
+        }
+
+        @GetMapping("/trace/failure")
+        public void failure() {
+            CausewaySemanticTraceNamer.nominateView(OBJECT_TYPE);
+            throw new IllegalStateException("expected semantic tracing failure");
         }
 
         private void renderPageAndPrompt() {
@@ -253,6 +306,7 @@ public final class MicrometerTracingAgentFixture {
         private void observe(
                 final WicketRenderObservationDescriptor descriptor,
                 final Runnable rendering) {
+            descriptor.nominateSemanticTraceName();
             descriptor.customize(observationIntegration.createNotStarted(
                     getClass(), descriptor.getRegion().getObservationName()))
                     .observe(rendering);

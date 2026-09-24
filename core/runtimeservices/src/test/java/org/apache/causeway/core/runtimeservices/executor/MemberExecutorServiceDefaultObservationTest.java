@@ -32,6 +32,7 @@ import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationHandler;
 import io.micrometer.observation.ObservationRegistry;
+import io.opentelemetry.api.trace.Span;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
@@ -39,6 +40,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
@@ -61,7 +63,10 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
@@ -162,6 +167,50 @@ class MemberExecutorServiceDefaultObservationTest {
     }
 
     @Test
+    void semanticTraceActionCandidateRequiresCommandIdentityAndExcludesAssociations() {
+        final Span declaredActionSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(declaredActionSpan)) {
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(
+                    false,
+                    "demo.Customer#updateName",
+                    "demo.Customer#updateName");
+        }
+        verify(declaredActionSpan).updateName("act demo.Customer#updateName");
+
+        final Span mixedInActionSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(mixedInActionSpan)) {
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(
+                    false,
+                    "demo.ApplicationUser#updateEmailAddress",
+                    "demo.ApplicationUser#updateEmailAddress");
+        }
+        verify(mixedInActionSpan).updateName(
+                "act demo.ApplicationUser#updateEmailAddress");
+
+        final Span nestedActionSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(nestedActionSpan)) {
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(
+                    false,
+                    "demo.Customer#wrapper",
+                    "demo.Customer#helper");
+        }
+        verify(nestedActionSpan, never()).updateName(anyString());
+
+        final Span associationSpan = recordingSpan();
+        try (CausewaySemanticTraceNamer.Scope ignored =
+                CausewaySemanticTraceNamer.open(associationSpan)) {
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(
+                    true,
+                    "demo.Customer#calculatedProperty",
+                    "demo.Customer#calculatedProperty");
+        }
+        verify(associationSpan, never()).updateName(anyString());
+    }
+
+    @Test
     void actionFailureIsRecordedAndRethrown() throws Exception {
         final RecordingHandler handler = new RecordingHandler();
         final ObservationRegistry registry = registryWith(handler);
@@ -195,6 +244,12 @@ class MemberExecutorServiceDefaultObservationTest {
 
         assertSame(expected, actual);
         assertNull(registry.getCurrentObservation());
+    }
+
+    private static Span recordingSpan() {
+        final Span span = mock(Span.class);
+        when(span.isRecording()).thenReturn(true);
+        return span;
     }
 
     private static ObservationRegistry registryWith(final RecordingHandler handler) {

@@ -86,6 +86,30 @@ The Java agent can add controller, connection-pool, or other automatic spans bet
 A request that does not execute JDBC work will not have the final JDBC span.
 Do not use generated trace or span IDs as operation identifiers.
 
+=== Interpret Semantic Trace Display Names
+
+Causeway updates the Java-agent-owned foreground HTTP entry span with the highest-priority semantic outcome observed during the request.
+The operation name is `act <logical-member-identifier>` for an eligible action, `prompt <logical-member-identifier>` for an action prompt, or `view <logical-object-type>` for a full entity-page render.
+For example, a trace list can show `act demo.Customer#updateName`, `prompt demo.Customer#updateName`, or `view demo.Customer` instead of only `GET /wicket/...`.
+
+Candidate priority is `act` over `prompt` over `view`.
+The first candidate wins when multiple candidates have the same priority.
+Action nomination requires the domain-facing action identity to match the current top-level interaction command.
+Calculated property and collection access, framework helper calls, pass-through work, and nested wrapper actions do not become the primary action name.
+Prompt nomination comes from the enclosing action-prompt render, and view nomination comes only from full entity-page rendering rather than ambiguous Ajax region rendering.
+
+The selected bounded name is also available as `causeway.trace.name`.
+Action and prompt outcomes retain the complete canonical identifier in `causeway.action.id`, while view outcomes retain the complete logical type in `causeway.object.type`.
+If a request has no supported semantic outcome, the Java agent's route-oriented operation name remains unchanged.
+
+This changes operation-name grouping for supported foreground requests and is operationally breaking for dashboards, alerts, and saved searches that group server spans by operation name.
+Route-oriented dashboards and alerts should group or filter using the standard `http.route` and `http.method` attributes rather than the mutable operation name.
+Backend UIs differ in how they label and group operation names and attributes, so verify the result in the production backend before migrating saved views.
+
+The OpenTelemetry Java agent 1.31.0 compatibility regression proves that `Span.updateName(...)` survives OTLP export while the HTTP method, route, target, status, execution classification, trace identity, entry-span identity, and child parentage remain intact.
+When evaluating another agent or backend, rerun `MicrometerTracingCompatibilityTest` before rollout.
+If operation-name updates do not survive, use the bounded `causeway.trace.name` attribute in a collector transform or a supported agent extension and leave the route operation name unchanged.
+
 Stop the application and Jaeger, then restore any pre-existing values or clear the shell settings if they should not affect later Java processes:
 
 [source,bash]

@@ -27,6 +27,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 
 /**
  * Serializable, instance-data-free description of a semantic Wicket render region.
@@ -231,6 +232,27 @@ public final class WicketRenderObservationDescriptor implements Serializable {
             this.memberId = Objects.requireNonNull(memberId, "memberId");
         } else {
             this.memberId = null;
+        }
+    }
+
+    /**
+     * Nominates this descriptor as the foreground request's semantic outcome when applicable.
+     */
+    public void nominateSemanticTraceName() {
+        switch (region) {
+            case PAGE:
+                CausewaySemanticTraceNamer.nominateView(objectType);
+                break;
+            case ACTION_PROMPT:
+                final int parameterSeparator = memberId.indexOf('(');
+                final String logicalMemberIdentifier = parameterSeparator >= 0
+                        ? memberId.substring(0, parameterSeparator)
+                        : memberId;
+                CausewaySemanticTraceNamer.nominatePrompt(
+                        logicalMemberIdentifier, memberId);
+                break;
+            default:
+                break;
         }
     }
 

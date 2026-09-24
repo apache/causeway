@@ -39,11 +39,15 @@ import com.google.protobuf.ByteString;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
+import io.opentelemetry.proto.common.v1.AnyValue;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
 import org.junit.jupiter.api.Test;
 
+import static org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.ACTION_ID_ATTRIBUTE;
+import static org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.OBJECT_TYPE_ATTRIBUTE;
+import static org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.TRACE_NAME_ATTRIBUTE;
 import static org.apache.causeway.core.config.observation.CausewayTraceClassifier.EXECUTION_MODE_ATTRIBUTE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -189,14 +193,26 @@ class MicrometerTracingCompatibilityTest {
                     .findFirst()
                     .orElseGet(() -> fail("JDBC span is not a child of the action.\n"
                             + describe(spans) + "\n" + result.output));
-            final ExportedSpan httpSpan = ancestorNamed(
+            final ExportedSpan httpSpan = ancestorWithAttribute(
                     spans,
                     rootSpan,
-                    "GET /trace",
+                    "http.route",
+                    "/trace",
                     result.output);
 
-            assertFalse(httpSpan.name.isEmpty());
+            assertEquals(MicrometerTracingAgentFixture.ACTION_INVOCATION_NAME, httpSpan.name);
             assertEquals("foreground", httpSpan.attributes.get(EXECUTION_MODE_ATTRIBUTE));
+            assertEquals(MicrometerTracingAgentFixture.ACTION_INVOCATION_NAME,
+                    httpSpan.attributes.get(TRACE_NAME_ATTRIBUTE));
+            assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
+                    httpSpan.attributes.get(ACTION_ID_ATTRIBUTE));
+            assertEquals("GET", httpSpan.attributes.get("http.method"));
+            assertEquals("/trace", httpSpan.attributes.get("http.route"));
+            assertEquals("/trace", httpSpan.attributes.get("http.target"));
+            assertEquals("204", httpSpan.attributes.get("http.status_code"));
+            assertEquals(1L, spans.stream()
+                    .filter(span -> "/trace".equals(span.attributes.get("http.route")))
+                    .count());
             assertEquals(httpSpan.traceId, rootSpan.traceId);
             assertEquals(rootSpan.traceId, actionSpan.traceId);
             assertEquals(actionSpan.traceId, jdbcSpan.traceId);
@@ -248,6 +264,34 @@ class MicrometerTracingCompatibilityTest {
                     rowActionSpan.attributes.get("causeway.action.id"));
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionRenderSpan.attributes.get("causeway.action.id"));
+
+            final ExportedSpan promptEntrySpan = spanWithAttribute(
+                    spans, "http.route", "/trace/prompt", result.output);
+            assertEquals(MicrometerTracingAgentFixture.PROMPT_RENDER_NAME,
+                    promptEntrySpan.name);
+            assertEquals(MicrometerTracingAgentFixture.PROMPT_RENDER_NAME,
+                    promptEntrySpan.attributes.get(TRACE_NAME_ATTRIBUTE));
+            assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
+                    promptEntrySpan.attributes.get(ACTION_ID_ATTRIBUTE));
+
+            final ExportedSpan viewEntrySpan = spanWithAttribute(
+                    spans, "http.route", "/trace/view", result.output);
+            assertEquals(MicrometerTracingAgentFixture.VIEW_TRACE_NAME,
+                    viewEntrySpan.name);
+            assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
+                    viewEntrySpan.attributes.get(OBJECT_TYPE_ATTRIBUTE));
+
+            final ExportedSpan unsupportedEntrySpan = spanWithAttribute(
+                    spans, "http.route", "/trace/unsupported", result.output);
+            assertEquals("GET /trace/unsupported", unsupportedEntrySpan.name);
+            assertFalse(unsupportedEntrySpan.attributes.containsKey(TRACE_NAME_ATTRIBUTE));
+
+            final ExportedSpan failedEntrySpan = spanWithAttribute(
+                    spans, "http.route", "/trace/failure", result.output);
+            assertEquals(MicrometerTracingAgentFixture.VIEW_TRACE_NAME,
+                    failedEntrySpan.name);
+            assertEquals("500", failedEntrySpan.attributes.get("http.status_code"));
+            assertEquals("STATUS_CODE_ERROR", failedEntrySpan.statusCode);
             System.out.printf(
                     "CAUSEWAY_TRACING_EVIDENCE traceId=%s http=%s rootSpanId=%s prepare=%s collectionInitialize=%s initializationJdbc=%s collectionPrepare=%s rowPrepare=%s preparationJdbc=%s page=%s collection=%s table=%s tableHeader=%s tableBody=%s tableFooter=%s row=%s prompt=%s action=%s jdbcSpanId=%s%n",
                     rootSpan.traceId,
@@ -353,10 +397,24 @@ class MicrometerTracingCompatibilityTest {
                         + describe(spans) + "\n" + processOutput));
     }
 
-    private static ExportedSpan ancestorNamed(
+    private static ExportedSpan spanWithAttribute(
+            final List<ExportedSpan> spans,
+            final String attributeName,
+            final String attributeValue,
+            final String processOutput) {
+        return spans.stream()
+                .filter(span -> attributeValue.equals(span.attributes.get(attributeName)))
+                .findFirst()
+                .orElseGet(() -> fail("Span not exported with "
+                        + attributeName + "=" + attributeValue + "\n"
+                        + describe(spans) + "\n" + processOutput));
+    }
+
+    private static ExportedSpan ancestorWithAttribute(
             final List<ExportedSpan> spans,
             final ExportedSpan descendant,
-            final String ancestorName,
+            final String attributeName,
+            final String attributeValue,
             final String processOutput) {
         String parentSpanId = descendant.parentSpanId;
         while (!parentSpanId.isEmpty()) {
@@ -369,12 +427,12 @@ class MicrometerTracingCompatibilityTest {
             if (parent == null) {
                 break;
             }
-            if (ancestorName.equals(parent.name)) {
+            if (attributeValue.equals(parent.attributes.get(attributeName))) {
                 return parent;
             }
             parentSpanId = parent.parentSpanId;
         }
-        return fail("Span has no ancestor named " + ancestorName + "\n"
+        return fail("Span has no ancestor with " + attributeName + "=" + attributeValue + "\n"
                 + describe(spans) + "\n" + processOutput);
     }
 
@@ -445,13 +503,14 @@ class MicrometerTracingCompatibilityTest {
                                 final Map<String, String> attributes = new LinkedHashMap<>();
                                 span.getAttributesList().forEach(attribute -> attributes.put(
                                         attribute.getKey(),
-                                        attribute.getValue().getStringValue()));
+                                        attributeValue(attribute.getValue())));
                                 result.add(new ExportedSpan(
                                         span.getName(),
                                         hex(span.getTraceId()),
                                         hex(span.getSpanId()),
                                         hex(span.getParentSpanId()),
-                                        attributes));
+                                        attributes,
+                                        span.getStatus().getCode().name()));
                             }
                         }
                     }
@@ -463,6 +522,21 @@ class MicrometerTracingCompatibilityTest {
         @Override
         public void close() {
             server.stop(0);
+        }
+    }
+
+    private static String attributeValue(final AnyValue value) {
+        switch (value.getValueCase()) {
+            case STRING_VALUE:
+                return value.getStringValue();
+            case INT_VALUE:
+                return Long.toString(value.getIntValue());
+            case BOOL_VALUE:
+                return Boolean.toString(value.getBoolValue());
+            case DOUBLE_VALUE:
+                return Double.toString(value.getDoubleValue());
+            default:
+                return value.toString();
         }
     }
 
@@ -482,18 +556,21 @@ class MicrometerTracingCompatibilityTest {
         private final String spanId;
         private final String parentSpanId;
         private final Map<String, String> attributes;
+        private final String statusCode;
 
         private ExportedSpan(
                 final String name,
                 final String traceId,
                 final String spanId,
                 final String parentSpanId,
-                final Map<String, String> attributes) {
+                final Map<String, String> attributes,
+                final String statusCode) {
             this.name = name;
             this.traceId = traceId;
             this.spanId = spanId;
             this.parentSpanId = parentSpanId;
             this.attributes = attributes;
+            this.statusCode = statusCode;
         }
     }
 }

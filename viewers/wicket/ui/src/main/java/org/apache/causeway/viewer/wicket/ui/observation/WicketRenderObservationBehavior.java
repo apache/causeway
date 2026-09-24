@@ -67,6 +67,8 @@ public final class WicketRenderObservationBehavior extends Behavior {
             return;
         }
 
+        descriptor.nominateSemanticTraceName();
+
         final ObservationClosure closure = new ObservationClosure();
         closure.startAndOpenScope(descriptor.customize(integration.provider(
                 getClass(),

@@ -21,6 +21,7 @@ package org.apache.causeway.core.webapp.modules.observation;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -28,6 +29,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.Scope;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 
@@ -39,13 +42,24 @@ import org.apache.causeway.core.config.observation.CausewayTraceClassifier.Execu
 public final class CausewayForegroundTraceFilter implements Filter {
 
     private final Consumer<ExecutionMode> classifier;
+    private final Supplier<Scope> semanticTraceScopeFactory;
 
     public CausewayForegroundTraceFilter() {
-        this(CausewayTraceClassifier::classifyCurrentSpan);
+        this(
+                CausewayTraceClassifier::classifyCurrentSpan,
+                CausewaySemanticTraceNamer::openCurrentSpan);
     }
 
     CausewayForegroundTraceFilter(final Consumer<ExecutionMode> classifier) {
+        this(classifier, CausewaySemanticTraceNamer::openCurrentSpan);
+    }
+
+    CausewayForegroundTraceFilter(
+            final Consumer<ExecutionMode> classifier,
+            final Supplier<Scope> semanticTraceScopeFactory) {
         this.classifier = Objects.requireNonNull(classifier, "classifier");
+        this.semanticTraceScopeFactory = Objects.requireNonNull(
+                semanticTraceScopeFactory, "semanticTraceScopeFactory");
     }
 
     @Override
@@ -54,6 +68,8 @@ public final class CausewayForegroundTraceFilter implements Filter {
             final ServletResponse response,
             final FilterChain chain) throws IOException, ServletException {
         classifier.accept(ExecutionMode.FOREGROUND);
-        chain.doFilter(request, response);
+        try (Scope ignored = semanticTraceScopeFactory.get()) {
+            chain.doFilter(request, response);
+        }
     }
 }

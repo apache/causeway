@@ -53,6 +53,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -218,6 +219,13 @@ implements MemberExecutorService {
         val interaction = getInteractionElseFail();
 
         prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
+
+        final String logicalMemberIdentifier =
+                IdentifierUtil.logicalMemberIdentifierFor(head, owningAction);
+        nominateSemanticTraceActionIfEligible(
+                actionExecutor.mixedInAssociation().isPresent(),
+                interaction.getCommand().getLogicalMemberIdentifier(),
+                logicalMemberIdentifier);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -417,6 +425,16 @@ implements MemberExecutorService {
         }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    static void nominateSemanticTraceActionIfEligible(
+            final boolean mixedInAssociation,
+            final String commandLogicalMemberIdentifier,
+            final String actionLogicalMemberIdentifier) {
+        if(!mixedInAssociation
+                && actionLogicalMemberIdentifier.equals(commandLogicalMemberIdentifier)) {
+            CausewaySemanticTraceNamer.nominateAction(actionLogicalMemberIdentifier);
+        }
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
