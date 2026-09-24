@@ -48,51 +48,55 @@ The stable observation names SHALL include `causeway.wicket.fieldset.render`, `c
 - **AND** each observation joins the current Ajax request trace
 
 ### Requirement: Bounded render metadata
-Each Wicket initialization, preparation, or render observation SHALL use stable observation names and SHALL attach only bounded layout or metamodel identifiers needed to identify the logical region.
-Collection initialization, collection and collection-row preparation, and table-phase observations SHALL use the same complete canonical collection and applicable static object-type identifiers as their render counterparts.
+
+Each Wicket preparation or render observation SHALL use stable observation names and SHALL attach only bounded layout or metamodel identifiers needed to identify the logical region.
+Collection and collection-row preparation and table-phase observations SHALL use the same complete canonical collection and applicable static object-type identifiers as their render counterparts.
 Collection-row observations SHALL identify the static collection element type and parent collection but SHALL NOT identify the row instance.
 The viewer MUST NOT attach object values, rendered labels, object titles, bookmarks, primary keys, row indexes, action arguments, user identities, tenancy identifiers, or generated Wicket component paths.
 
 #### Scenario: Property metadata
+
 - **WHEN** a regular entity property or collection-table property cell is rendered with observation active
 - **THEN** its observation identifies the logical object type and property member using stable metamodel identifiers
 - **AND** it contains no property value or object-instance identifier
 
 #### Scenario: Collection row metadata
+
 - **WHEN** a collection row is rendered with observation active
 - **THEN** its observation carries the complete element logical type as `causeway.object.type`
 - **AND** it carries the complete parent collection identifier as `causeway.collection.id`
 - **AND** its name and attributes contain no row index, title, bookmark, primary key, or value
 
 #### Scenario: Other region metadata
+
 - **WHEN** a fieldset, collection, or action button is rendered with observation active
 - **THEN** its observation identifies the applicable layout or metamodel member
 - **AND** the identifier describes application structure rather than a particular domain-object instance
 
 ### Requirement: Bounded instrumentation scope
-The viewer SHALL exclude non-semantic and non-server-rendered table contexts from collection initialization, preparation, table-phase, and member-level render observations.
-It SHALL create initialization and aggregate table-phase observations only for parented entity collections, preparation observations only for parented collections and visible rows participating in the current server response, and member render observations only for rows, logical property cells, and eligible row actions actually rendered in that response.
+
+The viewer SHALL exclude non-semantic and non-server-rendered table contexts from preparation, table-phase, and member-level render observations.
+It SHALL create aggregate table-phase observations only for parented entity collections, preparation observations only for parented collections and visible rows participating in the current server response, and member render observations only for rows, logical property cells, and eligible row actions actually rendered in that response.
 It SHALL NOT create individual observations for standalone action-result tables, off-page rows, action parameters, service-menu actions, table headers, navigation controls, selection checkboxes, empty-table placeholders, or client-side rendering.
 
 #### Scenario: Paginated collection table rendering
+
 - **WHEN** an entity collection contains more rows than the current page displays
-- **THEN** the viewer creates preparation and render observations only for rows participating in the current page response
+- **THEN** the viewer creates preparation and render observations only for rows participating in the current page response and permitted by the configured observation controls
 - **AND** it creates no row observations for rows outside that page
 
 #### Scenario: Standalone action-result table
+
 - **WHEN** a table renders the standalone result of an action without a canonical parent collection association
-- **THEN** it does not produce collection initialization, collection or row preparation, table-phase, or `causeway.wicket.collection.row.render` observations
+- **THEN** it does not produce collection or row preparation, table-phase, or `causeway.wicket.collection.row.render` observations
 - **AND** no action identifier is mislabeled as `causeway.collection.id`
 
 #### Scenario: Logical table cells
-- **WHEN** a rendered row contains property cells and eligible row actions
-- **THEN** each rendered logical property cell can produce one `causeway.wicket.property.render` observation
-- **AND** each rendered eligible action can produce one `causeway.wicket.action.render` observation
-- **AND** presentation-only title, toggle, and empty cells do not produce member observations
 
-#### Scenario: Action prompt rendering
-- **WHEN** Wicket renders action parameter fields in a prompt
-- **THEN** those parameter fields do not produce `causeway.wicket.property.render` observations
+- **WHEN** a rendered row contains property cells and eligible row actions
+- **THEN** each rendered logical property cell permitted by observation controls can produce one `causeway.wicket.property.render` observation
+- **AND** each rendered eligible action permitted by observation controls can produce one `causeway.wicket.action.render` observation
+- **AND** presentation-only cells produce no additional semantic observation
 
 ### Requirement: Render observation lifecycle safety
 The viewer SHALL close render observation scopes after successful rendering and SHALL defensively close any remaining active render observations when request rendering fails or the request detaches.
@@ -229,54 +233,40 @@ Their canonical layout and metamodel attributes SHALL continue to identify the r
 - **THEN** Causeway truncates the contextual name to 50 characters
 - **AND** its full canonical region attribute remains unchanged
 
-### Requirement: Collection initialization observation
-When observation is active, the Wicket viewer SHALL create one synchronous `causeway.wicket.collection.initialize` observation around each parented entity collection's UI construction and collection-model setup.
-The observation SHALL use contextual name `initialize collection <collectionId>`, SHALL join the current page-preparation scope when one is active, and SHALL own automatic JDBC work initiated while constructing that collection region.
-
-#### Scenario: Collection loading occurs during component construction
-- **WHEN** parented collection UI construction evaluates its collection model, visibility, presentation, or child components and triggers persistent loading
-- **THEN** that work inherits `causeway.wicket.collection.initialize` as an ancestor
-- **AND** automatic JDBC spans identify the canonical parent collection through that initialization ancestor
-
-#### Scenario: Sibling collections initialize
-- **WHEN** multiple parented collection regions are constructed sequentially
-- **THEN** each initialization observation closes before construction proceeds to the next sibling
-- **AND** initialization scopes do not overlap or remain active until later Wicket preparation
-
-#### Scenario: Collection initialization fails or observation is inactive
-- **WHEN** collection UI construction fails with observation active
-- **THEN** the initialization observation records the failure and closes its scope
-- **AND WHEN** observation is inactive
-- **THEN** collection construction and loading behavior remain unchanged and no initialization span is exported
-
 ### Requirement: Collection and row preparation observations
-When observation is active, the Wicket viewer SHALL create one `causeway.wicket.collection.prepare` observation around each parented entity collection's later preparation lifecycle before actual markup rendering begins.
-The collection preparation observation SHALL use contextual name `prepare collection <collectionId>`, SHALL be a child of the enclosing page preparation observation, and SHALL own later data-provider sizing and iteration, visible-row selection and population, and automatic JDBC work initiated by that lifecycle.
-For each visible row population callback, the viewer SHALL create one `causeway.wicket.collection.row.prepare` observation using contextual name `prepare row <logical-type-name>` as a child of the collection preparation observation.
+
+When observation is active and permitted by the configured controls, the Wicket viewer SHALL create one `causeway.wicket.collection.prepare` observation around each parented entity collection's later preparation lifecycle before actual markup rendering begins.
+The collection preparation observation SHALL use contextual name `prepare collection <collectionId>`, SHALL be a child of the enclosing page preparation observation when emitted, and SHALL own later data-provider sizing and iteration, visible-row selection and population, and automatic JDBC work initiated by that lifecycle.
+For each visible row population callback permitted by the configured controls, the viewer SHALL create one `causeway.wicket.collection.row.prepare` observation using contextual name `prepare row <logical-type-name>` as a child of the collection preparation observation or nearest active permitted ancestor.
 Preparation contextual names SHALL follow the existing complete-identifier, namespace-fallback, and 50-character truncation policy.
 
 #### Scenario: Collection data is loaded during later preparation
+
 - **WHEN** a parented collection's later Wicket preparation invokes its data provider or loads persistent collection state
-- **THEN** that work inherits `causeway.wicket.collection.prepare` as an ancestor
-- **AND** automatic JDBC spans are not incorrectly attributed to initialization or the later `causeway.wicket.collection.render` phase
+- **THEN** that work inherits `causeway.wicket.collection.prepare` as an ancestor when that observation is emitted
+- **AND** automatic JDBC spans are not incorrectly attributed to the later `causeway.wicket.collection.render` phase
 
 #### Scenario: Visible rows are populated
+
 - **WHEN** the table synchronously constructs or populates each visible row for the current response
-- **THEN** each row population callback receives one `causeway.wicket.collection.row.prepare` observation
-- **AND** work performed synchronously for that row inherits the row preparation observation
-- **AND** collection-fetch work performed before an individual row callback remains a direct or indirect child of collection preparation
+- **THEN** each row population callback permitted by observation controls receives one `causeway.wicket.collection.row.prepare` observation
+- **AND** work performed synchronously for that row inherits the row preparation observation when emitted
+- **AND** collection-fetch work performed before an individual row callback remains a direct or indirect child of collection preparation when emitted
 
 #### Scenario: Preparation and rendering are separate phases
+
 - **WHEN** Wicket completes collection and row preparation and starts actual markup rendering
-- **THEN** all collection and row preparation scopes are closed
+- **THEN** all emitted collection and row preparation scopes are closed
 - **AND** `causeway.wicket.collection.render` and `causeway.wicket.collection.row.render` observations represent the later rendering phase rather than enclosing preparation work
 
 #### Scenario: Collection or row preparation fails
+
 - **WHEN** collection preparation or a row population callback throws before normal completion
-- **THEN** the originating preparation observation records the failure
+- **THEN** the originating emitted preparation observation records the failure
 - **AND** request cleanup leaves no collection or row preparation scope active
 
 #### Scenario: Preparation observation is inactive
+
 - **WHEN** the parented collection is prepared without the `observation` profile active
 - **THEN** data-provider and row-population behavior remain unchanged
 - **AND** no collection or row preparation spans are exported
@@ -325,4 +315,20 @@ The observation SHALL use contextual name `render row <logical-type-name>` and S
 - **WHEN** collection rows render without the `observation` profile active
 - **THEN** table behavior and output remain unchanged
 - **AND** no collection-row render, property-cell, or row-action spans are exported
+
+### Requirement: Configured Wicket observation eligibility
+
+The observation-creation requirements in this capability SHALL apply only when the candidate category is permitted by the configured Wicket observation detail and admitted by the remaining per-request Wicket observation budget.
+Suppression SHALL preserve the guarded Wicket behavior, output, failure semantics, static metadata privacy, and Java-agent ownership defined by this capability.
+
+#### Scenario: Existing observation is permitted
+
+- **WHEN** an existing Wicket observation category is enabled by detail and admitted by budget
+- **THEN** the viewer creates it with the stable name, contextual name, metadata, hierarchy, and lifecycle required by this capability
+
+#### Scenario: Existing observation is suppressed
+
+- **WHEN** an otherwise eligible Wicket observation is excluded by detail or denied by budget
+- **THEN** its guarded framework operation executes unchanged without creating that observation
+- **AND** automatic Java-agent instrumentation remains attached to the nearest naturally current context
 
