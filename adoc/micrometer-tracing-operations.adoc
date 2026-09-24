@@ -283,10 +283,43 @@ Provide authentication through `OTEL_EXPORTER_OTLP_HEADERS` or the destination-s
 Store header values, tokens, and other credentials as Container Apps secrets and expose them through secret-referenced environment variables rather than putting them in the image or repository.
 See link:https://learn.microsoft.com/en-us/azure/container-apps/environment-variables[Manage environment variables on Azure Container Apps].
 
+== Define Application Spans
+
+Inject `ApplicationSpanService` when an application needs to make a synchronous operation or phase visible beneath the current Causeway span.
+The service exposes no Micrometer or OpenTelemetry type and does not create or configure a telemetry SDK or exporter.
+
+[source,java]
+----
+@Inject ApplicationSpanService applicationSpanService;
+
+Invoice result = applicationSpanService.call("calculate", () -> calculateInvoice());
+applicationSpanService.run("loadLines", () -> repository.loadLines());
+----
+
+The suffix identifies a static low-cardinality operation or phase and is appended with one plain space.
+It must be non-null, non-blank, and no longer than 46 characters.
+Do not put object identifiers, titles, bookmarks, arguments, record values, user identities, tenant identities, or other per-invocation data in the suffix.
+An invalid suffix is rejected before application work starts.
+
+Within a current member execution, a span is displayed as `<logical-type-name>#<member-logical-name> <suffix>`.
+The member identifier excludes parentheses and parameter signatures.
+Outside a current member execution, the fallback is `app <suffix>`.
+Causeway first removes the logical-type namespace and then truncates only the member-identity portion when necessary to keep the display name within 50 characters, so the complete application suffix is always retained.
+
+The stable observation name is `causeway.application.span`.
+The low-cardinality `causeway.application.span.suffix` attribute contains the suffix, and `causeway.member.id` contains the complete canonical member identifier when one is available.
+Nested calls naturally become children of the current Causeway or application span.
+
+`call` and `run` complete their span before returning and therefore do not support asynchronous work that outlives the call.
+Each supplied operation runs exactly once and returns its result unchanged.
+The original checked exception, runtime exception, or error is recorded on the span and escapes unchanged and unwrapped, without a declared checked exception on the service API.
+When Causeway observation is inactive, the same work, result, and exception behavior is retained without exporting a span.
+
 == What Causeway Adds
 
 With the `observation` profile active, Causeway adds these core semantic observation categories:
 
+* `causeway.application.span` covers an application-defined synchronous operation and uses a display name such as `demo.Customer#updateName load`;
 * `causeway.root.interaction` covers one top-level Causeway interaction and retains that stable span display name;
 * `causeway.action.invocation` covers an action invocation and uses a display name such as `act demo.Customer#updateName`;
 * `causeway.property.access` and `causeway.collection.access` cover evaluation of mixed-in associations and use display names such as `prop demo.Customer#calculatedTotal` and `coll demo.Customer#recentOrders`.

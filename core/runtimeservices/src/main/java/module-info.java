@@ -41,6 +41,7 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.serializing;
     exports org.apache.causeway.core.runtimeservices.session;
     exports org.apache.causeway.core.runtimeservices.sitemap;
+    exports org.apache.causeway.core.runtimeservices.span;
     exports org.apache.causeway.core.runtimeservices.spring;
     exports org.apache.causeway.core.runtimeservices.transaction;
     exports org.apache.causeway.core.runtimeservices.urlencoding;

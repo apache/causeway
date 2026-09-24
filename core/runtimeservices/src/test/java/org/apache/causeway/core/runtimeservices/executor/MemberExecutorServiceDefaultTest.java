@@ -30,6 +30,8 @@ import javax.inject.Provider;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
@@ -40,9 +42,11 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 
 import io.micrometer.observation.ObservationRegistry;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 class MemberExecutorServiceDefaultTest {
@@ -86,6 +90,36 @@ class MemberExecutorServiceDefaultTest {
                 mock(ObjectMember.class));
 
         verifyNoInteractions(commandPublisherProvider);
+    }
+
+    @Test
+    void mixedInActionInvocationUsesDomainFacingIdentifier() {
+        final ObjectAction owningAction = mock(ObjectAction.class);
+        final ObjectAction domainFacingAction = mock(ObjectAction.class);
+        final ActionInteractionHead head = mock(ActionInteractionHead.class);
+        final Identifier implementationIdentifier = actionIdentifier(
+                "demo.Customer_updateName", "act");
+        final Identifier domainIdentifier = actionIdentifier(
+                "demo.Customer", "updateName");
+        when(owningAction.isDeclaredOnMixin()).thenReturn(true);
+        when(owningAction.getFeatureIdentifier()).thenReturn(implementationIdentifier);
+        when(head.getMetaModel()).thenReturn(domainFacingAction);
+        when(domainFacingAction.getFeatureIdentifier()).thenReturn(domainIdentifier);
+
+        assertThat(MemberExecutorServiceDefault.domainFacingActionIdentifier(
+                head, owningAction)).isSameAs(domainIdentifier);
+    }
+
+    @Test
+    void ordinaryActionInvocationRetainsOwningActionIdentifier() {
+        final ObjectAction owningAction = mock(ObjectAction.class);
+        final InteractionHead head = mock(InteractionHead.class);
+        final Identifier identifier = actionIdentifier("demo.Customer", "updateName");
+        when(owningAction.isDeclaredOnMixin()).thenReturn(false);
+        when(owningAction.getFeatureIdentifier()).thenReturn(identifier);
+
+        assertThat(MemberExecutorServiceDefault.domainFacingActionIdentifier(
+                head, owningAction)).isSameAs(identifier);
     }
 
     @Test
@@ -164,6 +198,14 @@ class MemberExecutorServiceDefaultTest {
 
     private Bookmark bookmark(final String identifier) {
         return Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", identifier);
+    }
+
+    private Identifier actionIdentifier(
+            final String logicalTypeName,
+            final String actionName) {
+        return Identifier.actionIdentifier(
+                LogicalType.eager(Object.class, logicalTypeName),
+                actionName);
     }
 
     private ManagedObject entityAdapter(final Bookmark bookmark) {

@@ -21,6 +21,7 @@ package org.apache.causeway.core.config.observation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CausewayObservationNamingTest {
@@ -77,6 +78,62 @@ class CausewayObservationNamingTest {
 
         assertEquals(contextualName,
                 CausewayObservationNaming.bounded(contextualName));
+    }
+
+    @Test
+    void applicationSpanNameUsesCanonicalMemberIdentifier() {
+        assertEquals("demo.Customer#updateName load",
+                CausewayObservationNaming.forApplicationSpan(
+                        "demo.Customer#updateName", "load"));
+        assertEquals("demo.Customer#updateName LoadURL",
+                CausewayObservationNaming.forApplicationSpan(
+                        "demo.Customer#updateName", "LoadURL"));
+    }
+
+    @Test
+    void applicationSpanNameFallsBackToAppWithoutCurrentMember() {
+        assertEquals("app load",
+                CausewayObservationNaming.forApplicationSpan(null, "load"));
+    }
+
+    @Test
+    void applicationSpanNameCompactsNamespaceBeforeTruncating() {
+        assertEquals("Customer#updateName load",
+                CausewayObservationNaming.forApplicationSpan(
+                        "aVeryLongApplicationNamespaceThatExceedsTheLimit.Customer#updateName",
+                        "load"));
+    }
+
+    @Test
+    void applicationSpanNameTruncatesOnlyMemberIdentity() {
+        final String contextualName = CausewayObservationNaming.forApplicationSpan(
+                "demo.CustomerWithAnUnusuallyLongLogicalTypeName#performAnUnusuallyLongOperation",
+                "processBatch");
+
+        assertEquals(CausewayObservationNaming.MAX_CONTEXTUAL_NAME_LENGTH,
+                contextualName.length());
+        assertTrue(contextualName.endsWith(" processBatch"));
+    }
+
+    @Test
+    void applicationSpanFallbackFitsAtMaximumSuffixLength() {
+        final String suffix = "x".repeat(
+                CausewayObservationNaming.MAX_APPLICATION_SPAN_SUFFIX_LENGTH);
+
+        assertEquals("app " + suffix,
+                CausewayObservationNaming.forApplicationSpan(null, suffix));
+        assertEquals(CausewayObservationNaming.MAX_CONTEXTUAL_NAME_LENGTH,
+                CausewayObservationNaming.forApplicationSpan(null, suffix).length());
+    }
+
+    @Test
+    void applicationSpanSuffixMustBeNonBlankAndAtMostFortySixCharacters() {
+        assertThrows(NullPointerException.class,
+                () -> CausewayObservationNaming.forApplicationSpan(null, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> CausewayObservationNaming.forApplicationSpan(null, " \t"));
+        assertThrows(IllegalArgumentException.class,
+                () -> CausewayObservationNaming.forApplicationSpan(null, "x".repeat(47)));
     }
 
     @Test

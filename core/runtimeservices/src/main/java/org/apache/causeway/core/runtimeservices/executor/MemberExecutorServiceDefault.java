@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import io.micrometer.observation.Observation;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
@@ -65,6 +66,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -243,7 +245,11 @@ implements MemberExecutorService {
                 ? RuleChecking.CHECKED
                 : RuleChecking.SKIPPED;
         val actionInvocation = new ActionInvocation(
-                interaction, actionId, targetPojo, argumentPojos, ruleChecking);
+                interaction,
+                domainFacingActionIdentifier(head, owningAction),
+                targetPojo,
+                argumentPojos,
+                ruleChecking);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
@@ -425,6 +431,18 @@ implements MemberExecutorService {
         }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    static Identifier domainFacingActionIdentifier(
+            final InteractionHead head,
+            final ObjectAction owningAction) {
+        if(owningAction.isDeclaredOnMixin()
+                && head instanceof ActionInteractionHead) {
+            return ((ActionInteractionHead) head)
+                    .getMetaModel()
+                    .getFeatureIdentifier();
+        }
+        return owningAction.getFeatureIdentifier();
     }
 
     static void nominateSemanticTraceActionIfEligible(

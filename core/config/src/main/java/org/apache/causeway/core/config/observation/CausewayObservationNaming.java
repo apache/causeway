@@ -20,6 +20,8 @@ package org.apache.causeway.core.config.observation;
 
 import java.util.Objects;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Creates compact, bounded-cardinality contextual names for semantic observations.
  *
@@ -28,6 +30,7 @@ import java.util.Objects;
 public final class CausewayObservationNaming {
 
     public static final int MAX_CONTEXTUAL_NAME_LENGTH = 50;
+    public static final int MAX_APPLICATION_SPAN_SUFFIX_LENGTH = 46;
 
     private CausewayObservationNaming() {}
 
@@ -71,6 +74,35 @@ public final class CausewayObservationNaming {
         return bounded(prefix + simpleTypeName(typeName) + "#" + memberName);
     }
 
+    /**
+     * Builds an application span name while preserving the complete suffix.
+     */
+    public static String forApplicationSpan(
+            final @Nullable String logicalMemberIdentifier,
+            final String suffix) {
+        final String validatedSuffix = requireApplicationSpanSuffix(suffix);
+        final String identifier = logicalMemberIdentifier != null
+                ? requireText(logicalMemberIdentifier, "logicalMemberIdentifier")
+                : "app";
+        final String fullName = identifier + " " + validatedSuffix;
+        if(fullName.length() <= MAX_CONTEXTUAL_NAME_LENGTH) {
+            return fullName;
+        }
+
+        final String compactIdentifier = compactLogicalMemberIdentifier(identifier);
+        final String compactName = compactIdentifier + " " + validatedSuffix;
+        if(compactName.length() <= MAX_CONTEXTUAL_NAME_LENGTH) {
+            return compactName;
+        }
+
+        final int identifierLength = MAX_CONTEXTUAL_NAME_LENGTH
+                - 1
+                - validatedSuffix.length();
+        return compactIdentifier.substring(0, identifierLength)
+                + " "
+                + validatedSuffix;
+    }
+
     public static String forRenderRegion(
             final String region,
             final String identifier) {
@@ -91,6 +123,25 @@ public final class CausewayObservationNaming {
         return name.length() <= MAX_CONTEXTUAL_NAME_LENGTH
                 ? name
                 : name.substring(0, MAX_CONTEXTUAL_NAME_LENGTH);
+    }
+
+    private static String compactLogicalMemberIdentifier(final String identifier) {
+        final int memberSeparator = identifier.indexOf('#');
+        if(memberSeparator < 1 || memberSeparator + 1 >= identifier.length()) {
+            return identifier;
+        }
+        return simpleTypeName(identifier.substring(0, memberSeparator))
+                + identifier.substring(memberSeparator);
+    }
+
+    private static String requireApplicationSpanSuffix(final String suffix) {
+        final String validated = requireText(suffix, "suffix");
+        if(validated.length() > MAX_APPLICATION_SPAN_SUFFIX_LENGTH) {
+            throw new IllegalArgumentException(String.format(
+                    "suffix must be at most %d characters",
+                    MAX_APPLICATION_SPAN_SUFFIX_LENGTH));
+        }
+        return validated;
     }
 
     private static String regionIdentifier(final String identifier) {

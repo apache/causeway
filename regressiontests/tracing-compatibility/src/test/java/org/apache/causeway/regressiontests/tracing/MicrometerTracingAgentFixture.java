@@ -47,6 +47,7 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.span.ApplicationSpanService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
@@ -72,6 +73,7 @@ import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtimeservices.executor.MemberExecutorServiceDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
+import org.apache.causeway.core.runtimeservices.span.ApplicationSpanServiceDefault;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.webapp.modules.observation.CausewayForegroundTraceFilter;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
@@ -119,6 +121,10 @@ public final class MicrometerTracingAgentFixture {
     static final String PROMPT_RENDER_NAME =
             "prompt causeway.TracingFixture#executeJdbc";
     static final String VIEW_TRACE_NAME = "view causeway.TracingFixture";
+    static final String APPLICATION_ACTION_NAME = "app jdbcWork";
+    static final String APPLICATION_OUTER_NAME = "app outer";
+    static final String APPLICATION_INNER_NAME = "app inner";
+    static final String APPLICATION_FAILURE_NAME = "app failure";
     static final String ACTION_ID = "causeway.TracingFixture#executeJdbc()";
     static final String OBJECT_TYPE = "causeway.TracingFixture";
     static final String COLLECTION_ID = OBJECT_TYPE + "#roles";
@@ -143,6 +149,8 @@ public final class MicrometerTracingAgentFixture {
             executeHttpRequest(context, "/trace", 204);
             executeHttpRequest(context, "/trace/prompt", 204);
             executeHttpRequest(context, "/trace/view", 204);
+            executeHttpRequest(context, "/trace/application", 204);
+            executeHttpRequest(context, "/trace/application/failure", 500);
             executeHttpRequest(context, "/trace/unsupported", 204);
             executeHttpRequest(context, "/trace/failure", 500);
             System.out.println(SUCCESS_MARKER);
@@ -171,6 +179,7 @@ public final class MicrometerTracingAgentFixture {
         private final CausewayObservationIntegration observationIntegration;
         private final InteractionServiceDefault interactionService;
         private final MemberExecutorServiceDefault memberExecutorService;
+        private final ApplicationSpanService applicationSpanService;
         private final ActionExecutor actionExecutor;
 
         public SemanticTracingController(
@@ -178,7 +187,11 @@ public final class MicrometerTracingAgentFixture {
             this.observationIntegration = observationIntegration;
             this.interactionService = interactionService(observationIntegration);
             this.memberExecutorService = memberExecutorService(observationIntegration);
-            this.actionExecutor = actionExecutor(this::completeEntityChanges);
+            this.applicationSpanService = new ApplicationSpanServiceDefault(
+                    interactionService, observationIntegration);
+            this.actionExecutor = actionExecutor(
+                    this::completeEntityChanges,
+                    applicationSpanService);
         }
 
         @GetMapping("/trace")
@@ -221,6 +234,27 @@ public final class MicrometerTracingAgentFixture {
                                 () -> {});
                         return null;
                     });
+        }
+
+        @GetMapping("/trace/application")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void application() {
+            interactionService.run(
+                    mock(InteractionContext.class),
+                    () -> applicationSpanService.run(
+                            "outer",
+                            () -> applicationSpanService.call(
+                                    "inner",
+                                    () -> "done")));
+        }
+
+        @GetMapping("/trace/application/failure")
+        public void applicationFailure() {
+            interactionService.run(
+                    mock(InteractionContext.class),
+                    () -> applicationSpanService.run("failure", () -> {
+                        throw new IllegalStateException("expected application span failure");
+                    }));
         }
 
         @GetMapping("/trace/unsupported")
@@ -444,8 +478,11 @@ public final class MicrometerTracingAgentFixture {
     }
 
     private static ActionExecutor actionExecutor(
-            final Runnable auditTrailWrite) throws Exception {
-        final JdbcAction targetPojo = new JdbcAction(auditTrailWrite);
+            final Runnable auditTrailWrite,
+            final ApplicationSpanService applicationSpanService) throws Exception {
+        final JdbcAction targetPojo = new JdbcAction(
+                auditTrailWrite,
+                applicationSpanService);
         final ManagedObject target = mock(ManagedObject.class);
         when(target.getPojo()).thenReturn(targetPojo);
         final InteractionHead head = mock(InteractionHead.class);
@@ -479,28 +516,35 @@ public final class MicrometerTracingAgentFixture {
     public static final class JdbcAction {
 
         private final Runnable auditTrailWrite;
+        private final ApplicationSpanService applicationSpanService;
 
-        private JdbcAction(final Runnable auditTrailWrite) {
+        private JdbcAction(
+                final Runnable auditTrailWrite,
+                final ApplicationSpanService applicationSpanService) {
             this.auditTrailWrite = auditTrailWrite;
+            this.applicationSpanService = applicationSpanService;
         }
 
-        public String executeJdbc() throws Exception {
-            Class.forName("org.h2.Driver");
-            try (Connection connection = DriverManager.getConnection(
-                    "jdbc:h2:mem:causeway-tracing;DB_CLOSE_DELAY=-1")) {
-                try (Statement statement = connection.createStatement()) {
-                    statement.execute("create table trace_probe (id integer primary key, name varchar(32))");
-                    statement.executeUpdate("insert into trace_probe (id, name) values (1, 'compatible')");
-                    try (ResultSet resultSet = statement.executeQuery(
-                            "select name from trace_probe where id = 1")) {
-                        if (!resultSet.next() || !"compatible".equals(resultSet.getString(1))) {
-                            throw new IllegalStateException("Unexpected JDBC probe result");
+        public String executeJdbc() {
+            final String result = applicationSpanService.call("jdbcWork", () -> {
+                Class.forName("org.h2.Driver");
+                try (Connection connection = DriverManager.getConnection(
+                        "jdbc:h2:mem:causeway-tracing;DB_CLOSE_DELAY=-1")) {
+                    try (Statement statement = connection.createStatement()) {
+                        statement.execute("create table trace_probe (id integer primary key, name varchar(32))");
+                        statement.executeUpdate("insert into trace_probe (id, name) values (1, 'compatible')");
+                        try (ResultSet resultSet = statement.executeQuery(
+                                "select name from trace_probe where id = 1")) {
+                            if (!resultSet.next() || !"compatible".equals(resultSet.getString(1))) {
+                                throw new IllegalStateException("Unexpected JDBC probe result");
+                            }
                         }
                     }
                 }
-            }
+                return "compatible";
+            });
             auditTrailWrite.run();
-            return "compatible";
+            return result;
         }
     }
 }

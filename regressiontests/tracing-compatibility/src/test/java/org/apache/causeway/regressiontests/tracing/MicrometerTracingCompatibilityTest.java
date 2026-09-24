@@ -207,11 +207,17 @@ class MicrometerTracingCompatibilityTest {
                     .filter(span -> auditTrailWriteSpan.spanId.equals(span.parentSpanId))
                     .filter(span -> "h2".equals(span.attributes.get("db.system")))
                     .count();
+            final ExportedSpan actionApplicationSpan = childSpanNamed(
+                    spans,
+                    actionSpan,
+                    MicrometerTracingAgentFixture.APPLICATION_ACTION_NAME,
+                    result.output);
             final ExportedSpan jdbcSpan = spans.stream()
-                    .filter(span -> actionSpan.traceId.equals(span.traceId))
-                    .filter(span -> actionSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> actionApplicationSpan.traceId.equals(span.traceId))
+                    .filter(span -> actionApplicationSpan.spanId.equals(span.parentSpanId))
+                    .filter(span -> "h2".equals(span.attributes.get("db.system")))
                     .findFirst()
-                    .orElseGet(() -> fail("JDBC span is not a child of the action.\n"
+                    .orElseGet(() -> fail("JDBC span is not a child of the application span.\n"
                             + describe(spans) + "\n" + result.output));
             final ExportedSpan httpSpan = ancestorWithAttribute(
                     spans,
@@ -238,6 +244,12 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(actionSpan.traceId, jdbcSpan.traceId);
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionSpan.attributes.get("causeway.action.id"));
+            assertEquals("jdbcWork", actionApplicationSpan.attributes.get(
+                    "causeway.application.span.suffix"));
+            assertEquals("ApplicationSpanServiceDefault",
+                    actionApplicationSpan.attributes.get("causeway.bean"));
+            assertEquals("runtimeservices",
+                    actionApplicationSpan.attributes.get("causeway.module"));
             assertEquals(1L, spans.stream()
                     .filter(span -> actionSpan.traceId.equals(span.traceId))
                     .filter(span -> MicrometerTracingAgentFixture.ENTITY_CHANGE_EVALUATION_NAME
@@ -332,6 +344,44 @@ class MicrometerTracingCompatibilityTest {
                     viewEntrySpan.name);
             assertEquals(MicrometerTracingAgentFixture.OBJECT_TYPE,
                     viewEntrySpan.attributes.get(OBJECT_TYPE_ATTRIBUTE));
+
+            final ExportedSpan applicationEntrySpan = spanWithAttribute(
+                    spans, "http.route", "/trace/application", result.output);
+            final ExportedSpan applicationRootSpan = spanNamedInTrace(
+                    spans,
+                    applicationEntrySpan.traceId,
+                    MicrometerTracingAgentFixture.ROOT_INTERACTION_NAME,
+                    result.output);
+            final ExportedSpan applicationOuterSpan = childSpanNamed(
+                    spans,
+                    applicationRootSpan,
+                    MicrometerTracingAgentFixture.APPLICATION_OUTER_NAME,
+                    result.output);
+            final ExportedSpan applicationInnerSpan = childSpanNamed(
+                    spans,
+                    applicationOuterSpan,
+                    MicrometerTracingAgentFixture.APPLICATION_INNER_NAME,
+                    result.output);
+            assertEquals("outer", applicationOuterSpan.attributes.get(
+                    "causeway.application.span.suffix"));
+            assertEquals("inner", applicationInnerSpan.attributes.get(
+                    "causeway.application.span.suffix"));
+            assertFalse(applicationOuterSpan.attributes.containsKey("causeway.member.id"));
+
+            final ExportedSpan applicationFailureEntrySpan = spanWithAttribute(
+                    spans, "http.route", "/trace/application/failure", result.output);
+            final ExportedSpan applicationFailureRootSpan = spanNamedInTrace(
+                    spans,
+                    applicationFailureEntrySpan.traceId,
+                    MicrometerTracingAgentFixture.ROOT_INTERACTION_NAME,
+                    result.output);
+            final ExportedSpan applicationFailureSpan = childSpanNamed(
+                    spans,
+                    applicationFailureRootSpan,
+                    MicrometerTracingAgentFixture.APPLICATION_FAILURE_NAME,
+                    result.output);
+            assertEquals("500", applicationFailureEntrySpan.attributes.get("http.status_code"));
+            assertEquals("STATUS_CODE_ERROR", applicationFailureSpan.statusCode);
 
             final ExportedSpan unsupportedEntrySpan = spanWithAttribute(
                     spans, "http.route", "/trace/unsupported", result.output);
@@ -436,6 +486,19 @@ class MicrometerTracingCompatibilityTest {
                 .filter(span -> name.equals(span.name))
                 .findFirst()
                 .orElseGet(() -> fail("Span not exported: " + name + "\n"
+                        + describe(spans) + "\n" + processOutput));
+    }
+
+    private static ExportedSpan spanNamedInTrace(
+            final List<ExportedSpan> spans,
+            final String traceId,
+            final String name,
+            final String processOutput) {
+        return spans.stream()
+                .filter(span -> traceId.equals(span.traceId))
+                .filter(span -> name.equals(span.name))
+                .findFirst()
+                .orElseGet(() -> fail("Span not exported in expected trace: " + name + "\n"
                         + describe(spans) + "\n" + processOutput));
     }
 
