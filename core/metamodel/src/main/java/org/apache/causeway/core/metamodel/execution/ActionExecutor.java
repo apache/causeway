@@ -42,10 +42,12 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
+import org.apache.causeway.core.metamodel.services.priming.PrimingService;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -124,6 +126,15 @@ implements
     private final QueryResultsCache queryResultsCache =
         getServiceRegistry().lookupServiceElseFail(QueryResultsCache.class);
 
+    @Getter(lazy=true)
+    private final Optional<PrimingService> primingServiceIfAny = lookupPrimingService();
+
+    private Optional<PrimingService> lookupPrimingService() {
+        return getServiceRegistry() != null
+                ? getServiceRegistry().lookupService(PrimingService.class)
+                : Optional.empty();
+    }
+
     private boolean isPostable() {
         // when mixed-in prop/coll always returns false
         return actionInvocationFacetAbstract.isPostable();
@@ -162,7 +173,7 @@ implements
 
         if(!isPostable()) {
             // don't emit domain events
-            return executeWithoutEvents(arguments);
+            return executeWithPriming(arguments);
         }
 
         // ... post the executing event
@@ -188,8 +199,8 @@ implements
         // set event onto the execution
         currentExecution.setEvent(event);
 
-        // invoke method
-        val resultPojo = executeWithoutEvents(argsForInvocation);
+        // prime the ORM persistence context, then invoke method
+        val resultPojo = executeWithPriming(argsForInvocation);
 
         if (event != null) {
             // ... post the executed event
@@ -210,10 +221,38 @@ implements
     }
 
     @SneakyThrows
-    private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
-        // invoke method
+    private Object executeWithPriming(final Can<ManagedObject> arguments) {
+        prime(arguments);
         val resultPojo = invokeMethodElseFromCache(method, head, arguments);
         return getServiceInjector().injectServicesInto(resultPojo);
+    }
+
+    private void prime(final Can<ManagedObject> arguments) {
+        if(mixedInAssociation().isPresent()) {
+            return;
+        }
+        getPrimingServiceIfAny().ifPresent(primingService -> {
+            final ManagedObject owner = head.getOwner();
+            final Object targetPojo = Objects.requireNonNull(
+                    MmUnwrapUtils.single(owner),
+                    () -> "Could not extract pojo for action priming.");
+            primingService.primeAction(
+                    owner.objSpec(),
+                    domainFacingActionLogicalName(),
+                    targetPojo,
+                    MmUnwrapUtils.multipleAsList(arguments));
+        });
+    }
+
+    private String domainFacingActionLogicalName() {
+        if(owningAction.isDeclaredOnMixin()
+                && head instanceof ActionInteractionHead) {
+            return ((ActionInteractionHead) head)
+                    .getMetaModel()
+                    .getFeatureIdentifier()
+                    .memberLogicalName();
+        }
+        return owningAction.getFeatureIdentifier().memberLogicalName();
     }
 
     // -- HELPER

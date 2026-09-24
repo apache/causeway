@@ -25,6 +25,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -33,6 +34,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.services.priming.PrimingService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -255,10 +257,29 @@ public class EntityPage extends PageAbstract {
     @Override
     public void onNewRequestCycle() {
         val entityModel = (UiObjectWkt) getUiHintContainerIfAny();
-        ManagedObjects.refreshViewmodel(entityModel.getObject(),
+        final ManagedObject objectAdapter = entityModel.getObject();
+        ManagedObjects.refreshViewmodel(objectAdapter,
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
                         .orElseThrow());
+
+        // Authorize before application code can use the target to prime the persistence context.
+        if(!entityModel.isVisible()) {
+            throw new ObjectMember.AuthorizationException();
+        }
+        primeForRendering(this, objectAdapter, getServiceRegistry());
+    }
+
+    static void primeForRendering(
+            final Object page,
+            final ManagedObject objectAdapter,
+            final ServiceRegistry serviceRegistry) {
+        if(WicketViewPrimingGuard.firstVisit(page)) {
+            serviceRegistry.lookupService(PrimingService.class)
+                    .ifPresent(primingService -> primingService.primeView(
+                            objectAdapter.objSpec(),
+                            objectAdapter.getPojo()));
+        }
     }
 
     @Override

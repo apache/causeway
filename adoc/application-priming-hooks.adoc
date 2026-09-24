@@ -1,0 +1,75 @@
+= Application Priming Hooks
+
+Application priming hooks allow an application to load objects that are likely to be needed by an imminent action or Wicket entity-page rendering into the active ORM persistence context.
+They are an opt-in performance facility rather than an automatic fetch-plan or N+1 diagnostic mechanism.
+
+== Registering Primers
+
+Implement `PrimingRegistrar` as a Spring-managed application service and add registrations during its callback.
+The registry resolves the supplied class through the completed Causeway metamodel and freezes all registrations before requests are served.
+
+[source,java]
+----
+@Service
+@RequiredArgsConstructor
+public class InvoicePrimingRegistrar implements PrimingRegistrar {
+
+    private final InvoiceRepository invoiceRepository;
+
+    @Override
+    public void register(final PrimingRegistry registry) {
+        registry.actions(
+                Invoice.class,
+                Set.of("approve", "recalculate"),
+                (invoice, arguments) ->
+                        invoiceRepository.primeForCalculation(invoice));
+
+        registry.view(
+                Invoice.class,
+                invoiceRepository::primeForRendering);
+    }
+}
+----
+
+An action registration uses the domain class and each action's local logical name.
+For example, `Invoice.class` and `approve` are resolved to the domain-facing logical member identity represented by `Invoice#approve` in the metamodel.
+A contributed action is registered against its domain target or mixee class rather than its mixin implementation class.
+
+A view registration uses only the domain class because the registry derives its exact logical type from the metamodel.
+Registrations do not apply through Java superclass, interface, or subtype matching.
+Startup fails when the supplied class has no exact metamodel logical type or a local action name cannot be resolved.
+
+== Action Arguments
+
+An action primer receives its typed domain target and immutable positional `ActionArguments`.
+Arguments are those that will be supplied to the action method after executing-phase domain-event adjustment.
+
+[source,java]
+----
+registry.action(
+        Invoice.class,
+        "calculate",
+        (invoice, arguments) -> {
+            LocalDate effectiveDate = arguments.get(0, LocalDate.class);
+            invoiceRepository.primeForCalculation(invoice, effectiveDate);
+        });
+----
+
+`ActionArguments` provides its size, untyped indexed access, type-checked indexed access, and an unmodifiable list view.
+An array-valued action parameter remains one positional argument and is not flattened.
+
+== Lifecycle and Callback Contract
+
+Action primers run synchronously after action validation and immediately before the domain method in the same interaction, transaction, thread, and persistence context.
+Ordinary nested and wrapper-mediated action executions participate, while pass-through invocation and synthetic mixed-in property or collection access do not add priming callbacks.
+
+View primers run after entity visibility authorization and before Wicket prepares expensive entity-page content.
+They run at most once for an entity page during one rendering request and can run again during a later full or Ajax request with a new persistence context.
+A view primer can bulk-load collections and related entities reachable from the root object without requiring row-level callbacks.
+
+Primer implementations must be synchronous, read-only, idempotent, and safe for concurrent invocation as singleton application services.
+Multiple callbacks can be registered for one exact action or view key, and each matching callback is invoked.
+Callbacks must not depend on relative invocation order.
+
+A callback failure propagates through the enclosing action execution or Wicket request.
+Causeway does not retry or suppress primer failures because an ORM failure can invalidate the active transaction.
