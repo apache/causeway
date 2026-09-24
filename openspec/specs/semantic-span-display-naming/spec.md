@@ -2,9 +2,7 @@
 
 ## Purpose
 Define bounded, case-preserving contextual names and canonical metadata for Causeway semantic observations.
-
 ## Requirements
-
 ### Requirement: Meaningful action-invocation display name
 Causeway SHALL retain `causeway.action.invocation` as the stable observation name and SHALL assign each action-invocation observation the contextual display name `act <logical-member-identifier>`.
 The logical member identifier SHALL be the domain-facing identity of the invoked action, including for actions implemented by mixins.
@@ -74,12 +72,18 @@ Operators SHALL be able to use those attributes to disambiguate equal display na
 
 ### Requirement: Case-preserving Causeway trace export
 Causeway SHALL export its semantic observation contextual names without Micrometer's lower-hyphen conversion.
-The specialized handling SHALL apply only to Causeway's dedicated observation registry and SHALL preserve existing tracing lifecycle, parentage, tags, errors, and scope behavior.
+The specialized observation handling SHALL apply only to Causeway's dedicated observation registry and SHALL preserve existing tracing lifecycle, parentage, tags, errors, and scope behavior.
+The separate semantic trace-display-name mechanism SHALL restrict automatic-span renaming to the selected Java-agent-created foreground HTTP entry span; naming of other automatic Java-agent spans SHALL remain unchanged.
 
 #### Scenario: Logical identifier contains uppercase characters
 - **WHEN** a Causeway contextual name contains a logical identifier such as `isisExtSecMan.ApplicationUser`
 - **THEN** the exported span name retains that exact identifier casing
-- **AND** automatic Java-agent HTTP and JDBC span naming remains unchanged
+- **AND** automatic Java-agent JDBC, outbound HTTP, and non-selected server span naming remains unchanged
+
+#### Scenario: Foreground entry span receives a semantic trace name
+- **WHEN** the dedicated semantic trace-display-name mechanism selects a bounded name for a Java-agent-created foreground HTTP entry span
+- **THEN** Causeway updates that entry span to the selected case-preserving name
+- **AND** this exception does not change naming behavior for other automatic Java-agent spans
 
 ### Requirement: Generic root-interaction naming
 Causeway SHALL retain `causeway.root.interaction` as the contextual and stable observation name for the root interaction.
@@ -89,3 +93,4 @@ Semantic child spans SHALL describe action invocation, association access, page 
 - **WHEN** one request performs more than one semantic operation
 - **THEN** the root span remains named `causeway.root.interaction`
 - **AND** each instrumented semantic operation is represented by its applicable child span
+
