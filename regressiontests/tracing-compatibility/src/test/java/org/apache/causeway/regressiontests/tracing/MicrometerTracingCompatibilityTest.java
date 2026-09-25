@@ -263,6 +263,10 @@ class MicrometerTracingCompatibilityTest {
             assertEquals(actionSpan.traceId, jdbcSpan.traceId);
             assertEquals(MicrometerTracingAgentFixture.ACTION_ID,
                     actionSpan.attributes.get("causeway.action.id"));
+            assertEquals(MicrometerTracingAgentFixture.INTERACTION_ID.toString(),
+                    rootSpan.attributes.get("causeway.interaction.id"));
+            assertFalse(httpSpan.attributes.containsKey("causeway.interaction.id"));
+            assertFalse(actionSpan.attributes.containsKey("causeway.interaction.id"));
             assertEquals("jdbcWork", actionApplicationSpan.attributes.get(
                     "causeway.application.span.suffix"));
             assertEquals("ApplicationSpanServiceDefault",

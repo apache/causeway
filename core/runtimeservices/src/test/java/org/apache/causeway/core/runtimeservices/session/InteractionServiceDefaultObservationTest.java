@@ -46,6 +46,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,6 +56,9 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
 class InteractionServiceDefaultObservationTest {
+
+    private static final UUID INTERACTION_ID =
+            UUID.fromString("12345678-1234-1234-1234-123456789abc");
 
     @Test
     void oneRootObservationCoversNestedLayersAndClosesExactlyOnce() {
@@ -68,6 +72,7 @@ class InteractionServiceDefaultObservationTest {
         fixture.handler.record("layer count after close: " + fixture.service.getInteractionLayerCount());
         fixture.handler.record("current observation after close: "
                 + currentObservationName(fixture.registry));
+        assertEquals(INTERACTION_ID.toString(), fixture.handler.interactionId);
 
         Approvals.verify(report(
                 "One root observation covers nested interaction layers",
@@ -94,6 +99,7 @@ class InteractionServiceDefaultObservationTest {
         fixture.handler.record("original failure rethrown: " + (thrown == failure));
         fixture.handler.record("current observation after close: "
                 + currentObservationName(fixture.registry));
+        assertEquals(INTERACTION_ID.toString(), fixture.handler.interactionId);
 
         Approvals.verify(report(
                 "Root interaction work failure",
@@ -121,6 +127,7 @@ class InteractionServiceDefaultObservationTest {
         fixture.handler.record("layer count after failed close: " + fixture.service.getInteractionLayerCount());
         fixture.handler.record("current observation after failed close: "
                 + currentObservationName(fixture.registry));
+        assertEquals(INTERACTION_ID.toString(), fixture.handler.interactionId);
 
         Approvals.verify(report(
                 "Root interaction close failure",
@@ -148,7 +155,7 @@ class InteractionServiceDefaultObservationTest {
         when(transactionService.currentTransactionState()).thenReturn(transactionState);
 
         final InteractionIdGenerator interactionIdGenerator = mock(InteractionIdGenerator.class);
-        when(interactionIdGenerator.interactionId()).thenReturn(UUID.randomUUID());
+        when(interactionIdGenerator.interactionId()).thenReturn(INTERACTION_ID);
 
         @SuppressWarnings("unchecked")
         final Provider<CommandPublisher> commandPublisherProvider = mock(Provider.class);
@@ -209,10 +216,12 @@ class InteractionServiceDefaultObservationTest {
     implements ObservationHandler<Observation.Context> {
 
         private final List<String> events = new ArrayList<>();
+        private String interactionId;
 
         @Override
         public void onStart(final Observation.Context context) {
             record("onStart(name=" + context.getName() + ")");
+            interactionId = context.getHighCardinalityKeyValue("causeway.interaction.id").getValue();
         }
 
         @Override

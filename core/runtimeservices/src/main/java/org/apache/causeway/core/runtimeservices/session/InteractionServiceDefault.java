@@ -96,6 +96,7 @@ implements
     //  of TransactionSynchronization (in particular SpringSessionSynchronization), I suspect that this
     //  ThreadLocal would be considered bad practice and instead should be managed using the TransactionSynchronization mechanism.
     private static final String ROOT_INTERACTION_OBSERVATION_NAME = "causeway.root.interaction";
+    private static final String INTERACTION_ID_ATTRIBUTE = "causeway.interaction.id";
 
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
     final ThreadLocal<ObservationClosure> rootObservation = new ThreadLocal<>();
@@ -213,7 +214,7 @@ implements
         interactionLayerStack.get().push(interactionLayer);
 
         if(isAtTopLevel()) {
-            startRootObservation();
+            startRootObservation(causewayInteraction);
             try {
                 transactionServiceSpring.onOpen(causewayInteraction);
                 interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
@@ -377,10 +378,13 @@ implements
         }
     }
 
-    private void startRootObservation() {
+    private void startRootObservation(final CausewayInteraction causewayInteraction) {
         final ObservationClosure observationClosure = new ObservationClosure()
                 .startAndOpenScope(observationProvider.get(ROOT_INTERACTION_OBSERVATION_NAME)
-                        .contextualName(ROOT_INTERACTION_OBSERVATION_NAME));
+                        .contextualName(ROOT_INTERACTION_OBSERVATION_NAME)
+                        .highCardinalityKeyValue(
+                                INTERACTION_ID_ATTRIBUTE,
+                                causewayInteraction.getInteractionId().toString()));
         rootObservation.set(observationClosure);
     }
 

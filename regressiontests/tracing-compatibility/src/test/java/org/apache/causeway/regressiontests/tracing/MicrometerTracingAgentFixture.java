@@ -140,6 +140,8 @@ public final class MicrometerTracingAgentFixture {
     static final String ROW_OBJECT_TYPE = "causeway.TracingRole";
     static final String ROW_PROPERTY_ID = ROW_OBJECT_TYPE + "#name";
     static final String ROW_ACTION_ID = ROW_OBJECT_TYPE + "#update()";
+    static final UUID INTERACTION_ID =
+            UUID.fromString("12345678-1234-1234-1234-123456789abc");
     static final String SUCCESS_MARKER = "CAUSEWAY_TRACING_FIXTURE_OK";
 
     private MicrometerTracingAgentFixture() {
@@ -455,7 +457,7 @@ public final class MicrometerTracingAgentFixture {
         final TransactionServiceSpring transactionService = mock(TransactionServiceSpring.class);
         when(transactionService.currentTransactionState()).thenReturn(TransactionState.MUST_ABORT);
         final InteractionIdGenerator interactionIdGenerator = mock(InteractionIdGenerator.class);
-        when(interactionIdGenerator.interactionId()).thenReturn(UUID.randomUUID());
+        when(interactionIdGenerator.interactionId()).thenReturn(INTERACTION_ID);
         @SuppressWarnings("unchecked")
         final Provider<CommandPublisher> commandPublisherProvider = mock(Provider.class);
 

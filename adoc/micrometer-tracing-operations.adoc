@@ -131,6 +131,25 @@ The Java agent can add controller, connection-pool, or other automatic spans bet
 A request that does not execute JDBC work will not have the final JDBC span.
 Do not use generated trace or span IDs as operation identifiers.
 
+=== Correlate a Causeway Interaction
+
+Each `causeway.root.interaction` span carries the current Causeway interaction UUID as the high-cardinality `causeway.interaction.id` attribute.
+This identifier correlates a trace with command, execution-log, and audit records that expose the same interaction ID.
+It remains a span attribute and does not replace or alter the OpenTelemetry trace ID, span ID, display name, or parentage.
+Causeway does not copy it to the Java-agent-owned HTTP entry span or to every descendant span.
+
+To locate a retained trace in Jaeger, select the application service and search the Tags field for the exact value:
+
+[source,text]
+----
+causeway.interaction.id=<UUID>
+----
+
+Leave the Operation filter unset or set to all operations because the matching attribute is on the `causeway.root.interaction` span rather than the HTTP entry span.
+Jaeger returns the complete containing trace when that child span matches.
+The pinned Jaeger 2.21 in-memory store supports span-attribute search, but lookup succeeds only while the trace remains in its bounded ring buffer.
+The UUID is intentionally high-cardinality, so use it for exact correlation rather than grouping and account for attribute indexing costs when configuring a persistent production backend.
+
 === Interpret Semantic Trace Display Names
 
 Causeway updates the Java-agent-owned foreground HTTP entry span with the highest-priority semantic outcome observed during the request.
