@@ -40,6 +40,8 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -69,6 +71,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
     public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
         super(id, model);
         this.fieldSet = fieldSet;
+        WicketRenderObservationBehavior.addTo(this,
+                WicketRenderObservationDescriptor.fieldset(
+                        model.getTypeOfSpecification().logicalTypeName(),
+                        fieldSet.getId()));
 
         // the UI is only ever built once.
         childComponents = buildGui();

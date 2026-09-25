@@ -81,8 +81,6 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.query.Query;
-import org.apache.causeway.applib.services.i18n.Mode;
-import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
@@ -196,6 +194,23 @@ public class CausewayConfiguration {
         return Optional.ofNullable(environment.getProperty(configurationPropertyName));
     }
 
+    private final Execution execution = new Execution();
+    @Data
+    public static class Execution {
+
+        private final Mode mode = new Mode();
+        @Data
+        public static class Mode {
+
+            public static final String DEFAULT_KEY = "causeway.execution.mode";
+
+            /**
+             * Attribute key used to classify foreground and background execution spans.
+             */
+            @NotEmpty @NotNull
+            private String key = DEFAULT_KEY;
+        }
+    }
 
     private final Security security = new Security();
     @Data
@@ -894,9 +909,9 @@ public class CausewayConfiguration {
                  * {@link ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link ExecutionSubscriber#onExecution(Execution) onExecution}
+                 *     The service's {@link ExecutionSubscriber#onExecution(org.apache.causeway.applib.services.iactn.Execution) onExecution}
                  *     method is called only once per transaction, with
-                 *     {@link Execution} collecting details of
+                 *     {@link org.apache.causeway.applib.services.iactn.Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
                  *     object (if any).
                  * </p>
@@ -1154,9 +1169,9 @@ public class CausewayConfiguration {
                  * {@link ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 * The service's {@link ExecutionSubscriber#onExecution(Execution)}  publish}
+                 * The service's {@link ExecutionSubscriber#onExecution(org.apache.causeway.applib.services.iactn.Execution)}  publish}
                  * method is called only once per transaction, with
-                 * {@link Execution} collecting details of
+                 * {@link org.apache.causeway.applib.services.iactn.Execution} collecting details of
                  * the identity of the target object, the property edited, and the new value of the property.
                  * </p>
                  *
@@ -2131,7 +2146,7 @@ public class CausewayConfiguration {
                      *     <ul>
                      *         <li>
                      *              <p>
-                     *                  The default mode of {@link Mode#WRITE write} is appropriate for
+                     *                  The default mode of {@link org.apache.causeway.applib.services.i18n.Mode#WRITE write} is appropriate for
                      *                  integration testing or prototyping, meaning that the service records any requests made of it
                      *                  but just returns the string unaltered.  This is a good way to discover new strings that
                      *                  require translation.
@@ -2139,13 +2154,13 @@ public class CausewayConfiguration {
                      *         </li>
                      *         <li>
                      *              <p>
-                     *                  The {@link Mode#READ read} mode is appropriate for production; the
+                     *                  The {@link org.apache.causeway.applib.services.i18n.Mode#READ read} mode is appropriate for production; the
                      *                  service looks up translations that have previously been captured.
                      *              </p>
                      *         </li>
                      *         <li>
                      *             <p>
-                     *                 The {@link Mode#DISABLED disabled} performs no translation
+                     *                 The {@link org.apache.causeway.applib.services.i18n.Mode#DISABLED disabled} performs no translation
                      *                 and simply returns the original string unchanged.  Unlike the write mode, it
                      *                 does <i>not</i> keep track of translation requests.
                      *             </p>
@@ -2153,7 +2168,8 @@ public class CausewayConfiguration {
                      *     </ul>
                      * </p>
                      */
-                    Mode mode = Mode.WRITE;
+                    org.apache.causeway.applib.services.i18n.Mode mode =
+                            org.apache.causeway.applib.services.i18n.Mode.WRITE;
                 }
             }
 
@@ -2994,6 +3010,43 @@ public class CausewayConfiguration {
         private final Wicket wicket = new Wicket();
         @Data
         public static class Wicket {
+
+            /**
+             * Controls the volume of semantic Wicket observations.
+             */
+            private final Observation observation = new Observation();
+            @Data
+            public static class Observation {
+
+                /**
+                 * The finest semantic category eligible for observation.
+                 */
+                @NotNull
+                private Detail detail = Detail.MEMBERS;
+
+                /**
+                 * Hard maximum number of Causeway Wicket observations per request;
+                 * {@code 0} means unlimited.
+                 */
+                @javax.validation.constraints.Min(0)
+                private int maxSpansPerRequest = 0;
+
+                public void setMaxSpansPerRequest(final int maxSpansPerRequest) {
+                    if(maxSpansPerRequest < 0) {
+                        throw new IllegalArgumentException(
+                                "max-spans-per-request must not be negative");
+                    }
+                    this.maxSpansPerRequest = maxSpansPerRequest;
+                }
+
+                public enum Detail {
+                    NONE,
+                    PAGE,
+                    REGIONS,
+                    ROWS,
+                    MEMBERS
+                }
+            }
 
         	/**
              * Whether actions, that have explicit <code>hidden = Where</code> semantics

@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,18 +31,25 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.IItemReuseStrategy;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketPreparationObservation;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -54,6 +62,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
 
     private final CollectionContentsSortableDataProvider dataProvider;
     private final ToggleboxColumn toggleboxColumn;
+    private final WicketRenderObservationDescriptor rowRenderDescriptor;
 
     private CausewayAjaxHeadersToolbar headersToolbar;
     private CausewayAjaxNavigationToolbar navigationToolbar;
@@ -63,14 +72,45 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             final List<? extends IColumn<DataRow, String>> columns,
             final CollectionContentsSortableDataProvider dataProvider,
             final int rowsPerPage,
-            final ToggleboxColumn toggleboxColumn) {
+            final ToggleboxColumn toggleboxColumn,
+            final String ownerObjectType,
+            final String elementObjectType,
+            final String collectionId) {
 
         super(id, columns, dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
         this.toggleboxColumn = toggleboxColumn;
+        this.rowRenderDescriptor = collectionId != null
+                ? WicketRenderObservationDescriptor.row(
+                        elementObjectType, collectionId)
+                : null;
+        if(collectionId != null) {
+            WicketRenderObservationBehavior.addTo(
+                    this,
+                    WicketRenderObservationDescriptor.table(
+                            ownerObjectType, collectionId));
+            WicketRenderObservationBehavior.addTo(
+                    getTopToolbars(),
+                    WicketRenderObservationDescriptor.tableHeader(
+                            ownerObjectType, collectionId));
+            WicketRenderObservationBehavior.addTo(
+                    getBody(),
+                    WicketRenderObservationDescriptor.tableBody(
+                            ownerObjectType, collectionId));
+            WicketRenderObservationBehavior.addTo(
+                    getBottomToolbars(),
+                    WicketRenderObservationDescriptor.tableFooter(
+                            ownerObjectType, collectionId));
+        }
+        final WicketRenderObservationDescriptor rowPreparationDescriptor =
+                collectionId != null
+                        ? WicketRenderObservationDescriptor.rowPreparation(
+                                elementObjectType, collectionId)
+                        : null;
         setOutputMarkupId(true);
         setVersioned(false);
-        setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
+        setItemReuseStrategy(new RowItemReuseStrategy(
+                rowPreparationDescriptor));
     }
 
     public void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
@@ -129,8 +169,16 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
     }
 
     @Override
-    protected Item<DataRow> newRowItem(final String id, final int index, final IModel<DataRow> model) {
-        return Wkt.oddEvenItem(id, index, model, CausewayAjaxDataTable::cssClassForRow);
+    protected Item<DataRow> newRowItem(
+            final String id,
+            final int index,
+            final IModel<DataRow> model) {
+        final Item<DataRow> item = new ObservedRowItem(id, index, model);
+        if(rowRenderDescriptor != null) {
+            WicketRenderObservationBehavior.addTo(
+                    item, rowRenderDescriptor);
+        }
+        return item;
     }
 
     // -- HELPER
@@ -147,7 +195,9 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
     private static Iterator<Item<DataRow>> itemReuseStrategy(
             final IItemFactory<DataRow> factory,
             final Iterator<IModel<DataRow>> newModels,
-            final Iterator<Item<DataRow>> existingItems) {
+            final Iterator<Item<DataRow>> existingItems,
+            final HasMetaModelContext context,
+            final WicketRenderObservationDescriptor preparationDescriptor) {
 
         val itemByUuid = _Maps.<UUID, Item<DataRow>>newHashMap();
         existingItems.forEachRemaining(item->{
@@ -174,7 +224,13 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
                 final IModel<DataRow> model2 = oldItem != null
                         ? oldItem.getModel()
                         : newModel;
-                return factory.newItem(index++, model2);
+                final int itemIndex = index++;
+                return preparationDescriptor != null
+                        ? WicketPreparationObservation.observe(
+                                context,
+                                preparationDescriptor,
+                                () -> factory.newItem(itemIndex, model2))
+                        : factory.newItem(itemIndex, model2);
             }
 
             @Override
@@ -189,11 +245,82 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
     private static <T> Iterator<Item<T>> itemReuseStrategyWithCast(
             final IItemFactory<T> factory,
             final Iterator<IModel<T>> newModels,
-            final Iterator<Item<T>> existingItems) {
+            final Iterator<Item<T>> existingItems,
+            final HasMetaModelContext context,
+            final WicketRenderObservationDescriptor preparationDescriptor) {
         return _Casts.uncheckedCast(itemReuseStrategy(
                 _Casts.uncheckedCast(factory),
                 _Casts.uncheckedCast(newModels),
-                _Casts.uncheckedCast(existingItems)));
+                _Casts.uncheckedCast(existingItems),
+                context,
+                preparationDescriptor));
+    }
+
+    static final class RowItemReuseStrategy
+    implements IItemReuseStrategy, HasMetaModelContext, Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private final WicketRenderObservationDescriptor preparationDescriptor;
+        private transient CausewayObservationIntegration observationIntegration;
+
+        RowItemReuseStrategy(
+                final WicketRenderObservationDescriptor preparationDescriptor) {
+            this(preparationDescriptor, null);
+        }
+
+        RowItemReuseStrategy(
+                final WicketRenderObservationDescriptor preparationDescriptor,
+                final CausewayObservationIntegration observationIntegration) {
+            this.preparationDescriptor = preparationDescriptor;
+            this.observationIntegration = observationIntegration;
+        }
+
+        WicketRenderObservationDescriptor descriptor() {
+            return preparationDescriptor;
+        }
+
+        @Override
+        public <T> Optional<T> lookupService(final Class<T> serviceClass) {
+            if(serviceClass == CausewayObservationIntegration.class
+                    && observationIntegration != null) {
+                return Optional.of(serviceClass.cast(observationIntegration));
+            }
+            return HasMetaModelContext.super.lookupService(serviceClass);
+        }
+
+        @Override
+        public <T> Iterator<Item<T>> getItems(
+                final IItemFactory<T> factory,
+                final Iterator<IModel<T>> newModels,
+                final Iterator<Item<T>> existingItems) {
+            return itemReuseStrategyWithCast(
+                    factory,
+                    newModels,
+                    existingItems,
+                    this,
+                    preparationDescriptor);
+        }
+    }
+
+    private static final class ObservedRowItem
+    extends OddEvenItem<DataRow>
+    implements HasMetaModelContext {
+
+        private static final long serialVersionUID = 1L;
+
+        private ObservedRowItem(
+                final String id,
+                final int index,
+                final IModel<DataRow> model) {
+            super(id, index, model);
+        }
+
+        @Override
+        protected void onComponentTag(final ComponentTag tag) {
+            super.onComponentTag(tag);
+            Wkt.cssAppend(tag, cssClassForRow(getModelObject()));
+        }
     }
 
     private void honorHints() {

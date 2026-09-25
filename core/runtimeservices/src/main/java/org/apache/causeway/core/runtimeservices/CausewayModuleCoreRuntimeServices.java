@@ -63,6 +63,7 @@ import org.apache.causeway.core.runtimeservices.serializing.SerializingAdapterDe
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.sitemap.SitemapServiceDefault;
+import org.apache.causeway.core.runtimeservices.span.ApplicationSpanServiceDefault;
 import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
@@ -80,6 +81,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         CausewayModuleCoreCodegenByteBuddy.class,
 
         // @Service's
+        ApplicationSpanServiceDefault.class,
         BookmarkServiceDefault.class,
         CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,

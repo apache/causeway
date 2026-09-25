@@ -28,6 +28,7 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.metamodel.facets;
     exports org.apache.causeway.core.config.metamodel.services;
     exports org.apache.causeway.core.config.metamodel.specloader;
+    exports org.apache.causeway.core.config.observation;
     exports org.apache.causeway.core.config.presets;
     exports org.apache.causeway.core.config.progmodel;
     exports org.apache.causeway.core.config.util;
@@ -45,6 +46,10 @@ module org.apache.causeway.core.config {
     requires java.validation;
     requires java.ws.rs;
     requires java.inject;
+    requires transitive micrometer.observation;
+    requires micrometer.tracing;
+    requires micrometer.tracing.bridge.otel;
+    requires io.opentelemetry.api;
     requires org.apache.logging.log4j;
     requires org.eclipse.persistence.core;
     requires org.hibernate.validator;
@@ -59,4 +64,5 @@ module org.apache.causeway.core.config {
 
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
     opens org.apache.causeway.core.config.environment to spring.core;
+    opens org.apache.causeway.core.config.observation to spring.core;
 }

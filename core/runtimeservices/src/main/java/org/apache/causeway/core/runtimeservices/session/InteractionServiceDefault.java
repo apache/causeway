@@ -57,6 +57,9 @@ import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.ObservationClosure;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
@@ -92,8 +95,13 @@ implements
     // TODO: reading the javadoc for TransactionSynchronizationManager and looking at the implementations
     //  of TransactionSynchronization (in particular SpringSessionSynchronization), I suspect that this
     //  ThreadLocal would be considered bad practice and instead should be managed using the TransactionSynchronization mechanism.
-    final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
+    private static final String ROOT_INTERACTION_OBSERVATION_NAME = "causeway.root.interaction";
+    private static final String INTERACTION_ID_ATTRIBUTE = "causeway.interaction.id";
 
+    final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
+    final ThreadLocal<ObservationClosure> rootObservation = new ThreadLocal<>();
+
+    final ObservationProvider observationProvider;
     final MetamodelEventService runtimeEventService;
     final SpecificationLoader specificationLoader;
     final ServiceInjector serviceInjector;
@@ -117,7 +125,8 @@ implements
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
             final ConfigurableBeanFactory beanFactory,
-            final InteractionIdGenerator interactionIdGenerator) {
+            final InteractionIdGenerator interactionIdGenerator,
+            final CausewayObservationIntegration observationIntegration) {
         this.runtimeEventService = runtimeEventService;
         this.specificationLoader = specificationLoader;
         this.serviceInjector = serviceInjector;
@@ -126,6 +135,9 @@ implements
         this.commandPublisherProvider = commandPublisherProvider;
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
+        this.observationProvider = observationIntegration.provider(
+                getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
 
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
     }
@@ -202,8 +214,15 @@ implements
         interactionLayerStack.get().push(interactionLayer);
 
         if(isAtTopLevel()) {
-            transactionServiceSpring.onOpen(causewayInteraction);
-            interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
+            startRootObservation(causewayInteraction);
+            try {
+                transactionServiceSpring.onOpen(causewayInteraction);
+                interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
+            } catch (RuntimeException | Error ex) {
+                recordRootObservationError(ex);
+                closeRootObservation();
+                throw ex;
+            }
         }
 
         if(log.isDebugEnabled()) {
@@ -341,6 +360,7 @@ implements
         try {
             return callable.call();
         } catch (Throwable e) {
+            recordRootObservationError(e);
             requestRollback(e);
             throw e;
         }
@@ -352,8 +372,34 @@ implements
         try {
             runnable.run();
         } catch (Throwable e) {
+            recordRootObservationError(e);
             requestRollback(e);
             throw e;
+        }
+    }
+
+    private void startRootObservation(final CausewayInteraction causewayInteraction) {
+        final ObservationClosure observationClosure = new ObservationClosure()
+                .startAndOpenScope(observationProvider.get(ROOT_INTERACTION_OBSERVATION_NAME)
+                        .contextualName(ROOT_INTERACTION_OBSERVATION_NAME)
+                        .highCardinalityKeyValue(
+                                INTERACTION_ID_ATTRIBUTE,
+                                causewayInteraction.getInteractionId().toString()));
+        rootObservation.set(observationClosure);
+    }
+
+    private void recordRootObservationError(final Throwable failure) {
+        final ObservationClosure observationClosure = rootObservation.get();
+        if(observationClosure != null) {
+            observationClosure.onError(failure);
+        }
+    }
+
+    private void closeRootObservation() {
+        final ObservationClosure observationClosure = rootObservation.get();
+        rootObservation.remove();
+        if(observationClosure != null) {
+            observationClosure.close();
         }
     }
 
@@ -459,12 +505,16 @@ implements
                 _Xray.closeInteractionLayer(stack);
                 stack.pop();
             }
+        } catch (RuntimeException | Error ex) {
+            recordRootObservationError(ex);
+            throw ex;
         } finally {
             // preInteractionClosed above could conceivably throw an exception, so we'll tidy up our threadlocal
             // here to ensure everything is cleaned up
             if(downToStackSize == 0) {
-                // cleanup thread-local
+                // cleanup thread-locals
                 interactionLayerStack.remove();
+                closeRootObservation();
             }
         }
     }

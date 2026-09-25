@@ -79,6 +79,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.actioninfo;
     exports org.apache.causeway.viewer.wicket.ui.components.collection.bulk;
     exports org.apache.causeway.viewer.wicket.ui.pages.entity;
+    exports org.apache.causeway.viewer.wicket.ui.observation;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.bool;
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt.register;
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;

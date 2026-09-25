@@ -178,6 +178,8 @@ identified
         <lombok.version>1.18.44</lombok.version> <!-- overriding Spring -->
 
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+        <micrometer-observation.version>1.10.13</micrometer-observation.version>
+        <micrometer-tracing.version>1.0.12</micrometer-tracing.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync:
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
@@ -187,6 +189,7 @@ identified
         <npm.version>8.19.2</npm.version>
 
         <ognl.version>3.4.3</ognl.version>
+        <opentelemetry-api.version>1.19.0</opentelemetry-api.version>
         <osgi.version>8.0.0</osgi.version>
 
         <picocontainer.version>2.15</picocontainer.version>
@@ -1812,6 +1815,28 @@ identified
                 <groupId>org.webjars</groupId>
                 <artifactId>momentjs</artifactId>
                 <version>${momentjs.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-observation</artifactId>
+                <version>${micrometer-observation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing</artifactId>
+                <version>${micrometer-tracing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-otel</artifactId>
+                <version>${micrometer-tracing.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-api</artifactId>
+                <version>${opentelemetry-api.version}</version>
             </dependency>
 
             <dependency>

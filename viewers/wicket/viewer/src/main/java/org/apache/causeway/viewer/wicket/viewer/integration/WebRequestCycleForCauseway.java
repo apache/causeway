@@ -65,6 +65,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidE
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationTracker;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
@@ -275,6 +276,8 @@ implements
     @Override
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
 
+        WicketRenderObservationTracker.cleanup(requestCycle, null);
+
         if(log.isDebugEnabled()) {
             val metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
             long took = timings.get().took();
@@ -299,13 +302,19 @@ implements
 
     @Override
     public void onDetach(final RequestCycle requestCycle) {
-        // detach the current @RequestScope, if any
-        IRequestCycleListener.super.onDetach(requestCycle);
+        try {
+            WicketRenderObservationTracker.cleanup(requestCycle, null);
+        } finally {
+            // detach the current @RequestScope, if any
+            IRequestCycleListener.super.onDetach(requestCycle);
+        }
     }
 
 
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
+
+        WicketRenderObservationTracker.cleanup(cycle, ex);
 
         if(log.isDebugEnabled()) {
             log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().took());

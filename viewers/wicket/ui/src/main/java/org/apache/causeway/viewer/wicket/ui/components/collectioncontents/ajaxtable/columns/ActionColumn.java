@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -82,7 +81,11 @@ extends GenericColumnAbstract {
                     determineColumnActionModifier(act, elementType)))
             .collect(Can.toCan());
 
-        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.ActionPanelStyle.DROPDOWN, Where.ALL_TABLES)
+        return ActionLinksPanel.actionLinks(
+                componentId,
+                actionModels,
+                ActionLinksPanel.ActionPanelStyle.DROPDOWN,
+                collectionVariant.whereContext())
                 .map(Component.class::cast)
                 .orElseGet(()->Wkt.label(componentId, ""));
     }

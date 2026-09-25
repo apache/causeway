@@ -41,4 +41,5 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.Cause
 })
 public class CausewayModuleViewerWicketUi {
 
+    public static final String NAMESPACE = "causeway.viewer.wicket";
 }

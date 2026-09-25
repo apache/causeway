@@ -103,6 +103,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.message;
     exports org.apache.causeway.core.metamodel.services.metamodel;
     exports org.apache.causeway.core.metamodel.services.objectlifecycle;
+    exports org.apache.causeway.core.metamodel.services.priming;
     exports org.apache.causeway.core.metamodel.services.publishing;
     exports org.apache.causeway.core.metamodel.services.registry;
     exports org.apache.causeway.core.metamodel.services.schema;

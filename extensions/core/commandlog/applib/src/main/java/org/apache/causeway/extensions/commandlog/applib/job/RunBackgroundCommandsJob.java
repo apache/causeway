@@ -20,8 +20,10 @@ package org.apache.causeway.extensions.commandlog.applib.job;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -50,6 +52,8 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
+import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
@@ -90,10 +94,24 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject DeadlockRecognizer deadlockRecognizer;
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
-    @Autowired private CausewayConfiguration causewayConfiguration;
+    @Autowired CausewayConfiguration causewayConfiguration;
+
+    private final BiConsumer<String, ExecutionMode> traceClassifier;
+
+    public RunBackgroundCommandsJob() {
+        this(CausewayTraceClassifier::classifyCurrentSpan);
+    }
+
+    RunBackgroundCommandsJob(final BiConsumer<String, ExecutionMode> traceClassifier) {
+        this.traceClassifier = Objects.requireNonNull(traceClassifier, "traceClassifier");
+    }
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
+
+        traceClassifier.accept(
+                causewayConfiguration.getExecution().getMode().getKey(),
+                ExecutionMode.BACKGROUND);
 
         if (backgroundCommandsJobControl.isPaused()) {
             log.debug("currently paused");

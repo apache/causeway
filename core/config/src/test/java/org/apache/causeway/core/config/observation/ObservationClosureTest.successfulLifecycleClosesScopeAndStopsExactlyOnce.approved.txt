@@ -1,0 +1,17 @@
+Scenario: Successful observation lifecycle
+
+This approval checks:
+- Starting opens the observation scope and makes the observation current.
+- The first close closes the scope before stopping the observation.
+- The second close produces no additional callbacks.
+- No current observation remains after cleanup.
+
+Observed state:
+- current observation after start: causeway.test.success
+- current observation after two closes: <none>
+
+Observed callback order:
+1. onStart(name=causeway.test.success)
+2. onScopeOpened(name=causeway.test.success)
+3. onScopeClosed(name=causeway.test.success)
+4. onStop(name=causeway.test.success)

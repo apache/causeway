@@ -25,6 +25,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -33,6 +34,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.services.priming.PrimingService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -41,6 +43,9 @@ import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketPagePreparationObservation;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Application;
@@ -69,6 +74,7 @@ public class EntityPage extends PageAbstract {
             new CssResourceReference(EntityPage.class, "EntityPage.css");
 
     private final UiObjectWkt model;
+    private final WicketPagePreparationObservation preparationObservation;
 
     // -- FACTORIES
 
@@ -120,12 +126,27 @@ public class EntityPage extends PageAbstract {
             final UiObjectWkt entityModel) {
         super(pageParameters, null/*titleString*/, UiComponentType.ENTITY);
         this.model = entityModel;
+        final String objectType = entityModel.getTypeOfSpecification().logicalTypeName();
+        this.preparationObservation = new WicketPagePreparationObservation(
+                WicketRenderObservationDescriptor.pagePreparation(objectType));
+        WicketRenderObservationBehavior.addTo(this,
+                WicketRenderObservationDescriptor.page(objectType));
+    }
+
+    @Override
+    protected void onConfigure() {
+        preparationObservation.configure(this, () -> super.onConfigure());
     }
 
     @Override
     protected void onInitialize() {
         buildPage();
         super.onInitialize();
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        preparationObservation.beforeRender(() -> super.onBeforeRender());
     }
 
     @Override
@@ -223,9 +244,12 @@ public class EntityPage extends PageAbstract {
     
     @Override
     protected void onDetach() {
-    	super.onDetach();
-    	//model.detach(); //v4
-    	FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
+        try {
+            preparationObservation.detach(() -> super.onDetach());
+        } finally {
+            //model.detach(); //v4
+            FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
+        }
     }
 
     // -- REFRESH ENTITIES
@@ -233,10 +257,29 @@ public class EntityPage extends PageAbstract {
     @Override
     public void onNewRequestCycle() {
         val entityModel = (UiObjectWkt) getUiHintContainerIfAny();
-        ManagedObjects.refreshViewmodel(entityModel.getObject(),
+        final ManagedObject objectAdapter = entityModel.getObject();
+        ManagedObjects.refreshViewmodel(objectAdapter,
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
                         .orElseThrow());
+
+        // Authorize before application code can use the target to prime the persistence context.
+        if(!entityModel.isVisible()) {
+            throw new ObjectMember.AuthorizationException();
+        }
+        primeForRendering(this, objectAdapter, getServiceRegistry());
+    }
+
+    static void primeForRendering(
+            final Object page,
+            final ManagedObject objectAdapter,
+            final ServiceRegistry serviceRegistry) {
+        if(WicketViewPrimingGuard.firstVisit(page)) {
+            serviceRegistry.lookupService(PrimingService.class)
+                    .ifPresent(primingService -> primingService.primeView(
+                            objectAdapter.objSpec(),
+                            objectAdapter.getPojo()));
+        }
     }
 
     @Override

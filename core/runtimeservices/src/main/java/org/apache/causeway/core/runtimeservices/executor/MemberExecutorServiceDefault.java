@@ -30,11 +30,15 @@ import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import io.micrometer.observation.Observation;
+
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
+import org.apache.causeway.applib.services.iactn.ActionInvocation.RuleChecking;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
@@ -47,6 +51,10 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -58,6 +66,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -70,6 +79,7 @@ import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
@@ -109,6 +119,21 @@ implements MemberExecutorService {
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
     private final Provider<CommandPublisher> commandPublisherProvider;
+    private final CausewayObservationIntegration observationIntegration;
+
+    private static final String ACTION_OBSERVATION_NAME = "causeway.action.invocation";
+    private static final String PROPERTY_ACCESS_OBSERVATION_NAME = "causeway.property.access";
+    private static final String COLLECTION_ACCESS_OBSERVATION_NAME = "causeway.collection.access";
+    private static final String ACTION_ID_TAG = "causeway.action.id";
+    private static final String PROPERTY_ID_TAG = "causeway.property.id";
+    private static final String COLLECTION_ID_TAG = "causeway.collection.id";
+    private static final String INITIATED_BY_TAG = "causeway.execution.initiatedBy";
+
+    private ObservationProvider observationProvider() {
+        return observationIntegration.provider(
+                getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
+    }
 
     private MetricsService metricsService() {
         return metricsServiceProvider.get();
@@ -128,14 +153,52 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
-                ? Try.call(()->
-                    invokeActionInternally(actionExecutor))
-                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
-                    invokeActionInternally(actionExecutor));
+        final Observation observation = actionExecutor.mixedInAssociation()
+                .map(association -> associationAccessObservation(
+                        actionExecutor, association))
+                .orElseGet(() -> actionObservation(actionExecutor));
+        return observation.observe(() -> {
+            val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+                    ? Try.call(()->
+                        invokeActionInternally(actionExecutor))
+                    : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
+                        invokeActionInternally(actionExecutor));
 
-        return executionResult
-                .valueAsNullableElseFail();
+            return executionResult.valueAsNullableElseFail();
+        });
+    }
+
+    private Observation actionObservation(final ActionExecutor actionExecutor) {
+        final String logicalMemberIdentifier = IdentifierUtil.logicalMemberIdentifierFor(
+                actionExecutor.getHead(), actionExecutor.getOwningAction());
+        return observationProvider().get(ACTION_OBSERVATION_NAME)
+                .contextualName(CausewayObservationNaming.forLogicalMember(
+                        "act", logicalMemberIdentifier))
+                .lowCardinalityKeyValue(
+                        ACTION_ID_TAG, logicalMemberIdentifier + "()")
+                .lowCardinalityKeyValue(
+                        INITIATED_BY_TAG,
+                        actionExecutor.getInteractionInitiatedBy().name());
+    }
+
+    private Observation associationAccessObservation(
+            final ActionExecutor actionExecutor,
+            final ObjectAssociation association) {
+        final var identifier = association.getFeatureIdentifier();
+        final String logicalMemberIdentifier = identifier.logicalTypeName()
+                + "#" + identifier.memberLogicalName();
+        final boolean property = association.isSingular();
+        return observationProvider().get(property
+                    ? PROPERTY_ACCESS_OBSERVATION_NAME
+                    : COLLECTION_ACCESS_OBSERVATION_NAME)
+                .contextualName(CausewayObservationNaming.forLogicalMember(
+                        property ? "prop" : "coll", logicalMemberIdentifier))
+                .lowCardinalityKeyValue(
+                        property ? PROPERTY_ID_TAG : COLLECTION_ID_TAG,
+                        identifier.getLogicalIdentityString("#"))
+                .lowCardinalityKeyValue(
+                        INITIATED_BY_TAG,
+                        actionExecutor.getInteractionInitiatedBy().name());
     }
 
     private ManagedObject invokeActionInternally(
@@ -159,6 +222,13 @@ implements MemberExecutorService {
 
         prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
 
+        final String logicalMemberIdentifier =
+                IdentifierUtil.logicalMemberIdentifierFor(head, owningAction);
+        nominateSemanticTraceActionIfEligible(
+                actionExecutor.mixedInAssociation().isPresent(),
+                interaction.getCommand().getLogicalMemberIdentifier(),
+                logicalMemberIdentifier);
+
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
         val actionId = owningAction.getFeatureIdentifier();
@@ -171,8 +241,16 @@ implements MemberExecutorService {
                 .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
 
+        val ruleChecking = interactionInitiatedBy.isUser()
+                ? RuleChecking.CHECKED
+                : RuleChecking.SKIPPED;
         val actionInvocation = new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos);
+                interaction,
+                actionId,
+                domainFacingActionIdentifier(head, owningAction),
+                targetPojo,
+                argumentPojos,
+                ruleChecking);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
@@ -354,6 +432,28 @@ implements MemberExecutorService {
         }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    static Identifier domainFacingActionIdentifier(
+            final InteractionHead head,
+            final ObjectAction owningAction) {
+        if(owningAction.isDeclaredOnMixin()
+                && head instanceof ActionInteractionHead) {
+            return ((ActionInteractionHead) head)
+                    .getMetaModel()
+                    .getFeatureIdentifier();
+        }
+        return owningAction.getFeatureIdentifier();
+    }
+
+    static void nominateSemanticTraceActionIfEligible(
+            final boolean mixedInAssociation,
+            final String commandLogicalMemberIdentifier,
+            final String actionLogicalMemberIdentifier) {
+        if(!mixedInAssociation
+                && actionLogicalMemberIdentifier.equals(commandLogicalMemberIdentifier)) {
+            CausewaySemanticTraceNamer.nominateAction(actionLogicalMemberIdentifier);
+        }
     }
 
     private ManagedObject resultFilteredHonoringVisibility(

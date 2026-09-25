@@ -23,6 +23,7 @@ module org.apache.causeway.core.webapp {
     exports org.apache.causeway.core.webapp.keyvaluestore;
     exports org.apache.causeway.core.webapp.modules;
     exports org.apache.causeway.core.webapp.modules.logonlog;
+    exports org.apache.causeway.core.webapp.modules.observation;
     exports org.apache.causeway.core.webapp.modules.templresources;
     exports org.apache.causeway.core.webapp.routing;
     exports org.apache.causeway.core.webapp.webappctx;

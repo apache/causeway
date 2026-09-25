@@ -77,6 +77,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
@@ -587,25 +588,41 @@ implements
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
 
-        spec.introspectUpTo(upTo);
+        final IntrospectionState currentState = spec instanceof ObjectSpecificationAbstract
+                ? ((ObjectSpecificationAbstract) spec).introspectionStateForDiagnostics()
+                : null;
+        final _IntrospectionDiagnostics.Scope diagnosticScope =
+                _IntrospectionDiagnostics.enter(substitutedType, upTo, currentState);
+        try {
+            spec.introspectUpTo(upTo);
 
-        if(spec.getAliases().isNotEmpty()
-            // this bool. expr. is an optimization, not strictly required ... a bit of hack though
-            && upTo == IntrospectionState.TYPE_INTROSPECTED) {
+            if(spec.getAliases().isNotEmpty()
+                // this bool. expr. is an optimization, not strictly required ... a bit of hack though
+                && upTo == IntrospectionState.TYPE_INTROSPECTED) {
 
-            //XXX[3063] hitting this a couple of times
-            //(~5 see org.apache.causeway.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
-            // per spec (with aliases), even though already registered;
-            // room for performance optimizations, but at the time of writing
-            // don't want to add a ObjectSpecification flag to keep track of alias registered state;
-            // as an alternative purge the aliased facets and introspect aliased attributes from annotations
-            // much earlier in the bootstrap process, same as we do with @Named processing
+                //XXX[3063] hitting this a couple of times
+                //(~5 see org.apache.causeway.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
+                // per spec (with aliases), even though already registered;
+                // room for performance optimizations, but at the time of writing
+                // don't want to add a ObjectSpecification flag to keep track of alias registered state;
+                // as an alternative purge the aliased facets and introspect aliased attributes from annotations
+                // much earlier in the bootstrap process, same as we do with @Named processing
 
-            logicalTypeResolver
-                .registerAliases(spec);
+                logicalTypeResolver
+                    .registerAliases(spec);
+            }
+
+            return spec;
+        } catch (StackOverflowError error) {
+            try {
+                _IntrospectionDiagnostics.reportStackOverflow(log::error);
+            } catch (Throwable diagnosticFailure) {
+                // Reporting must never replace the original metamodel failure, particularly when stack is scarce.
+            }
+            throw error;
+        } finally {
+            diagnosticScope.close();
         }
-
-        return spec;
     }
 
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {

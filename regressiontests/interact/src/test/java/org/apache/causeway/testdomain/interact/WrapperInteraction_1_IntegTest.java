@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.services.iactn.ActionInvocation.RuleChecking;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -55,6 +59,11 @@ import lombok.val;
                 WrapperInteraction_1_IntegTest.Customer.class,
                 WrapperInteraction_1_IntegTest.ConcreteMixin.class,
                 WrapperInteraction_1_IntegTest.ConcreteMixin2.class,
+                WrapperInteraction_1_IntegTest.InvocationProbe.class,
+                WrapperInteraction_1_IntegTest.InvocationProbe_outer.class,
+                WrapperInteraction_1_IntegTest.InvocationProbe_inner.class,
+                WrapperInteraction_1_IntegTest.InvocationProbe_skipRules.class,
+                WrapperInteraction_1_IntegTest.InvocationProbe_direct.class,
         }
 )
 @TestPropertySource({
@@ -102,6 +111,69 @@ extends InteractionTestAbstract {
         }
     }
 
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    static class InvocationProbe {
+        private org.apache.causeway.applib.services.iactnlayer.InteractionService interactionService;
+        private WrapperFactory wrapperFactory;
+        private boolean outerCurrent;
+        private boolean innerCurrent;
+        private boolean outerCurrentDuringInner;
+        private boolean outerRestored;
+        private boolean skipRulesCurrent;
+        private boolean directCurrent;
+        private InvocationProbe_outer outerMixin;
+    }
+
+    @Action
+    @RequiredArgsConstructor
+    public static class InvocationProbe_outer {
+        private final InvocationProbe mixee;
+
+        public void act() {
+            mixee.outerMixin = this;
+            mixee.outerCurrent = mixee.interactionService
+                    .isCurrentActionInvocation(this, "act", RuleChecking.CHECKED);
+            mixee.wrapperFactory.wrapMixin(InvocationProbe_inner.class, mixee).act();
+            mixee.outerRestored = mixee.interactionService
+                    .isCurrentActionInvocation(this, "act", RuleChecking.CHECKED);
+        }
+    }
+
+    @Action
+    @RequiredArgsConstructor
+    public static class InvocationProbe_inner {
+        private final InvocationProbe mixee;
+
+        public void act() {
+            mixee.innerCurrent = mixee.interactionService
+                    .isCurrentActionInvocation(this, "act", RuleChecking.CHECKED);
+            mixee.outerCurrentDuringInner = mixee.interactionService
+                    .isCurrentActionInvocation(mixee.outerMixin, "act", RuleChecking.CHECKED);
+        }
+    }
+
+    @Action
+    @RequiredArgsConstructor
+    public static class InvocationProbe_skipRules {
+        private final InvocationProbe mixee;
+
+        public void act() {
+            mixee.skipRulesCurrent = mixee.interactionService
+                    .isCurrentActionInvocation(this, "act", RuleChecking.SKIPPED);
+        }
+    }
+
+    @Action
+    @RequiredArgsConstructor
+    public static class InvocationProbe_direct {
+        private final InvocationProbe mixee;
+
+        public void act() {
+            mixee.directCurrent = mixee.interactionService
+                    .isCurrentActionInvocation(this, "act");
+        }
+    }
+
     @Inject SpecificationLoader specificationLoader;
 
     @Test
@@ -142,6 +214,47 @@ extends InteractionTestAbstract {
     @Test
     void mixinActionAccess() {
         assertEquals(3, wrapper.wrapMixin(InteractionDemo_biArgEnabled.class, new InteractionDemo()).act(1, 2));
+    }
+
+    @Test
+    void currentActionInvocationTracksNestedWrapperExecution() {
+        var probe = new InvocationProbe();
+        probe.interactionService = interactionService;
+        probe.wrapperFactory = wrapper;
+
+        assertTrue(interactionService.currentActionInvocation().isEmpty());
+
+        wrapper.wrapMixin(InvocationProbe_outer.class, probe).act();
+
+        assertTrue(probe.outerCurrent);
+        assertTrue(probe.innerCurrent);
+        assertFalse(probe.outerCurrentDuringInner);
+        assertTrue(probe.outerRestored);
+        assertTrue(interactionService.currentActionInvocation().isEmpty());
+    }
+
+    @Test
+    void currentActionInvocationIncludesSkipRulesWrapperExecution() {
+        var probe = new InvocationProbe();
+        probe.interactionService = interactionService;
+
+        wrapper.wrapMixin(
+                InvocationProbe_skipRules.class,
+                probe,
+                SyncControl.control().withSkipRules())
+                .act();
+
+        assertTrue(probe.skipRulesCurrent);
+    }
+
+    @Test
+    void currentActionInvocationExcludesDirectJavaCalls() {
+        var probe = new InvocationProbe();
+        probe.interactionService = interactionService;
+
+        new InvocationProbe_direct(probe).act();
+
+        assertFalse(probe.directCurrent);
     }
 
 

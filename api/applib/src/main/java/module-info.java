@@ -91,6 +91,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.metrics;
     exports org.apache.causeway.applib.services.motd;
     exports org.apache.causeway.applib.services.placeholder;
+    exports org.apache.causeway.applib.services.priming;
     exports org.apache.causeway.applib.services.publishing.log;
     exports org.apache.causeway.applib.services.publishing.spi;
     exports org.apache.causeway.applib.services.queryresultscache;
@@ -100,6 +101,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.scratchpad;
     exports org.apache.causeway.applib.services.session;
     exports org.apache.causeway.applib.services.sitemap;
+    exports org.apache.causeway.applib.services.span;
     exports org.apache.causeway.applib.services.sudo;
     exports org.apache.causeway.applib.services.swagger;
     exports org.apache.causeway.applib.services.tablecol;

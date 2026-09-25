@@ -1,0 +1,677 @@
+= Boot 2.7 Micrometer Tracing Operations
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:toc:
+
+This runbook is for developers and operators using the Causeway `maintenance-branch` tracing backport.
+It is not Spring Boot 4 OpenTelemetry guidance.
+
+The validated baseline is Spring Boot 2.7.18, Java 11, and OpenTelemetry Java agent 1.31.0.
+Run the `regressiontests/tracing-compatibility` test on Java 11 before changing the agent version or this combination.
+
+The OpenTelemetry Java agent runs inside the application JVM and owns the SDK, HTTP and JDBC auto-instrumentation, sampling, and OTLP export.
+Do not add a Spring Boot OpenTelemetry starter, an application-owned `OpenTelemetrySdk`, `micrometer-registry-otlp`, or another in-process trace exporter.
+
+== Try It on a Laptop
+
+=== Start Jaeger
+
+Run the helper from the Causeway checkout to start the pinned Jaeger all-in-one image in the background with its OTLP HTTP receiver and UI exposed:
+
+[source,bash]
+----
+/path/to/causeway/scripts/jaeger-local-start.sh
+----
+
+The script limits the container to 512 MiB of memory with no additional swap allowance.
+Override the local default when necessary with a value such as `JAEGER_MEMORY_LIMIT=1g`, but do not remove the limit.
+The script also limits the in-memory store to 10,000 traces by default.
+When the ring buffer is full, Jaeger discards the oldest trace as each new trace arrives.
+Override the trace-count limit with a positive integer such as `JAEGER_MAX_TRACES=2000`.
+The trace-count limit does not bound bytes because trace sizes vary, so monitor actual consumption with:
+
+[source,bash]
+----
+docker stats jaeger
+----
+
+Docker can OOM-kill Jaeger if it reaches the hard limit.
+All local trace data is disposable and is lost when the container exits.
+The Jaeger UI is available at http://localhost:16686.
+
+=== Obtain the Java Agent
+
+Download the agent from its official release and keep the version in the filename so that the artifact is unambiguous:
+
+[source,bash]
+----
+mkdir -p .local/otel
+curl --fail --location \
+  --output .local/otel/opentelemetry-javaagent-1.31.0.jar \
+  https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.31.0/opentelemetry-javaagent.jar
+----
+
+Verify the downloaded artifact against the checksum published with the release before sharing or promoting it into an image build.
+The repository's Java 11 tracing regression also copies the validated artifact to `regressiontests/tracing-compatibility/target/agents/opentelemetry-javaagent.jar` when that module is built.
+
+=== Start the Application
+
+From the application directory, source the helper from the Causeway checkout and start the application's executable JAR:
+
+[source,bash]
+----
+source /path/to/causeway/scripts/otel-local-env.sh
+java -jar path/to/application.jar
+----
+
+The script must be sourced rather than executed so that its exports update the current shell.
+It expects the downloaded agent at `$PWD/.local/otel/opentelemetry-javaagent-1.31.0.jar` by default.
+Set `OTEL_JAVA_AGENT_PATH` before sourcing it to use another location, and set `OTEL_SERVICE_NAME` first to override `my-causeway-app-local`.
+The script preserves existing `JAVA_TOOL_OPTIONS`, rejects a conflicting Java agent, and adds `observation` to `SPRING_PROFILES_INCLUDE` without replacing profiles selected through `SPRING_PROFILES_ACTIVE`.
+It exports traces to local Jaeger over OTLP HTTP/protobuf, disables metrics and logs exporters, and enables always-on sampling.
+Always-on sampling is appropriate for this short local test, not as an assumed production setting.
+
+=== Compare a Baseline and Candidate
+
+Use the same `OTEL_SERVICE_NAME` for baseline and candidate processes so that Jaeger presents them as one logical service.
+Set the helper-owned `OTEL_SERVICE_ROLE` variable to the low-cardinality value `baseline` or `candidate` before sourcing the helper.
+The helper maps that value to the custom OpenTelemetry resource attribute `service.role`.
+
+In the baseline terminal or worktree, run:
+
+[source,bash]
+----
+export OTEL_SERVICE_NAME=my-application-regression
+export OTEL_SERVICE_ROLE=baseline
+source /path/to/causeway/scripts/otel-local-env.sh
+java -jar path/to/baseline-application.jar
+----
+
+In the candidate terminal or worktree, run:
+
+[source,bash]
+----
+export OTEL_SERVICE_NAME=my-application-regression
+export OTEL_SERVICE_ROLE=candidate
+source /path/to/causeway/scripts/otel-local-env.sh
+java -jar path/to/candidate-application.jar
+----
+
+When `OTEL_SERVICE_VERSION` is not already set, the helper resolves the full `HEAD` commit SHA from the current working directory and maps it to the standard `service.version` resource attribute.
+Source the helper from the application worktree whose commit should identify the process, rather than from the Causeway script directory.
+If the worktree has tracked or untracked changes, the helper warns that the SHA does not fully identify the executed content but leaves the exact commit SHA unchanged.
+If the current directory has no resolvable Git commit, tracing remains enabled without a synthesized `service.version` and the helper prints a warning.
+
+Set `OTEL_SERVICE_VERSION` explicitly when another identifier is more useful than the application commit, such as a locally installed Causeway release candidate:
+
+[source,bash]
+----
+export OTEL_SERVICE_VERSION=causeway-2.2.0-RC2
+----
+
+The helper preserves unrelated entries already present in `OTEL_RESOURCE_ATTRIBUTES` and replaces conflicting `service.role` or `service.version` entries with its resolved values.
+This preservation is important when a platform has already supplied cloud, application, or environment resource metadata.
+
+Select `my-application-regression` in Jaeger and filter with `service.role=baseline` or `service.role=candidate`.
+Use `service.version=<commit-or-override>` to select one exact source version.
+Route-oriented comparisons should continue to use `http.route` and `http.method`, especially when the compared versions produce different semantic operation names.
+
+Invoke an HTTP endpoint that executes a Causeway action and, ideally, performs JDBC work.
+Select `my-causeway-app-local` in Jaeger and look for these ordered boundaries:
+
+[source,text]
+----
+HTTP
+  -> causeway.root.interaction
+      -> act demo.Customer#updateName
+          -> JDBC
+----
+
+The Java agent can add controller, connection-pool, or other automatic spans between these boundaries, so the spans need not be immediate parent and child at every step.
+A request that does not execute JDBC work will not have the final JDBC span.
+Do not use generated trace or span IDs as operation identifiers.
+
+=== Correlate a Causeway Interaction
+
+Each `causeway.root.interaction` span carries the current Causeway interaction UUID as the high-cardinality `causeway.interaction.id` attribute.
+This identifier correlates a trace with command, execution-log, and audit records that expose the same interaction ID.
+It remains a span attribute and does not replace or alter the OpenTelemetry trace ID, span ID, display name, or parentage.
+Causeway does not copy it to the Java-agent-owned HTTP entry span or to every descendant span.
+
+To locate a retained trace in Jaeger, select the application service and search the Tags field for the exact value:
+
+[source,text]
+----
+causeway.interaction.id=<UUID>
+----
+
+Leave the Operation filter unset or set to all operations because the matching attribute is on the `causeway.root.interaction` span rather than the HTTP entry span.
+Jaeger returns the complete containing trace when that child span matches.
+The pinned Jaeger 2.21 in-memory store supports span-attribute search, but lookup succeeds only while the trace remains in its bounded ring buffer.
+The UUID is intentionally high-cardinality, so use it for exact correlation rather than grouping and account for attribute indexing costs when configuring a persistent production backend.
+
+=== Interpret Semantic Trace Display Names
+
+Causeway updates the Java-agent-owned foreground HTTP entry span with the highest-priority semantic outcome observed during the request.
+The operation name is `act <logical-member-identifier>` for an eligible action, `prompt <logical-member-identifier>` for an action prompt, or `view <logical-object-type>` for a full entity-page render.
+For example, a trace list can show `act demo.Customer#updateName`, `prompt demo.Customer#updateName`, or `view demo.Customer` instead of only `GET /wicket/...`.
+
+Candidate priority is `act` over `prompt` over `view`.
+The first candidate wins when multiple candidates have the same priority.
+Action nomination requires the domain-facing action identity to match the current top-level interaction command.
+Calculated property and collection access, framework helper calls, pass-through work, and nested wrapper actions do not become the primary action name.
+Prompt nomination comes from the enclosing action-prompt render, and view nomination comes only from full entity-page rendering rather than ambiguous Ajax region rendering.
+
+The selected bounded name is also available as `causeway.trace.name`.
+Action and prompt outcomes retain the complete canonical identifier in `causeway.action.id`, while view outcomes retain the complete logical type in `causeway.object.type`.
+If a request has no supported semantic outcome, the Java agent's route-oriented operation name remains unchanged.
+
+This changes operation-name grouping for supported foreground requests and is operationally breaking for dashboards, alerts, and saved searches that group server spans by operation name.
+Route-oriented dashboards and alerts should group or filter using the standard `http.route` and `http.method` attributes rather than the mutable operation name.
+Backend UIs differ in how they label and group operation names and attributes, so verify the result in the production backend before migrating saved views.
+
+The OpenTelemetry Java agent 1.31.0 compatibility regression proves that `Span.updateName(...)` survives OTLP export while the HTTP method, route, target, status, execution classification, trace identity, entry-span identity, and child parentage remain intact.
+When evaluating another agent or backend, rerun `MicrometerTracingCompatibilityTest` before rollout.
+If operation-name updates do not survive, use the bounded `causeway.trace.name` attribute in a collector transform or a supported agent extension and leave the route operation name unchanged.
+
+Stop the application and Jaeger, then restore any pre-existing values or clear the shell settings if they should not affect later Java processes:
+
+[source,bash]
+----
+/path/to/causeway/scripts/jaeger-local-stop.sh
+
+unset JAVA_TOOL_OPTIONS SPRING_PROFILES_INCLUDE OTEL_SERVICE_NAME \
+  OTEL_SERVICE_ROLE OTEL_SERVICE_VERSION OTEL_RESOURCE_ATTRIBUTES \
+  OTEL_JAVA_AGENT_PATH OTEL_TRACES_EXPORTER OTEL_METRICS_EXPORTER \
+  OTEL_LOGS_EXPORTER OTEL_EXPORTER_OTLP_PROTOCOL \
+  OTEL_EXPORTER_OTLP_ENDPOINT OTEL_TRACES_SAMPLER
+----
+
+The stop helper forcibly stops and removes the named Jaeger container, and succeeds harmlessly when it is already absent.
+
+== Change the Docker Image
+
+Fetch and checksum the agent in the trusted build pipeline, place it in the Docker build context, and copy it into the application image:
+
+[source,dockerfile]
+----
+# opentelemetry-javaagent-1.31.0.jar is downloaded and verified before docker build
+COPY opentelemetry-javaagent-1.31.0.jar \
+     /opt/opentelemetry/opentelemetry-javaagent.jar
+----
+
+Ensure that the image's runtime user can read the JAR.
+Do not download the agent when a replica starts, because startup would then depend on an external download and would no longer use a build-time verified artifact.
+
+Do not bake `JAVA_TOOL_OPTIONS`, the `observation` profile, service name, collector address, credentials, or sampling rate into an environment-specific image layer.
+The same immutable image should run with tracing disabled or be activated by runtime configuration.
+OTLP export is outbound, so the application container requires no additional inbound port.
+
+To enable tracing, attach the packaged JAR and activate `observation` at runtime.
+To disable it, remove those settings or roll back to the previous Container App revision; no application code change is required.
+
+== Configure Azure Container Apps
+
+There are two separate agents in the recommended Azure arrangement:
+
+* The *OpenTelemetry Java agent* is the JAR in the application image and instruments the JVM.
+* The *Azure Container Apps managed OpenTelemetry agent* is an environment-level collector that receives OTLP data and routes it to Application Insights or another configured destination.
+
+Enabling the Azure managed agent does not remove the need for the Java agent JAR.
+Do not attach the Application Insights Java agent or another OpenTelemetry Java agent alongside this one.
+
+=== Container App Revision Settings
+
+Set these non-secret environment variables on the application container, normally through the application's IaC definition:
+
+[cols="2a,3a",options="header"]
+|===
+|Variable
+|Value or policy
+
+|`JAVA_TOOL_OPTIONS`
+|`-javaagent:/opt/opentelemetry/opentelemetry-javaagent.jar` plus any existing JVM options that must be retained.
+An Azure value overrides an image value rather than appending to it.
+
+|`SPRING_PROFILES_INCLUDE`
+|Include `observation` and retain any profiles already in the include list.
+Do not replace the application's `SPRING_PROFILES_ACTIVE` value.
+
+|`OTEL_SERVICE_NAME`
+|A stable service name that distinguishes the application but not an individual revision or replica.
+
+|`OTEL_TRACES_EXPORTER`
+|`otlp`
+
+|`OTEL_METRICS_EXPORTER`
+|`none`, because this backport runbook enables tracing only.
+
+|`OTEL_LOGS_EXPORTER`
+|`none`, because this backport runbook enables tracing only.
+
+|`OTEL_TRACES_SAMPLER`
+|For example, `parentbased_traceidratio`.
+
+|`OTEL_TRACES_SAMPLER_ARG`
+|An explicitly agreed production fraction such as `0.1`, not an inherited local-test value.
+|===
+
+Changing Container App environment variables creates a new revision.
+Use normal revision traffic shifting and rollback practices when enabling tracing.
+
+=== Preferred Path: Azure Managed OpenTelemetry Agent
+
+Configure the managed OpenTelemetry agent on the *Container Apps managed environment*, not on the individual application image.
+Configure a trace destination such as Application Insights, Datadog, or an OTLP-compatible backend, and route traces to that destination.
+See link:https://learn.microsoft.com/en-us/azure/container-apps/opentelemetry-agents[Collect and read OpenTelemetry data in Azure Container Apps] for the current ARM, Bicep, Azure CLI, and Terraform forms.
+
+For applications in that environment, Azure injects:
+
+* `OTEL_EXPORTER_OTLP_ENDPOINT`, pointing to the managed agent;
+* `OTEL_EXPORTER_OTLP_PROTOCOL=grpc`, because the managed agent accepts gRPC;
+* `OTEL_RESOURCE_ATTRIBUTES`, containing Container Apps resource information.
+
+Do not set those three values on the Container App revision unless the application is deliberately bypassing the managed agent.
+In particular, replacing `OTEL_RESOURCE_ATTRIBUTES` can discard the Azure-provided application and environment attributes.
+
+The resulting path is:
+
+[source,text]
+----
+application JVM
+  -> OpenTelemetry Java agent
+      -> Azure managed OpenTelemetry agent (OTLP/gRPC)
+          -> configured trace destination
+----
+
+Managed-agent destinations and routing apply at the Container Apps environment level.
+Review Microsoft's current limitations before rollout, including the single managed-agent replica, gRPC-only ingestion, and destination-secret handling.
+
+=== Alternative Path: Direct External OTLP
+
+If the managed OpenTelemetry agent is not used, set the destination explicitly on the Container App revision:
+
+[source,text]
+----
+OTEL_EXPORTER_OTLP_ENDPOINT=https://collector.example/appropriate-base-path
+OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+----
+
+Use the protocol and endpoint shape required by that collector; `http/protobuf` is also supported by the Java agent when the destination expects it.
+Provide authentication through `OTEL_EXPORTER_OTLP_HEADERS` or the destination-specific mechanism.
+Store header values, tokens, and other credentials as Container Apps secrets and expose them through secret-referenced environment variables rather than putting them in the image or repository.
+See link:https://learn.microsoft.com/en-us/azure/container-apps/environment-variables[Manage environment variables on Azure Container Apps].
+
+== Define Application Spans
+
+Inject `ApplicationSpanService` when an application needs to make a synchronous operation or phase visible beneath the current Causeway span.
+The service exposes no Micrometer or OpenTelemetry type and does not create or configure a telemetry SDK or exporter.
+
+[source,java]
+----
+@Inject ApplicationSpanService applicationSpanService;
+
+Invoice result = applicationSpanService.call("calculate", () -> calculateInvoice());
+applicationSpanService.run("loadLines", () -> repository.loadLines());
+----
+
+The suffix identifies a static low-cardinality operation or phase and is appended with one plain space.
+It must be non-null, non-blank, and no longer than 46 characters.
+Do not put object identifiers, titles, bookmarks, arguments, record values, user identities, tenant identities, or other per-invocation data in the suffix.
+An invalid suffix is rejected before application work starts.
+
+Within a current member execution, a span is displayed as `<logical-type-name>#<member-logical-name> <suffix>`.
+The member identifier excludes parentheses and parameter signatures.
+Outside a current member execution, the fallback is `app <suffix>`.
+Causeway first removes the logical-type namespace and then truncates only the member-identity portion when necessary to keep the display name within 50 characters, so the complete application suffix is always retained.
+
+The stable observation name is `causeway.application.span`.
+The low-cardinality `causeway.application.span.suffix` attribute contains the suffix, and `causeway.member.id` contains the complete canonical member identifier when one is available.
+Nested calls naturally become children of the current Causeway or application span.
+
+`call` and `run` complete their span before returning and therefore do not support asynchronous work that outlives the call.
+Each supplied operation runs exactly once and returns its result unchanged.
+The original checked exception, runtime exception, or error is recorded on the span and escapes unchanged and unwrapped, without a declared checked exception on the service API.
+When Causeway observation is inactive, the same work, result, and exception behavior is retained without exporting a span.
+
+== What Causeway Adds
+
+With the `observation` profile active, Causeway adds these core semantic observation categories:
+
+* `causeway.application.span` covers an application-defined synchronous operation and uses a display name such as `demo.Customer#updateName load`;
+* `causeway.root.interaction` covers one top-level Causeway interaction and retains that stable span display name;
+* `causeway.action.invocation` covers an action invocation and uses a display name such as `act demo.Customer#updateName`;
+* `causeway.priming.action` and `causeway.priming.view` cover application primer callbacks and use display names such as `prime action demo.Customer#updateName` and `prime view demo.Customer`;
+* `causeway.property.access` and `causeway.collection.access` cover evaluation of mixed-in associations and use display names such as `prop demo.Customer#calculatedTotal` and `coll demo.Customer#recentOrders`.
+
+The stable observation name remains `causeway.action.invocation` even though the contextual name becomes the exported tracing span display name.
+Action spans carry the bounded attributes `causeway.action.id` and `causeway.execution.initiatedBy`.
+Mixed-in actions use their domain-facing logical member identity rather than an implementation identity such as `ApplicationUser_updateEmailAddress#act`.
+The full `causeway.action.id` is authoritative for filtering and disambiguates actions whose display names omit a namespace or are truncated.
+
+Contextual names preserve the declared casing of static logical type, member, and layout identifiers rather than using localized friendly names or lower-hyphen normalization.
+Causeway limits each semantic contextual name to 50 characters.
+For page, invocation, and prompt names, Causeway first tries the full logical identifier, then omits the logical-type namespace if necessary, and finally truncates at 50 characters.
+For example, `act isisExtSecMan.ApplicationUser#updateEmailAddress` falls back to `act ApplicationUser#updateEmailAddress`.
+The same policy applies to `prop`, `coll`, `prime`, `prepare`, `prompt`, and `render` contextual names.
+Causeway does not add action arguments, return values, target instance identifiers, object titles, bookmarks, user names, tenancy tokens, or other instance-specific application data to names or attributes on these semantic spans.
+
+=== Application Primer Callbacks
+
+When an application registers `ActionPrimer` or `ViewPrimer` callbacks and the `observation` profile is active, Causeway creates one semantic observation around every matching callback that is actually invoked.
+Action primers use stable name `causeway.priming.action` and contextual name `prime action <logical-member-identifier>`.
+View primers use stable name `causeway.priming.view` and contextual name `prime view <logical-object-type>`.
+The contextual names use the same case-preserving namespace fallback and deterministic 50-character bound as other semantic names.
+
+An action primer runs within the current action invocation immediately before the action method, so its JDBC preload work appears beneath that primer:
+
+[source,text]
+----
+act demo.Order#submit
+├── prime action demo.Order#submit
+│   ├── SELECT Customer
+│   └── SELECT OrderLine
+└── application action work
+----
+
+A view primer runs before Wicket page preparation begins, so it is a sibling of later preparation and rendering beneath the naturally current request or interaction context:
+
+[source,text]
+----
+HTTP
+└── causeway.root.interaction
+    ├── prime view demo.Order
+    │   └── SELECT OrderLine
+    ├── prepare demo.Order
+    └── render demo.Order
+----
+
+When several primers match the same action or logical type, Causeway creates separate sequential sibling observations with the same semantic name and canonical attributes.
+It does not add an aggregate priming span or identify callbacks by implementation class, generated lambda name, or registration sequence.
+Separate durations and Java-agent JDBC children show the work performed by each callback.
+
+Action-primer observations carry complete `causeway.object.type` and `causeway.action.id` attributes.
+View-primer observations carry the complete `causeway.object.type` attribute.
+They do not attach targets, arguments, values, bookmarks, titles, users, tenants, transaction or interaction identifiers, or Wicket component paths.
+A primer failure is recorded on its observation, its scope closes, and the original exception or error propagates unchanged with the existing fail-fast callback behavior.
+No observation is created when no primer matches, a repeated Wicket visit is excluded by the existing guard, or observation is inactive.
+The Java agent continues to own JDBC spans, propagation, sampling, and export.
+Primer observations are core semantic observations and do not consume the Causeway Wicket per-request observation budget.
+
+=== Entity Property-Change Evaluation
+
+When entity property-change publication has enlisted candidate records and the `observation` profile is active, Causeway adds `causeway.entitychange.evaluate` around their transaction-completion evaluation.
+The exported contextual display name is `evaluate property changes`.
+
+The phase obtains current post-values and compares them with the enlisted pre-values before property-change subscribers run.
+JDO evaluation can invoke derived property accessors as well as read persisted state, so application queries made by those accessors appear as automatic JDBC descendants:
+
+[source,text]
+----
+act demo.InvoiceSummary#invoiceAll
+├── UPDATE CommandWithArchive
+├── evaluate property changes
+│   ├── SELECT CodaTax
+│   └── SELECT CodaTax
+└── write audit trail
+    ├── INSERT AuditTrailEntry
+    └── INSERT AuditTrailEntry
+----
+
+One aggregate evaluation observation encloses all candidate records and the existing defensive-copy retry if evaluation modifies the enlisted collection.
+Causeway does not create one observation per entity, property, accessor, or retry attempt.
+A transaction with no enlisted property-change records creates no evaluation observation, while evaluation that ultimately finds no publishable difference still produces one observation because the post-value work occurred.
+
+Evaluation closes before subscribers are invoked, so `evaluate property changes` and `write audit trail` are sibling phases rather than nested phases.
+The evaluation observation inherits the naturally current action, interaction, request, or background context and does not fabricate action parentage.
+The OpenTelemetry Java agent continues to own descendant JDBC spans, context propagation, sampling, and export.
+
+The observation carries only static `causeway.bean` and `causeway.module` framework metadata.
+It does not attach entity types, property identifiers, targets, bookmarks, pre-values, post-values, users, tenants, transaction or interaction identifiers, sequence numbers, candidate or changed counts, or retry counts.
+Without the `observation` profile, property-change evaluation and publication remain unchanged and the no-op registry exports no evaluation span.
+
+=== Audit-Trail Persistence
+
+When the audit-trail extension is enabled with the `observation` profile active, Causeway adds `causeway.audittrail.write` around each audit subscriber persistence callback.
+The exported contextual display name is `write audit trail`.
+
+A bulk property-change callback creates one aggregate audit observation around all entry creation, persistence, flushing, and automatic JDBC work in that callback:
+
+[source,text]
+----
+act demo.InvoiceSummary#invoiceAll
+└── write audit trail
+    ├── SELECT audit metadata
+    ├── INSERT AuditTrailEntry
+    ├── SELECT audit metadata
+    └── INSERT AuditTrailEntry
+----
+
+An individual property-change callback creates one observation around that individual repository operation.
+The extension does not add one framework observation per entry within a bulk callback.
+Small publications can contain multiple sibling audit observations when the core publisher delivers separate individual callbacks according to its existing threshold.
+
+The audit observation inherits whichever action, interaction, request, or background trace context is current when the callback begins.
+It does not retain an action context or fabricate action parentage when publication occurs at another transaction boundary.
+The OpenTelemetry Java agent continues to own the descendant JDBC spans, context propagation, sampling, and export.
+
+The observation carries only the existing static `causeway.bean` and `causeway.module` framework metadata.
+It does not attach changed property identifiers, targets, bookmarks, pre-values, post-values, interaction or transaction identifiers, sequence numbers, users, tenants, or entry counts.
+When audit persistence is disabled, no audit observation is created.
+Without the `observation` profile, audit persistence remains unchanged and the no-op registry exports no audit span.
+
+=== Wicket Entity Page Rendering
+
+When the Wicket viewer renders an entity page, Causeway adds semantic spans for the page and its rendered logical regions:
+
+[source,text]
+----
+prepare demo.Customer
+├── prop demo.Customer#calculatedTotal
+├── coll demo.Customer#recentOrders
+├── JDBC collection load
+└── prepare collection roles
+    ├── prepare row demo.Role
+    │   └── JDBC lazy load
+    └── prepare row demo.Role
+render demo.Customer
+├── render fieldset identity
+│   ├── render property emailAddress
+│   └── render action updateEmailAddress
+├── render collection roles
+│   └── render table roles
+│       ├── render table header roles
+│       ├── render table body roles
+│       │   ├── render row demo.Role
+│       │   │   ├── render property name
+│       │   │   └── render action update
+│       │   └── render row demo.Role
+│       └── render table footer roles
+└── prompt demo.Customer#updateEmailAddress
+----
+
+Ajax responses create spans only for the instrumented regions included in the partial response, so an Ajax trace need not contain `causeway.wicket.page.render` and contains no row observations for off-page rows.
+Automatic JDBC spans become descendants of whichever preparation or render region is active when the database work occurs.
+
+The entity-page preparation observation uses stable name `causeway.wicket.page.prepare` and a contextual display name such as `prepare demo.Customer`.
+It starts before Wicket delegates to `Page.onConfigure()`, so it covers initial page construction, descendant component configuration, visibility and usability evaluation, and other `onBeforeRender` preparation.
+Collection UI construction and model setup remain within page preparation or the nearest natural context and do not create a separate collection-initialization observation.
+Java-agent JDBC spans initiated during construction inherit that naturally active parent.
+Each visible parented collection adds a `causeway.wicket.collection.prepare` child such as `prepare collection roles` when it enters `onBeforeRender()`, before Wicket configures and prepares its descendant table subtree.
+This later preparation span owns data-provider sizing and iteration, visible-row selection and population, and Java-agent JDBC spans initiated there.
+Each synchronous visible-row population callback adds a `causeway.wicket.collection.row.prepare` child such as `prepare row demo.Role`.
+Collection-fetch work completed during later preparation but before iteration reaches an individual row remains directly beneath collection preparation.
+All preparation observations close before actual markup rendering begins.
+Mixed-in association evaluations during preparation therefore appear using their domain-facing `prop` or `coll` identity rather than the underlying implementation action.
+
+The entity-page rendering observation retains the stable name `causeway.wicket.page.render` but uses a contextual display name such as `render demo.Customer`.
+Fieldset, property, collection, table, row, and action-button observations use contextual display names of the forms `render fieldset <fieldsetId>`, `render property <propertyId>`, `render collection <collectionId>`, `render table <collectionId>`, `render row <logicalTypeName>`, and `render action <actionId>`.
+Each parented Ajax table adds aggregate `render table header <collectionId>`, `render table body <collectionId>`, and `render table footer <collectionId>` children.
+Caption, column-group, component-tag, and table markup work outside those phase containers remains measurable as table self-time.
+Each `causeway.wicket.collection.row.render` observation is a child of table body and encloses the actual Wicket render callback for one visible row, with logical property-cell and eligible row-action observations as children.
+The header and footer are aggregate phases; individual header cells, sort links, navigation controls, and count labels do not create observations.
+The unnamed fieldset is displayed as `render fieldset default`.
+
+A parameterized action prompt creates one `causeway.wicket.action.prompt.render` observation around the enclosing prompt panel's actual render callback, with a display name such as `prompt demo.Customer#updateName`.
+The same semantic boundary applies to inline, modal, and sidebar presentation styles.
+It does not cover defaults, choices, validation, visibility, usability, authorization, or other prompt preparation completed outside that render callback.
+Individual action parameters do not create property render spans.
+
+Wicket spans use `causeway.object.type` together with the applicable bounded attribute `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id`, or `causeway.action.id`.
+Core mixed-in association access spans use the same canonical `causeway.property.id` and `causeway.collection.id` conventions and retain `causeway.execution.initiatedBy`.
+The full canonical attributes remain authoritative when any contextual name omits a namespace, is ambiguous, or is truncated.
+These identifiers describe static application structure.
+Causeway does not attach property values, rendered labels, object titles, bookmarks, action arguments, user names, tenancy tokens, collection-row identities, or generated Wicket component paths.
+
+Collection and row observations apply only to parented entity collections that have a canonical `causeway.collection.id`.
+Standalone action-result tables, action parameters, service menus, individual headers and navigation controls, selection checkboxes, presentation-only cells, empty placeholders, and browser-side rendering remain excluded.
+Preparation and render row names deliberately repeat for rows of the same logical type, and no row index or instance identifier is added.
+
+The Wicket observation controls are configured beneath `causeway.viewer.wicket.observation`.
+The compatibility defaults are `detail=MEMBERS` and `max-spans-per-request=0`, where zero means unlimited.
+The accepted detail levels form this monotonic hierarchy:
+
+[cols="1,4",options="header"]
+|===
+|Level
+|Eligible Causeway Wicket observations
+
+|`NONE`
+|None.
+
+|`PAGE`
+|Page preparation, page rendering, and action prompts.
+
+|`REGIONS`
+|Page detail plus fieldsets, collection preparation and rendering, and table/header/body/footer regions.
+
+|`ROWS`
+|Region detail plus visible-row preparation and rendering.
+
+|`MEMBERS`
+|Row detail plus logical properties and eligible action buttons.
+|===
+
+For example, this configuration retains region boundaries while excluding row and member spans and enforces a hard maximum of 100 Causeway Wicket observations in each full-page or Ajax request:
+
+[source,properties]
+----
+causeway.viewer.wicket.observation.detail=REGIONS
+causeway.viewer.wicket.observation.max-spans-per-request=100
+----
+
+A positive maximum counts only Causeway Wicket observations and never counts Java-agent HTTP or JDBC spans or other Causeway observations.
+Ten percent of a finite maximum, with a minimum of one and a maximum of sixteen, is reserved for later page and region observations before rows and members are admitted.
+The absolute configured maximum is never exceeded.
+Suppressed observations create no scope, and admitted descendants attach to the nearest active emitted Wicket ancestor or the naturally current non-Wicket context.
+
+The nearest active page or region observation reports fixed-key numeric `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` attributes when candidates are suppressed.
+An emitted collection preparation observation reports visible-row callback count and total and maximum monotonic duration using `causeway.wicket.collection.row.count`, `causeway.wicket.collection.row.duration.total.nanos`, and `causeway.wicket.collection.row.duration.max.nanos`.
+An emitted collection render observation reports the same row aggregates plus `causeway.wicket.collection.logical-cell.count`.
+`causeway.wicket.collection.suppressed.children` counts row and member callbacks whose individual observations were omitted while their work still contributed to the collection aggregate.
+These diagnostics contain no row identity, domain value, total collection size, or off-page count.
+
+Collection-heavy pages create observations in proportion to the participating rows and logical cells only at detail levels that enable them.
+Pagination, detail selection, the request budget, Java-agent or collector sampling, and appropriate page sizes provide complementary production volume controls.
+Changing the startup-bound Wicket settings requires an application restart or deployment revision replacement and does not change policy midway through an in-flight request.
+
+`causeway.wicket.collection.initialize` has been removed because representative spans were generally only hundreds of microseconds to a few milliseconds while substantially amplifying traces.
+Use page preparation for construction-time work and collection preparation for later data-provider and visible-row work.
+
+Without the `observation` profile, the existing no-op registry prevents these spans and aggregate metadata from being exported and Wicket output remains unchanged.
+The Java agent continues to own automatic HTTP and JDBC instrumentation, sampling, and export when Wicket observations are active.
+
+=== Filter Foreground and Background Traces
+
+Causeway classifies Java-agent-created HTTP entry spans with `causeway.execution.mode=foreground` and the command-log extension's Quartz entry spans with `causeway.execution.mode=background`.
+The attribute key is exposed as `causeway.execution.mode.key` and defaults to `causeway.execution.mode`.
+Consuming applications can inject `CausewayConfiguration` and obtain the shared key from `getExecution().getMode().getKey()` for their own filters and instrumentation.
+
+In Jaeger's Attributes field, use one of these logfmt searches:
+
+[source,text]
+----
+causeway.execution.mode=foreground
+causeway.execution.mode=background
+----
+
+The maintenance publication transform renames these to `isis.execution.mode=foreground` and `isis.execution.mode=background`.
+Overriding `causeway.execution.mode.key` changes the key used by both foreground and background Causeway classification, so corresponding collector transforms, dashboards, alerts, and saved searches must be updated together.
+Applications that provide their own Quartz job implementation must classify its entry span explicitly using the transformed helper:
+
+[source,java]
+----
+import org.apache.isis.core.config.observation.IsisTraceClassifier;
+
+IsisTraceClassifier.classifyCurrentSpan(
+        IsisTraceClassifier.ExecutionMode.BACKGROUND);
+----
+
+Classification is low-cardinality and does not add another span, SDK, or exporter.
+It makes traces easier to discover but does not reduce collection, export, retention, or Jaeger memory consumption.
+Use head sampling or a configurable collector's tail processing when background telemetry volume itself must be reduced.
+
+Causeway does not add semantic spans for transactions, property edits, execution publishing, or persistence-specific operations.
+The Wicket viewer adds only the bounded preparation and render observations described above and does not add browser-side observations.
+The Java agent can still produce automatic spans for supported libraries such as HTTP and JDBC.
+
+The behavior of the two activation controls is:
+
+[cols="1,1,3",options="header"]
+|===
+|Java agent
+|`observation` profile
+|Result
+
+|Off
+|Off
+|Causeway uses its no-op registry and exports nothing.
+
+|On
+|Off
+|The Java agent can export automatic spans, but Causeway semantic spans are absent.
+
+|Off
+|On
+|Application execution remains safe, but there is no SDK or exporter and therefore no exported spans.
+
+|On
+|On
+|Automatic and Causeway semantic spans share the agent-owned trace context and exporter.
+|===
+
+== Troubleshooting
+
+No spans arrive at Jaeger or the Azure destination::
+Confirm that the process startup log shows `-javaagent`, that Java 11 is in use, and that the agent reports version 1.31.0.
+Confirm that sampling is not `always_off` or zero, `OTEL_TRACES_EXPORTER=otlp`, the endpoint and protocol match the receiver, and the collector or destination is reachable.
+For the Azure managed path, confirm that trace destinations and routing are enabled on the managed environment and inspect the environment variables actually injected into the running replica.
+
+HTTP or JDBC spans exist but Causeway spans do not::
+Confirm that `observation` appears in the effective Spring profiles.
+Look for `causeway.root.interaction` and `causeway.action.invocation` by exact name.
+
+Causeway spans exist but JDBC is not below the action::
+Confirm that the JDBC call occurs synchronously during the action and uses a library supported by the agent.
+Intermediate automatic spans are expected, but all relevant spans must share the same trace.
+
+Duplicate spans or duplicate exports appear::
+Check for another `-javaagent`, an Application Insights Java agent, a Spring Boot 4 OpenTelemetry starter, an application-owned SDK, `micrometer-registry-otlp`, or another exporter.
+The application must have one in-process telemetry owner: the validated OpenTelemetry Java agent.
+
+The application fails before startup::
+Check that the JAR path in `JAVA_TOOL_OPTIONS` exists and is readable by the image's runtime user.
+Run the Java 11 tracing regression before adopting a different agent release.
+The pinned 1.31.0 agent is not expected to start unchanged on newer strongly encapsulated JDKs such as the project's Java 25 build JDK.
+
+For a regression-level check, run:
+
+[source,bash]
+----
+JAVA_HOME="$HOME/.sdkman/candidates/java/11.0.29-tem" \
+mvn -pl regressiontests/tracing-compatibility -am test \
+  -Dmodule-regressiontests \
+  -Drevision=2.2.0-SNAPSHOT \
+  -Dmaven.compiler.release=11 \
+  -Dmaven.compiler.proc=full
+----

@@ -1,0 +1,17 @@
+Scenario: Root interaction close failure
+
+This approval checks:
+- A transaction flush failure is recorded on the root observation.
+- Existing rollback and rethrow behavior is retained.
+- The observation closes even though interaction close failed.
+- Thread-local interaction and observation state is removed.
+
+Observed lifecycle:
+1. onStart(name=causeway.root.interaction)
+2. onScopeOpened(name=causeway.root.interaction)
+3. onError(type=IllegalStateException, message=flush failed)
+4. onScopeClosed(name=causeway.root.interaction)
+5. onStop(name=causeway.root.interaction)
+6. original close failure rethrown: true
+7. layer count after failed close: 0
+8. current observation after failed close: <none>

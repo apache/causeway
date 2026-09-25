@@ -67,6 +67,7 @@ import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLo
 import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDefault;
+import org.apache.causeway.core.metamodel.services.priming.PrimingRegistryDefault;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
@@ -199,6 +200,7 @@ import lombok.NonNull;
         MetamodelEventService.class,
         MetaModelServiceDefault.class,
         ObjectManagerDefault.class,
+        PrimingRegistryDefault.class,
         ProgrammingModelServiceDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
