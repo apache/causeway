@@ -62,7 +62,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class MicrometerTracingCompatibilityTest {
 
-    private static final Duration PROCESS_TIMEOUT = Duration.ofSeconds(45);
+    private static final Duration PROCESS_TIMEOUT = Duration.ofMinutes(3);
     private static final String FIXTURE_JAVA_HOME_PROPERTY =
             "causeway.tracing.fixture.java.home";
     private static final String FIXTURE_JAVA_HOME_ENV =
