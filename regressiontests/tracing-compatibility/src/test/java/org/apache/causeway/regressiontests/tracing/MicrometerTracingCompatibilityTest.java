@@ -63,6 +63,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 class MicrometerTracingCompatibilityTest {
 
     private static final Duration PROCESS_TIMEOUT = Duration.ofSeconds(45);
+    private static final String FIXTURE_JAVA_HOME_PROPERTY =
+            "causeway.tracing.fixture.java.home";
+    private static final String FIXTURE_JAVA_HOME_ENV =
+            "CAUSEWAY_TRACING_FIXTURE_JAVA_HOME";
 
     @Test
     void javaAgentExportsHttpRootInteractionActionAndJdbcAncestry() throws Exception {
@@ -517,12 +521,12 @@ class MicrometerTracingCompatibilityTest {
         final String executable = System.getProperty("os.name").toLowerCase().contains("win")
                 ? "java.exe"
                 : "java";
-        return Paths.get(
-                System.getProperty(
-                        "causeway.tracing.fixture.java.home",
-                        System.getProperty("java.home")),
-                "bin",
-                executable).toString();
+        final String configuredJavaHome = System.getProperty(
+                FIXTURE_JAVA_HOME_PROPERTY,
+                System.getenv().getOrDefault(
+                        FIXTURE_JAVA_HOME_ENV,
+                        System.getProperty("java.home")));
+        return Paths.get(configuredJavaHome, "bin", executable).toString();
     }
 
     private static ExportedSpan spanNamed(
