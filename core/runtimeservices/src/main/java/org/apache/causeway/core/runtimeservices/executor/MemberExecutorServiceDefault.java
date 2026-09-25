@@ -246,6 +246,7 @@ implements MemberExecutorService {
                 : RuleChecking.SKIPPED;
         val actionInvocation = new ActionInvocation(
                 interaction,
+                actionId,
                 domainFacingActionIdentifier(head, owningAction),
                 targetPojo,
                 argumentPojos,

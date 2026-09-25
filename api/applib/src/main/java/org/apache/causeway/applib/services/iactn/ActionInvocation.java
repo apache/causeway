@@ -67,6 +67,20 @@ extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
     @Getter
     private final List<Object> args;
 
+    /**
+     * The domain-facing logical action identifier.
+     *
+     * <p>
+     * This differs from {@link #getLogicalMemberIdentifier()} for a mixin action:
+     * the inherited identifier describes the mixin implementation method, typically
+     * {@code act}, while this identifier describes the contributed domain action.
+     * </p>
+     *
+     * @since 2.x
+     */
+    @Getter
+    private final Identifier domainFacingLogicalMemberIdentifier;
+
     @Getter
     private final RuleChecking ruleChecking;
 
@@ -84,7 +98,7 @@ extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
             final Identifier memberId,
             final Object target,
             final List<Object> args) {
-        this(interaction, memberId, target, args, RuleChecking.UNKNOWN);
+        this(interaction, memberId, memberId, target, args, RuleChecking.UNKNOWN);
     }
 
     /**
@@ -102,8 +116,29 @@ extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
             final Object target,
             final List<Object> args,
             final @NonNull RuleChecking ruleChecking) {
+        this(interaction, memberId, memberId, target, args, ruleChecking);
+    }
+
+    /**
+     * Creates an action invocation with separate invoked-method and domain-facing identifiers.
+     *
+     * @param interaction owning interaction
+     * @param memberId logical identifier of the method invoked on {@code target}
+     * @param domainFacingLogicalMemberIdentifier domain-facing logical action identifier
+     * @param target action method receiver
+     * @param args action arguments
+     * @param ruleChecking whether Causeway checked rules before invoking the action
+     */
+    public ActionInvocation(
+            final Interaction interaction,
+            final Identifier memberId,
+            final @NonNull Identifier domainFacingLogicalMemberIdentifier,
+            final Object target,
+            final List<Object> args,
+            final @NonNull RuleChecking ruleChecking) {
         super(interaction, InteractionType.ACTION_INVOCATION, memberId, target);
         this.args = args;
+        this.domainFacingLogicalMemberIdentifier = domainFacingLogicalMemberIdentifier;
         this.ruleChecking = ruleChecking;
     }
     // ...

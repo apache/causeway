@@ -33,6 +33,7 @@ import io.micrometer.observation.Observation;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -117,8 +118,15 @@ public final class ApplicationSpanServiceDefault implements ApplicationSpanServi
     private Optional<String> currentLogicalMemberIdentifier() {
         return interactionService.currentInteraction()
                 .map(Interaction::getCurrentExecution)
-                .map(Execution::getLogicalMemberIdentifier)
+                .map(ApplicationSpanServiceDefault::domainFacingLogicalMemberIdentifier)
                 .map(ApplicationSpanServiceDefault::canonicalIdentifier);
+    }
+
+    private static Identifier domainFacingLogicalMemberIdentifier(
+            final Execution<?, ?> execution) {
+        return execution instanceof ActionInvocation
+                ? ((ActionInvocation) execution).getDomainFacingLogicalMemberIdentifier()
+                : execution.getLogicalMemberIdentifier();
     }
 
     private static String canonicalIdentifier(final Identifier identifier) {

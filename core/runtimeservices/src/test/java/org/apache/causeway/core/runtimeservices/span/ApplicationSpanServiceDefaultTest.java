@@ -32,6 +32,7 @@ import io.micrometer.observation.ObservationRegistry;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -72,6 +73,37 @@ class ApplicationSpanServiceDefaultTest {
         assertEquals("load",
                 value(context, ApplicationSpanServiceDefault.SUFFIX_ATTRIBUTE));
         assertTrue(context.getContextualName().indexOf('(') < 0);
+    }
+
+    @Test
+    void callUsesDomainFacingIdentityForMixinAction() {
+        final RecordingHandler handler = new RecordingHandler();
+        final Identifier invokedIdentifier = Identifier.actionIdentifier(
+                LogicalType.eager(Object.class, "demo.Customer_updateName"),
+                "act");
+        final Identifier domainFacingIdentifier = Identifier.actionIdentifier(
+                LogicalType.eager(Object.class, "demo.Customer"),
+                "updateName");
+        final ActionInvocation actionInvocation = new ActionInvocation(
+                null,
+                invokedIdentifier,
+                domainFacingIdentifier,
+                new Object(),
+                List.of(),
+                ActionInvocation.RuleChecking.CHECKED);
+        final ApplicationSpanServiceDefault service = serviceWith(
+                currentInteraction(actionInvocation),
+                registryWith(handler));
+
+        service.run("load", () -> {});
+
+        final Observation.Context context = handler.stopped.get(0);
+        assertEquals("demo.Customer#updateName load", context.getContextualName());
+        assertEquals("demo.Customer#updateName",
+                value(context, ApplicationSpanServiceDefault.MEMBER_ID_ATTRIBUTE));
+        assertSame(invokedIdentifier, actionInvocation.getLogicalMemberIdentifier());
+        assertSame(domainFacingIdentifier,
+                actionInvocation.getDomainFacingLogicalMemberIdentifier());
     }
 
     @Test
@@ -171,15 +203,19 @@ class ApplicationSpanServiceDefaultTest {
     private static InteractionService currentInteraction(
             final String logicalTypeName,
             final String memberLogicalName) {
-        final InteractionService interactionService = mock(InteractionService.class);
-        final Interaction interaction = mock(Interaction.class);
         final Execution<?, ?> execution = mock(Execution.class);
         final Identifier identifier = Identifier.actionIdentifier(
                 LogicalType.eager(Object.class, logicalTypeName),
                 memberLogicalName);
+        when(execution.getLogicalMemberIdentifier()).thenReturn(identifier);
+        return currentInteraction(execution);
+    }
+
+    private static InteractionService currentInteraction(final Execution<?, ?> execution) {
+        final InteractionService interactionService = mock(InteractionService.class);
+        final Interaction interaction = mock(Interaction.class);
         when(interactionService.currentInteraction()).thenReturn(Optional.of(interaction));
         doReturn(execution).when(interaction).getCurrentExecution();
-        when(execution.getLogicalMemberIdentifier()).thenReturn(identifier);
         return interactionService;
     }
 

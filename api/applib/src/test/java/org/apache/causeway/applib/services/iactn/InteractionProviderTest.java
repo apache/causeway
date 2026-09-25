@@ -37,6 +37,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 class InteractionProviderTest {
 
     private static class Customer {}
+    private static class Customer_updateName {}
 
     private final Object target = new String("target");
     private final Identifier actionIdentifier = Identifier.actionIdentifier(
@@ -77,6 +78,30 @@ class InteractionProviderTest {
         assertTrue(provider.isCurrentActionInvocation(target, "invoice", RuleChecking.CHECKED));
         assertFalse(provider.isCurrentActionInvocation(target, actionIdentifier, RuleChecking.SKIPPED));
         assertFalse(provider.isCurrentActionInvocation(target, "invoice", RuleChecking.SKIPPED));
+    }
+
+    @Test
+    void currentActionInvocation_matchesInvokedMixinMethodRatherThanDomainFacingIdentity() {
+        final Identifier domainFacingIdentifier = Identifier.actionIdentifier(
+                LogicalType.fqcn(Customer.class), "updateName", String.class);
+        final Identifier invokedMemberIdentifier = Identifier.actionIdentifier(
+                LogicalType.fqcn(Customer_updateName.class), "act", String.class);
+        var actionInvocation = new ActionInvocation(
+                null,
+                invokedMemberIdentifier,
+                domainFacingIdentifier,
+                target,
+                Collections.singletonList("arg"),
+                RuleChecking.CHECKED);
+        var provider = providerFor(Optional.of(interactionWith(actionInvocation)));
+
+        assertSame(invokedMemberIdentifier, actionInvocation.getLogicalMemberIdentifier());
+        assertSame(domainFacingIdentifier,
+                actionInvocation.getDomainFacingLogicalMemberIdentifier());
+        assertTrue(provider.isCurrentActionInvocation(target, invokedMemberIdentifier));
+        assertTrue(provider.isCurrentActionInvocation(target, "act"));
+        assertFalse(provider.isCurrentActionInvocation(target, domainFacingIdentifier));
+        assertFalse(provider.isCurrentActionInvocation(target, "updateName"));
     }
 
     @Test
