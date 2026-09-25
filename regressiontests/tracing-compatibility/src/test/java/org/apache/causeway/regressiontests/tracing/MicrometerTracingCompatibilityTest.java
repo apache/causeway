@@ -504,17 +504,24 @@ class MicrometerTracingCompatibilityTest {
                 "surefire.test.class.path", System.getProperty("java.class.path")));
         command.add(MicrometerTracingAgentFixture.class.getName());
 
-        final Process process = new ProcessBuilder(command)
-                .redirectErrorStream(true)
-                .start();
-        final boolean completed = process.waitFor(PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
-        if (!completed) {
-            process.destroyForcibly();
-            fail("Tracing compatibility fixture timed out");
+        final Path outputPath = Files.createTempFile("causeway-tracing-fixture-", ".log");
+        try {
+            final Process process = new ProcessBuilder(command)
+                    .redirectErrorStream(true)
+                    .redirectOutput(outputPath.toFile())
+                    .start();
+            final boolean completed = process.waitFor(
+                    PROCESS_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+            if (!completed) {
+                process.destroyForcibly().waitFor();
+                fail("Tracing compatibility fixture timed out\n"
+                        + Files.readString(outputPath, StandardCharsets.UTF_8));
+            }
+            final String output = Files.readString(outputPath, StandardCharsets.UTF_8);
+            return new ProcessResult(process.exitValue(), output);
+        } finally {
+            Files.deleteIfExists(outputPath);
         }
-        final String output = new String(
-                process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        return new ProcessResult(process.exitValue(), output);
     }
 
     private static String javaExecutable() {
