@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -94,22 +94,24 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject DeadlockRecognizer deadlockRecognizer;
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
-    @Autowired private CausewayConfiguration causewayConfiguration;
+    @Autowired CausewayConfiguration causewayConfiguration;
 
-    private final Consumer<ExecutionMode> traceClassifier;
+    private final BiConsumer<String, ExecutionMode> traceClassifier;
 
     public RunBackgroundCommandsJob() {
         this(CausewayTraceClassifier::classifyCurrentSpan);
     }
 
-    RunBackgroundCommandsJob(final Consumer<ExecutionMode> traceClassifier) {
+    RunBackgroundCommandsJob(final BiConsumer<String, ExecutionMode> traceClassifier) {
         this.traceClassifier = Objects.requireNonNull(traceClassifier, "traceClassifier");
     }
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
 
-        traceClassifier.accept(ExecutionMode.BACKGROUND);
+        traceClassifier.accept(
+                causewayConfiguration.getExecution().getMode().getKey(),
+                ExecutionMode.BACKGROUND);
 
         if (backgroundCommandsJobControl.isPaused()) {
             log.debug("currently paused");

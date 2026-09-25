@@ -43,6 +43,15 @@ class CausewayTraceClassifierTest {
     }
 
     @Test
+    void classifiesUsingProvidedAttributeKey() {
+        final Span span = mock(Span.class);
+
+        CausewayTraceClassifier.classify(span, "application.execution.mode", FOREGROUND);
+
+        verify(span).setAttribute("application.execution.mode", "foreground");
+    }
+
+    @Test
     void repeatedClassificationIsIdempotentAttributeMutation() {
         final Span span = mock(Span.class);
 
@@ -55,5 +64,6 @@ class CausewayTraceClassifierTest {
     @Test
     void noAgentCurrentSpanIsSafe() {
         CausewayTraceClassifier.classifyCurrentSpan(BACKGROUND);
+        CausewayTraceClassifier.classifyCurrentSpan("application.execution.mode", BACKGROUND);
     }
 }

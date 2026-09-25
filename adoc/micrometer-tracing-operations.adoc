@@ -584,6 +584,9 @@ The Java agent continues to own automatic HTTP and JDBC instrumentation, samplin
 === Filter Foreground and Background Traces
 
 Causeway classifies Java-agent-created HTTP entry spans with `causeway.execution.mode=foreground` and the command-log extension's Quartz entry spans with `causeway.execution.mode=background`.
+The attribute key is exposed as `causeway.execution.mode.key` and defaults to `causeway.execution.mode`.
+Consuming applications can inject `CausewayConfiguration` and obtain the shared key from `getExecution().getMode().getKey()` for their own filters and instrumentation.
+
 In Jaeger's Attributes field, use one of these logfmt searches:
 
 [source,text]
@@ -593,6 +596,7 @@ causeway.execution.mode=background
 ----
 
 The maintenance publication transform renames these to `isis.execution.mode=foreground` and `isis.execution.mode=background`.
+Overriding `causeway.execution.mode.key` changes the key used by both foreground and background Causeway classification, so corresponding collector transforms, dashboards, alerts, and saved searches must be updated together.
 Applications that provide their own Quartz job implementation must classify its entry span explicitly using the transformed helper:
 
 [source,java]

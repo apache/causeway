@@ -22,6 +22,8 @@ import java.util.Objects;
 
 import io.opentelemetry.api.trace.Span;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +37,8 @@ import lombok.RequiredArgsConstructor;
  */
 public final class CausewayTraceClassifier {
 
-    public static final String EXECUTION_MODE_ATTRIBUTE = "causeway.execution.mode";
+    public static final String EXECUTION_MODE_ATTRIBUTE =
+            CausewayConfiguration.Execution.Mode.DEFAULT_KEY;
 
     @Getter
     @RequiredArgsConstructor
@@ -50,12 +53,26 @@ public final class CausewayTraceClassifier {
     }
 
     public static void classifyCurrentSpan(final ExecutionMode executionMode) {
-        classify(Span.current(), executionMode);
+        classifyCurrentSpan(EXECUTION_MODE_ATTRIBUTE, executionMode);
+    }
+
+    public static void classifyCurrentSpan(
+            final String executionModeAttribute,
+            final ExecutionMode executionMode) {
+        classify(Span.current(), executionModeAttribute, executionMode);
     }
 
     static void classify(final Span span, final ExecutionMode executionMode) {
+        classify(span, EXECUTION_MODE_ATTRIBUTE, executionMode);
+    }
+
+    static void classify(
+            final Span span,
+            final String executionModeAttribute,
+            final ExecutionMode executionMode) {
         Objects.requireNonNull(span, "span");
+        Objects.requireNonNull(executionModeAttribute, "executionModeAttribute");
         Objects.requireNonNull(executionMode, "executionMode");
-        span.setAttribute(EXECUTION_MODE_ATTRIBUTE, executionMode.getAttributeValue());
+        span.setAttribute(executionModeAttribute, executionMode.getAttributeValue());
     }
 }

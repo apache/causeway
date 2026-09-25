@@ -20,7 +20,7 @@ package org.apache.causeway.core.webapp.modules.observation;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import javax.servlet.Filter;
@@ -29,6 +29,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.Scope;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
@@ -41,7 +44,10 @@ import org.apache.causeway.core.config.observation.CausewayTraceClassifier.Execu
  */
 public final class CausewayForegroundTraceFilter implements Filter {
 
-    private final Consumer<ExecutionMode> classifier;
+    @Autowired(required = false)
+    CausewayConfiguration causewayConfiguration;
+
+    private final BiConsumer<String, ExecutionMode> classifier;
     private final Supplier<Scope> semanticTraceScopeFactory;
 
     public CausewayForegroundTraceFilter() {
@@ -50,12 +56,12 @@ public final class CausewayForegroundTraceFilter implements Filter {
                 CausewaySemanticTraceNamer::openCurrentSpan);
     }
 
-    CausewayForegroundTraceFilter(final Consumer<ExecutionMode> classifier) {
+    CausewayForegroundTraceFilter(final BiConsumer<String, ExecutionMode> classifier) {
         this(classifier, CausewaySemanticTraceNamer::openCurrentSpan);
     }
 
     CausewayForegroundTraceFilter(
-            final Consumer<ExecutionMode> classifier,
+            final BiConsumer<String, ExecutionMode> classifier,
             final Supplier<Scope> semanticTraceScopeFactory) {
         this.classifier = Objects.requireNonNull(classifier, "classifier");
         this.semanticTraceScopeFactory = Objects.requireNonNull(
@@ -67,9 +73,15 @@ public final class CausewayForegroundTraceFilter implements Filter {
             final ServletRequest request,
             final ServletResponse response,
             final FilterChain chain) throws IOException, ServletException {
-        classifier.accept(ExecutionMode.FOREGROUND);
+        classifier.accept(executionModeAttribute(), ExecutionMode.FOREGROUND);
         try (Scope ignored = semanticTraceScopeFactory.get()) {
             chain.doFilter(request, response);
         }
+    }
+
+    private String executionModeAttribute() {
+        return causewayConfiguration != null
+                ? causewayConfiguration.getExecution().getMode().getKey()
+                : CausewayTraceClassifier.EXECUTION_MODE_ATTRIBUTE;
     }
 }
