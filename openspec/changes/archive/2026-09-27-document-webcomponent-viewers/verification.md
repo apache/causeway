@@ -97,3 +97,7 @@ Reran `mvnd clean install -DskipTests -B --no-transfer-progress` from the reposi
 The full build exited 0 with `BUILD SUCCESS` in approximately 30 seconds.
 The local log is `/tmp/webcomponents-mvnd-fixed-build.log`.
 This resolves the earlier build prerequisite blocker; it does not retroactively verify sample browser journeys or tests skipped by `-DskipTests`.
+
+## Archive validation (2026-09-27)
+
+Re-ran `bash ./preview.sh -A` on main before archive: exit 0. Generated 13 webcomponents HTML pages (including the index); no build diagnostics mentioned the webcomponents source. Existing diagnostics elsewhere in the documentation remain. No runtime tests apply to this documentation-only archive.
