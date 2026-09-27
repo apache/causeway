@@ -36,9 +36,19 @@ import io.micrometer.tracing.exporter.FinishedSpan;
 import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
 /**
- * Makes observation an opt-in choice based on Spring Profile 'observation' being active.
+ * Connects Causeway instrumentation to Micrometer when the {@code observation}
+ * Spring profile is active. The registry's handlers determine what observations
+ * produce (for example, tracing spans); this configuration does not create an SDK
+ * or exporter.
  *
- * <p>see Spring's org.springframework.boot.micrometer.observation.autoconfigure.ObservationAutoConfiguration
+ * <p>Normally Boot configures the tracing handlers and export pipeline. An
+ * application can instead supply a registry bridged to the OpenTelemetry Java
+ * agent's context, with competing Boot tracing auto-configuration excluded.
+ * Both arrangements use the same Causeway integration below.
+ *
+ * <p>With the profile inactive, only Causeway's integration is disabled. We do
+ * not register a no-op registry bean: that could interfere with the application's
+ * own observations or make registry injection ambiguous.
  */
 @AutoConfiguration
 @ConditionalOnClass(ObservationRegistry.class)
@@ -48,7 +58,11 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
 public class CausewayObservationAutoConfiguration {
 
 	/**
-	 * Does not allow discarded spans to be exported. Register with Spring (before auto configuration is running).
+	 * Lets the Spring-managed tracing pipeline drop spans marked by Causeway's
+	 * duration filter or an explicit discard. The marker alone does not suppress
+	 * export: the pipeline must consume this predicate. In particular, an
+	 * agent-owned exporter does not discover Spring beans, so duration filtering
+	 * is explicitly disabled in the documented agent configuration.
 	 */
 	public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
 		@Override
@@ -58,8 +72,9 @@ public class CausewayObservationAutoConfiguration {
 	}
 
 	/**
-	 * Same as in org.springframework.boot.micrometer.observation.autoconfigure.ObservationAutoConfiguration,
-	 * that is, acts as a fallback.
+	 * Supplies an active-profile fallback only when no registry bean is already
+	 * available. As with Boot's fallback, creating a registry does not itself
+	 * enable export; observation handlers must be registered by the tracing setup.
 	 */
 	@Profile("observation")
 	@Bean
@@ -68,10 +83,23 @@ public class CausewayObservationAutoConfiguration {
 		return ObservationRegistry.create();
 	}
 
+    /**
+     * Always supplies the integration used by framework consumers, including
+     * when Causeway observations are disabled.
+     *
+     * <p>The provider defers registry resolution until after checking the
+     * profile. When active, Spring selects the single or primary registry;
+     * ambiguous candidates deliberately fail configuration rather than selecting
+     * an arbitrary telemetry pipeline. When inactive, application registries are
+     * not resolved or modified.
+     */
 	@Bean
     public CausewayObservationIntegration causewayObservationIntegration(
             final ObjectProvider<ObservationRegistry> registries,
             final Environment environment) {
+        // The second argument controls the optional duration-discard policy,
+        // not observation activation or sampling. Agent-owned export requires
+        // false because it does not consume DiscardedSpanExportingPredicate.
         return new CausewayObservationIntegration(environment.acceptsProfiles(Profiles.of("observation"))
                 ? registries.getIfAvailable(() -> ObservationRegistry.NOOP)
                 : ObservationRegistry.NOOP,
