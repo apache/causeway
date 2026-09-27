@@ -59,3 +59,7 @@ openspec validate reconcile-main-observation-foundation --strict
 ```
 
 The focused reactor run executes 31 tests, the exported-trace fixture executes 4, and the selected existing regression suites execute 22. Full-repository and viewer-specific suites were not run. Configuration metadata parses successfully and `git diff --check` is clean. Final review found no maintenance dependency pins, unrelated workspace artifacts, or new production dependencies.
+
+## Archive checkpoint
+
+On 2026-09-27 the focused reactor build and 31 tests, followed by all 4 exported-trace fixture tests, passed again using the installed Java 25.0.4. The original Java 25.0.3 installation had been replaced, so the archive check used 25.0.4. All 19 implementation tasks were complete; the six requirements were synced to `openspec/specs/main-observation-foundation/spec.md`. Implementation commit: `299dcdc2234`; PR: https://github.com/apache/causeway/pull/3814.

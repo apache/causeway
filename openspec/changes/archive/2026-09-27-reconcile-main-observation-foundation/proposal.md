@@ -24,7 +24,7 @@ None.
 
 Implementation targets **main**, not the maintenance working tree in which these planning artifacts were authored. Expected areas are `commons` observation utilities, `core/config` observation integration, their runtime/JPA consumers, and a main-compatible tracing regression fixture. Retain main's BOM-managed dependency versions; do not copy Boot 2.7 pins, Java 11 fixture assumptions, or maintenance's interaction implementation.
 
-No public applib API change is intended. Error-span retention can increase exported short-failure spans. Registry wiring changes require application-registry compatibility tests. The roadmap and source references are in [the forward-port plan](../../planned-changes/otel-forward-port-roadmap.md).
+No public applib API change is intended. Error-span retention can increase exported short-failure spans. Registry wiring changes require application-registry compatibility tests. The roadmap and source references are in [the forward-port plan](../../../planned-changes/otel-forward-port-roadmap.md).
 
 ## Non-goals
 

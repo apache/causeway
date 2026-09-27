@@ -5,4 +5,4 @@ This directory records cross-change roadmaps and investigation notes. Entries ar
 - [Web-component viewer plans](web-component-viewer/)
 - [OpenTelemetry and related maintenance-to-main forward ports](otel-forward-port-roadmap.md)
 
-The first active proposal is [reconcile-main-observation-foundation](../changes/reconcile-main-observation-foundation/proposal.md). Its implementation target is **main**. These artifacts were initially authored on maintenance and transferred to this main worktree for further planning and implementation.
+The first completed and archived change is [reconcile-main-observation-foundation](../changes/archive/2026-09-27-reconcile-main-observation-foundation/proposal.md). Its implementation target is **main**. These artifacts were initially authored on maintenance and transferred to this main worktree for further planning and implementation.
