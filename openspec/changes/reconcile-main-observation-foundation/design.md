@@ -77,3 +77,13 @@ No data migration is required. Deliver the change as a main-targeted PR with foc
 - Does agent-mode export support the existing discard contract? If not, document the retained-span behavior specified above.
 
 These are bounded implementation investigations. They do not authorize switching the default telemetry owner without updating this proposal.
+
+## Implementation decisions confirmed
+
+The refreshed main baseline remained `351eae721d9`; implementation is on `CAUSEWAY-3975-observation-foundation`. The framework continues to use Boot-managed tracing by default. Agent mode is an explicit application registry using the BOM-managed OtelTracer bridge and documented Boot SDK/tracing exclusions; no production agent-specific registry or dependency was necessary.
+
+`causeway.observation.duration-filtering-enabled` defaults to true and is false in the validated agent configuration. The integration retains its existing registry constructor and exposes a threshold factory used by JPA. This controls framework duration filtering without attempting to control the agent's exporter with Spring predicates.
+
+Consumer inspection identified a shared transaction closure reused across transaction-manager iterations. Each iteration now owns a closure, and cleanup closes them in reverse order. This is observation ownership correction, not a change to main's documented limitations on multiple transaction managers. Interaction layers retain their closure as an interaction attribute to report Throwable failures before closing; work exceptions remain primary when cleanup also fails.
+
+The task list's branch/commit item was converted into a workflow checkpoint rather than counted as implementation work, following the apply skill. See validation.md for the instrumentation inventory and test evidence.

@@ -200,8 +200,12 @@ implements
 
         final int stackSizeWhenEntering = layerStack.size();
         openInteraction(interactionContext);
+        Throwable failure = null;
         try {
             return callInternal(callable);
+        } catch (Throwable ex) {
+            failure = ex;
+            throw ex;
         } finally {
             //
             // TODO: this method could theoretically throw an exception, if the flush fails in
@@ -209,7 +213,7 @@ implements
             //  may be returning a Try, which could encode a failure that way.  Having this method also possibly
             //  throw an exception seems incorrect.
             //
-            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
+            closeAfterWork(stackSizeWhenEntering, failure);
         }
     }
 
@@ -221,8 +225,12 @@ implements
 
         final int stackSizeWhenEntering = layerStack.size();
         openInteraction(interactionContext);
+        Throwable failure = null;
         try {
             runInternal(runnable);
+        } catch (Throwable ex) {
+            failure = ex;
+            throw ex;
         } finally {
             //
             // TODO: this method could theoretically throw an exception, if the flush fails in
@@ -230,7 +238,7 @@ implements
             //  may be returning a Try, which could encode a failure that way.  Having this method also possibly
             //  throw an exception seems incorrect.
             //
-            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
+            closeAfterWork(stackSizeWhenEntering, failure);
         }
     }
 
@@ -274,7 +282,11 @@ implements
         try {
             return callable.call();
         } catch (Throwable e) {
-            requestRollback(e);
+            try {
+                requestRollback(e);
+            } catch (Throwable rollbackFailure) {
+                if (rollbackFailure != e) e.addSuppressed(rollbackFailure);
+            }
             throw e;
         }
     }
@@ -285,12 +297,27 @@ implements
         try {
             runnable.run();
         } catch (Throwable e) {
-            requestRollback(e);
+            try {
+                requestRollback(e);
+            } catch (Throwable rollbackFailure) {
+                if (rollbackFailure != e) e.addSuppressed(rollbackFailure);
+            }
             throw e;
         }
     }
 
+    @SneakyThrows
+    private void closeAfterWork(final int stackSize, final Throwable failure) {
+        try {
+            closeInteractionLayerStackDownToStackSize(stackSize);
+        } catch (Throwable cleanupFailure) {
+            if (failure == null) throw cleanupFailure;
+            if (failure != cleanupFailure) failure.addSuppressed(cleanupFailure);
+        }
+    }
+
     private void requestRollback(final Throwable cause) {
+        layerStack.onError(cause);
         if(layerStack.isEmpty()) {
             // seeing this code-path, when the corresponding runnable/callable
             // by itself causes the interaction stack to be closed

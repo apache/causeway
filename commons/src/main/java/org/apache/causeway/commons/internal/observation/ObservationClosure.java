@@ -39,32 +39,69 @@ public final class ObservationClosure implements AutoCloseable {
 	
     private Observation observation;
     private Scope scope;
+    @Getter(lombok.AccessLevel.NONE)
+    private Throwable failure;
 
     public ObservationClosure startAndOpenScope(final Observation observation) {
         if(observation==null) return this;
+        if (this.observation != null) {
+            throw new IllegalStateException("Observation lifecycle is already active");
+        }
+        failure = null;
         this.observation = observation.start();
-        this.scope = observation.openScope();
+        try {
+            this.scope = this.observation.openScope();
+        } catch (RuntimeException | Error ex) {
+            onError(ex);
+            close();
+            throw ex;
+        }
         return this;
     }
 
     @Override
     public void close() {
-        if(observation==null) return;
-        if(scope!=null) {
-            this.scope.close();
-            this.scope = null;
+        final var scopeToClose = scope;
+        final var observationToStop = observation;
+        final var originalFailure = failure;
+        scope = null;
+        observation = null;
+        failure = null;
+        Throwable cleanupFailure = null;
+        try {
+            if (scopeToClose != null) scopeToClose.close();
+        } catch (RuntimeException | Error ex) {
+            cleanupFailure = ex;
         }
-        observation.stop();
+        try {
+            if (observationToStop != null) observationToStop.stop();
+        } catch (RuntimeException | Error ex) {
+            if (cleanupFailure == null) cleanupFailure = ex;
+            else suppress(cleanupFailure, ex);
+        }
+        if (cleanupFailure != null) {
+            if (originalFailure != null) suppress(originalFailure, cleanupFailure);
+            else if (cleanupFailure instanceof RuntimeException ex) throw ex;
+            else throw (Error) cleanupFailure;
+        }
     }
 
     public void onError(final Exception ex) {
-        if(observation==null) return;
-        // scope lifecycle terminates before exception handling
-        if(scope!=null) {
-            this.scope.close();
-            this.scope = null;
+        onError((Throwable) ex);
+    }
+
+    public void onError(final Throwable ex) {
+        if (observation == null || ex == null) return;
+        if (failure == null) failure = ex;
+        try {
+            observation.error(ex);
+        } catch (RuntimeException | Error reportingFailure) {
+            suppress(ex, reportingFailure);
         }
-        observation.error(ex);
+    }
+
+    private static void suppress(final Throwable primary, final Throwable secondary) {
+        if (primary != secondary) primary.addSuppressed(secondary);
     }
 
     public ObservationClosure tag(final String key, @Nullable final Supplier<? extends Object> valueSupplier) {
@@ -78,8 +115,14 @@ public final class ObservationClosure implements AutoCloseable {
     }
 
     public void discard() {
-        discard(this.observation);
-        close();
+        try {
+            discard(this.observation);
+        } catch (RuntimeException | Error ex) {
+            onError(ex);
+            throw ex;
+        } finally {
+            close();
+        }
     }
     
     // -- UTILITY

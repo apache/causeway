@@ -1,0 +1,129 @@
+= Observability
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Causeway's `observation` Spring profile enables framework observations for interactions, actions, property editing, transactions, execution publishing, metamodel initialization and JPA operations.
+Without that profile, Causeway uses a no-op integration; an application's own observation registry remains usable.
+
+== Boot-managed tracing
+
+Use the main BOM's `spring-boot-starter-opentelemetry` and activate the profile:
+
+[source,yaml]
+----
+spring:
+  profiles:
+    active: observation
+management:
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+----
+
+Boot owns tracing configuration and export in this configuration.
+Causeway uses a supplied single or primary `ObservationRegistry`, with a fallback when none is supplied.
+Multiple registry candidates without a primary produce a configuration error.
+An active observation profile does not require an agent or exporter to start successfully.
+
+== Java-agent-owned tracing
+
+An alternative configuration lets the OpenTelemetry Java agent own the SDK, automatic HTTP/JDBC instrumentation and export.
+Provide a registry whose Micrometer tracing handler bridges to the agent's global OpenTelemetry context.
+Add the BOM-managed `io.micrometer:micrometer-tracing-bridge-otel` dependency for this application configuration.
+
+[source,java]
+----
+@Configuration(proxyBeanMethods = false)
+@Profile("agent")
+class AgentObservationConfiguration {
+    @Bean
+    ObservationRegistry agentObservationRegistry() {
+        var currentContext = new OtelCurrentTraceContext();
+        var tracer = new OtelTracer(
+                GlobalOpenTelemetry.getTracer("org.apache.causeway"),
+                currentContext,
+                event -> {},
+                new OtelBaggageManager(currentContext, List.of(), List.of()));
+        var registry = ObservationRegistry.create();
+        registry.observationConfig()
+                .observationHandler(new DefaultTracingObservationHandler(tracer));
+        return registry;
+    }
+}
+----
+
+The types are from `io.micrometer.observation`, `io.micrometer.tracing.handler`, `io.micrometer.tracing.otel.bridge`, `io.opentelemetry.api`, `java.util`, and Spring's configuration annotations.
+Import this configuration into the application.
+For the validated Boot 4.2.0-M1 configuration, exclude the competing SDK/tracing auto-configurations:
+
+[source,yaml]
+----
+spring:
+  profiles:
+    active: observation,agent
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.opentelemetry.autoconfigure.OpenTelemetrySdkAutoConfiguration
+      - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.OpenTelemetryTracingAutoConfiguration
+      - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.otlp.OtlpTracingAutoConfiguration
+      - org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration
+management:
+  tracing:
+    export:
+      enabled: false
+causeway:
+  observation:
+    duration-filtering-enabled: false
+----
+
+Launch the JVM with `-javaagent:/path/to/opentelemetry-javaagent.jar` and configure the agent's service name, sampler and OTLP endpoint through its normal settings.
+For example, a local tracing-only run can use:
+
+[source,bash]
+----
+export OTEL_SERVICE_NAME=my-causeway-app
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:4318/v1/traces
+export OTEL_METRICS_EXPORTER=none
+export OTEL_LOGS_EXPORTER=none
+java -javaagent:/path/to/opentelemetry-javaagent.jar -jar application.jar
+----
+
+Do not also construct an independent SDK/export pipeline in this configuration.
+The agent configuration is an explicit application choice; it does not replace the Boot-managed default.
+With the agent profile but without the `observation` profile, automatic agent spans remain active and Causeway observations remain inactive.
+
+== Duration filtering and failures
+
+The existing JPA observation threshold remains two milliseconds.
+With `causeway.observation.duration-filtering-enabled=true` (the default), successful observations below that threshold are marked for discard; failed observations remain eligible for export regardless of duration.
+The Boot-managed export predicate honors that marker.
+
+The agent-owned exporter does not consume Spring's span-export predicates.
+Set `duration-filtering-enabled=false` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
+The setting controls Causeway's JPA duration optimization, not agent sampling or application-created observations.
+An explicitly discarded observation is still subject to the exporter's filtering capabilities.
+
+Duration-based export filtering can leave children whose parent span was suppressed.
+This change retains the existing Boot-mode policy; it does not implement tail sampling or a per-request span budget.
+
+== Validated baseline and regression fixture
+
+The foundation fixture validates Boot 4.2.0-M1, Micrometer Observation 1.18.0-M1, Micrometer Tracing 1.8.0-M1, OpenTelemetry API/SDK 1.64.0, agent 2.31.1, Java 25.0.3 and Maven 3.9.13.
+These are the tested versions, not a requirement to override the application's Causeway BOM.
+
+The child-process fixture uses production interaction and action services with mocked non-telemetry collaborators, a local JDK HTTP server, H2, and a local OTLP receiver.
+It proves agent HTTP/framework/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration filtering, inactive-profile behavior and operation without an agent/exporter.
+It does not prove every servlet container or viewer integration.
+
+From the repository root, after building the required main artifacts:
+
+[source,bash]
+----
+mvn -f regressiontests/tracing-compatibility/pom.xml test
+----
+
+Fixture output is retained under `regressiontests/tracing-compatibility/target/fixture-*.log`.
+The fixture drains output while the child runs and enforces a two-minute process timeout.

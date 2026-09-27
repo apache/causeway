@@ -1,6 +1,12 @@
 {
   "properties": [
     {
+      "name": "causeway.observation.duration-filtering-enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "Whether Causeway JPA observations use duration-based export filtering. Disable for agent-owned exporters that do not consume Spring span-export predicates."
+    },
+    {
       "name": "causeway.value-types.temporal.editing.date-pattern",
       "type": "java.lang.String",
       "defaultValue": "yyyy-MM-dd"

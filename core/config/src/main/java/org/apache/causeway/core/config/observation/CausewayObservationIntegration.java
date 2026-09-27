@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.LongSupplier;
 import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.Nullable;
@@ -45,7 +46,11 @@ import io.micrometer.observation.ObservationRegistry;
  * Holder of {@link ObservationRegistry} which comes as a dependency of <i>spring-context</i>.
  */
 public record CausewayObservationIntegration(
-        ObservationRegistry observationRegistry) {
+        ObservationRegistry observationRegistry, boolean durationFilteringEnabled) {
+
+    public CausewayObservationIntegration(final ObservationRegistry observationRegistry) {
+        this(observationRegistry, true);
+    }
 
     public CausewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
@@ -86,6 +91,12 @@ public record CausewayObservationIntegration(
         return obs->StringUtils.hasText(moduleName)
                 ? obs.lowCardinalityKeyValue(moduleName(moduleName))
                 : obs;
+    }
+
+    public Observation withTimeThreshold(final Observation observation, final Duration threshold) {
+        return durationFilteringEnabled
+                ? new ObservationWithTimeThreshold(observation, threshold)
+                : observation;
     }
 
     // -- COMMON KEY-VALUES
@@ -149,50 +160,63 @@ public record CausewayObservationIntegration(
     //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
     // that are way off a base-line; this would require some profiling to establish base-lines
     public record ObservationWithTimeThreshold(Observation delegate, Duration threshold, Timer timer) implements Observation {
-        private static class Timer {
+        static class Timer {
+            final LongSupplier clock;
+            Timer() { this(System::nanoTime); }
+            Timer(final LongSupplier clock) { this.clock = clock; }
             long startNanos;
-            void start() { this.startNanos = System.nanoTime(); }
-            long elapsedNanos() { return System.nanoTime() - startNanos; }
+            void start() { this.startNanos = clock.getAsLong(); }
+            long elapsedNanos() { return clock.getAsLong() - startNanos; }
         }
         public ObservationWithTimeThreshold(final Observation delegate, final Duration threshold) {
             this(delegate, threshold, new Timer());
         }
         @Override public Observation contextualName(@Nullable final String contextualName) {
-            return delegate.contextualName(contextualName);
+            delegate.contextualName(contextualName);
+            return this;
         }
         @Override public Observation parentObservation(@Nullable final Observation parentObservation) {
-            return delegate.parentObservation(parentObservation);
+            delegate.parentObservation(parentObservation);
+            return this;
         }
         @Override public Observation lowCardinalityKeyValue(final KeyValue keyValue) {
-            return delegate.lowCardinalityKeyValue(keyValue);
+            delegate.lowCardinalityKeyValue(keyValue);
+            return this;
         }
         @Override public Observation lowCardinalityKeyValue(final String key, final String value) {
-            return delegate.lowCardinalityKeyValue(key, value);
+            delegate.lowCardinalityKeyValue(key, value);
+            return this;
         }
         @Override public Observation highCardinalityKeyValue(final KeyValue keyValue) {
-            return delegate.highCardinalityKeyValue(keyValue);
+            delegate.highCardinalityKeyValue(keyValue);
+            return this;
         }
         @Override public Observation highCardinalityKeyValue(final String key, final String value) {
-            return delegate.highCardinalityKeyValue(key, value);
+            delegate.highCardinalityKeyValue(key, value);
+            return this;
         }
         @Override public Observation observationConvention(final ObservationConvention<?> observationConvention) {
-            return delegate.observationConvention(observationConvention);
+            delegate.observationConvention(observationConvention);
+            return this;
         }
         @Override public Observation error(final Throwable error) {
-            return delegate.error(error);
+            delegate.error(error);
+            return this;
         }
         @Override public Observation event(final Event event) {
-            return delegate.event(event);
+            delegate.event(event);
+            return this;
         }
         @Override public Observation start() {
             timer.start();
-            return delegate.start();
+            delegate.start();
+            return this;
         }
         @Override public Context getContext() {
             return delegate.getContext();
         }
         @Override public void stop() {
-            if(timer.elapsedNanos() < threshold.toNanos()) {
+            if(delegate.getContext().getError() == null && timer.elapsedNanos() < threshold.toNanos()) {
                 discard(delegate);
             }
             delegate.stop();

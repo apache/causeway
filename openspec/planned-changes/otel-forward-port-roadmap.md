@@ -10,7 +10,7 @@ Main already contains CAUSEWAY-3975, including instrumentation absent from the s
 
 | Sequence | Ticket / feature | Status and proposed scope | Implementation source anchors |
 |---|---|---|---|
-| 1 | 3975: foundation reconciliation | **Proposed:** [active change](../changes/reconcile-main-observation-foundation/proposal.md). Lifecycle cleanup, activation/registry selection, Boot/agent compatibility evidence, threshold behavior, preservation of main instrumentation. | `9b8b66d5b7b`, `e6752f882b5`; compare main's original 3975 implementation |
+| 1 | 3975: foundation reconciliation | **Implemented, pending archive:** [active change](../changes/reconcile-main-observation-foundation/proposal.md). Lifecycle cleanup, activation/registry selection, Boot/agent compatibility evidence, threshold behavior, preservation of main instrumentation. | `9b8b66d5b7b`, `e6752f882b5`; compare main's original 3975 implementation |
 | 1b | 3975 follow-up: metadata and observation policy | Planned. Stable operation names vs contextual names; review bookmark/query-description names, identity attributes, hard-coded duration threshold and missing exported parents. Set policy before adding new semantic names. No ticket beyond originating 3975 assigned here. | Main `JpaEntityFacet`, runtime `ia/_Observation`, `CausewayObservationIntegration` |
 | 2 | 3975 + 4068: classification and correlation | Planned. Foreground/background classification, root interaction ID, configurable execution-mode attribute key. Depends on foundation; adapt to main's interaction layers. | `024bd33128d`, `0325232a3c7`, `3083a51eabd` |
 | 3 | 4058: current action context | Planned. Exact-current-action queries and rule-checking state; nested restoration and physical mixin receiver semantics. Can proceed independently of most telemetry work. | `6d037db6609`; account for `f66b8f17a89` |
@@ -80,3 +80,11 @@ Inspect with `git ls-tree -r --name-only <ref> openspec` and `git show <ref>:<pa
 5. Record actual tests, dependency versions, remaining limitations and resulting PR/commit links here. Do not mark planned features complete solely because the maintenance implementation exists.
 
 No new tickets or PRs have been created by this planning work. Sequence numbers indicate a suggested delivery order; independent tracks can be developed separately.
+
+## Foundation implementation update (2026-09-27)
+
+Planning artifacts were committed as `13f98006d08` on `CAUSEWAY-3975-observation-foundation`. Implementation was completed at the apply boundary and is being submitted for review on `CAUSEWAY-3975`, targeting `main`. [Validation evidence](../changes/reconcile-main-observation-foundation/validation.md) records the inventory, tested versions and configurations.
+
+Boot remains the default owner. The agent configuration supplies an explicit registry bridged to GlobalOpenTelemetry, excludes competing Boot SDK/tracing auto-configuration, and disables JPA duration filtering through `causeway.observation.duration-filtering-enabled=false`. Real exported traces verify parentage and no duplicate framework spans; Boot mode verifies discard behavior. This required no new production dependency.
+
+Main's current tracing handler preserves existing name casing; revisit whether any custom handler is needed for 4062 instead of copying maintenance's workaround. Step 1b (metadata/privacy/naming policy) remains planned and separate. The user guide now contains the main-specific observability runbook. Jaeger/comparison shell tooling is still a planned early companion and was not included in this foundation implementation.

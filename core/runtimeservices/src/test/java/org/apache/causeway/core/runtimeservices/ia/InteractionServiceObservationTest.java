@@ -1,0 +1,97 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.runtimeservices.ia;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.Scope;
+
+import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.xactn.TransactionState;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
+import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
+import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
+import org.apache.causeway.core.security.authentication.InteractionContextFactory;
+
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationHandler;
+import io.micrometer.observation.ObservationRegistry;
+
+class InteractionServiceObservationTest {
+    @Test void nestedLayersRestoreParentAndStopExactlyOnce() {
+        var fixture = new Fixture();
+        fixture.service.run(InteractionContextFactory.testing(), () -> {
+            var parent = fixture.registry.getCurrentObservation();
+            fixture.service.run(InteractionContextFactory.testing("nested"), () -> {
+                assertNotSame(parent, fixture.registry.getCurrentObservation());
+                assertEquals(2, fixture.service.getInteractionLayerCount());
+            });
+            assertSame(parent, fixture.registry.getCurrentObservation());
+        });
+        assertEquals(2, fixture.stopped.size());
+        assertNull(fixture.registry.getCurrentObservation());
+        assertFalse(fixture.service.isInInteraction());
+    }
+    @Test void workErrorSurvivesTransactionCleanupFailure() {
+        var fixture = new Fixture();
+        var workFailure = new AssertionError("work");
+        var cleanupFailure = new IllegalStateException("cleanup");
+        doThrow(cleanupFailure).when(fixture.transactions).onClose(any());
+        assertSame(workFailure, assertThrows(AssertionError.class, () ->
+                fixture.service.run(InteractionContextFactory.testing(), () -> { throw workFailure; })));
+        assertSame(workFailure, fixture.stopped.get(0).getError());
+        assertArrayEquals(new Throwable[]{cleanupFailure}, workFailure.getSuppressed());
+        assertNull(fixture.registry.getCurrentObservation());
+        assertFalse(fixture.service.isInInteraction());
+        reset(fixture.transactions);
+        when(fixture.transactions.currentTransactionState()).thenReturn(TransactionState.MUST_ABORT);
+        fixture.service.call(InteractionContextFactory.testing(), () -> "next");
+        assertEquals(2, fixture.stopped.size());
+        assertNull(fixture.stopped.get(1).getError());
+    }
+    private static class Fixture {
+        final ObservationRegistry registry = ObservationRegistry.create();
+        final ArrayList<Observation.Context> stopped = new ArrayList<>();
+        final TransactionServiceSpring transactions = mock(TransactionServiceSpring.class);
+        final InteractionServiceDefault service;
+        Fixture() {
+            registry.observationConfig().observationHandler(new ObservationHandler<Observation.Context>() {
+                public boolean supportsContext(Observation.Context context) { return true; }
+                public void onStop(Observation.Context context) { stopped.add(context); }
+            });
+            var beanFactory = mock(ConfigurableBeanFactory.class);
+            var scope = mock(Scope.class, withSettings().extraInterfaces(InteractionScopeLifecycleHandler.class));
+            when(beanFactory.getRegisteredScope(InteractionScopeBeanFactoryPostProcessor.SCOPE_NAME)).thenReturn(scope);
+            when(transactions.currentTransactionState()).thenReturn(TransactionState.MUST_ABORT);
+            var executionContext = mock(ExecutionContext.class, RETURNS_DEEP_STUBS);
+            when(executionContext.idGenerator().interactionId()).thenAnswer(__ -> UUID.randomUUID());
+            service = new InteractionServiceDefault(beanFactory, mock(ServiceInjector.class), transactions,
+                    mock(ClockService.class), () -> null, executionContext, new CausewayObservationIntegration(registry));
+        }
+    }
+}
