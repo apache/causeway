@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationWithTimeThreshold;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
@@ -81,7 +80,7 @@ class JpaEntityFacet
         var timeThreshold = Duration.ofMillis(2);
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE)
-                .andThen(obs->new ObservationWithTimeThreshold(obs, timeThreshold)));
+                .andThen(obs->observationIntegration.withTimeThreshold(obs, timeThreshold)));
     }
 
     @Override

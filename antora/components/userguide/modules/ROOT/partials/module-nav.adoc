@@ -9,6 +9,7 @@
 * xref:userguide::mixins.adoc[Mixins]
 * xref:userguide::events.adoc[Events]
 * xref:userguide::modules.adoc[Modules]
+* xref:userguide::observability.adoc[Observability]
 * xref:userguide::value-types.adoc[Value types]
 * xref:userguide::meta-annotations.adoc[Meta-annotations]
 * xref:userguide::background-context-and-theory.adoc[Background, Context & Theory]

@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.LongSupplier;
 import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.Nullable;
@@ -42,10 +43,32 @@ import io.micrometer.observation.ObservationConvention;
 import io.micrometer.observation.ObservationRegistry;
 
 /**
- * Holder of {@link ObservationRegistry} which comes as a dependency of <i>spring-context</i>.
+ * Framework entry point for creating observations in the configured telemetry
+ * context. Consumers use this integration instead of choosing registries or
+ * constructing tracers themselves.
+ *
+ * @param observationRegistry registry selected by
+ *        {@link CausewayObservationAutoConfiguration}: a single/primary
+ *        application registry or the fallback when observation is enabled,
+ *        otherwise {@link ObservationRegistry#NOOP}. Its handlers bridge
+ *        observations to the chosen tracing pipeline and parent context; the
+ *        registry is not itself an SDK or exporter. A null registry is treated
+ *        as no-op for manually constructed instances.
+ * @param durationFilteringEnabled whether {@link #withTimeThreshold} wraps
+ *        observations in Causeway's duration-discard policy. Configured by
+ *        {@code causeway.observation.duration-filtering-enabled}, defaulting to
+ *        true for the Spring-managed export predicate. Set false for an
+ *        agent-owned exporter, which does not consume that predicate. This is
+ *        independent of observation activation: false retains short spans
+ *        rather than turning tracing off, and does not change sampling.
  */
 public record CausewayObservationIntegration(
-        ObservationRegistry observationRegistry) {
+        ObservationRegistry observationRegistry, boolean durationFilteringEnabled) {
+
+    /** Retains the existing duration-filtering default for programmatic callers. */
+    public CausewayObservationIntegration(final ObservationRegistry observationRegistry) {
+        this(observationRegistry, true);
+    }
 
     public CausewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
@@ -86,6 +109,18 @@ public record CausewayObservationIntegration(
         return obs->StringUtils.hasText(moduleName)
                 ? obs.lowCardinalityKeyValue(moduleName(moduleName))
                 : obs;
+    }
+
+    /**
+     * Applies the optional duration policy at the instrumentation boundary
+     * (currently JPA operations, whose caller supplies the two-millisecond
+     * threshold). When disabled, the original observation is returned unchanged.
+     * The flag does not affect observations created without this method.
+     */
+    public Observation withTimeThreshold(final Observation observation, final Duration threshold) {
+        return durationFilteringEnabled
+                ? new ObservationWithTimeThreshold(observation, threshold)
+                : observation;
     }
 
     // -- COMMON KEY-VALUES
@@ -140,7 +175,9 @@ public record CausewayObservationIntegration(
     // -- SPAN EXPORT DISCARDING SUPPORT
 
     /**
-     * Denies span export, in collaboration with a Spring registered {@link DiscardedSpanExportingPredicate}.
+     * Marks an observation for suppression by the Spring-registered
+     * {@link DiscardedSpanExportingPredicate}. Exporters that do not consume that
+     * predicate, such as the Java agent's exporter, do not honor this marker.
      */
     public static void discard(@Nullable final Observation obs) {
     	ObservationClosure.discard(obs);
@@ -148,51 +185,74 @@ public record CausewayObservationIntegration(
 
     //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
     // that are way off a base-line; this would require some profiling to establish base-lines
+    /**
+     * Measures the observation from start to stop and marks successful work
+     * below the threshold for discard. Failed work remains eligible for export
+     * regardless of duration. This is an export filter, so it does not avoid the
+     * cost of recording the observation or its children.
+     *
+     * <p>Fluent methods and {@code start()} return this wrapper, not the delegate:
+     * callers such as ObservationClosure retain the returned observation and
+     * must still reach this wrapper's {@code stop()} to apply the policy.
+     */
     public record ObservationWithTimeThreshold(Observation delegate, Duration threshold, Timer timer) implements Observation {
-        private static class Timer {
+        static class Timer {
+            final LongSupplier clock;
+            Timer() { this(System::nanoTime); }
+            Timer(final LongSupplier clock) { this.clock = clock; }
             long startNanos;
-            void start() { this.startNanos = System.nanoTime(); }
-            long elapsedNanos() { return System.nanoTime() - startNanos; }
+            void start() { this.startNanos = clock.getAsLong(); }
+            long elapsedNanos() { return clock.getAsLong() - startNanos; }
         }
         public ObservationWithTimeThreshold(final Observation delegate, final Duration threshold) {
             this(delegate, threshold, new Timer());
         }
         @Override public Observation contextualName(@Nullable final String contextualName) {
-            return delegate.contextualName(contextualName);
+            delegate.contextualName(contextualName);
+            return this;
         }
         @Override public Observation parentObservation(@Nullable final Observation parentObservation) {
-            return delegate.parentObservation(parentObservation);
+            delegate.parentObservation(parentObservation);
+            return this;
         }
         @Override public Observation lowCardinalityKeyValue(final KeyValue keyValue) {
-            return delegate.lowCardinalityKeyValue(keyValue);
+            delegate.lowCardinalityKeyValue(keyValue);
+            return this;
         }
         @Override public Observation lowCardinalityKeyValue(final String key, final String value) {
-            return delegate.lowCardinalityKeyValue(key, value);
+            delegate.lowCardinalityKeyValue(key, value);
+            return this;
         }
         @Override public Observation highCardinalityKeyValue(final KeyValue keyValue) {
-            return delegate.highCardinalityKeyValue(keyValue);
+            delegate.highCardinalityKeyValue(keyValue);
+            return this;
         }
         @Override public Observation highCardinalityKeyValue(final String key, final String value) {
-            return delegate.highCardinalityKeyValue(key, value);
+            delegate.highCardinalityKeyValue(key, value);
+            return this;
         }
         @Override public Observation observationConvention(final ObservationConvention<?> observationConvention) {
-            return delegate.observationConvention(observationConvention);
+            delegate.observationConvention(observationConvention);
+            return this;
         }
         @Override public Observation error(final Throwable error) {
-            return delegate.error(error);
+            delegate.error(error);
+            return this;
         }
         @Override public Observation event(final Event event) {
-            return delegate.event(event);
+            delegate.event(event);
+            return this;
         }
         @Override public Observation start() {
             timer.start();
-            return delegate.start();
+            delegate.start();
+            return this;
         }
         @Override public Context getContext() {
             return delegate.getContext();
         }
         @Override public void stop() {
-            if(timer.elapsedNanos() < threshold.toNanos()) {
+            if(delegate.getContext().getError() == null && timer.elapsedNanos() < threshold.toNanos()) {
                 discard(delegate);
             }
             delegate.stop();

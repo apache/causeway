@@ -1,0 +1,90 @@
+# OpenTelemetry and related forward ports to main
+
+## Baseline and purpose
+
+Prepared 2026-09-27 from maintenance merge `7e799dfd360` (PR #3813, CAUSEWAY-4066 branch) and recorded `origin/main` at `351eae721d9`. The planning checkout was maintenance at `b028fca1132`; local `main` was 513 commits behind `origin/main`. No remote freshness verification or runtime testing was performed during exploration. Refresh these references before implementation.
+
+Main already contains CAUSEWAY-3975, including instrumentation absent from the smaller maintenance backport. The task is to reconcile and extend main, not replay the merge or replace its observation implementation. Use feature-sized PRs with the originating ticket as provenance. Numeric ticket order is not a dependency order, and no 4064 implementation was identified in this merge.
+
+## Roadmap
+
+| Sequence | Ticket / feature | Status and proposed scope | Implementation source anchors |
+|---|---|---|---|
+| 1 | 3975: foundation reconciliation | **Archived:** [completed change](../changes/archive/2026-09-27-reconcile-main-observation-foundation/proposal.md). Lifecycle cleanup, activation/registry selection, Boot/agent compatibility evidence, threshold behavior, preservation of main instrumentation. | `9b8b66d5b7b`, `e6752f882b5`; compare main's original 3975 implementation |
+| 1b | 3975 follow-up: metadata and observation policy | Planned. Stable operation names vs contextual names; review bookmark/query-description names, identity attributes, hard-coded duration threshold and missing exported parents. Set policy before adding new semantic names. No ticket beyond originating 3975 assigned here. | Main `JpaEntityFacet`, runtime `ia/_Observation`, `CausewayObservationIntegration` |
+| 2 | 3975 + 4068: classification and correlation | Planned. Foreground/background classification, root interaction ID, configurable execution-mode attribute key. Depends on foundation; adapt to main's interaction layers. | `024bd33128d`, `0325232a3c7`, `3083a51eabd` |
+| 3 | 4058: current action context | Planned. Exact-current-action queries and rule-checking state; nested restoration and physical mixin receiver semantics. Can proceed independently of most telemetry work. | `6d037db6609`; account for `f66b8f17a89` |
+| 4 | 4062: semantic member names | Planned. Bounded operation categories with domain-facing contextual names; mixed-in property/collection access distinguished from actions. Depends on foundation and naming policy. | `a2ae5877c99`, `d5ecd49a1f3`, `45e01ff6f42` |
+| 5 | 4059 + relevant 4062: Wicket regions/preparation | Planned. Entity-page preparation, region rendering and action prompts; Ajax ancestry, serialization and failure cleanup. The 4062 source touches Wicket as well as core: extract the relevant portions here rather than blindly applying step 4 commits. | `a8264fd1f9b`, relevant parts of `a2ae5877c99` / `45e01ff6f42` |
+| 6 | 4062 + 4067: collection detail and volume | Planned. Table phases, rows, cells, row actions; deliver detail levels, request budgets and collection aggregates with the new detail. Depends on Wicket regions. | `8e5eaab6145`, `036a28a23c2`, `5a1dc2dd17b` |
+| 7 | 4063: semantic trace display names | Planned. Foreground entry-span naming from prioritized action/prompt/view nominations. Depends on classification, semantic naming and Wicket nominations for Wicket support. | `e17c3088ac2` |
+| 8a | 4059: audit-trail writing | Planned. Observe audit subscriber work, preserving transaction semantics and failures. Depends on foundation only. | `7961910a089` |
+| 8b | 4059: entity-change evaluation | Planned. Observe evaluation in persistence commons, preserving existing main publishing/transaction spans. Depends on foundation only. | `02786054574` |
+| 9 | 4065: application-defined spans | Planned. Public service, nested spans, suffix/name contract, no-op implementation and action identity correction. Depends on foundation, action context and naming policy. | `ea32b739d0f`, `5da64c34b57`, `f66b8f17a89` |
+| 10a | 4066: application priming hooks | Planned. Registrar, startup validation, immutable argument view, action callbacks and once-per-request entity-view callbacks. Useful independently of tracing; adapt to main's metamodel/action/Wicket lifecycles. | `19d2a36d2f9` |
+| 10b | 4066: primer observations | Planned. One span per matching callback, natural parentage, failure propagation. Depends on priming hooks and semantic naming. | `473454f2447` |
+| Separate A | 4060: introspection diagnostics | Planned. Retained introspection chain, overflow diagnostics and stable mixin traversal; assess overhead and preserve behavior. No telemetry dependency. | `fb28fa67e06` |
+| Separate B | 4061: mixin prefilter | Planned. Check applicability using type metadata before requesting full member introspection; preserve applicable contributions and ordering. Follow diagnostics for evidence, but the fix is not conceptually dependent on tracing. | `680ac40ef52` |
+
+## Dependency sketch
+
+```text
+3975 foundation ──┬── classification/correlation ──────────────┐
+                 ├── audit and entity-change observations     │
+                 └── metadata policy → semantic names ────────┤
+                                          │                  │
+                                          ├→ Wicket regions ─┼→ trace display names
+                                          │       └→ collection detail + budgets
+4058 current-action context ────────────────┴→ application spans
+priming hooks ── + foundation/semantic names ─→ primer observations
+
+metamodel diagnostics → mixin applicability prefilter (separate track)
+```
+
+## Foundation findings and decisions to retain
+
+- Main's closure can stop twice and skips stop if scope closing throws; maintenance clears state and uses finally for stop. Port behavior into main's existing helper, not its maintenance package location.
+- Main's threshold wrapper returns its delegate from fluent methods/start. Potential bypass needs a targeted reproduction; no runtime defect was claimed during exploration.
+- Main uses Boot-managed configuration; maintenance constructs a dedicated registry/tracer against agent-owned global context. The first proposal retains main's default and requires evidence for an explicitly supported agent configuration. Do not assume a Spring exporting predicate controls the agent exporter.
+- Main has property editing, transaction, publishing and JPA spans. Preserve these while adapting the maintenance features to main's interaction carrier/layers.
+- Main includes bookmarks/query descriptions in some JPA observation names and username/tenancy attributes on interactions. Maintenance's newer features deliberately use bounded domain-level metadata. Resolve the policy in step 1b, documenting any telemetry naming compatibility changes.
+- 4058 distinguishes the physical action receiver/identifier from the domain-facing identity needed for spans. The later `f66b8f17a89` correction must inform both 4058 and 4065; do not rewrite invoked identifiers to solve display naming.
+- Maintenance's 4067 defaults are `MEMBERS` detail and unlimited budget (`0`) for compatibility. Main can consider different defaults, but that is an explicit feature decision backed by representative traces, not an incidental port change.
+- Priming is an application hook for bulk loading into the current persistence context, not an ORM-specific fetch implementation. Action and view hooks must remain useful with observation disabled.
+- Wicket-only features do not imply equivalent coverage for main's web-component viewers. Extending those viewers requires a separately scoped proposal.
+
+## Tests, tooling and documentation
+
+Carry focused tests and documentation with every feature. Telemetry gates include profile off, missing exporter/agent, success, failure, cleanup and real exported ancestry. Wicket gates additionally include full-page/Ajax, serialization, reduced-detail ancestry and hard budget limits. Public invocation APIs require exact identity, checked/skipped/unknown rule status, nested restoration and mixin coverage. Metamodel fixes require applicable/inapplicable mixins and repeated deterministic initialization.
+
+Adapt the maintenance process fixture early. Sources include `8d3771bb852`, `regressiontests/tracing-compatibility`, and follow-ups `90512b829c1`, `769f13af9a5`, `523117e7de4`. Retain output-draining and bounded process waits; replace the Java 11 constraint and old telemetry pins with target-main-compatible versions. Do not import Boot 2.7's observation/bridge dependency management.
+
+Local tooling/docs sources include `acc65829bbd`, `8628d26fdc3`, `0a02d0b59d1`, `f5a499d50ef`, `d141c96edfb`, `scripts/jaeger-local-*`, `scripts/otel-local-env.sh`, its shell tests, and `adoc/micrometer-tracing-operations.adoc`. Port a main-appropriate runbook and comparison tooling as an early companion to foundation validation; do not copy the Boot 2.7 operating guide verbatim. Integrate the final guidance into main's documentation structure.
+
+## Recovering design evidence
+
+OpenSpec changes/specs were deleted during the maintenance sequence, but remain in Git:
+
+- `473d2c218c4^:openspec/changes/archive/` contains the early Boot 2.7 substrate, tracing and current-action-context designs.
+- `1a9910c3e77^:openspec/changes/archive/` contains Wicket rendering, naming, audit/evaluation, priming, application spans, volume controls and metamodel designs.
+- `1ac42dc5408^:openspec/changes/archive/` contains the later 4068 artifacts.
+
+Inspect with `git ls-tree -r --name-only <ref> openspec` and `git show <ref>:<path>`. Earlier proposals can be superseded by later implementation/fix commits; use the final maintenance code and tests as the behavior reference, with archived designs explaining intent.
+
+## Execution rules
+
+1. Refresh target main and inspect its instructions, specs, toolchain and integration changes before implementing each feature.
+2. Create a main-based branch/worktree and transfer the relevant proposal artifacts. Keep this maintenance tree free of forward-port implementation.
+3. Use source commits as provenance; split mixed-feature changes and include their fixes. Exclude OpenSpec pruning, `.mcp.json`, and unrelated local setup from feature PRs.
+4. Commit uncommitted proposal artifacts before `/opsx-apply`. Prefix implementation/proposal commits with the appropriate branch/Jira key.
+5. Record actual tests, dependency versions, remaining limitations and resulting PR/commit links here. Do not mark planned features complete solely because the maintenance implementation exists.
+
+No new tickets or PRs have been created by this planning work. Sequence numbers indicate a suggested delivery order; independent tracks can be developed separately.
+
+## Foundation implementation update (2026-09-27)
+
+Planning artifacts were committed as `13f98006d08` on `CAUSEWAY-3975-observation-foundation`. Implementation was committed as `299dcdc2234` and is under review in [PR #3814](https://github.com/apache/causeway/pull/3814), targeting `main` from remote branch `CAUSEWAY-3975-observation-foundation`. The OpenSpec change is archived; PR merge is still pending. [Validation evidence](../changes/archive/2026-09-27-reconcile-main-observation-foundation/validation.md) records the inventory, tested versions and configurations.
+
+Boot remains the default owner. The agent configuration supplies an explicit registry bridged to GlobalOpenTelemetry, excludes competing Boot SDK/tracing auto-configuration, and disables JPA duration filtering through `causeway.observation.duration-filtering-enabled=false`. Real exported traces verify parentage and no duplicate framework spans; Boot mode verifies discard behavior. This required no new production dependency.
+
+Main's current tracing handler preserves existing name casing; revisit whether any custom handler is needed for 4062 instead of copying maintenance's workaround. Step 1b (metadata/privacy/naming policy) remains planned and separate. The user guide now contains the main-specific observability runbook. Jaeger/comparison shell tooling is still a planned early companion and was not included in this foundation implementation.

@@ -53,9 +53,10 @@ public final class InteractionLayerStack {
             final Observation observation) {
         var parent = currentLayer().orElse(null);
         var interactionCarrier = new InteractionCarrierDefault(executionContext);
-        @SuppressWarnings("resource")
+        var closure = new ObservationClosure().startAndOpenScope(observation);
         var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)
-        	.addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
+                .addOnCloseListener(closure::close);
+        newLayer.interaction().putAttribute(ObservationClosure.class, closure);
         set(newLayer);
         return newLayer;
     }
@@ -80,6 +81,14 @@ public final class InteractionLayerStack {
     	} finally {
     		threadLocalLayer.remove();
     	}
+    }
+
+    public void onError(final Throwable failure) {
+        var layer = peek();
+        if (layer != null) {
+            var closure = layer.interaction().getAttribute(ObservationClosure.class);
+            if (closure != null) closure.onError(failure);
+        }
     }
 
     public boolean isEmpty() {

@@ -200,16 +200,18 @@ implements
 
         final int stackSizeWhenEntering = layerStack.size();
         openInteraction(interactionContext);
+        Throwable failure = null;
         try {
             return callInternal(callable);
+        } catch (Throwable ex) {
+            failure = ex;
+            throw ex;
         } finally {
-            //
-            // TODO: this method could theoretically throw an exception, if the flush fails in
-            //  preInteractionClosed.  It]m uncertain what to do here.  The callable executed in the try block
-            //  may be returning a Try, which could encode a failure that way.  Having this method also possibly
-            //  throw an exception seems incorrect.
-            //
-            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
+            // Restore the entry depth, including for nested calls. Pass the
+            // original failure so a flush/close failure cannot replace it.
+            // A returned Try is an ordinary result here; only thrown failures
+            // participate in this exception-precedence rule.
+            closeAfterWork(stackSizeWhenEntering, failure);
         }
     }
 
@@ -221,16 +223,16 @@ implements
 
         final int stackSizeWhenEntering = layerStack.size();
         openInteraction(interactionContext);
+        Throwable failure = null;
         try {
             runInternal(runnable);
+        } catch (Throwable ex) {
+            failure = ex;
+            throw ex;
         } finally {
-            //
-            // TODO: this method could theoretically throw an exception, if the flush fails in
-            //  preInteractionClosed.  It]m uncertain what to do here.  The callable executed in the try block
-            //  may be returning a Try, which could encode a failure that way.  Having this method also possibly
-            //  throw an exception seems incorrect.
-            //
-            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
+            // As in call(), restore the entry depth without replacing a work
+            // failure with a secondary flush/close failure.
+            closeAfterWork(stackSizeWhenEntering, failure);
         }
     }
 
@@ -274,7 +276,14 @@ implements
         try {
             return callable.call();
         } catch (Throwable e) {
-            requestRollback(e);
+            // Record the work failure and request rollback even for Error.
+            // Rollback preparation can itself fail; retain that information
+            // as suppressed while rethrowing the original throwable unchanged.
+            try {
+                requestRollback(e);
+            } catch (Throwable rollbackFailure) {
+                if (rollbackFailure != e) e.addSuppressed(rollbackFailure);
+            }
             throw e;
         }
     }
@@ -285,12 +294,44 @@ implements
         try {
             runnable.run();
         } catch (Throwable e) {
-            requestRollback(e);
+            // Same precedence as callInternal: rollback/reporting failures are
+            // secondary to the work failure. Avoid self-suppression if a
+            // collaborator happens to rethrow the very same object.
+            try {
+                requestRollback(e);
+            } catch (Throwable rollbackFailure) {
+                if (rollbackFailure != e) e.addSuppressed(rollbackFailure);
+            }
             throw e;
         }
     }
 
+    /**
+     * Closes layers opened by call/run, including their transaction and
+     * observation cleanup. If work succeeded, a cleanup failure must still
+     * propagate (for example, a failed flush). If work already failed, its
+     * throwable is being rethrown by the caller: attach the cleanup failure to
+     * it instead of throwing from finally and masking the original cause.
+     *
+     * <p>Catch Throwable because lifecycle callbacks can propagate both Error
+     * and checked exceptions via SneakyThrows. The identity check avoids Java's
+     * prohibition on adding a throwable to its own suppressed exceptions.
+     */
+    @SneakyThrows
+    private void closeAfterWork(final int stackSize, final Throwable failure) {
+        try {
+            closeInteractionLayerStackDownToStackSize(stackSize);
+        } catch (Throwable cleanupFailure) {
+            if (failure == null) throw cleanupFailure;
+            if (failure != cleanupFailure) failure.addSuppressed(cleanupFailure);
+        }
+    }
+
     private void requestRollback(final Throwable cause) {
+        // Attribute the failure to the current layer while its observation is
+        // still open. Merely marking a transaction rollback-only would not mark
+        // the interaction span as failed. This is a no-op if the stack is empty.
+        layerStack.onError(cause);
         if(layerStack.isEmpty()) {
             // seeing this code-path, when the corresponding runnable/callable
             // by itself causes the interaction stack to be closed
@@ -300,6 +341,8 @@ implements
                     cause.getMessage());
             return;
         }
+        // Nested layers share the root transaction boundary: record the error
+        // on the current layer, but request rollback on the root interaction.
         var interactionCarrier = layerStack.peek().rootLayer().interactionCarrier();
         transactionServiceSpring.requestRollback(interactionCarrier.interaction());
     }
