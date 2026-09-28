@@ -162,7 +162,7 @@ identified
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.48</lombok.version> <!-- overriding Spring -->
 
-        <momentjs.version>2.30.1-1</momentjs.version> <!-- webjar
+        <momentjs.version>2.31.0</momentjs.version> <!-- webjar
         see also
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
