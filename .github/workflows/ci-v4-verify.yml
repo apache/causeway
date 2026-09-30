@@ -54,18 +54,18 @@ jobs:
       run: |
         echo BRANCH_NAME      \: $BRANCH_NAME
 
-    - name: Set up JDK (zulu 26)
+    - name: Set up JDK (zulu 27)
       if: matrix.language == 'java'
       uses: actions/setup-java@v6
       with:
         distribution: 'zulu'
-        java-version: 26
+        java-version: 27
 
-    - name: Set up Maven (4.0.0-rc-6)
+    - name: Set up Maven (4.0.0-rc-7)
       if: matrix.language == 'java' && env.BRANCH_NAME == 'main'
       uses: stCarolas/setup-maven@v5
       with:
-        maven-version: 4.0.0-rc-6
+        maven-version: 4.0.0-rc-7
 
     - name: Print Maven Version
       if: matrix.language == 'java'
