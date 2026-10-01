@@ -409,6 +409,14 @@ public class CausewayConfiguration {
             public static class DomainObject {
 
                 /**
+                 * Default policy for Causeway JPA entity bookmark loads.
+                 * Pessimistic loading requires a transaction and acquires a write
+                 * lock until commit or rollback, including for read-only use cases.
+                 * Override per entity with @DomainObject(locking=...).
+                 */
+                private DomainObjectConfigOptions.LockingPolicy locking = DomainObjectConfigOptions.LockingPolicy.OPTIMISTIC;
+
+                /**
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
                  * sent through to {@link EntityChangesSubscriber}s and
                  * sent through to {@link EntityPropertyChangeSubscriber}.

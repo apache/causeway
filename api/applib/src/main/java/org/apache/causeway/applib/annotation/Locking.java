@@ -16,32 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.config.metamodel.facets;
+package org.apache.causeway.applib.annotation;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
-import lombok.NonNull;
-
-public final class DomainObjectConfigOptions {
-
-    public enum EntityChangePublishingPolicy {
-        ALL,
-        NONE;
-    }
-
-    public enum LockingPolicy {
-        OPTIMISTIC,
-        PESSIMISTIC;
-    }
-
-    public enum EditingObjectsConfiguration {
-        TRUE,
-        FALSE;
-    }
-    
-    public static EntityChangePublishingPolicy entityChangePublishingPolicy(
-            final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getDomainObject().getEntityChangePublishing();
-    }
-
+/**
+ * Policy for loading JPA entities by bookmark, including REST action parameters.
+ * @since 2.2 {@index}
+ */
+public enum Locking {
+    /** Preserve ordinary loading and existing ORM version checks. */
+    OPTIMISTIC,
+    /** Acquire a database write lock until the current transaction completes. */
+    PESSIMISTIC,
+    /** Explicitly use causeway.applib.annotation.domain-object.locking. */
+    AS_CONFIGURED,
+    /** Search other annotation sources, then fall back to configuration. */
+    DEFAULT
 }

@@ -96,7 +96,7 @@ When a RESTful Objects action resolves a pessimistic JPA entity reference parame
 
 ### Requirement: Failure and cached-state behavior
 
-The JPA adapter SHALL preserve provider lock and version failures and SHALL NOT automatically refresh an already-managed entity as part of applying the policy. REST reference loading SHALL retain the existing exception-to-parameter-validation-failure handling and SHALL NOT invoke the callback after a failed argument load.
+The JPA adapter SHALL preserve provider lock and version failures and SHALL NOT add explicit refresh calls around the locking `find()`. It SHALL retain the provider's state-refresh behavior and document that EclipseLink's first pessimistic load can refresh previously unlocked managed state. REST reference loading SHALL retain the existing exception-to-parameter-validation-failure handling and SHALL NOT invoke the callback after a failed argument load.
 
 #### Scenario: Provider lock failure
 - **WHEN** the JPA provider throws a lock failure while resolving an orchestration argument
@@ -106,7 +106,16 @@ The JPA adapter SHALL preserve provider lock and version failures and SHALL NOT 
 #### Scenario: Previously managed entity
 - **WHEN** a pessimistic bookmark resolves an entity already managed by the persistence context
 - **THEN** the adapter SHALL still request the locking `find()`
-- **AND** it SHALL preserve provider version-check failures without automatically refreshing local state
+- **AND** it SHALL preserve any provider version-check failures without adding adapter refresh calls
+
+#### Scenario: EclipseLink first acquisition refreshes managed state
+- **WHEN** EclipseLink first pessimistically loads an entity previously managed without a pessimistic lock
+- **THEN** the provider's refresh behavior SHALL be retained, including replacement of unflushed local changes
+- **AND** documentation SHALL instruct callers to acquire the lock before modifying orchestration state
+
+#### Scenario: EclipseLink repeated locked load
+- **WHEN** an entity is already pessimistically locked in the current EclipseLink transaction and the callback has changed its progress
+- **THEN** another bookmark load SHALL return the same entity with those callback changes retained
 
 ### Requirement: Documented policy boundary
 

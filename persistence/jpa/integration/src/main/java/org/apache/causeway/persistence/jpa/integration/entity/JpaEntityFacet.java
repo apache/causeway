@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 
@@ -38,10 +39,12 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions.LockingPolicy;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
+import org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
@@ -111,7 +114,10 @@ public class JpaEntityFacet
         val primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
 
         val entityManager = getEntityManager();
-        val entityPojo = entityManager.find(entityClass, primaryKey);
+        val lockingFacet = facetHolder().getFacet(LockingFacet.class);
+        val entityPojo = lockingFacet != null && lockingFacet.getPolicy() == LockingPolicy.PESSIMISTIC
+                ? entityManager.find(entityClass, primaryKey, LockModeType.PESSIMISTIC_WRITE)
+                : entityManager.find(entityClass, primaryKey);
         return Optional.ofNullable(entityPojo);
     }
 

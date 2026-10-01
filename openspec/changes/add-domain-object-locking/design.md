@@ -50,7 +50,7 @@ Alternatives considered: acquiring a lock in the action would be too late for re
 
 ### Cache behavior and failure handling
 
-Prove EclipseLink behavior using separate persistence contexts with shared cache enabled. A waiter resolving a previously unloaded orchestration must see the previous transaction's committed state before callback execution. Include a previously managed entity case: JPA locking `find()` may perform version checks and need not refresh all existing fields. Preserve provider failures rather than automatically refreshing managed objects and risking lost local changes. Document this distinction and require the callback resolution path to pass the concurrency test before completing implementation.
+Prove EclipseLink behavior using separate persistence contexts with shared cache enabled. A waiter resolving a previously unloaded orchestration must see the previous transaction's committed state before callback execution. EclipseLink 2.7.16 tests and source show that the first pessimistic `find()` refreshes previously unlocked managed state, including local changes, and can refresh stale versions instead of throwing a version failure. Once the entity is already pessimistically locked in that transaction, subsequent locking finds return it without refreshing. Use the provider's standard `find()` behavior without extra adapter refresh calls or vendor hints; require callbacks to resolve the lock before changing state. Test both first acquisition and repeated locked loads, and preserve any provider lock/version failures.
 
 Do not introduce timeout configuration or automatic retry. Preserve the provider exception at the adapter boundary. REST argument parsing currently wraps load failures as parameter-validation failures; document and test that existing behavior so callers do not receive a successful callback response on lock failure. Changing HTTP error classification is a separate concern.
 
@@ -61,7 +61,7 @@ Unit tests cover policy resolution, annotation inheritance/meta-annotations, exp
 ## Risks / Trade-offs
 
 - [A configured pessimistic default affects all JPA bookmark loads, including reads and parameter validation] → Default to optimistic and document the transaction and contention consequences.
-- [Cached managed state may produce a version failure or stale values] → Test fresh-context/shared-cache and already-managed cases; do not silently refresh or claim that locking reloads all state.
+- [First lock acquisition can overwrite previously unlocked local changes in EclipseLink] → Document provider behavior and resolve orchestration references before reading or modifying their state; test that repeated already-locked loads preserve callback changes.
 - [Lock waits or deadlocks] → Keep callback transactions short, test bounded contention, and retain database/provider timeout behavior.
 - [Other loading paths bypass the facet] → Explicitly document bookmark scope and require cooperating callback writers to use the same locking path.
 - [Duplicate callback delivery] → Serialization does not itself deduplicate callbacks; the application's idempotent callback implementation remains responsible.
