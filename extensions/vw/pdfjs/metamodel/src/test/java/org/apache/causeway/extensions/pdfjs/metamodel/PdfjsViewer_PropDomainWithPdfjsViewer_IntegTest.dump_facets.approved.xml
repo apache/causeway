@@ -70,6 +70,11 @@
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="reason" value="Disabled via @DomainObject annotation, reason not given."/>
       </mml:facet>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+        <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+        <mml:attr name="policy" value="OPTIMISTIC"/>
+        <mml:attr name="precedence" value="DEFAULT"/>
+      </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
         <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
         <mml:attr name="interactionAdvisors" value="Validating"/>

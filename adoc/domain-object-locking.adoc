@@ -1,0 +1,99 @@
+= Domain Object Locking
+
+Causeway can acquire a pessimistic database write lock when loading a JPA entity by bookmark.
+This includes entity references supplied as RESTful Objects action parameters.
+It is useful for serializing parallel callbacks that update the progress of a shared orchestration.
+
+== Annotation and Configuration
+
+[source,java]
+----
+@Entity
+@DomainObject(locking = Locking.PESSIMISTIC)
+public class PaymentBatchOrchestration {
+    // retain the existing @Version mapping
+}
+----
+
+The annotation attribute defaults to `Locking.DEFAULT`.
+Its values have the following meanings:
+
+[cols="1,3",options="header"]
+|===
+|Value |Meaning
+|`OPTIMISTIC` |Preserve ordinary entity loading and existing ORM version checks. This does not introduce a version mapping or request an explicit JPA optimistic lock.
+|`PESSIMISTIC` |Acquire a JPA `PESSIMISTIC_WRITE` lock when loading by bookmark, held until the transaction commits or rolls back.
+|`AS_CONFIGURED` |Explicitly select the configured policy, overriding a policy inherited from other annotation sources.
+|`DEFAULT` |Allow merged annotation resolution to find a policy in superclass or meta-annotations; otherwise use configuration.
+|===
+
+The configuration property accepts `OPTIMISTIC` or `PESSIMISTIC` and defaults to `OPTIMISTIC`:
+
+[source,properties]
+----
+causeway.applib.annotation.domain-object.locking=OPTIMISTIC
+----
+
+An explicit optimistic or pessimistic annotation policy overrides configuration.
+Entities without an applicable `@DomainObject` annotation also use configuration.
+A global pessimistic configuration affects all JPA bookmark loads, including reads, so per-entity opt-in is usually appropriate for orchestration callbacks.
+
+== REST Callback Parameters
+
+For an action accepting an orchestration reference:
+
+[source,java]
+----
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+public Orchestration<?, ?> onSuccess(
+        final Orchestration<?, ?> orchestration,
+        final String payload) {
+    orchestration.onSuccess(payload);
+    return orchestration;
+}
+----
+
+The RESTful Objects argument body uses a reference link:
+
+[source,json]
+----
+{
+  "orchestration": {
+    "value": {
+      "href": "https://host/restful/objects/payments.PaymentBatchOrchestration/123"
+    }
+  },
+  "payload": { "value": "..." }
+}
+----
+
+Causeway resolves this link to a bookmark and loads the concrete entity before parameter validation and action invocation.
+The concrete entity's policy applies even when the declared parameter is a base type.
+The request transaction retains the lock throughout callback execution and commit.
+A competing callback for the same orchestration waits for the lock or fails according to the database/provider timeout behavior.
+Callbacks for independent orchestration rows do not share an application-wide lock.
+
+== Scope and Transaction Requirements
+
+This policy applies to Causeway JPA bookmark loads, including bookmark service lookup and REST action reference parameters.
+It does not automatically apply to named queries, all-instances queries, Spring Data repositories, QueryDSL, lazy relationship loads or JDO.
+All callback writers whose decisions must serialize need to acquire the same orchestration lock before reading its progress.
+
+Pessimistic loading requires an active transaction; loading without one fails rather than silently returning an unlocked entity.
+Causeway does not start a separate transaction around the load or retry failed callbacks automatically.
+Locks end at commit or rollback and do not cover the time between separate HTTP requests or the external worker's processing interval.
+
+State refresh behavior depends on the JPA provider.
+With EclipseLink 2.7.16, the first pessimistic `find()` refreshes an entity previously managed without a pessimistic lock, including replacing unflushed local changes and updating stale state.
+Once that entity is pessimistically locked in the current transaction, subsequent locking finds return it without refreshing again, retaining the callback's changes.
+Causeway adds no explicit refresh calls around the locking `find()`.
+Resolve the callback reference and acquire its lock before application code reads or modifies orchestration state.
+Any lock or version-check failures raised by the provider remain failures.
+
+Lock and version failures propagate from the JPA adapter.
+When they occur during REST argument resolution, the existing argument-validation error path reports the failure and prevents action invocation.
+No successful callback response is produced for a failed argument load.
+
+Retain existing version mappings and keep callback transactions short.
+Database timeout and deadlock handling remain provider/deployment concerns.
+Serialization does not deduplicate callback delivery: the application's idempotent callback must still avoid applying the same line completion or publishing its final completion event repeatedly.
