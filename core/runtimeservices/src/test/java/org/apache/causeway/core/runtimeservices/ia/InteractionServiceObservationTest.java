@@ -74,12 +74,46 @@ class InteractionServiceObservationTest {
         assertEquals(2, fixture.stopped.size());
         assertNull(fixture.stopped.get(1).getError());
     }
+    @Test void identityOptionsAreIndependentAndPreserveOtherTags() {
+        for (boolean userName : new boolean[]{false, true}) {
+            for (boolean tenancy : new boolean[]{false, true}) {
+                var fixture = new Fixture(new org.apache.causeway.core.config.observation.CausewayObservationPolicy(
+                        userName, tenancy, false, java.time.Duration.ofMillis(2)));
+                var user = org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
+                        .withMultiTenancyToken("sentinel-tenant");
+                fixture.service.run(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(user), () -> {});
+                var context = fixture.stopped.get(0);
+                var name = context.getHighCardinalityKeyValue("causeway.user.name");
+                var token = context.getHighCardinalityKeyValue("causeway.user.multiTenancyToken");
+                assertEquals(userName, name != null);
+                assertEquals(tenancy, token != null);
+                if (userName) assertEquals("sentinel-user", name.getValue());
+                if (tenancy) assertEquals("sentinel-tenant", token.getValue());
+                assertNotNull(context.getLowCardinalityKeyValue("causeway.user.impersonating"));
+                assertNotNull(context.getHighCardinalityKeyValue("causeway.interaction.clock"));
+                if (!userName) assertFalse(context.getAllKeyValues().toString().contains("sentinel-user"));
+                if (!tenancy) assertFalse(context.getAllKeyValues().toString().contains("sentinel-tenant"));
+            }
+        }
+    }
+    @Test void emptyIdentityValuesAreOmittedEvenWhenEnabled() {
+        var registry = new Fixture().registry;
+        var obs = Observation.createNotStarted("test", registry);
+        var user = mock(org.apache.causeway.applib.services.user.UserMemento.class);
+        when(user.name()).thenReturn("");
+        var ic = org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(user);
+        _Observation.addTags(obs, ic, 0, new org.apache.causeway.core.config.observation.CausewayObservationPolicy(
+                true, true, false, java.time.Duration.ofMillis(2)));
+        assertNull(obs.getContext().getHighCardinalityKeyValue("causeway.user.name"));
+        assertNull(obs.getContext().getHighCardinalityKeyValue("causeway.user.multiTenancyToken"));
+    }
     private static class Fixture {
         final ObservationRegistry registry = ObservationRegistry.create();
         final ArrayList<Observation.Context> stopped = new ArrayList<>();
         final TransactionServiceSpring transactions = mock(TransactionServiceSpring.class);
         final InteractionServiceDefault service;
-        Fixture() {
+        Fixture() { this(org.apache.causeway.core.config.observation.CausewayObservationPolicy.DEFAULT); }
+        Fixture(org.apache.causeway.core.config.observation.CausewayObservationPolicy policy) {
             registry.observationConfig().observationHandler(new ObservationHandler<Observation.Context>() {
                 public boolean supportsContext(Observation.Context context) { return true; }
                 public void onStop(Observation.Context context) { stopped.add(context); }
@@ -91,7 +125,7 @@ class InteractionServiceObservationTest {
             var executionContext = mock(ExecutionContext.class, RETURNS_DEEP_STUBS);
             when(executionContext.idGenerator().interactionId()).thenAnswer(__ -> UUID.randomUUID());
             service = new InteractionServiceDefault(beanFactory, mock(ServiceInjector.class), transactions,
-                    mock(ClockService.class), () -> null, executionContext, new CausewayObservationIntegration(registry));
+                    mock(ClockService.class), () -> null, executionContext, new CausewayObservationIntegration(registry, policy));
         }
     }
 }

@@ -54,20 +54,26 @@ import io.micrometer.observation.ObservationRegistry;
  *        observations to the chosen tracing pipeline and parent context; the
  *        registry is not itself an SDK or exporter. A null registry is treated
  *        as no-op for manually constructed instances.
- * @param durationFilteringEnabled whether {@link #withTimeThreshold} wraps
- *        observations in Causeway's duration-discard policy. Configured by
- *        {@code causeway.observation.duration-filtering-enabled}, defaulting to
- *        true for the Spring-managed export predicate. Set false for an
- *        agent-owned exporter, which does not consume that predicate. This is
- *        independent of observation activation: false retains short spans
- *        rather than turning tracing off, and does not change sampling.
+ * @param policy metadata and duration settings, independent of activation and
+ *        sampling. Duration filtering is opt-in and requires an exporter that
+ *        consumes the Spring-managed discard predicate.
  */
 public record CausewayObservationIntegration(
-        ObservationRegistry observationRegistry, boolean durationFilteringEnabled) {
+        ObservationRegistry observationRegistry, CausewayObservationPolicy policy) {
 
-    /** Retains the existing duration-filtering default for programmatic callers. */
     public CausewayObservationIntegration(final ObservationRegistry observationRegistry) {
-        this(observationRegistry, true);
+        this(observationRegistry, CausewayObservationPolicy.DEFAULT);
+    }
+
+    /** Compatibility constructor for callers explicitly selecting duration filtering. */
+    public CausewayObservationIntegration(final ObservationRegistry observationRegistry,
+            final boolean durationFilteringEnabled) {
+        this(observationRegistry, new CausewayObservationPolicy(false, false,
+                durationFilteringEnabled, CausewayObservationPolicy.DEFAULT.jpaDurationThreshold()));
+    }
+
+    public boolean durationFilteringEnabled() {
+        return policy.durationFilteringEnabled();
     }
 
     public CausewayObservationIntegration(
@@ -76,6 +82,7 @@ public record CausewayObservationIntegration(
     }
 
     public CausewayObservationIntegration {
+        java.util.Objects.requireNonNull(policy, "policy");
         observationRegistry = observationRegistry!=null
             ? observationRegistry
             : ObservationRegistry.NOOP;
@@ -113,12 +120,12 @@ public record CausewayObservationIntegration(
 
     /**
      * Applies the optional duration policy at the instrumentation boundary
-     * (currently JPA operations, whose caller supplies the two-millisecond
-     * threshold). When disabled, the original observation is returned unchanged.
+     * (currently JPA operations, using the configured threshold). When disabled,
+     * the original observation is returned unchanged.
      * The flag does not affect observations created without this method.
      */
     public Observation withTimeThreshold(final Observation observation, final Duration threshold) {
-        return durationFilteringEnabled
+        return durationFilteringEnabled()
                 ? new ObservationWithTimeThreshold(observation, threshold)
                 : observation;
     }
@@ -183,8 +190,6 @@ public record CausewayObservationIntegration(
     	ObservationClosure.discard(obs);
     }
 
-    //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
-    // that are way off a base-line; this would require some profiling to establish base-lines
     /**
      * Measures the observation from start to stop and marks successful work
      * below the threshold for discard. Failed work remains eligible for export
@@ -252,7 +257,7 @@ public record CausewayObservationIntegration(
             return delegate.getContext();
         }
         @Override public void stop() {
-            if(delegate.getContext().getError() == null && timer.elapsedNanos() < threshold.toNanos()) {
+            if(delegate.getContext().getError() == null && Duration.ofNanos(timer.elapsedNanos()).compareTo(threshold) < 0) {
                 discard(delegate);
             }
             delegate.stop();

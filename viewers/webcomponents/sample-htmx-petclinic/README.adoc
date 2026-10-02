@@ -47,6 +47,37 @@ The deterministic secured user receives the standard regular-user and configurat
 Sign out activation submits the host's non-visual current-CSRF POST form rather than invoking GraphQL, and the shell adds no separate visible username or logout block.
 The secured launcher preserves the same `JAVA_HOME`, `MVN`, and pass-through Maven argument behavior as `run.sh`.
 
+== Local Boot-managed tracing
+
+Start an OTLP HTTP trace receiver on `localhost:4318`, then run:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-observation.sh
+----
+
+This enables the Maven `observation` profile (adding Boot's BOM-managed OpenTelemetry starter)
+and the Spring `observation` profile (enabling Causeway observations).
+Boot owns the SDK and export; do not attach an OpenTelemetry Java agent for this launch.
+The sample exports every sampled request with sampling probability `1.0` to `http://localhost:4318/v1/traces`.
+The service name is `Causeway Pet Clinic`.
+
+Open `http://localhost:8080/htmx`, or use the Wicket comparison at `http://localhost:8080/wicket/`.
+Try opening Mary Smith, changing an owner's name and registering a pet, then inspect the traces.
+The default policy retains short JPA spans and omits username and tenancy attributes.
+The launcher deliberately leaves `causeway.observation.*` unset so those defaults are exercised.
+
+Override the endpoint or policy through the existing Maven argument passthrough, for example:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-observation.sh \
+  '-Dspring-boot.run.arguments=--causeway.observation.include-user-name=true'
+----
+
+Normal `run.sh` launches do not add the tracing starter or activate the observation profile.
+The collector and its trace UI are started separately; this launcher only runs Petclinic.
+
 == Headless Playwright acceptance
 
 The opt-in `playwright` profile adds Playwright for Java only to the dedicated browser-test source set, so ordinary reactor builds do not resolve a browser or compile the Playwright suite.

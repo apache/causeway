@@ -97,25 +97,86 @@ With the agent profile but without the `observation` profile, automatic agent sp
 
 == Duration filtering and failures
 
-The existing JPA observation threshold remains two milliseconds.
-With `causeway.observation.duration-filtering-enabled=true` (the default), successful observations below that threshold are marked for discard; failed observations remain eligible for export regardless of duration.
+Duration filtering is disabled by default, so short successful JPA parents remain available when their children are exported.
+This can increase span volume compared with the previous default.
+It does not override sampling, exporter failures or application-defined filtering.
+
+To opt into the lossy Boot-managed duration filter:
+
+[source,yaml]
+----
+causeway:
+  observation:
+    duration-filtering-enabled: true
+    jpa-duration-threshold: 2ms
+----
+
+The threshold defaults to `2ms` and accepts nonnegative durations; `0ms` suppresses no spans by duration.
+Malformed or negative thresholds fail startup, including when filtering is disabled.
+Successful JPA observations strictly below the configured threshold are marked for discard; observations at or above it and failed observations remain eligible for export.
 The Boot-managed export predicate honors that marker.
 
+Filtering can leave children whose parent span was suppressed: discarding a JPA parent cannot retract an independently exported JDBC child.
+This option does not implement tail sampling or a per-request span budget.
+
 The agent-owned exporter does not consume Spring's span-export predicates.
-Set `duration-filtering-enabled=false` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
-The setting controls Causeway's JPA duration optimization, not agent sampling or application-created observations.
+Keep `duration-filtering-enabled=false` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
+The setting controls Causeway's JPA duration policy, not agent sampling or application-created observations.
 An explicitly discarded observation is still subject to the exporter's filtering capabilities.
 
-Duration-based export filtering can leave children whose parent span was suppressed.
-This change retains the existing Boot-mode policy; it does not implement tail sampling or a per-request span budget.
+== Observation names and metadata migration (CAUSEWAY-4096)
+
+Micrometer's operation name identifies an operation category and its meters.
+The contextual name is a separate, human-readable label used by the tracing handler for exported span names.
+For example, `causeway.jpa.persist` is the operation name and `Persist com.example.Customer` is its contextual/exported name.
+Static entity type, member identifier and declared query name can appear in contextual names and the attributes `causeway.entity.type`, `causeway.member.id` and `causeway.query.name`.
+Bookmarks, instance identifiers, titles, query descriptions and query arguments are excluded from these Causeway-generated fields.
+
+[cols="2,2,2",options="header"]
+|===
+|Previous observation name |Operation name |Contextual/exported name
+|`Fetch by Bookmark (...)` |`causeway.jpa.fetch-by-bookmark` |`Fetch by Bookmark <entity type>`
+|`Fetch all Instances (...)` (all instances) |`causeway.jpa.fetch-all` |`Fetch all Instances <entity type>`
+|`Fetch all Instances (...)` (named query) |`causeway.jpa.named-query` |`Named Query <entity type> <query name>`
+|`Persist (type=...)` |`causeway.jpa.persist` |`Persist <entity type>`
+|`Refresh (type=...)` |`causeway.jpa.refresh` |`Refresh <entity type>`
+|`Remove (type=...)` |`causeway.jpa.remove` |`Remove <entity type>`
+|`Detach (type=...)` |`causeway.jpa.detach` |`Detach <entity type>`
+|`Action Invocation (...)` |`causeway.member.action` |`Action <member identifier>`
+|`Property Update (...)` |`causeway.member.property-update` |`Property Update <member identifier>`
+|`Execution Publishing (subscribers=N)` |`causeway.execution.publish` |`Execution Publishing`
+|===
+
+Update meter queries using the operation names and trace searches using contextual names or attributes.
+Legacy observations are not emitted alongside the replacements.
+Other existing fixed operation names are unchanged.
+Missing static member identifiers are omitted; runtime object data is never a fallback.
+Publishing counts are emitted as `causeway.execution.subscriber-count` high-cardinality data rather than a meter dimension or part of a name.
+
+Causeway no longer emits username and multitenancy token by default.
+Each can be enabled independently:
+
+[source,yaml]
+----
+causeway:
+  observation:
+    include-user-name: true
+    include-multi-tenancy-token: true
+----
+
+These options retain the existing `causeway.user.name` and `causeway.user.multiTenancyToken` attribute keys for nonempty values.
+High-cardinality attributes are still exported; the classification is not a redaction mechanism.
+Impersonation status and locale metadata remain available.
+These policies govern Causeway's instrumentation, not metadata emitted by application observations, agents, JDBC instrumentation or collectors.
 
 == Validated baseline and regression fixture
 
-The foundation fixture validates Boot 4.2.0-M1, Micrometer Observation 1.18.0-M1, Micrometer Tracing 1.8.0-M1, OpenTelemetry API/SDK 1.64.0, agent 2.31.1, Java 25.0.3 and Maven 3.9.13.
+The foundation fixture validates Boot 4.2.0-M1, Micrometer Observation 1.18.0-M1, Micrometer Tracing 1.8.0-M1, OpenTelemetry API/SDK 1.64.0, agent 2.31.1, Java 25.0.4 and Maven 3.9.13.
 These are the tested versions, not a requirement to override the application's Causeway BOM.
 
-The child-process fixture uses production interaction and action services with mocked non-telemetry collaborators, a local JDK HTTP server, H2, and a local OTLP receiver.
-It proves agent HTTP/framework/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration filtering, inactive-profile behavior and operation without an agent/exporter.
+The child-process fixture uses production interaction and action services and the JPA facet with mocked non-telemetry collaborators, a local JDK HTTP server, H2, and a local OTLP receiver.
+Its JPA backend is controlled; agent mode instruments real H2 JDBC automatically, while Boot mode explicitly wraps the SQL call in a fixture observation.
+It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration filtering, inactive-profile behavior and operation without an agent/exporter.
 It does not prove every servlet container or viewer integration.
 
 From the repository root, after building the required main artifacts:

@@ -57,6 +57,7 @@ module org.apache.causeway.core.config {
     requires spring.boot.autoconfigure;
     requires org.slf4j;
 
+    opens org.apache.causeway.core.config.observation to spring.core;
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
     opens org.apache.causeway.core.config.environment to spring.core;
 }
