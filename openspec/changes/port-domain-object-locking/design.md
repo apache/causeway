@@ -64,7 +64,8 @@ Document the feature in Antora's DomainObject annotation reference and associate
 
 Implement on a dedicated branch based on main in the main worktree, committing proposal artifacts before applying. Existing applications need no changes. Applications requiring serialized callback access opt in with `@DomainObject(locking = Locking.PESSIMISTIC)` and retain version mappings. Reverting to optimistic policy restores ordinary bookmark loading. No data migration is required.
 
-## Open Questions
+## Verification Findings
 
-- Confirm first-acquisition refresh, stale-version handling, and repeated locked loads on main's EclipseLink 5.0.2 during implementation.
-- Confirm the exact approval snapshot set affected by main's installed facets; the maintenance correction commit identifies candidate modules rather than replacement files.
+EclipseLink 5.0.2 passes the ported first-acquisition refresh, stale-state refresh, and repeated locked-load regressions with the existing H2 regression database and shared cache enabled. The maintenance cached-state contract therefore remains applicable to main.
+
+Main's affected approval set is the same five files identified by the maintenance correction commit, with 55 locking facets in the domainmodel snapshot and six across the four PDF.js snapshots. Regeneration changed only those facet blocks. Focused validation commands and results are recorded in tasks.md.

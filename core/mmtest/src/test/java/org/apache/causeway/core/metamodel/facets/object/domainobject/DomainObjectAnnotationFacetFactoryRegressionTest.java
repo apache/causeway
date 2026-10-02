@@ -16,32 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.config.metamodel.facets;
+package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
-import org.jspecify.annotations.NonNull;
-
-public final class DomainObjectConfigOptions {
-
-    public enum EntityChangePublishingPolicy {
-        ALL,
-        NONE;
-    }
-
-    public enum LockingPolicy {
-        OPTIMISTIC,
-        PESSIMISTIC;
-    }
-
-    public enum EditingObjectsConfiguration {
-        TRUE,
-        FALSE;
-    }
-
-    public static EntityChangePublishingPolicy entityChangePublishingPolicy(
-            final @NonNull CausewayConfiguration configuration) {
-        return configuration.applib().annotation().domainObject().entityChangePublishing();
-    }
-
+/** Makes the existing abstract suite executable alongside locking policy regressions. */
+class DomainObjectAnnotationFacetFactoryRegressionTest extends DomainObjectAnnotationFacetFactoryTest {
 }

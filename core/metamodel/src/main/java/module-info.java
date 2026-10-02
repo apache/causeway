@@ -42,6 +42,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.members.layout.group;
     exports org.apache.causeway.core.metamodel.facets.members.publish.command;
     exports org.apache.causeway.core.metamodel.facets.members.publish.execution;
+    exports org.apache.causeway.core.metamodel.facets.object.locking;
     exports org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
     exports org.apache.causeway.core.metamodel.facets.object.callbacks;
     exports org.apache.causeway.core.metamodel.facets.object.domainobject;
