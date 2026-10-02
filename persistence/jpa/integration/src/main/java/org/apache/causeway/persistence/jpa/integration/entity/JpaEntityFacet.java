@@ -32,12 +32,14 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
+import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions.LockingPolicy;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
+import org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
@@ -48,6 +50,7 @@ import org.springframework.data.jpa.repository.JpaContext;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceUnitUtil;
 import jakarta.persistence.TypedQuery;
 import lombok.Getter;
@@ -122,7 +125,11 @@ class JpaEntityFacet
         return observationProvider.get("Fetch by Bookmark (%s)".formatted(bookmark))
             .observe(()->{
                 var primaryKey = primaryKeyType.destring(bookmark.identifier());
-                return Optional.ofNullable(getEntityManager().find(entityClass, primaryKey));
+                var policy = facetHolder().lookupFacet(LockingFacet.class)
+                        .map(LockingFacet::getPolicy).orElse(LockingPolicy.OPTIMISTIC);
+                return Optional.ofNullable(policy == LockingPolicy.PESSIMISTIC
+                        ? getEntityManager().find(entityClass, primaryKey, LockModeType.PESSIMISTIC_WRITE)
+                        : getEntityManager().find(entityClass, primaryKey));
             });
     }
 

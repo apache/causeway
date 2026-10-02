@@ -438,6 +438,14 @@ public record CausewayConfiguration(
 
             public record DomainObject(
                 /**
+                 * Default locking policy for Causeway JPA bookmark loads.
+                 * Pessimistic loads require an active transaction and acquire a write lock.
+                 * Overridden by {@link DomainObject#locking()}.
+                 */
+                @DefaultValue("OPTIMISTIC")
+                DomainObjectConfigOptions.LockingPolicy locking,
+
+                /**
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
                  * sent through to {@link EntityChangesSubscriber}s and
                  * sent through to {@link EntityPropertyChangeSubscriber}.

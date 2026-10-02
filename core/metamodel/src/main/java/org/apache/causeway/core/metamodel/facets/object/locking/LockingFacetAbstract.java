@@ -16,32 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.config.metamodel.facets;
+package org.apache.causeway.core.metamodel.facets.object.locking;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
+import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
+import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions.LockingPolicy;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public final class DomainObjectConfigOptions {
+import lombok.Getter;
 
-    public enum EntityChangePublishingPolicy {
-        ALL,
-        NONE;
+public abstract class LockingFacetAbstract extends FacetAbstract implements LockingFacet {
+
+    @Getter
+    private final LockingPolicy policy;
+
+    protected LockingFacetAbstract(final FacetHolder holder, final LockingPolicy policy) {
+        super(LockingFacet.class, holder);
+        this.policy = policy;
     }
 
-    public enum LockingPolicy {
-        OPTIMISTIC,
-        PESSIMISTIC;
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        LockingFacet.super.visitAttributes(visitor);
+        visitor.accept("policy", policy);
     }
-
-    public enum EditingObjectsConfiguration {
-        TRUE,
-        FALSE;
-    }
-
-    public static EntityChangePublishingPolicy entityChangePublishingPolicy(
-            final @NonNull CausewayConfiguration configuration) {
-        return configuration.applib().annotation().domainObject().entityChangePublishing();
-    }
-
 }

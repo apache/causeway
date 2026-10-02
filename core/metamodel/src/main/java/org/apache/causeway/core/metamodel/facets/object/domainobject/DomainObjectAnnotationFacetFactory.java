@@ -69,6 +69,7 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.Edi
 import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
@@ -178,6 +179,7 @@ implements
 
         var domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
 
+        processLocking(domainObjectIfAny, processClassContext);
         processEntityChangePublishing(domainObjectIfAny, processClassContext);
         processAutoComplete(domainObjectIfAny, processClassContext);
         processBounded(domainObjectIfAny, processClassContext);
@@ -185,6 +187,12 @@ implements
         processNature(domainObjectIfAny, processClassContext);
         processLifecycleEvents(domainObjectIfAny, processClassContext);
         processDomainEvents(domainObjectIfAny, processClassContext);
+    }
+
+    void processLocking(final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
+        LockingFacetForDomainObjectAnnotation.create(
+                domainObjectIfAny.map(DomainObject::locking), getConfiguration(), processClassContext.facetHolder());
     }
 
     void processEntityChangePublishing(
