@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -17,16 +16,15 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -euo pipefail
-
-ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-
-if [[ -z "${JAVA_HOME:-}" && -x /usr/libexec/java_home ]]; then
-  export JAVA_HOME="$(/usr/libexec/java_home -v 21)"
-fi
-
-exec "${MVN:-mvn}" \
-  -T1C \
-  -f "$ROOT/viewers/webcomponents/pom.xml" \
-  -Prun-sample-htmx-petclinic \
-  "$@"
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    uid: causeway-prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      httpMethod: POST
+      timeInterval: 10s

@@ -31,7 +31,7 @@ Both modes verify exported contextual names, a single JPA span beneath each acti
 
 Explicit Boot filtering drops short successful JPA parents while their JDBC children remain. Default-disabled filtering retains these parents. This does not guarantee completeness under external sampling/export filtering, and the agent exporter still does not consume Spring's discard predicate. No collector buffering or ancestry-aware suppression is claimed.
 
-The full repository suite and viewer-specific telemetry tests were not run; selected existing regression suites cover property, wrapper and JPA publishing behavior. Later semantic mixin names, interaction correlation, trace-root naming and collection budgets remain separate roadmap work.
+At the initial implementation checkpoint, the full repository suite and viewer-specific telemetry tests were not run; selected existing regression suites cover property, wrapper and JPA publishing behavior. Later semantic mixin names, interaction correlation, trace-root naming and collection budgets remain separate roadmap work.
 
 ## Reproducible commands
 
@@ -45,3 +45,21 @@ bash ./preview.sh -A
 openspec validate standardize-observation-policy --strict
 git diff --check
 ```
+
+## Local verification follow-up (2026-10-05)
+
+Added independent ephemeral Jaeger and Prometheus/Grafana helpers and a single Petclinic `run-with-telemetry.sh` launcher with Boot-managed and optional agent-managed tracing. Micrometer exports metrics in both modes. The sample agent profile disables Boot's OTEL environment mapping so the agent's `OTEL_METRICS_EXPORTER=none` does not disable Micrometer metrics. The M3 how-to and sample README document the runnable setup and scenario expectations. These sample-only dependencies do not change core SDK ownership.
+
+Manual testing exposed a Wicket scope-ordering defect: Wicket ends request listeners in reverse registration order, so the former stop handler closed the outer scope before the interaction. Closure now runs in the start listener's end callback, after interaction cleanup; the stop listener still captures metrics before cleanup. `TelemetryRequestCycleTest` reproduces both successful and failed request scope restoration failures against the old implementation and passes with the fix. The Wicket viewer module test run reports 19 tests, 0 failures/errors, 3 skipped.
+
+Additional checks passed: offline observation-profile Petclinic reactor package (tests skipped); launcher shell syntax and all 12 supported mode/scenario combinations using stubs; actual Boot environment-postprocessor verification that agent settings retain Micrometer metrics; Docker Compose configuration validation; M3 guide and sample README AsciiDoc conversion; internal guide links; whitespace checks. Live Docker access was unavailable to the assistant. The user manually verified the local services, corrected Jaeger v3 readiness endpoint, Grafana after disabling plugin auto-updates, newly nested Wicket/GraphQL traces, and identity/filtering scenarios, and accepted the result. The full repository suite was not rerun.
+
+Follow-up commands:
+
+```sh
+mvn -o -f viewers/wicket/viewer/pom.xml test
+mvn -o -f viewers/webcomponents/pom.xml -pl sample-htmx-petclinic -am -Pobservation -DskipTests -Dmaven.javadoc.skip=true -Dmaven.source.skip=true package
+./scripts/metrics-local.sh config
+```
+
+Archive checkpoint: repeated the observation-profile Petclinic package and Wicket module tests successfully on 2026-10-05; guide rendering, shell syntax and strict change validation passed. Git staging was blocked by the session's read-only Git metadata (`.git/index.lock`: Operation not permitted), so no pre-archive or archive commit could be created by the assistant. Spec sync and the archive move were completed in the working tree for the user to commit locally.

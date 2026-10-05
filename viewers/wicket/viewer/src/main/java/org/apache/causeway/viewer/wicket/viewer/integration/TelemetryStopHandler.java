@@ -24,6 +24,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 
 /**
+ * Captures request metrics before the interaction is torn down. The outer
+ * observation is closed later by {@link TelemetryStartHandler#onEndRequest},
+ * because Wicket invokes end-of-request listeners in reverse order.
+ *
  * @since 4.0
  */
 public record TelemetryStopHandler(
@@ -39,7 +43,6 @@ implements IRequestCycleListener {
                 requestCycle2.observationClosure.tag("numberEntitiesDirtied", metricsService::numberEntitiesDirtied);
             }
 
-            requestCycle2.observationClosure.close();
         }
     }
 

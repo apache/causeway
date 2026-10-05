@@ -47,36 +47,73 @@ The deterministic secured user receives the standard regular-user and configurat
 Sign out activation submits the host's non-visual current-CSRF POST form rather than invoking GraphQL, and the shell adds no separate visible username or logout block.
 The secured launcher preserves the same `JAVA_HOME`, `MVN`, and pass-through Maven argument behavior as `run.sh`.
 
-== Local Boot-managed tracing
+== Local traces and metrics
 
-Start an OTLP HTTP trace receiver on `localhost:4318`, then run:
-
-[source,bash]
-----
-./viewers/webcomponents/sample-htmx-petclinic/run-observation.sh
-----
-
-This enables the Maven `observation` profile (adding Boot's BOM-managed OpenTelemetry starter)
-and the Spring `observation` profile (enabling Causeway observations).
-Boot owns the SDK and export; do not attach an OpenTelemetry Java agent for this launch.
-The sample exports every sampled request with sampling probability `1.0` to `http://localhost:4318/v1/traces`.
-The service name is `Causeway Pet Clinic`.
-
-Open `http://localhost:8080/htmx`, or use the Wicket comparison at `http://localhost:8080/wicket/`.
-Try opening Mary Smith, changing an owner's name and registering a pet, then inspect the traces.
-The default policy retains short JPA spans and omits username and tenancy attributes.
-The launcher deliberately leaves `causeway.observation.*` unset so those defaults are exercised.
-
-Override the endpoint or policy through the existing Maven argument passthrough, for example:
+With Docker Desktop (or a Docker daemon) and Docker Compose v2+ available, run from the repository root:
 
 [source,bash]
 ----
-./viewers/webcomponents/sample-htmx-petclinic/run-observation.sh \
-  '-Dspring-boot.run.arguments=--causeway.observation.include-user-name=true'
+./scripts/jaeger-local.sh start
+./scripts/metrics-local.sh start
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
 ----
 
-Normal `run.sh` launches do not add the tracing starter or activate the observation profile.
-The collector and its trace UI are started separately; this launcher only runs Petclinic.
+This starts Jaeger and Prometheus/Grafana, then runs Petclinic with Boot-managed tracing and Micrometer metrics.
+Open `http://localhost:8080/htmx` (or `/wicket/` for comparison).
+Traces go to `http://localhost:16686`, under service `Causeway Pet Clinic`.
+Metrics go to Prometheus at `http://localhost:9090`; Grafana is at `http://localhost:3000` with initial login `admin` / `admin` and Prometheus already provisioned.
+After exercising the app, wait 10–20 seconds and query `jvm_memory_used_bytes` or `count by (__name__) ({__name__=~"causeway_.*"})` in Grafana Explore.
+
+Stop Petclinic with Ctrl-C and switch tracing ownership by adding one flag:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
+----
+
+The agent owns traces and automatic HTTP/JDBC instrumentation; Micrometer still owns metrics.
+The optional registry bridge joins Causeway observations to agent context and the agent profile excludes competing Boot tracing configuration.
+Agent metrics/log export and Causeway duration filtering are disabled; Micrometer metrics stay enabled.
+Maven obtains agent 2.31.1 on first use, or set `OTEL_JAVAAGENT_PATH` to an existing JAR.
+
+Use the same launcher for policy checks:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --scenario username
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent --scenario username
+----
+
+Scenarios are `defaults`, `username`, `tenancy`, `identity`, `filtered`, `zero`, `negative` and `malformed`.
+The last four are Boot-only; agent mode supports the default and identity checks.
+Defaults omit identity attributes and retain short JPA spans.
+`filtered` suppresses successful JPA spans below one second; `zero` retains all by duration.
+The two invalid-duration scenarios deliberately fail startup.
+
+Check identity attributes on `Causeway Root Interaction` spans, not static-resource HTTP spans.
+The bypass user normally has no tenancy token; enabling its export does not create one.
+Compare operations on different owners to check that instance identifiers and argument values stay out of Causeway span names and metadata.
+Stop Petclinic between runs; its database is recreated each time. Keep telemetry backends running and use the time range to distinguish results.
+
+Use `SERVER_PORT=8081` to change the app port and put Maven options after `--`.
+The launcher respects `JAVA_HOME` and `MVN`, and reserves profile, agent and application-argument settings.
+
+[source,bash]
+----
+./scripts/jaeger-local.sh status
+./scripts/metrics-local.sh status
+./scripts/jaeger-local.sh logs
+./scripts/metrics-local.sh logs
+# Stop Petclinic with Ctrl-C first.
+./scripts/jaeger-local.sh stop
+./scripts/metrics-local.sh stop
+----
+
+All telemetry services bind to localhost and store runtime data temporarily.
+Stopping them discards traces, metrics and Grafana UI/password changes.
+The metrics pair uses tmpfs without persistent volumes; its Prometheus data source is provisioned again at startup.
+Each backend script manages only its own services; `run-with-telemetry.sh` runs Petclinic only.
+See the M3 `otel-howto.adoc` for the complete manual verification guide and equivalent application configuration.
 
 == Headless Playwright acceptance
 
