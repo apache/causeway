@@ -53,7 +53,7 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
  * own observations or make registry injection ambiguous.
  */
 @AutoConfiguration
-@EnableConfigurationProperties({CausewayObservationPolicy.class, CausewayExecutionPolicy.class})
+@EnableConfigurationProperties(CausewayObservationPolicy.class)
 @ConditionalOnClass(ObservationRegistry.class)
 @Import({
 	DiscardedSpanExportingPredicate.class
@@ -95,13 +95,12 @@ public class CausewayObservationAutoConfiguration {
     @Bean
     public CausewayTraceClassifier causewayTraceClassifier(
             final ObjectProvider<Tracer> tracers,
-            final Environment environment,
-            final CausewayExecutionPolicy policy) {
+            final Environment environment) {
         // Do not resolve application tracers when inactive, including ambiguous ones.
         var tracer = environment.acceptsProfiles(Profiles.of("observation"))
                 ? tracers.getIfAvailable(() -> Tracer.NOOP)
                 : Tracer.NOOP;
-        return new CausewayTraceClassifier(tracer, policy.mode().key());
+        return new CausewayTraceClassifier(tracer);
     }
 
     /**

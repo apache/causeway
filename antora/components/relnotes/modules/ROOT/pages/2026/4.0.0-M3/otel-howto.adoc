@@ -172,20 +172,6 @@ The UUID can correlate command replay with the originating command; replay retai
 Sampling, export failures, time ranges and Jaeger's in-memory retention can limit matches; restarting Jaeger loses earlier traces.
 Neither attribute adds an interaction UUID or execution-mode label to Causeway's Micrometer meters.
 
-The attribute key can be changed without changing the values `foreground` and `background`.
-Stop Petclinic and restart, for example:
-
-[source,bash]
-----
-CAUSEWAY_EXECUTION_MODE_KEY=app.execution.mode \
-  ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
-----
-
-This binds `causeway.execution.mode.key`; it also works with `--agent`.
-Inspect new HTTP spans for `app.execution.mode=foreground` and use that key in searches.
-The default key is replaced, not emitted alongside it; empty or whitespace-only keys fail startup.
-Unset any exported override before returning to the default examples.
-
 [[verification-scenarios]]
 === Select a verification scenario
 
@@ -381,7 +367,7 @@ mvn -f regressiontests/tracing-compatibility/pom.xml \
 ----
 
 This fixture starts a servlet container, a Quartz scheduler and its own temporary OTLP receiver.
-It checks Boot-provided and agent-instrumented entry spans with both default and custom keys, and root interaction correlation after command DTO identity replacement.
+It checks Boot-provided and agent-instrumented entry spans using `causeway.execution.mode`, and root interaction correlation after command DTO identity replacement.
 Business collaborators are controlled test doubles; this is not a full persisted-command replay test.
 It asserts exported trace data directly and does not send traces to your local Jaeger.
 In an instrumented application, search Jaeger separately for `causeway.execution.mode=background` and for the replayed command's `causeway.interaction.id`, using *All Span Names*.

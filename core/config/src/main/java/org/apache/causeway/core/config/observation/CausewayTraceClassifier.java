@@ -24,6 +24,8 @@ import io.micrometer.tracing.Tracer;
 
 /** Tags an existing entry span using the application's tracing bridge; never creates a span or scope. */
 public final class CausewayTraceClassifier {
+    public static final String EXECUTION_MODE_KEY = "causeway.execution.mode";
+
     public enum ExecutionMode {
         FOREGROUND("foreground"), BACKGROUND("background");
         private final String value;
@@ -31,15 +33,13 @@ public final class CausewayTraceClassifier {
     }
 
     private final Tracer tracer;
-    private final String key;
 
-    public CausewayTraceClassifier(Tracer tracer, String key) {
+    public CausewayTraceClassifier(Tracer tracer) {
         this.tracer = Objects.requireNonNull(tracer);
-        this.key = Objects.requireNonNull(key);
     }
 
     public void classifyCurrentSpan(ExecutionMode mode) {
         var span = tracer.currentSpan();
-        if (span != null) span.tag(key, mode.value);
+        if (span != null) span.tag(EXECUTION_MODE_KEY, mode.value);
     }
 }

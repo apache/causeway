@@ -43,7 +43,7 @@ class RunBackgroundCommandsJobTraceClassificationTest {
     }
     @Test void noCurrentSpanAllowsSuccessfulRunAndPreservesPendingLookupFailure() {
         var job = new RunBackgroundCommandsJob();
-        job.traceClassifier = new CausewayTraceClassifier(io.micrometer.tracing.Tracer.NOOP, "custom.mode");
+        job.traceClassifier = new CausewayTraceClassifier(io.micrometer.tracing.Tracer.NOOP);
         job.backgroundCommandsJobControl = mock(BackgroundCommandsJobControl.class);
         job.interactionService = mock(org.apache.causeway.applib.services.iactn.InteractionService.class);
         job.listeners = java.util.List.of();
@@ -57,7 +57,7 @@ class RunBackgroundCommandsJobTraceClassificationTest {
     }
     @Test void noCurrentSpanDoesNotPreventPausedJobExecution() {
         var job = new RunBackgroundCommandsJob();
-        job.traceClassifier = new CausewayTraceClassifier(io.micrometer.tracing.Tracer.NOOP, "custom.mode");
+        job.traceClassifier = new CausewayTraceClassifier(io.micrometer.tracing.Tracer.NOOP);
         job.backgroundCommandsJobControl = mock(BackgroundCommandsJobControl.class);
         when(job.backgroundCommandsJobControl.isPaused()).thenReturn(true);
         assertDoesNotThrow(() -> job.execute(null));

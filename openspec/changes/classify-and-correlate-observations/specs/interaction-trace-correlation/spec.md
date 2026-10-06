@@ -30,7 +30,7 @@ Correlation SHALL NOT allocate new interaction IDs, derive trace/span IDs or dis
 
 ### Requirement: Operator verification explains attribute placement
 
-The observability guide SHALL show execution-mode attributes on the applicable entry span and interaction UUID on the root interaction span. It SHALL provide separate Jaeger searches using the configured key or exact UUID with All Span Names, explain retention/sampling limitations, and distinguish runnable foreground examples from background instrumentation prerequisites.
+The observability guide SHALL show execution-mode attributes on the applicable entry span and interaction UUID on the root interaction span. It SHALL provide separate Jaeger searches using `causeway.execution.mode` or an exact UUID with All Span Names, explain retention/sampling limitations, and distinguish runnable foreground examples from background instrumentation prerequisites.
 
 #### Scenario: Find a retained trace by interaction ID
 - **WHEN** an operator copies a root interaction UUID and searches retained traces using `causeway.interaction.id=<UUID>` without a conflicting operation filter

@@ -115,18 +115,7 @@ Without a tracer or current span the classifier does nothing, and it creates no 
 An inactive observation profile disables classification too.
 An active profile requires a single/primary Micrometer tracer; a registry-only custom setup cannot classify external entry spans.
 
-Override the attribute key, retaining the two fixed values:
-
-[source,yaml]
-----
-causeway:
-  execution:
-    mode:
-      key: app.execution.mode
-----
-
-The default is `causeway.execution.mode`; blank keys are rejected even with observations inactive.
-An override replaces the default key.
+The attribute key is always `causeway.execution.mode`, with values `foreground` or `background`.
 Classification is local to the entry span and is not copied to every child or added as a metric label.
 
 `Causeway Root Interaction` carries high-cardinality `causeway.interaction.id` from the interaction's UUID.
@@ -218,7 +207,7 @@ These are the tested versions, not a requirement to override the application's C
 The child-process fixture uses production interaction and action services and the JPA facet with mocked non-telemetry collaborators, a local JDK HTTP server, H2, and a local OTLP receiver.
 Its JPA backend is controlled; agent mode instruments real H2 JDBC automatically, while Boot mode explicitly wraps the SQL call in a fixture observation.
 It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration filtering, inactive-profile behavior and operation without an agent/exporter.
-The additional entry-point fixture uses real Tomcat servlet and Quartz instrumentation with controlled business collaborators, verifying default/custom classification keys and effective replay UUIDs in both trace ownership modes.
+The additional entry-point fixture uses real Tomcat servlet and Quartz instrumentation with controlled business collaborators, verifying fixed-key classification and effective replay UUIDs in both trace ownership modes.
 It does not prove every servlet container or viewer integration, nor a full persisted-command replay.
 
 From the repository root, after building the required main artifacts:

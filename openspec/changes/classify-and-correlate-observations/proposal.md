@@ -5,16 +5,16 @@ The observation foundation and CAUSEWAY-4096 now provide reliable scopes and exp
 ## What Changes
 
 - Classify existing HTTP entry spans as `foreground` and existing command-log Quartz job entry spans as `background`, without creating extra spans or inferring execution mode from usernames or thread names.
-- Expose typed configuration `causeway.execution.mode.key`, default `causeway.execution.mode`, shared by both entry points; reject blank keys.
+- Use the fixed attribute key `causeway.execution.mode` for both entry points.
 - Add high-cardinality `causeway.interaction.id` to the existing root interaction observation, using its actual UUID, including the effective command ID after background replay replaces the initial identifier.
 - Support Boot-managed and agent-managed tracing using the existing trace owner; remain inert with the `observation` profile inactive or no current span.
-- Extend export/lifecycle tests and the M3 how-to with concrete attribute locations, Jaeger searches, custom-key checks and an honest background-job example.
+- Extend export/lifecycle tests and the M3 how-to with concrete attribute locations, Jaeger searches, an honest background-job example.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `observation-execution-classification`: Foreground/background entry-span classification, configurable attribute key, activation and trace-owner compatibility.
+- `observation-execution-classification`: Foreground/background entry-span classification, fixed attribute key, activation and trace-owner compatibility.
 - `interaction-trace-correlation`: Root interaction UUID metadata, replay identity, and retained-trace lookup guidance.
 
 ### Modified Capabilities

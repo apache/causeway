@@ -21,47 +21,40 @@ package org.apache.causeway.core.config.observation;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.env.MapPropertySource;
 
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
 
 class CausewayTraceClassifierTest {
-    @Test void bindsDefaultAndCustomKeyForBothModes() {
-        for (String key : new String[]{CausewayExecutionPolicy.DEFAULT_KEY, "app.execution"}) {
-            try (var context = context(true, key)) {
-                var tracer = mock(Tracer.class);
-                var span = mock(Span.class);
-                when(tracer.currentSpan()).thenReturn(span);
-                context.registerBean(Tracer.class, () -> tracer);
-                context.refresh();
-                assertEquals(key, context.getBean(CausewayExecutionPolicy.class).mode().key());
-                var classifier = context.getBean(CausewayTraceClassifier.class);
-                classifier.classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.FOREGROUND);
-                classifier.classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.BACKGROUND);
-                verify(span).tag(key, "foreground");
-                verify(span).tag(key, "background");
-                verifyNoMoreInteractions(span);
-            }
+    @Test void usesFixedKeyForBothModes() {
+        try (var context = context(true)) {
+            var tracer = mock(Tracer.class);
+            var span = mock(Span.class);
+            when(tracer.currentSpan()).thenReturn(span);
+            context.registerBean(Tracer.class, () -> tracer);
+            context.refresh();
+            var classifier = context.getBean(CausewayTraceClassifier.class);
+            classifier.classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.FOREGROUND);
+            classifier.classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.BACKGROUND);
+            verify(span).tag("causeway.execution.mode", "foreground");
+            verify(span).tag("causeway.execution.mode", "background");
+            verifyNoMoreInteractions(span);
         }
     }
     @Test void missingTracerOrSpanIsSafe() {
-        try (var context = context(true, null)) {
+        try (var context = context(true)) {
             context.refresh();
-            assertEquals(CausewayExecutionPolicy.DEFAULT_KEY, context.getBean(CausewayExecutionPolicy.class).mode().key());
             context.getBean(CausewayTraceClassifier.class).classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.FOREGROUND);
         }
         var tracer = mock(Tracer.class);
-        new CausewayTraceClassifier(tracer, "key").classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.BACKGROUND);
+        new CausewayTraceClassifier(tracer).classifyCurrentSpan(CausewayTraceClassifier.ExecutionMode.BACKGROUND);
         verify(tracer).currentSpan();
         verifyNoMoreInteractions(tracer);
     }
     @Test void inactiveDoesNotResolveOrMutateApplicationTracers() {
-        try (var context = context(false, null)) {
+        try (var context = context(false)) {
             var first = mock(Tracer.class);
             var second = mock(Tracer.class);
             context.registerBean("first", Tracer.class, () -> first);
@@ -73,7 +66,7 @@ class CausewayTraceClassifierTest {
     }
     @Test void primaryTracerIsUsedAndAmbiguityFails() {
         for (boolean primary : new boolean[]{false, true}) {
-            try (var context = context(true, null)) {
+            try (var context = context(true)) {
                 var first = mock(Tracer.class);
                 var second = mock(Tracer.class);
                 context.registerBean("first", Tracer.class, () -> first, bd -> bd.setPrimary(primary));
@@ -89,18 +82,9 @@ class CausewayTraceClassifierTest {
             }
         }
     }
-    @Test void blankKeysFailEvenWhenInactive() {
-        for (String key : new String[]{"", "   "}) {
-            try (var context = context(false, key)) {
-                assertThrows(org.springframework.beans.factory.BeanCreationException.class, context::refresh);
-            }
-        }
-    }
-    private AnnotationConfigApplicationContext context(boolean active, String key) {
+    private AnnotationConfigApplicationContext context(boolean active) {
         var context = new AnnotationConfigApplicationContext();
         if (active) context.getEnvironment().setActiveProfiles("observation");
-        if (key != null) context.getEnvironment().getPropertySources().addFirst(
-                new MapPropertySource("test", Map.of("causeway.execution.mode.key", key)));
         context.register(CausewayObservationAutoConfiguration.class);
         return context;
     }

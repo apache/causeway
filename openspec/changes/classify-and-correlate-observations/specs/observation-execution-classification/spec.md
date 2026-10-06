@@ -6,7 +6,7 @@ With the observation profile active and a supported tracing bridge, Causeway SHA
 
 #### Scenario: Framework HTTP request
 - **WHEN** a Wicket, GraphQL/HTMX, REST or static-resource request enters the filter under Boot-managed or agent-managed tracing
-- **THEN** its exported HTTP entry span carries `foreground` under the configured key and existing names and parentage remain intact
+- **THEN** its exported HTTP entry span carries `foreground` under `causeway.execution.mode` and existing names and parentage remain intact
 
 #### Scenario: Failure and redispatch
 - **WHEN** request processing fails or undergoes async/error redispatch
@@ -24,17 +24,13 @@ Causeway SHALL annotate an existing current entry span at the beginning of `RunB
 - **WHEN** the command-log job starts without a current span
 - **THEN** classification is a no-op and execution proceeds without requiring an SDK or exporter
 
-### Requirement: Configurable shared execution-mode key
+### Requirement: Fixed shared execution-mode key
 
-Typed Causeway configuration SHALL expose `causeway.execution.mode.key`, defaulting to `causeway.execution.mode`, and SHALL reject empty or whitespace-only values. Both classifiers SHALL use the configured key and the bounded values `foreground` and `background`. Application instrumentation SHALL be able to read the same typed setting.
+Both classifiers SHALL use the fixed attribute key `causeway.execution.mode` and the bounded values `foreground` and `background`. The key SHALL NOT be configurable.
 
-#### Scenario: Default and override
-- **WHEN** either entry point classifies a span
-- **THEN** it writes the default key unless overridden, in which case it writes only the configured key
-
-#### Scenario: Invalid key
-- **WHEN** the configured key is empty or whitespace-only
-- **THEN** startup reports an actionable configuration error
+#### Scenario: Either entry point
+- **WHEN** a servlet request or command-log job classifies a current span
+- **THEN** it writes `foreground` or `background` respectively under `causeway.execution.mode`
 
 ### Requirement: Classification respects tracing ownership and activation
 

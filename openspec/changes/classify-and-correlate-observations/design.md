@@ -5,13 +5,13 @@ Baseline inspected: `6f10ac34cac` on `CAUSEWAY-4096`, after the archived observa
 Maintenance sources:
 - `024bd33128d`: current-span foreground filter and background-command job classification.
 - `0325232a3c7`: interaction UUID on the root observation.
-- `3083a51eabd`: `causeway.execution.mode.key`. Its surrounding filter also contains later semantic-naming support, which is excluded here.
+- `3083a51eabd`: maintenance key-override configuration, intentionally omitted after user review. Its surrounding filter also contains later semantic-naming support, which is excluded here.
 
 Main differs materially: `InteractionServiceDefault.openInteractionLayer` creates root/nested observations through `InteractionLayerStack`; interaction carriers allocate command identity. `CommandExecutorServiceDefault.doExecute` later calls `setCommandDtoAndIdentifier`, replacing that identity for replay. Copying maintenance's opening-time tag would leave a stale correlation value. The recently corrected Wicket listener order must remain intact.
 
 ## Goals / Non-Goals
 
-**Goals:** bounded entry-span classification, operator-configurable classification key, trustworthy root interaction UUID correlation, and exported evidence for Boot and agent modes. Preserve inactive-profile behavior, scope cleanup, existing names and transaction semantics.
+**Goals:** bounded entry-span classification, fixed classification key, trustworthy root interaction UUID correlation, and exported evidence for Boot and agent modes. Preserve inactive-profile behavior, scope cleanup, existing names and transaction semantics.
 
 **Non-goals:** semantic naming, rendering detail, correlation baggage/MDC, cross-process identity propagation, new SDK/exporter ownership, generic scheduler instrumentation, adding metric identity labels, or forcing every span to carry classification.
 
@@ -19,7 +19,7 @@ Main differs materially: `InteractionServiceDefault.openInteractionLayer` create
 
 ### Classify the existing entry span through the configured tracing bridge
 
-Introduce a small classifier backed by the single/primary Micrometer `Tracer`, using `currentSpan().tag(key, value)` only when a span exists. Configure an inert implementation when Causeway's `observation` profile is inactive or no tracer is available. Resolve any ambiguous active tracer configuration explicitly using Spring's single/primary rules rather than guessing. Keep key/value constants and typed configuration available to consuming applications.
+Introduce a small classifier backed by the single/primary Micrometer `Tracer`, using `currentSpan().tag(key, value)` only when a span exists. Configure an inert implementation when Causeway's `observation` profile is inactive or no tracer is available. Resolve any ambiguous active tracer configuration explicitly using Spring's single/primary rules rather than guessing. Keep key/value constants available to consuming applications.
 
 Boot supplies the tracer. Refactor the documented sample agent bridge to expose its existing `OtelTracer` as a bean and inject that same instance into the observation handler; do not create a second tracer pipeline or SDK. Update the compatibility fixture equivalently. A custom registry alone without an exposed tracer still supports observations, but cannot classify non-observation entry spans; document this prerequisite.
 
@@ -37,9 +37,9 @@ Call the classifier at the start of `RunBackgroundCommandsJob.execute`, before i
 
 Boot does not automatically guarantee a Quartz entry span. Without one, the classifier is a no-op. Tests explicitly provide a recording entry span for the Boot job fixture; an agent fixture should exercise real Quartz instrumentation. Documentation must distinguish this fixture/setup requirement from out-of-the-box Petclinic behavior. Petclinic is suitable for foreground verification, not a claim of a configured command-log scheduler.
 
-### Keep the maintenance configuration contract, using main's immutable conventions
+### Use one fixed execution-mode attribute
 
-Expose `causeway.execution.mode.key`, default `causeway.execution.mode`, as typed configuration following main's record/default conventions. Use a separate `CausewayExecutionPolicy` record registered alongside `CausewayObservationPolicy`, avoiding collisions with the root configuration's execution types; generated metadata advertises the key and default. Reject empty and whitespace-only values at binding/startup. Retain the exact values `foreground` and `background`; an override replaces the emitted default key rather than adding aliases. Do not add a second observation-policy switch for the same setting. Audit `Execution`/`Mode` type-name collisions instead of copying maintenance's mutable configuration class.
+Use `causeway.execution.mode` unconditionally with the bounded values `foreground` and `background`. Following user review, omit maintenance's key override and its configuration property: a single key simplifies instrumentation, examples and searches. Expose the shared key constant on `CausewayTraceClassifier`; no execution-policy configuration record or binding is needed.
 
 ### Bind correlation to the root interaction lifecycle
 
@@ -60,9 +60,9 @@ Rejected alternatives: tagging every HTTP/JDBC span creates needless correlation
 
 ## Migration Plan
 
-Additive span attributes; names, exporters, sampling, identity opt-ins and filtering defaults remain unchanged. Applications using the documented agent bridge expose the shared tracer bean before checking classification. Override the key only when required by existing telemetry conventions and update searches accordingly. Removing the change removes the new attributes without changing domain outcomes or requiring data migration.
+Additive span attributes; names, exporters, sampling, identity opt-ins and filtering defaults remain unchanged. Applications using the documented agent bridge expose the shared tracer bean before checking classification. All applications use the same execution-mode key. Removing the change removes the new attributes without changing domain outcomes or requiring data migration.
 
-Update the M3 how-to incrementally: default foreground attributes on the HTTP span, root UUID on the interaction span, copy-and-search example, custom key, and a separately identified background fixture/example. Retain the separate Jaeger and metrics scripts and unified Petclinic launcher.
+Update the M3 how-to incrementally: default foreground attributes on the HTTP span, root UUID on the interaction span, copy-and-search example, and a separately identified background fixture/example. Retain the separate Jaeger and metrics scripts and unified Petclinic launcher.
 
 ## Open Questions
 

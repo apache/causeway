@@ -133,43 +133,40 @@ class MicrometerTracingCompatibilityTest {
     }
     @Test void servletAndQuartzEntryClassificationAndCorrelation() throws Exception {
         for (String mode : List.of("boot", "agent")) {
-            for (String key : List.of("causeway.execution.mode", "custom.execution.mode")) {
-                try (var collector = new Collector()) {
-                    launchFixture(EntryPointTracingFixture.class, mode, collector, "--causeway.execution.mode.key=" + key);
-                    var http = collector.spans.stream().filter(s -> s.getKind() == Span.SpanKind.SPAN_KIND_SERVER).toList();
-                    assertEquals(4, http.size(), names(collector.spans));
-                    http.forEach(s -> assertEquals("foreground", attribute(s, key), names(collector.spans)));
-                    var background = collector.spans.stream().filter(s -> "background".equals(attribute(s, key))).toList();
-                    assertEquals(1, background.size(), names(collector.spans));
-                    var roots = collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
-                    assertEquals(6, roots.size(), names(collector.spans));
-                    for (var root : roots) {
-                        var id = attribute(root, "causeway.interaction.id");
-                        assertNotNull(id);
-                        java.util.UUID.fromString(id);
-                        assertNull(attribute(root, key));
-                        assertIdentity(root, false);
-                    }
-                    for (var entry : http) {
-                        var security = collector.spans.stream().filter(s -> s.getName().equals("fixture.security")
-                                && s.getParentSpanId().equals(entry.getSpanId())).toList();
-                        assertEquals(1, security.size());
-                        var children = roots.stream().filter(s -> s.getParentSpanId().equals(security.get(0).getSpanId())).toList();
-                        assertEquals(1, children.size());
-                        assertEquals(entry.getTraceId(), children.get(0).getTraceId());
-                    }
-                    var replay = roots.stream().filter(s -> EntryPointTracingFixture.REPLAY_ID.toString()
-                            .equals(attribute(s, "causeway.interaction.id"))).findFirst().orElseThrow();
-                    assertEquals(background.get(0).getSpanId(), replay.getParentSpanId());
-                    assertEquals(background.get(0).getTraceId(), replay.getTraceId());
-                    for (var span : collector.spans) {
-                        if (!roots.contains(span)) assertNull(attribute(span, "causeway.interaction.id"));
-                        if (!http.contains(span) && !background.contains(span)) assertNull(attribute(span, key));
-                        if (!key.equals("causeway.execution.mode")) assertNull(attribute(span, "causeway.execution.mode"));
-                    }
-                    assertEquals(5, roots.stream().map(Span::getTraceId).distinct().count());
-                    assertEquals(1, roots.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+            try (var collector = new Collector()) {
+                launchFixture(EntryPointTracingFixture.class, mode, collector);
+                var http = collector.spans.stream().filter(s -> s.getKind() == Span.SpanKind.SPAN_KIND_SERVER).toList();
+                assertEquals(4, http.size(), names(collector.spans));
+                http.forEach(s -> assertEquals("foreground", attribute(s, "causeway.execution.mode"), names(collector.spans)));
+                var background = collector.spans.stream().filter(s -> "background".equals(attribute(s, "causeway.execution.mode"))).toList();
+                assertEquals(1, background.size(), names(collector.spans));
+                var roots = collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
+                assertEquals(6, roots.size(), names(collector.spans));
+                for (var root : roots) {
+                    var id = attribute(root, "causeway.interaction.id");
+                    assertNotNull(id);
+                    java.util.UUID.fromString(id);
+                    assertNull(attribute(root, "causeway.execution.mode"));
+                    assertIdentity(root, false);
                 }
+                for (var entry : http) {
+                    var security = collector.spans.stream().filter(s -> s.getName().equals("fixture.security")
+                            && s.getParentSpanId().equals(entry.getSpanId())).toList();
+                    assertEquals(1, security.size());
+                    var children = roots.stream().filter(s -> s.getParentSpanId().equals(security.get(0).getSpanId())).toList();
+                    assertEquals(1, children.size());
+                    assertEquals(entry.getTraceId(), children.get(0).getTraceId());
+                }
+                var replay = roots.stream().filter(s -> EntryPointTracingFixture.REPLAY_ID.toString()
+                        .equals(attribute(s, "causeway.interaction.id"))).findFirst().orElseThrow();
+                assertEquals(background.get(0).getSpanId(), replay.getParentSpanId());
+                assertEquals(background.get(0).getTraceId(), replay.getTraceId());
+                for (var span : collector.spans) {
+                    if (!roots.contains(span)) assertNull(attribute(span, "causeway.interaction.id"));
+                    if (!http.contains(span) && !background.contains(span)) assertNull(attribute(span, "causeway.execution.mode"));
+                }
+                assertEquals(5, roots.stream().map(Span::getTraceId).distinct().count());
+                assertEquals(1, roots.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
             }
         }
     }
