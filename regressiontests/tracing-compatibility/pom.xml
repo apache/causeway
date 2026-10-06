@@ -67,6 +67,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jpa-integration</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Managed by the target main BOM. -->
         <dependency>
             <groupId>io.micrometer</groupId>

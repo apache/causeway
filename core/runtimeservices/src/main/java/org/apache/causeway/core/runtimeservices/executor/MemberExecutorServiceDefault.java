@@ -30,6 +30,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
@@ -78,6 +79,8 @@ import static org.apache.causeway.core.metamodel.facets.members.publish.command.
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import io.micrometer.observation.Observation;
+
 /**
  * Default implementation of {@link MemberExecutorService}.
  *
@@ -120,12 +123,21 @@ implements MemberExecutorService {
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
 
+    private Observation memberObservation(final String operation,
+            final String label, final Identifier memberId) {
+        var observation = observationProvider.get(operation).contextualName(label);
+        // A missing static identifier must not trigger a fallback to runtime object data.
+        return memberId == null ? observation : observation
+                .contextualName(label + " " + memberId)
+                .lowCardinalityKeyValue("causeway.member.id", memberId.toString());
+    }
+
     @Override
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        var executionResult = observationProvider.get("Action Invocation (%s)"
-                .formatted(actionExecutor.owningAction().getFeatureIdentifier()))
+        var executionResult = memberObservation("causeway.member.action", "Action",
+                actionExecutor.owningAction().getFeatureIdentifier())
                 .lowCardinalityKeyValue("causeway.execution.initiatedBy", actionExecutor.interactionInitiatedBy().name())
                 //could also add action's args as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)
@@ -234,8 +246,8 @@ implements MemberExecutorService {
     public ManagedObject setOrClearProperty(
             final @NonNull PropertyModifier propertyExecutor) {
 
-        var executionResult = observationProvider.get("Property Update (%s)"
-                .formatted(propertyExecutor.owningProperty().getFeatureIdentifier()))
+        var executionResult = memberObservation("causeway.member.property-update", "Property Update",
+                propertyExecutor.owningProperty().getFeatureIdentifier())
                 .lowCardinalityKeyValue("causeway.execution.initiatedBy", propertyExecutor.interactionInitiatedBy().name())
                 //could also add property's old and new value as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)

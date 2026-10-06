@@ -74,7 +74,7 @@ class ObservationWithTimeThresholdTest {
     }
     @Test void providerPatternAndExplicitDisable() {
         var registry = registry();
-        var integration = new CausewayObservationIntegration(registry);
+        var integration = new CausewayObservationIntegration(registry, true);
         var provider = integration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName("causeway.jpa")
                 .andThen(obs -> integration.withTimeThreshold(obs, Duration.ofDays(1))));
@@ -86,6 +86,25 @@ class ObservationWithTimeThresholdTest {
         assertSame(delegate, disabled.withTimeThreshold(delegate, Duration.ofDays(1)));
         delegate.observe(() -> {});
         assertNull(delegate.getContext().getLowCardinalityKeyValue("causeway.discard"));
+    }
+    @Test void zeroThresholdRetainsInstantSuccess() {
+        var observation = new ObservationWithTimeThreshold(Observation.createNotStarted("test", registry()),
+                Duration.ZERO, new ObservationWithTimeThreshold.Timer(() -> 0L));
+        observation.observe(() -> {});
+        assertNull(observation.getContext().getLowCardinalityKeyValue("causeway.discard"));
+    }
+    @Test void largeConfiguredThresholdDoesNotOverflowDuringCleanup() {
+        var observation = new ObservationWithTimeThreshold(Observation.createNotStarted("test", registry()),
+                Duration.ofDays(1000000), new ObservationWithTimeThreshold.Timer(() -> 0L));
+        assertDoesNotThrow(() -> observation.observe(() -> {}));
+        assertNotNull(observation.getContext().getLowCardinalityKeyValue("causeway.discard"));
+    }
+    @Test void defaultPolicyDoesNotWrapOrDiscard() {
+        var integration = new CausewayObservationIntegration(registry());
+        var observation = integration.createNotStarted(getClass(), "test");
+        assertSame(observation, integration.withTimeThreshold(observation, Duration.ofDays(1)));
+        observation.observe(() -> {});
+        assertNull(observation.getContext().getLowCardinalityKeyValue("causeway.discard"));
     }
     private ObservationWithTimeThreshold observation(AtomicLong clock) {
         return new ObservationWithTimeThreshold(Observation.createNotStarted("test", registry()),

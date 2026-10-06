@@ -63,7 +63,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.runtimeservices.executor.MemberExecutorServiceDefault;
 import org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
-import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
@@ -95,7 +94,7 @@ public class MicrometerTracingAgentFixture {
             constructor.setAccessible(true);
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
-            var action = action(executionContext, integration);
+            var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
             var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
             // One worker proves that subsequent requests cannot inherit stale thread-local scopes.
             var executor = Executors.newSingleThreadExecutor();
@@ -105,7 +104,9 @@ public class MicrometerTracingAgentFixture {
                 try {
                     if (integration.observationRegistry().getCurrentObservation() != null)
                         throw new AssertionError("stale Causeway observation");
-                    interactions.call(InteractionContextFactory.testing(), () -> {
+                    interactions.call(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(
+                            org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
+                                    .withMultiTenancyToken("sentinel-tenant")), () -> {
                         members.invokeAction(action);
                         if (exchange.getRequestURI().getQuery() != null) throw new IllegalStateException("fixture failure");
                         return null;
@@ -134,12 +135,12 @@ public class MicrometerTracingAgentFixture {
             } finally { server.stop(0); executor.shutdownNow(); }
         }
     }
-    private static ActionExecutor action(ExecutionContext executionContext, CausewayObservationIntegration integration) throws Exception {
+    private static ActionExecutor action(ExecutionContext executionContext, CausewayObservationIntegration integration, boolean agent) throws Exception {
         var specification = mock(org.apache.causeway.core.metamodel.spec.ObjectSpecification.class);
         var loader = mock(org.apache.causeway.core.metamodel.specloader.SpecificationLoader.class);
         when(specification.getSpecificationLoader()).thenReturn(loader);
         when(loader.specForType(JdbcAction.class)).thenReturn(java.util.Optional.of(specification));
-        var target = ManagedObject.other(specification, new JdbcAction());
+        var target = ManagedObject.other(specification, new JdbcAction(integration, agent));
         var head = mock(InteractionHead.class);
         when(head.target()).thenReturn(target);
         var objectManager = mock(ObjectManager.class);
@@ -153,13 +154,26 @@ public class MicrometerTracingAgentFixture {
                 mock(ActionInvocationFacetAbstract.class), integration.provider(ActionExecutor.class));
     }
     public static class JdbcAction {
-        public String executeJdbc() throws Exception {
+        private final org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet jpa;
+        public JdbcAction(CausewayObservationIntegration integration, boolean agent) {
+            jpa = org.apache.causeway.persistence.jpa.integration.entity.JpaObservationFixture.create(integration,
+                    () -> {
+                        if (agent) executeSql(); // actual automatic agent JDBC instrumentation
+                        else integration.createNotStarted(JdbcAction.class, "fixture.jdbc")
+                                .lowCardinalityKeyValue("db.system", "h2").observe(JdbcAction::executeSql);
+                    });
+        }
+        public String executeJdbc() {
+            jpa.persist(new org.apache.causeway.persistence.jpa.integration.entity.JpaObservationFixture.Entity());
+            return "compatible";
+        }
+        private static void executeSql() {
             try (var connection = DriverManager.getConnection("jdbc:h2:mem:tracing;DB_CLOSE_DELAY=-1");
                     var statement = connection.createStatement();
                     var result = statement.executeQuery("SELECT 1")) {
                 if (!result.next()) throw new AssertionError("missing JDBC result");
-                return "compatible";
-            }
+                // The Boot fixture explicitly instruments JDBC; agent mode owns its automatic JDBC spans.
+            } catch (java.sql.SQLException ex) { throw new IllegalStateException(ex); }
         }
     }
     @Configuration(proxyBeanMethods = false)

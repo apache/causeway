@@ -3,8 +3,26 @@
     {
       "name": "causeway.observation.duration-filtering-enabled",
       "type": "java.lang.Boolean",
-      "defaultValue": true,
+      "defaultValue": false,
       "description": "Whether Causeway JPA observations use duration-based export filtering. Disable for agent-owned exporters that do not consume Spring span-export predicates."
+    },
+    {
+      "name": "causeway.observation.include-user-name",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Include the user name in Causeway interaction span attributes."
+    },
+    {
+      "name": "causeway.observation.include-multi-tenancy-token",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Include the multitenancy token in Causeway interaction span attributes, independently of the user name."
+    },
+    {
+      "name": "causeway.observation.jpa-duration-threshold",
+      "type": "java.time.Duration",
+      "defaultValue": "2ms",
+      "description": "Nonnegative JPA duration threshold when duration filtering is enabled. Zero retains all spans by duration."
     },
     {
       "name": "causeway.value-types.temporal.editing.date-pattern",
