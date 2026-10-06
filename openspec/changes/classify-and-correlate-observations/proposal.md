@@ -25,7 +25,7 @@ None. Existing foundation and observation-policy requirements remain in force, i
 
 Main modules: `core/config`, `core/webapp`, `core/runtimeservices` and potentially `core/metamodel` for interaction lifecycle binding; `extensions/core/commandlog/applib` for the job entry point; tracing compatibility tests; sample agent bridge and observability documentation. No new SDK/exporter, production persistence schema, dependency-version upgrade or span-name migration is intended.
 
-Source provenance: CAUSEWAY-3975 commit `024bd33128d`, CAUSEWAY-4068 commits `0325232a3c7` and `3083a51eabd`. This is a main-side adaptation, not a cherry-pick. A new Jira ticket/implementation branch has not been assigned; these ticket numbers record provenance, not a newly created ticket.
+Source provenance: CAUSEWAY-3975 commit `024bd33128d`, CAUSEWAY-4068 commits `0325232a3c7` and `3083a51eabd`. This is a main-side adaptation, not a cherry-pick. The main-side implementation uses the user-created `CAUSEWAY-4068-v4` branch under CAUSEWAY-4068.
 
 ## Non-goals
 

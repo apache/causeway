@@ -53,9 +53,24 @@ public final class InteractionLayerStack {
             final Observation observation) {
         var parent = currentLayer().orElse(null);
         var interactionCarrier = new InteractionCarrierDefault(executionContext);
+        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier);
+        if (parent == null) {
+            observation.highCardinalityKeyValue("causeway.interaction.id",
+                    newLayer.interaction().getInteractionId().toString());
+        }
         var closure = new ObservationClosure().startAndOpenScope(observation);
-        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)
-                .addOnCloseListener(closure::close);
+        newLayer.addOnCloseListener(() -> {
+            try {
+                // Replay can replace the command's opening-time identifier. Bind to
+                // this root, not whichever nested layer happens to be current.
+                if (parent == null) {
+                    observation.highCardinalityKeyValue("causeway.interaction.id",
+                            newLayer.interaction().getInteractionId().toString());
+                }
+            } finally {
+                closure.close();
+            }
+        });
         newLayer.interaction().putAttribute(ObservationClosure.class, closure);
         set(newLayer);
         return newLayer;

@@ -36,11 +36,14 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 @Profile("agent")
 public class AgentObservationConfiguration {
     @Bean
-    ObservationRegistry agentObservationRegistry() {
+    io.micrometer.tracing.Tracer agentTracer() {
         // The attached agent owns the global SDK and exporter. Do not construct another SDK here.
         var currentContext = new OtelCurrentTraceContext();
-        var tracer = new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
+        return new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
                 event -> {}, new OtelBaggageManager(currentContext, List.of(), List.of()));
+    }
+    @Bean
+    ObservationRegistry agentObservationRegistry(io.micrometer.tracing.Tracer tracer) {
         var registry = ObservationRegistry.create();
         registry.observationConfig().observationHandler(new DefaultTracingObservationHandler(tracer));
         return registry;

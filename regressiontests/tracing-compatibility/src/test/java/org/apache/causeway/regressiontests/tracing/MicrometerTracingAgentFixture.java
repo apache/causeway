@@ -179,10 +179,13 @@ public class MicrometerTracingAgentFixture {
     @Configuration(proxyBeanMethods = false)
     @Profile("agent")
     static class AgentRegistry {
-        @Bean ObservationRegistry agentObservationRegistry() {
+        @Bean io.micrometer.tracing.Tracer agentTracer() {
             var currentContext = new OtelCurrentTraceContext();
-            var tracer = new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
+            return new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
                     event -> {}, new OtelBaggageManager(currentContext, List.of(), List.of()));
+        }
+        @Bean
+        ObservationRegistry agentObservationRegistry(io.micrometer.tracing.Tracer tracer) {
             var registry = ObservationRegistry.create();
             registry.observationConfig().observationHandler(new DefaultTracingObservationHandler(tracer));
             return registry;

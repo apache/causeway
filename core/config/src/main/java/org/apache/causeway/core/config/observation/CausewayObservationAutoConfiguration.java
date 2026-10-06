@@ -33,6 +33,7 @@ import org.apache.causeway.commons.internal.observation.ObservationClosure;
 import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration.DiscardedSpanExportingPredicate;
 
 import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.tracing.Tracer;
 import io.micrometer.tracing.exporter.FinishedSpan;
 import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
@@ -52,7 +53,7 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
  * own observations or make registry injection ambiguous.
  */
 @AutoConfiguration
-@EnableConfigurationProperties(CausewayObservationPolicy.class)
+@EnableConfigurationProperties({CausewayObservationPolicy.class, CausewayExecutionPolicy.class})
 @ConditionalOnClass(ObservationRegistry.class)
 @Import({
 	DiscardedSpanExportingPredicate.class
@@ -86,6 +87,24 @@ public class CausewayObservationAutoConfiguration {
 	}
 
     /**
+     * Tags the current entry span through the same tracer used by observation
+     * handlers. Inactive profiles and missing tracers are inert; an active
+     * configuration must supply a single or primary tracer to avoid tagging
+     * an unrelated tracing pipeline. This bean creates no spans or SDK.
+     */
+    @Bean
+    public CausewayTraceClassifier causewayTraceClassifier(
+            final ObjectProvider<Tracer> tracers,
+            final Environment environment,
+            final CausewayExecutionPolicy policy) {
+        // Do not resolve application tracers when inactive, including ambiguous ones.
+        var tracer = environment.acceptsProfiles(Profiles.of("observation"))
+                ? tracers.getIfAvailable(() -> Tracer.NOOP)
+                : Tracer.NOOP;
+        return new CausewayTraceClassifier(tracer, policy.mode().key());
+    }
+
+    /**
      * Always supplies the integration used by framework consumers, including
      * when Causeway observations are disabled.
      *
@@ -95,7 +114,7 @@ public class CausewayObservationAutoConfiguration {
      * an arbitrary telemetry pipeline. When inactive, application registries are
      * not resolved or modified.
      */
-	@Bean
+    @Bean
     public CausewayObservationIntegration causewayObservationIntegration(
             final ObjectProvider<ObservationRegistry> registries,
             final Environment environment,

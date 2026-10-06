@@ -1,6 +1,6 @@
 ## Context
 
-Baseline inspected: `6f10ac34cac` on `CAUSEWAY-4096`, after the archived observation-policy change. No remote refresh or new implementation branch is implied by this proposal. Main uses Boot 4.2.0-M1 and supports an explicit agent-owned bridge; core/config already depends on Micrometer Tracing, but not the OpenTelemetry API.
+Baseline inspected: `6f10ac34cac` on `CAUSEWAY-4096`, after the archived observation-policy change. Implementation proceeds on the user-created `CAUSEWAY-4068-v4` branch under CAUSEWAY-4068. Main uses Boot 4.2.0-M1 and supports an explicit agent-owned bridge; core/config already depends on Micrometer Tracing, but not the OpenTelemetry API.
 
 Maintenance sources:
 - `024bd33128d`: current-span foreground filter and background-command job classification.
@@ -27,7 +27,7 @@ Alternative rejected: directly copying maintenance's `Span.current()` helper int
 
 ### Register classification inside HTTP instrumentation and before application/security work
 
-Use a Jakarta servlet filter across `/*`, ordered after Boot's HTTP observation filter and before nested security/viewer observations. In agent mode the agent's servlet entry span must already be current. Verify this ordering with actual exported HTTP spans, not just mocked classifier calls. Do not copy maintenance's servlet priority blindly or import its semantic trace scope.
+Use a Jakarta servlet filter across `/*`, ordered after Boot's HTTP observation filter and before nested security/viewer observations. In agent mode the agent's servlet entry span must already be current. Boot 4.2.0-M1 registers its HTTP observation filter at `HIGHEST_PRECEDENCE + 1`; register classification at `+ 2`. In the explicit agent configuration exclude `WebMvcObservationAutoConfiguration` so classification targets the actual agent HTTP entry instead of a duplicate Boot observation child. This also removes Boot HTTP request observation meters in agent mode, while other Micrometer meters remain. Verify this ordering with actual exported HTTP spans, not just mocked classifier calls. Do not copy maintenance's servlet priority blindly or import its semantic trace scope.
 
 Foreground includes Wicket, GraphQL/HTMX, REST and static resources: it denotes an HTTP entry, not necessarily a human action. Use request-dispatch semantics that prevent async/error redispatch from retagging arbitrary child spans. Classification creates no scopes and no spans; request exceptions propagate unchanged. No universal propagation to children is promised.
 
@@ -39,11 +39,11 @@ Boot does not automatically guarantee a Quartz entry span. Without one, the clas
 
 ### Keep the maintenance configuration contract, using main's immutable conventions
 
-Expose `causeway.execution.mode.key`, default `causeway.execution.mode`, as typed configuration following main's record/default conventions. Reject empty and whitespace-only values at binding/startup. Retain the exact values `foreground` and `background`; an override replaces the emitted default key rather than adding aliases. Do not add a second observation-policy switch for the same setting. Audit `Execution`/`Mode` type-name collisions instead of copying maintenance's mutable configuration class.
+Expose `causeway.execution.mode.key`, default `causeway.execution.mode`, as typed configuration following main's record/default conventions. Use a separate `CausewayExecutionPolicy` record registered alongside `CausewayObservationPolicy`, avoiding collisions with the root configuration's execution types; generated metadata advertises the key and default. Reject empty and whitespace-only values at binding/startup. Retain the exact values `foreground` and `background`; an override replaces the emitted default key rather than adding aliases. Do not add a second observation-policy switch for the same setting. Audit `Execution`/`Mode` type-name collisions instead of copying maintenance's mutable configuration class.
 
 ### Bind correlation to the root interaction lifecycle
 
-Add `causeway.interaction.id` only to the existing depth-zero `Causeway Root Interaction` observation, as high-cardinality metadata. Source it from that interaction's `getInteractionId()`; do not allocate an ID for telemetry or rename observations. Leave main's existing nested/reused-layer identity semantics unchanged, and do not assume maintenance's shared-ID stack model applies.
+Add `causeway.interaction.id` only to the existing depth-zero `Causeway Root Interaction` observation, as high-cardinality metadata. Source it from that interaction's `getInteractionId()`; do not allocate an ID for telemetry or rename observations. Leave main's existing nested/reused-layer identity semantics unchanged: child carriers share the command, but only the root observation receives this attribute.
 
 Attach the initial value once the root carrier exists, then refresh the same attribute from that root interaction immediately before its observation stops. Bind the supplier to that root instance, not to whichever layer is current at cleanup. This handles replay's identifier replacement, preserves the attribute on failures, and prevents nested interactions from overwriting the outer root. If an equivalent existing lifecycle hook provides this guarantee, reuse it rather than introducing separate ThreadLocal state. Protect scope-close/stop guarantees if correlation enrichment fails.
 
@@ -66,4 +66,4 @@ Update the M3 how-to incrementally: default foreground attributes on the HTTP sp
 
 ## Open Questions
 
-No product decision blocks implementation. Assign the main-side Jira ticket/branch before implementation; CAUSEWAY-3975/4068 are provenance. Implementation must prove filter ordering against the pinned Boot baseline and check how agent Quartz instrumentation exposes the job entry span. If either requires a contract change, update this plan before expanding scope.
+No product decision blocks implementation. The user selected branch `CAUSEWAY-4068-v4` under CAUSEWAY-4068. Export tests cover the pinned Boot filter ordering and real agent Quartz instrumentation; the background fixture uses production job/command execution with controlled persistence and domain dispatch, rather than claiming full stored-command integration.

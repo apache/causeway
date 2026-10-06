@@ -116,10 +116,13 @@ Full sampling and frequent metrics export are useful for this local verification
 
 In Jaeger, select service *Causeway Pet Clinic*, click *Find Traces*, and open a recent trace from a domain operation.
 HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
+Select the enclosing HTTP server span to see `causeway.execution.mode=foreground`; this includes static asset requests as well as domain operations.
 Expand the span tree and select *Causeway Root Interaction* to inspect its *Attributes*, such as `causeway.interaction.language`, `causeway.interaction.timezone` and `causeway.user.impersonating`.
 In this default run, `causeway.user.name` and `causeway.user.multiTenancyToken` should be absent.
 When explicitly enabled in <<verification-scenarios>>, those attributes appear on interaction spans when the corresponding user values are nonempty; they are not added to the enclosing HTTP server span.
-Static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans.
+The root interaction also has `causeway.interaction.id`, the UUID used by Causeway's interaction/command, even in the default scenario.
+It is distinct from Jaeger's trace ID and span ID, and is not copied onto the HTTP span or nested interactions.
+Static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
 
 Span display names are contextual, for example `Action <member>` or `Persist <entity type>`.
 Underlying Micrometer operation names are categories such as `causeway.member.action` and `causeway.jpa.persist`.
@@ -146,6 +149,42 @@ The second query discovers available Causeway metric names and counts their seri
 Prometheus metric names can differ from contextual span names, including dots translated to underscores.
 The optional username and tenancy attributes are high-cardinality span metadata; enabling them does not add them as Micrometer metric labels.
 Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
+
+=== Find requests and correlate interactions
+
+In Jaeger, select *All Span Names* and use the *Attributes* field for these searches separately:
+
+[source,text]
+----
+causeway.execution.mode=foreground
+----
+
+Copy the `causeway.interaction.id` from a root interaction, then replace the example UUID below with that value:
+
+[source,text]
+----
+causeway.interaction.id=12345678-1234-1234-1234-123456789abc
+----
+
+The execution mode is on the entry span and the UUID is on the root interaction span.
+Do not combine these into a same-span attribute query: no single span is required to carry both.
+The UUID can correlate command replay with the originating command; replay retains that command's effective identifier even if it replaces an ID allocated when the interaction opened.
+Sampling, export failures, time ranges and Jaeger's in-memory retention can limit matches; restarting Jaeger loses earlier traces.
+Neither attribute adds an interaction UUID or execution-mode label to Causeway's Micrometer meters.
+
+The attribute key can be changed without changing the values `foreground` and `background`.
+Stop Petclinic and restart, for example:
+
+[source,bash]
+----
+CAUSEWAY_EXECUTION_MODE_KEY=app.execution.mode \
+  ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
+
+This binds `causeway.execution.mode.key`; it also works with `--agent`.
+Inspect new HTTP spans for `app.execution.mode=foreground` and use that key in searches.
+The default key is replaced, not emitted alongside it; empty or whitespace-only keys fail startup.
+Unset any exported override before returning to the default examples.
 
 [[verification-scenarios]]
 === Select a verification scenario
@@ -256,11 +295,15 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 @Profile("agent")
 public class AgentObservationConfiguration {
     @Bean
-    ObservationRegistry agentObservationRegistry() {
+    io.micrometer.tracing.Tracer agentTracer() {
         // The attached agent owns the global SDK and exporter. Do not construct another SDK here.
         var currentContext = new OtelCurrentTraceContext();
-        var tracer = new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
+        return new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
                 event -> {}, new OtelBaggageManager(currentContext, List.of(), List.of()));
+    }
+
+    @Bean
+    ObservationRegistry agentObservationRegistry(io.micrometer.tracing.Tracer tracer) {
         var registry = ObservationRegistry.create();
         registry.observationConfig().observationHandler(new DefaultTracingObservationHandler(tracer));
         return registry;
@@ -268,7 +311,9 @@ public class AgentObservationConfiguration {
 }
 ----
 
-This registry uses the agent's global OpenTelemetry instance; it does not construct another SDK.
+The registry and entry-span classifier share this tracer bean, which uses the agent's global OpenTelemetry instance without constructing another SDK.
+A custom registry without a tracer bean can still create observations, but cannot classify agent-owned entry spans.
+When observations are active, supply a single tracer or designate a primary if multiple tracers exist.
 Add an agent-specific configuration that replaces tracing ownership while retaining Micrometer metrics:
 
 [source,yaml]
@@ -281,6 +326,7 @@ spring:
       - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.OpenTelemetryTracingAutoConfiguration
       - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.otlp.OtlpTracingAutoConfiguration
       - org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration
+      - org.springframework.boot.webmvc.autoconfigure.WebMvcObservationAutoConfiguration
 management:
   opentelemetry:
     map-environment-variables: false
@@ -293,6 +339,8 @@ causeway:
 ----
 
 The exclusions above match the Spring Boot 4.2.0-M1 baseline used by this checkout.
+The WebMVC exclusion lets the agent own the HTTP entry span without a second Boot HTTP observation around it; foreground classification then tags the agent's span.
+It also removes Boot's HTTP request observation meters in this configuration; JVM and Causeway Micrometer metrics remain available.
 Build the application with the bridge configuration included.
 Activate `observation,agent` alongside any other required application profiles and attach the agent to the application JVM:
 
@@ -314,6 +362,30 @@ java -javaagent:/absolute/path/to/opentelemetry-javaagent.jar \
 `management.opentelemetry.map-environment-variables=false` prevents Boot from mapping that agent flag onto Micrometer and disabling its metrics too.
 The shared `management.otlp.metrics.export.enabled=true` configuration therefore retains Micrometer's separate metrics pipeline.
 When returning to Boot-managed tracing, remove `-javaagent`, deactivate the `agent` profile, and unset the exported `OTEL_*` variables above so that Boot does not inherit the agent-only settings.
+
+== Verify background-command classification
+
+Petclinic's walkthrough exercises foreground requests; it does not configure a command-log scheduler.
+In an application using `RunBackgroundCommandsJob`, Causeway tags the current job entry span `causeway.execution.mode=background` before checking whether the job is paused.
+A paused run can therefore have that tag without any interaction beneath it.
+Boot mode requires application or library instrumentation to open and scope that entry span; the classifier itself creates no span, and safely does nothing without a current span.
+The Java agent can supply the entry span through its Quartz instrumentation, with the shared tracer bridge shown above.
+Other schedulers and arbitrary Quartz jobs are not automatically classified by this change.
+
+For repeatable verification without setting up a command store, first install the checkout's core, webapp and command-log artifacts, then run from the repository root:
+
+[source,bash]
+----
+mvn -f regressiontests/tracing-compatibility/pom.xml \
+  '-Dtest=MicrometerTracingCompatibilityTest#servletAndQuartzEntryClassificationAndCorrelation' test
+----
+
+This fixture starts a servlet container, a Quartz scheduler and its own temporary OTLP receiver.
+It checks Boot-provided and agent-instrumented entry spans with both default and custom keys, and root interaction correlation after command DTO identity replacement.
+Business collaborators are controlled test doubles; this is not a full persisted-command replay test.
+It asserts exported trace data directly and does not send traces to your local Jaeger.
+In an instrumented application, search Jaeger separately for `causeway.execution.mode=background` and for the replayed command's `causeway.interaction.id`, using *All Span Names*.
+The same sampling and retention limits apply as for foreground searches.
 
 == Inspect and stop the local services
 

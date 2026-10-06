@@ -44,6 +44,8 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
+import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -89,8 +91,13 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Autowired private CausewayConfiguration causewayConfiguration;
 
+    @Inject CausewayTraceClassifier traceClassifier;
+
     @Override
     public void execute(final JobExecutionContext quartzContext) {
+        // Instrumentation (for example the Java agent) owns the job entry span.
+        // Classify even paused runs, but never manufacture a span when none exists.
+        traceClassifier.classifyCurrentSpan(ExecutionMode.BACKGROUND);
 
         if (backgroundCommandsJobControl.isPaused()) {
             log.debug("currently paused");

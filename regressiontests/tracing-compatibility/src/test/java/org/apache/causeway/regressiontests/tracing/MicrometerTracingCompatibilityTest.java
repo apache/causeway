@@ -131,7 +131,56 @@ class MicrometerTracingCompatibilityTest {
             assertTrue(collector.spans.isEmpty(), names(collector.spans));
         }
     }
+    @Test void servletAndQuartzEntryClassificationAndCorrelation() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            for (String key : List.of("causeway.execution.mode", "custom.execution.mode")) {
+                try (var collector = new Collector()) {
+                    launchFixture(EntryPointTracingFixture.class, mode, collector, "--causeway.execution.mode.key=" + key);
+                    var http = collector.spans.stream().filter(s -> s.getKind() == Span.SpanKind.SPAN_KIND_SERVER).toList();
+                    assertEquals(4, http.size(), names(collector.spans));
+                    http.forEach(s -> assertEquals("foreground", attribute(s, key), names(collector.spans)));
+                    var background = collector.spans.stream().filter(s -> "background".equals(attribute(s, key))).toList();
+                    assertEquals(1, background.size(), names(collector.spans));
+                    var roots = collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
+                    assertEquals(6, roots.size(), names(collector.spans));
+                    for (var root : roots) {
+                        var id = attribute(root, "causeway.interaction.id");
+                        assertNotNull(id);
+                        java.util.UUID.fromString(id);
+                        assertNull(attribute(root, key));
+                        assertIdentity(root, false);
+                    }
+                    for (var entry : http) {
+                        var security = collector.spans.stream().filter(s -> s.getName().equals("fixture.security")
+                                && s.getParentSpanId().equals(entry.getSpanId())).toList();
+                        assertEquals(1, security.size());
+                        var children = roots.stream().filter(s -> s.getParentSpanId().equals(security.get(0).getSpanId())).toList();
+                        assertEquals(1, children.size());
+                        assertEquals(entry.getTraceId(), children.get(0).getTraceId());
+                    }
+                    var replay = roots.stream().filter(s -> EntryPointTracingFixture.REPLAY_ID.toString()
+                            .equals(attribute(s, "causeway.interaction.id"))).findFirst().orElseThrow();
+                    assertEquals(background.get(0).getSpanId(), replay.getParentSpanId());
+                    assertEquals(background.get(0).getTraceId(), replay.getTraceId());
+                    for (var span : collector.spans) {
+                        if (!roots.contains(span)) assertNull(attribute(span, "causeway.interaction.id"));
+                        if (!http.contains(span) && !background.contains(span)) assertNull(attribute(span, key));
+                        if (!key.equals("causeway.execution.mode")) assertNull(attribute(span, "causeway.execution.mode"));
+                    }
+                    assertEquals(5, roots.stream().map(Span::getTraceId).distinct().count());
+                    assertEquals(1, roots.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                }
+            }
+        }
+    }
+    private static String attribute(Span span, String key) {
+        return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
+                .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);
+    }
     private void launch(String mode, Collector collector, String... properties) throws Exception {
+        launchFixture(MicrometerTracingAgentFixture.class, mode, collector, properties);
+    }
+    private void launchFixture(Class<?> fixture, String mode, Collector collector, String... properties) throws Exception {
         boolean agent = mode.equals("agent") || mode.equals("inactive");
         var command = new ArrayList<String>();
         command.add(Path.of(System.getProperty("java.home"), "bin", "java").toString());
@@ -139,7 +188,7 @@ class MicrometerTracingCompatibilityTest {
         command.add("-javaagent:" + Path.of(org.mockito.Mockito.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
         command.add("-cp");
         command.add(System.getProperty("surefire.test.class.path", System.getProperty("java.class.path")));
-        command.add(MicrometerTracingAgentFixture.class.getName());
+        command.add(fixture.getName());
         command.add("--spring.profiles.active=" + (mode.equals("inactive") ? "agent" : agent ? "observation,agent" : "observation"));
         command.add("--management.tracing.sampling.probability=1.0");
         command.add("--management.opentelemetry.tracing.export.otlp.endpoint=" + collector.endpoint());
@@ -149,8 +198,10 @@ class MicrometerTracingCompatibilityTest {
                     "org.springframework.boot.opentelemetry.autoconfigure.OpenTelemetrySdkAutoConfiguration",
                     "org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.OpenTelemetryTracingAutoConfiguration",
                     "org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.otlp.OtlpTracingAutoConfiguration",
-                    "org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration"));
+                    "org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration",
+                    "org.springframework.boot.webmvc.autoconfigure.WebMvcObservationAutoConfiguration"));
         }
+        command.add("--management.opentelemetry.map-environment-variables=false");
         command.addAll(List.of(properties));
         var builder = new ProcessBuilder(command).redirectErrorStream(true);
         builder.environment().keySet().removeIf(key -> key.startsWith("OTEL_"));
@@ -162,7 +213,7 @@ class MicrometerTracingCompatibilityTest {
         builder.environment().put("OTEL_EXPORTER_OTLP_PROTOCOL", "http/protobuf");
         builder.environment().put("OTEL_TRACES_SAMPLER", "always_on");
         builder.environment().put("OTEL_BSP_SCHEDULE_DELAY", "100");
-        var output = Path.of("target", "fixture-" + mode + ".log");
+        var output = Path.of("target", "fixture-" + fixture.getSimpleName() + "-" + mode + ".log");
         var process = builder.start();
         var drainer = new Thread(() -> {
             try (var stream = process.getInputStream()) { Files.copy(stream, output, java.nio.file.StandardCopyOption.REPLACE_EXISTING); }
