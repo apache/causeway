@@ -52,3 +52,5 @@ JAVA_HOME=/Users/danhaywood/.sdkman/candidates/java/25.0.4-tem mvn -o \
 ```
 
 The initial builds fetched missing main dependencies online; the final verification succeeded offline. Log: `/tmp/causeway-4070-v4-verification.log`.
+
+Archive verification (2026-10-06): reran the focused reactor command above successfully against the current checkout. All eight pessimistic-locking regressions passed; the two existing JpaQueryTest skips remain. Log: `/tmp/locking-archive-validation.log`.
