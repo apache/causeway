@@ -106,24 +106,16 @@ With the agent profile but without the `observation` profile, automatic agent sp
 
 == Execution classification and interaction correlation
 
-With `observation` active, Causeway tags existing servlet entry spans `causeway.execution.mode=foreground` across all paths, including static resources.
-The filter runs after Boot HTTP instrumentation and before nested security/viewer observations; in agent mode it tags the agent's current servlet span.
-Async/error redispatch does not repeat classification.
-`RunBackgroundCommandsJob` tags its current entry span `background` before its pause check.
-Boot needs application/library job instrumentation to provide that span; the Java agent's Quartz instrumentation can provide it.
-Without a tracer or current span the classifier does nothing, and it creates no scopes, spans or SDK.
-An inactive observation profile disables classification too.
-An active profile requires a single/primary Micrometer tracer; a registry-only custom setup cannot classify external entry spans.
+With the `observation` profile active, two attributes help you find relevant traces:
 
-The attribute key is always `causeway.execution.mode`, with values `foreground` or `background`.
-Classification is local to the entry span and is not copied to every child or added as a metric label.
+* `causeway.execution.mode` identifies the entry span as `foreground` for HTTP requests (including static resources), or `background` for `RunBackgroundCommandsJob` executions.
+Background classification requires an existing job span, supplied by instrumentation such as the Java agent's Quartz support.
+* `causeway.interaction.id` appears on *Causeway Root Interaction* and contains the interaction's UUID.
+It is distinct from the trace ID and retains the command's identifier during replay, allowing you to find related executions.
 
-`Causeway Root Interaction` carries high-cardinality `causeway.interaction.id` from the interaction's UUID.
-The value is refreshed before observation stop so that command DTO replay's replacement identifier is exported.
-It is independent of username/tenancy opt-ins, and is neither a metric label nor baggage nor an HTTP/descendant attribute.
-Nested/reused interaction semantics and observation names are unchanged.
-Search Jaeger with *All Span Names*, separately for execution mode and interaction ID: these attributes belong to different spans and a same-span conjunction need not match.
-An interaction UUID is distinct from the tracing system's trace ID; sampling, export failures and backend retention can prevent correlation searches finding every execution.
+These attributes are available without enabling username or tenancy export and are not added as metric labels.
+In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
+Searches can only find traces that were sampled, exported and retained by the backend.
 
 == Duration filtering and failures
 
