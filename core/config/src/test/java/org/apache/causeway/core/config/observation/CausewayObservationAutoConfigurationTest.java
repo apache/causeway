@@ -80,41 +80,6 @@ class CausewayObservationAutoConfigurationTest {
         while (cause.getCause() != null) cause = cause.getCause();
         assertInstanceOf(NoUniqueBeanDefinitionException.class, cause);
     }
-    @Test void policyDefaultsAndProgrammaticDefaultsAgree() {
-        try (var context = context(true)) {
-            var integration = context.getBean(CausewayObservationIntegration.class);
-            assertEquals(CausewayObservationPolicy.DEFAULT, integration.policy());
-            assertEquals(integration.policy(), new CausewayObservationIntegration(ObservationRegistry.NOOP).policy());
-        }
-    }
-    @Test void bindsExplicitPolicyWithoutActivatingFrameworkObservations() {
-        try (var context = configured(java.util.Map.of(
-                "causeway.observation.jpa-duration-threshold", "7ms"))) {
-            var integration = context.getBean(CausewayObservationIntegration.class);
-            assertTrue(integration.isNoop());
-            assertEquals(new CausewayObservationPolicy(java.time.Duration.ofMillis(7)), integration.policy());
-        }
-    }
-    @Test void acceptsZeroThreshold() {
-        try (var context = configured(java.util.Map.of("causeway.observation.jpa-duration-threshold", "0ms"))) {
-            assertEquals(java.time.Duration.ZERO, context.getBean(CausewayObservationPolicy.class).jpaDurationThreshold());
-        }
-    }
-    @Test void rejectsInvalidThreshold() {
-        for (String value : new String[]{"-1ms", "not-a-duration"}) {
-            var failure = assertThrows(Exception.class, () -> configured(
-                    java.util.Map.of("causeway.observation.jpa-duration-threshold", value)));
-            assertTrue(failure.toString().contains("causeway.observation"), failure.toString());
-        }
-    }
-    private AnnotationConfigApplicationContext configured(java.util.Map<String, Object> properties) {
-        var context = new AnnotationConfigApplicationContext();
-        context.getEnvironment().getPropertySources().addFirst(
-                new org.springframework.core.env.MapPropertySource("test", properties));
-        context.register(CausewayObservationAutoConfiguration.class);
-        try { context.refresh(); return context; }
-        catch (RuntimeException | Error ex) { context.close(); throw ex; }
-    }
     private AnnotationConfigApplicationContext context(boolean active, Class<?>... userConfigs) {
         var context = new AnnotationConfigApplicationContext();
         if (active) context.getEnvironment().setActiveProfiles("observation");

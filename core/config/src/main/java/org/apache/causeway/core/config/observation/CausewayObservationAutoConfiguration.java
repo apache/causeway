@@ -22,7 +22,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -53,7 +52,6 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
  * own observations or make registry injection ambiguous.
  */
 @AutoConfiguration
-@EnableConfigurationProperties(CausewayObservationPolicy.class)
 @ConditionalOnClass(ObservationRegistry.class)
 @Import({
 	DiscardedSpanExportingPredicate.class
@@ -61,11 +59,11 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
 public class CausewayObservationAutoConfiguration {
 
 	/**
-	 * Lets the Spring-managed tracing pipeline drop spans marked by Causeway's
-	 * duration filter or an explicit discard. The marker alone does not suppress
+	 * Lets the Spring-managed tracing pipeline drop observations explicitly marked
+	 * for discard by Causeway. The marker alone does not suppress
 	 * export: the pipeline must consume this predicate. In particular, an
-	 * agent-owned exporter does not discover Spring beans, so duration filtering
-	 * is explicitly disabled in the documented agent configuration.
+	 * agent-owned exporter does not discover Spring beans, so explicit discards
+	 * are subject to that exporter's policy.
 	 */
 	public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
 		@Override
@@ -116,14 +114,10 @@ public class CausewayObservationAutoConfiguration {
     @Bean
     public CausewayObservationIntegration causewayObservationIntegration(
             final ObjectProvider<ObservationRegistry> registries,
-            final Environment environment,
-            final CausewayObservationPolicy policy) {
-        // Bind policy even with the profile inactive, so invalid configuration
-        // fails at startup. This does not resolve or modify application registries.
+            final Environment environment) {
         return new CausewayObservationIntegration(environment.acceptsProfiles(Profiles.of("observation"))
                 ? registries.getIfAvailable(() -> ObservationRegistry.NOOP)
-                : ObservationRegistry.NOOP,
-                policy);
+                : ObservationRegistry.NOOP);
     }
 
 }

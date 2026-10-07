@@ -114,3 +114,5 @@ Review follow-up (2026-10-07): username and tenancy are now automatic nonempty i
 Filtering simplification: `causeway.observation.jpa-duration-threshold` is the only filtering setting, with `0ms` disabling filtering. The launcher no longer takes `--scenario`; set `CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD` for Boot-managed runs.
 
 Classification/correlation archived on 2026-10-07 after fresh focused and tracing validation passed (45 tests), with all delta specs synced. General duration filtering is tracked in [the exploration backlog](general-span-duration-filtering.md); the narrow JPA-only threshold is being removed in a separate change.
+
+The [remove-jpa-duration-filtering](../changes/remove-jpa-duration-filtering/proposal.md) change removes the narrow JPA-only policy while preserving explicit transaction discard behavior. Replacement filtering is deferred to [general span duration filtering](general-span-duration-filtering.md).

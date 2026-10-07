@@ -6,7 +6,7 @@
 This guide starts with Boot-managed tracing and metrics, then changes tracing ownership to the OpenTelemetry Java agent.
 Both modes send traces to Jaeger and Micrometer metrics to Prometheus, with Grafana for exploration.
 Only one SDK/export pipeline owns tracing in each run.
-Start with the default configuration to see request, interaction and persistence spans, then try duration filtering in the duration-filtering example below.
+Use the configuration below to see request, interaction and persistence spans.
 
 == Start the local telemetry services
 
@@ -146,36 +146,6 @@ These attributes are _not_ added to the enclosing HTTP server span.
 Note that static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
 
 
-=== Enable duration filtering
-
-The JPA duration threshold defaults to `0ms`, which disables filtering.
-To filter short successful JPA spans, stop Petclinic with Ctrl-C, leave the telemetry services running, and set a positive threshold for the next Boot-managed run:
-
-[source,bash]
-----
-export CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=1s
-./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
-----
-
-This environment variable binds `causeway.observation.jpa-duration-threshold`.
-The example uses one second to make the filtering effect easy to see; choose a smaller threshold such as `2ms` for less aggressive filtering.
-Repeat a database-backed action and compare a new trace with one from the unfiltered run.
-Existing traces are unchanged.
-In Jaeger, look for contextual names such as *Fetch by Bookmark* and *Refresh*, followed by the entity type; these correspond to `causeway.jpa.fetch-by-bookmark` and `causeway.jpa.refresh`.
-Short successful spans with these names below the threshold should disappear when filtering is enabled, while *Transaction*, *Transaction Creation*, *Transaction Completion* and *Action* remain because they are outside the JPA duration filter.
-
-Duration filtering is a span export policy, not a guarantee about metric suppression.
-It can leave exported children whose JPA parent was discarded.
-To check context cleanup, trigger an exception during observed work, then a successful action in the same run; a rejected UI validation alone need not produce an error span.
-
-To return to the defaults, stop Petclinic and unset the overrides before restarting:
-
-[source,bash]
-----
-unset CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD
-----
-
-
 === Micrometer
 
 Underlying Micrometer operation names are categories such as `causeway.member.action` and `causeway.jpa.persist`.
@@ -251,8 +221,6 @@ The launcher sets OTLP HTTP trace export, full trace sampling and service name *
 `OTEL_SERVICE_NAME` and `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` can override the agent's trace service name and destination.
 Micrometer's destination remains the separately configured metrics URL.
 
-The launcher disables duration filtering in agent mode: the agent exporter does not consume Spring's discard predicate.
-Use Boot mode to enable duration filtering.
 Inspect a database-backed operation in Jaeger: framework spans should join automatic HTTP/JDBC context without duplicate framework export.
 The launcher reserves profile, agent and application-argument settings so conflicting Maven options cannot silently replace this wiring.
 
@@ -319,9 +287,6 @@ management:
   tracing:
     export:
       enabled: false
-causeway:
-  observation:
-    jpa-duration-threshold: 0ms
 ----
 
 The exclusions above match the Spring Boot 4.2.0-M1 baseline used by this checkout.

@@ -1,12 +1,6 @@
 {
   "properties": [
     {
-      "name": "causeway.observation.jpa-duration-threshold",
-      "type": "java.time.Duration",
-      "defaultValue": "0ms",
-      "description": "JPA duration threshold. Zero disables filtering; positive values discard shorter successful spans."
-    },
-    {
       "name": "causeway.value-types.temporal.editing.date-pattern",
       "type": "java.lang.String",
       "defaultValue": "yyyy-MM-dd"

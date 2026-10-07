@@ -78,9 +78,6 @@ management:
   tracing:
     export:
       enabled: false
-causeway:
-  observation:
-    jpa-duration-threshold: 0ms
 ----
 
 Launch the JVM with `-javaagent:/path/to/opentelemetry-javaagent.jar` and configure the agent's service name, sampler and OTLP endpoint through its normal settings.
@@ -117,33 +114,12 @@ User identity attributes are included automatically alongside interaction correl
 In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
 Searches can only find traces that were sampled, exported and retained by the backend.
 
-== Duration filtering and failures
+== JPA span retention
 
-The JPA duration threshold defaults to `0ms`, which disables filtering so short successful JPA parents remain available when their children are exported.
-This can increase span volume compared with the previous default.
-It does not override sampling, exporter failures or application-defined filtering.
-
-To opt into the lossy Boot-managed duration filter:
-
-[source,yaml]
-----
-causeway:
-  observation:
-    jpa-duration-threshold: 2ms
-----
-
-The threshold accepts nonnegative durations; `0ms` suppresses no spans by duration.
-Malformed or negative thresholds fail startup.
-Successful JPA observations strictly below the configured threshold are marked for discard; observations at or above it and failed observations remain eligible for export.
-The Boot-managed export predicate honors that marker.
-
-Filtering can leave children whose parent span was suppressed: discarding a JPA parent cannot retract an independently exported JDBC child.
-This option does not implement tail sampling or a per-request span budget.
-
-The agent-owned exporter does not consume Spring's span-export predicates.
-Keep `jpa-duration-threshold=0ms` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
-The setting controls Causeway's JPA duration policy, not agent sampling or application-created observations.
-An explicitly discarded observation is still subject to the exporter's filtering capabilities.
+Causeway retains JPA observations regardless of duration in both Boot-managed and agent-managed tracing.
+The former `causeway.observation.jpa-duration-threshold` property has been removed; remove it and its environment override from existing configurations.
+Filtering a JPA parent independently could leave its JDBC children without an exported parent.
+Normal sampling, exporter failures and application-defined policies still determine which spans reach the backend.
 
 == Observation names and metadata migration (CAUSEWAY-4096)
 
@@ -185,7 +161,7 @@ These are the tested versions, not a requirement to override the application's C
 
 The child-process fixture uses production interaction and action services and the JPA facet with mocked non-telemetry collaborators, a local JDK HTTP server, H2, and a local OTLP receiver.
 Its JPA backend is controlled; agent mode instruments real H2 JDBC automatically, while Boot mode explicitly wraps the SQL call in a fixture observation.
-It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration filtering, inactive-profile behavior and operation without an agent/exporter.
+It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration-independent JPA retention, inactive-profile behavior and operation without an agent/exporter.
 The additional entry-point fixture uses real Tomcat servlet and Quartz instrumentation with controlled business collaborators, verifying fixed-key classification and effective replay UUIDs in both trace ownership modes.
 It does not prove every servlet container or viewer integration, nor a full persisted-command replay.
 

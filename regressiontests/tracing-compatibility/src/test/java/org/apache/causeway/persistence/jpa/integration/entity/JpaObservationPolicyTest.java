@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
-import org.apache.causeway.core.config.observation.CausewayObservationPolicy;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationHandler;
 import io.micrometer.observation.ObservationRegistry;
@@ -35,7 +34,7 @@ import io.micrometer.observation.ObservationRegistry;
 class JpaObservationPolicyTest {
     @Test void realFacetUsesStableNamesAndExcludesInstanceValues() {
         var stopped = new ArrayList<Observation.Context>();
-        var facet = JpaObservationFixture.create(integration(stopped, CausewayObservationPolicy.DEFAULT), () -> {});
+        var facet = JpaObservationFixture.create(integration(stopped), () -> {});
         for (String id : List.of("sentinel-id-one", "sentinel-id-two")) {
             facet.fetchByBookmark(Bookmark.forLogicalTypeNameAndIdentifier("fixture.Entity", id));
             facet.fetchByQuery(Query.named(JpaObservationFixture.Entity.class, "Entity.byName").withParameter("name", id));
@@ -57,24 +56,23 @@ class JpaObservationPolicyTest {
         }
         assertEquals("Entity.byName", stopped.get(1).getLowCardinalityKeyValue("causeway.query.name").getValue());
     }
-    @Test void facetUsesConfiguredThresholdAndRetainsErrors() {
+    @Test void facetRetainsSuccessfulAndFailedObservations() {
         var stopped = new ArrayList<Observation.Context>();
-        var policy = new CausewayObservationPolicy(java.time.Duration.ofDays(1));
-        var integration = integration(stopped, policy);
+        var integration = integration(stopped);
         JpaObservationFixture.create(integration, () -> {}).persist(new JpaObservationFixture.Entity());
-        assertNotNull(stopped.get(0).getLowCardinalityKeyValue("causeway.discard"));
+        assertNull(stopped.get(0).getLowCardinalityKeyValue("causeway.discard"));
         var failure = new IllegalStateException("work");
         var facet = JpaObservationFixture.create(integration, () -> { throw failure; });
         assertSame(failure, assertThrows(IllegalStateException.class, () -> facet.persist(new JpaObservationFixture.Entity())));
         assertSame(failure, stopped.get(1).getError());
         assertNull(stopped.get(1).getLowCardinalityKeyValue("causeway.discard"));
     }
-    private CausewayObservationIntegration integration(List<Observation.Context> stopped, CausewayObservationPolicy policy) {
+    private CausewayObservationIntegration integration(List<Observation.Context> stopped) {
         var registry = ObservationRegistry.create();
         registry.observationConfig().observationHandler(new ObservationHandler<Observation.Context>() {
             public boolean supportsContext(Observation.Context context) { return true; }
             public void onStop(Observation.Context context) { stopped.add(context); }
         });
-        return new CausewayObservationIntegration(registry, policy);
+        return new CausewayObservationIntegration(registry);
     }
 }

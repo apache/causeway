@@ -27,8 +27,6 @@ Usage: run-with-telemetry.sh [--agent] [-- Maven options...]
 
 Boot-managed tracing by default; --agent uses agent-managed tracing.
 Both modes export Micrometer metrics to Prometheus and traces to Jaeger.
-Enable Boot duration filtering with CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=1s.
-Agent mode keeps duration filtering disabled.
 
 Start Jaeger and the metrics pair separately before running Petclinic:
   ./scripts/jaeger-local.sh start
@@ -79,8 +77,6 @@ if [[ "$MODE" == agent ]]; then
   export OTEL_METRICS_EXPORTER=none
   export OTEL_LOGS_EXPORTER=none
   
-  # The agent exporter does not consume Spring's duration-discard predicate.
-  export CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=0ms
   PROFILES=observation,agent
   AGENT_ARGS=("-Dspring-boot.run.agents=$AGENT")
 fi

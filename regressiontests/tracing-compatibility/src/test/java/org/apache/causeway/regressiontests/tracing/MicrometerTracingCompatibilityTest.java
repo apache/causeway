@@ -57,28 +57,22 @@ class MicrometerTracingCompatibilityTest {
                 assertJpaAncestry(spans, action, true);
                 assertIdentity(root, "sentinel-user", "sentinel-tenant");
             }
-            assertTrue(spans.stream().anyMatch(s -> s.getName().equals("threshold-success")), names(spans));
-            assertTrue(spans.stream().anyMatch(s -> s.getName().equals("threshold-failure") && s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR), names(spans));
         }
     }
-    @Test void bootManagedExportAndDiscardPolicy() throws Exception {
-        try (var collector = new Collector()) {
-            launch("boot", collector, "--causeway.observation.jpa-duration-threshold=1d");
-            assertEquals(2, collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).count(), names(collector.spans));
-            assertFalse(collector.spans.stream().anyMatch(s -> s.getName().equals("threshold-success")), names(collector.spans));
-            assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("Persist ")), names(collector.spans));
-            var children = collector.spans.stream().filter(s -> s.getName().equals("fixture.jdbc")).toList();
-            assertEquals(2, children.size(), names(collector.spans));
-            // Explicit filtering is lossy: independent children survive their suppressed JPA parents.
-            for (var child : children) assertFalse(collector.spans.stream()
-                    .anyMatch(s -> s.getSpanId().equals(child.getParentSpanId())), names(collector.spans));
-            assertTrue(collector.spans.stream().anyMatch(s -> s.getName().equals("threshold-failure")), names(collector.spans));
+    @Test void obsoleteJpaThresholdDoesNotDiscardExportedParents() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--causeway.observation.jpa-duration-threshold=1d");
+                var actions = collector.spans.stream().filter(s -> s.getName().startsWith("Action ")).toList();
+                assertEquals(2, actions.size(), names(collector.spans));
+                for (var action : actions) assertJpaAncestry(collector.spans, action, mode.equals("agent"));
+                assertFalse(collector.spans.stream().anyMatch(s -> attribute(s, "causeway.discard") != null));
+            }
         }
     }
     @Test void bootDefaultsRetainJpaParentsAndIncludeIdentity() throws Exception {
         try (var collector = new Collector()) {
             launch("boot", collector);
-            assertTrue(collector.spans.stream().anyMatch(s -> s.getName().equals("threshold-success")), names(collector.spans));
             var actions = collector.spans.stream().filter(s -> s.getName().startsWith("Action ")).toList();
             assertEquals(2, actions.size(), names(collector.spans));
             for (var action : actions) assertJpaAncestry(collector.spans, action, false);

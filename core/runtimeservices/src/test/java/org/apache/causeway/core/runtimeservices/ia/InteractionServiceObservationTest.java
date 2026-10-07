@@ -163,8 +163,7 @@ class InteractionServiceObservationTest {
         final ArrayList<Observation.Context> stopped = new ArrayList<>();
         final TransactionServiceSpring transactions = mock(TransactionServiceSpring.class);
         final InteractionServiceDefault service;
-        Fixture() { this(org.apache.causeway.core.config.observation.CausewayObservationPolicy.DEFAULT); }
-        Fixture(org.apache.causeway.core.config.observation.CausewayObservationPolicy policy) {
+        Fixture() {
             registry.observationConfig().observationHandler(new ObservationHandler<Observation.Context>() {
                 public boolean supportsContext(Observation.Context context) { return true; }
                 public void onStop(Observation.Context context) { stopped.add(context); }
@@ -177,7 +176,7 @@ class InteractionServiceObservationTest {
             var sequence = new java.util.concurrent.atomic.AtomicLong();
             when(executionContext.idGenerator().interactionId()).thenAnswer(__ -> new UUID(0, sequence.incrementAndGet()));
             service = new InteractionServiceDefault(beanFactory, mock(ServiceInjector.class), transactions,
-                    mock(ClockService.class), () -> null, executionContext, new CausewayObservationIntegration(registry, policy));
+                    mock(ClockService.class), () -> null, executionContext, new CausewayObservationIntegration(registry));
         }
     }
 }
