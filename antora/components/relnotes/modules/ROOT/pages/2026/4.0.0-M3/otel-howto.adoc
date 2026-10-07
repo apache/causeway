@@ -50,6 +50,11 @@ The Petclinic launcher requires Maven and a supported build JDK, respects `JAVA_
 ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
 ----
 
+[TIP]
+====
+Additional Maven options can be specified after `--`, for example `run-with-telemetry.sh -- -o` for an offline build.
+====
+
 The launcher activates the Maven `observation` profile for dependencies and the Spring `observation` profile for framework instrumentation and export configuration.
 Boot owns tracing; Micrometer exports metrics.
 Traces are fully sampled and metrics are exported every ten seconds.
@@ -57,11 +62,24 @@ No Java agent is attached in this mode.
 With no `--scenario` option, the launcher uses `defaults`: username and tenancy attributes are omitted, and duration filtering is disabled, so even short successful JPA spans are retained.
 Remove external `causeway.observation.*` overrides when checking these defaults.
 
-Open http://localhost:8080/htmx, or the Wicket comparison at http://localhost:8080/wicket/.
-This launcher uses the sample's bypass authentication; sign in to Wicket with `sven` / `pass` when prompted.
-Try opening Mary Smith, changing an owner's name and registering a pet.
-Use `SERVER_PORT=8081` before the launcher command for another application port.
-Additional Maven options follow `--`, for example `run-with-telemetry.sh -- -o` for an offline build.
+=== Exercise the application
+
+Open the app:
+
+* http://localhost:8080/htmx (webcomponent viewer)
++
+no password (uses bypass authentication); or
+
+* http://localhost:8080/wicket/ (Wicket viewer)
++
+sign in with `sven` / `pass`
+
+Try:
+
+* opening Mary Smith
+* changing an owner's name
+* registering a pet.
+
 
 === Equivalent configuration for another application
 
@@ -114,41 +132,84 @@ Full sampling and frequent metrics export are useful for this local verification
 [[inspect-traces-and-metrics]]
 === Inspect traces and metrics
 
-In Jaeger, select service *Causeway Pet Clinic*, click *Find Traces*, and open a recent trace from a domain operation.
-HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
-Select the enclosing HTTP server span to see `causeway.execution.mode=foreground`; this includes static asset requests as well as domain operations.
-Expand the span tree and select *Causeway Root Interaction* to inspect its *Attributes*, such as `causeway.interaction.language`, `causeway.interaction.timezone` and `causeway.user.impersonating`.
-In this default run, `causeway.user.name` and `causeway.user.multiTenancyToken` should be absent.
-When explicitly enabled in <<verification-scenarios>>, those attributes appear on interaction spans when the corresponding user values are nonempty; they are not added to the enclosing HTTP server span.
-The root interaction also has `causeway.interaction.id`, the UUID used by Causeway's interaction/command, even in the default scenario.
-It is distinct from Jaeger's trace ID and span ID, and is not copied onto the HTTP span or nested interactions.
-Static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
+In Jaeger:
 
+* select service *Causeway Pet Clinic*
+* click *Find Traces*
+* open a recent trace from a domain operation.
++
+HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
+
+* Select the enclosing HTTP server span to see `causeway.execution.mode=foreground`; this includes static asset requests as well as domain operations.
+
+* Expand the span tree and inspect the spans
++
 Span display names are contextual, for example `Action <member>` or `Persist <entity type>`.
+
+* select the *Causeway Root Interaction* span, and inspect its *Attributes*, such as:
+
+** `causeway.interaction.language`
+** `causeway.interaction.timezone`
+** `causeway.user.impersonating`
+
++
+In this default run, `causeway.user.name` and `causeway.user.multiTenancyToken` should be absent.
+
+* When explicitly enabled in <<verification-scenarios>>, those attributes appear on interaction spans when the corresponding user values are nonempty; they are not added to the enclosing HTTP server span.
+* The root interaction also has `causeway.interaction.id`, the UUID used by Causeway's interaction/command, even in the default scenario.
++
+This is distinct from Jaeger's trace ID and span ID, and is not copied onto the HTTP span or nested interactions.
+* Note that static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
+
+
+
+=== Micrometer
+
 Underlying Micrometer operation names are categories such as `causeway.member.action` and `causeway.jpa.persist`.
-Repeat operations on different owners: the Causeway member/JPA span names and member/entity metadata describe the operation and type, without embedding instance identifiers, object titles or argument values.
+
+Repeat operations on different owners:
+
+* the Causeway member/JPA span names and member/entity metadata describe the operation and type
+
+Note that instance identifiers, object titles or argument values and _not_ included in the spans.
+
 HTTP instrumentation can still record request paths containing object identifiers; optional interaction identity attributes are a separate policy.
 
-Open Prometheus directly or log in to Grafana (`admin` / `admin`, with a password change prompt on first login).
-In Grafana, choose *Explore*, select *Prometheus* in the data-source dropdown at the top, and switch to *Code* mode for PromQL.
+Open Prometheus directly or log in to Grafana (`admin` / `admin`).
+
+In Grafana:
+
+* choose *Explore*
+* select *Prometheus* in the data-source dropdown at the top, and switch to *Code* mode for PromQL.
+
 The built-in *Grafana* data source and its *Random Walk* query show generated sample data, not Petclinic metrics.
-The provisioned *Prometheus* source is also listed under *Connections → Data sources*.
+
+* The provisioned *Prometheus* source is also listed under *Connections → Data sources*.
+
 After exercising Petclinic, wait 10–20 seconds and try these queries separately:
 
+* JVM memory used bytes
++
 [source,promql]
 ----
 jvm_memory_used_bytes
 ----
 
+* discover available Causeway metric names and counts their series:
++
 [source,promql]
 ----
 count by (__name__) ({__name__=~"causeway_.*"})
 ----
 
-The second query discovers available Causeway metric names and counts their series; select an actual metric name to inspect values.
-Prometheus metric names can differ from contextual span names, including dots translated to underscores.
+* select an actual metric name to inspect values.
+
+Note that Prometheus metric names can differ from contextual span names, including dots translated to underscores.
+
 The optional username and tenancy attributes are high-cardinality span metadata; enabling them does not add them as Micrometer metric labels.
-Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
+
+* Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
+
 
 === Find requests and correlate interactions
 
@@ -171,6 +232,7 @@ Do not combine these into a same-span attribute query: no single span is require
 The UUID can correlate command replay with the originating command; replay retains that command's effective identifier even if it replaces an ID allocated when the interaction opened.
 Sampling, export failures, time ranges and Jaeger's in-memory retention can limit matches; restarting Jaeger loses earlier traces.
 Neither attribute adds an interaction UUID or execution-mode label to Causeway's Micrometer meters.
+
 
 [[verification-scenarios]]
 === Select a verification scenario
