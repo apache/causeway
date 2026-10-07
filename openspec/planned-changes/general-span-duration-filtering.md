@@ -17,4 +17,4 @@ Questions to investigate:
 
 Do not promise duration-based suppression at span creation: duration is known only when the span ends. Prefer complete trace trees until a coherent, tested policy is available.
 
-Predecessor: `remove-jpa-duration-filtering`, following `classify-and-correlate-observations` on CAUSEWAY-4068-v4.
+Predecessor: [remove JPA duration filtering](../changes/archive/2026-10-07-remove-jpa-duration-filtering/proposal.md), following [classification/correlation](../changes/archive/2026-10-07-classify-and-correlate-observations/proposal.md) on CAUSEWAY-4068-v4.

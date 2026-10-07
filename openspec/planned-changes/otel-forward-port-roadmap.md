@@ -115,4 +115,6 @@ Filtering simplification: `causeway.observation.jpa-duration-threshold` is the o
 
 Classification/correlation archived on 2026-10-07 after fresh focused and tracing validation passed (45 tests), with all delta specs synced. General duration filtering is tracked in [the exploration backlog](general-span-duration-filtering.md); the narrow JPA-only threshold is being removed in a separate change.
 
-The [remove-jpa-duration-filtering](../changes/remove-jpa-duration-filtering/proposal.md) change removes the narrow JPA-only policy while preserving explicit transaction discard behavior. Replacement filtering is deferred to [general span duration filtering](general-span-duration-filtering.md).
+The [remove-jpa-duration-filtering](../changes/archive/2026-10-07-remove-jpa-duration-filtering/proposal.md) change removes the narrow JPA-only policy while preserving explicit transaction discard behavior. Replacement filtering is deferred to [general span duration filtering](general-span-duration-filtering.md).
+
+Removal completed and archived on 2026-10-07. Implementation checkpoint `39faf40ded6`; 34 Java tests passed before and after the checkpoint, Petclinic packaged successfully, and metadata/docs/launcher checks passed. Specs were synced; all completed changes are archived. General span filtering remains backlog exploration.

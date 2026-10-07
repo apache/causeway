@@ -26,3 +26,5 @@ Clean rebuild verified that the threshold property is absent from generated meta
 Shell syntax and mock-Maven invocations verify launcher profile/agent forwarding with no threshold setting in either mode. Both observability guides and the sample README render with Asciidoctor and their YAML examples parse. `git diff --check` and strict OpenSpec change validation pass. Full repository regressions and live browser/backend sessions were not repeated.
 
 Archive checkpoint validation uses the same focused `test` goals (without clean/install) and the tracing suite after the implementation commit, as required by the one-shot workflow.
+
+Post-checkpoint archive validation passed: the same 25 focused and 9 tracing/JPA tests succeeded after `39faf40ded6`. All tasks are complete and both capability deltas have been synced during archive.

@@ -1,6 +1,6 @@
 ## Purpose
 
-Defines stable observation operation names, safe contextual metadata, automatic interaction identity, and configurable JPA duration filtering.
+Defines stable observation operation names, safe contextual metadata, automatic interaction identity, and duration-independent JPA span retention.
 ## Requirements
 ### Requirement: Existing dynamic observations separate operation and context
 
@@ -22,29 +22,12 @@ Causeway SHALL use fixed operation names for the existing JPA, action invocation
 - **WHEN** a safe static identifier is unavailable
 - **THEN** the operation remains observable without falling back to object or query descriptions
 
-### Requirement: JPA duration policy is explicit and validated
-
-Causeway SHALL expose only `causeway.observation.jpa-duration-threshold` for JPA duration filtering, defaulting to `0ms`. Zero SHALL disable filtering. A positive threshold SHALL mark successful JPA observations strictly below the threshold for discard; failed observations SHALL remain eligible for export. Negative or malformed thresholds SHALL fail startup. No separate duration-filtering-enabled property SHALL exist. Agent-owned export SHALL require a zero threshold because it does not consume Spring's discard predicate.
-
-#### Scenario: Default or zero threshold
-- **WHEN** the threshold is zero or unset
-- **THEN** short successful JPA spans are retained
-
-#### Scenario: Positive threshold
-- **WHEN** the threshold is positive
-- **THEN** shorter successful JPA spans are marked for discard while failed spans remain eligible
-
-#### Scenario: Invalid threshold
-- **WHEN** the threshold is negative or malformed
-- **THEN** startup reports a configuration error
-
 ### Requirement: Telemetry migration and limitations are documented
-
-The observability guide SHALL describe operation/contextual names, automatic identity attributes, duration defaults and configuration examples. It SHALL distinguish Micrometer operation identity from exported contextual names, explain that enabled duration filtering can leave missing parents, and retain the supported agent requirement to disable filtering. Migration SHALL NOT introduce duplicate legacy spans.
+The observability guide SHALL describe operation/contextual names, automatic identity attributes and the removal of JPA duration filtering. It SHALL distinguish Micrometer operation identity from exported contextual names and explain that normal sampling/export policy still determines available traces. It SHALL NOT present the removed threshold as supported configuration or require agent-specific duration overrides. Migration SHALL NOT introduce duplicate legacy spans.
 
 #### Scenario: Existing deployment migrates
-- **WHEN** an operator follows the migration guide
-- **THEN** they can inspect automatically included identity attributes and choose supported duration filtering without another SDK or duplicate observations
+- **WHEN** an operator follows the guide
+- **THEN** they can remove obsolete threshold settings and inspect complete eligible JPA/JDBC ancestry without configuring a replacement Causeway filter
 
 ### Requirement: Interaction identity metadata is automatic
 
@@ -57,4 +40,19 @@ Causeway SHALL always include nonempty username and multitenancy-token values un
 #### Scenario: Missing values
 - **WHEN** an observed interaction has empty or missing identity values
 - **THEN** those attributes are omitted without inventing values
+
+### Requirement: JPA observations are independent of duration
+Causeway SHALL retain successful and failed JPA observations regardless of their duration, subject to ordinary sampling and export policies. It SHALL NOT expose a JPA duration threshold or automatically mark these observations for discard by duration. Existing operation/contextual names, metadata and ancestry SHALL remain intact in Boot-managed and agent-managed tracing. Explicit discard behavior outside duration filtering SHALL be preserved.
+
+#### Scenario: Short successful operation
+- **WHEN** a short JPA operation completes successfully under either supported tracing owner
+- **THEN** its JPA span remains eligible for export with its children and parentage intact
+
+#### Scenario: Failed operation
+- **WHEN** a JPA operation fails
+- **THEN** its error and observation lifecycle remain intact regardless of duration
+
+#### Scenario: Obsolete configuration
+- **WHEN** an application still supplies the removed JPA threshold property
+- **THEN** it has no effect on Causeway's JPA observation retention and is absent from configuration metadata
 
