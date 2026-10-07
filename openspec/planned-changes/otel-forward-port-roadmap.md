@@ -121,4 +121,6 @@ Removal completed and archived on 2026-10-07. Implementation checkpoint `39faf40
 
 ## Built-in agent bridge follow-up (2026-10-07)
 
-[provide-agent-observation-bridge](../changes/provide-agent-observation-bridge/proposal.md) moves the sample-owned bridge and manual exclusions into core configuration. Consumers add the optional BOM-managed OTel bridge dependency, attach the Java agent and activate `observation,agent`; Micrometer metrics remain independent. Exported-trace fixtures exercise the production configuration. This is an adoption simplification on CAUSEWAY-4068, with general duration filtering still deferred.
+[provide-agent-observation-bridge](../changes/archive/2026-10-07-provide-agent-observation-bridge/proposal.md) moves the sample-owned bridge and manual exclusions into core configuration. Consumers add the optional BOM-managed OTel bridge dependency, attach the Java agent and activate `observation,agent`; Micrometer metrics remain independent. Exported-trace fixtures exercise the production configuration. This is an adoption simplification on CAUSEWAY-4068, with general duration filtering still deferred.
+
+Agent bridge completed and archived on 2026-10-07: planning `a7c3d3584e6`, implementation `906a897df37`. All 28 focused/exported-trace tests passed before and after the checkpoint, including Micrometer metrics export in agent mode; Petclinic packaging and documentation rendering passed. The new agent bridge requirements are synced to the main specs.

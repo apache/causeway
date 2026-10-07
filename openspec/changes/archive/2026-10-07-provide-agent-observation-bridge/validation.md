@@ -9,4 +9,4 @@
 
 The framework creates no SDK/exporter and does not attach the agent. Custom registry owners remain responsible for tracing handlers. Boot HTTP observation meters are absent in agent mode by design; other Micrometer metrics remain available. No interactive Docker/browser verification was performed in this change.
 
-Before archive, the focused and exported-trace suites are rerun after the implementation checkpoint; results recorded below.
+Post-checkpoint verification after `906a897df37`: the same 19 focused tests and 9 exported-trace/JPA tests passed, Petclinic packaged against the final installed bridge, both AsciiDoc pages rendered, and strict validation passed all 54 OpenSpec items.
