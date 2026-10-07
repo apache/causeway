@@ -126,9 +126,9 @@ public class MicrometerTracingAgentFixture {
                         throw new AssertionError("unexpected HTTP result: " + connection.getResponseCode());
                     connection.disconnect();
                 }
-                var shortSpan = integration.withTimeThreshold(integration.createNotStarted(MicrometerTracingAgentFixture.class, "threshold-success"), java.time.Duration.ofDays(1));
+                var shortSpan = integration.withTimeThreshold(integration.createNotStarted(MicrometerTracingAgentFixture.class, "threshold-success"), integration.policy().jpaDurationThreshold());
                 shortSpan.observe(() -> {});
-                var failedSpan = integration.withTimeThreshold(integration.createNotStarted(MicrometerTracingAgentFixture.class, "threshold-failure"), java.time.Duration.ofDays(1));
+                var failedSpan = integration.withTimeThreshold(integration.createNotStarted(MicrometerTracingAgentFixture.class, "threshold-failure"), integration.policy().jpaDurationThreshold());
                 try { failedSpan.observe(() -> { throw new IllegalStateException("short failure"); }); }
                 catch (IllegalStateException expected) { }
                 System.out.println("CAUSEWAY_TRACING_FIXTURE_OK");

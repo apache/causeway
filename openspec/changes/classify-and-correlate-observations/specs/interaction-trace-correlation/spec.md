@@ -2,11 +2,11 @@
 
 ### Requirement: Root interaction UUID correlation
 
-When observation is active, the existing root interaction span SHALL contain high-cardinality string attribute `causeway.interaction.id`, equal to the canonical UUID returned by its own interaction's `getInteractionId()` at completion. The attribute SHALL be independent of username and tenancy opt-ins and SHALL NOT become a metric label.
+When observation is active, the existing root interaction span SHALL contain high-cardinality string attribute `causeway.interaction.id`, equal to the canonical UUID returned by its own interaction's `getInteractionId()` at completion. The attribute SHALL be independent of username and tenancy attributes and SHALL NOT become a metric label.
 
 #### Scenario: Ordinary interaction
 - **WHEN** an observed root interaction completes
-- **THEN** its exported ID equals the interaction UUID even with username and tenancy export disabled
+- **THEN** its exported ID equals the interaction UUID alongside nonempty username and tenancy attributes
 
 #### Scenario: Background replay replaces identity
 - **WHEN** command replay replaces the initial command identifier using a command DTO

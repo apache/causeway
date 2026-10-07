@@ -108,3 +108,7 @@ Before creating the proposal, completed `port-domain-object-locking` was validat
 Implementation checkpoint (2026-10-06): all 12 tasks completed on `CAUSEWAY-4068-v4`. [Validation evidence](../changes/classify-and-correlate-observations/validation.md) records 31 focused tests, 9 tracing/JPA compatibility tests, Petclinic packaging, generated configuration metadata and documentation checks. The M3 how-to and observability guide now cover foreground/background entry attributes, root interaction UUIDs, separate Jaeger searches and the background fixture. Agent setup shares its tracer and excludes duplicate Boot HTTP observation instrumentation, with the meter implications documented. Implementation is recorded in the commit containing this checkpoint; archival remains pending.
 
 Review follow-up: removed the execution-mode key override at the user’s request. Both entry points always use `causeway.execution.mode`; configuration, tests and operator guidance have been simplified accordingly.
+
+Review follow-up (2026-10-07): username and tenancy are now automatic nonempty interaction attributes alongside the root UUID and fixed entry execution mode. Removed identity opt-in properties and launcher scenarios; duration-filtering policy remains available.
+
+Filtering simplification: `causeway.observation.jpa-duration-threshold` is the only filtering setting, with `0ms` disabling filtering. The launcher no longer takes `--scenario`; set `CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD` for Boot-managed runs.

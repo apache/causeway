@@ -40,8 +40,7 @@ import io.opentelemetry.proto.trace.v1.Status;
 class MicrometerTracingCompatibilityTest {
     @Test void agentJoinsFrameworkAndJdbcWithoutDuplicateSpans() throws Exception {
         try (var collector = new Collector()) {
-            launch("agent", collector, "--causeway.observation.duration-filtering-enabled=false",
-                    "--causeway.observation.jpa-duration-threshold=1d");
+            launch("agent", collector);
             var spans = collector.spans;
             var roots = spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
             assertEquals(2, roots.size(), names(spans));
@@ -56,7 +55,7 @@ class MicrometerTracingCompatibilityTest {
                 var action = actions.get(0);
                 assertEquals(root.getTraceId(), action.getTraceId());
                 assertJpaAncestry(spans, action, true);
-                assertIdentity(root, false);
+                assertIdentity(root, "sentinel-user", "sentinel-tenant");
             }
             assertTrue(spans.stream().anyMatch(s -> s.getName().equals("threshold-success")), names(spans));
             assertTrue(spans.stream().anyMatch(s -> s.getName().equals("threshold-failure") && s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR), names(spans));
@@ -64,8 +63,7 @@ class MicrometerTracingCompatibilityTest {
     }
     @Test void bootManagedExportAndDiscardPolicy() throws Exception {
         try (var collector = new Collector()) {
-            launch("boot", collector, "--causeway.observation.duration-filtering-enabled=true",
-                    "--causeway.observation.jpa-duration-threshold=1d");
+            launch("boot", collector, "--causeway.observation.jpa-duration-threshold=1d");
             assertEquals(2, collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).count(), names(collector.spans));
             assertFalse(collector.spans.stream().anyMatch(s -> s.getName().equals("threshold-success")), names(collector.spans));
             assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("Persist ")), names(collector.spans));
@@ -77,33 +75,32 @@ class MicrometerTracingCompatibilityTest {
             assertTrue(collector.spans.stream().anyMatch(s -> s.getName().equals("threshold-failure")), names(collector.spans));
         }
     }
-    @Test void bootDefaultsRetainJpaParentsAndOmitIdentity() throws Exception {
+    @Test void bootDefaultsRetainJpaParentsAndIncludeIdentity() throws Exception {
         try (var collector = new Collector()) {
-            launch("boot", collector, "--causeway.observation.jpa-duration-threshold=1d");
+            launch("boot", collector);
             assertTrue(collector.spans.stream().anyMatch(s -> s.getName().equals("threshold-success")), names(collector.spans));
             var actions = collector.spans.stream().filter(s -> s.getName().startsWith("Action ")).toList();
             assertEquals(2, actions.size(), names(collector.spans));
             for (var action : actions) assertJpaAncestry(collector.spans, action, false);
             collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction"))
-                    .forEach(s -> assertIdentity(s, false));
+                    .forEach(s -> assertIdentity(s, "sentinel-user", "sentinel-tenant"));
         }
     }
-    @Test void identityOptInsAreExportedInBothModes() throws Exception {
+    @Test void identityIsExportedByDefaultInBothModes() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
-                launch(mode, collector, "--causeway.observation.include-user-name=true",
-                        "--causeway.observation.include-multi-tenancy-token=true");
+                launch(mode, collector);
                 var roots = collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
                 assertEquals(2, roots.size(), names(collector.spans));
-                roots.forEach(s -> assertIdentity(s, true));
+                roots.forEach(s -> assertIdentity(s, "sentinel-user", "sentinel-tenant"));
             }
         }
     }
-    private void assertIdentity(Span span, boolean enabled) {
+    private void assertIdentity(Span span, String userName, String token) {
         var attributes = span.getAttributesList().stream().collect(java.util.stream.Collectors.toMap(
                 a -> a.getKey(), a -> a.getValue().getStringValue()));
-        assertEquals(enabled ? "sentinel-user" : null, attributes.get("causeway.user.name"));
-        assertEquals(enabled ? "sentinel-tenant" : null, attributes.get("causeway.user.multiTenancyToken"));
+        assertEquals(userName, attributes.get("causeway.user.name"));
+        assertEquals(token, attributes.get("causeway.user.multiTenancyToken"));
     }
     private void assertJpaAncestry(List<Span> spans, Span action, boolean agent) {
         var parents = spans.stream().filter(s -> s.getParentSpanId().equals(action.getSpanId())
@@ -147,7 +144,8 @@ class MicrometerTracingCompatibilityTest {
                     assertNotNull(id);
                     java.util.UUID.fromString(id);
                     assertNull(attribute(root, "causeway.execution.mode"));
-                    assertIdentity(root, false);
+                    assertIdentity(root, root.getTraceId().equals(background.get(0).getTraceId())
+                            ? "scheduler_user" : "prototyping", null);
                 }
                 for (var entry : http) {
                     var security = collector.spans.stream().filter(s -> s.getName().equals("fixture.security")

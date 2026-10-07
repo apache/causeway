@@ -83,3 +83,18 @@ mvn -o -f regressiontests/tracing-compatibility/pom.xml test
 ```
 
 Passed: 9 tracing/JPA tests. The entry-point test now runs one child JVM per trace owner (Boot and agent), asserting the fixed key for both servlet and Quartz entry spans. Total follow-up verification: 30 passing Java tests. This follow-up is recorded in the commit containing this validation update.
+
+## Automatic identity and threshold-only filtering (2026-10-07)
+
+Removed both user identity opt-in properties. Nonempty usernames and tenancy tokens are automatically exported as high-cardinality interaction attributes; root UUID and fixed entry-span execution mode retain their existing placement. Removed the filtering-enabled property and boolean integration constructor. The sole filtering property is `causeway.observation.jpa-duration-threshold`, default `0ms`: zero disables filtering; positive thresholds discard shorter successful JPA spans; failures remain eligible. Negative/malformed thresholds still fail binding.
+
+```sh
+mvn -o -pl core/runtimeservices,core/webapp,extensions/core/commandlog/applib -am \
+  -Dtest=CausewayTraceClassifierTest,CausewayObservationAutoConfigurationTest,ObservationWithTimeThresholdTest,InteractionServiceObservationTest,CausewayForegroundTraceFilterTest,RunBackgroundCommandsJobTraceClassificationTest \
+  -Dsurefire.failIfNoSpecifiedTests=false -Dmaven.source.skip=true -Dmaven.javadoc.skip=true clean install
+mvn -o -f regressiontests/tracing-compatibility/pom.xml test
+```
+
+Passed: 36 focused tests and 9 tracing/JPA tests (45 total), on the previously recorded toolchain. Export checks assert automatic username/tenancy in Boot and agent modes, actual `scheduler_user` identity on job interactions, default zero retaining parents and positive thresholds suppressing successful JPA spans while retaining failures. An intermediate assertion incorrectly expected the HTTP fixture's user for scheduler interactions; it was corrected to assert the actual scheduler identity before the final passing run.
+
+Rebuilt configuration metadata contains only the JPA duration threshold with default `0ms`; all three removed properties are absent. Both guides and the sample README render, YAML examples parse, shell syntax passes, and strict OpenSpec validation passes. A mock Maven invocation verifies the launcher passes a Boot `1s` environment override and uses `0ms` in agent mode. The launcher no longer accepts `--scenario`; the how-to uses `CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD`. No live browser/backend session was repeated. This follow-up is recorded in the commit containing this validation update.

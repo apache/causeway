@@ -24,3 +24,8 @@
 
 - [x] 5.1 Extend the existing observability guidance and M3 how-to with entry-span classification, root-span UUID lookup, separate Jaeger searches; preserve default identity/filtering explanations and the current launcher structure.
 - [x] 5.2 Provide a reproducible background-job verification example or fixture command with its tracing prerequisites; distinguish it from Petclinic's foreground walkthrough, document retention/sampling limits, and validate documentation rendering and configuration examples.
+
+## 6. Automatic identity attributes (review follow-up)
+
+- [x] 6.1 Remove username/tenancy configuration properties and always export nonempty user values as interaction span attributes; retain UUID/execution-mode placement and simplify filtering to one threshold (default `0ms`).
+- [x] 6.2 Remove launcher scenarios and document the threshold environment override; verify unit/export tests, metadata removal and documentation rendering.

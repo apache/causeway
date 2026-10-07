@@ -60,10 +60,14 @@ Rejected alternatives: tagging every HTTP/JDBC span creates needless correlation
 
 ## Migration Plan
 
-Additive span attributes; names, exporters, sampling, identity opt-ins and filtering defaults remain unchanged. Applications using the documented agent bridge expose the shared tracer bean before checking classification. All applications use the same execution-mode key. Removing the change removes the new attributes without changing domain outcomes or requiring data migration.
+Additive span attributes; names, exporters, sampling, automatic identity attributes and filtering defaults remain unchanged. Applications using the documented agent bridge expose the shared tracer bean before checking classification. All applications use the same execution-mode key. Removing the change removes the new attributes without changing domain outcomes or requiring data migration.
 
 Update the M3 how-to incrementally: default foreground attributes on the HTTP span, root UUID on the interaction span, copy-and-search example, and a separately identified background fixture/example. Retain the separate Jaeger and metrics scripts and unified Petclinic launcher.
 
 ## Open Questions
 
 No product decision blocks implementation. The user selected branch `CAUSEWAY-4068-v4` under CAUSEWAY-4068. Export tests cover the pinned Boot filter ordering and real agent Quartz instrumentation; the background fixture uses production job/command execution with controlled persistence and domain dispatch, rather than claiming full stored-command integration.
+
+## Review simplification (2026-10-07)
+
+Always emit nonempty username and tenancy attributes on interaction spans. Retain the root UUID and fixed entry-span execution mode without switches. Remove identity configuration properties. Use a single JPA duration threshold (default `0ms`) instead of a filtering-enabled flag; zero retains all spans, positive values filter shorter successful JPA spans, and invalid values fail startup. Agent mode requires zero because its exporter cannot consume Spring's discard predicate. The launcher exposes only `--agent` plus Maven options; Boot filtering is configured through `CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD`.

@@ -72,18 +72,18 @@ class ObservationWithTimeThresholdTest {
         assertSame(failure, observation.getContext().getError());
         assertNull(observation.getContext().getLowCardinalityKeyValue("causeway.discard"));
     }
-    @Test void providerPatternAndExplicitDisable() {
+    @Test void providerPatternAndZeroThreshold() {
         var registry = registry();
-        var integration = new CausewayObservationIntegration(registry, true);
+        var integration = new CausewayObservationIntegration(registry);
         var provider = integration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName("causeway.jpa")
                 .andThen(obs -> integration.withTimeThreshold(obs, Duration.ofDays(1))));
         var observation = provider.get("Persist");
         observation.observe(() -> {});
         assertNotNull(observation.getContext().getLowCardinalityKeyValue("causeway.discard"));
-        var disabled = new CausewayObservationIntegration(registry, false);
+        var disabled = new CausewayObservationIntegration(registry);
         var delegate = disabled.createNotStarted(getClass(), "Persist");
-        assertSame(delegate, disabled.withTimeThreshold(delegate, Duration.ofDays(1)));
+        assertSame(delegate, disabled.withTimeThreshold(delegate, Duration.ZERO));
         delegate.observe(() -> {});
         assertNull(delegate.getContext().getLowCardinalityKeyValue("causeway.discard"));
     }
@@ -102,7 +102,7 @@ class ObservationWithTimeThresholdTest {
     @Test void defaultPolicyDoesNotWrapOrDiscard() {
         var integration = new CausewayObservationIntegration(registry());
         var observation = integration.createNotStarted(getClass(), "test");
-        assertSame(observation, integration.withTimeThreshold(observation, Duration.ofDays(1)));
+        assertSame(observation, integration.withTimeThreshold(observation, integration.policy().jpaDurationThreshold()));
         observation.observe(() -> {});
         assertNull(observation.getContext().getLowCardinalityKeyValue("causeway.discard"));
     }

@@ -5,6 +5,7 @@ The observation foundation and CAUSEWAY-4096 now provide reliable scopes and exp
 ## What Changes
 
 - Classify existing HTTP entry spans as `foreground` and existing command-log Quartz job entry spans as `background`, without creating extra spans or inferring execution mode from usernames or thread names.
+- Always include nonempty username and tenancy attributes on interaction spans; remove their opt-in properties.
 - Use the fixed attribute key `causeway.execution.mode` for both entry points.
 - Add high-cardinality `causeway.interaction.id` to the existing root interaction observation, using its actual UUID, including the effective command ID after background replay replaces the initial identifier.
 - Support Boot-managed and agent-managed tracing using the existing trace owner; remain inert with the `observation` profile inactive or no current span.
@@ -19,7 +20,7 @@ The observation foundation and CAUSEWAY-4096 now provide reliable scopes and exp
 
 ### Modified Capabilities
 
-None. Existing foundation and observation-policy requirements remain in force, including default identity omission, duration filtering policy and deterministic scope cleanup.
+- `observation-policy`: remove identity opt-in properties and include nonempty user attributes automatically; use only a JPA duration threshold (default `0ms`) for filtering and retain deterministic scope cleanup.
 
 ## Impact
 

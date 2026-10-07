@@ -80,7 +80,7 @@ management:
       enabled: false
 causeway:
   observation:
-    duration-filtering-enabled: false
+    jpa-duration-threshold: 0ms
 ----
 
 Launch the JVM with `-javaagent:/path/to/opentelemetry-javaagent.jar` and configure the agent's service name, sampler and OTLP endpoint through its normal settings.
@@ -113,13 +113,13 @@ Background classification requires an existing job span, supplied by instrumenta
 * `causeway.interaction.id` appears on *Causeway Root Interaction* and contains the interaction's UUID.
 It is distinct from the trace ID and retains the command's identifier during replay, allowing you to find related executions.
 
-These attributes are available without enabling username or tenancy export and are not added as metric labels.
+User identity attributes are included automatically alongside interaction correlation; they are not added as metric labels.
 In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
 Searches can only find traces that were sampled, exported and retained by the backend.
 
 == Duration filtering and failures
 
-Duration filtering is disabled by default, so short successful JPA parents remain available when their children are exported.
+The JPA duration threshold defaults to `0ms`, which disables filtering so short successful JPA parents remain available when their children are exported.
 This can increase span volume compared with the previous default.
 It does not override sampling, exporter failures or application-defined filtering.
 
@@ -129,12 +129,11 @@ To opt into the lossy Boot-managed duration filter:
 ----
 causeway:
   observation:
-    duration-filtering-enabled: true
     jpa-duration-threshold: 2ms
 ----
 
-The threshold defaults to `2ms` and accepts nonnegative durations; `0ms` suppresses no spans by duration.
-Malformed or negative thresholds fail startup, including when filtering is disabled.
+The threshold accepts nonnegative durations; `0ms` suppresses no spans by duration.
+Malformed or negative thresholds fail startup.
 Successful JPA observations strictly below the configured threshold are marked for discard; observations at or above it and failed observations remain eligible for export.
 The Boot-managed export predicate honors that marker.
 
@@ -142,7 +141,7 @@ Filtering can leave children whose parent span was suppressed: discarding a JPA 
 This option does not implement tail sampling or a per-request span budget.
 
 The agent-owned exporter does not consume Spring's span-export predicates.
-Keep `duration-filtering-enabled=false` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
+Keep `jpa-duration-threshold=0ms` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
 The setting controls Causeway's JPA duration policy, not agent sampling or application-created observations.
 An explicitly discarded observation is still subject to the exporter's filtering capabilities.
 
@@ -175,21 +174,9 @@ Other existing fixed operation names are unchanged.
 Missing static member identifiers are omitted; runtime object data is never a fallback.
 Publishing counts are emitted as `causeway.execution.subscriber-count` high-cardinality data rather than a meter dimension or part of a name.
 
-Causeway no longer emits username and multitenancy token by default.
-Each can be enabled independently:
-
-[source,yaml]
-----
-causeway:
-  observation:
-    include-user-name: true
-    include-multi-tenancy-token: true
-----
-
-These options retain the existing `causeway.user.name` and `causeway.user.multiTenancyToken` attribute keys for nonempty values.
-High-cardinality attributes are still exported; the classification is not a redaction mechanism.
-Impersonation status and locale metadata remain available.
-These policies govern Causeway's instrumentation, not metadata emitted by application observations, agents, JDBC instrumentation or collectors.
+Causeway always includes nonempty `causeway.user.name` and `causeway.user.multiTenancyToken` on interaction spans.
+They describe the interaction's authenticated user and tenancy, and are high-cardinality span attributes rather than metric labels.
+Empty values are omitted; impersonation status and locale metadata remain available.
 
 == Validated baseline and regression fixture
 

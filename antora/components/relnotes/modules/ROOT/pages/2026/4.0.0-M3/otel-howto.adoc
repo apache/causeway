@@ -6,7 +6,7 @@
 This guide starts with Boot-managed tracing and metrics, then changes tracing ownership to the OpenTelemetry Java agent.
 Both modes send traces to Jaeger and Micrometer metrics to Prometheus, with Grafana for exploration.
 Only one SDK/export pipeline owns tracing in each run.
-Start with the default scenario to see request, interaction and persistence spans, then opt into username metadata or duration filtering in the verification scenarios below.
+Start with the default configuration to see request, interaction and persistence spans, then try duration filtering in the duration-filtering example below.
 
 == Start the local telemetry services
 
@@ -59,7 +59,8 @@ The launcher activates the Maven `observation` profile for dependencies and the 
 Boot owns tracing; Micrometer exports metrics.
 Traces are fully sampled and metrics are exported every ten seconds.
 No Java agent is attached in this mode.
-With no `--scenario` option, the launcher uses `defaults`: username and tenancy attributes are omitted, and duration filtering is disabled, so even short successful JPA spans are retained.
+Nonempty username and tenancy attributes are always included.
+Duration filtering is disabled by default, so even short successful JPA spans are retained.
 Remove external `causeway.observation.*` overrides when checking these defaults.
 
 === Exercise the application
@@ -153,10 +154,11 @@ Span display names are contextual, for example `Action <member>` or `Persist <en
 ** `causeway.user.impersonating`
 
 +
-In this default run, `causeway.user.name` and `causeway.user.multiTenancyToken` should be absent.
+`causeway.user.name` contains the authenticated username, not the pet owner being edited.
+`causeway.user.multiTenancyToken` is included when the user has a nonempty tenancy token; the sample bypass user normally has none.
 
-* When explicitly enabled in <<verification-scenarios>>, those attributes appear on interaction spans when the corresponding user values are nonempty; they are not added to the enclosing HTTP server span.
-* The root interaction also has `causeway.interaction.id`, the UUID used by Causeway's interaction/command, even in the default scenario.
+* These user attributes are always included when nonempty on interaction spans; they are not added to the enclosing HTTP server span.
+* The root interaction also has `causeway.interaction.id`, the UUID used by Causeway's interaction/command, in both tracing modes.
 +
 This is distinct from Jaeger's trace ID and span ID, and is not copied onto the HTTP span or nested interactions.
 * Note that static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
@@ -173,7 +175,7 @@ Repeat operations on different owners:
 
 Note that instance identifiers, object titles or argument values and _not_ included in the spans.
 
-HTTP instrumentation can still record request paths containing object identifiers; optional interaction identity attributes are a separate policy.
+HTTP instrumentation can still record request paths containing object identifiers; interaction identity attributes are recorded separately.
 
 Open Prometheus directly or log in to Grafana (`admin` / `admin`).
 
@@ -206,7 +208,7 @@ count by (__name__) ({__name__=~"causeway_.*"})
 
 Note that Prometheus metric names can differ from contextual span names, including dots translated to underscores.
 
-The optional username and tenancy attributes are high-cardinality span metadata; enabling them does not add them as Micrometer metric labels.
+The username and tenancy attributes are high-cardinality span metadata; they are not added as Micrometer metric labels.
 
 * Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
 
@@ -234,47 +236,34 @@ Sampling, export failures, time ranges and Jaeger's in-memory retention can limi
 Neither attribute adds an interaction UUID or execution-mode label to Causeway's Micrometer meters.
 
 
-[[verification-scenarios]]
-=== Select a verification scenario
+=== Enable duration filtering
 
-Stop Petclinic with Ctrl-C, leave the telemetry services running, and restart with a named scenario.
-For example, enable username export:
+The JPA duration threshold defaults to `0ms`, which disables filtering.
+To filter short successful JPA spans, stop Petclinic with Ctrl-C, leave the telemetry services running, and set a positive threshold for the next Boot-managed run:
 
 [source,bash]
 ----
-./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --scenario username
+export CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=1s
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
 ----
 
-[cols="1,3",options="header"]
-|===
-|Scenario |Expected result
-|`defaults` (the default) |Username and tenancy attributes omitted; short successful JPA spans retained. Remove external policy overrides when checking framework defaults.
-|`username` |Nonempty `causeway.user.name` present on interaction spans; tenancy omitted.
-|`tenancy` |Username omitted; `causeway.user.multiTenancyToken` emitted if the user has a nonempty token.
-|`identity` |Both exports enabled; each attribute emitted only if its user value is nonempty.
-|`filtered` |Successful JPA spans below one second suppressed; failed JPA spans retained.
-|`zero` |Filtering enabled with a zero threshold: no spans suppressed by duration.
-|`negative` |Startup rejects a negative duration despite filtering being disabled.
-|`malformed` |Startup rejects an invalid duration despite filtering being disabled.
-|===
-
-After restarting, perform another domain operation and inspect a *new* trace's *Causeway Root Interaction* attributes.
-Existing traces retain the attributes exported by the previous run.
-For `username`, expect the interaction's authenticated username, not the name of the pet owner being edited.
-Run one scenario at a time, stopping Petclinic with Ctrl-C between runs.
-Its in-memory database is recreated on restart; keep telemetry services running and use the time range to distinguish runs.
-The `negative` and `malformed` cases deliberately exit unsuccessfully.
-The bypass user normally has no tenancy token; the options enable export but do not invent a token or change authentication.
-
-For another application, the identity switches are `causeway.observation.include-user-name` and `causeway.observation.include-multi-tenancy-token`; both default to `false`.
-The duration switches are `causeway.observation.duration-filtering-enabled` (default `false`) and `causeway.observation.jpa-duration-threshold` (default `2ms`, applied only when filtering is enabled).
-The launcher's `filtered` scenario deliberately uses `1s` to make the effect easy to see: repeat a database-backed action and compare its JPA spans with the default run.
+This environment variable binds `causeway.observation.jpa-duration-threshold`.
+The example uses one second to make the filtering effect easy to see; choose a smaller threshold such as `2ms` for less aggressive filtering.
+Repeat a database-backed action and compare a new trace with one from the unfiltered run.
+Existing traces are unchanged.
 In Jaeger, look for contextual names such as *Fetch by Bookmark* and *Refresh*, followed by the entity type; these correspond to `causeway.jpa.fetch-by-bookmark` and `causeway.jpa.refresh`.
-Short successful spans with these names should disappear in `filtered`, while *Transaction*, *Transaction Creation*, *Transaction Completion* and *Action* remain because they are outside the JPA duration filter.
+Short successful spans with these names below the threshold should disappear when filtering is enabled, while *Transaction*, *Transaction Creation*, *Transaction Completion* and *Action* remain because they are outside the JPA duration filter.
 
 Duration filtering is a span export policy, not a guarantee about metric suppression.
 It can leave exported children whose JPA parent was discarded.
 To check context cleanup, trigger an exception during observed work, then a successful action in the same run; a rejected UI validation alone need not produce an error span.
+
+To return to the defaults, stop Petclinic and unset the overrides before restarting:
+
+[source,bash]
+----
+unset CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD
+----
 
 == Switch to agent-managed tracing
 
@@ -285,15 +274,8 @@ Stop the Boot-managed Petclinic process, keep all three telemetry services runni
 ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
 ----
 
-Or combine it with an identity check:
-
-[source,bash]
-----
-./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent --scenario username
-----
-
 The same Jaeger and Prometheus/Grafana UIs remain available.
-The plain `--agent` command still uses `defaults`, so username and tenancy remain absent; use `--scenario username` or `--scenario identity` to opt in, and inspect new traces after exercising the app again.
+User attributes are included in both modes; inspect new traces after exercising the app again.
 The agent now owns the tracing SDK, exporter and automatic HTTP/JDBC instrumentation.
 An explicit registry bridge joins Causeway observations to that context, and the `agent` profile disables competing Boot tracing auto-configuration.
 Micrometer continues to export metrics to Prometheus in both modes; the agent's own metrics exporter is disabled to avoid duplicate JVM metrics.
@@ -313,9 +295,8 @@ The launcher sets OTLP HTTP trace export, full trace sampling and service name *
 `OTEL_SERVICE_NAME` and `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` can override the agent's trace service name and destination.
 Micrometer's destination remains the separately configured metrics URL.
 
-Agent mode supports `defaults`, `username`, `tenancy` and `identity`.
-Keep duration filtering disabled: the agent exporter does not consume Spring's discard predicate.
-Use Boot mode for duration-filtering scenarios.
+The launcher disables duration filtering in agent mode: the agent exporter does not consume Spring's discard predicate.
+Use Boot mode to enable duration filtering.
 Inspect a database-backed operation in Jaeger: framework spans should join automatic HTTP/JDBC context without duplicate framework export.
 The launcher reserves profile, agent and application-argument settings so conflicting Maven options cannot silently replace this wiring.
 
@@ -383,7 +364,7 @@ management:
       enabled: false
 causeway:
   observation:
-    duration-filtering-enabled: false
+    jpa-duration-threshold: 0ms
 ----
 
 The exclusions above match the Spring Boot 4.2.0-M1 baseline used by this checkout.

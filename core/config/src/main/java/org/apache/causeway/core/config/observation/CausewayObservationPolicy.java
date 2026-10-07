@@ -25,18 +25,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
- * Metadata and duration policy, independent of registry ownership and activation.
- * Identity is opt-in; retaining short parents avoids holes above exported children.
+ * Duration policy, independent of registry ownership and activation.
+ * Retaining short parents avoids holes above exported children.
  */
 @ConfigurationProperties("causeway.observation")
 public record CausewayObservationPolicy(
-        @DefaultValue("false") boolean includeUserName,
-        @DefaultValue("false") boolean includeMultiTenancyToken,
-        @DefaultValue("false") boolean durationFilteringEnabled,
-        @DefaultValue("2ms") Duration jpaDurationThreshold) {
+        @DefaultValue("0ms") Duration jpaDurationThreshold) {
 
     public static final CausewayObservationPolicy DEFAULT =
-            new CausewayObservationPolicy(false, false, false, Duration.ofMillis(2));
+            new CausewayObservationPolicy(Duration.ZERO);
 
     public CausewayObservationPolicy {
         Objects.requireNonNull(jpaDurationThreshold, "jpa-duration-threshold");

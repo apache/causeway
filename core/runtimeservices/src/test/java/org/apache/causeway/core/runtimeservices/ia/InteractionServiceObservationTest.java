@@ -75,36 +75,26 @@ class InteractionServiceObservationTest {
         assertEquals(2, fixture.stopped.size());
         assertNull(fixture.stopped.get(1).getError());
     }
-    @Test void identityOptionsAreIndependentAndPreserveOtherTags() {
-        for (boolean userName : new boolean[]{false, true}) {
-            for (boolean tenancy : new boolean[]{false, true}) {
-                var fixture = new Fixture(new org.apache.causeway.core.config.observation.CausewayObservationPolicy(
-                        userName, tenancy, false, java.time.Duration.ofMillis(2)));
-                var user = org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
-                        .withMultiTenancyToken("sentinel-tenant");
-                fixture.service.run(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(user), () -> {});
-                var context = fixture.stopped.get(0);
-                var name = context.getHighCardinalityKeyValue("causeway.user.name");
-                var token = context.getHighCardinalityKeyValue("causeway.user.multiTenancyToken");
-                assertEquals(userName, name != null);
-                assertEquals(tenancy, token != null);
-                if (userName) assertEquals("sentinel-user", name.getValue());
-                if (tenancy) assertEquals("sentinel-tenant", token.getValue());
-                assertNotNull(context.getLowCardinalityKeyValue("causeway.user.impersonating"));
-                assertNotNull(context.getHighCardinalityKeyValue("causeway.interaction.clock"));
-                if (!userName) assertFalse(context.getAllKeyValues().toString().contains("sentinel-user"));
-                if (!tenancy) assertFalse(context.getAllKeyValues().toString().contains("sentinel-tenant"));
-            }
-        }
+    @Test void identityAttributesAreAlwaysIncludedAsSpanMetadata() {
+        var fixture = new Fixture();
+        var user = org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
+                .withMultiTenancyToken("sentinel-tenant");
+        fixture.service.run(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(user), () -> {});
+        var context = fixture.stopped.get(0);
+        assertEquals("sentinel-user", context.getHighCardinalityKeyValue("causeway.user.name").getValue());
+        assertEquals("sentinel-tenant", context.getHighCardinalityKeyValue("causeway.user.multiTenancyToken").getValue());
+        assertNull(context.getLowCardinalityKeyValue("causeway.user.name"));
+        assertNull(context.getLowCardinalityKeyValue("causeway.user.multiTenancyToken"));
+        assertNotNull(context.getHighCardinalityKeyValue("causeway.interaction.id"));
+        assertNotNull(context.getLowCardinalityKeyValue("causeway.user.impersonating"));
     }
-    @Test void emptyIdentityValuesAreOmittedEvenWhenEnabled() {
+    @Test void emptyIdentityValuesAreOmitted() {
         var registry = new Fixture().registry;
         var obs = Observation.createNotStarted("test", registry);
         var user = mock(org.apache.causeway.applib.services.user.UserMemento.class);
         when(user.name()).thenReturn("");
         var ic = org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(user);
-        _Observation.addTags(obs, ic, 0, new org.apache.causeway.core.config.observation.CausewayObservationPolicy(
-                true, true, false, java.time.Duration.ofMillis(2)));
+        _Observation.addTags(obs, ic, 0);
         assertNull(obs.getContext().getHighCardinalityKeyValue("causeway.user.name"));
         assertNull(obs.getContext().getHighCardinalityKeyValue("causeway.user.multiTenancyToken"));
     }

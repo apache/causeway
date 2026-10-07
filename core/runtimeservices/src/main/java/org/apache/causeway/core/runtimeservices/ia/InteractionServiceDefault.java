@@ -46,7 +46,6 @@ import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
-import org.apache.causeway.core.config.observation.CausewayObservationPolicy;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
@@ -81,7 +80,6 @@ implements
 
     private final InteractionLayerStack layerStack = new InteractionLayerStack();
 
-    private final CausewayObservationPolicy observationPolicy;
     private final ObservationProvider observationProvider;
     private final ServiceInjector serviceInjector;
     private final Provider<CommandPublisher> commandPublisherProvider;
@@ -104,7 +102,6 @@ implements
         this.transactionServiceSpring = transactionServiceSpring;
         this.commandPublisherProvider = commandPublisherProvider;
         this.executionContext = executionContext;
-        this.observationPolicy = observationIntegration.policy();
         this.observationProvider = observationIntegration.provider(getClass(),
         		CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
@@ -148,7 +145,7 @@ implements
                 : "Causeway Nested Interaction");
         var newInteractionLayer = layerStack.push(executionContext, interactionContextToUse, obs);
 
-        _Observation.addTags(obs, interactionContextToUse, depth, observationPolicy);
+        _Observation.addTags(obs, interactionContextToUse, depth);
 
         if(depth == 0) {
             transactionServiceSpring.onOpen(newInteractionLayer.interaction());

@@ -76,22 +76,20 @@ The optional registry bridge joins Causeway observations to agent context and th
 Agent metrics/log export and Causeway duration filtering are disabled; Micrometer metrics stay enabled.
 Maven obtains agent 2.31.1 on first use, or set `OTEL_JAVAAGENT_PATH` to an existing JAR.
 
-Use the same launcher for policy checks:
+Nonempty user identity attributes are always included. Duration filtering is disabled by default.
+To enable it in Boot-managed mode:
 
 [source,bash]
 ----
-./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --scenario username
-./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent --scenario username
+export CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=1s
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
 ----
 
-Scenarios are `defaults`, `username`, `tenancy`, `identity`, `filtered`, `zero`, `negative` and `malformed`.
-The last four are Boot-only; agent mode supports the default and identity checks.
-Defaults omit identity attributes and retain short JPA spans.
-`filtered` suppresses successful JPA spans below one second; `zero` retains all by duration.
-The two invalid-duration scenarios deliberately fail startup.
+The JPA threshold defaults to `0ms` (no filtering); a positive threshold filters shorter successful spans.
+Unset the variable before returning to the default. The launcher disables filtering in agent mode.
 
 Check identity attributes on `Causeway Root Interaction` spans, not static-resource HTTP spans.
-The bypass user normally has no tenancy token; enabling its export does not create one.
+The bypass user normally has no tenancy token; that attribute is omitted when empty.
 Compare operations on different owners to check that instance identifiers and argument values stay out of Causeway span names and metadata.
 Stop Petclinic between runs; its database is recreated each time. Keep telemetry backends running and use the time range to distinguish results.
 

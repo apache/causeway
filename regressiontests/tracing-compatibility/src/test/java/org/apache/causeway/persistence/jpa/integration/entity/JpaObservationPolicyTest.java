@@ -59,7 +59,7 @@ class JpaObservationPolicyTest {
     }
     @Test void facetUsesConfiguredThresholdAndRetainsErrors() {
         var stopped = new ArrayList<Observation.Context>();
-        var policy = new CausewayObservationPolicy(false, false, true, java.time.Duration.ofDays(1));
+        var policy = new CausewayObservationPolicy(java.time.Duration.ofDays(1));
         var integration = integration(stopped, policy);
         JpaObservationFixture.create(integration, () -> {}).persist(new JpaObservationFixture.Entity());
         assertNotNull(stopped.get(0).getLowCardinalityKeyValue("causeway.discard"));

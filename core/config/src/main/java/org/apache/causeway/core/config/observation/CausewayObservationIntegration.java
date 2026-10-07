@@ -65,17 +65,6 @@ public record CausewayObservationIntegration(
         this(observationRegistry, CausewayObservationPolicy.DEFAULT);
     }
 
-    /** Compatibility constructor for callers explicitly selecting duration filtering. */
-    public CausewayObservationIntegration(final ObservationRegistry observationRegistry,
-            final boolean durationFilteringEnabled) {
-        this(observationRegistry, new CausewayObservationPolicy(false, false,
-                durationFilteringEnabled, CausewayObservationPolicy.DEFAULT.jpaDurationThreshold()));
-    }
-
-    public boolean durationFilteringEnabled() {
-        return policy.durationFilteringEnabled();
-    }
-
     public CausewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
         this(observationRegistryOpt.orElse(ObservationRegistry.NOOP));
@@ -119,15 +108,12 @@ public record CausewayObservationIntegration(
     }
 
     /**
-     * Applies the optional duration policy at the instrumentation boundary
-     * (currently JPA operations, using the configured threshold). When disabled,
-     * the original observation is returned unchanged.
-     * The flag does not affect observations created without this method.
+     * Retains all spans at zero; a positive threshold marks short successful
+     * observations for discard by the Spring-managed exporter. Failed work is retained.
      */
     public Observation withTimeThreshold(final Observation observation, final Duration threshold) {
-        return durationFilteringEnabled()
-                ? new ObservationWithTimeThreshold(observation, threshold)
-                : observation;
+        if (threshold.isNegative()) throw new IllegalArgumentException("threshold must not be negative");
+        return threshold.isZero() ? observation : new ObservationWithTimeThreshold(observation, threshold);
     }
 
     // -- COMMON KEY-VALUES

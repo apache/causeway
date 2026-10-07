@@ -89,13 +89,10 @@ class CausewayObservationAutoConfigurationTest {
     }
     @Test void bindsExplicitPolicyWithoutActivatingFrameworkObservations() {
         try (var context = configured(java.util.Map.of(
-                "causeway.observation.include-user-name", "true",
-                "causeway.observation.include-multi-tenancy-token", "true",
-                "causeway.observation.duration-filtering-enabled", "true",
                 "causeway.observation.jpa-duration-threshold", "7ms"))) {
             var integration = context.getBean(CausewayObservationIntegration.class);
             assertTrue(integration.isNoop());
-            assertEquals(new CausewayObservationPolicy(true, true, true, java.time.Duration.ofMillis(7)), integration.policy());
+            assertEquals(new CausewayObservationPolicy(java.time.Duration.ofMillis(7)), integration.policy());
         }
     }
     @Test void acceptsZeroThreshold() {
@@ -103,7 +100,7 @@ class CausewayObservationAutoConfigurationTest {
             assertEquals(java.time.Duration.ZERO, context.getBean(CausewayObservationPolicy.class).jpaDurationThreshold());
         }
     }
-    @Test void rejectsInvalidThresholdEvenWhenFilteringIsDisabled() {
+    @Test void rejectsInvalidThreshold() {
         for (String value : new String[]{"-1ms", "not-a-duration"}) {
             var failure = assertThrows(Exception.class, () -> configured(
                     java.util.Map.of("causeway.observation.jpa-duration-threshold", value)));
