@@ -34,6 +34,8 @@ All published ports bind to localhost.
 |http://localhost:3000 |Grafana; initial login `admin` / `admin`
 |===
 
+Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
+
 Jaeger stores traces in memory, so
 restarting Jaeger will lose earlier traces.
 Similarly Prometheus and Grafana data directories use size-limited tmpfs; there are no persistent data volumes or host data directories.
@@ -75,7 +77,6 @@ The launcher activates the Maven `observation` profile for dependencies and the 
 
 Boot owns the tracing, no Java agent is attached in this mode.
 Micrometer meanwhile exports metrics.
-
 The petclinic sample is configured so that traces are fully sampled and metrics are exported every ten seconds (this can be adjusted, see xref:#configuring-your-own-app[below].)
 
 
@@ -118,7 +119,7 @@ NOTE: instance identifiers, object titles or argument values and _not_ included 
 
 * on the top-level "entry" span, inspect its *attributes*:
 
-* causeway.execution.mode
+** `causeway.execution.mode`
 +
 Records if the interaction was performed in the foreground (as the result of a user request) or in the background (from the command log extension's xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[] ).
 
@@ -154,16 +155,17 @@ Repeat operations on different owners:
 
 * the Causeway member/JPA span names and member/entity metadata describe the operation and type
 
-Open Prometheus directly or log in to Grafana (`admin` / `admin`).
+In Prometheus:
+
+* open directly
 
 In Grafana:
 
+* log in (`admin` / `admin`).
 * choose *Explore*
 * select *Prometheus* in the data-source dropdown at the top, and switch to *Code* mode for PromQL.
-
-The built-in *Grafana* data source and its *Random Walk* query show generated sample data, not Petclinic metrics.
-
-* The provisioned *Prometheus* source is also listed under *Connections → Data sources*.
++
+The provisioned *Prometheus* source is also listed under *Connections → Data sources*.
 
 After exercising Petclinic, wait 10–20 seconds and try these queries separately:
 
@@ -185,13 +187,16 @@ count by (__name__) ({__name__=~"causeway_.*"})
 
 Note that Prometheus metric names can differ from contextual span names, including dots translated to underscores.
 
-The username and tenancy attributes are high-cardinality span metadata; they are not added as Micrometer metric labels.
-
-* Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
 
 
 
 == Switch to agent-managed tracing
+
+The principal benefit of using agent-managed tracing is that the agent will instrument libraries, such as JDBC access.
+When an agent is configured, the agent now owns the tracing SDK, exporter and automatic HTTP/JDBC instrumentation.
+A registry bridge joins Causeway observations to that context, and the `agent` profile disables competing Boot tracing auto-configuration.
+
+### Try it out
 
 Stop the Boot-managed Petclinic process, keep all three telemetry services running, then add `--agent`:
 
@@ -200,16 +205,10 @@ Stop the Boot-managed Petclinic process, keep all three telemetry services runni
 ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
 ----
 
-The same Jaeger and Prometheus/Grafana UIs remain available.
-User attributes are included in both modes; inspect new traces after exercising the app again.
-The agent now owns the tracing SDK, exporter and automatic HTTP/JDBC instrumentation.
-An explicit registry bridge joins Causeway observations to that context, and the `agent` profile disables competing Boot tracing auto-configuration.
-Micrometer continues to export metrics to Prometheus in both modes; the agent's own metrics exporter is disabled to avoid duplicate JVM metrics.
-This setup also disables agent log export.
+On first use, Maven downloads the (compatible) agent into the sample's `target/agents/` directory.
+The launcher attaches it to the application JVM with `spring-boot.run.agents`.
 
-On first use, Maven obtains agent 2.31.1 (matching the compatibility fixture) into the sample's `target/agents/` directory.
-The launcher attaches it to the application JVM with `spring-boot.run.agents`, not to Maven itself.
-Use an existing JAR if preferred:
+Alternatively, the location of the agent JAR can be specified using an env var:
 
 [source,bash]
 ----
@@ -217,12 +216,17 @@ OTEL_JAVAAGENT_PATH=/absolute/path/to/opentelemetry-javaagent.jar \
   ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
 ----
 
-The launcher sets OTLP HTTP trace export, full trace sampling and service name *Causeway Pet Clinic* by default.
-`OTEL_SERVICE_NAME` and `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` can override the agent's trace service name and destination.
-Micrometer's destination remains the separately configured metrics URL.
 
-Inspect a database-backed operation in Jaeger: framework spans should join automatic HTTP/JDBC context without duplicate framework export.
-The launcher reserves profile, agent and application-argument settings so conflicting Maven options cannot silently replace this wiring.
+Micrometer continues to export metrics to Prometheus in both modes; the agent's own metrics exporter is disabled to avoid duplicate JVM metrics.
+This setup also disables agent log export.
+
+The launcher sets OTLP HTTP trace export, full trace sampling and service name *Causeway Pet Clinic* by default.
+
+Some config can be overridden using env vars:
+
+* `OTEL_SERVICE_NAME` - agent's trace service name
+* `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` - agent's trace destination
+
 
 [#apply-the-same-change-to-another-application]
 === Apply the same change to another application
