@@ -1,9 +1,7 @@
 ## Purpose
 
-Defines stable observation operation names, safe contextual metadata, opt-in interaction identity, and configurable JPA duration filtering.
-
+Defines stable observation operation names, safe contextual metadata, automatic interaction identity, and configurable JPA duration filtering.
 ## Requirements
-
 ### Requirement: Existing dynamic observations separate operation and context
 
 Causeway SHALL use fixed operation names for the existing JPA, action invocation, property update and execution-publishing observations. Contextual names and model metadata SHALL use only static entity type, member identity or declared named-query identity. Instance identifiers, bookmarks, object titles, query descriptions and arguments SHALL NOT be introduced into these names or attributes. Execution subscriber counts SHALL NOT be included in names or low-cardinality dimensions. Existing fixed-name instrumentation and invocation semantics SHALL be preserved.
@@ -24,46 +22,39 @@ Causeway SHALL use fixed operation names for the existing JPA, action invocation
 - **WHEN** a safe static identifier is unavailable
 - **THEN** the operation remains observable without falling back to object or query descriptions
 
-### Requirement: Identity metadata requires independent opt-in
-
-Causeway SHALL omit username and multitenancy-token attributes by default. It SHALL support independent `causeway.observation.include-user-name` and `causeway.observation.include-multi-tenancy-token` options, both defaulting to false. Explicitly enabled nonempty values SHALL retain their existing attribute keys and high-cardinality classification. Disabled values SHALL NOT be copied into other Causeway-generated names or attributes. Non-identity interaction metadata SHALL remain available.
-
-#### Scenario: Defaults
-- **WHEN** an observed interaction has a named user and tenancy token without identity opt-ins
-- **THEN** neither identity value is emitted by Causeway interaction tagging
-
-#### Scenario: Independent options
-- **WHEN** exactly one identity option is enabled
-- **THEN** only its corresponding nonempty value is emitted under the existing key
-
-#### Scenario: Both options and empty values
-- **WHEN** both options are enabled
-- **THEN** both nonempty values are emitted, and missing or empty values are omitted
-
 ### Requirement: JPA duration policy is explicit and validated
 
-Causeway SHALL default `causeway.observation.duration-filtering-enabled` to false and SHALL support `causeway.observation.jpa-duration-threshold`, defaulting to 2 ms. The threshold SHALL accept zero and positive durations and reject malformed or negative values at startup, including when filtering is disabled. The threshold SHALL apply only to the existing JPA duration-filtered boundaries and SHALL NOT change domain outcomes or observation activation.
+Causeway SHALL expose only `causeway.observation.jpa-duration-threshold` for JPA duration filtering, defaulting to `0ms`. Zero SHALL disable filtering. A positive threshold SHALL mark successful JPA observations strictly below the threshold for discard; failed observations SHALL remain eligible for export. Negative or malformed thresholds SHALL fail startup. No separate duration-filtering-enabled property SHALL exist. Agent-owned export SHALL require a zero threshold because it does not consume Spring's discard predicate.
 
-#### Scenario: Default parent retention
-- **WHEN** a short successful JPA observation has an exported JDBC child in the deterministically sampled compatibility fixture with default duration policy
-- **THEN** the framework parent remains exported in both supported telemetry configurations and the child's parent ID resolves to it
+#### Scenario: Default or zero threshold
+- **WHEN** the threshold is zero or unset
+- **THEN** short successful JPA spans are retained
 
-#### Scenario: Configured and zero thresholds
-- **WHEN** Boot-mode filtering is explicitly enabled with a configured threshold
-- **THEN** successful observations below it are suppressed, observations equal to or above it are retained, and zero suppresses none by duration
+#### Scenario: Positive threshold
+- **WHEN** the threshold is positive
+- **THEN** shorter successful JPA spans are marked for discard while failed spans remain eligible
 
-#### Scenario: Invalid duration
+#### Scenario: Invalid threshold
 - **WHEN** the threshold is negative or malformed
-- **THEN** startup reports an actionable configuration failure regardless of whether duration filtering is enabled
-
-#### Scenario: Observation profile inactive
-- **WHEN** policy options are configured but the observation profile is inactive
-- **THEN** Causeway framework observations remain disabled and application observations remain independent
+- **THEN** startup reports a configuration error
 
 ### Requirement: Telemetry migration and limitations are documented
 
-The observability guide SHALL describe changed operation/contextual names, identity opt-ins, duration defaults and configuration examples. It SHALL distinguish Micrometer operation identity from exported contextual names, state that opt-in duration filtering can leave missing parents, and retain the supported agent requirement to disable filtering. It SHALL NOT imply control over application/agent metadata or externally sampled/exported spans. Migration SHALL NOT introduce duplicate legacy spans.
+The observability guide SHALL describe operation/contextual names, automatic identity attributes, duration defaults and configuration examples. It SHALL distinguish Micrometer operation identity from exported contextual names, explain that enabled duration filtering can leave missing parents, and retain the supported agent requirement to disable filtering. Migration SHALL NOT introduce duplicate legacy spans.
 
 #### Scenario: Existing deployment migrates
 - **WHEN** an operator follows the migration guide
-- **THEN** they can update affected queries and explicitly choose identity and supported duration filtering without requiring another SDK or duplicate observations
+- **THEN** they can inspect automatically included identity attributes and choose supported duration filtering without another SDK or duplicate observations
+
+### Requirement: Interaction identity metadata is automatic
+
+Causeway SHALL always include nonempty username and multitenancy-token values under the existing high-cardinality keys `causeway.user.name` and `causeway.user.multiTenancyToken` on interaction spans. There SHALL be no configuration properties to enable or disable these attributes. Empty values SHALL be omitted and neither value SHALL become a metric label. Other interaction metadata SHALL remain available.
+
+#### Scenario: Defaults
+- **WHEN** an observed interaction has a named user and tenancy token
+- **THEN** both identity values are emitted without configuration
+
+#### Scenario: Missing values
+- **WHEN** an observed interaction has empty or missing identity values
+- **THEN** those attributes are omitted without inventing values
+
