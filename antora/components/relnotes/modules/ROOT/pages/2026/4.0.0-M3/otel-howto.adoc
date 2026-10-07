@@ -34,10 +34,26 @@ All published ports bind to localhost.
 |http://localhost:3000 |Grafana; initial login `admin` / `admin`
 |===
 
-Jaeger stores traces in memory; Prometheus and Grafana data directories use size-limited tmpfs.
-There are no persistent data volumes or host data directories.
-Stopping or restarting the containers discards their runtime data, including Grafana password changes and dashboards created in the UI.
-Read-only configuration files remain in the repository.
+Jaeger stores traces in memory, so
+restarting Jaeger will lose earlier traces.
+Similarly Prometheus and Grafana data directories use size-limited tmpfs; there are no persistent data volumes or host data directories.
+
+To check status:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh status
+./scripts/metrics-local.sh status
+----
+
+To inspect logs:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh logs
+./scripts/metrics-local.sh logs
+----
+
 
 == Run with Boot-managed telemetry
 
@@ -56,18 +72,19 @@ Additional Maven options can be specified after `--`, for example `run-with-tele
 ====
 
 The launcher activates the Maven `observation` profile for dependencies and the Spring `observation` profile for framework instrumentation and export configuration.
-Boot owns tracing; Micrometer exports metrics.
-Traces are fully sampled and metrics are exported every ten seconds.
-No Java agent is attached in this mode.
-Nonempty username and tenancy attributes are always included.
-Duration filtering is disabled by default, so even short successful JPA spans are retained.
-Remove external `causeway.observation.*` overrides when checking these defaults.
+
+Boot owns the tracing, no Java agent is attached in this mode.
+Micrometer meanwhile exports metrics.
+
+The petclinic sample is configured so that traces are fully sampled and metrics are exported every ten seconds (this can be adjusted, see xref:#configuring-your-own-app[below].)
+
+
 
 === Exercise the application
 
 Open the app:
 
-* http://localhost:8080/htmx (webcomponent viewer)
+* http://localhost:8080/htmx (htmx viewer)
 +
 no password (uses bypass authentication); or
 
@@ -82,54 +99,6 @@ Try:
 * registering a pet.
 
 
-=== Equivalent configuration for another application
-
-If you are following along with Petclinic, the launcher already supplies this configuration; continue to <<inspect-traces-and-metrics>>.
-
-Use the BOM-managed starter, which includes the Micrometer OTLP metrics registry:
-
-[source,xml]
-.pom.xml
-----
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-opentelemetry</artifactId>
-</dependency>
-----
-
-Activate `observation` alongside the application's other Spring profiles:
-
-[source,yaml]
-.application.yaml
-----
-spring:
-  application:
-    name: my-causeway-app
-  profiles:
-    active: observation
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-  opentelemetry:
-    tracing:
-      export:
-        otlp:
-          endpoint: http://localhost:4318/v1/traces
-  otlp:
-    metrics:
-      export:
-        enabled: true
-        url: http://localhost:9090/api/v1/otlp/v1/metrics
-        step: 10s
-        aggregation-temporality: cumulative
-----
-
-The two export endpoints are deliberately different.
-Sending metrics to Jaeger's `/v1/metrics` produces HTTP 404 errors even if trace export works.
-No custom `OtlpConfig` bean is needed.
-Full sampling and frequent metrics export are useful for this local verification setup.
-
 [[inspect-traces-and-metrics]]
 === Inspect traces and metrics
 
@@ -141,28 +110,70 @@ In Jaeger:
 +
 HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
 
-* Select the enclosing HTTP server span to see `causeway.execution.mode=foreground`; this includes static asset requests as well as domain operations.
-
 * Expand the span tree and inspect the spans
 +
 Span display names are contextual, for example `Action <member>` or `Persist <entity type>`.
++
+NOTE: instance identifiers, object titles or argument values and _not_ included in the spans.
 
-* select the *Causeway Root Interaction* span, and inspect its *Attributes*, such as:
+* on the top-level "entry" span, inspect its *attributes*:
+
+* causeway.execution.mode
++
+Records if the interaction was performed in the foreground (as the result of a user request) or in the background (from the command log extension's xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[] ).
+
+* on any *Causeway Root Interaction* span, and inspect its *attributes*, such as:
+
+** `causeway.interaction.id`
++
+The UUID used by Causeway's interaction/command, in both tracing modes.
+Note that this is distinct from Jaeger's trace ID and span ID.
 
 ** `causeway.interaction.language`
 ** `causeway.interaction.timezone`
+** `causeway.user.name`
++
+The authenticated username
+
 ** `causeway.user.impersonating`
+** `causeway.user.multiTenancyToken`
++
+\... if the user has a nonempty tenancy token (nb: the sample bypass user normally has none)
 
 +
-`causeway.user.name` contains the authenticated username, not the pet owner being edited.
-`causeway.user.multiTenancyToken` is included when the user has a nonempty tenancy token; the sample bypass user normally has none.
+These attributes are _not_ added to the enclosing HTTP server span.
 
-* These user attributes are always included when nonempty on interaction spans; they are not added to the enclosing HTTP server span.
-* The root interaction also has `causeway.interaction.id`, the UUID used by Causeway's interaction/command, in both tracing modes.
-+
-This is distinct from Jaeger's trace ID and span ID, and is not copied onto the HTTP span or nested interactions.
-* Note that static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
+Note that static asset requests, such as `pdf.worker.min.mjs`, may contain only HTTP/security spans and therefore have no interaction UUID.
 
+
+=== Enable duration filtering
+
+The JPA duration threshold defaults to `0ms`, which disables filtering.
+To filter short successful JPA spans, stop Petclinic with Ctrl-C, leave the telemetry services running, and set a positive threshold for the next Boot-managed run:
+
+[source,bash]
+----
+export CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=1s
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
+
+This environment variable binds `causeway.observation.jpa-duration-threshold`.
+The example uses one second to make the filtering effect easy to see; choose a smaller threshold such as `2ms` for less aggressive filtering.
+Repeat a database-backed action and compare a new trace with one from the unfiltered run.
+Existing traces are unchanged.
+In Jaeger, look for contextual names such as *Fetch by Bookmark* and *Refresh*, followed by the entity type; these correspond to `causeway.jpa.fetch-by-bookmark` and `causeway.jpa.refresh`.
+Short successful spans with these names below the threshold should disappear when filtering is enabled, while *Transaction*, *Transaction Creation*, *Transaction Completion* and *Action* remain because they are outside the JPA duration filter.
+
+Duration filtering is a span export policy, not a guarantee about metric suppression.
+It can leave exported children whose JPA parent was discarded.
+To check context cleanup, trigger an exception during observed work, then a successful action in the same run; a rejected UI validation alone need not produce an error span.
+
+To return to the defaults, stop Petclinic and unset the overrides before restarting:
+
+[source,bash]
+----
+unset CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD
+----
 
 
 === Micrometer
@@ -172,10 +183,6 @@ Underlying Micrometer operation names are categories such as `causeway.member.ac
 Repeat operations on different owners:
 
 * the Causeway member/JPA span names and member/entity metadata describe the operation and type
-
-Note that instance identifiers, object titles or argument values and _not_ included in the spans.
-
-HTTP instrumentation can still record request paths containing object identifiers; interaction identity attributes are recorded separately.
 
 Open Prometheus directly or log in to Grafana (`admin` / `admin`).
 
@@ -213,57 +220,6 @@ The username and tenancy attributes are high-cardinality span metadata; they are
 * Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
 
 
-=== Find requests and correlate interactions
-
-In Jaeger, select *All Span Names* and use the *Attributes* field for these searches separately:
-
-[source,text]
-----
-causeway.execution.mode=foreground
-----
-
-Copy the `causeway.interaction.id` from a root interaction, then replace the example UUID below with that value:
-
-[source,text]
-----
-causeway.interaction.id=12345678-1234-1234-1234-123456789abc
-----
-
-The execution mode is on the entry span and the UUID is on the root interaction span.
-Do not combine these into a same-span attribute query: no single span is required to carry both.
-The UUID can correlate command replay with the originating command; replay retains that command's effective identifier even if it replaces an ID allocated when the interaction opened.
-Sampling, export failures, time ranges and Jaeger's in-memory retention can limit matches; restarting Jaeger loses earlier traces.
-Neither attribute adds an interaction UUID or execution-mode label to Causeway's Micrometer meters.
-
-
-=== Enable duration filtering
-
-The JPA duration threshold defaults to `0ms`, which disables filtering.
-To filter short successful JPA spans, stop Petclinic with Ctrl-C, leave the telemetry services running, and set a positive threshold for the next Boot-managed run:
-
-[source,bash]
-----
-export CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD=1s
-./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
-----
-
-This environment variable binds `causeway.observation.jpa-duration-threshold`.
-The example uses one second to make the filtering effect easy to see; choose a smaller threshold such as `2ms` for less aggressive filtering.
-Repeat a database-backed action and compare a new trace with one from the unfiltered run.
-Existing traces are unchanged.
-In Jaeger, look for contextual names such as *Fetch by Bookmark* and *Refresh*, followed by the entity type; these correspond to `causeway.jpa.fetch-by-bookmark` and `causeway.jpa.refresh`.
-Short successful spans with these names below the threshold should disappear when filtering is enabled, while *Transaction*, *Transaction Creation*, *Transaction Completion* and *Action* remain because they are outside the JPA duration filter.
-
-Duration filtering is a span export policy, not a guarantee about metric suppression.
-It can leave exported children whose JPA parent was discarded.
-To check context cleanup, trigger an exception during observed work, then a successful action in the same run; a rejected UI validation alone need not produce an error span.
-
-To return to the defaults, stop Petclinic and unset the overrides before restarting:
-
-[source,bash]
-----
-unset CAUSEWAY_OBSERVATION_JPA_DURATION_THRESHOLD
-----
 
 == Switch to agent-managed tracing
 
@@ -300,6 +256,7 @@ Use Boot mode to enable duration filtering.
 Inspect a database-backed operation in Jaeger: framework spans should join automatic HTTP/JDBC context without duplicate framework export.
 The launcher reserves profile, agent and application-argument settings so conflicting Maven options cannot silently replace this wiring.
 
+[#apply-the-same-change-to-another-application]
 === Apply the same change to another application
 
 Keep the metrics configuration above, add the BOM-managed `io.micrometer:micrometer-tracing-bridge-otel` dependency, and register the following configuration through component scanning or an explicit import:
@@ -392,15 +349,7 @@ java -javaagent:/absolute/path/to/opentelemetry-javaagent.jar \
 The shared `management.otlp.metrics.export.enabled=true` configuration therefore retains Micrometer's separate metrics pipeline.
 When returning to Boot-managed tracing, remove `-javaagent`, deactivate the `agent` profile, and unset the exported `OTEL_*` variables above so that Boot does not inherit the agent-only settings.
 
-== Inspect and stop the local services
-
-[source,bash]
-----
-./scripts/jaeger-local.sh status
-./scripts/metrics-local.sh status
-./scripts/jaeger-local.sh logs
-./scripts/metrics-local.sh logs
-----
+== Stop the local services
 
 When finished, stop Petclinic with Ctrl-C, then stop all telemetry services:
 
@@ -414,6 +363,53 @@ The Jaeger command discards stored traces.
 The metrics command discards metrics and Grafana UI changes and removes its Compose network.
 Each script manages only its own services.
 `./scripts/metrics-local.sh config` validates Compose configuration without starting services.
+
+
+[#configuring-your-own-app]
+== Configuring your own app.
+
+Use the BOM-managed starter, which includes the Micrometer OTLP metrics registry:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-opentelemetry</artifactId>
+</dependency>
+----
+
+Activate `observation` alongside the application's other Spring profiles:
+
+[source,yaml]
+.application.yaml
+----
+spring:
+  application:
+    name: my-causeway-app
+  profiles:
+    active: observation
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: http://localhost:9090/api/v1/otlp/v1/metrics
+        step: 10s
+        aggregation-temporality: cumulative
+----
+
+Traces are sent to Jaeger, and metrics to Prometheus using the endpoints above.
+The configuration records every trace (sampling probability) and exports metrics every ten seconds.
+
 
 == Further reading
 
