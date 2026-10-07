@@ -97,6 +97,13 @@
             <artifactId>micrometer-tracing</artifactId>
         </dependency>
 
+        <!-- Agent bridge is opt-in for consuming applications. -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--
         as per https://github.com/spring-projects/spring-boot/issues/30986, must be
         before the spring-boot-configuration-processor

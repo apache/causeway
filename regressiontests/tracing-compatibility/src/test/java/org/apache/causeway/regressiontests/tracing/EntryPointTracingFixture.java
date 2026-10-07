@@ -65,8 +65,7 @@ import io.micrometer.tracing.Tracer;
 /** Real servlet/Quartz entry points; business collaborators are controlled fixtures. */
 @SpringBootConfiguration(proxyBeanMethods = false)
 @EnableAutoConfiguration
-@Import({MicrometerTracingAgentFixture.AgentRegistry.class,
-        CausewayObservationAutoConfiguration.class, WebObservationConfiguration.class})
+@Import({CausewayObservationAutoConfiguration.class, WebObservationConfiguration.class})
 public class EntryPointTracingFixture {
     static InteractionServiceDefault interactions;
     static CausewayObservationIntegration integration;

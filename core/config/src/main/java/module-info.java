@@ -35,6 +35,8 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.viewer.web;
 
     requires static lombok;
+    requires static micrometer.tracing.bridge.otel;
+    requires static io.opentelemetry.api;
 
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;

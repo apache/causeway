@@ -194,7 +194,7 @@ Note that Prometheus metric names can differ from contextual span names, includi
 
 The principal benefit of using agent-managed tracing is that the agent will instrument libraries, such as JDBC access.
 When an agent is configured, the agent now owns the tracing SDK, exporter and automatic HTTP/JDBC instrumentation.
-A registry bridge joins Causeway observations to that context, and the `agent` profile disables competing Boot tracing auto-configuration.
+Causeway supplies a registry bridge to join its observations to that context, and the `agent` profile automatically disables competing Boot tracing auto-configuration.
 
 ### Try it out
 
@@ -229,74 +229,19 @@ Some config can be overridden using env vars:
 
 
 [#apply-the-same-change-to-another-application]
-=== Apply the same change to another application
+=== Configure agent-managed tracing in another application
 
-Keep the metrics configuration above, add the BOM-managed `io.micrometer:micrometer-tracing-bridge-otel` dependency, and register the following configuration through component scanning or an explicit import:
+Keep the metrics configuration above and add the BOM-managed `io.micrometer:micrometer-tracing-bridge-otel` dependency.
+Causeway supplies the registry bridge automatically when both `observation` and `agent` profiles are active; no application Java configuration or manual Boot exclusions are needed.
+The bridge uses the agent's global OpenTelemetry instance without constructing another SDK or exporter.
 
-[source,java]
-----
-import java.util.List;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-
-import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
-import io.micrometer.tracing.otel.bridge.OtelBaggageManager;
-import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
-import io.micrometer.tracing.otel.bridge.OtelTracer;
-import io.opentelemetry.api.GlobalOpenTelemetry;
-
-/** Bridges Causeway observations into the agent's HTTP/JDBC trace context. */
-@Configuration(proxyBeanMethods = false)
-@Profile("agent")
-public class AgentObservationConfiguration {
-    @Bean
-    io.micrometer.tracing.Tracer agentTracer() {
-        // The attached agent owns the global SDK and exporter. Do not construct another SDK here.
-        var currentContext = new OtelCurrentTraceContext();
-        return new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
-                event -> {}, new OtelBaggageManager(currentContext, List.of(), List.of()));
-    }
-
-    @Bean
-    ObservationRegistry agentObservationRegistry(io.micrometer.tracing.Tracer tracer) {
-        var registry = ObservationRegistry.create();
-        registry.observationConfig().observationHandler(new DefaultTracingObservationHandler(tracer));
-        return registry;
-    }
-}
-----
-
-The registry and entry-span classifier share this tracer bean, which uses the agent's global OpenTelemetry instance without constructing another SDK.
-A custom registry without a tracer bean can still create observations, but cannot classify agent-owned entry spans.
-When observations are active, supply a single tracer or designate a primary if multiple tracers exist.
-Add an agent-specific configuration that replaces tracing ownership while retaining Micrometer metrics:
-
-[source,yaml]
-.application-agent.yaml
-----
-spring:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.opentelemetry.autoconfigure.OpenTelemetrySdkAutoConfiguration
-      - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.OpenTelemetryTracingAutoConfiguration
-      - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.otlp.OtlpTracingAutoConfiguration
-      - org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration
-      - org.springframework.boot.webmvc.autoconfigure.WebMvcObservationAutoConfiguration
-management:
-  opentelemetry:
-    map-environment-variables: false
-  tracing:
-    export:
-      enabled: false
-----
-
-The exclusions above match the Spring Boot 4.2.0-M1 baseline used by this checkout.
-The WebMVC exclusion lets the agent own the HTTP entry span without a second Boot HTTP observation around it; foreground classification then tags the agent's span.
+The `agent` profile automatically excludes competing Boot tracing and WebMVC observation configuration, while preserving any unrelated application exclusions.
+The WebMVC exclusion lets the agent own the HTTP entry span without a second Boot HTTP observation around it; foreground classification tags the agent's span.
 It also removes Boot's HTTP request observation meters in this configuration; JVM and Causeway Micrometer metrics remain available.
-Build the application with the bridge configuration included.
+
+If your application supplies its own registry or tracer, Causeway backs off from creating the corresponding bean.
+A custom registry must register its own tracing handlers using the same single or primary tracer that the entry-span classifier uses.
+
 Activate `observation,agent` alongside any other required application profiles and attach the agent to the application JVM:
 
 [source,bash]
@@ -313,8 +258,8 @@ java -javaagent:/absolute/path/to/opentelemetry-javaagent.jar \
   -jar application.jar --spring.profiles.active=observation,agent
 ----
 
-`OTEL_METRICS_EXPORTER=none` disables the agent's exporter.
-`management.opentelemetry.map-environment-variables=false` prevents Boot from mapping that agent flag onto Micrometer and disabling its metrics too.
+`OTEL_METRICS_EXPORTER=none` disables the agent's metrics exporter.
+Causeway sets `management.opentelemetry.map-environment-variables=false` for the `agent` profile, preventing Boot from mapping that agent flag onto Micrometer and disabling its metrics too.
 The shared `management.otlp.metrics.export.enabled=true` configuration therefore retains Micrometer's separate metrics pipeline.
 When returning to Boot-managed tracing, remove `-javaagent`, deactivate the `agent` profile, and unset the exported `OTEL_*` variables above so that Boot does not inherit the agent-only settings.
 

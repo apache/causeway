@@ -36,9 +36,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
@@ -64,17 +62,11 @@ import org.apache.causeway.core.runtimeservices.executor.MemberExecutorServiceDe
 import org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 
-import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
-import io.micrometer.tracing.otel.bridge.OtelBaggageManager;
-import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
-import io.micrometer.tracing.otel.bridge.OtelTracer;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 
 /** Child JVM fixture: real framework boundaries with mocked non-telemetry collaborators. */
 @SpringBootConfiguration(proxyBeanMethods = false)
 @EnableAutoConfiguration
-@Import({CausewayObservationAutoConfiguration.class, MicrometerTracingAgentFixture.AgentRegistry.class})
+@Import({CausewayObservationAutoConfiguration.class})
 public class MicrometerTracingAgentFixture {
     public static void main(String[] args) throws Exception {
         try (var context = new SpringApplicationBuilder(MicrometerTracingAgentFixture.class)
@@ -169,21 +161,6 @@ public class MicrometerTracingAgentFixture {
                 if (!result.next()) throw new AssertionError("missing JDBC result");
                 // The Boot fixture explicitly instruments JDBC; agent mode owns its automatic JDBC spans.
             } catch (java.sql.SQLException ex) { throw new IllegalStateException(ex); }
-        }
-    }
-    @Configuration(proxyBeanMethods = false)
-    @Profile("agent")
-    static class AgentRegistry {
-        @Bean io.micrometer.tracing.Tracer agentTracer() {
-            var currentContext = new OtelCurrentTraceContext();
-            return new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
-                    event -> {}, new OtelBaggageManager(currentContext, List.of(), List.of()));
-        }
-        @Bean
-        ObservationRegistry agentObservationRegistry(io.micrometer.tracing.Tracer tracer) {
-            var registry = ObservationRegistry.create();
-            registry.observationConfig().observationHandler(new DefaultTracingObservationHandler(tracer));
-            return registry;
         }
     }
 }

@@ -72,7 +72,7 @@ Stop Petclinic with Ctrl-C and switch tracing ownership by adding one flag:
 ----
 
 The agent owns traces and automatic HTTP/JDBC instrumentation; Micrometer still owns metrics.
-The optional registry bridge joins Causeway observations to agent context and the agent profile excludes competing Boot tracing configuration.
+Causeway supplies the registry bridge automatically for `observation,agent` and excludes competing Boot tracing configuration. No application bridge code is required.
 Agent metrics/log export is disabled; Micrometer metrics stay enabled.
 Maven obtains agent 2.31.1 on first use, or set `OTEL_JAVAAGENT_PATH` to an existing JAR.
 

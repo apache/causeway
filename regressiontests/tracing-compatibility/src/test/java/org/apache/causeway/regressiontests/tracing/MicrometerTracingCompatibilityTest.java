@@ -41,6 +41,7 @@ class MicrometerTracingCompatibilityTest {
     @Test void agentJoinsFrameworkAndJdbcWithoutDuplicateSpans() throws Exception {
         try (var collector = new Collector()) {
             launch("agent", collector);
+            assertFalse(collector.metricNames.isEmpty(), "Micrometer metrics must export despite OTEL_METRICS_EXPORTER=none");
             var spans = collector.spans;
             var roots = spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
             assertEquals(2, roots.size(), names(spans));
@@ -180,9 +181,10 @@ class MicrometerTracingCompatibilityTest {
         command.add(fixture.getName());
         command.add("--spring.profiles.active=" + (mode.equals("inactive") ? "agent" : agent ? "observation,agent" : "observation"));
         command.add("--management.tracing.sampling.probability=1.0");
+        command.add("--management.otlp.metrics.export.url=" + collector.metricsEndpoint());
         command.add("--management.opentelemetry.tracing.export.otlp.endpoint=" + collector.endpoint());
-        command.add("--management.tracing.export.enabled=" + mode.equals("boot"));
-        if (agent || mode.equals("none")) {
+        if (!agent) command.add("--management.tracing.export.enabled=" + mode.equals("boot"));
+        if (mode.equals("none")) {
             command.add("--spring.autoconfigure.exclude=" + String.join(",",
                     "org.springframework.boot.opentelemetry.autoconfigure.OpenTelemetrySdkAutoConfiguration",
                     "org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.OpenTelemetryTracingAutoConfiguration",
@@ -190,7 +192,7 @@ class MicrometerTracingCompatibilityTest {
                     "org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration",
                     "org.springframework.boot.webmvc.autoconfigure.WebMvcObservationAutoConfiguration"));
         }
-        command.add("--management.opentelemetry.map-environment-variables=false");
+        if (!agent) command.add("--management.opentelemetry.map-environment-variables=false");
         command.addAll(List.of(properties));
         var builder = new ProcessBuilder(command).redirectErrorStream(true);
         builder.environment().keySet().removeIf(key -> key.startsWith("OTEL_"));
@@ -221,6 +223,7 @@ class MicrometerTracingCompatibilityTest {
     private String names(List<Span> spans) { return spans.stream().map(s -> s.getName() + ":" + s.getKind()).toList().toString(); }
     private static class Collector implements AutoCloseable {
         final List<Span> spans = new CopyOnWriteArrayList<>();
+        final List<String> metricNames = new CopyOnWriteArrayList<>();
         final HttpServer server;
         Collector() throws Exception {
             server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
@@ -232,9 +235,19 @@ class MicrometerTracingCompatibilityTest {
                     exchange.sendResponseHeaders(200, 0);
                 } finally { exchange.close(); }
             });
+            server.createContext("/v1/metrics", exchange -> {
+                try (var body = "gzip".equals(exchange.getRequestHeaders().getFirst("Content-Encoding"))
+                        ? new GZIPInputStream(exchange.getRequestBody()) : exchange.getRequestBody()) {
+                    var request = io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest.parseFrom(body);
+                    request.getResourceMetricsList().forEach(resource -> resource.getScopeMetricsList().forEach(scope ->
+                            scope.getMetricsList().forEach(metric -> metricNames.add(metric.getName()))));
+                    exchange.sendResponseHeaders(200, 0);
+                } finally { exchange.close(); }
+            });
             server.start();
         }
         String endpoint() { return "http://127.0.0.1:" + server.getAddress().getPort() + "/v1/traces"; }
+        String metricsEndpoint() { return "http://127.0.0.1:" + server.getAddress().getPort() + "/v1/metrics"; }
         public void close() { server.stop(0); }
     }
 }

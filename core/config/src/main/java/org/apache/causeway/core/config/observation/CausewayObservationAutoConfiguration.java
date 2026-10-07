@@ -42,9 +42,9 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
  * produce (for example, tracing spans); this configuration does not create an SDK
  * or exporter.
  *
- * <p>Normally Boot configures the tracing handlers and export pipeline. An
- * application can instead supply a registry bridged to the OpenTelemetry Java
- * agent's context, with competing Boot tracing auto-configuration excluded.
+ * <p>Normally Boot configures the tracing handlers and export pipeline. The
+ * {@code observation,agent} profiles instead enable Causeway's built-in bridge
+ * to the Java agent and exclude competing Boot tracing auto-configuration.
  * Both arrangements use the same Causeway integration below.
  *
  * <p>With the profile inactive, only Causeway's integration is disabled. We do
@@ -77,7 +77,7 @@ public class CausewayObservationAutoConfiguration {
 	 * available. As with Boot's fallback, creating a registry does not itself
 	 * enable export; observation handlers must be registered by the tracing setup.
 	 */
-	@Profile("observation")
+	@Profile("observation & !agent")
 	@Bean
 	@ConditionalOnMissingBean
 	public ObservationRegistry observationRegistry() {
