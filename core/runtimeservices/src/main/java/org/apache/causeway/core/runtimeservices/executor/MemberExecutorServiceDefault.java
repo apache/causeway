@@ -184,7 +184,10 @@ implements MemberExecutorService {
                 .collect(_Lists.toUnmodifiable());
 
         var actionInvocation = new ActionInvocation(
-        		interactionCarrier.interaction(), actionId, targetPojo, argumentPojos);
+                interactionCarrier.interaction(), actionId, domainFacingActionIdentifier(head, owningAction),
+                targetPojo, argumentPojos, interactionInitiatedBy.isUser()
+                        ? ActionInvocation.RuleChecking.CHECKED
+                        : ActionInvocation.RuleChecking.SKIPPED);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         execute(interactionCarrier, actionExecutor, actionInvocation);
@@ -405,6 +408,20 @@ implements MemberExecutorService {
         }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    /** Keeps physical invocation identity intact while exposing a contributed action's name. */
+    static Identifier domainFacingActionIdentifier(final InteractionHead head, final ObjectAction owningAction) {
+        var invokedId = owningAction.getFeatureIdentifier();
+        if (!owningAction.isDeclaredOnMixin()) {
+            return invokedId;
+        }
+        // Main carries the mixee/mixin pair instead of maintenance's managed
+        // action head. Use the strategy that constructs contributed members.
+        var contributedName = owningAction.getProgrammingModel().mixinNamingStrategy()
+                .memberId(invokedId.logicalType().correspondingClass());
+        return Identifier.actionIdentifier(head.owner().objSpec().logicalType(),
+                contributedName, invokedId.memberParameterClassNames());
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
