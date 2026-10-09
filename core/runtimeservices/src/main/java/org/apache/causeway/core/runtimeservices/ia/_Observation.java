@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices.ia;
 
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.observation.CausewayObservationPolicy;
 
 import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionClock;
 import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionDepth;
@@ -39,8 +38,7 @@ import io.micrometer.observation.Observation;
 @UtilityClass
 class _Observation {
 
-    void addTags(final Observation obs, final InteractionContext ic, final int depth,
-            final CausewayObservationPolicy policy) {
+    void addTags(final Observation obs, final InteractionContext ic, final int depth) {
         if(depth>0) {
             obs.lowCardinalityKeyValue(interactionDepth(depth));
         }
@@ -53,16 +51,10 @@ class _Observation {
 
         obs.lowCardinalityKeyValue(userImpersonating(ic.getUser().isImpersonating()));
 
-        if (policy.includeMultiTenancyToken()) {
-            _Strings.nonEmpty(ic.getUser().multiTenancyToken())
-                .ifPresent(value->obs.highCardinalityKeyValue(userMultiTenancyToken(value)));
-        }
-
-        if (policy.includeUserName()) {
-            _Strings.nonEmpty(ic.getUser().name())
-                .ifPresent(value->obs.highCardinalityKeyValue(userName(value)));
-        }
-
+        _Strings.nonEmpty(ic.getUser().multiTenancyToken())
+            .ifPresent(value->obs.highCardinalityKeyValue(userMultiTenancyToken(value)));
+        _Strings.nonEmpty(ic.getUser().name())
+            .ifPresent(value->obs.highCardinalityKeyValue(userName(value)));
     }
 
 }

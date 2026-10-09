@@ -22,7 +22,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -33,6 +32,7 @@ import org.apache.causeway.commons.internal.observation.ObservationClosure;
 import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration.DiscardedSpanExportingPredicate;
 
 import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.tracing.Tracer;
 import io.micrometer.tracing.exporter.FinishedSpan;
 import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
@@ -42,9 +42,9 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
  * produce (for example, tracing spans); this configuration does not create an SDK
  * or exporter.
  *
- * <p>Normally Boot configures the tracing handlers and export pipeline. An
- * application can instead supply a registry bridged to the OpenTelemetry Java
- * agent's context, with competing Boot tracing auto-configuration excluded.
+ * <p>Normally Boot configures the tracing handlers and export pipeline. The
+ * {@code observation,agent} profiles instead enable Causeway's built-in bridge
+ * to the Java agent and exclude competing Boot tracing auto-configuration.
  * Both arrangements use the same Causeway integration below.
  *
  * <p>With the profile inactive, only Causeway's integration is disabled. We do
@@ -52,7 +52,6 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
  * own observations or make registry injection ambiguous.
  */
 @AutoConfiguration
-@EnableConfigurationProperties(CausewayObservationPolicy.class)
 @ConditionalOnClass(ObservationRegistry.class)
 @Import({
 	DiscardedSpanExportingPredicate.class
@@ -60,11 +59,11 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
 public class CausewayObservationAutoConfiguration {
 
 	/**
-	 * Lets the Spring-managed tracing pipeline drop spans marked by Causeway's
-	 * duration filter or an explicit discard. The marker alone does not suppress
+	 * Lets the Spring-managed tracing pipeline drop observations explicitly marked
+	 * for discard by Causeway. The marker alone does not suppress
 	 * export: the pipeline must consume this predicate. In particular, an
-	 * agent-owned exporter does not discover Spring beans, so duration filtering
-	 * is explicitly disabled in the documented agent configuration.
+	 * agent-owned exporter does not discover Spring beans, so explicit discards
+	 * are subject to that exporter's policy.
 	 */
 	public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
 		@Override
@@ -78,12 +77,29 @@ public class CausewayObservationAutoConfiguration {
 	 * available. As with Boot's fallback, creating a registry does not itself
 	 * enable export; observation handlers must be registered by the tracing setup.
 	 */
-	@Profile("observation")
+	@Profile("observation & !agent")
 	@Bean
 	@ConditionalOnMissingBean
 	public ObservationRegistry observationRegistry() {
 		return ObservationRegistry.create();
 	}
+
+    /**
+     * Tags the current entry span through the same tracer used by observation
+     * handlers. Inactive profiles and missing tracers are inert; an active
+     * configuration must supply a single or primary tracer to avoid tagging
+     * an unrelated tracing pipeline. This bean creates no spans or SDK.
+     */
+    @Bean
+    public CausewayTraceClassifier causewayTraceClassifier(
+            final ObjectProvider<Tracer> tracers,
+            final Environment environment) {
+        // Do not resolve application tracers when inactive, including ambiguous ones.
+        var tracer = environment.acceptsProfiles(Profiles.of("observation"))
+                ? tracers.getIfAvailable(() -> Tracer.NOOP)
+                : Tracer.NOOP;
+        return new CausewayTraceClassifier(tracer);
+    }
 
     /**
      * Always supplies the integration used by framework consumers, including
@@ -95,17 +111,13 @@ public class CausewayObservationAutoConfiguration {
      * an arbitrary telemetry pipeline. When inactive, application registries are
      * not resolved or modified.
      */
-	@Bean
+    @Bean
     public CausewayObservationIntegration causewayObservationIntegration(
             final ObjectProvider<ObservationRegistry> registries,
-            final Environment environment,
-            final CausewayObservationPolicy policy) {
-        // Bind policy even with the profile inactive, so invalid configuration
-        // fails at startup. This does not resolve or modify application registries.
+            final Environment environment) {
         return new CausewayObservationIntegration(environment.acceptsProfiles(Profiles.of("observation"))
                 ? registries.getIfAvailable(() -> ObservationRegistry.NOOP)
-                : ObservationRegistry.NOOP,
-                policy);
+                : ObservationRegistry.NOOP);
     }
 
 }

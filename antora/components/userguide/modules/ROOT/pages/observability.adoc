@@ -29,53 +29,13 @@ An active observation profile does not require an agent or exporter to start suc
 == Java-agent-owned tracing
 
 An alternative configuration lets the OpenTelemetry Java agent own the SDK, automatic HTTP/JDBC instrumentation and export.
-Provide a registry whose Micrometer tracing handler bridges to the agent's global OpenTelemetry context.
-Add the BOM-managed `io.micrometer:micrometer-tracing-bridge-otel` dependency for this application configuration.
+Add the BOM-managed `io.micrometer:micrometer-tracing-bridge-otel` dependency and activate `observation,agent`.
+Causeway supplies the missing tracer and registry beans, bridges observations to the agent's global context, and automatically excludes competing Boot SDK/tracing and WebMVC observation configuration.
+No application Java bridge or manual exclusions are needed.
 
-[source,java]
-----
-@Configuration(proxyBeanMethods = false)
-@Profile("agent")
-class AgentObservationConfiguration {
-    @Bean
-    ObservationRegistry agentObservationRegistry() {
-        var currentContext = new OtelCurrentTraceContext();
-        var tracer = new OtelTracer(
-                GlobalOpenTelemetry.getTracer("org.apache.causeway"),
-                currentContext,
-                event -> {},
-                new OtelBaggageManager(currentContext, List.of(), List.of()));
-        var registry = ObservationRegistry.create();
-        registry.observationConfig()
-                .observationHandler(new DefaultTracingObservationHandler(tracer));
-        return registry;
-    }
-}
-----
-
-The types are from `io.micrometer.observation`, `io.micrometer.tracing.handler`, `io.micrometer.tracing.otel.bridge`, `io.opentelemetry.api`, `java.util`, and Spring's configuration annotations.
-Import this configuration into the application.
-For the validated Boot 4.2.0-M1 configuration, exclude the competing SDK/tracing auto-configurations:
-
-[source,yaml]
-----
-spring:
-  profiles:
-    active: observation,agent
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.opentelemetry.autoconfigure.OpenTelemetrySdkAutoConfiguration
-      - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.OpenTelemetryTracingAutoConfiguration
-      - org.springframework.boot.micrometer.tracing.opentelemetry.autoconfigure.otlp.OtlpTracingAutoConfiguration
-      - org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration
-management:
-  tracing:
-    export:
-      enabled: false
-causeway:
-  observation:
-    duration-filtering-enabled: false
-----
+A supplied registry or tracer takes precedence over the corresponding default.
+A custom registry remains responsible for its handlers; those handlers and Causeway's entry-span classifier must share a single or primary tracer.
+Causeway does not construct an SDK or exporter, and the profiles do not attach an agent: attachment is still required for agent export.
 
 Launch the JVM with `-javaagent:/path/to/opentelemetry-javaagent.jar` and configure the agent's service name, sampler and OTLP endpoint through its normal settings.
 For example, a local tracing-only run can use:
@@ -88,41 +48,35 @@ export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:4318/v1/traces
 export OTEL_METRICS_EXPORTER=none
 export OTEL_LOGS_EXPORTER=none
-java -javaagent:/path/to/opentelemetry-javaagent.jar -jar application.jar
+java -javaagent:/path/to/opentelemetry-javaagent.jar -jar application.jar --spring.profiles.active=observation,agent
 ----
 
+The registry and entry-span classifier share the exposed Micrometer tracer.
+The WebMVC exclusion avoids a second Boot HTTP observation inside the agent's entry span; Boot HTTP request observation meters are consequently absent, while other Micrometer metrics remain available.
+Causeway disables Boot environment-variable mapping for the `agent` profile, preventing the agent's `OTEL_METRICS_EXPORTER=none` from disabling a separately configured Micrometer metrics exporter.
 Do not also construct an independent SDK/export pipeline in this configuration.
 The agent configuration is an explicit application choice; it does not replace the Boot-managed default.
 With the agent profile but without the `observation` profile, automatic agent spans remain active and Causeway observations remain inactive.
 
-== Duration filtering and failures
+== Execution classification and interaction correlation
 
-Duration filtering is disabled by default, so short successful JPA parents remain available when their children are exported.
-This can increase span volume compared with the previous default.
-It does not override sampling, exporter failures or application-defined filtering.
+With the `observation` profile active, two attributes help you find relevant traces:
 
-To opt into the lossy Boot-managed duration filter:
+* `causeway.execution.mode` identifies the entry span as `foreground` for HTTP requests (including static resources), or `background` for `RunBackgroundCommandsJob` executions.
+Background classification requires an existing job span, supplied by instrumentation such as the Java agent's Quartz support.
+* `causeway.interaction.id` appears on *Causeway Root Interaction* and contains the interaction's UUID.
+It is distinct from the trace ID and retains the command's identifier during replay, allowing you to find related executions.
 
-[source,yaml]
-----
-causeway:
-  observation:
-    duration-filtering-enabled: true
-    jpa-duration-threshold: 2ms
-----
+User identity attributes are included automatically alongside interaction correlation; they are not added as metric labels.
+In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
+Searches can only find traces that were sampled, exported and retained by the backend.
 
-The threshold defaults to `2ms` and accepts nonnegative durations; `0ms` suppresses no spans by duration.
-Malformed or negative thresholds fail startup, including when filtering is disabled.
-Successful JPA observations strictly below the configured threshold are marked for discard; observations at or above it and failed observations remain eligible for export.
-The Boot-managed export predicate honors that marker.
+== JPA span retention
 
-Filtering can leave children whose parent span was suppressed: discarding a JPA parent cannot retract an independently exported JDBC child.
-This option does not implement tail sampling or a per-request span budget.
-
-The agent-owned exporter does not consume Spring's span-export predicates.
-Keep `duration-filtering-enabled=false` in agent mode; the tested behavior retains those spans rather than claiming they were suppressed.
-The setting controls Causeway's JPA duration policy, not agent sampling or application-created observations.
-An explicitly discarded observation is still subject to the exporter's filtering capabilities.
+Causeway retains JPA observations regardless of duration in both Boot-managed and agent-managed tracing.
+The former `causeway.observation.jpa-duration-threshold` property has been removed; remove it and its environment override from existing configurations.
+Filtering a JPA parent independently could leave its JDBC children without an exported parent.
+Normal sampling, exporter failures and application-defined policies still determine which spans reach the backend.
 
 == Observation names and metadata migration (CAUSEWAY-4096)
 
@@ -153,21 +107,9 @@ Other existing fixed operation names are unchanged.
 Missing static member identifiers are omitted; runtime object data is never a fallback.
 Publishing counts are emitted as `causeway.execution.subscriber-count` high-cardinality data rather than a meter dimension or part of a name.
 
-Causeway no longer emits username and multitenancy token by default.
-Each can be enabled independently:
-
-[source,yaml]
-----
-causeway:
-  observation:
-    include-user-name: true
-    include-multi-tenancy-token: true
-----
-
-These options retain the existing `causeway.user.name` and `causeway.user.multiTenancyToken` attribute keys for nonempty values.
-High-cardinality attributes are still exported; the classification is not a redaction mechanism.
-Impersonation status and locale metadata remain available.
-These policies govern Causeway's instrumentation, not metadata emitted by application observations, agents, JDBC instrumentation or collectors.
+Causeway always includes nonempty `causeway.user.name` and `causeway.user.multiTenancyToken` on interaction spans.
+They describe the interaction's authenticated user and tenancy, and are high-cardinality span attributes rather than metric labels.
+Empty values are omitted; impersonation status and locale metadata remain available.
 
 == Validated baseline and regression fixture
 
@@ -176,8 +118,9 @@ These are the tested versions, not a requirement to override the application's C
 
 The child-process fixture uses production interaction and action services and the JPA facet with mocked non-telemetry collaborators, a local JDK HTTP server, H2, and a local OTLP receiver.
 Its JPA backend is controlled; agent mode instruments real H2 JDBC automatically, while Boot mode explicitly wraps the SQL call in a fixture observation.
-It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration filtering, inactive-profile behavior and operation without an agent/exporter.
-It does not prove every servlet container or viewer integration.
+It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration-independent JPA retention, inactive-profile behavior and operation without an agent/exporter.
+The additional entry-point fixture uses real Tomcat servlet and Quartz instrumentation with controlled business collaborators, verifying fixed-key classification and effective replay UUIDs in both trace ownership modes.
+It does not prove every servlet container or viewer integration, nor a full persisted-command replay.
 
 From the repository root, after building the required main artifacts:
 

@@ -36,9 +36,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
@@ -64,17 +62,11 @@ import org.apache.causeway.core.runtimeservices.executor.MemberExecutorServiceDe
 import org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 
-import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
-import io.micrometer.tracing.otel.bridge.OtelBaggageManager;
-import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
-import io.micrometer.tracing.otel.bridge.OtelTracer;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 
 /** Child JVM fixture: real framework boundaries with mocked non-telemetry collaborators. */
 @SpringBootConfiguration(proxyBeanMethods = false)
 @EnableAutoConfiguration
-@Import({CausewayObservationAutoConfiguration.class, MicrometerTracingAgentFixture.AgentRegistry.class})
+@Import({CausewayObservationAutoConfiguration.class})
 public class MicrometerTracingAgentFixture {
     public static void main(String[] args) throws Exception {
         try (var context = new SpringApplicationBuilder(MicrometerTracingAgentFixture.class)
@@ -126,11 +118,6 @@ public class MicrometerTracingAgentFixture {
                         throw new AssertionError("unexpected HTTP result: " + connection.getResponseCode());
                     connection.disconnect();
                 }
-                var shortSpan = integration.withTimeThreshold(integration.createNotStarted(MicrometerTracingAgentFixture.class, "threshold-success"), java.time.Duration.ofDays(1));
-                shortSpan.observe(() -> {});
-                var failedSpan = integration.withTimeThreshold(integration.createNotStarted(MicrometerTracingAgentFixture.class, "threshold-failure"), java.time.Duration.ofDays(1));
-                try { failedSpan.observe(() -> { throw new IllegalStateException("short failure"); }); }
-                catch (IllegalStateException expected) { }
                 System.out.println("CAUSEWAY_TRACING_FIXTURE_OK");
             } finally { server.stop(0); executor.shutdownNow(); }
         }
@@ -174,18 +161,6 @@ public class MicrometerTracingAgentFixture {
                 if (!result.next()) throw new AssertionError("missing JDBC result");
                 // The Boot fixture explicitly instruments JDBC; agent mode owns its automatic JDBC spans.
             } catch (java.sql.SQLException ex) { throw new IllegalStateException(ex); }
-        }
-    }
-    @Configuration(proxyBeanMethods = false)
-    @Profile("agent")
-    static class AgentRegistry {
-        @Bean ObservationRegistry agentObservationRegistry() {
-            var currentContext = new OtelCurrentTraceContext();
-            var tracer = new OtelTracer(GlobalOpenTelemetry.getTracer("org.apache.causeway"), currentContext,
-                    event -> {}, new OtelBaggageManager(currentContext, List.of(), List.of()));
-            var registry = ObservationRegistry.create();
-            registry.observationConfig().observationHandler(new DefaultTracingObservationHandler(tracer));
-            return registry;
         }
     }
 }

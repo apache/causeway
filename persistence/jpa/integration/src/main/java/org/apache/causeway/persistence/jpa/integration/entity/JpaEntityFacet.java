@@ -81,10 +81,8 @@ class JpaEntityFacet
         this.entityClass = entityClass;
         this.primaryKeyType = idStringifierLookupService
                 .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
-        var timeThreshold = observationIntegration.policy().jpaDurationThreshold();
         this.observationProvider = observationIntegration.provider(getClass(),
-                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE)
-                .andThen(obs->observationIntegration.withTimeThreshold(obs, timeThreshold)));
+                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE));
     }
 
     @Override
