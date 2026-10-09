@@ -42,8 +42,8 @@ import org.apache.causeway.schema.common.v2.OidDto;
 @org.apache.causeway.applib.annotation.Value
 @XmlJavaTypeAdapter(Bookmark.JaxbToStringAdapter.class) // for JAXB view model support
 public record Bookmark(
-    @NonNull String logicalTypeName, 
-    @Nullable String identifier, 
+    @NonNull String logicalTypeName,
+    @Nullable String identifier,
     @Nullable String hintId,
     int precalculatedHashCode) implements Oid {
 
@@ -93,9 +93,9 @@ public record Bookmark(
             final String hintId) {
         this(logicalTypeName, urlSafeIdentifier, hintId, Objects.hash(logicalTypeName, urlSafeIdentifier));
     }
-    
+
     // -- WITHERS
-    
+
     public Bookmark withHintId(final @Nullable String hintId) {
         return new Bookmark(this.logicalTypeName(), this.identifier(), hintId);
     }
@@ -107,26 +107,23 @@ public record Bookmark(
      */
     public static Optional<Bookmark> parse(final @Nullable String str) {
         if(_Strings.isNullOrEmpty(str)) return Optional.empty();
-        
+
         var tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
-        if(tokenCount==1) {
+        if(tokenCount==1)
             return str.endsWith(SEPARATOR)
                     || str.startsWith(SEPARATOR)
                     ? Optional.empty() // invalid
                     : Optional.of(Bookmark.emptyForLogicalTypeName(
                             tokenizer.nextToken()));
-        }
-        if(tokenCount==2) {
+        if(tokenCount==2)
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
                     tokenizer.nextToken(),
                     tokenizer.nextToken()));
-        }
-        if(tokenCount>2) {
+        if(tokenCount>2)
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
                     tokenizer.nextToken(),
                     tokenizer.nextToken("").substring(1)));
-        }
         return Optional.empty();
     }
 
@@ -157,22 +154,25 @@ public record Bookmark(
 
     @Override
     public String stringify() {
-        return stringify(identifier);
+        return stringifyAndAppend(identifier);
+    }
+
+    public String format(final String delimiter) {
+        return !isEmpty()
+                ? logicalTypeName + delimiter + identifier
+                : logicalTypeName;
     }
 
     // -- OBJECT CONTRACT // not considering any hintId
 
     @Override
     public boolean equals(final Object other) {
-        if (other == null) {
+        if (other == null)
             return false;
-        }
-        if (other == this) {
+        if (other == this)
             return true;
-        }
-        if (getClass() != other.getClass()) {
+        if (getClass() != other.getClass())
             return false;
-        }
         return equals((Bookmark) other);
     }
 
@@ -197,8 +197,8 @@ public record Bookmark(
      */
     public String stringifyHonoringHintIfAny() {
         return _Strings.isNotEmpty(hintId)
-                ? stringify(hintId)
-                : stringify(identifier);
+                ? stringifyAndAppend(hintId)
+                : stringifyAndAppend(identifier);
     }
 
     /**
@@ -224,7 +224,7 @@ public record Bookmark(
 
     // -- HELPER
 
-    private String stringify(final String id) {
+    private String stringifyAndAppend(final String id) {
         return !isEmpty()
                 ? logicalTypeName + SEPARATOR + id
                 : logicalTypeName;

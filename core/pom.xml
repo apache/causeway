@@ -56,6 +56,7 @@
         <module>config</module>
         <module>interaction</module>
         <module>internaltestsupport</module>
+        <module>kernel</module>
         <module>metamodel</module>
         <module>mmtestsupport</module>
         <module>mmtest</module>

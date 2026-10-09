@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -98,6 +99,7 @@ import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.causeway.core.config.util.ViewerProfileUtil;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
 import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
@@ -159,10 +161,8 @@ public record CausewayConfiguration(
     /**
      * All known configuration property names.
      *
-     * <p>
-     *     Or at least, from the {@link org.springframework.core.env.PropertySource} obtained from
-     *     {@link ConfigurableEnvironment#getPropertySources()} that are also {@link EnumerablePropertySource}s.
-     *
+     * <p>Or at least, from the {@link org.springframework.core.env.PropertySource} obtained from
+     * {@link ConfigurableEnvironment#getPropertySources()} that are also {@link EnumerablePropertySource}s.
      */
     public Stream<String> streamConfigurationPropertyNames() {
         MutablePropertySources propertySources = environment.getPropertySources();
@@ -201,16 +201,17 @@ public record CausewayConfiguration(
         }
     }
 
-    public Security security() {return causeway.security(); }
-    public Schema schema() {return causeway.schema(); }
-    public Applib applib() {return causeway.applib(); }
-    public Core core() {return causeway.core(); }
-    public Persistence persistence() {return causeway.persistence(); }
-    public Prototyping prototyping() {return causeway.prototyping(); }
-    public Viewer viewer() {return causeway.viewer(); }
-    public ValueTypes valueTypes() {return causeway.valueTypes(); }
-    public Testing testing() {return causeway.testing(); }
-    public Extensions extensions() {return causeway.extensions(); }
+    public Security security() { return causeway.security(); }
+    public Schema schema() { return causeway.schema(); }
+    public Applib applib() { return causeway.applib(); }
+    public Core core() { return causeway.core(); }
+    public Persistence persistence() { return causeway.persistence(); }
+    public Prototyping prototyping() { return causeway.prototyping(); }
+    public Viewer viewer() { return causeway.viewer(); }
+    public ViewerProfiles viewerProfiles() { return causeway.viewerProfiles(); }
+    public ValueTypes valueTypes() { return causeway.valueTypes(); }
+    public Testing testing() { return causeway.testing(); }
+    public Extensions extensions() { return causeway.extensions(); }
 
     @ConfigurationProperties(CausewayConfiguration.ROOT_PREFIX)
     @Validated
@@ -229,6 +230,8 @@ public record CausewayConfiguration(
         Prototyping prototyping,
         @DefaultValue
         Viewer viewer,
+        @DefaultValue
+        ViewerProfiles viewerProfiles,
         @DefaultValue
         ValueTypes valueTypes,
         @DefaultValue
@@ -265,7 +268,6 @@ public record CausewayConfiguration(
              * @see org.springframework.security.web.csrf.CsrfFilter
              * @see <a href="https://www.baeldung.com/spring-security-registered-filters">baeldung</a>
              */
-            @SuppressWarnings("javadoc")
             @DefaultValue("false")
             boolean allowCsrfFilters) {
         }
@@ -493,11 +495,9 @@ public record CausewayConfiguration(
                      * be published (on the internal {@link org.apache.causeway.applib.services.eventbus.EventBusService})
                      * whenever a domain object has been created using {@link org.apache.causeway.applib.services.factory.FactoryService}.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -525,11 +525,9 @@ public record CausewayConfiguration(
                      * be published (on the internal {@link org.apache.causeway.applib.services.eventbus.EventBusService})
                      * whenever a domain <i>entity</i> has been loaded from the persistence store.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#loadedLifecycleEvent() @DomainObject(loadedLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#loadedLifecycleEvent() @DomainObject(loadedLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -547,9 +545,7 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     Note: this applies only to domain entities, not to view models.
-                     *
+                     * <p>Note: this applies only to domain entities, not to view models.
                      */
                     @DefaultValue("true")
                     boolean postForDefault) {
@@ -561,11 +557,9 @@ public record CausewayConfiguration(
                      * be published (on the internal {@link org.apache.causeway.applib.services.eventbus.EventBusService})
                      * whenever a domain <i>entity</i> is about to be persisting (for the first time) to the persistence store.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#persistingLifecycleEvent() @DomainObject(persistingLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#persistingLifecycleEvent() @DomainObject(persistingLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -583,9 +577,7 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     Note: this applies only to domain entities, not to view models.
-                     *
+                     * <p>Note: this applies only to domain entities, not to view models.
                      */
                     @DefaultValue("true")
                     boolean postForDefault) {
@@ -597,11 +589,9 @@ public record CausewayConfiguration(
                      * be published (on the internal {@link org.apache.causeway.applib.services.eventbus.EventBusService})
                      * whenever a domain <i>entity</i> has been persisted (for the first time) to the persistence store.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#persistedLifecycleEvent() @DomainObject(persistedLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#persistedLifecycleEvent() @DomainObject(persistedLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -619,9 +609,7 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     Note: this applies only to domain entities, not to view models.
-                     *
+                     * <p>Note: this applies only to domain entities, not to view models.
                      */
                     @DefaultValue("true")
                     boolean postForDefault) {
@@ -634,11 +622,9 @@ public record CausewayConfiguration(
                      * whenever a persistent domain <i>entity</i> is about to be removed (that is, deleted)
                      * from the persistence store.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#removingLifecycleEvent() @DomainObject(removingLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#removingLifecycleEvent() @DomainObject(removingLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -656,13 +642,9 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     Note: this applies only to domain entities, not to view models.
+                     * <p>Note: this applies only to domain entities, not to view models.
                      *
-                     *
-                     * <p>
-                     *     Note: There is no corresponding <code>removed</code> callback, because it is not possible to interact with a domain entity once it has been deleted.
-                     *
+                     * <p>Note: There is no corresponding <code>removed</code> callback, because it is not possible to interact with a domain entity once it has been deleted.
                      */
                     @DefaultValue("true")
                     boolean postForDefault) {
@@ -674,11 +656,9 @@ public record CausewayConfiguration(
                      * be published (on the internal {@link org.apache.causeway.applib.services.eventbus.EventBusService})
                      * whenever a persistent domain <i>entity</i> has been updated in the persistence store.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#updatedLifecycleEvent() @DomainObject(updatedLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#updatedLifecycleEvent() @DomainObject(updatedLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -696,9 +676,7 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     Note: this applies only to domain entities, not to view models.
-                     *
+                     * <p>Note: this applies only to domain entities, not to view models.
                      */
                     @DefaultValue("true")
                     boolean postForDefault) {
@@ -710,11 +688,9 @@ public record CausewayConfiguration(
                      * be published (on the internal {@link org.apache.causeway.applib.services.eventbus.EventBusService})
                      * whenever a persistent domain <i>entity</i> is about to be updated in the persistence store.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObject#updatingLifecycleEvent() @DomainObject(updatingLifecycleEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObject#updatingLifecycleEvent() @DomainObject(updatingLifecycleEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -732,9 +708,7 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     Note: this applies only to domain entities, not to view models.
-                     *
+                     * <p>Note: this applies only to domain entities, not to view models.
                      */
                     @DefaultValue("true")
                     boolean postForDefault) {
@@ -747,9 +721,7 @@ public record CausewayConfiguration(
                  * Defines the default number of objects that are shown in a 'standalone' collection obtained as the
                  * result of invoking an action.
                  *
-                 * <p>
-                 *     This can be overridden on a case-by-case basis using {@link org.apache.causeway.applib.annotation.DomainObjectLayout#paged()}.
-                 *
+                 * <p>This can be overridden on a case-by-case basis using {@link org.apache.causeway.applib.annotation.DomainObjectLayout#paged()}.
                  */
                 @DefaultValue("25")
                 int paged,
@@ -776,11 +748,9 @@ public record CausewayConfiguration(
                      * optionally {@link org.apache.causeway.applib.events.ui.CssClassUiEvent#setCssClass(String)} change)
                      * the CSS classes that are used.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObjectLayout#cssClassUiEvent()}  @DomainObjectLayout(cssClassEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObjectLayout#cssClassUiEvent()}  @DomainObjectLayout(cssClassEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -798,11 +768,9 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
-                     *     (perhaps for some attribute other than this one) will cause any imperative <code>cssClass()</code>
-                     *     method to be ignored.
-                     *
+                     * <p>The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
+                     * (perhaps for some attribute other than this one) will cause any imperative <code>cssClass()</code>
+                     * method to be ignored.
                      */
                     @DefaultValue("false")
                     boolean postForDefault) {
@@ -816,11 +784,9 @@ public record CausewayConfiguration(
                      * optionally {@link org.apache.causeway.applib.events.ui.IconUiEvent#setIconName(String)} change)
                      * the icon that is used.
                      *
-                     * <p>
-                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.causeway.applib.annotation.DomainObjectLayout#iconUiEvent()}  @DomainObjectLayout(iconEvent=...)} for the
-                     *     domain object in question.
-                     *
+                     * <p>The algorithm for determining whether (and what type of) an event is sent depends on the value of the
+                     * {@link org.apache.causeway.applib.annotation.DomainObjectLayout#iconUiEvent()}  @DomainObjectLayout(iconEvent=...)} for the
+                     * domain object in question.
                      *
                      * <ul>
                      *     <li>
@@ -838,11 +804,9 @@ public record CausewayConfiguration(
                      *     </li>
                      * </ul>
                      *
-                     * <p>
-                     *     The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
-                     *     (perhaps for some attribute other than this one) will cause any imperative <code>iconName()</code>
-                     *     method to be ignored.
-                     *
+                     * <p>The default is <tt>false</tt>, because otherwise the mere presence of <tt>@DomainObjectLayout</tt>
+                     * (perhaps for some attribute other than this one) will cause any imperative <code>iconName()</code>
+                     * method to be ignored.
                      */
                     @DefaultValue("false")
                     boolean postForDefault) {
@@ -949,8 +913,8 @@ public record CausewayConfiguration(
                  * the identity of the target object, the action invoked, the action arguments and the returned
                  * object (if any).
                  *
-                 * <p>This setting can be overridden on a case-by-case basis using {@link org.apache.causeway.applib.annotation.Action#executionPublishing()  Action#executionPublishing()}.
-                 *
+                 * <p>This setting can be overridden on a case-by-case basis using
+                 * {@link org.apache.causeway.applib.annotation.Action#executionPublishing()  Action#executionPublishing()}.
                  */
                 @DefaultValue("NONE")
                 ActionConfigOptions.PublishingPolicy executionPublishing,
@@ -3532,6 +3496,45 @@ public record CausewayConfiguration(
                 }
             }
         }
+    }
+
+    public record ViewerProfiles(
+        Map<String, String> map,
+        Map<String, String> namespace) {
+
+        /**
+         * Compact constructor provides fallback defaults when configuration is absent.
+         * Spring Boot passes `null` for missing configuration sections.
+         */
+        public ViewerProfiles {
+            map = map != null
+                ? map
+                : Map.of(
+                    "wicket", "web-ui",
+                    "restful", "api,restful-only",
+                    "graphql", "api,graphql-only"
+            );
+            namespace = namespace != null
+                ? namespace
+                : Map.of("default", "web-ui,api");
+            ViewerProfileUtil.validate(map, namespace);
+        }
+
+        /**
+         * Resolves the default viewer profiles for a given namespace prefix on namespace configuration.
+         * Uses longest-prefix matching. Falls back to {@code default} key.
+         */
+        public Set<String> profilesForNamespace(final String namespacePrefix) {
+            return ViewerProfileUtil.profilesForNamespace(this, namespacePrefix);
+        }
+
+        /**
+         * Returns all profile IDs that a specific viewer supports.
+         */
+        public Set<String> profilesForViewer(final String viewerId) {
+            return ViewerProfileUtil.profilesForViewer(this, viewerId);
+        }
+
     }
 
     public record ValueTypes(
