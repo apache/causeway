@@ -114,9 +114,20 @@ HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
 
 * Expand the span tree and inspect the spans
 +
-Span display names are contextual, for example `Action <member>` or `Persist <entity type>`.
+Span display names describe domain work, for example `act petclinic.PetOwner#updateName` or `Persist <entity type>`.
+Mixed-in actions use the contributed action name rather than the mixin implementation's `act` method.
+Mixed-in properties and collections use `prop <logical-type>#<member>` and `coll <logical-type>#<member>`; opening an owner can show `coll petclinic.PetOwner#visits`.
+Regular property updates retain their `Property Update` spans.
 +
-NOTE: instance identifiers, object titles or argument values and _not_ included in the spans.
+Select a member span to inspect its full identifier: `causeway.action.id`, `causeway.property.id` or `causeway.collection.id`.
+Action identifiers include declared parameter types, for example `petclinic.PetOwner#updateName(java.lang.String)`.
+In Jaeger's *Attributes* search field, use `causeway.action.id="petclinic.PetOwner#updateName(java.lang.String)"` or `causeway.collection.id="petclinic.PetOwner#visits"` with *All Span Names* selected.
++
+Display names retain identifier casing and are limited to 50 characters: long names lose their namespace first, then are truncated if still too long.
+The full identifier attribute remains intact, so use it to distinguish compact names that look the same.
+These names and attributes work in both Boot-managed and agent-managed tracing; they require no extra configuration.
++
+NOTE: instance identifiers, object titles or argument values are _not_ included in the spans.
 
 * on the top-level "entry" span, inspect its *attributes*:
 

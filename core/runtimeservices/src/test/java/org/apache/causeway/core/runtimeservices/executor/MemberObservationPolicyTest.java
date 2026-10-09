@@ -95,11 +95,81 @@ class MemberObservationPolicyTest {
             verify(manager).adapt("sentinel-result");
             var context = stopped.get(stopped.size() - 1);
             assertEquals("causeway.member.action", context.getName());
-            assertEquals("Action " + id, context.getContextualName());
+            assertEquals(org.apache.causeway.core.config.observation.CausewayObservationNaming.forMember(
+                    "act", id.logicalTypeName(), id.memberLogicalName()), context.getContextualName());
+            assertEquals(id.getLogicalIdentityString("#"), context.getLowCardinalityKeyValue("causeway.action.id").getValue());
             assertEquals(id.toString(), context.getLowCardinalityKeyValue("causeway.member.id").getValue());
             assertFalse(context.getAllKeyValues().toString().contains("sentinel"));
         }
     }
+    @Test void mixedInAssociationResolutionSelectsActualContribution() throws Exception {
+        var spec = mock(org.apache.causeway.core.metamodel.spec.ObjectSpecification.class);
+        var loader = mock(org.apache.causeway.core.metamodel.specloader.SpecificationLoader.class);
+        when(spec.getSpecificationLoader()).thenReturn(loader);
+        when(loader.specForType(Target.class)).thenReturn(java.util.Optional.of(spec));
+        var owner = ManagedObject.other(spec, new Target());
+        var head = mock(org.apache.causeway.core.metamodel.interactions.InteractionHead.class);
+        when(head.owner()).thenReturn(owner);
+        var action = mock(org.apache.causeway.core.metamodel.spec.feature.ObjectAction.class);
+        var property = association(action, true);
+        var unrelated = association(mock(org.apache.causeway.core.metamodel.spec.feature.ObjectAction.class), false);
+        var facet = mock(org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection.class);
+        var executor = new org.apache.causeway.core.metamodel.execution.ActionExecutor(null, null,
+                InteractionInitiatedBy.PASS_THROUGH, action, null, head, null, facet, null);
+        when(spec.streamAssociations(org.apache.causeway.core.metamodel.spec.feature.MixedIn.INCLUDED))
+                .thenAnswer(__ -> java.util.stream.Stream.of(unrelated, property));
+        assertSame(property, executor.mixedInAssociation().orElseThrow());
+        when(spec.streamAssociations(org.apache.causeway.core.metamodel.spec.feature.MixedIn.INCLUDED))
+                .thenAnswer(__ -> java.util.stream.Stream.of(unrelated));
+        assertTrue(executor.mixedInAssociation().isEmpty());
+        var ordinary = new org.apache.causeway.core.metamodel.execution.ActionExecutor(null, null,
+                InteractionInitiatedBy.PASS_THROUGH, action, null, head, null,
+                mock(org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract.class), null);
+        assertTrue(ordinary.mixedInAssociation().isEmpty());
+    }
+
+    @Test void associationCategoriesAndFallbackKeepWorkObservable() throws Exception {
+        for (int kind = 0; kind < 3; kind++) {
+            var stopped = new ArrayList<Observation.Context>();
+            var executor = mock(org.apache.causeway.core.metamodel.execution.ActionExecutor.class, RETURNS_DEEP_STUBS);
+            var invokedId = Identifier.actionIdentifier(LogicalType.fqcn(Target.class), "call", String.class);
+            when(executor.owningAction().getFeatureIdentifier()).thenReturn(invokedId);
+            when(executor.interactionInitiatedBy()).thenReturn(InteractionInitiatedBy.PASS_THROUGH);
+            when(executor.arguments()).thenReturn(org.apache.causeway.commons.collections.Can.empty());
+            var spec = mock(org.apache.causeway.core.metamodel.spec.ObjectSpecification.class);
+            var loader = mock(org.apache.causeway.core.metamodel.specloader.SpecificationLoader.class);
+            when(spec.getSpecificationLoader()).thenReturn(loader);
+            when(loader.specForType(Target.class)).thenReturn(java.util.Optional.of(spec));
+            var head = executor.head();
+            doReturn(ManagedObject.other(spec, new Target())).when(head).target();
+            doReturn(org.apache.causeway.commons.internal.reflection._MethodFacades.testing.regular(Target.class.getDeclaredMethod("call")))
+                    .when(executor).method();
+            var manager = executor.facetHolder().getObjectManager();
+            doReturn(ManagedObject.unspecified()).when(manager).adapt("sentinel-result");
+            var association = association(executor.owningAction(), kind == 0);
+            var associationId = Identifier.propertyIdentifier(LogicalType.eager(Target.class, "domain.Owner"), kind == 0 ? "name" : "items");
+            when(association.getFeatureIdentifier()).thenReturn(associationId);
+            when(executor.mixedInAssociation()).thenReturn(kind < 2 ? java.util.Optional.of(association) : java.util.Optional.empty());
+            new MemberExecutorServiceDefault(null, null, null, null, null, null, null, integration(stopped)).invokeAction(executor);
+            var context = stopped.get(stopped.size() - 1);
+            var key = kind == 0 ? "causeway.property.id" : kind == 1 ? "causeway.collection.id" : "causeway.action.id";
+            assertEquals(kind == 0 ? "causeway.property.access" : kind == 1 ? "causeway.collection.access" : "causeway.member.action", context.getName());
+            assertEquals((kind < 2 ? associationId : invokedId).getLogicalIdentityString("#"), context.getLowCardinalityKeyValue(key).getValue());
+            if (kind < 2) assertNull(context.getLowCardinalityKeyValue("causeway.action.id"));
+            assertEquals(invokedId.toString(), context.getLowCardinalityKeyValue("causeway.member.id").getValue());
+            assertFalse(context.getAllKeyValues().toString().contains("sentinel"));
+        }
+    }
+
+    private org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation association(
+            org.apache.causeway.core.metamodel.spec.feature.ObjectAction action, boolean singular) {
+        var association = mock(org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation.class,
+                withSettings().extraInterfaces(org.apache.causeway.core.metamodel.spec.feature.MixedInMember.class));
+        when(((org.apache.causeway.core.metamodel.spec.feature.MixedInMember) association).hasMixinAction(action)).thenReturn(true);
+        when(association.isSingular()).thenReturn(singular);
+        return association;
+    }
+
     @Test void subscriberCountsDoNotChangeNamesOrMeterDimensions() {
         var stopped = new ArrayList<Observation.Context>();
         var integration = integration(stopped);

@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.execution;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
 
@@ -42,12 +43,16 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService.MemberExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
@@ -110,6 +115,20 @@ implements MemberExecutor<ActionInvocation> {
         return result;
 	}
 	
+    /** Resolves the domain association implemented by this pseudo-getter, if available. */
+    public Optional<ObjectAssociation> mixedInAssociation() {
+        if (!(actionInvocationFacetAbstract instanceof
+                ActionInvocationFacetForMixedInPropertyOrCollection)) {
+            return Optional.empty();
+        }
+        return head.owner().objSpec()
+                .streamAssociations(MixedIn.INCLUDED)
+                .filter(MixedInMember.class::isInstance)
+                .filter(association -> ((MixedInMember) association)
+                        .hasMixinAction(owningAction))
+                .findFirst();
+    }
+
 	@SneakyThrows
     private Object doExecuteWithExecutingEvents(
     		final int executionSequence,

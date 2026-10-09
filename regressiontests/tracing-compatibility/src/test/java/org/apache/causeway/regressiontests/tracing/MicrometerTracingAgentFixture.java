@@ -87,6 +87,8 @@ public class MicrometerTracingAgentFixture {
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
             var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
+            boolean semantic = context.getEnvironment().getProperty("fixture.semantic", Boolean.class, false);
+            var semanticActions = semantic ? semanticActions(action) : List.<ActionExecutor>of();
             var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
             // One worker proves that subsequent requests cannot inherit stale thread-local scopes.
             var executor = Executors.newSingleThreadExecutor();
@@ -99,7 +101,9 @@ public class MicrometerTracingAgentFixture {
                     interactions.call(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(
                             org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
                                     .withMultiTenancyToken("sentinel-tenant")), () -> {
-                        members.invokeAction(action);
+                        if (semantic) {
+                            for (var semanticAction : semanticActions) members.invokeAction(semanticAction);
+                        } else members.invokeAction(action);
                         if (exchange.getRequestURI().getQuery() != null) throw new IllegalStateException("fixture failure");
                         return null;
                     });
@@ -140,6 +144,50 @@ public class MicrometerTracingAgentFixture {
                 _MethodFacades.testing.regular(JdbcAction.class.getDeclaredMethod("executeJdbc")), head, Can.empty(),
                 mock(ActionInvocationFacetAbstract.class), integration.provider(ActionExecutor.class));
     }
+    private static List<ActionExecutor> semanticActions(ActionExecutor base) {
+        var result = new java.util.ArrayList<ActionExecutor>();
+        var target = base.head().target();
+        for (int kind = 0; kind < 7; kind++) {
+            var action = mock(ObjectAction.class);
+            var ownerSpec = mock(org.apache.causeway.core.metamodel.spec.ObjectSpecification.class);
+            var logicalName = kind >= 5 ? "very.long.namespace." + (kind == 5 ? "one" : "two")
+                    + ".with.many.components.UpperCaseOwner" : "domain.UpperCaseOwner";
+            var ownerType = LogicalType.eager(JdbcAction.class, logicalName);
+            when(ownerSpec.logicalType()).thenReturn(ownerType);
+            var ownerLoader = mock(org.apache.causeway.core.metamodel.specloader.SpecificationLoader.class);
+            when(ownerSpec.getSpecificationLoader()).thenReturn(ownerLoader);
+            when(ownerLoader.specForType(JdbcAction.class)).thenReturn(java.util.Optional.of(ownerSpec));
+            var head = mock(InteractionHead.class);
+            when(head.target()).thenReturn(target);
+            var owner = ManagedObject.other(ownerSpec, target.getPojo());
+            when(head.owner()).thenReturn(owner);
+            var invokedId = Identifier.actionIdentifier(kind == 0 || kind >= 5 ? ownerType
+                    : LogicalType.eager(JdbcAction.class, "implementation.Owner_updateName"), "executeJdbc", String.class);
+            when(action.getFeatureIdentifier()).thenReturn(invokedId);
+            if (kind > 0 && kind < 5) {
+                when(action.isDeclaredOnMixin()).thenReturn(true);
+                var model = mock(org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.class, RETURNS_DEEP_STUBS);
+                when(action.getProgrammingModel()).thenReturn(model);
+                when(model.mixinNamingStrategy().memberId(JdbcAction.class)).thenReturn("updateName");
+            }
+            org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract facet;
+            if (kind >= 2 && kind <= 4) {
+                facet = mock(org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection.class);
+                var association = mock(org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation.class,
+                        withSettings().extraInterfaces(org.apache.causeway.core.metamodel.spec.feature.MixedInMember.class));
+                when(((org.apache.causeway.core.metamodel.spec.feature.MixedInMember) association).hasMixinAction(action)).thenReturn(true);
+                when(association.isSingular()).thenReturn(kind == 2);
+                when(association.getFeatureIdentifier()).thenReturn(Identifier.propertyIdentifier(ownerType, kind == 2 ? "name" : "items"));
+                boolean missing = kind == 4;
+                when(ownerSpec.streamAssociations(org.apache.causeway.core.metamodel.spec.feature.MixedIn.INCLUDED))
+                        .thenAnswer(__ -> missing ? java.util.stream.Stream.empty() : java.util.stream.Stream.of(association));
+            } else facet = mock(ActionInvocationFacetAbstract.class);
+            result.add(new ActionExecutor(base.executionContext(), base.facetHolder(), base.interactionInitiatedBy(),
+                    action, base.method(), head, base.arguments(), facet, base.observationProvider()));
+        }
+        return result;
+    }
+
     public static class JdbcAction {
         private final org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet jpa;
         public JdbcAction(CausewayObservationIntegration integration, boolean agent) {
