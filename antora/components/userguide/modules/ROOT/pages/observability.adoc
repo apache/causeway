@@ -78,6 +78,25 @@ The former `causeway.observation.jpa-duration-threshold` property has been remov
 Filtering a JPA parent independently could leave its JDBC children without an exported parent.
 Normal sampling, exporter failures and application-defined policies still determine which spans reach the backend.
 
+== Semantic member spans
+
+Action observations use the fixed Micrometer operation `causeway.member.action` and contextual name `act <logical-type>#<member>`.
+For mixed-in actions, the name identifies the contributed domain action rather than the mixin's implementation method.
+Mixed-in property and collection accesses use `causeway.property.access` / `causeway.collection.access`, with contextual prefixes `prop` / `coll`.
+Regular property updates remain `causeway.member.property-update` observations.
+
+Inspect `causeway.action.id`, `causeway.property.id` or `causeway.collection.id` for the complete canonical domain identifier.
+Action identifiers retain declared parameter signatures.
+The existing generic `causeway.member.id` retains the physical invoked member's metadata; use the category-specific keys for domain-facing searches.
+
+Contextual names retain casing and use a 50-character display budget.
+Names that exceed the budget first use a namespace-free type name, then truncate if still necessary; complete identifier attributes remain unchanged.
+Names contain static model identifiers, not instance titles, bookmarks or argument values.
+Unresolved mixed-in association metadata falls back to an action observation.
+
+Both Boot and agent modes use this naming without extra settings.
+The root interaction and HTTP entry names are unchanged; Wicket rendering regions and semantic entry-span names are separate capabilities.
+
 == Observation names and metadata migration (CAUSEWAY-4096)
 
 Micrometer's operation name identifies an operation category and its meters.
@@ -96,7 +115,7 @@ Bookmarks, instance identifiers, titles, query descriptions and query arguments 
 |`Refresh (type=...)` |`causeway.jpa.refresh` |`Refresh <entity type>`
 |`Remove (type=...)` |`causeway.jpa.remove` |`Remove <entity type>`
 |`Detach (type=...)` |`causeway.jpa.detach` |`Detach <entity type>`
-|`Action Invocation (...)` |`causeway.member.action` |`Action <member identifier>`
+|`Action Invocation (...)` |`causeway.member.action` |`act <domain logical type>#<member>`
 |`Property Update (...)` |`causeway.member.property-update` |`Property Update <member identifier>`
 |`Execution Publishing (subscribers=N)` |`causeway.execution.publish` |`Execution Publishing`
 |===

@@ -47,6 +47,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
@@ -76,10 +77,11 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
 
+import io.micrometer.observation.Observation;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import io.micrometer.observation.Observation;
 
 /**
  * Default implementation of {@link MemberExecutorService}.
@@ -136,11 +138,7 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        var executionResult = memberObservation("causeway.member.action", "Action",
-                actionExecutor.owningAction().getFeatureIdentifier())
-                .lowCardinalityKeyValue("causeway.execution.initiatedBy", actionExecutor.interactionInitiatedBy().name())
-                //could also add action's args as tags (but potentially sensitive)
-                //(we do this with Xray, but that is local for debugging only)
+        var executionResult = semanticMemberObservation(actionExecutor)
             .observe(()->
                 actionExecutor.interactionInitiatedBy().isPassThrough()
                 ? Try.call(()->
@@ -150,6 +148,33 @@ implements MemberExecutorService {
 
         return executionResult
                 .valueAsNullableElseFail();
+    }
+
+    private Observation semanticMemberObservation(final ActionExecutor executor) {
+        var invokedId = executor.owningAction().getFeatureIdentifier();
+        var association = executor.mixedInAssociation();
+        var domainId = association.map(member -> member.getFeatureIdentifier())
+                .orElseGet(() -> invokedId == null ? null : domainFacingActionIdentifier(executor.head(), executor.owningAction()));
+        var property = association.map(member -> member.isSingular()).orElse(false);
+        var operation = association.isEmpty() ? "causeway.member.action"
+                : property ? "causeway.property.access" : "causeway.collection.access";
+        var prefix = association.isEmpty() ? "act" : property ? "prop" : "coll";
+        var identityKey = association.isEmpty() ? "causeway.action.id"
+                : property ? "causeway.property.id" : "causeway.collection.id";
+        var observation = observationProvider.get(operation).contextualName(prefix)
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", executor.interactionInitiatedBy().name());
+        // Generic metadata retains the physical identity for existing consumers.
+        // The semantic key carries the complete domain identity, independently
+        // of the compact display name and without runtime values or arguments.
+        if (invokedId != null) {
+            observation.lowCardinalityKeyValue("causeway.member.id", invokedId.toString());
+        }
+        if (domainId != null) {
+            observation.contextualName(CausewayObservationNaming.forMember(
+                    prefix, domainId.logicalTypeName(), domainId.memberLogicalName()))
+                    .lowCardinalityKeyValue(identityKey, domainId.getLogicalIdentityString("#"));
+        }
+        return observation;
     }
 
     private ManagedObject invokeActionInternally(

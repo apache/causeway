@@ -51,7 +51,7 @@ class MicrometerTracingCompatibilityTest {
                 var http = spans.stream().filter(s -> s.getSpanId().equals(root.getParentSpanId())).findFirst().orElseThrow(() -> new AssertionError(names(spans)));
                 assertEquals(Span.SpanKind.SPAN_KIND_SERVER, http.getKind());
                 assertEquals(http.getTraceId(), root.getTraceId());
-                var actions = spans.stream().filter(s -> s.getParentSpanId().equals(root.getSpanId()) && s.getName().startsWith("Action ")).toList();
+                var actions = spans.stream().filter(s -> s.getParentSpanId().equals(root.getSpanId()) && s.getName().startsWith("act ")).toList();
                 assertEquals(1, actions.size(), names(spans));
                 var action = actions.get(0);
                 assertEquals(root.getTraceId(), action.getTraceId());
@@ -64,7 +64,7 @@ class MicrometerTracingCompatibilityTest {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
                 launch(mode, collector, "--causeway.observation.jpa-duration-threshold=1d");
-                var actions = collector.spans.stream().filter(s -> s.getName().startsWith("Action ")).toList();
+                var actions = collector.spans.stream().filter(s -> s.getName().startsWith("act ")).toList();
                 assertEquals(2, actions.size(), names(collector.spans));
                 for (var action : actions) assertJpaAncestry(collector.spans, action, mode.equals("agent"));
                 assertFalse(collector.spans.stream().anyMatch(s -> attribute(s, "causeway.discard") != null));
@@ -74,7 +74,7 @@ class MicrometerTracingCompatibilityTest {
     @Test void bootDefaultsRetainJpaParentsAndIncludeIdentity() throws Exception {
         try (var collector = new Collector()) {
             launch("boot", collector);
-            var actions = collector.spans.stream().filter(s -> s.getName().startsWith("Action ")).toList();
+            var actions = collector.spans.stream().filter(s -> s.getName().startsWith("act ")).toList();
             assertEquals(2, actions.size(), names(collector.spans));
             for (var action : actions) assertJpaAncestry(collector.spans, action, false);
             collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction"))
@@ -91,6 +91,42 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
+    @Test void semanticMembersExportDomainIdentityAndCompactNamesInBothModes() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.semantic=true");
+                var members = collector.spans.stream().filter(span -> attribute(span, "causeway.member.id") != null).toList();
+                assertEquals(14, members.size(), names(collector.spans)); // seven operations, two requests
+                for (String key : List.of("causeway.action.id", "causeway.property.id", "causeway.collection.id")) {
+                    var selected = members.stream().filter(span -> attribute(span, key) != null).toList();
+                    assertEquals(key.equals("causeway.action.id") ? 10 : 2, selected.size(), names(members));
+                    for (var span : selected) {
+                        assertTrue(span.getName().startsWith(key.equals("causeway.action.id") ? "act "
+                                : key.equals("causeway.property.id") ? "prop " : "coll "), span.getName());
+                        assertTrue(span.getName().contains("UpperCaseOwner#"), span.getName());
+                        assertTrue(span.getName().length() <= 50);
+                        assertFalse(attribute(span, key).contains("implementation."));
+                        if (!key.equals("causeway.action.id")) assertNull(attribute(span, "causeway.action.id"));
+                        var root = collector.spans.stream().filter(parent -> parent.getSpanId().equals(span.getParentSpanId()))
+                                .findFirst().orElseThrow();
+                        assertEquals("Causeway Root Interaction", root.getName());
+                        assertEquals(root.getTraceId(), span.getTraceId());
+                        assertJpaAncestry(collector.spans, span, mode.equals("agent"));
+                    }
+                }
+                var longActions = members.stream().filter(span -> {
+                    var id = attribute(span, "causeway.action.id");
+                    return id != null && id.startsWith("very.long.namespace.");
+                }).toList();
+                assertEquals(4, longActions.size());
+                assertEquals(1, longActions.stream().map(Span::getName).distinct().count());
+                assertEquals(2, longActions.stream().map(span -> attribute(span, "causeway.action.id")).distinct().count());
+                assertTrue(longActions.stream().allMatch(span -> attribute(span, "causeway.action.id").endsWith("(java.lang.String)")));
+                assertTrue(members.stream().anyMatch(span -> "act domain.UpperCaseOwner#updateName".equals(span.getName())));
+            }
+        }
+    }
+
     private void assertIdentity(Span span, String userName, String token) {
         var attributes = span.getAttributesList().stream().collect(java.util.stream.Collectors.toMap(
                 a -> a.getKey(), a -> a.getValue().getStringValue()));
@@ -114,7 +150,7 @@ class MicrometerTracingCompatibilityTest {
         try (var collector = new Collector()) {
             launch("inactive", collector);
             assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_SERVER), names(collector.spans));
-            assertFalse(collector.spans.stream().anyMatch(s -> s.getName().contains("Causeway Root Interaction") || s.getName().startsWith("Action ")), names(collector.spans));
+            assertFalse(collector.spans.stream().anyMatch(s -> s.getName().contains("Causeway Root Interaction") || s.getName().startsWith("act ")), names(collector.spans));
         }
     }
     @Test void activeWithoutAgentOrExporterIsSafe() throws Exception {

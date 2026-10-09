@@ -120,7 +120,14 @@ causeway:
     restfulobjects:
       basePath: /restful
 ----
-+
+
+== Current action context (CAUSEWAY-4058)
+
+Applications can inspect the currently executing framework action through `InteractionProvider.currentActionInvocation()` and match its receiver, invoked identifier and rule-checking status with `isCurrentActionInvocation(...)`.
+
+Mixin invocations expose their effective action (or property or collection) identifier rather than the identifier of the the underlying mixin action itself.
+
+See xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider] for examples and direct Java-call limitations.
 
 
 == Immutable Configuration
@@ -136,7 +143,8 @@ in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 
 == Object Icon Support (Experimental)
 
-WARNING: This is a _Programming Model_/_API_ draft. It might receive some polishing till final `4.0.0`.
+WARNING: This is a _Programming Model_/_API_ draft.
+It might receive some polishing till final `4.0.0`.
 
 Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconSize iconSize)`,
 which also supports image data embedding and supersedes `String iconName()`.
