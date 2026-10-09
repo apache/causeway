@@ -23,3 +23,7 @@ Existing standard handlers preserve the names and attributes in both tracing mod
 ## Limits
 
 The export fixture uses controlled metamodel collaborators and actual runtime invocation, JPA observation and SQL work. It verifies declared identifier signatures independently of runtime argument values. This does not replace interactive Petclinic verification; no browser session or full reactor build was performed. Automatic HTTP/JDBC names and Wicket region naming are outside this change.
+
+## Archive checkpoint
+
+After rebase, implementation commit is `5471c51b515`; user documentation edits are committed as `e5b7ea42e11`. The same focused build/test, interaction and exported-trace commands passed again before archive: 43 focused tests, 77 executed interaction tests with 2 existing disabled tests, and 10 tracing/JPA tests. The M3 how-to, migration notes and observability guide rendered successfully; strict change validation also passed.
