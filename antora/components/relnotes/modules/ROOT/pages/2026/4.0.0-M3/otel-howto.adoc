@@ -333,6 +333,13 @@ A custom registry must configure its tracing handlers to use the same single or 
 
 
 
+== Current action context (CAUSEWAY-4058)
+
+Applications can inspect the currently executing framework action through `InteractionProvider.currentActionInvocation()` and match its receiver, invoked identifier and rule-checking status with `isCurrentActionInvocation(...)`.
+Mixin invocations also expose their domain-facing action identifier separately from the implementation method identifier.
+This context API works with observations disabled and adds no spans; it provides the invocation information needed for the later application-defined spans capability.
+See xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider] for examples and direct Java-call limitations.
+
 == Further reading
 
 * https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot[OpenTelemetry with Spring Boot]

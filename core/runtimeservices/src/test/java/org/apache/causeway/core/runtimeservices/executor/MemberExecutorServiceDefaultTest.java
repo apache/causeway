@@ -53,6 +53,40 @@ import jakarta.inject.Provider;
 class MemberExecutorServiceDefaultTest {
 
     @Test
+    void currentContextPreservesRegularIdentifier() {
+        var action = mock(ObjectAction.class);
+        var identifier = org.apache.causeway.applib.Identifier.actionIdentifier(
+                org.apache.causeway.applib.id.LogicalType.fqcn(SuppressedTarget.class), "update", String.class);
+        when(action.getFeatureIdentifier()).thenReturn(identifier);
+        assertThat(MemberExecutorServiceDefault.domainFacingActionIdentifier(null, action)).isSameAs(identifier);
+    }
+
+    @Test
+    void domainContextUsesMainMixinNamingAndPreservesParameters() {
+        var action = mock(ObjectAction.class);
+        var owner = managedObject(new SuppressedTarget());
+        var ownerSpec = owner.objSpec();
+        var ownerType = org.apache.causeway.applib.id.LogicalType.fqcn(SuppressedTarget.class);
+        var invokedType = org.apache.causeway.applib.id.LogicalType.fqcn(MixinReceiver.class);
+        var invokedId = org.apache.causeway.applib.Identifier.actionIdentifier(invokedType, "act", String.class);
+        var programmingModel = mock(org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.class);
+        var naming = mock(org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.MixinNamingStrategy.class);
+        when(action.getFeatureIdentifier()).thenReturn(invokedId);
+        when(action.isDeclaredOnMixin()).thenReturn(true);
+        when(action.getProgrammingModel()).thenReturn(programmingModel);
+        when(programmingModel.mixinNamingStrategy()).thenReturn(naming);
+        when(naming.memberId(MixinReceiver.class)).thenReturn("rename");
+        when(ownerSpec.logicalType()).thenReturn(ownerType);
+        var head = mock(InteractionHead.class);
+        when(head.owner()).thenReturn(owner);
+        assertThat(MemberExecutorServiceDefault.domainFacingActionIdentifier(head, action))
+                .isEqualTo(org.apache.causeway.applib.Identifier.actionIdentifier(ownerType, "rename", String.class));
+        assertThat(action.getFeatureIdentifier()).isSameAs(invokedId);
+    }
+
+    private static class MixinReceiver {}
+
+    @Test
     void recordingAwareSafeActionOnSuppressedTargetBypassesCommandPreparation() {
         var commandPublisherProvider = commandPublisherProvider();
         var service = newService(commandPublisherProvider);

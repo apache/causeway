@@ -21,6 +21,9 @@ package org.apache.causeway.applib.services.iactn;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.causeway.applib.Identifier;
+import lombok.NonNull;
+
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
@@ -55,6 +58,124 @@ public interface InteractionProvider {
      * Optionally, the currently active {@link org.apache.causeway.applib.services.iactn.InteractionContext} for the calling thread.
      */
     Optional<InteractionContext> currentInteractionContext();
+
+    /**
+     * The current action invocation, if the current interaction execution is an action.
+     *
+     * <p>
+     * This describes execution through Causeway's action invocation machinery.
+     * Inspect the returned {@link ActionInvocation}'s rule-checking status to determine
+     * whether visibility, usability and validity rules were checked or skipped.
+     * Only the current framework execution is considered; a nested property
+     * edit does not expose its enclosing action. Direct Java calls do not create
+     * execution frames, so an outer framework invocation may remain visible.
+     * </p>
+     *
+     * @return the current action invocation, if any
+     * @since 4.0.0
+     */
+    default Optional<ActionInvocation> currentActionInvocation() {
+        return currentInteraction()
+                .map(Interaction::getCurrentExecution)
+                .filter(ActionInvocation.class::isInstance)
+                .map(ActionInvocation.class::cast);
+    }
+
+    /**
+     * Whether the current action invocation is for the identical {@code target} and
+     * has the supplied logical member {@code identifier}.
+     *
+     * <p>
+     * Target comparison deliberately uses object identity rather than
+     * {@link Object#equals(Object)}.
+     * For a mixin action the target is the transient mixin instance on which
+     * {@code act} is invoked, not the mixed-in domain object.
+     * </p>
+     *
+     * @param target action method receiver
+     * @param identifier full logical action identifier
+     * @return whether the target and identifier match the current action invocation
+     * @since 4.0.0
+     */
+    default boolean isCurrentActionInvocation(
+            final @NonNull Object target,
+            final @NonNull Identifier identifier) {
+        return currentActionInvocation()
+                .filter(actionInvocation -> actionInvocation.getTarget() == target)
+                .map(ActionInvocation::getLogicalMemberIdentifier)
+                .filter(identifier::equals)
+                .isPresent();
+    }
+
+    /**
+     * Whether the current action invocation is for the identical {@code target} and
+     * has the supplied logical {@code memberName}.
+     *
+     * <p>
+     * This convenience form does not distinguish overloaded action identifiers.
+     * Use {@link #isCurrentActionInvocation(Object, Identifier)} when the full action
+     * identity is required.
+     * For a mixin action, callers typically supply {@code this} as the target and
+     * {@code "act"} as the member name.
+     * </p>
+     *
+     * @param target action method receiver
+     * @param memberName logical member name
+     * @return whether the target and member name match the current action invocation
+     * @since 4.0.0
+     */
+    default boolean isCurrentActionInvocation(
+            final @NonNull Object target,
+            final @NonNull String memberName) {
+        return currentActionInvocation()
+                .filter(actionInvocation -> actionInvocation.getTarget() == target)
+                .map(ActionInvocation::getLogicalMemberIdentifier)
+                .map(Identifier::memberLogicalName)
+                .filter(memberName::equals)
+                .isPresent();
+    }
+
+    /**
+     * Whether the current action invocation matches the supplied target,
+     * identifier and rule-checking status.
+     *
+     * @param target action method receiver
+     * @param identifier full logical action identifier
+     * @param ruleChecking expected rule-checking status
+     * @return whether all supplied characteristics match the current action invocation
+     * @since 4.0.0
+     */
+    default boolean isCurrentActionInvocation(
+            final @NonNull Object target,
+            final @NonNull Identifier identifier,
+            final @NonNull ActionInvocation.RuleChecking ruleChecking) {
+        return isCurrentActionInvocation(target, identifier)
+                && currentActionInvocation()
+                        .map(ActionInvocation::getRuleChecking)
+                        .filter(ruleChecking::equals)
+                        .isPresent();
+    }
+
+    /**
+     * Whether the current action invocation matches the supplied target,
+     * logical member name and rule-checking status.
+     *
+     * @param target action method receiver
+     * @param memberName logical member name
+     * @param ruleChecking expected rule-checking status
+     * @return whether all supplied characteristics match the current action invocation
+     * @since 4.0.0
+     */
+    default boolean isCurrentActionInvocation(
+            final @NonNull Object target,
+            final @NonNull String memberName,
+            final @NonNull ActionInvocation.RuleChecking ruleChecking) {
+        return isCurrentActionInvocation(target, memberName)
+                && currentActionInvocation()
+                        .map(ActionInvocation::getRuleChecking)
+                        .filter(ruleChecking::equals)
+                        .isPresent();
+    }
 
     /**
      * Unique id of the current request- or test-scoped {@link Interaction}.
