@@ -42,6 +42,8 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeModel;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
@@ -65,6 +67,8 @@ implements HasDynamicallyVisibleContent {
     public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
         super(id, model);
         buildGui(fieldSet);
+        WicketRenderObservationBehavior.addTo(this, WicketRenderObservationDescriptor.fieldset(
+                model.getTypeOfSpecification().getFeatureIdentifier().logicalTypeName(), fieldSet.getId()));
     }
 
     @Override

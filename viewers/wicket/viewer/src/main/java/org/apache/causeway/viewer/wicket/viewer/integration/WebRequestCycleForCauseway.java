@@ -66,6 +66,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationTracker;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
@@ -224,11 +225,16 @@ implements
      */
     @Override
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
-        interactionService.closeInteractionLayers();
+        try {
+            WicketRenderObservationTracker.cleanup(requestCycle, null);
+        } finally {
+            interactionService.closeInteractionLayers();
+        }
     }
 
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
+        WicketRenderObservationTracker.cleanup(cycle, ex);
 
         // using side-effect free access to MM validation result
         var validationResult = specificationLoader().getValidationResult()

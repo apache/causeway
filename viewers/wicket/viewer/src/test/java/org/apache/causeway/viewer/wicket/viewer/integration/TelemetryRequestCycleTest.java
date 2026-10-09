@@ -54,6 +54,38 @@ class TelemetryRequestCycleTest {
         verifyRequestScopes(true);
     }
 
+    @Test
+    void unfinishedRegionClosesBeforeInteractionAndOuterRequest() {
+        var registry = ObservationRegistry.create();
+        var stopped = new ArrayList<String>();
+        registry.observationConfig().observationHandler(new ObservationHandler<Observation.Context>() {
+            public boolean supportsContext(Observation.Context context) { return true; }
+            public void onStop(Observation.Context context) { stopped.add(context.getName()); }
+        });
+        var integration = new CausewayObservationIntegration(registry);
+        var cycle = new RequestCycle2(new RequestCycleContext(mock(Request.class), mock(Response.class),
+                mock(IRequestMapper.class), mock(IExceptionMapper.class)));
+        var outer = new TelemetryStartHandler(integration);
+        outer.onBeginRequest(cycle);
+        var interaction = new ObservationClosure().startAndOpenScope(Observation.createNotStarted("interaction", registry));
+        var component = org.mockito.Mockito.mock(org.apache.wicket.markup.html.WebMarkupContainer.class,
+                org.mockito.Mockito.withSettings().extraInterfaces(org.apache.causeway.core.metamodel.context.HasMetaModelContext.class));
+        org.mockito.Mockito.when(component.getRequestCycle()).thenReturn(cycle);
+        org.mockito.Mockito.when(((org.apache.causeway.core.metamodel.context.HasMetaModelContext) component)
+                .lookupService(CausewayObservationIntegration.class)).thenReturn(java.util.Optional.of(integration));
+        var behavior = new org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior(
+                org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor.page("demo.Customer"));
+        behavior.beforeRender(component);
+        var interactions = mock(org.apache.causeway.applib.services.iactn.InteractionService.class);
+        org.mockito.Mockito.doAnswer(__ -> { interaction.close(); return null; }).when(interactions).closeInteractionLayers();
+        new WebRequestCycleForCauseway(interactions, null, null, null, null).onEndRequest(cycle);
+        outer.onEndRequest(cycle);
+        assertNull(registry.getCurrentObservation());
+        assertEquals(List.of("causeway.wicket.page.render", "interaction", "Apache Wicket Request Cycle"), stopped);
+        behavior.afterRender(component); // skipped callback is safe even when it arrives late
+        assertEquals(3, stopped.size());
+    }
+
     private void verifyRequestScopes(boolean fail) {
         var registry = ObservationRegistry.create();
         var stopped = new ArrayList<String>();

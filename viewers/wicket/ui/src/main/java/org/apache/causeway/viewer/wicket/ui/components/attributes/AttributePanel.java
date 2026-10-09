@@ -57,6 +57,8 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationPolicy;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.RegularFrame;
@@ -257,6 +259,8 @@ implements AttributeModelChangeListener, HasAttributeModel {
 
     protected AttributePanel(final String id, final UiAttributeWkt attributeModel) {
         super(id, attributeModel);
+        WicketRenderObservationPolicy.propertyDescriptor(attributeModel)
+                .ifPresent(descriptor -> WicketRenderObservationBehavior.addTo(this, descriptor));
 
         var formatModifiers = EnumSet.noneOf(FormatModifier.class);
         setupFormatModifiers(formatModifiers);

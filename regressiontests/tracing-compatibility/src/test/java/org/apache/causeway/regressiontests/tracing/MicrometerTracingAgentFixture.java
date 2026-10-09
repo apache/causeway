@@ -87,6 +87,7 @@ public class MicrometerTracingAgentFixture {
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
             var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
+            boolean wicket = context.getEnvironment().getProperty("fixture.wicket", Boolean.class, false);
             boolean semantic = context.getEnvironment().getProperty("fixture.semantic", Boolean.class, false);
             var semanticActions = semantic ? semanticActions(action) : List.<ActionExecutor>of();
             var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
@@ -98,7 +99,23 @@ public class MicrometerTracingAgentFixture {
                 try {
                     if (integration.observationRegistry().getCurrentObservation() != null)
                         throw new AssertionError("stale Causeway observation");
-                    interactions.call(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(
+                    if (wicket) {
+                        Runnable render = () -> WicketRegionTracingFixture.render(integration, interactions,
+                                () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null);
+                        if (context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent"))) {
+                            render.run(); // The agent owns the real JDK HTTP server boundary.
+                        } else {
+                            // Boot does not automatically instrument JDK HttpServer. Bind its
+                            // standard receiver handler to this real request, without an SDK
+                            // or another tracing handler, so both modes exercise HTTP ancestry.
+                            io.micrometer.observation.Observation.createNotStarted("http.server.requests", () -> {
+                                var receiver = new io.micrometer.observation.transport.ReceiverContext<com.sun.net.httpserver.HttpExchange>(
+                                        (request, key) -> request.getRequestHeaders().getFirst(key), io.micrometer.observation.transport.Kind.SERVER);
+                                receiver.setCarrier(exchange);
+                                return receiver;
+                            }, integration.observationRegistry()).contextualName("GET /trace").observe(render);
+                        }
+                    } else interactions.call(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(
                             org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
                                     .withMultiTenancyToken("sentinel-tenant")), () -> {
                         if (semantic) {

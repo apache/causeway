@@ -97,6 +97,28 @@ Unresolved mixed-in association metadata falls back to an action observation.
 Both Boot and agent modes use this naming without extra settings.
 The root interaction and HTTP entry names are unchanged; Wicket rendering regions and semantic entry-span names are separate capabilities.
 
+== Wicket preparation and rendering regions
+
+With observations active, Wicket domain-object pages emit `causeway.wicket.page.prepare` (`prepare <logical-type>`) around initial page construction and configuration/descendant preparation, and `causeway.wicket.page.render` (`render <logical-type>`) around markup rendering.
+Preparation closes before markup rendering begins.
+Visible fieldsets, regular object properties, parented collections and object action controls use `causeway.wicket.fieldset.render`, `causeway.wicket.property.render`, `causeway.wicket.collection.render` and `causeway.wicket.action.render`.
+Their displays use `render fieldset <id>`, `render property <logical-type>#<member>`, `render collection <logical-type>#<member>` and `render action <logical-type>#<member>`.
+Action prompts use `causeway.wicket.action.prompt.render`, displayed as `prompt <logical-type>#<action>`.
+
+These UI boundaries enclose actual rendering; domain invocation/access spans remain separate observations.
+Each region carries the full static `causeway.object.type` and its applicable `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id` or `causeway.action.id`.
+Action controls and prompts identify contributed domain actions, retaining declared parameter signatures in attributes.
+Displays follow the same case-preserving 50-character compaction policy as member spans; instance identifiers, titles and argument values are omitted.
+
+A full page has nested page/member rendering regions.
+An Ajax subtree update retains its request/interaction ancestry and can render a property or collection without rendering the page.
+Hidden components, action parameter widgets and table cells do not acquire these member-level regions.
+Outstanding scopes are unwound at request completion or on error before interaction/request parents close, and active telemetry is excluded from serialized page state.
+
+Use the existing Petclinic setup in the M3 how-to: open an owner, inspect its visits collection and open Update Name to see preparation, collection rendering and prompt regions.
+These observations work with either existing tracing owner without another flag.
+They apply to Wicket; table internals/detail budgets, semantic entry names and equivalent rendering regions for other viewers are outside this capability.
+
 == Observation names and metadata migration (CAUSEWAY-4096)
 
 Micrometer's operation name identifies an operation category and its meters.
@@ -139,7 +161,9 @@ The child-process fixture uses production interaction and action services and th
 Its JPA backend is controlled; agent mode instruments real H2 JDBC automatically, while Boot mode explicitly wraps the SQL call in a fixture observation.
 It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocation, a failure followed by a successful request on the same worker, Boot-managed export, duration-independent JPA retention, inactive-profile behavior and operation without an agent/exporter.
 The additional entry-point fixture uses real Tomcat servlet and Quartz instrumentation with controlled business collaborators, verifying fixed-key classification and effective replay UUIDs in both trace ownership modes.
-It does not prove every servlet container or viewer integration, nor a full persisted-command replay.
+The Wicket fixture additionally runs real component lifecycle and Ajax callbacks with production region helpers and request observation/cleanup handlers, verifying full-page versus subtree ancestry, failure followed by success, identity and inactive/missing-exporter behavior in both modes.
+Its JDK HTTP server uses Boot’s standard receiver handler bound to the real request in Boot mode and automatic HTTP instrumentation in agent mode.
+Its domain/model collaborators are controlled; it does not replace interactive Petclinic verification or prove every servlet container/viewer integration or a full persisted-command replay.
 
 From the repository root, after building the required main artifacts:
 

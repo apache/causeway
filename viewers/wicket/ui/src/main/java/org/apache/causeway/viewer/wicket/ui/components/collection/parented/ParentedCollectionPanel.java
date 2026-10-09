@@ -37,6 +37,8 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
@@ -135,6 +137,9 @@ implements HasDynamicallyVisibleContent {
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
         var collectionMetaModel = collectionModel.getMetaModel();
+        var featureId = collectionMetaModel.getFeatureIdentifier();
+        WicketRenderObservationBehavior.addTo(this, WicketRenderObservationDescriptor.collection(
+                featureId.logicalTypeName(), featureId.getLogicalIdentityString("#")));
 
         Wkt.cssAppend(div, collectionModel.getIdentifier());
         Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());

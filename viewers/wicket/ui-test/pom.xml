@@ -49,6 +49,12 @@
             <artifactId>causeway-viewer-wicket-ui</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-tester</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 		<!-- TESTING -->
 
 		<dependency>

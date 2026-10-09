@@ -55,6 +55,8 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 })
 public class CausewayModuleViewerWicketUi {
 
+    public static final String NAMESPACE = "causeway.viewer.wicket.ui";
+
     @Bean
     ThemeProvider bootstrapDefaultThemeProvider() {
         return new BootstrapDefaultThemeProvider();

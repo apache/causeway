@@ -42,4 +42,12 @@ class CausewayObservationNamingTest {
         assertThrows(NullPointerException.class, () -> CausewayObservationNaming.forMember("act", null, "name"));
         assertThrows(IllegalArgumentException.class, () -> CausewayObservationNaming.forMember("act", "Type", " "));
     }
+    @Test void renderRegionsUseStaticNamesAndTheSameCompactionBudget() {
+        assertEquals("render property demo.Customer#name", CausewayObservationNaming.forRenderRegion("property", "demo.Customer#name"));
+        assertEquals("render action demo.Customer#updateName", CausewayObservationNaming.forRenderRegion("action", "demo.Customer#updateName(java.lang.String)"));
+        assertEquals("render fieldset default", CausewayObservationNaming.forRenderRegion("fieldset", "<default>"));
+        assertEquals("render Customer", CausewayObservationNaming.forType("render", "very.long.namespace.with.many.segments.and.components.Customer"));
+        assertEquals(50, CausewayObservationNaming.forRenderRegion("collection", "namespace.Type#" + "x".repeat(100)).length());
+    }
+
 }

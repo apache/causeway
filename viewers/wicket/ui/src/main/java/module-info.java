@@ -18,6 +18,7 @@
  */
 module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui;
+    exports org.apache.causeway.viewer.wicket.ui.observation;
     exports org.apache.causeway.viewer.wicket.ui.app.logout;
     exports org.apache.causeway.viewer.wicket.ui.app.registry;
     exports org.apache.causeway.viewer.wicket.ui.components;
@@ -117,6 +118,7 @@ module org.apache.causeway.viewer.wicket.ui {
     requires com.github.openjson;
     requires jakarta.activation;
     requires java.desktop;
+    requires micrometer.observation;
     requires jakarta.inject;
     requires java.sql;
     requires jakarta.validation;

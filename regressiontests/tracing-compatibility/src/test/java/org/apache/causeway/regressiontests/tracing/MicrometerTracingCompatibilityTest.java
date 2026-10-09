@@ -146,6 +146,51 @@ class MicrometerTracingCompatibilityTest {
         assertFalse((jpa.getName() + jpa.getAttributesList()).contains("sentinel"));
         assertTrue(action.getAttributesList().stream().anyMatch(a -> a.getKey().equals("causeway.member.id")));
     }
+    @Test void wicketRegionsExportRealRenderAndAjaxAncestryInBothModes() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.wicket=true");
+                var spans = collector.spans;
+                var regions = spans.stream().filter(span -> attribute(span, "causeway.object.type") != null).toList();
+                assertFalse(regions.isEmpty(), names(spans));
+                for (var region : regions) {
+                    assertTrue(region.getName().length() <= 50);
+                    assertEquals("fixture.UpperCaseOwner", attribute(region, "causeway.object.type"));
+                    assertTrue(region.getName().contains("UpperCaseOwner") || region.getName().equals("render fieldset identity"), names(spans));
+                    var parent = spans.stream().filter(span -> span.getSpanId().equals(region.getParentSpanId())).findFirst().orElseThrow(() -> new AssertionError(names(spans)));
+                    assertEquals(parent.getTraceId(), region.getTraceId());
+                }
+                assertEquals(2, regions.stream().filter(span -> span.getName().equals("prepare fixture.UpperCaseOwner")).count());
+                assertEquals(2, regions.stream().filter(span -> span.getName().equals("render fixture.UpperCaseOwner")).count());
+                var properties = regions.stream().filter(span -> attribute(span, "causeway.property.id") != null).toList();
+                assertEquals(3, properties.size(), names(spans)); // failed full render, successful full render, Ajax update
+                assertEquals(1, properties.stream().filter(span -> span.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                assertEquals(1, regions.stream().filter(span -> span.getName().equals("prompt fixture.UpperCaseOwner#updateName")).count());
+                assertTrue(regions.stream().anyMatch(span -> "fixture.UpperCaseOwner#updateName(java.lang.String)".equals(attribute(span, "causeway.action.id"))));
+                var framework = spans.stream().filter(span -> span.getName().startsWith("Apache Wicket Request Cycle")).toList();
+                assertTrue(framework.stream().anyMatch(span -> span.getName().endsWith("(AJAX)")), names(spans));
+                for (var property : properties) {
+                    var actions = spans.stream().filter(span -> span.getParentSpanId().equals(property.getSpanId()) && span.getName().startsWith("act ")).toList();
+                    assertEquals(1, actions.size(), names(spans));
+                    assertJpaAncestry(spans, actions.get(0), mode.equals("agent"));
+                }
+                var ajax = framework.stream().filter(span -> span.getName().endsWith("(AJAX)")).findFirst().orElseThrow();
+                var ajaxRoot = spans.stream().filter(span -> span.getParentSpanId().equals(ajax.getSpanId()) && span.getName().equals("Causeway Root Interaction")).findFirst().orElseThrow();
+                assertTrue(properties.stream().anyMatch(span -> span.getParentSpanId().equals(ajaxRoot.getSpanId())));
+                for (var request : framework) {
+                    assertTrue(spans.stream().anyMatch(span -> span.getSpanId().equals(request.getParentSpanId()) && span.getKind() == Span.SpanKind.SPAN_KIND_SERVER), names(spans));
+                }
+            }
+        }
+    }
+    @Test void wicketRegionsAreSafeWhenInactiveOrExporterIsAbsent() throws Exception {
+        for (String mode : List.of("inactive", "none")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.wicket=true");
+                assertFalse(collector.spans.stream().anyMatch(span -> attribute(span, "causeway.object.type") != null));
+            }
+        }
+    }
     @Test void inactiveProfileLeavesAutomaticAgentSpansWorking() throws Exception {
         try (var collector = new Collector()) {
             launch("inactive", collector);

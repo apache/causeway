@@ -51,6 +51,9 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.model.whereAmI.WhereAmI;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketPagePreparationObservation;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -61,6 +64,8 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 @AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
 //@Slf4j
 public class DomainObjectPage extends PageAbstract {
+
+    private WicketPagePreparationObservation preparation;
 
     private static final long serialVersionUID = 144368606134796079L;
 
@@ -116,8 +121,13 @@ public class DomainObjectPage extends PageAbstract {
 
     @Override
     protected void onInitialize() {
-        buildPage();
-        super.onInitialize();
+        try {
+            buildPage();
+            super.onInitialize();
+        } catch (RuntimeException | Error failure) {
+            if (preparation != null) preparation.fail(failure);
+            throw failure;
+        }
     }
 
     @Override
@@ -148,7 +158,14 @@ public class DomainObjectPage extends PageAbstract {
         if(!model.isVisible())
             throw new ObjectMember.AuthorizationException();
 
-        var objectSpec = model.getTypeOfSpecification();
+        var objectSpec = objectAdapter.objSpec();
+        // The object is already needed to build the page. Only static metadata
+        // is retained; no observation or registry enters serialized page state.
+        var logicalType = objectSpec.getFeatureIdentifier().logicalTypeName();
+        preparation = new WicketPagePreparationObservation(
+                WicketRenderObservationDescriptor.pagePreparation(logicalType));
+        preparation.configure(this, () -> {});
+        WicketRenderObservationBehavior.addTo(this, WicketRenderObservationDescriptor.page(logicalType));
 
         var layoutKey = Facets.gridPreload(objectSpec, objectAdapter)
             .map(BSGrid::layoutKey)
@@ -212,8 +229,21 @@ public class DomainObjectPage extends PageAbstract {
     }
 
     @Override
+    protected void onConfigure() {
+        if (preparation == null) super.onConfigure();
+        else preparation.configure(this, () -> super.onConfigure());
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        if (preparation == null) super.onBeforeRender();
+        else preparation.beforeRender(() -> super.onBeforeRender());
+    }
+
+    @Override
     protected void onDetach() {
-    	super.onDetach();
+        if (preparation != null) preparation.detach(() -> super.onDetach());
+        else super.onDetach();
     	model.detach();
     	FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
     }
