@@ -128,6 +128,25 @@ instance identifiers, object titles or argument values are _not_ included in the
 ====
 
 
+* For Wicket object pages, inspect the preparation and rendering regions.
++
+Opening an owner shows `prepare petclinic.PetOwner` for building/configuring the page and preparing its child components, followed by `render petclinic.PetOwner` for rendering the page markup.
+The preparation scope finishes before markup rendering starts.
+Within the page render, look for regions such as `render fieldset identity`, `render property petclinic.PetOwner#name` and `render collection petclinic.PetOwner#visits`.
+Object action controls have `render action <logical-type>#<member>` regions.
+These describe UI rendering; `act`, `prop` and `coll` spans describe domain member execution and access.
++
+Open the owner's *Update Name* action prompt to see `prompt petclinic.PetOwner#updateName`.
+Inspect its `causeway.action.id` attribute for the complete identifier, including declared parameter types: `petclinic.PetOwner#updateName(java.lang.String)`.
+Region spans carry `causeway.object.type` and, where applicable, `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id` or `causeway.action.id`.
+Full identifier attributes remain intact when a display name is shortened.
+In Jaeger's *Attributes* search field, for example use `causeway.action.id="petclinic.PetOwner#updateName(java.lang.String)"` with *All Span Names* selected; this can find action execution, action-control rendering and prompt rendering.
++
+Ajax updates render only the selected component subtree, so they can contain member rendering regions without a page-render region.
+Hidden regions and action parameter widgets do not produce domain-property rendering regions.
+These Wicket regions work in both tracing modes with the existing launcher and configuration.
+HTMX `/graphql` traces retain their domain-operation spans; they do not contain Wicket regions.
+Table phases, individual row/cell detail and semantic HTTP trace-root naming are separate roadmap items.
 
 
 === Micrometer

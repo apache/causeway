@@ -43,6 +43,8 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationPolicy;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FrameFragment;
@@ -102,6 +104,8 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
         _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
         this.where = where;
+        WicketRenderObservationPolicy.actionDescriptor(model, where)
+                .ifPresent(descriptor -> WicketRenderObservationBehavior.addTo(this, descriptor));
         this.indicatorAppenderIfAny = getSettings().useIndicatorForNoArgAction()
                 ? new AjaxIndicatorAppender()
                 : null;
