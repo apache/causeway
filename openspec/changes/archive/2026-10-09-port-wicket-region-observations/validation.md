@@ -34,3 +34,7 @@ Strict OpenSpec validation and `git diff --check` passed.
 ## Limits
 
 Lifecycle tests use lightweight Wicket components/pages and the production helpers; exported fixtures use controlled business/model collaborators and actual framework/member/JPA/SQL work. They characterize the hooks used by main's DomainObjectPage but do not constitute an end-to-end render of that page with a live Petclinic persistence context. No interactive browser verification or full reactor test run was performed. Table internals/detail/budgets, root display naming and rendering instrumentation for other viewers remain separate roadmap items.
+
+## Archive checkpoint
+
+Implementation committed as `895782abf6d`. Fresh pre-archive checks passed the focused build/install (30 tests: 5 naming, 22 UI/region/prompt and 3 request-cycle), full Wicket UI/viewer tests (93 executed, 6 existing skips), all 12 exported-trace/JPA tests and rendering of both documentation pages. Strict change validation passed; six requirements were synced during archive.
