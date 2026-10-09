@@ -36,3 +36,7 @@ Rendered all three changed AsciiDoc pages with the locally installed Asciidoctor
 ## Limits
 
 This additive invocation API emits no new spans and requires no observation profile. No interactive browser or external exporter verification applies. Direct Java calls do not introduce framework execution frames and can still see an enclosing invocation. RuleChecking is aggregate mode information, not individual rule provenance. This implementation is based on the local preceding feature branch; remote main was not fetched or merged during apply.
+
+## Rebased archive verification (2026-10-09)
+
+After the user rebased onto main merge `ce0c8352dee`, planning and implementation checkpoints are `5c43e44b085` and `be228adf4ac`. Fresh focused reactor verification passed 29 tests; the full interact module again reported 79 tests, 77 executed and 2 existing disabled tests, with no failures/errors. All three documentation pages rendered and strict change validation passed. Specs were synced during archive.
