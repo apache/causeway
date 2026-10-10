@@ -309,6 +309,48 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
+    @Test void semanticEntryNamesSurviveExportInBothOwnersAndAdmissionSettings() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            for (String setting : List.of("--causeway.viewer.wicket.observation.detail=MEMBERS",
+                    "--causeway.viewer.wicket.observation.detail=NONE",
+                    "--causeway.viewer.wicket.observation.max-spans-per-request=1")) {
+                try (var collector = new Collector()) {
+                    launchFixture(SemanticTraceTracingFixture.class, mode, collector, setting);
+                    var entries = collector.spans.stream().filter(s -> "foreground".equals(attribute(s, "causeway.execution.mode"))).toList();
+                    assertEquals(6, entries.size(), names(collector.spans));
+                    assertEquals(1, entries.stream().filter(s -> s.getName().equals("view " + SemanticTraceTracingFixture.TYPE)).count(), names(entries));
+                    assertEquals(1, entries.stream().filter(s -> s.getName().equals("prompt " + SemanticTraceTracingFixture.TYPE + "#UpdateName")).count(), names(entries));
+                    assertEquals(2, entries.stream().filter(s -> s.getName().equals("act " + SemanticTraceTracingFixture.TYPE + "#UpdateName")).count(), names(entries));
+                    assertEquals(2, entries.stream().filter(s -> attribute(s, "causeway.trace.name") == null).count(), names(entries));
+                    for (var entry : entries) {
+                        assertEquals(Span.SpanKind.SPAN_KIND_SERVER, entry.getKind());
+                        assertEquals("0123456789abcdef0123456789abcdef", java.util.HexFormat.of().formatHex(entry.getTraceId().toByteArray()));
+                        assertEquals("0123456789abcdef", java.util.HexFormat.of().formatHex(entry.getParentSpanId().toByteArray()));
+                        assertEquals("GET", attribute(entry, mode.equals("boot") ? "method" : "http.request.method"), entry.toString());
+                        String status = entry.getAttributesList().stream()
+                                .filter(a -> a.getKey().equals(mode.equals("boot") ? "status" : "http.response.status_code"))
+                                .map(a -> a.getValue().hasIntValue() ? Long.toString(a.getValue().getIntValue()) : a.getValue().getStringValue())
+                                .findFirst().orElseThrow(() -> new AssertionError(entry.toString()));
+                        assertEquals("/fail".equals(attribute(entry, mode.equals("boot") ? "http.url" : "url.path")) ? "500" : "204", status);
+                        assertNotNull(attribute(entry, mode.equals("boot") ? "http.url" : "url.path"), entry.toString());
+                        assertNotNull(attribute(entry, mode.equals("boot") ? "uri" : "http.route"), entry.toString());
+                        if (attribute(entry, "causeway.trace.name") != null) assertEquals(entry.getName(), attribute(entry, "causeway.trace.name"));
+                        if (entry.getName().startsWith("act ") || entry.getName().startsWith("prompt ")) {
+                            assertEquals(SemanticTraceTracingFixture.ACTION, attribute(entry, "causeway.action.id"));
+                        }
+                        if (entry.getName().startsWith("view ")) assertEquals(SemanticTraceTracingFixture.TYPE, attribute(entry, "causeway.object.type"));
+                        var children = collector.spans.stream().filter(s -> s.getName().equals("fixture.security") && s.getParentSpanId().equals(entry.getSpanId())).toList();
+                        assertEquals(1, children.size(), names(collector.spans));
+                        assertEquals(entry.getTraceId(), children.get(0).getTraceId());
+                        assertNull(attribute(children.get(0), "causeway.trace.name"));
+                    }
+                    if (setting.endsWith("NONE")) assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("render ") || s.getName().startsWith("prompt ") && !entries.contains(s)), names(collector.spans));
+                    assertEquals(6, entries.stream().map(Span::getSpanId).distinct().count());
+                }
+            }
+        }
+    }
+
     private static String attribute(Span span, String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);

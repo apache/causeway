@@ -48,6 +48,7 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
@@ -58,6 +59,7 @@ import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -195,6 +197,13 @@ implements MemberExecutorService {
         var interactionCarrier = interactionCarrierElseFail();
 
         prepareCommandForPublishing(interactionCarrier.command(), head, owningAction, facetHolder);
+
+        // Only the command's requested action is the HTTP request outcome.
+        // Association access and unmatched nested work retain their own spans.
+        nominateSemanticTraceActionIfEligible(
+                actionExecutor.actionInvocationFacetAbstract() instanceof ActionInvocationFacetForMixedInPropertyOrCollection,
+                head.isCommandForMember(interactionCarrier.command(), owningAction),
+                domainFacingActionIdentifier(head, owningAction));
 
         var xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interactionCarrier, owningAction, head, argumentAdapters);
 
@@ -433,6 +442,13 @@ implements MemberExecutorService {
         }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    static void nominateSemanticTraceActionIfEligible(final boolean mixedInAssociation,
+            final boolean matchesCommand, final Identifier domainId) {
+        if (!mixedInAssociation && matchesCommand && domainId != null) {
+            CausewaySemanticTraceNamer.nominateAction(domainId.getLogicalIdentityString("#"));
+        }
     }
 
     /** Keeps physical invocation identity intact while exposing a contributed action's name. */

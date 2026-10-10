@@ -112,6 +112,23 @@ In Jaeger:
 +
 HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
 
+* Inspect the HTTP entry span and its display name.
++
+In both Boot-managed and agent-managed tracing, Causeway names eligible foreground requests from their domain outcome: `act <logical-type>#<action>`, `prompt <logical-type>#<action>` or `view <logical-type>`.
+In Wicket, opening Mary Smith's object page gives `view petclinic.PetOwner`; opening *Update Name* gives `prompt petclinic.PetOwner#updateName`; submitting that action gives `act petclinic.PetOwner#updateName`.
+Use fresh requests for each operation, then refresh *Find Traces* to inspect their names in the trace list.
++
+An eligible top-level action takes priority over a prompt, which takes priority over a page view; the first candidate wins ties.
+The selected entry has `causeway.trace.name` and the complete `causeway.action.id` (including parameter types) or `causeway.object.type`.
+These entry attributes describe static domain identity; `causeway.user.name`, tenancy and interaction UUID remain on the root interaction span.
++
+Action naming applies to matching top-level commands across servlet entry points, including GraphQL/HTMX.
+Page-view and prompt nominations come from Wicket rendering.
+A request without a supported outcome, such as a static-resource request or an arbitrary Ajax subtree refresh, retains its HTTP display name.
+Wicket detail and span-budget settings do not suppress entry-name nominations, even with `NONE` detail or an exhausted budget.
+HTTP method, route/path and status attributes remain available; use those attributes when you want to group by route rather than domain outcome.
+Naming covers synchronous work in the initial request dispatch, without propagating nominations to asynchronous continuations.
+
 * Expand the span tree and inspect the spans
 +
 Span display names identify the domain member being interacted with, for example `act petclinic.PetOwner#updateName`, `prop petclinic.PetOwner#name` or `coll petclinic.PetOwner#visits`.
@@ -150,7 +167,7 @@ Parented collections also have `prepare collection <logical-type>#<member>` and 
 Within the table body, `render row <element-type>` encloses logical property and row-action rendering; `prepare row <element-type>` measures row population during collection preparation.
 Only rows participating in the current page or Ajax update are measured.
 Header labels, navigation controls and decorative cells do not produce member spans.
-Semantic HTTP trace-root naming remains a separate roadmap item.
+The HTTP entry display describes the request outcome; these child regions describe rendering work within that request.
 +
 The default detail is `MEMBERS`, with no Wicket span limit.
 To reduce collection detail and bound the number of Causeway semantic Wicket observations, export settings before starting the existing launcher:

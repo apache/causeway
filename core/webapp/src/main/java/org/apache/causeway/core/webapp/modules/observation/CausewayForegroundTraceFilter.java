@@ -27,6 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 
@@ -34,15 +35,22 @@ import org.apache.causeway.core.config.observation.CausewayTraceClassifier.Execu
 public final class CausewayForegroundTraceFilter extends OncePerRequestFilter {
     private final CausewayTraceClassifier classifier;
 
-    public CausewayForegroundTraceFilter(CausewayTraceClassifier classifier) {
+    private final CausewaySemanticTraceNamer semanticTraceNamer;
+
+    public CausewayForegroundTraceFilter(CausewayTraceClassifier classifier, CausewaySemanticTraceNamer semanticTraceNamer) {
         this.classifier = classifier;
+        this.semanticTraceNamer = semanticTraceNamer;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain chain) throws ServletException, IOException {
         classifier.classifyCurrentSpan(ExecutionMode.FOREGROUND);
-        chain.doFilter(request, response);
+        // Capture the HTTP entry before downstream scopes open. Nominations
+        // select its final display without owning the span's lifetime.
+        try (var naming = semanticTraceNamer.openCurrentSpan()) {
+            chain.doFilter(request, response);
+        }
     }
     // OncePerRequestFilter skips async/error redispatch: the entry was already
     // classified, and the current span during redispatch might be a child.

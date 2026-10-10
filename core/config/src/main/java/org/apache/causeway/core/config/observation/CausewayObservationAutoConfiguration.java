@@ -101,6 +101,24 @@ public class CausewayObservationAutoConfiguration {
         return new CausewayTraceClassifier(tracer);
     }
 
+    /** Uses the same single/primary bridge as classification; never owns or ends the entry span. */
+    @Bean
+    public CausewaySemanticTraceNamer causewaySemanticTraceNamer(
+            final CausewayObservationIntegration integration,
+            final ObjectProvider<Tracer> tracers,
+            final Environment environment) {
+        var tracer = environment.acceptsProfiles(Profiles.of("observation"))
+                ? tracers.getIfAvailable(() -> Tracer.NOOP)
+                : Tracer.NOOP;
+        return new CausewaySemanticTraceNamer(tracer, integration.observationRegistry());
+    }
+
+    @Profile("observation & !agent")
+    @Bean
+    public io.micrometer.observation.ObservationFilter semanticTraceDisplayNameFilter() {
+        return CausewaySemanticTraceNamer.retainSelectedName();
+    }
+
     /**
      * Always supplies the integration used by framework consumers, including
      * when Causeway observations are disabled.

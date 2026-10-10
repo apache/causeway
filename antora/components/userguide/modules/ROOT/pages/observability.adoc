@@ -95,7 +95,31 @@ Names contain static model identifiers, not instance titles, bookmarks or argume
 Unresolved mixed-in association metadata falls back to an action observation.
 
 Both Boot and agent modes use this naming without extra settings.
-The root interaction and HTTP entry names are unchanged; Wicket rendering regions and semantic entry-span names are separate capabilities.
+The root interaction remains a separate span; semantic HTTP entry names describe the request outcome as explained below.
+
+== Semantic foreground trace names
+
+With observations active, Causeway names the existing HTTP entry span from the highest-priority supported outcome: `act <logical-type>#<action>`, `prompt <logical-type>#<action>` or `view <logical-type>`.
+Actions outrank prompts, prompts outrank views and the first candidate wins equal-priority ties.
+A real action nominates only when its domain-facing identity matches the interaction command; calculated association access, pass-through work and unmatched nested/helper actions do not become the request outcome.
+Wicket full object-page rendering nominates a view, and enclosing action-prompt rendering nominates a prompt.
+Arbitrary Ajax subregions do not invent page-view outcomes.
+Requests with no supported candidate retain the tracing owner's supplied name.
+
+The selected entry display follows the same case-preserving 50-character compaction as member spans and is also available in `causeway.trace.name`.
+Entry attributes retain the full `causeway.action.id` (including declared parameter signatures) for actions/prompts or `causeway.object.type` for views.
+No instance titles, bookmarks or argument values are included.
+Existing HTTP attributes, execution mode, trace/span identity and child parentage remain intact; identity and correlation attributes remain on their existing interaction spans.
+Use HTTP method and route/path attributes for route-based grouping, since an entry's display now identifies domain work when a candidate exists.
+
+Both Boot-managed and agent-managed tracing use the existing integration without another flag or application code.
+Wicket entry nominations remain effective with `NONE` detail and exhausted request budgets, independently of region span admission.
+Nomination state belongs to synchronous work in the initial servlet dispatch; it is cleared on success/failure and is not propagated across threads or redispatches.
+
+In the M3 Petclinic how-to, open an owner in Wicket, open Update Name, then submit it and inspect separate fresh traces in Jaeger.
+Expected entry displays are `view petclinic.PetOwner`, `prompt petclinic.PetOwner#updateName` and `act petclinic.PetOwner#updateName`.
+Select the HTTP entry for the outcome attributes and the child regions/member spans for their own rendering/execution detail.
+GraphQL/HTMX can nominate matching top-level actions but does not supply Wicket view/prompt nominations.
 
 == Wicket preparation and rendering regions
 
@@ -145,7 +169,7 @@ Logical cells count property/action callbacks, not DOM cells or physical columns
 Positive `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` counts on surviving page/region spans explain rejection by detail or budget.
 No synthetic summary carrier is created when all potential carriers are omitted.
 
-These rendering observations apply to Wicket; semantic entry names and equivalent regions for other viewers remain separate capabilities.
+These rendering observations apply to Wicket; page/prompt nomination is also Wicket-specific. Other viewers retain their existing domain observations and can nominate eligible top-level actions.
 
 == Observation names and metadata migration (CAUSEWAY-4096)
 
@@ -191,6 +215,7 @@ It proves agent HTTP/framework/JPA/JDBC ancestry, one framework span per invocat
 The additional entry-point fixture uses real Tomcat servlet and Quartz instrumentation with controlled business collaborators, verifying fixed-key classification and effective replay UUIDs in both trace ownership modes.
 The Wicket fixture additionally runs real component lifecycle and Ajax callbacks with production region helpers and request observation/cleanup handlers, verifying full-page versus subtree ancestry, failure followed by success, identity and inactive/missing-exporter behavior in both modes.
 Its JDK HTTP server uses Boot’s standard receiver handler bound to the real request in Boot mode and automatic HTTP instrumentation in agent mode.
+The semantic entry fixture additionally uses real servlet filters, runtime action eligibility and Wicket render callbacks to verify final exported action/prompt/view names, priority, unchanged HTTP metadata/ancestry, suppressed-region naming and failure followed by un-nominated requests on one worker under both tracing owners.
 Its domain/model collaborators are controlled; it does not replace interactive Petclinic verification or prove every servlet container/viewer integration or a full persisted-command replay.
 
 From the repository root, after building the required main artifacts:
