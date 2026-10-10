@@ -42,4 +42,6 @@ Both modified AsciiDoc pages rendered with the installed Asciidoctor core, inclu
 
 The semantic fixture uses actual servlet filters, the production runtime member service's eligibility/nomination path, real InteractionHead command matching and Wicket component callbacks. Domain dispatch, execution carrier/result and publishing collaborators are controlled test doubles; it does not establish a complete persistence-backed domain action invocation. The member-subtree case exercises the same render descriptor behavior as an Ajax-only region, while existing Wicket regressions cover actual Ajax callbacks. Contributed identity, association exclusion and cleanup/bridge failures have focused coverage. No interactive Petclinic browser verification or full repository reactor test run was performed. Naming supports synchronous work in the initial servlet dispatch and does not propagate mutable state to asynchronous continuations.
 
-Implementation remains uncommitted after apply; archival and spec synchronization are subsequent workflow steps.
+## Archive checkpoint
+
+Implementation committed as `4d4af10557a`. Fresh pre-archive build/install passed the same 76 focused core/Wicket tests; both documentation renders and strict change validation passed. The preceding full tracing/JPA suite passed fifteen tests. Archived on 2026-10-10 with five semantic naming requirements added, one classification requirement updated and two Wicket region requirements updated; existing unrelated requirements and scenarios are preserved.
