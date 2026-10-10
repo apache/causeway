@@ -105,7 +105,11 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
         this.where = where;
         WicketRenderObservationPolicy.actionDescriptor(model, where)
-                .ifPresent(descriptor -> WicketRenderObservationBehavior.addTo(this, descriptor));
+                .ifPresent(descriptor -> {
+                    if(where == Where.ALL_TABLES || where == Where.PARENTED_TABLES)
+                        WicketRenderObservationBehavior.addToParentedTableMember(this, descriptor);
+                    else WicketRenderObservationBehavior.addTo(this, descriptor);
+                });
         this.indicatorAppenderIfAny = getSettings().useIndicatorForNoArgAction()
                 ? new AjaxIndicatorAppender()
                 : null;

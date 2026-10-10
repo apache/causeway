@@ -22,10 +22,7 @@ import java.util.Objects;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
-import org.apache.causeway.commons.internal.observation.ObservationClosure;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 
 /**
  * Opens a semantic observation for the actual rendering of one Wicket component subtree.
@@ -43,11 +40,24 @@ public final class WicketRenderObservationBehavior extends Behavior {
         return component;
     }
 
+    /** Table actions retain their original UI Where semantics; telemetry eligibility is checked at render time. */
+    public static <T extends Component> T addToParentedTableMember(final T component,
+            final WicketRenderObservationDescriptor descriptor) {
+        component.add(new WicketRenderObservationBehavior(descriptor, true));
+        return component;
+    }
+
     private final WicketRenderObservationDescriptor descriptor;
-    private transient ObservationClosure activeClosure;
+    private final boolean parentedTableOnly;
+    private transient WicketObservationCoordinator.Admission activeClosure;
 
     public WicketRenderObservationBehavior(final WicketRenderObservationDescriptor descriptor) {
+        this(descriptor, false);
+    }
+
+    private WicketRenderObservationBehavior(final WicketRenderObservationDescriptor descriptor, final boolean parentedTableOnly) {
         this.descriptor = Objects.requireNonNull(descriptor, "descriptor");
+        this.parentedTableOnly = parentedTableOnly;
     }
 
     @Override
@@ -55,33 +65,23 @@ public final class WicketRenderObservationBehavior extends Behavior {
         if(activeClosure != null) {
             throw new IllegalStateException("Wicket render observation lifecycle is already active");
         }
-        if(!(component instanceof HasMetaModelContext)) {
-            return;
+        if(parentedTableOnly) {
+            final var table = component.findParent(org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable.class);
+            if(table == null || !table.isObservedCollection()) return;
         }
+        final HasMetaModelContext context = contextOf(component);
+        if(context == null) return;
+        final var admission = WicketObservationCoordinator.begin(context, descriptor, getClass());
+        if(!admission.isTracked()) return;
+        activeClosure = admission;
+        WicketRenderObservationTracker.register(component.getRequestCycle(), this, admission);
+    }
 
-        final CausewayObservationIntegration integration = ((HasMetaModelContext) component)
-                .lookupService(CausewayObservationIntegration.class)
-                .orElse(null);
-        if(integration == null || integration.isNoop()) {
-            return;
+    static HasMetaModelContext contextOf(final Component component) {
+        for(Component current = component; current != null; current = current.getParent()) {
+            if(current instanceof HasMetaModelContext context) return context;
         }
-
-        final ObservationClosure closure = new ObservationClosure();
-        closure.startAndOpenScope(descriptor.customize(integration.provider(
-                getClass(),
-                CausewayObservationIntegration.withModuleName(
-                        CausewayModuleViewerWicketUi.NAMESPACE))
-                .get(descriptor.getRegion().getObservationName())));
-
-        activate(closure);
-        try {
-            WicketRenderObservationTracker.register(component.getRequestCycle(), this, closure);
-        } catch (RuntimeException | Error ex) {
-            clearActiveClosure();
-            closure.onError(ex);
-            closure.close();
-            throw ex;
-        }
+        return null;
     }
 
     @Override
@@ -101,8 +101,9 @@ public final class WicketRenderObservationBehavior extends Behavior {
         if (activeClosure != null) WicketRenderObservationTracker.complete(component.getRequestCycle(), this);
     }
 
-    void activate(final ObservationClosure closure) {
-        activeClosure = closure;
+
+    void activate(final org.apache.causeway.commons.internal.observation.ObservationClosure closure) {
+        activeClosure = WicketObservationCoordinator.Admission.adopt(closure);
     }
 
     void clearActiveClosure() {

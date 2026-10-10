@@ -38,6 +38,7 @@ import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketPagePreparationObservation;
 import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
@@ -84,6 +85,7 @@ implements HasDynamicallyVisibleContent {
     }
 
     private final WebMarkupContainer div;
+    private WicketPagePreparationObservation preparation;
 
     public ParentedCollectionPanel(final String id, final UiObjectWkt objectModel, final CollectionLayoutData layoutData) {
         super(id, objectModel);
@@ -119,6 +121,16 @@ implements HasDynamicallyVisibleContent {
     }
 
     @Override
+    protected void onBeforeRender() {
+        preparation.prepare(this, () -> super.onBeforeRender());
+    }
+
+    @Override
+    protected void onDetach() {
+        preparation.detach(() -> super.onDetach());
+    }
+
+    @Override
     public boolean assessVisibility() {
         return visible; //FIXME never reassessed, visibility needs assessment during onConfigure
     }
@@ -138,6 +150,8 @@ implements HasDynamicallyVisibleContent {
 
         var collectionMetaModel = collectionModel.getMetaModel();
         var featureId = collectionMetaModel.getFeatureIdentifier();
+        preparation = new WicketPagePreparationObservation(WicketRenderObservationDescriptor.collectionPreparation(
+                featureId.logicalTypeName(), featureId.getLogicalIdentityString("#")));
         WicketRenderObservationBehavior.addTo(this, WicketRenderObservationDescriptor.collection(
                 featureId.logicalTypeName(), featureId.getLogicalIdentityString("#")));
 

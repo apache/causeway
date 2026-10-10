@@ -112,12 +112,40 @@ Displays follow the same case-preserving 50-character compaction policy as membe
 
 A full page has nested page/member rendering regions.
 An Ajax subtree update retains its request/interaction ancestry and can render a property or collection without rendering the page.
-Hidden components, action parameter widgets and table cells do not acquire these member-level regions.
+Hidden components, action parameter widgets and decorative table widgets do not acquire these member-level regions.
+Logical property cells and eligible row actions in parented collections do.
 Outstanding scopes are unwound at request completion or on error before interaction/request parents close, and active telemetry is excluded from serialized page state.
 
 Use the existing Petclinic setup in the M3 how-to: open an owner, inspect its visits collection and open Update Name to see preparation, collection rendering and prompt regions.
 These observations work with either existing tracing owner without another flag.
-They apply to Wicket; table internals/detail budgets, semantic entry names and equivalent rendering regions for other viewers are outside this capability.
+Parented collections use `causeway.wicket.collection.prepare`, `causeway.wicket.collection.row.prepare`, `causeway.wicket.collection.table.render`, `causeway.wicket.collection.table.header.render`, `causeway.wicket.collection.table.body.render`, `causeway.wicket.collection.table.footer.render` and `causeway.wicket.collection.row.render`.
+Row preparation measures actual population; row rendering belongs under the table body.
+Only participating paginated rows are measured, without extra loading or counting.
+Rows carry their static collection identifier and element type, never an instance identifier or row index.
+Standalone result and action-parameter tables are excluded.
+
+=== Wicket detail and request budgets
+
+`causeway.viewer.wicket.observation.detail` defaults to `MEMBERS`.
+The cumulative levels are `NONE` (no Causeway semantic Wicket observations), `PAGE` (page preparation/rendering and prompts), `REGIONS` (also fieldsets, collections and table phases), `ROWS` (also rows) and `MEMBERS` (also logical properties and eligible actions).
+`causeway.viewer.wicket.observation.max-spans-per-request` defaults to `0`, meaning unlimited; a positive value bounds cumulative Wicket observation starts across one request, with no refund on closure.
+Negative values and invalid detail fail startup.
+A finite budget reserves ten percent, rounded up and capped at sixteen places, for structural page/region observations.
+The absolute limit still applies, so structural observations can also be omitted.
+
+Set `CAUSEWAY_VIEWER_WICKET_OBSERVATION_DETAIL=REGIONS` and `CAUSEWAY_VIEWER_WICKET_OBSERVATION_MAX_SPANS_PER_REQUEST=100` before starting the existing Petclinic telemetry launcher to inspect a bounded collection trace.
+These settings work with either tracing owner and take effect at startup.
+They affect only Causeway semantic Wicket observations: The enclosing Apache Wicket Request Cycle, HTTP, interaction, transaction, domain, JPA and agent JDBC spans retain their existing behavior.
+Omitted boundaries open no scope; underlying work still executes and emitted descendants join the current surviving ancestry.
+
+Admitted collection preparation/render spans report numeric callback summaries: `causeway.wicket.collection.row.count`, `causeway.wicket.collection.row.duration.total.nanos` and `causeway.wicket.collection.row.duration.max.nanos`.
+Render spans also report `causeway.wicket.collection.logical-cell.count` and positive `causeway.wicket.collection.suppressed.children`.
+Summaries include row/member work whose individual observations were omitted; they do not count off-page rows or total collection size.
+Logical cells count property/action callbacks, not DOM cells or physical columns.
+Positive `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` counts on surviving page/region spans explain rejection by detail or budget.
+No synthetic summary carrier is created when all potential carriers are omitted.
+
+These rendering observations apply to Wicket; semantic entry names and equivalent regions for other viewers remain separate capabilities.
 
 == Observation names and metadata migration (CAUSEWAY-4096)
 

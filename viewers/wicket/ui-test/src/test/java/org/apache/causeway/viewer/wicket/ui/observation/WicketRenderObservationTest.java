@@ -434,7 +434,7 @@ class WicketRenderObservationTest {
     }
 
     @Test
-    void propertyPolicyIncludesOnlyRegularEntityProperties() {
+    void propertyPolicyIncludesRegularAndParentedProperties() {
         final Identifier propertyId = Identifier.propertyIdentifier(
                 LogicalType.eager(Object.class, OBJECT_TYPE), "name");
         final OneToOneAssociation property = mock(OneToOneAssociation.class);
@@ -454,12 +454,13 @@ class WicketRenderObservationTest {
                 WicketRenderObservationPolicy.propertyDescriptor(regularProperty);
         assertTrue(included.isPresent());
         assertEquals(OBJECT_TYPE + "#name", included.get().getMemberId());
-        assertTrue(WicketRenderObservationPolicy.propertyDescriptor(tableProperty).isEmpty());
+        when(tableProperty.getMetaModel()).thenReturn(property);
+        assertTrue(WicketRenderObservationPolicy.propertyDescriptor(tableProperty).isPresent());
         assertTrue(WicketRenderObservationPolicy.propertyDescriptor(parameter).isEmpty());
     }
 
     @Test
-    void actionPolicyIncludesOnlyObjectFormActionsUnassociatedWithParameters() {
+    void actionPolicyIncludesObjectAndTableCandidatesUnassociatedWithParameters() {
         final Identifier actionId = Identifier.actionIdentifier(
                 LogicalType.eager(Object.class, OBJECT_TYPE), "updateName");
         final ObjectAction action = mock(ObjectAction.class);
@@ -478,7 +479,7 @@ class WicketRenderObservationTest {
         assertTrue(included.isPresent());
         assertEquals(OBJECT_TYPE + "#updateName()", included.get().getMemberId());
         assertTrue(WicketRenderObservationPolicy.actionDescriptor(
-                entityAction, Where.ALL_TABLES).isEmpty());
+                entityAction, Where.ALL_TABLES).isPresent());
         assertTrue(WicketRenderObservationPolicy.actionDescriptor(
                 entityAction, Where.ANYWHERE).isEmpty());
         assertTrue(WicketRenderObservationPolicy.actionDescriptor(

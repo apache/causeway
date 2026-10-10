@@ -48,6 +48,11 @@ public final class WicketRenderObservationTracker {
         state(requestCycle).register(owner, closure);
     }
 
+    static void register(final RequestCycle requestCycle, final Object owner,
+            final WicketObservationCoordinator.Admission admission) {
+        state(requestCycle).activeObservations.addLast(new ActiveObservation(owner, admission));
+    }
+
     static void complete(
             final RequestCycle requestCycle,
             final Object owner) {
@@ -67,9 +72,19 @@ public final class WicketRenderObservationTracker {
             final @Nullable Throwable failure) {
         final State state = requestCycle.getMetaData(STATE_KEY);
         requestCycle.setMetaData(STATE_KEY, null);
-        if(state != null) {
-            state.cleanup(failure);
+        Throwable cleanupFailure = null;
+        try {
+            if(state != null) state.cleanup(failure);
+        } catch(RuntimeException | Error ex) {
+            cleanupFailure = ex;
         }
+        try {
+            WicketObservationCoordinator.cleanup(requestCycle, failure);
+        } catch(RuntimeException | Error ex) {
+            if(cleanupFailure == null) cleanupFailure = ex;
+            else if(cleanupFailure != ex) cleanupFailure.addSuppressed(ex);
+        }
+        State.rethrow(cleanupFailure);
     }
 
     static State state(final RequestCycle requestCycle) {
@@ -134,20 +149,30 @@ public final class WicketRenderObservationTracker {
 
         private final Object owner;
         private final ObservationClosure closure;
+        private final WicketObservationCoordinator.Admission admission;
 
         private ActiveObservation(
                 final Object owner,
                 final ObservationClosure closure) {
             this.owner = owner;
             this.closure = closure;
+            this.admission = null;
+        }
+
+        private ActiveObservation(final Object owner, final WicketObservationCoordinator.Admission admission) {
+            this.owner = owner;
+            this.closure = null;
+            this.admission = admission;
         }
 
         private void close(final @Nullable Throwable failure) {
             try {
-                closure.onError(failure);
+                if(admission != null) admission.onError(failure);
+                else closure.onError(failure);
             } finally {
                 try {
-                    closure.close();
+                    if(admission != null) admission.finish();
+                    else closure.close();
                 } finally {
                     if (owner instanceof WicketRenderObservationBehavior behavior) behavior.clearActiveClosure();
                     else if (owner instanceof WicketPagePreparationObservation preparation) preparation.clearActiveClosure();
