@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.functional;
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -35,14 +36,19 @@ import lombok.NonNull;
  * @see Try
  * @since 3.4
  */
-public record TryFuture<T>(@NonNull Future<T> future) {
+public record TryFuture<T>(/*@NonNull ... Lombok bug affecting Eclipse */Future<T> future) {
+
+    /** workaround Lombok bug */
+    public TryFuture {
+        Objects.requireNonNull(future);
+    }
 
     /**
      * @throws RejectedExecutionException if the task cannot be
      *         scheduled for execution
      * @throws NullPointerException if the task or executor is null
      */
-    public TryFuture(@NonNull Callable<T> task, @NonNull ExecutorService executor) {
+    public TryFuture(@NonNull final Callable<T> task, @NonNull final ExecutorService executor) {
         this(executor.submit(task));
     }
 
@@ -50,7 +56,7 @@ public record TryFuture<T>(@NonNull Future<T> future) {
         return Try.call(future::get);
     }
 
-    public Try<T> tryGet(long timeout, TimeUnit unit) {
+    public Try<T> tryGet(final long timeout, final TimeUnit unit) {
         return Try.call(()->future.get(timeout, unit));
     }
 
