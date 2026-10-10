@@ -136,6 +136,11 @@ implements CollectionCountProvider {
         var dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         var dataTable = new CausewayAjaxDataTable(
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize());
+        if(collectionModel instanceof CollectionModelParented parented) {
+            final var id = parented.getMetaModel().getFeatureIdentifier();
+            dataTable.observeCollection(id.logicalTypeName(),
+                    elementType.getFeatureIdentifier().logicalTypeName(), id.getLogicalIdentityString("#"));
+        }
         addOrReplace(dataTable);
 
         // prepend toggle-box column (left most), if enabled

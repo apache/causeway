@@ -24,10 +24,7 @@ import java.util.Objects;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
-import org.apache.causeway.commons.internal.observation.ObservationClosure;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 
 /**
  * Keeps object-page construction/configuration in scope through the
@@ -40,14 +37,13 @@ public final class WicketPagePreparationObservation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final WicketRenderObservationDescriptor descriptor;
-    private transient ObservationClosure activeClosure;
+    private transient WicketObservationCoordinator.Admission activeClosure;
     private transient RequestCycle requestCycle;
 
     public WicketPagePreparationObservation(
             final WicketRenderObservationDescriptor descriptor) {
         this.descriptor = Objects.requireNonNull(descriptor, "descriptor");
-        if(descriptor.getRegion()
-                != WicketRenderObservationDescriptor.Region.PAGE_PREPARATION) {
+        if(!descriptor.getRegion().isPreparation()) {
             throw new IllegalArgumentException(
                     "Page preparation descriptor required");
         }
@@ -93,21 +89,32 @@ public final class WicketPagePreparationObservation implements Serializable {
         if(activeClosure != null || !(component instanceof HasMetaModelContext)) {
             return;
         }
-        final CausewayObservationIntegration integration =
-                ((HasMetaModelContext) component)
-                        .lookupService(CausewayObservationIntegration.class)
-                        .orElse(null);
-        if(integration == null || integration.isNoop()) {
-            return;
-        }
+        final var admission = WicketObservationCoordinator.begin(
+                (HasMetaModelContext) component, descriptor, getClass());
+        if(!admission.isTracked()) return;
         requestCycle = component.getRequestCycle();
-        activeClosure = new ObservationClosure().startAndOpenScope(
-                descriptor.customize(integration.provider(
-                        getClass(),
-                        CausewayObservationIntegration.withModuleName(
-                                CausewayModuleViewerWicketUi.NAMESPACE))
-                        .get(descriptor.getRegion().getObservationName())));
-        WicketRenderObservationTracker.register(requestCycle, this, activeClosure);
+        activeClosure = admission;
+        WicketRenderObservationTracker.register(requestCycle, this, admission);
+    }
+
+    public void prepare(final Component component, final Runnable work) {
+        start(component);
+        beforeRender(work);
+    }
+
+    public static <T> T observe(final HasMetaModelContext context,
+            final WicketRenderObservationDescriptor descriptor,
+            final java.util.function.Supplier<T> work) {
+        final var admission = WicketObservationCoordinator.begin(context, descriptor,
+                WicketPagePreparationObservation.class);
+        try {
+            return work.get();
+        } catch(RuntimeException | Error ex) {
+            admission.onError(ex);
+            throw ex;
+        } finally {
+            admission.finish();
+        }
     }
 
     private void complete(final Throwable failure) {

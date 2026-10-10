@@ -3221,7 +3221,22 @@ public record CausewayConfiguration(
             @DefaultValue
             Welcome welcome,
             @DefaultValue
-            MessagePopups messagePopups) {
+            MessagePopups messagePopups,
+            /** Controls only Causeway's semantic Wicket observations. */
+            @DefaultValue
+            Observation observation) {
+
+            public record Observation(
+                /** Cumulative detail: NONE, PAGE, REGIONS, ROWS or MEMBERS. */
+                @DefaultValue("MEMBERS") @NotNull Detail detail,
+                /** Maximum Wicket observation starts per request; zero means unlimited. */
+                @DefaultValue("0") @jakarta.validation.constraints.Min(0) int maxSpansPerRequest) {
+                public Observation {
+                    java.util.Objects.requireNonNull(detail, "detail");
+                    if(maxSpansPerRequest < 0) throw new IllegalArgumentException("maxSpansPerRequest must not be negative");
+                }
+                public enum Detail { NONE, PAGE, REGIONS, ROWS, MEMBERS }
+            }
 
             private static boolean isMaxTitleLenghtValid(final int len) {
                 return len>=0;

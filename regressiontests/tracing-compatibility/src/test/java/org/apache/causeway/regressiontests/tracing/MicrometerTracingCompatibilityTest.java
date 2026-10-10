@@ -183,6 +183,71 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
+    @Test void collectionCallbacksExportInBothModesWithSummariesAndAdmission() throws Exception {
+        for(String mode : List.of("boot", "agent")) {
+            for(String detail : List.of("MEMBERS", "REGIONS")) {
+                try(var collector = new Collector()) {
+                    launch(mode, collector, "--fixture.collections=true",
+                            "--causeway.viewer.wicket.observation.detail=" + detail);
+                    var spans = collector.spans;
+                    var collections = spans.stream().filter(span -> span.getName().startsWith("render collection ")).toList();
+                    assertEquals(3, collections.size(), names(spans)); // failed full render, successful full render, Ajax
+                    assertTrue(collections.stream().anyMatch(span -> "2".equals(attribute(span, "causeway.wicket.collection.row.count"))), names(spans));
+                    assertTrue(collections.stream().anyMatch(span -> "2".equals(attribute(span, "causeway.wicket.collection.logical-cell.count"))), names(spans));
+                    var rows = spans.stream().filter(span -> span.getName().startsWith("render row ")).toList();
+                    assertEquals(detail.equals("MEMBERS"), !rows.isEmpty(), names(spans));
+                    for(var row : rows) {
+                        var parent = spans.stream().filter(span -> span.getSpanId().equals(row.getParentSpanId())).findFirst().orElseThrow();
+                        assertTrue(parent.getName().startsWith("render table body "), names(spans));
+                        assertEquals("fixture.CollectionOwner#items", attribute(row, "causeway.collection.id"));
+                    }
+                    var actions = spans.stream().filter(span -> span.getName().startsWith("act ")).toList();
+                    assertFalse(actions.isEmpty(), names(spans));
+                    for(var action : actions) assertJpaAncestry(spans, action, mode.equals("agent"));
+                    if(detail.equals("REGIONS")) assertTrue(spans.stream().anyMatch(span -> attribute(span, "causeway.wicket.suppressed.detail") != null));
+                }
+            }
+        }
+    }
+    @Test void collectionBudgetIsHardAndDoesNotSuppressDomainWork() throws Exception {
+        for(String mode : List.of("boot", "agent")) {
+            try(var collector = new Collector()) {
+                launch(mode, collector, "--fixture.collections=true", "--causeway.viewer.wicket.observation.max-spans-per-request=5");
+                var spans = collector.spans;
+                var frameworks = spans.stream().filter(span -> span.getName().startsWith("Apache Wicket Request Cycle")).toList();
+                assertTrue(frameworks.stream().anyMatch(span -> span.getName().endsWith("(AJAX)")), names(spans));
+                for(var framework : frameworks) {
+                    long count = spans.stream().filter(span -> attribute(span, "causeway.object.type") != null
+                            && ancestorIs(spans, span, framework)).count();
+                    assertTrue(count <= 5, names(spans));
+                }
+                // Group by framework interactions: the agent can add servlet
+                // boundaries inside the synthetic WicketTester HTTP requests.
+                var roots = spans.stream().filter(span -> span.getName().equals("Causeway Root Interaction")).toList();
+                long accounted = 0;
+                for(var root : roots) {
+                    long count = spans.stream().filter(span ->
+                            "fixture.CollectionOwner".equals(attribute(span, "causeway.object.type"))
+                            && ancestorIs(spans, span, root)).count();
+                    assertTrue(count <= 5, names(spans));
+                    accounted += count;
+                }
+                assertEquals(15, accounted, names(spans)); // failed full render, success, Ajax
+                assertTrue(spans.stream().anyMatch(span -> attribute(span, "causeway.wicket.suppressed.budget") != null));
+                assertTrue(spans.stream().anyMatch(span -> span.getName().startsWith("act ")), names(spans));
+            }
+        }
+    }
+    private static boolean ancestorIs(List<Span> spans, Span span, Span ancestor) {
+        for(int depth=0; depth<100 && !span.getParentSpanId().isEmpty(); depth++) {
+            if(span.getParentSpanId().equals(ancestor.getSpanId())) return true;
+            var parentId = span.getParentSpanId();
+            var parent = spans.stream().filter(candidate -> candidate.getSpanId().equals(parentId)).findFirst();
+            if(parent.isEmpty()) return false;
+            span = parent.get();
+        }
+        return false;
+    }
     @Test void wicketRegionsAreSafeWhenInactiveOrExporterIsAbsent() throws Exception {
         for (String mode : List.of("inactive", "none")) {
             try (var collector = new Collector()) {

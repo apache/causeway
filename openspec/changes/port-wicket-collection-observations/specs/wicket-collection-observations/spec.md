@@ -22,7 +22,7 @@ Rows SHALL identify their collection and element logical type. Logical property 
 
 ### Requirement: Detail is hierarchical and startup-bound
 
-The configuration SHALL expose causeway.viewer.wicket.observation.detail with NONE, PAGE, REGIONS, ROWS and MEMBERS, default MEMBERS. NONE SHALL admit no Causeway Wicket observations; PAGE SHALL admit page preparation/render and prompts; REGIONS SHALL additionally admit fieldsets, collections and table phases; ROWS SHALL additionally admit rows; MEMBERS SHALL additionally admit logical properties and eligible actions. Invalid/null detail SHALL fail startup. Configuration SHALL use main's immutable binding model.
+The configuration SHALL expose causeway.viewer.wicket.observation.detail with NONE, PAGE, REGIONS, ROWS and MEMBERS, default MEMBERS. NONE SHALL admit no Causeway semantic Wicket observations; PAGE SHALL admit page preparation/render and prompts; REGIONS SHALL additionally admit fieldsets, collections and table phases; ROWS SHALL additionally admit rows; MEMBERS SHALL additionally admit logical properties and eligible actions. Invalid/null detail SHALL fail startup. Configuration SHALL use main's immutable binding model.
 
 #### Scenario: Reduced detail
 - **WHEN** detail is REGIONS
@@ -34,7 +34,7 @@ The configuration SHALL expose causeway.viewer.wicket.observation.detail with NO
 
 ### Requirement: One hard budget bounds the whole request
 
-causeway.viewer.wicket.observation.max-spans-per-request SHALL default to 0 for unlimited and reject negative values at startup. A positive value SHALL bound cumulative admitted Causeway Wicket starts across the whole full-page/Ajax request, all collections and preparation/rendering; closures SHALL NOT refund places. ROWS/MEMBERS SHALL NOT consume the structural reserve min(16, max(1, ceil(budget / 10))). PAGE/REGIONS MAY consume it but SHALL NOT exceed the absolute budget. Arithmetic SHALL be overflow-safe and state SHALL reset between requests.
+causeway.viewer.wicket.observation.max-spans-per-request SHALL default to 0 for unlimited and reject negative values at startup. A positive value SHALL bound cumulative admitted Causeway semantic Wicket starts across the whole full-page/Ajax request, all collections and preparation/rendering; closures SHALL NOT refund places. ROWS/MEMBERS SHALL NOT consume the structural reserve min(16, max(1, ceil(budget / 10))). PAGE/REGIONS MAY consume it but SHALL NOT exceed the absolute budget. Arithmetic SHALL be overflow-safe and state SHALL reset between requests.
 
 #### Scenario: Multiple collections and completed spans
 - **WHEN** a finite-budget request renders multiple collections after earlier observations have closed
@@ -46,7 +46,7 @@ causeway.viewer.wicket.observation.max-spans-per-request SHALL default to 0 for 
 
 ### Requirement: Omission preserves work and observation ownership
 
-Detail rejection SHALL precede budget rejection. Omitted candidates SHALL open no observation/scope and SHALL execute their underlying callbacks with unchanged error behavior. Emitted descendants SHALL join the nearest surviving active ancestor. Admission SHALL apply only to Causeway Wicket observations, not HTTP, JDBC, JPA, transaction, domain work or other viewers. Both Boot and agent tracing SHALL reuse existing integration without duplicate infrastructure.
+Detail rejection SHALL precede budget rejection. Omitted candidates SHALL open no observation/scope and SHALL execute their underlying callbacks with unchanged error behavior. Emitted descendants SHALL join the nearest surviving active ancestor. Admission SHALL apply only to Causeway semantic Wicket observations, not HTTP, JDBC, JPA, transaction, domain work or other viewers. Both Boot and agent tracing SHALL reuse existing integration without duplicate infrastructure.
 
 #### Scenario: Omitted parent and retained work
 - **WHEN** a candidate is rejected while its underlying callback performs instrumented domain or JDBC work

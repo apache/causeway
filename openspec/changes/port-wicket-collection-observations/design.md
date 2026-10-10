@@ -6,7 +6,7 @@ Roadmap step 6 combines CAUSEWAY-4062 collection detail (`8e5eaab6145`, `036a28a
 
 Expose actual collection preparation, table phases, visible rows and logical property/action cells; provide predictable Wicket volume and useful summaries; preserve UI work, static identity, scope safety and both tracing owners.
 
-Do not add applib APIs, SDKs, exporters, entry-span nominations/renaming, other viewer instrumentation, browser timing or general duration filtering. Admission cannot suppress JDBC, HTTP, transaction, JPA or domain-execution spans.
+Do not add applib APIs, SDKs, exporters, entry-span nominations/renaming, other viewer instrumentation, browser timing or general duration filtering. Admission cannot suppress enclosing Wicket request-cycle, JDBC, HTTP, transaction, JPA or domain-execution spans.
 
 ## Decisions
 
@@ -16,7 +16,7 @@ Add an observation record under Wicket configuration, with `detail` and `max-spa
 
 | Detail | Eligible observations, cumulative |
 |---|---|
-| NONE | None of the Causeway Wicket observations |
+| NONE | None of the Causeway semantic Wicket observations |
 | PAGE | Page preparation/rendering and action prompts |
 | REGIONS | Fieldsets, collections and table/header/body/footer phases |
 | ROWS | Participating row preparation/rendering |

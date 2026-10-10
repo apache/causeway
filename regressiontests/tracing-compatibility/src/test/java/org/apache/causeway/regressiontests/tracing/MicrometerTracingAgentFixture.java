@@ -87,6 +87,7 @@ public class MicrometerTracingAgentFixture {
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
             var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
+            boolean collections = context.getEnvironment().getProperty("fixture.collections", Boolean.class, false);
             boolean wicket = context.getEnvironment().getProperty("fixture.wicket", Boolean.class, false);
             boolean semantic = context.getEnvironment().getProperty("fixture.semantic", Boolean.class, false);
             var semanticActions = semantic ? semanticActions(action) : List.<ActionExecutor>of();
@@ -99,9 +100,16 @@ public class MicrometerTracingAgentFixture {
                 try {
                     if (integration.observationRegistry().getCurrentObservation() != null)
                         throw new AssertionError("stale Causeway observation");
-                    if (wicket) {
-                        Runnable render = () -> WicketRegionTracingFixture.render(integration, interactions,
-                                () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null);
+                    if (wicket || collections) {
+                        Runnable render = () -> {
+                            if(collections) WicketCollectionTracingFixture.render(integration,
+                                    new org.apache.causeway.core.config.CausewayConfiguration(context.getEnvironment(), java.util.Optional.empty(),
+                                            org.springframework.boot.context.properties.bind.Binder.get(context.getEnvironment()).bindOrCreate("causeway",
+                                                    org.springframework.boot.context.properties.bind.Bindable.of(org.apache.causeway.core.config.CausewayConfiguration.Causeway.class))), interactions,
+                                    () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null);
+                            else WicketRegionTracingFixture.render(integration, interactions,
+                                    () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null);
+                        };
                         if (context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent"))) {
                             render.run(); // The agent owns the real JDK HTTP server boundary.
                         } else {

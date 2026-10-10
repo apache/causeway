@@ -40,7 +40,8 @@ public final class WicketRenderObservationPolicy {
     public static Optional<WicketRenderObservationDescriptor> propertyDescriptor(
             final UiAttributeWkt attributeModel) {
         if(!(attributeModel instanceof PropertyModel)
-                || attributeModel.getRenderingHint() != RenderingHint.REGULAR) {
+                || (attributeModel.getRenderingHint() != RenderingHint.REGULAR
+                    && attributeModel.getRenderingHint() != RenderingHint.PARENTED_PROPERTY_COLUMN)) {
             return Optional.empty();
         }
         final var featureId = attributeModel.getMetaModel().getFeatureIdentifier();
@@ -52,7 +53,8 @@ public final class WicketRenderObservationPolicy {
     public static Optional<WicketRenderObservationDescriptor> actionDescriptor(
             final ActionModel actionModel,
             final Where where) {
-        if(where != Where.OBJECT_FORMS || actionModel.getAssociatedParameter().isPresent()) {
+        if((where != Where.OBJECT_FORMS && where != Where.PARENTED_TABLES && where != Where.ALL_TABLES)
+                || actionModel.getAssociatedParameter().isPresent()) {
             return Optional.empty();
         }
         final var featureId = actionIdentifier(actionModel);

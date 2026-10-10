@@ -30,7 +30,7 @@ Causeway SHALL observe domain-object page preparation using causeway.wicket.page
 
 ### Requirement: Existing observation ownership and viewer behavior remain intact
 
-Wicket regions SHALL use the existing Causeway observation integration under Boot-managed and agent-managed tracing without competing registries, handlers, SDKs or exporters. Disabled or unavailable observations SHALL preserve UI behavior. Existing HTTP, Wicket request, interaction, transaction and domain member observations SHALL retain their lifecycle and ancestry. Shared detail and request-budget admission SHALL affect only Causeway Wicket observations. This capability SHALL NOT rename entry spans, filter non-Wicket spans by duration or instrument other viewers.
+Wicket regions SHALL use the existing Causeway observation integration under Boot-managed and agent-managed tracing without competing registries, handlers, SDKs or exporters. Disabled or unavailable observations SHALL preserve UI behavior. Existing HTTP, Wicket request, interaction, transaction and domain member observations SHALL retain their lifecycle and ancestry. Shared detail and request-budget admission SHALL affect only Causeway semantic Wicket observations. This capability SHALL NOT rename entry spans, filter non-Wicket spans by duration or instrument other viewers.
 
 #### Scenario: Real exports in both modes
 - **WHEN** representative full-page and Ajax work is exported under each tracing owner

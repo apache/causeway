@@ -146,7 +146,35 @@ Ajax updates render only the selected component subtree, so they can contain mem
 Hidden regions and action parameter widgets do not produce domain-property rendering regions.
 These Wicket regions work in both tracing modes with the existing launcher and configuration.
 HTMX `/graphql` traces retain their domain-operation spans; they do not contain Wicket regions.
-Table phases, individual row/cell detail and semantic HTTP trace-root naming are separate roadmap items.
+Parented collections also have `prepare collection <logical-type>#<member>` and table/header/body/footer rendering regions.
+Within the table body, `render row <element-type>` encloses logical property and row-action rendering; `prepare row <element-type>` measures row population during collection preparation.
+Only rows participating in the current page or Ajax update are measured.
+Header labels, navigation controls and decorative cells do not produce member spans.
+Semantic HTTP trace-root naming remains a separate roadmap item.
++
+The default detail is `MEMBERS`, with no Wicket span limit.
+To reduce collection detail and bound the number of Causeway semantic Wicket observations, export settings before starting the existing launcher:
++
+[source,bash]
+----
+export CAUSEWAY_VIEWER_WICKET_OBSERVATION_DETAIL=REGIONS
+export CAUSEWAY_VIEWER_WICKET_OBSERVATION_MAX_SPANS_PER_REQUEST=100
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
++
+These startup settings work in both tracing modes; add `--agent` to the launcher command for agent-managed tracing.
+Detail is cumulative: `NONE` omits Causeway semantic Wicket observations, `PAGE` includes page preparation/rendering and prompts, `REGIONS` adds fieldsets, collections and table phases, `ROWS` adds row preparation/rendering, and `MEMBERS` adds logical properties and eligible actions.
+The limit counts admitted observations across the entire request, including preparation and all collections; closing an observation does not free a place.
+`0` means unlimited.
+A small part of a finite budget is reserved for page/region observations, but a sufficiently small budget can omit those too.
+The enclosing Apache Wicket Request Cycle, HTTP, interaction, transaction, domain-execution, JPA and agent JDBC spans are unaffected.
++
+Select an admitted collection preparation/render span in Jaeger to inspect `causeway.wicket.collection.row.count`, `causeway.wicket.collection.row.duration.total.nanos` and `causeway.wicket.collection.row.duration.max.nanos`.
+Render spans also report `causeway.wicket.collection.logical-cell.count` and, when positive, `causeway.wicket.collection.suppressed.children`.
+These describe participating callbacks, not total collection size; row durations and logical-cell counts remain available when child spans are omitted.
+Positive `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` attributes on surviving page/region spans explain omissions.
+There is no summary span if its carrier was itself omitted.
+Unset the two exported variables to restore defaults for the next application start.
 
 
 === Micrometer
