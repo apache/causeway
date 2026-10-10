@@ -38,3 +38,7 @@ Both modified AsciiDoc pages rendered with the installed Asciidoctor core. Stric
 ## Limits
 
 The table fixtures exercise the actual CausewayAjaxDataTable, its row reuse and production observation helpers, with controlled data providers/columns and standard Wicket toolbars. They do not render a complete live Petclinic DomainObjectPage with persistence-backed collections and all Causeway toolbars. Policy tests verify real PropertyModel/ActionModel metadata; exported column fixtures use controlled logical member components. Existing WicketTester failure handling does not establish end-to-end servlet error-page ancestry. No interactive browser verification or full repository reactor test run was performed.
+
+## Archive checkpoint
+
+Implementation committed as `b8383bfb1c2`. Fresh pre-archive validation passed the core configuration/Wicket build/install with 47 focused tests, all fourteen tracing/JPA export tests, both documentation renders, strict change validation and git diff --check. The earlier full Wicket run passed 107 executed tests with six existing skips. Seven collection requirements were added and four region requirements updated, retaining the existing static identity and cleanup requirements.
