@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail;
 import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 
 /**
  * Serializable, instance-data-free description of a semantic Wicket render region.
@@ -260,6 +261,22 @@ public final class WicketRenderObservationDescriptor implements Serializable {
 
     public boolean isLogicalCellCallback() {
         return region == Region.PROPERTY || region == Region.ACTION;
+    }
+
+    /** Static request outcome, independent of whether this region receives a span. */
+    public void nominateSemanticTraceName() {
+        switch (region) {
+        case PAGE:
+            CausewaySemanticTraceNamer.nominateView(objectType);
+            break;
+        case ACTION_PROMPT:
+            final int parameters = memberId.indexOf('(');
+            CausewaySemanticTraceNamer.nominatePrompt(
+                    parameters >= 0 ? memberId.substring(0, parameters) : memberId, memberId);
+            break;
+        default:
+            break;
+        }
     }
 
     public Observation customize(final Observation observation) {

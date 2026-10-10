@@ -82,6 +82,23 @@ class MemberExecutorServiceDefaultTest {
         assertThat(MemberExecutorServiceDefault.domainFacingActionIdentifier(head, action))
                 .isEqualTo(org.apache.causeway.applib.Identifier.actionIdentifier(ownerType, "rename", String.class));
         assertThat(action.getFeatureIdentifier()).isSameAs(invokedId);
+        // Exercise main's actual command matching with the contributed identity,
+        // while retaining the physical mixin receiver and parameter signature.
+        when(ownerSpec.logicalTypeName()).thenReturn(ownerType.logicalName());
+        var actualHead = InteractionHead.regular(owner);
+        var command = mock(Command.class);
+        when(command.getLogicalMemberIdentifier()).thenReturn(ownerType.logicalName() + "#rename");
+        assertThat(actualHead.isCommandForMember(command, action)).isTrue();
+        var entry = mock(io.micrometer.tracing.Span.class);
+        try (var namingScope = org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.open(entry)) {
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(false,
+                    actualHead.isCommandForMember(command, action),
+                    MemberExecutorServiceDefault.domainFacingActionIdentifier(actualHead, action));
+        }
+        verify(entry).tag("causeway.action.id", org.apache.causeway.applib.Identifier.actionIdentifier(
+                ownerType, "rename", String.class).getLogicalIdentityString("#"));
+        when(command.getLogicalMemberIdentifier()).thenReturn(ownerType.logicalName() + "#another");
+        assertThat(actualHead.isCommandForMember(command, action)).isFalse();
     }
 
     private static class MixinReceiver {}

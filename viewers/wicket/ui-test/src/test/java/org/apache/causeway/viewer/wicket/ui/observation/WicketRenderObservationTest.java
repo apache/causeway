@@ -66,6 +66,38 @@ class WicketRenderObservationTest {
     private static final String OBJECT_TYPE = "demo.Customer";
 
     @Test
+    void semanticNominationsSurviveSuppressedRegionsAndIgnoreAjaxOnlyMembers() {
+        for (var detail : new org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail[]{
+                org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail.NONE,
+                org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation.Detail.MEMBERS}) {
+            var config = org.mockito.Mockito.mock(org.apache.causeway.core.config.CausewayConfiguration.class, org.mockito.Mockito.RETURNS_DEEP_STUBS);
+            when(config.viewer().wicket().observation()).thenReturn(new org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Observation(detail, 1));
+            var handler = new RecordingHandler(); var integration = new CausewayObservationIntegration(registryWith(handler));
+            var tester = new WicketTester();
+            try {
+                var span = mock(io.micrometer.tracing.Span.class);
+                try (var naming = org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.open(span)) {
+                    var page = new ObservedContainer("component", integration, WicketRenderObservationDescriptor.page(OBJECT_TYPE));
+                    page.configuration = config;
+                    var prompt = new ObservedContainer("prompt", integration,
+                            WicketRenderObservationDescriptor.actionPrompt(OBJECT_TYPE, OBJECT_TYPE + "#UpdateName(java.lang.String)", "UpdateName"));
+                    page.add(prompt);
+                    tester.startComponentInPage(page, Markup.of("<div wicket:id='component'><div wicket:id='prompt'></div></div>"));
+                }
+                org.mockito.Mockito.verify(span).name("prompt demo.Customer#UpdateName");
+                org.mockito.Mockito.verify(span).tag("causeway.action.id", OBJECT_TYPE + "#UpdateName(java.lang.String)");
+                var ajax = mock(io.micrometer.tracing.Span.class);
+                try (var naming = org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.open(ajax)) {
+                    var property = new ObservedContainer("component", integration, WicketRenderObservationDescriptor.property(OBJECT_TYPE, OBJECT_TYPE + "#name"));
+                    property.configuration = config;
+                    tester.startComponentInPage(property, Markup.of("<span wicket:id='component'></span>"));
+                }
+                org.mockito.Mockito.verify(ajax, org.mockito.Mockito.never()).name(org.mockito.ArgumentMatchers.anyString());
+            } finally { tester.destroy(); }
+        }
+    }
+
+    @Test
     void descriptorsUseStableNamesAndSafeIdentifiers() {
         final ObservationRegistry registry = registryWith(new RecordingHandler());
         final WicketRenderObservationDescriptor descriptor =
@@ -673,6 +705,7 @@ class WicketRenderObservationTest {
 
         private static final long serialVersionUID = 1L;
         private transient CausewayObservationIntegration integration;
+        private transient org.apache.causeway.core.config.CausewayConfiguration configuration;
 
         private ObservedContainer(
                 final String id,
@@ -687,7 +720,8 @@ class WicketRenderObservationTest {
         public <T> Optional<T> lookupService(final Class<T> serviceClass) {
             return serviceClass == CausewayObservationIntegration.class
                     ? Optional.of(serviceClass.cast(integration))
-                    : Optional.empty();
+                    : serviceClass == org.apache.causeway.core.config.CausewayConfiguration.class
+                            ? Optional.ofNullable(configuration).map(serviceClass::cast) : Optional.empty();
         }
     }
 

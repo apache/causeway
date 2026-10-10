@@ -71,6 +71,7 @@ public final class WicketRenderObservationBehavior extends Behavior {
         }
         final HasMetaModelContext context = contextOf(component);
         if(context == null) return;
+        descriptor.nominateSemanticTraceName();
         final var admission = WicketObservationCoordinator.begin(context, descriptor, getClass());
         if(!admission.isTracked()) return;
         activeClosure = admission;

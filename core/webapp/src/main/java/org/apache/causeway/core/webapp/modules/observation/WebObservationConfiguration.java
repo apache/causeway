@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
 
 @Configuration(proxyBeanMethods = false)
@@ -33,8 +34,8 @@ import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
 public class WebObservationConfiguration {
     @Bean
     public FilterRegistrationBean<CausewayForegroundTraceFilter> causewayForegroundTraceFilter(
-            CausewayTraceClassifier classifier) {
-        var registration = new FilterRegistrationBean<>(new CausewayForegroundTraceFilter(classifier));
+            CausewayTraceClassifier classifier, CausewaySemanticTraceNamer semanticTraceNamer) {
+        var registration = new FilterRegistrationBean<>(new CausewayForegroundTraceFilter(classifier, semanticTraceNamer));
         registration.setName("CausewayForegroundTraceFilter");
         registration.addUrlPatterns("/*");
         // Boot's HTTP observation filter runs at HIGHEST_PRECEDENCE + 1.
