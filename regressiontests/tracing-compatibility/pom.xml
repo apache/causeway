@@ -37,7 +37,7 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <opentelemetry-javaagent.version>2.31.1</opentelemetry-javaagent.version>
+        <opentelemetry-javaagent.version>2.32.0</opentelemetry-javaagent.version>
         <opentelemetry-proto.version>1.11.0-alpha</opentelemetry-proto.version>
 
         <jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.tracing.compatibility</jar-plugin.automaticModuleName>
