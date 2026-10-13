@@ -61,6 +61,13 @@ public class GraphQLTypeRegistry {
         return Collections.unmodifiableSet(new HashSet<>(graphQLTypes));
     }
 
+    public synchronized Set<GraphQLNamedType> getGraphQLNamedTypes() {
+        return graphQLTypes.stream()
+                .filter(GraphQLNamedType.class::isInstance)
+                .map(GraphQLNamedType.class::cast)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
     synchronized void addTypeIfNotAlreadyPresent(
             final GraphQLObjectType typeToAdd,
             final String logicalTypeName){
