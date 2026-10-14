@@ -38,7 +38,8 @@ public enum WebJar {
 	PDFJS_WORKER_JS("pdfjs-dist", "${id}/${version}/build/pdf.worker.min.mjs"),
 	VEGA_JS("vega", "${root}/_static/${id}/${version}/build/vega.min.js"),
 	VEGA_LITE_JS("vega-lite", "${root}/_static/${id}/${version}/build/vega-lite.min.js"),
-	VEGA_EMBED_JS("vega-embed", "${root}/_static/${id}/${version}/build/vega-embed.min.js");
+	VEGA_EMBED_JS("vega-embed", "${root}/_static/${id}/${version}/build/vega-embed.min.js"),
+	D3_JS("d3", "${id}/${version}/dist/d3.min.js");
 
 	public final static String ROOT = "_ROOT_"; // rewrites URL's path to an absolute path
 
