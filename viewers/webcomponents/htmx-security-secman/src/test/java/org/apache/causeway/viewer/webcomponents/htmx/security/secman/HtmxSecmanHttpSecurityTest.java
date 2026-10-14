@@ -132,7 +132,7 @@ class HtmxSecmanHttpSecurityTest {
                 .andExpect(content().string(org.hamcrest.Matchers.not(containsString("absent"))));
     }
 
-    @Test @Disabled("No sure how this test can succeed with a mocked session!?")
+    @Test @Disabled("Not sure how this test can succeed with a mocked session!?")
     void validLoginMigratesSessionAndRestoresSafeDeepLink() throws Exception {
         final var applicationUser = applicationUser("sven", "correct horse");
         when(repository.findByUsername("sven")).thenReturn(Optional.of(applicationUser));
