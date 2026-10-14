@@ -32,7 +32,7 @@ The deploy process has been tested only with `gpg` 2.0.x ; you may need to adjus
 
 === Configure JDK Toolchain
 
-The release process should be performed on Java 21, but using Java 17 toolchain.
+The release process should be performed on Java 21+ (eg. 25), but using Java 21 toolchain.
 
 For example, if using sdkman:
 
@@ -45,11 +45,11 @@ For example, if using sdkman:
   <toolchain>
     <type>jdk</type>
     <provides>
-      <version>17</version>
+      <version>25</version>
       <vendor>openjdk</vendor>
     </provides>
     <configuration>
-      <jdkHome>/Users/YOUR_USERNAME/.sdkman/candidates/java/17.0.10-tem</jdkHome>
+      <jdkHome>/Users/YOUR_USERNAME/.sdkman/candidates/java/25.0.3.0+9-tem</jdkHome>
     </configuration>
   </toolchain>
 

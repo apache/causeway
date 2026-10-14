@@ -18,7 +18,7 @@ The owner toolbar also demonstrates a compact foundation-owned unreferenced-acti
 
 == Run
 
-Use JDK 17 or later and run this command from the repository root:
+Use JDK 21 or later and run this command from the repository root:
 
 [source,bash]
 ----

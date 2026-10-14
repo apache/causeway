@@ -47,7 +47,7 @@ Malformed or non-canonical identities are rejected before an object context is m
 
 == Development environment
 
-The web-component Maven modules require JDK 17 or later.
+The web-component Maven modules require JDK 17 or later. (Causeway requires JDK 21 or later)
 The Petclinic launchers select JDK 21 on macOS when `JAVA_HOME` is absent; setting `JAVA_HOME` explicitly avoids relying on that selection.
 Use the repository's supported Maven and Node.js environment for sample builds and frontend regeneration.
 Run one sample at a time because the default launchers use port 8080.
