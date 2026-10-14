@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.Filter;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -35,6 +34,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -78,9 +78,8 @@ class HtmxSecmanSecurityConfiguration {
         final var requestCache = new HttpSessionRequestCache();
         requestCache.setMatchingRequestParameterName(null);
         requestCache.setRequestMatcher(request -> {
-            if (!"GET".equals(request.getMethod()) || "true".equalsIgnoreCase(request.getHeader("HX-Request"))) {
+            if (!"GET".equals(request.getMethod()) || "true".equalsIgnoreCase(request.getHeader("HX-Request")))
                 return false;
-            }
             final var requestPath = request.getRequestURI().substring(request.getContextPath().length());
             final var candidate = requestPath
                     + (request.getQueryString() == null ? "" : "?" + request.getQueryString());
@@ -129,18 +128,16 @@ class HtmxSecmanSecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .csrf(csrf -> csrf.requireCsrfProtectionMatcher(request -> {
                     if ("GET".equals(request.getMethod()) || "HEAD".equals(request.getMethod())
-                            || "OPTIONS".equals(request.getMethod()) || "TRACE".equals(request.getMethod())) {
+                            || "OPTIONS".equals(request.getMethod()) || "TRACE".equals(request.getMethod()))
                         return false;
-                    }
                     final var requestPath = request.getRequestURI().substring(request.getContextPath().length());
-                    if (requestPath.equals(paths.loginPath())) {
+                    if (requestPath.equals(paths.loginPath()))
                         return true;
-                    }
                     final var authentication = SecurityContextHolder.getContext().getAuthentication();
                     return authentication != null && authentication.isAuthenticated();
                 }))
                 .requestCache(cache -> cache.requestCache(requestCache))
-                .sessionManagement(session -> session.sessionFixation(fixation -> fixation.migrateSession()))
+                .sessionManagement(session -> session.sessionFixation(SessionFixationConfigurer::migrateSession))
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HtmxSecmanAuthenticationEntryPoint(paths)))
                 .formLogin(form -> form

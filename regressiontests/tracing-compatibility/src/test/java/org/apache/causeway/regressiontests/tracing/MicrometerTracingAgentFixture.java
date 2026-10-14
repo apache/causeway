@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.regressiontests.tracing;
 
-import static org.mockito.Mockito.*;
-
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.DriverManager;
@@ -29,13 +27,17 @@ import java.util.concurrent.Executors;
 
 import com.sun.net.httpserver.HttpServer;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.applib.Identifier;
@@ -68,7 +70,7 @@ import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSp
 @EnableAutoConfiguration
 @Import({CausewayObservationAutoConfiguration.class})
 public class MicrometerTracingAgentFixture {
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         try (var context = new SpringApplicationBuilder(MicrometerTracingAgentFixture.class)
                 .web(WebApplicationType.NONE).logStartupInfo(false)
                 .properties("spring.main.banner-mode=off").run(args)) {
@@ -102,8 +104,12 @@ public class MicrometerTracingAgentFixture {
                             org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
                                     .withMultiTenancyToken("sentinel-tenant")), () -> {
                         if (semantic) {
-                            for (var semanticAction : semanticActions) members.invokeAction(semanticAction);
-                        } else members.invokeAction(action);
+                            for (var semanticAction : semanticActions) {
+                                members.invokeAction(semanticAction);
+                            }
+                        } else {
+                            members.invokeAction(action);
+                        }
                         if (exchange.getRequestURI().getQuery() != null) throw new IllegalStateException("fixture failure");
                         return null;
                     });
@@ -126,7 +132,7 @@ public class MicrometerTracingAgentFixture {
             } finally { server.stop(0); executor.shutdownNow(); }
         }
     }
-    private static ActionExecutor action(ExecutionContext executionContext, CausewayObservationIntegration integration, boolean agent) throws Exception {
+    private static ActionExecutor action(final ExecutionContext executionContext, final CausewayObservationIntegration integration, final boolean agent) throws Exception {
         var specification = mock(org.apache.causeway.core.metamodel.spec.ObjectSpecification.class);
         var loader = mock(org.apache.causeway.core.metamodel.specloader.SpecificationLoader.class);
         when(specification.getSpecificationLoader()).thenReturn(loader);
@@ -144,7 +150,7 @@ public class MicrometerTracingAgentFixture {
                 _MethodFacades.testing.regular(JdbcAction.class.getDeclaredMethod("executeJdbc")), head, Can.empty(),
                 mock(ActionInvocationFacetAbstract.class), integration.provider(ActionExecutor.class));
     }
-    private static List<ActionExecutor> semanticActions(ActionExecutor base) {
+    private static List<ActionExecutor> semanticActions(final ActionExecutor base) {
         var result = new java.util.ArrayList<ActionExecutor>();
         var target = base.head().target();
         for (int kind = 0; kind < 7; kind++) {
@@ -181,7 +187,9 @@ public class MicrometerTracingAgentFixture {
                 boolean missing = kind == 4;
                 when(ownerSpec.streamAssociations(org.apache.causeway.core.metamodel.spec.feature.MixedIn.INCLUDED))
                         .thenAnswer(__ -> missing ? java.util.stream.Stream.empty() : java.util.stream.Stream.of(association));
-            } else facet = mock(ActionInvocationFacetAbstract.class);
+            } else {
+                facet = mock(ActionInvocationFacetAbstract.class);
+            }
             result.add(new ActionExecutor(base.executionContext(), base.facetHolder(), base.interactionInitiatedBy(),
                     action, base.method(), head, base.arguments(), facet, base.observationProvider()));
         }
@@ -190,12 +198,15 @@ public class MicrometerTracingAgentFixture {
 
     public static class JdbcAction {
         private final org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet jpa;
-        public JdbcAction(CausewayObservationIntegration integration, boolean agent) {
+        public JdbcAction(final CausewayObservationIntegration integration, final boolean agent) {
             jpa = org.apache.causeway.persistence.jpa.integration.entity.JpaObservationFixture.create(integration,
                     () -> {
-                        if (agent) executeSql(); // actual automatic agent JDBC instrumentation
-                        else integration.createNotStarted(JdbcAction.class, "fixture.jdbc")
-                                .lowCardinalityKeyValue("db.system", "h2").observe(JdbcAction::executeSql);
+                        if (agent) {
+                            executeSql(); // actual automatic agent JDBC instrumentation
+                        } else {
+                            integration.createNotStarted(JdbcAction.class, "fixture.jdbc")
+                                    .lowCardinalityKeyValue("db.system", "h2").observe(JdbcAction::executeSql);
+                        }
                     });
         }
         public String executeJdbc() {
