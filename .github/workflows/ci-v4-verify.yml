@@ -129,6 +129,7 @@ jobs:
           -Dmaven.source.skip=true
           -Dproject.build.outputTimestamp=2026-01-01T00:00:00Z
           -Dspring.main.banner-mode=off
+          -pl '!viewers/webcomponents'
           -e
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).

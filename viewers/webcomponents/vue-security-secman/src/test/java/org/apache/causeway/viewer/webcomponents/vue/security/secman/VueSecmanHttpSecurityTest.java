@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -141,7 +140,7 @@ class VueSecmanHttpSecurityTest {
                 .andExpect(content().string(org.hamcrest.Matchers.not(containsString("absent"))));
     }
 
-    @Test @Disabled("Not sure how this test can succeed with a mocked session!?")
+    @Test
     void validLoginMigratesSessionAndRestoresSafeDeepLink() throws Exception {
         final var applicationUser = applicationUser("sven", "correct horse");
         when(repository.findByUsername("sven")).thenReturn(Optional.of(applicationUser));
