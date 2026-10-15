@@ -48,6 +48,8 @@ public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.c
 
     private static final long serialVersionUID = 1L;
 
+    private static final String EMPTY_GRAPH = "{\"nodes\":[],\"links\":[]}";
+
     private final UiAttributeWkt attributeModel;
 
     public D3Panel(final String id, final UiAttributeWkt attributeModel) {
@@ -80,10 +82,13 @@ public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.c
                 ? facet.configFor(domainClass)
                 : new D3Config();
 
-        // graph data is the annotated property's value (a JSON string)
+        // graph data is the annotated property's value (a JSON string);
+        // fall back to an empty graph when the value is null or blank
         var pojo = attributeModel.getObject().getPojo();
         if (pojo instanceof CharSequence cs && !cs.toString().isBlank()) {
             config = config.withGraphData(cs);
+        } else {
+            config = config.withGraphData(EMPTY_GRAPH);
         }
         return config;
     }

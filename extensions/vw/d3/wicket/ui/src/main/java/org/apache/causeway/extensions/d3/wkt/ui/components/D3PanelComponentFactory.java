@@ -50,14 +50,7 @@ public class D3PanelComponentFactory extends ComponentFactoryAbstract {
         if (!attributeModel.getMetaModel().containsFacet(D3GraphFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        // graph data must be a non-blank CharSequence (a JSON string)
-        var value = attributeModel.getObject();
-        if (value != null
-                && value.getPojo() instanceof CharSequence cs
-                && !cs.toString().isBlank()) {
-            return ApplicationAdvice.APPLIES;
-        }
-        return ApplicationAdvice.DOES_NOT_APPLY;
+        return ApplicationAdvice.APPLIES;
     }
 
     @Override

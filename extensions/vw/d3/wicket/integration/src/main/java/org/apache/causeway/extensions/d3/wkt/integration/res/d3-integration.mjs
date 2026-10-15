@@ -50,14 +50,33 @@
                 .find('svg');
             svg.attr('width', width).attr('height', height);
 
-            // Parse the graph data (expected as JSON)
+            // Parse the graph data (expected as JSON);
+            // if graphData is null, undefined, or empty, use an empty graph
             var nodes, links;
             try {
-                var data = JSON.parse(config.graphData);
-                nodes = data.nodes || [];
-                links = data.links || [];
+                if (config.graphData) {
+                    var data = JSON.parse(config.graphData);
+                    nodes = data.nodes || [];
+                    links = data.links || [];
+                } else {
+                    nodes = [];
+                    links = [];
+                }
             } catch (e) {
                 console.error('D3 graph data parse error:', e);
+                return;
+            }
+
+            // If there's no data, render an empty graph placeholder
+            if (nodes.length === 0 && links.length === 0) {
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', height / 2)
+                    .attr('text-anchor', 'middle')
+                    .attr('font-family', 'sans-serif')
+                    .attr('font-size', '14px')
+                    .attr('fill', '#999')
+                    .text('No graph data available');
                 return;
             }
 

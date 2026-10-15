@@ -20,8 +20,8 @@ Implement the Wicket UI module so that a domain **property** annotated `@D3Graph
 | Research & API verification | **DONE** |
 | Code implementation | **DONE** — three main classes (`CausewayModuleExtD3WicketUi`, `D3PanelComponentFactory`, `D3Panel`) written, compiled, and API-verified |
 | Unit tests (`appliesTo` logic) | **PASS** — 6/6 tests pass (all `appliesTo` scenarios) |
-| Unit tests (panel construction) | **BLOCKED** — requires `wicket-tester` for full Wicket container simulation; `wicket-tester` dep added to `pom.xml` but panel-level tests (`D3PanelTest`) were removed pending rewrite using `WicketTester` |
-| Build / test validation | `mvn -pl extensions/vw/d3/wicket/ui -am test` → **BUILD SUCCESS** (6 tests, 0 failures, 0 errors) |
+| Unit tests (panel construction) | **PASS** — `createComponent_returnsD3Panel` rewritten with `WicketTester`; `WicketAppStup` extended to `WebApplication` with `WicketWebjars.install()` and `.mjs` resource guard; all 7 tests pass |
+| Build / test validation | `mvn -pl extensions/vw/d3/wicket/ui -am test -Dtest=D3PanelComponentFactoryTest` → **BUILD SUCCESS** (7 tests, 0 failures, 0 errors) |
 | Blockers | **None** |
 
 ---

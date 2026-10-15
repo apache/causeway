@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.extensions.d3.wkt.integration.components;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.extensions.d3.applib.config.D3Config;
-import org.apache.causeway.extensions.d3.applib.config.D3Config;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedCallback;
-import org.apache.causeway.extensions.d3.wkt.integration.res.D3IntegrationReference;
 import org.apache.causeway.extensions.d3.wkt.integration.res.D3IntegrationReference;
 import org.apache.causeway.extensions.d3.wkt.integration.res.D3Reference;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -37,8 +37,7 @@ import org.jspecify.annotations.NonNull;
  * <p>
  * Contains an SVG canvas (a {@link WebComponent} with a markup id for the D3
  * visualization) and wires the D3 integration script that initialises the graph
- * using the configuration provided.
- * git status</p>
+ * using the configuration provided.</p>
  *
  * @since 2.0 {@index}
  */
@@ -85,6 +84,8 @@ public class D3Panel extends Panel {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
+
+        response.render(CssHeaderItem.forReference(new CssResourceReference(D3Panel.class, "D3Panel.css")));
 
         var configWithCallback = clickCallback != null
                 ? config.withClickCallbackUrl(clickCallback.getCallbackUrl().toString())

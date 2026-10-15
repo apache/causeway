@@ -20,17 +20,18 @@ package org.apache.causeway.extensions.d3.wkt.ui.components;
 
 import java.util.Optional;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.Session;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import de.agilecoders.wicket.webjars.WicketWebjars;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -77,7 +78,7 @@ class D3PanelComponentFactoryTest {
     }
 
     @Test
-    void applies_whenAttributeHasD3GraphFacetAndNonBlankJsonString() {
+    void applies_whenAttributeHasD3GraphFacet() {
         var attributeModel = attributeModel(true);
         when(attributeModel.getObject()).thenReturn(managedString("{\"nodes\":[],\"links\":[]}"));
 
@@ -100,36 +101,34 @@ class D3PanelComponentFactoryTest {
     }
 
     @Test
-    void doesNotApply_whenPropertyValueIsBlank() {
+    void applies_whenPropertyValueIsBlank() {
         var attributeModel = attributeModel(true);
         when(attributeModel.getObject()).thenReturn(managedString("  "));
 
         var advice = factory.appliesTo(attributeModel);
-        assertThat(advice.applies()).isFalse();
+        assertThat(advice.applies()).isTrue();
     }
 
     @Test
-    void doesNotApply_whenPropertyValueIsNull() {
+    void applies_whenPropertyValueIsNull() {
         var attributeModel = attributeModel(true);
         when(attributeModel.getObject()).thenReturn(null);
 
         var advice = factory.appliesTo(attributeModel);
-        assertThat(advice.applies()).isFalse();
+        assertThat(advice.applies()).isTrue();
     }
 
     @Test
-    void doesNotApply_whenPropertyValueIsNotCharSequence() {
+    void applies_whenPropertyValueIsNotCharSequence() {
         var attributeModel = attributeModel(true);
         var spec = mmc.getSpecificationLoader().loadSpecification(Integer.class);
         when(attributeModel.getObject()).thenReturn(ManagedObject.adaptSingular(spec, 123));
 
         var advice = factory.appliesTo(attributeModel);
-        assertThat(advice.applies()).isFalse();
+        assertThat(advice.applies()).isTrue();
     }
 
-    // panel construction requires wicket-tester (see status doc)
-    //TODO add wicket-tester test dependency and re-enable
-    //@Test
+    @Test
     void createComponent_returnsD3Panel() {
         var attributeModel = attributeModel(true);
         when(attributeModel.getObject()).thenReturn(managedString("{\"nodes\":[],\"links\":[]}"));
@@ -146,15 +145,35 @@ class D3PanelComponentFactoryTest {
         when(d3GraphFacet.configFor(D3PanelComponentFactoryTest.class)).thenReturn(new D3Config());
         when(d3GraphFacet.getClickAction(D3PanelComponentFactoryTest.class)).thenReturn(Optional.empty());
 
-        var component = factory.createComponent("d3", attributeModel);
-        assertThat(component).isInstanceOf(D3Panel.class);
+        // WicketTester provides the full Wicket infrastructure (Application, Session, RequestCycle)
+        // needed to construct and render the D3Panel component
+        var tester = new WicketTester(new WicketAppStup());
+        try {
+            var component = factory.createComponent("d3", attributeModel);
+            tester.startComponentInPage(component);
+            assertThat(component).isInstanceOf(D3Panel.class);
+        } finally {
+            tester.destroy();
+        }
     }
 
-    /** minimal Wicket Application so that {@code new D3Panel(...)} works without a servlet container */
-    static class WicketAppStup extends Application {
+    /**
+     * Minimal Wicket {@link WebApplication} that enables Wicket infrastructure
+     * (Session, RequestCycle) without a servlet container, as required by
+     * {@link WicketTester} and the D3Panel component hierarchy.
+     */
+    static class WicketAppStup extends WebApplication {
         @Override
-        public String getApplicationKey() {
-            return "test";
+        protected void init() {
+            super.init();
+            // Required before any WebjarsJavaScriptResourceReference (e.g. D3Reference) can be used
+            WicketWebjars.install(this);
+            // Allows *.mjs, otherwise Wicket throws 'Access denied to (static) package resource'
+            var resourceGuard =
+                    (SecurePackageResourceGuard) getResourceSettings().getPackageResourceGuard();
+            resourceGuard.addPattern("+*.mjs");
+            // Allows *.css loaded via CssResourceReference
+            resourceGuard.addPattern("+*.css");
         }
 
         @Override
@@ -164,11 +183,6 @@ class D3PanelComponentFactoryTest {
 
         @Override
         public Class<? extends Page> getHomePage() {
-            return null;
-        }
-
-        @Override
-        public Session newSession(final Request request, final Response response) {
             return null;
         }
     }
