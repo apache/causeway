@@ -39,16 +39,21 @@
 
         init: function (config) {
 
-            var container = $('#' + config.canvasId);
+            var containerEl = document.getElementById(config.canvasId);
+            if (!containerEl) {
+                console.error('D3 canvas element not found:', config.canvasId);
+                return;
+            }
             var width = config.initialWidth || 800;
             var height = config.initialHeight || 600;
             var enableDragging = config.enableDragging !== false;
             var enableZoom = config.enableZoom !== false;
 
-            container.empty();
-            var svg = container.append('<svg width="100%" height="100%"></svg>')
-                .find('svg');
-            svg.attr('width', width).attr('height', height);
+            // Use D3 selections throughout — never mix jQuery with D3 selection methods
+            var svg = d3.select(containerEl)
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
 
             // Parse the graph data (expected as JSON);
             // if graphData is null, undefined, or empty, use an empty graph
@@ -176,18 +181,22 @@
                     .attr('y', function (d) { return d.y; });
             });
 
-            // Store the simulation for cleanup
-            container.data('d3-simulation', simulation);
+            // Store the simulation for cleanup (on the DOM element)
+            containerEl._d3Simulation = simulation;
         },
 
         destroy: function (canvasId) {
-            var container = $('#' + canvasId);
-            var simulation = container.data('d3-simulation');
+            var containerEl = document.getElementById(canvasId);
+            if (!containerEl) return;
+            var simulation = containerEl._d3Simulation;
             if (simulation) {
                 simulation.stop();
-                container.removeData('d3-simulation');
+                delete containerEl._d3Simulation;
             }
-            container.empty();
+            // Clear all children (SVG and any other content)
+            while (containerEl.firstChild) {
+                containerEl.removeChild(containerEl.firstChild);
+            }
         }
 
     };
