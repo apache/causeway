@@ -29,6 +29,8 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
 
+import java.io.Serial;
+
 /**
  * Wicket panel that renders a {@code @D3Graph}-annotated property
  * (recognised through its {@link D3GraphFacet})
@@ -46,6 +48,7 @@ import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
  */
 public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.components.D3Panel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final String EMPTY_GRAPH = "{\"nodes\":[],\"links\":[]}";
@@ -64,6 +67,7 @@ public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.c
 
         if (clickAction != null) {
             withClickCallback(new NodeClickedCallback() {
+                @Serial
                 private static final long serialVersionUID = 1L;
                 @Override
                 protected void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target) {

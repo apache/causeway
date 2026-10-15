@@ -32,6 +32,8 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import org.jspecify.annotations.NonNull;
 
+import java.io.Serial;
+
 /**
  * A panel for rendering D3.js interactive graphs inline in the page.
  * <p>
@@ -43,11 +45,12 @@ import org.jspecify.annotations.NonNull;
  */
 public class D3Panel extends Panel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final static String ID_D3_CANVAS = "d3Canvas";
 
-    private D3Config config;
+    private final D3Config config;
 
     /**
      * Optional AJAX callback invoked when a graph node is clicked;
