@@ -44,14 +44,6 @@
     </properties>
 
     <modules>
-
-        <module>../supplemental-model</module>
-
-        <module>../commons</module>
-
-        <module>../api/schema</module>
-        <module>../api/applib</module>
-
         <module>codegen-bytebuddy</module>
         <module>config</module>
         <module>interaction</module>
@@ -63,24 +55,7 @@
         <module>runtimeservices</module>
         <module>transaction</module>
         <module>webapp</module>
-
         <module>security</module>
-        <module>../security/bypass</module>
-        <module>../security/keycloak</module>
-        <module>../security/simple</module>
-        <module>../security/spring</module>
-
-        <module>../viewers/commons</module>
-        <module>../viewers/restfulobjects</module>
-        <module>../viewers/wicket</module>
-        <module>../viewers/graphql</module>
-        <module>../viewers/webcomponents</module>
-
-        <module>../persistence/commons</module>
-        <module>../persistence/jdbc</module>
-        <module>../persistence/jpa</module>
-        <module>../persistence/querydsl</module>
-
     </modules>
 
 </project>

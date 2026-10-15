@@ -73,15 +73,37 @@
             non-essential modules can be added to the build via profiles
             (as defined below);
 
-            keep module declarations in alphabetical order!
-
             also keep profiles in sync with the site documentation
             https://github.com/apache/causeway/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-causeway.adoc
             -->
             <modules>
+                <module>supplemental-model</module>
                 <module>bom</module>
                 <module>parent</module>
+                
+                <module>commons</module>
+
+                <module>api/schema</module>
+                <module>api/applib</module>
+
                 <module>core</module>
+                
+                <module>security/bypass</module>
+                <module>security/keycloak</module>
+                <module>security/simple</module>
+                <module>security/spring</module>
+
+                <module>viewers/commons</module>
+                <module>viewers/restfulobjects</module>
+                <module>viewers/wicket</module>
+                <module>viewers/graphql</module>
+<!--                <module>viewers/webcomponents</module> broken after GraphQL upgrade as of Spring Boot 4.2.0-M2 -->
+        
+                <module>persistence/commons</module>
+                <module>persistence/jdbc</module>
+                <module>persistence/jpa</module>
+                <module>persistence/querydsl</module>
+                
                 <module>extensions</module>
                 <module>mavendeps</module>
                 <module>starters</module>

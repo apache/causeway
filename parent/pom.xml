@@ -789,7 +789,7 @@
                                 <supplementalModel>supplemental-models.xml</supplementalModel>
                             </supplementalModels>
                             <properties>
-                                <projectTimespan>2010~2022</projectTimespan>
+                                <projectTimespan>2010~2026</projectTimespan>
                                 <postDepListText>
                                     The above (auto-generated) list aggregates
                                     the dependencies (either directly or
@@ -814,7 +814,7 @@
                             <version>[3.9.9,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <version>[17,)</version>
+                            <version>[21,)</version>
                         </requireJavaVersion>
                         <!-- seemingly not compatible with use of 3.4.0-SNAPSHOT
                         placeholders
