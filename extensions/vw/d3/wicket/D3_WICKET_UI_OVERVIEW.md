@@ -224,7 +224,7 @@ sequenceDiagram
     Browser->>Browser: update UI
 ```
 
-### 4.3 Decision tree — `appliesTo`
+### 4.3 Decision tree — `appliesTo` (post-fix)
 
 ```mermaid
 flowchart TD
@@ -232,13 +232,8 @@ flowchart TD
     CheckType -- No --> NoApply["ApplicationAdvice.DOES_NOT_APPLY"]
     CheckType -- Yes --> CheckFacet{"containsFacet<br/>(D3GraphFacet.class)?"}
     CheckFacet -- No --> NoApply
-    CheckFacet -- Yes --> CheckNull{"value != null?"}
-    CheckNull -- No --> NoApply
-    CheckNull -- Yes --> CheckType2{"value.getPojo() instanceof<br/>CharSequence?"}
-    CheckType2 -- No --> NoApply
-    CheckType2 -- Yes --> CheckBlank{"!cs.toString().isBlank()?"}
-    CheckBlank -- No --> NoApply
-    CheckBlank -- Yes --> Apply["ApplicationAdvice.APPLIES"]
+    CheckFacet -- Yes --> Apply["ApplicationAdvice.APPLIES ✓"]
+    Apply --> Note["Panel is always rendered when facet<br/>is present; null/blank data is<br/>handled downstream in buildConfig()"]
 ```
 
 ### 4.4 Callback wiring detail
@@ -262,6 +257,67 @@ flowchart LR
         G --> H["D3AjaxCallback.respond(target)"]
         H --> I["NodeClickedCallback.onNodeClicked(...)"]
     end
+```
+
+### 4.5 Rendering chain — full flow with null-data fixes
+
+```mermaid
+flowchart TD
+    subgraph "1. Factory gating"
+        A["Entity page iterates attributes"] --> B{"D3PanelComponentFactory<br/>.appliesTo()"}
+        B --> B1{"instanceof UiAttributeWkt?"}
+        B1 -- No --> NO["DOES_NOT_APPLY"]
+        B1 -- Yes --> B2{"containsFacet<br/>(D3GraphFacet)?"}
+        B2 -- No --> NO
+        B2 -- Yes --> YES["APPLIES ★"]
+        YES --> Note1["No longer checks property<br/>value type, null, or blank"]
+    end
+
+    subgraph "2. Panel construction"
+        C["factory.createComponent()"] --> D["new D3Panel(id, attributeModel)"]
+        D --> E["buildConfig(attributeModel)"]
+        E --> E1["lookup D3GraphFacet"]
+        E1 --> E2["facet.configFor(domainClass)"]
+        E2 --> E3{"pojo instanceof CharSequence<br/>&& !blank?"}
+        E3 -- Yes --> E4["config.withGraphData(cs)"]
+        E3 -- No --> E5["config.withGraphData(EMPTY_GRAPH)<br/>{nodes:[], links:[]}"]
+        E4 --> F["Panel ready with valid graphData JSON"]
+        E5 --> F
+    end
+
+    subgraph "3. CSS rendering"
+        G["panel.renderHead()"] --> G1["CssHeaderItem.forReference<br/>(D3Panel.css) ★"]
+        G1 --> G2[".d3GraphPanel { min-height: 400px }<br/>.d3GraphCanvas { min-height: 400px }"]
+        G2 --> G3["SVG container has visible height"]
+    end
+
+    subgraph "4. JS init"
+        H["WicketStuff.D3.init(config)"] --> H1{"config.graphData truthy?"}
+        H1 -- No --> H2["nodes = [], links = [] ★"]
+        H1 -- Yes --> H3["JSON.parse(config.graphData)"]
+        H3 --> H4{"parse succeeded?"}
+        H4 -- No --> H5["console.error + return"]
+        H4 -- Yes --> H6["nodes = data.nodes || []<br/>links = data.links || []"]
+        H2 --> H7{"nodes.length === 0 &&<br/>links.length === 0?"}
+        H6 --> H7
+        H7 -- Yes --> H8["svg.append('text')<br/>'No graph data available' ★"]
+        H7 -- No --> H9["Build force simulation,<br/>render nodes + links + labels"]
+    end
+
+    NO -.->|"Panel not rendered"| END["Property shown as plain text"]
+    F --> G
+    G3 --> H
+    H8 --> END2["Visible panel with<br/>placeholder message"]
+    H9 --> END3["Interactive D3 graph"]
+
+    style YES fill:#9f9,stroke:#090
+    style E5 fill:#9f9,stroke:#090
+    style G1 fill:#9f9,stroke:#090
+    style H2 fill:#9f9,stroke:#090
+    style H8 fill:#ffc,stroke:#cc0
+    style END fill:#fcc,stroke:#c00
+    style END2 fill:#ffc,stroke:#cc0
+    style END3 fill:#9f9,stroke:#090
 ```
 
 ---
@@ -344,9 +400,11 @@ flowchart TD
    This reuses the standard Wicket viewer's action-execution pipeline (parameter
    validation, result handling, page update).
 
-5. **No separate CSS file (optional).**  
-   A small `D3Panel.css` was considered but not implemented. The integration
-   panel already contributes D3.js CSS via `D3Reference`.
+5. **`D3Panel.css` — dedicated styling.**  
+   A `D3Panel.css` resource provides explicit `min-height` and `width: 100%`
+   on the panel and SVG canvas containers, ensuring the graph area is visible
+   even when no data has been rendered. The integration panel's `renderHead()`
+   contributes it via `CssHeaderItem.forReference(new CssResourceReference(...))`.
 
 ---
 
@@ -356,7 +414,7 @@ flowchart TD
 |---|---|---|
 | **TYPE-level `@D3Graph`** | Unsupported | `@Target` includes `TYPE`, but metamodel factory only processes `PROPERTIES_AND_ACTIONS` |
 | **Advisor `graphData` merge** | Not merged | `configFor(...)` merges advisor width/height/drag/zoom/clickAction but not graph data |
-| **`D3Panel.css`** | Optional | Not yet created; would require a `CssReference` in `renderHead` |
+| **`D3Panel.css`** | Done | Created with `.d3GraphPanel`, `.d3GraphCanvas`, `.d3-links`, `.d3-nodes`, `.d3-labels` styles; contributed via `CssResourceReference` in `renderHead()` |
 | **Canvas cleanup** | Optional | Override `onRemove`/`onDetach` to call `WicketStuff.D3.destroy(canvasId)` |
 | **Antora docs** | Not started | User-facing page for the D3 viewer extension |
 | **`ui-test` module** | Not started | Long-term Wicket-level regression tests (like `viewers/wicket/ui-test`) |
