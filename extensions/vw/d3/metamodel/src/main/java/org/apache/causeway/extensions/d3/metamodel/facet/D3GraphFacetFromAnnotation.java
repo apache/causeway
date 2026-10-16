@@ -36,6 +36,10 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
     private final int initialHeight;
     private final boolean enableDragging;
     private final boolean enableZoom;
+    private final int linkDistance;
+    private final int repulsionStrength;
+    private final int collisionRadius;
+    private final double distributionStrength;
     private final String clickAction;
 
     @Inject List<D3GraphAdvisor> advisors;
@@ -46,6 +50,10 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
         initialHeight = config.getInitialHeight();
         enableDragging = config.isEnableDragging();
         enableZoom = config.isEnableZoom();
+        linkDistance = config.getLinkDistance();
+        repulsionStrength = config.getRepulsionStrength();
+        collisionRadius = config.getCollisionRadius();
+        distributionStrength = config.getDistributionStrength();
         clickAction = config.getClickAction();
     }
 
@@ -58,6 +66,10 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
                 .withInitialHeight(annotation.initialHeight())
                 .withEnableDragging(annotation.enableDragging())
                 .withEnableZoom(annotation.enableZoom())
+                .withLinkDistance(annotation.linkDistance())
+                .withRepulsionStrength(annotation.repulsionStrength())
+                .withCollisionRadius(annotation.collisionRadius())
+                .withDistributionStrength(annotation.distributionStrength())
                 .withClickAction(annotation.clickAction());
 
         return new D3GraphFacetFromAnnotation(config, holder);
@@ -103,6 +115,10 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
         visitor.accept("initialHeight", initialHeight);
         visitor.accept("enableDragging", enableDragging);
         visitor.accept("enableZoom", enableZoom);
+        visitor.accept("linkDistance", linkDistance);
+        visitor.accept("repulsionStrength", repulsionStrength);
+        visitor.accept("collisionRadius", collisionRadius);
+        visitor.accept("distributionStrength", distributionStrength);
         visitor.accept("clickAction", clickAction);
     }
 

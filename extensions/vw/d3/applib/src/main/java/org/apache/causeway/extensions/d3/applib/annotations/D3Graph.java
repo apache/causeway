@@ -64,6 +64,31 @@ public @interface D3Graph {
     boolean enableZoom() default true;
 
     /**
+     * The distance (pixels) between linked nodes in the force layout.
+     * Higher values spread connected nodes further apart. (default: 120)
+     */
+    int linkDistance() default 120;
+
+    /**
+     * The strength of the repulsive force between all nodes (negative = repulsion).
+     * More negative values push nodes further apart. (default: -400)
+     */
+    int repulsionStrength() default -400;
+
+    /**
+     * The minimum radial separation (pixels) maintained between any two nodes
+     * via collision detection. Prevents overlap and clusters. (default: 60)
+     */
+    int collisionRadius() default 60;
+
+    /**
+     * The strength of the centering distribution force that pulls nodes toward
+     * the center of the canvas. Lower values let nodes spread further out.
+     * Range: 0.0 (no centering) to 1.0 (tight cluster). (default: 0.08)
+     */
+    double distributionStrength() default 0.08;
+
+    /**
      * The member id of a domain action to invoke (AJAX) when a node of the graph is clicked.
      * <p>
      * If specified, the action must accept a single string parameter

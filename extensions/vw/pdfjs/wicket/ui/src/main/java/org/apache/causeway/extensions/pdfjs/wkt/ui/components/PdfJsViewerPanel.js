@@ -19,6 +19,16 @@
 
 $(function () {
 
+    // The WicketStuff.PDFJS namespace (incl. Topic) is defined by the
+    // pdfjs-integration-v4x5x.mjs module. That module runs deferred; if it was
+    // not (yet) available (e.g. on an AJAX-refreshed region, or if the module
+    // failed to load), bail out rather than throwing a TypeError that also
+    // breaks subsequent ready handlers.
+    if (typeof WicketStuff === 'undefined' || typeof WicketStuff.PDFJS === 'undefined') {
+        console.warn("pdfjs-viewer: the pdfjs-integration module (WicketStuff.PDFJS) is not loaded; viewer controls disabled.");
+        return;
+    }
+
     function raiseEvent(elem, event, moreArgs) {
         var canvasId = elem.data('canvasId');
         var args = {"canvasId": canvasId}

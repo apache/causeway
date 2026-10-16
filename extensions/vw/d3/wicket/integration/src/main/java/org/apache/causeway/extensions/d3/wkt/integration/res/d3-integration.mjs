@@ -44,16 +44,19 @@
                 console.error('D3 canvas element not found:', config.canvasId);
                 return;
             }
-            var width = config.initialWidth || 800;
-            var height = config.initialHeight || 600;
+            // Measure available space from the container; fall back to config values
+            var width = containerEl.clientWidth || config.initialWidth || 800;
+            var height = containerEl.clientHeight || config.initialHeight || Math.round(width * 0.6);
             var enableDragging = config.enableDragging !== false;
             var enableZoom = config.enableZoom !== false;
 
             // Use D3 selections throughout — never mix jQuery with D3 selection methods
             var svg = d3.select(containerEl)
                 .append('svg')
-                .attr('width', width)
-                .attr('height', height);
+                .attr('width', '100%')
+                .attr('height', height)
+                .attr('viewBox', '0 0 ' + width + ' ' + height)
+                .attr('preserveAspectRatio', 'xMidYMid meet');
 
             // Parse the graph data (expected as JSON);
             // if graphData is null, undefined, or empty, use an empty graph
@@ -85,13 +88,41 @@
                 return;
             }
 
+            // Force parameters from config (with sensible defaults)
+            var linkDistance = config.linkDistance != null ? config.linkDistance : 120;
+            var repulsionStrength = config.repulsionStrength != null ? config.repulsionStrength : -400;
+            var collisionRadius = config.collisionRadius != null ? config.collisionRadius : 60;
+            var distStrength = config.distributionStrength != null ? config.distributionStrength : 0.08;
+
             // Create the force simulation
+            // Use forceX/forceY (weaker than forceCenter) to spread nodes across the canvas,
+            // combined with collision detection to prevent overlap.
             var simulation = d3.forceSimulation(nodes)
                 .force('link', d3.forceLink(links)
                     .id(function (d) { return d.id; })
-                    .distance(100))
-                .force('charge', d3.forceManyBody().strength(-300))
-                .force('center', d3.forceCenter(width / 2, height / 2));
+                    .distance(linkDistance))
+                .force('charge', d3.forceManyBody()
+                    .strength(repulsionStrength))
+                .force('collide', d3.forceCollide()
+                    .radius(function (d) {
+                        return (d.r || 8) + collisionRadius;
+                    }))
+                .force('x', d3.forceX(width / 2).strength(distStrength))
+                .force('y', d3.forceY(height / 2).strength(distStrength));
+
+            // Re-center/distribute on window resize so the force layout stays proportioned to the container
+            window.addEventListener('resize', function () {
+                var w = containerEl.clientWidth;
+                var h = containerEl.clientHeight;
+                if (w && (w !== width || h !== height)) {
+                    width = w;
+                    height = h || height;
+                    svg.attr('viewBox', '0 0 ' + width + ' ' + height);
+                    simulation.force('x', d3.forceX(width / 2).strength(distStrength));
+                    simulation.force('y', d3.forceY(height / 2).strength(distStrength));
+                    simulation.alpha(0.5).restart();
+                }
+            });
 
             // Zoom behaviour (applied to the container)
             var g = svg.append('g');
@@ -104,7 +135,10 @@
                 svg.call(zoom);
             }
 
-            // Links
+            // ---- Extract legend from data ----
+            var legend = data.legend || [];
+
+            // ---- Links (lines) ----
             var link = g.append('g')
                 .attr('class', 'd3-links')
                 .selectAll('line')
@@ -114,25 +148,97 @@
                 .attr('stroke-opacity', 0.6)
                 .attr('stroke-width', function (d) { return Math.sqrt(d.value || 1); });
 
-            // Nodes
+            // ---- Edge labels ----
+            var linkLabel = g.append('g')
+                .attr('class', 'd3-link-labels')
+                .selectAll('text')
+                .data(links)
+                .join('text')
+                .text(function (d) { return d.label || ''; })
+                .attr('font-size', 9)
+                .attr('fill', '#555')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central');
+
+            // ---- Helper functions for node rendering ----
+            function nodeScale(d) {
+                return (d.r || 8) / 8;
+            }
+            function clampFont(px) {
+                return Math.max(6, Math.min(18, Math.round(px)));
+            }
+
+            // ---- Nodes (rounded rectangles + 3-line labels) ----
             var node = g.append('g')
                 .attr('class', 'd3-nodes')
-                .selectAll('circle')
+                .selectAll('g')
                 .data(nodes)
-                .join('circle')
-                .attr('r', 8)
-                .attr('fill', '#69b3a2');
+                .join('g');
 
-            // Node labels
-            g.append('g')
-                .attr('class', 'd3-labels')
-                .selectAll('text')
-                .data(nodes)
-                .join('text')
-                .text(function (d) { return d.name || d.id; })
-                .attr('font-size', 12)
-                .attr('dx', 12)
-                .attr('dy', 4);
+            // Rounded rectangle behind the label (fitted after measuring)
+            node.append('rect')
+                .attr('rx', 9)
+                .attr('ry', 9)
+                .attr('fill', function (d) { return d.color || '#69b3a2'; })
+                .attr('stroke', '#333')
+                .attr('stroke-width', function (d) {
+                    return d.approved ? 4 : 2;
+                })
+                .attr('stroke-dasharray', function (d) {
+                    return d.synonym ? '6,4' : null;
+                });
+
+            // 3-line label: italic subdomain / name / <<POS>>
+            var nodeText = node.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .attr('fill', '#fff')
+                .attr('pointer-events', 'none');
+
+            // Line 1: subdomain in italics
+            nodeText.append('tspan')
+                .attr('x', 0)
+                .attr('dy', '-0.9em')
+                .attr('font-style', 'italic')
+                .attr('font-size', function (d) {
+                    return clampFont(7 * nodeScale(d));
+                })
+                .text(function (d) { return d.subdomain || ''; });
+
+            // Line 2: candidate name (bold)
+            nodeText.append('tspan')
+                .attr('x', 0)
+                .attr('dy', '1.15em')
+                .attr('font-weight', 'bold')
+                .attr('font-size', function (d) {
+                    return clampFont(11 * nodeScale(d));
+                })
+                .text(function (d) { return d.name || d.id; });
+
+            // Line 3: POS in double brackets
+            nodeText.append('tspan')
+                .attr('x', 0)
+                .attr('dy', '1.15em')
+                .attr('font-size', function (d) {
+                    return clampFont(7 * nodeScale(d));
+                })
+                .text(function (d) { return '<<' + (d.pos || '') + '>>'; });
+
+            // Fit the rectangle around the measured label
+            node.each(function (d) {
+                var labelEl = d3.select(this).select('text').node();
+                if (!labelEl) return;
+                var bbox = labelEl.getBBox();
+                var sf = nodeScale(d) || 1;
+                var pad = 7 * sf;
+                var w = bbox.width + pad * 2;
+                var h = bbox.height + pad * 2;
+                d3.select(this).select('rect')
+                    .attr('width', w)
+                    .attr('height', h)
+                    .attr('x', -w / 2)
+                    .attr('y', -h / 2);
+            });
 
             // Node click handler (if a callback URL is configured)
             if (config.clickCallbackUrl) {
@@ -164,7 +270,39 @@
                 node.call(drag);
             }
 
-            // Simulation tick
+            // ---- Legend ----
+            if (legend.length > 0) {
+                var legendGroup = svg.append('g')
+                    .attr('class', 'd3-legend')
+                    .attr('transform', function () {
+                        return 'translate(20, ' + (height - 40 - legend.length * 28) + ')';
+                    });
+                legendGroup.append('rect')
+                    .attr('width', 240)
+                    .attr('height', legend.length * 28 + 10)
+                    .attr('fill', 'rgba(255, 255, 255, 0.92)')
+                    .attr('stroke', '#ccc')
+                    .attr('rx', 4);
+                legendGroup.append('text')
+                    .attr('x', 8).attr('y', 18)
+                    .attr('font-size', 11).attr('font-weight', 'bold')
+                    .attr('fill', '#333')
+                    .text('Node Type Legend');
+                legend.forEach(function (item, i) {
+                    var rowY = 35 + i * 28;
+                    var swatch = legendGroup.append('g');
+                    swatch.append('rect')
+                        .attr('x', 8).attr('y', rowY)
+                        .attr('width', 14).attr('height', 14)
+                        .attr('fill', item.color).attr('rx', 2);
+                    swatch.append('text')
+                        .attr('x', 28).attr('y', rowY + 11)
+                        .attr('font-size', 10).attr('fill', '#444')
+                        .text((item.label || '') + ' \u2014 ' + (item.description || ''));
+                });
+            }
+
+            // ---- Simulation tick ----
             simulation.on('tick', function () {
                 link
                     .attr('x1', function (d) { return d.source.x; })
@@ -172,13 +310,13 @@
                     .attr('x2', function (d) { return d.target.x; })
                     .attr('y2', function (d) { return d.target.y; });
 
-                node
-                    .attr('cx', function (d) { return d.x; })
-                    .attr('cy', function (d) { return d.y; });
+                linkLabel
+                    .attr('x', function (d) { return (d.source.x + d.target.x) / 2; })
+                    .attr('y', function (d) { return (d.source.y + d.target.y) / 2; });
 
-                svg.selectAll('.d3-labels text')
-                    .attr('x', function (d) { return d.x; })
-                    .attr('y', function (d) { return d.y; });
+                node.attr('transform', function (d) {
+                    return 'translate(' + d.x + ',' + d.y + ')';
+                });
             });
 
             // Store the simulation for cleanup (on the DOM element)

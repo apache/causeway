@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.d3.applib.config;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.springframework.util.Assert;
@@ -41,6 +42,7 @@ import lombok.With;
 @Getter @AllArgsConstructor @NoArgsConstructor @Builder
 public class D3Config implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Builder.Default
@@ -54,6 +56,35 @@ public class D3Config implements Serializable {
 
     @Builder.Default
     private boolean enableZoom = true;
+
+    /**
+     * The distance (pixels) between linked nodes in the force layout.
+     * Higher values spread connected nodes further apart. (default: 120)
+     */
+    @Builder.Default
+    private int linkDistance = 120;
+
+    /**
+     * The strength of the repulsive force between all nodes (negative = repulsion).
+     * More negative values push nodes further apart. (default: -400)
+     */
+    @Builder.Default
+    private int repulsionStrength = -400;
+
+    /**
+     * The minimum radial separation (pixels) maintained between any two nodes
+     * via collision detection. Prevents overlap and clusters. (default: 60)
+     */
+    @Builder.Default
+    private int collisionRadius = 60;
+
+    /**
+     * The strength of the centering distribution force that pulls nodes toward
+     * the center of the canvas. Lower values let nodes spread further out.
+     * Range: 0.0 (no centering) to 1.0 (tight cluster). (default: 0.08)
+     */
+    @Builder.Default
+    private double distributionStrength = 0.08;
 
     /**
      * The member id of a domain action to invoke (AJAX) when a graph node is clicked;
@@ -102,6 +133,30 @@ public class D3Config implements Serializable {
         return asBuilder().enableZoom(enableZoom).build();
     }
 
+    public D3Config withLinkDistance(final int linkDistance) {
+        Assert.isTrue(linkDistance >= 20 && linkDistance <= 1000,
+                ()->String.format("'linkDistance' must be between 20 and 1000; got %d", linkDistance));
+        return asBuilder().linkDistance(linkDistance).build();
+    }
+
+    public D3Config withRepulsionStrength(final int repulsionStrength) {
+        Assert.isTrue(repulsionStrength >= -5000 && repulsionStrength <= 0,
+                ()->String.format("'repulsionStrength' must be between -5000 and 0; got %d", repulsionStrength));
+        return asBuilder().repulsionStrength(repulsionStrength).build();
+    }
+
+    public D3Config withCollisionRadius(final int collisionRadius) {
+        Assert.isTrue(collisionRadius >= 0 && collisionRadius <= 500,
+                ()->String.format("'collisionRadius' must be between 0 and 500; got %d", collisionRadius));
+        return asBuilder().collisionRadius(collisionRadius).build();
+    }
+
+    public D3Config withDistributionStrength(final double distributionStrength) {
+        Assert.isTrue(distributionStrength >= 0.0 && distributionStrength <= 1.0,
+                ()->String.format("'distributionStrength' must be between 0.0 and 1.0; got %f", distributionStrength));
+        return asBuilder().distributionStrength(distributionStrength).build();
+    }
+
     public D3Config withClickAction(final String clickAction) {
         return asBuilder().clickAction(clickAction).build();
     }
@@ -112,6 +167,10 @@ public class D3Config implements Serializable {
                 .initialHeight(getInitialHeight())
                 .enableDragging(isEnableDragging())
                 .enableZoom(isEnableZoom())
+                .linkDistance(getLinkDistance())
+                .repulsionStrength(getRepulsionStrength())
+                .collisionRadius(getCollisionRadius())
+                .distributionStrength(getDistributionStrength())
                 .clickAction(getClickAction())
                 .canvasId(getCanvasId())
                 .graphData(getGraphData())
