@@ -18,13 +18,17 @@
  */
 package org.apache.causeway.commons.internal.observation;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationHandler;
@@ -34,30 +38,32 @@ class ObservationClosureTest {
     @Test void restoresParentAndClosesOnlyOnce() {
         var registry = ObservationRegistry.create();
         var stopped = new ArrayList<String>();
-        registry.observationConfig().observationHandler(new ObservationHandler<Observation.Context>() {
-            public boolean supportsContext(Observation.Context context) { return true; }
-            public void onStop(Observation.Context context) { stopped.add(context.getName()); }
+        registry.observationConfig().observationHandler(new ObservationHandler<>() {
+            @Override
+            public boolean supportsContext(final Observation.Context context) { return true; }
+            @Override
+            public void onStop(final Observation.Context context) { stopped.add(context.getName()); }
         });
         var parent = Observation.start("parent", registry);
         try (var parentScope = parent.openScope()) {
             var child = Observation.createNotStarted("child", registry);
-            var closure = new ObservationClosure().startAndOpenScope(child);
-            assertSame(child, registry.getCurrentObservation());
-            closure.close();
-            closure.close();
-            assertSame(parent, registry.getCurrentObservation());
-            assertEquals(List.of("child"), stopped);
-            assertNull(closure.observation());
-            assertNull(closure.scope());
+            try(var closure = new ObservationClosure(child)) {
+                assertSame(child, registry.getCurrentObservation());
+                closure.close();
+                assertSame(parent, registry.getCurrentObservation());
+                assertEquals(List.of("child"), stopped);
+                assertNull(closure.observation());
+                assertNull(closure.scope());
+            }
         } finally { parent.stop(); }
         assertNull(registry.getCurrentObservation());
     }
 
     @Test void rejectsDuplicateStartWithoutLosingOriginal() {
         var probe = new Probe();
-        var closure = new ObservationClosure().startAndOpenScope(probe.observation());
-        assertThrows(IllegalStateException.class, () -> closure.startAndOpenScope(probe.observation()));
-        closure.close();
+        try(var closure = new ObservationClosure(probe.observation())) {
+            assertThrows(IllegalStateException.class, () -> closure.startAndOpenScope(probe.observation()));
+        }
         assertEquals(List.of("start", "openScope", "closeScope", "stop"), probe.calls);
     }
 
@@ -78,9 +84,9 @@ class ObservationClosureTest {
         var probe = new Probe();
         probe.closeFailure = new IllegalStateException("close");
         probe.stopFailure = new IllegalStateException("stop");
-        var closure = new ObservationClosure().startAndOpenScope(probe.observation());
-        assertSame(probe.closeFailure, assertThrows(IllegalStateException.class, closure::close));
-        closure.close();
+        try (var closure = new ObservationClosure(probe.observation())) {
+            assertSame(probe.closeFailure, assertThrows(IllegalStateException.class, closure::close));
+        }
         assertEquals(List.of("start", "openScope", "closeScope", "stop"), probe.calls);
         assertArrayEquals(new Throwable[]{probe.stopFailure}, probe.closeFailure.getSuppressed());
     }
@@ -89,9 +95,9 @@ class ObservationClosureTest {
         var probe = new Probe();
         probe.closeFailure = new IllegalStateException("close");
         var failure = new AssertionError("work");
-        var closure = new ObservationClosure().startAndOpenScope(probe.observation());
-        closure.onError(failure);
-        closure.close();
+        try (var closure = new ObservationClosure(probe.observation())) {
+            closure.onError(failure);
+        }
         assertSame(failure, probe.recordedFailure);
         assertArrayEquals(new Throwable[]{probe.closeFailure}, failure.getSuppressed());
         assertEquals(List.of("start", "openScope", "error", "closeScope", "stop"), probe.calls);
@@ -100,11 +106,12 @@ class ObservationClosureTest {
     @Test void stopFailureClearsStateAndTagAndDiscardRemainAvailable() {
         var probe = new Probe();
         probe.stopFailure = new IllegalStateException("stop");
-        var closure = new ObservationClosure().startAndOpenScope(probe.observation());
-        closure.tag("key", () -> "value");
-        assertSame(probe.stopFailure, assertThrows(IllegalStateException.class, closure::discard));
-        closure.close();
-        assertNull(closure.observation());
+        try (var closure = new ObservationClosure(probe.observation())) {
+            closure.tag("key", () -> "value");
+            assertSame(probe.stopFailure, assertThrows(IllegalStateException.class, closure::discard));
+            closure.close();
+            assertNull(closure.observation());
+        }
         assertEquals(List.of("start", "openScope", "highCardinalityKeyValue", "lowCardinalityKeyValue", "closeScope", "stop"), probe.calls);
     }
 

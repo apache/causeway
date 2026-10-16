@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import jakarta.annotation.Priority;
@@ -42,12 +44,11 @@ public class ScalarMarshallerUrl extends ScalarMarshallerAbstract<URL> {
 
     @Override
     public URL unmarshal(final Object graphValue, final Class<?> targetType) {
-        if (graphValue instanceof URL url) {
+        if (graphValue instanceof URL url)
             return url;
-        }
         try {
-            return new URL((String) graphValue);
-        } catch (MalformedURLException ignored) {
+            return new URI((String) graphValue).toURL();
+        } catch (MalformedURLException | URISyntaxException ignored) {
             throw new IllegalArgumentException("Invalid URL value");
         }
     }

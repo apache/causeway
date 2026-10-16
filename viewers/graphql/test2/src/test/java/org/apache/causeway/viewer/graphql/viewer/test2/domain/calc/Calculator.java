@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.viewer.test2.domain.calc;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -167,7 +168,7 @@ public class Calculator {
     @SneakyThrows
     @Action(semantics = SemanticsOf.SAFE)
     public URL someUrl() {
-        return new URL("https://causeway.apache.org");
+        return new URI("https://causeway.apache.org").toURL();
     }
 
     @SneakyThrows

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 import java.util.function.UnaryOperator;
@@ -100,9 +101,8 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final RequestParams requestParams) {
 
-        if (!getInteractionService().isInInteraction()) {
+        if (!getInteractionService().isInInteraction())
             throw RestfulObjectsApplicationException.create(HttpStatus.UNAUTHORIZED);
-        }
 
         var requestUrl = parseUrl(httpServletRequest.getRequestURL().toString());
 
@@ -168,15 +168,24 @@ implements HasMetaModelContext {
     // -- HELPER
 
     @SneakyThrows
-    private URL parseUrl(String url) {
-        return new URL(url);
+    private URL parseUrl(final String url) {
+        return new URI(url).toURL();
     }
 
     /** if not configured can be re-constructed */
     @SneakyThrows
-    private String restfulAbsoluteBase(URL requestUrl) {
+    private String restfulAbsoluteBase(final URL requestUrl) {
         var base = webAppContextPath.prependContextPath(restfulPath);
-        return new URL(requestUrl.getProtocol(), requestUrl.getHost(), requestUrl.getPort(), base).toExternalForm();
+        var uri = new URI(
+                requestUrl.getProtocol(),
+                null, // userInfo (null for no user info)
+                requestUrl.getHost(),
+                requestUrl.getPort() == -1 ? 0 : requestUrl.getPort(),
+                base,
+                null, // query
+                null  // fragment
+            );
+        return uri.toURL().toExternalForm();
     }
 
     private String getUrlDecodedQueryStringIfAny() {

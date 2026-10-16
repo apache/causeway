@@ -24,7 +24,7 @@ module org.apache.causeway.extensions.titlecache.caffeine {
     requires spring.context.support;
     requires spring.boot.autoconfigure;
 
-    requires cache.api;
+    requires cache.api; //unstable automatic module name
 
     requires jakarta.inject;
     requires jakarta.annotation;

@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.webcomponents.htmx;
 
 public final class InvalidHtmxRouteException extends IllegalArgumentException {
 
+    private static final long serialVersionUID = 1L;
+
     public InvalidHtmxRouteException(final String message) {
         super(message);
     }

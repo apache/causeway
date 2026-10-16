@@ -122,7 +122,7 @@ public class _Probe {
 
     // -- INDENTING
 
-    private int currentIndent = 0;
+    private final int currentIndent = 0;
 
     // -- PRINTING
 
@@ -201,7 +201,7 @@ public class _Probe {
 
     public static String currentThreadId() {
         var ct = Thread.currentThread();
-        return String.format("Thread[%s (%d)])", ct.getName(), ct.getId());
+        return String.format("Thread[%s (%d)])", ct.getName(), ct.threadId());
     }
 
     public static void sysOut(final String format, final Object... args) {

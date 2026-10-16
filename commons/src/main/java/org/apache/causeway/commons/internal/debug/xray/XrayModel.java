@@ -100,9 +100,9 @@ public interface XrayModel {
         public static ThreadMemento fromCurrentThread() {
             var ct = Thread.currentThread();
             return new ThreadMemento(
-                    String.format("thread-%d-%s", ct.getId(), ct.getName()),
-                    String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
-                    String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
+                    String.format("thread-%d-%s", ct.threadId(), ct.getName()),
+                    String.format("Thread-%d [%s]", ct.threadId(), ct.getName()),
+                    String.format("Thread-%d\n%s", ct.threadId(), ct.getName()));
         }
 
     }

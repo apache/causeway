@@ -99,7 +99,7 @@ public record CausewayObservationIntegration(ObservationRegistry observationRegi
 
     public static KeyValue currentThreadId() {
         var ct = Thread.currentThread();
-        return KeyValue.of("causeway.threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
+        return KeyValue.of("causeway.threadId", "%d [%s]".formatted(ct.threadId(), ct.getName()));
     }
 
     public static KeyValue moduleName(final String moduleName) {
@@ -109,7 +109,7 @@ public record CausewayObservationIntegration(ObservationRegistry observationRegi
             ? moduleName.substring(9)
             : moduleName);
     }
-    
+
     /**
      * UTC ISO format
      */

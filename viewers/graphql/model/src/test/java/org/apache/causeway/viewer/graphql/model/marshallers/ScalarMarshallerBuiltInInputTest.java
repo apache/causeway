@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.model.marshallers;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -28,10 +29,10 @@ import java.time.ZoneId;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.causeway.applib.value.Password;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import org.apache.causeway.applib.value.Password;
 
 class ScalarMarshallerBuiltInInputTest {
 
@@ -84,7 +85,7 @@ class ScalarMarshallerBuiltInInputTest {
     void urlInputIsTypedAndRejectsMalformedValues() throws Exception {
         final URL value = new ScalarMarshallerUrl(null).unmarshal("https://causeway.apache.org/", URL.class);
 
-        assertThat(value).isEqualTo(new URL("https://causeway.apache.org/"));
+        assertThat(value).isEqualTo(new URI("https://causeway.apache.org/").toURL());
         assertThatThrownBy(() -> new ScalarMarshallerUrl(null).unmarshal("not a URL", URL.class))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Invalid URL value");

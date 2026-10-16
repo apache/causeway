@@ -18,13 +18,20 @@
  */
 package org.apache.causeway.persistence.jpa.integration.entity;
 
-import static org.mockito.Mockito.*;
-
 import java.util.Map;
 import java.util.stream.Stream;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.springframework.data.jpa.repository.JpaContext;
 
@@ -43,7 +50,8 @@ public final class JpaObservationFixture {
         @Override public String toString() { return "sentinel-object-title"; }
     }
 
-    public static EntityFacet create(CausewayObservationIntegration integration, Runnable jdbc) {
+    @SuppressWarnings("unchecked")
+    public static EntityFacet create(final CausewayObservationIntegration integration, final Runnable jdbc) {
         var em = mock(EntityManager.class, RETURNS_DEEP_STUBS);
         var jpa = mock(JpaContext.class);
         when(jpa.getEntityManagerByManagedType(Entity.class)).thenReturn(em);

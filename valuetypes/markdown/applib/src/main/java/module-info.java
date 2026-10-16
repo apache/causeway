@@ -24,13 +24,13 @@ module org.apache.causeway.valuetypes.markdown.applib {
     requires static lombok;
 
     requires flexmark;
-    requires flexmark.ext.gfm.strikethrough;
-    requires flexmark.ext.tables;
-    requires flexmark.util.ast;
-    requires flexmark.util.builder;
-    requires flexmark.util.data;
-    requires flexmark.util.misc;
-    requires flexmark.util.sequence;
+    requires flexmark.ext.gfm.strikethrough; //unstable automatic module name
+    requires flexmark.ext.tables; //unstable automatic module name
+    requires flexmark.util.ast; //unstable automatic module name
+    requires flexmark.util.builder; //unstable automatic module name
+    requires flexmark.util.data; //unstable automatic module name
+    requires flexmark.util.misc; //unstable automatic module name
+    requires flexmark.util.sequence; //unstable automatic module name
     requires jakarta.inject;
     requires jakarta.xml.bind;
 

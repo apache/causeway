@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.graphql.model.types;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -32,11 +34,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.function.Function;
 
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.value.Markup;
-import org.apache.causeway.applib.value.Password;
-
 import graphql.GraphQLContext;
 import graphql.execution.CoercedVariables;
 import graphql.language.StringValue;
@@ -46,6 +43,12 @@ import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
+
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.value.Markup;
+import org.apache.causeway.applib.value.Password;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -181,21 +184,19 @@ public class GraphQLValueScalars {
 
     private static URL parseUrl(final String value) {
         try {
-            var url = new URL(value);
-            if (url.getProtocol() == null || url.getHost() == null || url.getHost().isBlank()) {
+            var url = new URI(value).toURL();
+            if (url.getProtocol() == null || url.getHost() == null || url.getHost().isBlank())
                 throw new IllegalArgumentException("URL must be absolute");
-            }
             return url;
-        } catch (MalformedURLException ex) {
+        } catch (MalformedURLException | URISyntaxException ex) {
             throw new IllegalArgumentException("Invalid URL", ex);
         }
     }
 
     private static Time parseSqlTime(final String value) {
         var localTime = java.time.LocalTime.parse(value, DateTimeFormatter.ISO_LOCAL_TIME);
-        if (localTime.getNano() != 0) {
+        if (localTime.getNano() != 0)
             throw new IllegalArgumentException("SqlTime supports second precision");
-        }
         return Time.valueOf(localTime);
     }
 
@@ -218,9 +219,8 @@ public class GraphQLValueScalars {
                             final Object dataFetcherResult,
                             final GraphQLContext graphQLContext,
                             final Locale locale) {
-                        if (!javaType.isInstance(dataFetcherResult)) {
+                        if (!javaType.isInstance(dataFetcherResult))
                             throw new CoercingSerializeException("Expected a " + name + " compatible Java value");
-                        }
                         try {
                             return formatter.apply(javaType.cast(dataFetcherResult));
                         } catch (RuntimeException ex) {
@@ -233,9 +233,8 @@ public class GraphQLValueScalars {
                             final Object input,
                             final GraphQLContext graphQLContext,
                             final Locale locale) {
-                        if (!(input instanceof String text)) {
+                        if (!(input instanceof String text))
                             throw new CoercingParseValueException("Expected " + name + " input as a string");
-                        }
                         return parseString(text, parser, name, CoercingParseValueException::new);
                     }
 
@@ -245,9 +244,8 @@ public class GraphQLValueScalars {
                             final CoercedVariables variables,
                             final GraphQLContext graphQLContext,
                             final Locale locale) {
-                        if (!(input instanceof StringValue stringValue)) {
+                        if (!(input instanceof StringValue stringValue))
                             throw new CoercingParseLiteralException("Expected " + name + " input as a string literal");
-                        }
                         return parseString(stringValue.getValue(), parser, name, CoercingParseLiteralException::new);
                     }
                 })
@@ -268,9 +266,8 @@ public class GraphQLValueScalars {
                             final Object dataFetcherResult,
                             final GraphQLContext graphQLContext,
                             final Locale locale) {
-                        if (!javaType.isInstance(dataFetcherResult)) {
+                        if (!javaType.isInstance(dataFetcherResult))
                             throw new CoercingSerializeException("Expected a " + name + " compatible Java value");
-                        }
                         return formatter.apply(javaType.cast(dataFetcherResult));
                     }
 
