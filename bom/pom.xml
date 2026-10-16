@@ -74,7 +74,9 @@ identified
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.22.0</commons-io.version>
 
-        <cucumber.version>7.34.8</cucumber.version>
+        <cucumber.version>8.0.4</cucumber.version>
+        <!--        fixes convergence issue in cucumber 8.0.4; remove when no longer needed-->
+	    <cucumber-messages-ndjson.version>0.5.2</cucumber-messages-ndjson.version>
 
         <datasource-proxy-spring-boot-starter.version>2.0.1</datasource-proxy-spring-boot-starter.version>
 
@@ -1716,6 +1718,13 @@ identified
                 <artifactId>cucumber-junit-platform-engine</artifactId>
                 <version>${cucumber.version}</version>
             </dependency>
+<!--        fixes convergence issue in cucumber 8.0.4; remove when no longer needed-->
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>messages-ndjson</artifactId>
+                <version>${cucumber-messages-ndjson.version}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
