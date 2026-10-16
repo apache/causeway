@@ -58,21 +58,20 @@ public final class InteractionLayerStack {
             observation.highCardinalityKeyValue("causeway.interaction.id",
                     newLayer.interaction().getInteractionId().toString());
         }
-        try (var closure = new ObservationClosure(observation)) {
-            newLayer.addOnCloseListener(() -> {
-                try {
-                    // Replay can replace the command's opening-time identifier. Bind to
-                    // this root, not whichever nested layer happens to be current.
-                    if (parent == null) {
-                        observation.highCardinalityKeyValue("causeway.interaction.id",
-                                newLayer.interaction().getInteractionId().toString());
-                    }
-                } finally {
-                    closure.close();
+        var closure = new ObservationClosure(observation);
+        newLayer.addOnCloseListener(() -> {
+            try {
+                // Replay can replace the command's opening-time identifier. Bind to
+                // this root, not whichever nested layer happens to be current.
+                if (parent == null) {
+                    observation.highCardinalityKeyValue("causeway.interaction.id",
+                            newLayer.interaction().getInteractionId().toString());
                 }
-            });
-            newLayer.interaction().putAttribute(ObservationClosure.class, closure);
-        }
+            } finally {
+                closure.close();
+            }
+        });
+        newLayer.interaction().putAttribute(ObservationClosure.class, closure);
         set(newLayer);
         return newLayer;
     }
