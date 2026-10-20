@@ -21,8 +21,31 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
+
+import jakarta.inject.Inject;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.IPageFactory;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.markup.head.ResourceAggregator;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.settings.RequestCycleSettings;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
@@ -50,30 +73,7 @@ import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
 import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStartHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStopHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
-import org.apache.wicket.Application;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.IPageFactory;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
-import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.markup.head.ResourceAggregator;
-import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.RequestCycleSettings;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -252,33 +252,10 @@ implements
     protected void configureSecurity(final CausewayConfiguration configuration) {
         // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
         getCspSettings().blocking().disabled();
-        getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
 
         // TODO CAUSEWAY-987 Either make the API better (no direct access to the map) or use DB records
         final int maxEntries = 1000;
         setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.ofDays(1)));
-    }
-
-    /**
-     * protected visibility to allow ad-hoc overriding of some other authentication strategy.
-     */
-    protected IAuthenticationStrategy newAuthenticationStrategy(final CausewayConfiguration configuration) {
-        var rememberMe = configuration.viewer().wicket().rememberMe();
-        var cookieKey = rememberMe.cookieKey();
-        var encryptionKey = rememberMe.encryptionKey().orElse(defaultEncryptionKey());
-        return new DefaultAuthenticationStrategy(cookieKey, _CryptFactory.sunJceCrypt(encryptionKey));
-    }
-
-    /**
-     * As called by {@link #newAuthenticationStrategy(CausewayConfiguration)}.
-     * If an encryption key for the 'rememberMe' cookie hasn't been configured,
-     * then use a different encryption key for the 'rememberMe'
-     * cookie each time the app is restarted.
-     */
-    protected String defaultEncryptionKey() {
-        return systemEnvironment.isPrototyping()
-                ? _CryptFactory.FIXED_SALT_FOR_PROTOTYPING
-                : UUID.randomUUID().toString();
     }
 
     // //////////////////////////////////////

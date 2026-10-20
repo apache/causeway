@@ -99,7 +99,6 @@ public class ObjectIconAndTitlePanelFactory extends ComponentFactoryAbstract {
     /**
      * refactoring hint: go through proper ComponentFactory channels instead
      */
-    @Deprecated
     public static Component entityIconAndTitlePanel(
             final String componentId,
             final ObjectAdapterModel objectAdapterModel) {

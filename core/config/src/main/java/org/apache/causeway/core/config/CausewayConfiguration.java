@@ -90,6 +90,8 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
@@ -2648,10 +2650,9 @@ public record CausewayConfiguration(
                     int maxWindowSize) {
 
                 public Collections {
-                    if (defaultWindowSize > maxWindowSize) {
-                        throw new IllegalArgumentException(
+                    if (defaultWindowSize > maxWindowSize)
+						throw new IllegalArgumentException(
                                 "causeway.viewer.graphql.collections.default-window-size must not exceed max-window-size");
-                    }
                 }
             }
 
@@ -2673,10 +2674,9 @@ public record CausewayConfiguration(
                     int maxWindowSize) {
 
                 public Autocomplete {
-                    if (defaultWindowSize > maxWindowSize) {
-                        throw new IllegalArgumentException(
+                    if (defaultWindowSize > maxWindowSize)
+						throw new IllegalArgumentException(
                                 "causeway.viewer.graphql.autocomplete.default-window-size must not exceed max-window-size");
-                    }
                 }
             }
 
@@ -3390,43 +3390,20 @@ public record CausewayConfiguration(
                  * Whether the sign-in page should have a 'remember me' link (the default), or if it should
                  * be suppressed.
                  *
-                 * <p>
-                 *     If 'remember me' is available and checked, then the viewer will allow users to login
-                 *     based on encrypted credentials stored in a cookie.  An {@link #getEncryptionKey() encryption key}
-                 *     can optionally be specified.
-                 *
+                 * <p> If 'remember me' is available and checked, then the viewer will remember 'username' and 'timezone'
+                 * for the login page using cookies. This does not include any secrets nor requires encryption.
                  */
                 @DefaultValue("false")
                 boolean suppress,
 
                 /**
-                 * If the 'remember me' feature is available, specifies the key to hold the encrypted
-                 * credentials in the cookie.
+                 * If the 'remember me' feature is available, specifies the cookie name prefix that is used for cookies to store timezone and username data.
                  */
                 @DefaultValue("causewayWicketRememberMe")
                 String cookieKey,
-                /**
-                 * If the 'remember me' feature is available, optionally specifies an encryption key
-                 * (a complex string acting as salt to the encryption algorithm) for computing the encrypted
-                 * credentials.
-                 *
-                 * <p>
-                 *     If not set, then (in production mode) the Wicket viewer will compute a random key each time it
-                 *     is started.  This will mean that any credentials stored between sessions will become invalid.
-                 *
-                 *
-                 * <p>
-                 *     Conversely, if set then (in production mode) then the same salt will be used each time the app
-                 *     is started, meaning that cached credentials can continue to be used across restarts.
-                 *
-                 *
-                 * <p>
-                 *     In prototype mode this setting is effectively ignored, because the same key will always be
-                 *     provided (either as set, or a fixed literal otherwise).
-                 *
-                 */
-                @DefaultValue
-                Optional<String> encryptionKey) {
+
+                @DefaultValue("Remember 'username' and 'timezone' for the next login.")
+                String description) {
 
             }
 

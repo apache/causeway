@@ -47,7 +47,7 @@ implements ActionPrompt {
     public ModalDialog(final String id, final IModel<T> model) {
         super(id, model);
         setFadeIn(false);
-        setUseKeyboard(true);
+        setCloseOnEscapeKey(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
         Wkt.containerAdd(this, getContentId()); // initial empty content

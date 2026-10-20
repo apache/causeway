@@ -27,6 +27,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
@@ -40,7 +41,6 @@ import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionC
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
-import org.jspecify.annotations.NonNull;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -112,14 +112,6 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
             clearOriginalDestination();
         }
         super.onSignInSucceeded();
-    }
-
-    @Override
-    protected void onSignInRemembered() {
-        if(isClearOriginalDestination) {
-            clearOriginalDestination();
-        }
-        super.onSignInRemembered();
     }
 
     @Override
