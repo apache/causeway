@@ -23,11 +23,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionService;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
+import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
+import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
@@ -37,15 +49,7 @@ import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.security.authentication.standard.Registrar;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.Getter;
 
 @Service
@@ -63,19 +67,19 @@ public class AuthenticationManager {
     private final @NonNull RandomCodeGenerator randomCodeGenerator;
     private final @NonNull Can<Registrar> registrars;
     private final @NonNull List<UserMementoRefiner> userMementoRefiners;
-    private final @NonNull Optional<UserCurrentSessionTimeZoneHolder> userCurrentSessionTimeZoneHolder;
+    private final @NonNull UserCurrentSessionTimeZoneHandler timeZoneHandler;
 
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
             final InteractionService interactionService,
             final RandomCodeGenerator randomCodeGenerator,
-            final Optional<UserCurrentSessionTimeZoneHolder> userCurrentSessionTimeZoneHolder,
+            final Optional<KeyValueSessionStore> keyValueSessionStore,
             final List<UserMementoRefiner> userMementoRefiners) {
         this.interactionService = interactionService;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
-        this.userCurrentSessionTimeZoneHolder = userCurrentSessionTimeZoneHolder;
+        this.timeZoneHandler = new UserCurrentSessionTimeZoneHandler(keyValueSessionStore);
         this.userMementoRefiners = userMementoRefiners;
         if (this.authenticators.isEmpty())
 			throw new NoAuthenticatorException("No authenticators specified");
@@ -109,8 +113,7 @@ public class AuthenticationManager {
                 if (interactionContext != null) {
 
                     var interactionContextWithTimeZone = interactionContext
-                            .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder
-                                    .flatMap(UserCurrentSessionTimeZoneHolder::getUserTimeZone));
+                            .withTimeZoneIfAny(timeZoneHandler.getUserTimeZone());
 
                     var userRefined = UserMementoRefiner.refine(
                             interactionContext.getUser(),
