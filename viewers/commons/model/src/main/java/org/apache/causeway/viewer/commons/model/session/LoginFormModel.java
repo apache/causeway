@@ -21,10 +21,6 @@ package org.apache.causeway.viewer.commons.model.session;
 import java.io.Serializable;
 import java.time.ZoneId;
 
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.core.security.authentication.AuthenticationRequest;
-import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,11 +43,5 @@ public class LoginFormModel implements Serializable {
 
     @Getter @Setter
     private ZoneId timezone;
-
-    public AuthenticationRequest toAuthenticationRequest() {
-    	var authenticationRequest = new AuthenticationRequestPassword(username, password);
-        authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-    	return authenticationRequest;
-    }
 
 }

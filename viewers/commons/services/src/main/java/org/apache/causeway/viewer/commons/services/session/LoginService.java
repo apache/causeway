@@ -31,11 +31,13 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
+import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.value.semantics.TimeZoneChoiceProvider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Signin;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Signin.RememberMe;
+import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.commons.model.session.LoginFormModel;
 
@@ -70,7 +72,8 @@ public record LoginService(
 	}
 
 	public boolean login(final LoginFormModel loginFormModel, final CookieHandler cookieHandler, @Nullable final LoginSuccessCallback loginSuccessListener) {
-		var authenticationRequest = loginFormModel.toAuthenticationRequest();
+    	var authenticationRequest = new AuthenticationRequestPassword(loginFormModel.getUsername(), loginFormModel.getPassword());
+        authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
 		var interactionContext = authenticationManager.authenticate(authenticationRequest);
 		var success = interactionContext!=null;
 		if(!success)
