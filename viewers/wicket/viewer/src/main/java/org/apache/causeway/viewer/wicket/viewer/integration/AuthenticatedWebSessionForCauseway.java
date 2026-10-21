@@ -164,6 +164,8 @@ implements BreadcrumbModelProvider,
     	signIn(true);
 		changeSessionId();
 		bind();
+		Optional.ofNullable(interactionContext.getUser().languageLocale())
+			.ifPresent(this::setLocale);
     	log(SessionSubscriber.Type.LOGIN, authenticationRequest.getName(), null);
     }
 
