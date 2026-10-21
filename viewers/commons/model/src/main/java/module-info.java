@@ -21,6 +21,7 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model.about;
     exports org.apache.causeway.viewer.commons.model.action;
     exports org.apache.causeway.viewer.commons.model.attrib;
+    exports org.apache.causeway.viewer.commons.model.session;
     exports org.apache.causeway.viewer.commons.model.decorators;
     exports org.apache.causeway.viewer.commons.model.error;
     exports org.apache.causeway.viewer.commons.model.components;
@@ -40,4 +41,5 @@ module org.apache.causeway.viewer.commons.model {
     requires org.apache.causeway.core.runtime;
     requires webjars.locator.core; //unstable automatic module name
 	requires io.github.classgraph;
+	requires org.apache.causeway.security.api;
 }

@@ -22,6 +22,9 @@ import java.time.ZoneId;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 
 /**
  * Stores the user's current {@link ZoneId} with session scope.
@@ -30,13 +33,29 @@ import org.jspecify.annotations.NonNull;
  *
  * @since 2.0 {@index}
  */
-public interface UserCurrentSessionTimeZoneHolder {
+public record UserCurrentSessionTimeZoneHandler(
+	    KeyValueSessionStore keyValueSessionStore) {
 
-    /**
-     * Sets the user's current {@link ZoneId}
-     * within the context of the current session.
-     */
-    void setUserTimeZone(@NonNull ZoneId zoneId);
+	private static final String SESSION_KEY_ZONE_ID =
+			UserCurrentSessionTimeZoneHandler.class.getName() + "#zoneId";
+
+	public UserCurrentSessionTimeZoneHandler {
+		keyValueSessionStore = keyValueSessionStore!=null
+				? keyValueSessionStore
+				: KeyValueSessionStore.NOOP;
+	}
+
+	public UserCurrentSessionTimeZoneHandler(final @Nullable Optional<KeyValueSessionStore> keyValueSessionStoreOpt) {
+		this(keyValueSessionStoreOpt!=null ? keyValueSessionStoreOpt.orElse(null) : null);
+	}
+
+	/**
+	 * Sets the user's current {@link ZoneId}
+	 * within the context of the current session.
+	 */
+    public void setUserTimeZone(final @NonNull ZoneId zoneId) {
+        keyValueSessionStore.put(SESSION_KEY_ZONE_ID, zoneId);
+    }
 
     /**
      * Optionally returns the user's current {@link ZoneId},
@@ -47,12 +66,16 @@ public interface UserCurrentSessionTimeZoneHolder {
      * instead return {@link Optional#empty()},
      * if there is no specific time-zone information available
      */
-    Optional<ZoneId> getUserTimeZone();
+    public Optional<ZoneId> getUserTimeZone() {
+        return keyValueSessionStore.lookupAs(SESSION_KEY_ZONE_ID, ZoneId.class);
+    }
 
     /**
      * Clears the user's current {@link ZoneId}
      * within the context of the current session.
      */
-    void clearUserTimeZone();
+    public void clearUserTimeZone() {
+        keyValueSessionStore.clear(SESSION_KEY_ZONE_ID);
+    }
 
 }

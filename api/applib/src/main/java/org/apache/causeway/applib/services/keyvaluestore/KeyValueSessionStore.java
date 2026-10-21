@@ -21,9 +21,8 @@ package org.apache.causeway.applib.services.keyvaluestore;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Defines a mechanism for viewers to store arbitrary key value pairs
@@ -34,8 +33,16 @@ import org.jspecify.annotations.NonNull;
  *
  * @since 2.0 {@index}
  */
-@SuppressWarnings("javadoc")
 public interface KeyValueSessionStore {
+
+	public static KeyValueSessionStore NOOP = new KeyValueSessionStore() {
+		@Override public void put(@NonNull final String key, @Nullable final Serializable value) { }
+		@Override public <T extends Serializable> Optional<T> lookupAs(@NonNull final String key, @NonNull final Class<T> requiredType) {
+			return Optional.empty();
+		}
+		@Override public boolean isSessionAvailable() { return true; }
+		@Override public void clear(@NonNull final String key) { }
+	};
 
     /**
      * Whether a session is available, for storing/retrieving key/value pairs.

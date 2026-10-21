@@ -41,8 +41,10 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+import org.apache.causeway.viewer.commons.services.session.LoginSuccessCallback;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -59,8 +61,9 @@ import lombok.extern.slf4j.Slf4j;
  * associated with the same session).
  */
 @Slf4j
-public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession implements BreadcrumbModelProvider,
-        BookmarkedPagesModelProvider, HasMetaModelContext, HasAmendableInteractionContext {
+public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession
+implements BreadcrumbModelProvider,
+        BookmarkedPagesModelProvider, HasMetaModelContext, HasAmendableInteractionContext, LoginSuccessCallback {
 
     private static final long serialVersionUID = 1L;
 
@@ -118,7 +121,7 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
     }
 
     @Getter
-    private UUID sessionGuid;
+    private final UUID sessionGuid;
     private String cachedSessionId;
 
     /**
@@ -140,7 +143,7 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
         sessionGuid = UUID.randomUUID();
     }
 
-    @Override
+    @Override @Deprecated //TODO remove this code path, as we want logins handled by the viewer agnostic LoginService
     public synchronized boolean authenticate(final String username, final String password) {
         var authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
@@ -151,6 +154,17 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
             return true;
         } else
             return false;
+    }
+
+    @Override
+    public void onLoginSuccess(final AuthenticationRequest authenticationRequest, final InteractionContext interactionContext) {
+    	if(interactionContext == null)
+    		return;
+    	setInteractionContext(interactionContext);
+    	signIn(true);
+		changeSessionId();
+		bind();
+    	log(SessionSubscriber.Type.LOGIN, authenticationRequest.getName(), null);
     }
 
     @Override
@@ -168,7 +182,6 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
                 .closeSession(Optional.ofNullable(interactionContext).map(InteractionContext::getUser).orElse(null));
 
         super.invalidateNow();
-
     }
 
     @Override

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.dom.mixins;
 
+import java.util.Optional;
+
 import jakarta.inject.Inject;
 
 import org.jspecify.annotations.Nullable;
@@ -27,7 +29,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
+import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
+import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
@@ -50,10 +53,10 @@ public class ApplicationUser_timeZone {
 
     private final ApplicationUser mixee;
 
-    @Inject private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
+    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore;
 
     @MemberSupport @Nullable public String prop() {
-        return userCurrentSessionTimeZoneHolder.getUserTimeZone()
+        return new UserCurrentSessionTimeZoneHandler(keyValueSessionStore).getUserTimeZone()
             .map(_Temporals::formatZoneId)
             .orElse(null);
     }
