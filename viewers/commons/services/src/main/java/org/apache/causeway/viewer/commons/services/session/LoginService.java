@@ -71,7 +71,7 @@ public record LoginService(
 				.orElse(null));
 	}
 
-	public boolean login(final LoginFormModel loginFormModel, final CookieHandler cookieHandler, @Nullable final LoginSuccessCallback loginSuccessListener) {
+	public boolean login(final LoginFormModel loginFormModel, final CookieHandler cookieHandler, @Nullable final LoginSuccessCallback onLoginSuccess) {
     	var authenticationRequest = new AuthenticationRequestPassword(loginFormModel.getUsername(), loginFormModel.getPassword());
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
 		var interactionContext = authenticationManager.authenticate(authenticationRequest);
@@ -97,7 +97,9 @@ public record LoginService(
 		} else {
 			new UserCurrentSessionTimeZoneHandler(keyValueSessionStoreOpt).clearUserTimeZone();
 		}
-		loginSuccessListener.onLoginSuccess(authenticationRequest, interactionContext);
+		if(onLoginSuccess!=null) {
+			onLoginSuccess.onLoginSuccess(authenticationRequest, interactionContext);
+		}
 		return success;
 	}
 
