@@ -123,12 +123,12 @@ causeway:
 
 == Current action context (CAUSEWAY-4058)
 
-Applications can inspect the currently executing framework action through `InteractionProvider.currentActionInvocation()` and match its receiver, invoked identifier and rule-checking status with `isCurrentActionInvocation(...)`.
+Applications can inspect the currently executing framework action through `InteractionProvider.currentActionInvocation()` and match its receiver, 
+invoked identifier and rule-checking status with `isCurrentActionInvocation(...)`.
 
-Mixin invocations expose their effective action (or property or collection) identifier rather than the identifier of the the underlying mixin action itself.
+Mixin invocations expose their effective action (or property or collection) identifier rather than the identifier of the underlying mixin action itself.
 
 See xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider] for examples and direct Java-call limitations.
-
 
 == Immutable Configuration
 
@@ -140,6 +140,14 @@ in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 
 `ErrorDetails` as used by the `ErrorReportingService` has been converted from a class to a record.
 (In effect all accessors have been renamed, stripping any `get` or `is` prefixes)
+
+== Wicket Viewer
+
+_Apache Wicket_ removed support for _Remember Me_ due to security concerns. https://wicket.apache.org/news/2026/08/30/wicket-10.11.0-released.html
+
+We changed the meaning of the _Remember Me_ checkbox for the _Wicket Viewer_, that is, 
+instead of storing user credentials we only store the 'username' and let the browser handle passwords. 
+This does no longer require encrypted cookies.    
 
 == Object Icon Support (Experimental)
 
