@@ -84,6 +84,8 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.applib.services.userreg.EmailNotificationService;
+import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.functional.Try;
@@ -2255,7 +2257,9 @@ public record CausewayConfiguration(
              * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
              */
             @DefaultValue
-            List<Credit> credit) {
+            List<Credit> credit,
+            @DefaultValue
+            Signin signin) {
 
             public record Application(
                 /**
@@ -2353,6 +2357,59 @@ public record CausewayConfiguration(
                  */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
+
+            public record Signin(
+
+                    /**
+                     * Whether to suppress the sign-up link on the sign-in page.
+                     *
+                     * <p>Although this is disabled by default (in other words the sign-up link is not suppressed), note that
+                     * in addition the application must provide an implementation of the
+                     * {@link UserRegistrationService} as well as a
+                     * configured {@link EmailNotificationService} (same conditions
+                     * as for the {@link #isSuppressPasswordReset()} password reset link).
+                     */
+                    @DefaultValue("false")
+                    boolean suppressSignUp,
+
+                    /**
+                     * Whether to suppress the password reset link on the sign-in page.
+                     *
+                     * <p>Although this is disabled by default (in other words the 'reset password' link is not suppressed),
+                     * note that in addition the application must provide an implementation of the
+                     * {@link UserRegistrationService} as well as a
+                     * configured {@link EmailNotificationService} (same conditions
+                     * as for the {@link #isSuppressSignUp()} sign-up link).
+                     */
+                    @DefaultValue("false")
+                    boolean suppressPasswordReset,
+
+                    @DefaultValue
+                    RememberMe rememberMe
+            		) {
+
+                public record RememberMe(
+                        /**
+                         * Whether the sign-in page should have a 'remember me' link (the default), or if it should
+                         * be suppressed.
+                         *
+                         * <p> If 'remember me' is available and checked, then the viewer will remember 'username' and 'timezone'
+                         * for the login page using cookies. This does not include any secrets nor requires encryption.
+                         */
+                        @DefaultValue("false")
+                        boolean suppress,
+
+                        /**
+                         * If the 'remember me' feature is available, specifies the cookie name prefix that is used for cookies to store timezone and username data.
+                         */
+                        @DefaultValue("causewayRememberMe")
+                        String cookieKey,
+
+                        @DefaultValue("Remember 'username' and 'timezone' for the next login.")
+                        String description) {
+                }
+            }
+
         }
 
         public record Graphql(
@@ -3140,30 +3197,6 @@ public record CausewayConfiguration(
             boolean stripWicketTags,
 
             /**
-             * Whether to suppress the sign-up link on the sign-in page.
-             *
-             * <p>Although this is disabled by default (in other words the sign-up link is not suppressed), note that
-             * in addition the application must provide an implementation of the
-             * {@link UserRegistrationService} as well as a
-             * configured {@link EmailNotificationService} (same conditions
-             * as for the {@link #isSuppressPasswordReset()} password reset link).
-             */
-            @DefaultValue("false")
-            boolean suppressSignUp,
-
-            /**
-             * Whether to suppress the password reset link on the sign-in page.
-             *
-             * <p>Although this is disabled by default (in other words the 'reset password' link is not suppressed),
-             * note that in addition the application must provide an implementation of the
-             * {@link UserRegistrationService} as well as a
-             * configured {@link EmailNotificationService} (same conditions
-             * as for the {@link #isSuppressSignUp()} sign-up link).
-             */
-            @DefaultValue("false")
-            boolean suppressPasswordReset,
-
-            /**
              * How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
              */
             @DefaultValue("TEXT")
@@ -3212,8 +3245,6 @@ public record CausewayConfiguration(
             DevelopmentUtilities developmentUtilities,
             @DefaultValue
             FileUpload fileUpload,
-            @DefaultValue
-            RememberMe rememberMe,
             @DefaultValue
             Themes themes,
             @DefaultValue
@@ -3381,28 +3412,6 @@ public record CausewayConfiguration(
         			 */
             		@DefaultValue("true")
         			boolean showPreview) {
-            }
-
-            public record RememberMe(
-                /**
-                 * Whether the sign-in page should have a 'remember me' link (the default), or if it should
-                 * be suppressed.
-                 *
-                 * <p> If 'remember me' is available and checked, then the viewer will remember 'username' and 'timezone'
-                 * for the login page using cookies. This does not include any secrets nor requires encryption.
-                 */
-                @DefaultValue("false")
-                boolean suppress,
-
-                /**
-                 * If the 'remember me' feature is available, specifies the cookie name prefix that is used for cookies to store timezone and username data.
-                 */
-                @DefaultValue("causewayWicketRememberMe")
-                String cookieKey,
-
-                @DefaultValue("Remember 'username' and 'timezone' for the next login.")
-                String description) {
-
             }
 
             public record Themes(

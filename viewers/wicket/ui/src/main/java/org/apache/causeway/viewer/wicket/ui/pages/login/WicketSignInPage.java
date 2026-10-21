@@ -38,6 +38,8 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    @Inject private transient PageNavigationService pageNavigationService;
+
     public WicketSignInPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
@@ -54,7 +56,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
-        add(createSignInPanel());
+        add(new CausewaySignInPanel("signInPanel"));
 
         SuccessFeedbackCookieManager.drainSuccessFeedback(this::success);
     }
@@ -66,22 +68,4 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
                 SignInPanelAbstract.getJsForTimezoneSelectDefault()));
     }
 
-    protected CausewaySignInPanel createSignInPanel() {
-
-        final boolean rememberMeSuppress = getWicketViewerSettings().rememberMe().suppress();
-        final boolean suppressRememberMe = rememberMeSuppress;
-
-        final boolean suppressSignUpLink = getWicketViewerSettings().suppressSignUp();
-        final boolean suppressPasswordResetLink = getWicketViewerSettings().suppressPasswordReset();
-        final boolean clearOriginalDestination = getWicketViewerSettings().clearOriginalDestination();
-        final boolean rememberMe = !suppressRememberMe;
-        final boolean signUpLink = !suppressSignUpLink;
-        final boolean passwordReset = !suppressPasswordResetLink;
-        final boolean continueToOriginalDestination = !clearOriginalDestination;
-        var signInPanel =
-                new CausewaySignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
-        return signInPanel;
-    }
-
-    @Inject private PageNavigationService pageNavigationService;
 }

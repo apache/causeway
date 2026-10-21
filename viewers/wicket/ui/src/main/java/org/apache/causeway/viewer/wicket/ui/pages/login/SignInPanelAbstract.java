@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.value.semantics.TimeZoneChoiceProvider;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.RememberMe;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Signin.RememberMe;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -64,9 +64,6 @@ implements HasMetaModelContext {
 
     private static final String SIGN_IN_FORM = "signInForm";
     private static final String TIME_ZONE_SELECT = "timezone-select";
-
-    /** True if the panel should display a remember-me checkbox */
-    private boolean includeRememberMe = true;
 
     /**
      * True if the username and timezone should be remembered via form persistence (cookies).
@@ -94,10 +91,8 @@ implements HasMetaModelContext {
      *            True if form should include a remember-me checkbox
      * @see org.apache.wicket.Component#Component(String)
      */
-    protected SignInPanelAbstract(final String id, final boolean includeRememberMe) {
+    protected SignInPanelAbstract(final String id) {
         super(id);
-
-        this.includeRememberMe = includeRememberMe;
 
         // Create feedback panel and add to page
         add(new FeedbackPanel("feedback"));
@@ -214,13 +209,16 @@ implements HasMetaModelContext {
 
             // Add rememberMe checkbox
             rememberMeContainer.add(new CheckBox("rememberMe"));
+
+            var signinConf = getConfiguration().viewer().common().signin();
+
             rememberMeContainer.add(new Label("rememberMeDescription",
             		getTranslationService().translate(
             				TranslationContext.named("Login"),
-            				getConfiguration().viewer().wicket().rememberMe().description())));
+            				signinConf.rememberMe().description())));
 
             // Show remember me checkbox?
-            rememberMeContainer.setVisible(includeRememberMe);
+            rememberMeContainer.setVisible(!signinConf.rememberMe().suppress());
         }
 
         /**
@@ -282,7 +280,7 @@ implements HasMetaModelContext {
     }
 
     private UsernameCookie usernameCookie() {
-    	return new UsernameCookie(getConfiguration().viewer().wicket().rememberMe());
+    	return new UsernameCookie(getConfiguration().viewer().common().signin().rememberMe());
     }
 
     // -- TIME ZONE COOKIES
@@ -308,6 +306,6 @@ implements HasMetaModelContext {
     }
 
     private TimezoneCookie timezoneCookie() {
-    	return new TimezoneCookie(getConfiguration().viewer().wicket().rememberMe());
+    	return new TimezoneCookie(getConfiguration().viewer().common().signin().rememberMe());
     }
 }
