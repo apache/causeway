@@ -41,5 +41,4 @@ module org.apache.causeway.viewer.commons.model {
     requires org.apache.causeway.core.runtime;
     requires webjars.locator.core; //unstable automatic module name
 	requires io.github.classgraph;
-	requires org.apache.causeway.security.api;
 }
