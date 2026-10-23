@@ -35,9 +35,9 @@ import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.webapp.confmenu.ConfigurationViewServiceDefault;
 import org.apache.causeway.core.webapp.health.HealthIndicatorUsingHealthCheckService;
-import org.apache.causeway.core.webapp.keyvaluestore.KeyValueStoreUsingHttpSession;
 import org.apache.causeway.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.causeway.core.webapp.modules.templresources.WebModuleTemplateResources;
+import org.apache.causeway.core.webapp.session.SessionManagerDefault;
 import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
 import io.micrometer.common.KeyValues;
@@ -57,7 +57,7 @@ import io.micrometer.common.KeyValues;
         // @Component's
 
         HealthIndicatorUsingHealthCheckService.class,
-        KeyValueStoreUsingHttpSession.class,
+        SessionManagerDefault.class,
 
         // (not annotated)
         CausewayWebAppContextInitializer.class,
@@ -74,7 +74,7 @@ public class CausewayModuleCoreWebapp {
     }
 
     /**
-     * for implementation of {@link KeyValueStoreUsingHttpSession}, using {@link org.springframework.web.context.request.RequestContextHolder}.
+     * for implementation of {@link SessionManagerDefault}, using {@link org.springframework.web.context.request.RequestContextHolder}.
      *
      * @see org.springframework.web.context.request.RequestContextHolder
      * @see <a href="https://stackoverflow.com/a/44830684/56880">https://stackoverflow.com/a/44830684/56880</a>

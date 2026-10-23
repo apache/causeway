@@ -28,6 +28,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
@@ -52,6 +53,7 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtAuditTrailPersistenceJpa.class,
+            SessionManager.InMemory.class,
 
             // entities, eager meta-model introspection
             Counter.class,

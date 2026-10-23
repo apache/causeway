@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.viewer.integration;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.causeway.applib.services.iactn.InteractionService;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
@@ -44,6 +46,8 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.causeway.viewer.commons.model.session.LoginFormModel;
+import org.apache.causeway.viewer.commons.services.session.LoginService;
 
 class AuthenticatedWebSessionForCauseway_Authenticate {
 
@@ -56,6 +60,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
 
     protected AuthenticatedWebSessionForCauseway webSession;
     private MetaModelContext mmc;
+	private LoginService loginService;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -81,6 +86,8 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         // must provide explicit expectation, since Locale is final.
         .when(mockRequest.getLocale())
         .thenReturn(Locale.getDefault());
+
+        this.loginService = new LoginService(mmc.getConfiguration(), authMgr, mmc.getTranslationService(), Optional.empty(), new SessionManager.InMemory(new HashMap<>()));
     }
 
     protected void setupWebSession() {
@@ -91,9 +98,12 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
                 return authMgr;
             }
 
-            @Override
-            public MetaModelContext getMetaModelContext() {
+            @Override public MetaModelContext getMetaModelContext() {
                 return mmc;
+            }
+
+            @Override protected SessionManager sessionManager() {
+            	return sessionManagerRef.orElseSet(loginService::sessionManager);
             }
         };
     }
@@ -117,8 +127,12 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
 
         setupWebSession();
 
+        var form = new LoginFormModel();
+        form.setUsername("jsmith");
+        form.setPassword("secret");
+
         // when
-        boolean authenticated = webSession.authenticate("jsmith", "secret");
+        boolean authenticated = loginService.login(form, null, webSession);
         assertThat(authenticated, is(true));
 
         // then
@@ -140,7 +154,12 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
 
         setupWebSession();
 
-        assertThat(webSession.authenticate("jsmith", "secret"), is(false));
+        var form = new LoginFormModel();
+        form.setUsername("jsmith");
+        form.setPassword("secret");
+
+        boolean authenticated = loginService.login(form, null, webSession);
+        assertThat(authenticated, is(false));
         assertThat(webSession.getInteractionContext(), is(nullValue()));
     }
 

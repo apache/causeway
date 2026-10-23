@@ -35,7 +35,7 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
-import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -55,7 +55,7 @@ import lombok.RequiredArgsConstructor;
  * <p>
  * In addition, if impersonation has been invoked through the
  * {@link ImpersonateMenu}, then this service will report the impersonated user,
- * with the companion {@link KeyValueSessionStore} taking responsibilty for
+ * with the companion {@link SessionManager} taking responsibilty for
  * remembering the impersonated user over multiple (http) requests, eg using an
  * http session. It's important to note that under these circumstances the user
  * reported by this service (the &quot;effective&quot; user) will <i>not</i> be
@@ -85,11 +85,9 @@ public class UserService {
      */
     public static final String NOBODY = "__causeway_nobody";
 
-    private static final String SESSION_KEY_IMPERSONATED_USER = UserService.class.getName() + "#sudo";
-
     private final Provider<InteractionProvider> interactionProviderProvider;
-    
-    private final Optional<KeyValueSessionStore> keyValueSessionStore;
+
+    private final SessionManager sessionManager;
 
     /**
      * Returns the details about the current user, either the &quot;effective&quot;
@@ -165,7 +163,7 @@ public class UserService {
      * @see #stopImpersonating()
      */
     public boolean isImpersonating() {
-        return lookupSudoUser().isPresent();
+        return lookupImpersonatedUser().isPresent();
     }
 
     /**
@@ -187,9 +185,7 @@ public class UserService {
      *         request.
      */
     public boolean supportsImpersonation() {
-        return keyValueSessionStore
-            .map(KeyValueSessionStore::isSessionAvailable)
-            .orElse(false);
+        return sessionManager.isSessionAvailable();
     }
 
     /**
@@ -218,9 +214,10 @@ public class UserService {
             final String userName,
             final List<String> roles,
             final String multiTenancyToken) {
-        setSudoUser(UserMemento.ofNameAndRoleNames(userName, roles)
-                .withImpersonating(true)
-                .withMultiTenancyToken(multiTenancyToken));
+    	sessionManager.put(SessionManager.USER_IMPERSONATION,
+    			UserMemento.ofNameAndRoleNames(userName, roles)
+	                .withImpersonating(true)
+	                .withMultiTenancyToken(multiTenancyToken));
     }
 
     /**
@@ -229,7 +226,7 @@ public class UserService {
      * was made within the current HTTP session.
      */
     public Optional<UserMemento> lookupImpersonatedUser() {
-        return lookupSudoUser();
+        return sessionManager.lookup(SessionManager.USER_IMPERSONATION);
     }
 
     /**
@@ -251,28 +248,7 @@ public class UserService {
      * @see #isImpersonating()
      */
     public void stopImpersonating() {
-        clearSudoUser();
-    }
-
-    // -- HELPER - KEY STORE FOR IMPERSONATING
-
-    private void setSudoUser(final @Nullable UserMemento userMemento) {
-        if(userMemento==null) {
-            clearSudoUser();
-            return;
-        }
-        keyValueSessionStore
-            .ifPresent(store->store.put(SESSION_KEY_IMPERSONATED_USER, userMemento));
-    }
-
-    private Optional<UserMemento> lookupSudoUser() {
-        return keyValueSessionStore
-            .flatMap(store->store.lookupAs(SESSION_KEY_IMPERSONATED_USER, UserMemento.class));
-    }
-
-    private void clearSudoUser() {
-        keyValueSessionStore
-            .ifPresent(store->store.clear(SESSION_KEY_IMPERSONATED_USER));
+    	sessionManager.remove(SessionManager.USER_IMPERSONATION);
     }
 
 }
