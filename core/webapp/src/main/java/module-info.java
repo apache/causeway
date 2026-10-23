@@ -20,7 +20,7 @@ module org.apache.causeway.core.webapp {
     exports org.apache.causeway.core.webapp;
     exports org.apache.causeway.core.webapp.confmenu;
     exports org.apache.causeway.core.webapp.health;
-    exports org.apache.causeway.core.webapp.keyvaluestore;
+    exports org.apache.causeway.core.webapp.session;
     exports org.apache.causeway.core.webapp.modules;
     exports org.apache.causeway.core.webapp.modules.observation;
     exports org.apache.causeway.core.webapp.modules.logonlog;

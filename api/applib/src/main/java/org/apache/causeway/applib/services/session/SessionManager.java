@@ -16,33 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.keyvaluestore;
+package org.apache.causeway.applib.services.session;
 
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.user.UserMemento;
+
 /**
  * Defines a mechanism for viewers to store arbitrary key value pairs
  * on a per-session basis. That is usually a {@link jakarta.servlet.http.HttpSession}.
- * <p>
- * This store <i>is</i> used by the Wicket viewer. For example, the viewer
- * remembers which time-zone the user has logged in. Or when impersonating.
  *
- * @since 2.0 {@index}
+ * @since 4.0 {@index}
  */
-public interface KeyValueSessionStore {
+public interface SessionManager {
 
-	public static KeyValueSessionStore NOOP = new KeyValueSessionStore() {
-		@Override public void put(@NonNull final String key, @Nullable final Serializable value) { }
-		@Override public <T extends Serializable> Optional<T> lookupAs(@NonNull final String key, @NonNull final Class<T> requiredType) {
-			return Optional.empty();
-		}
-		@Override public boolean isSessionAvailable() { return true; }
-		@Override public void clear(@NonNull final String key) { }
-	};
+	public record SessionKey<T extends Serializable>(
+			String id,
+			Class<T> type) implements Serializable {
+	}
+
+	public static SessionKey<ZoneId> USER_TIMEZONE_ID = new SessionKey<>("causeway.user.zoneId", ZoneId.class);
+	public static SessionKey<InteractionContext> USER_AUTHENTICATION = new SessionKey<>("causeway.user.auth", InteractionContext.class);
+	public static SessionKey<UserMemento> USER_IMPERSONATION = new SessionKey<>("causeway.user.sudo", UserMemento.class);
 
     /**
      * Whether a session is available, for storing/retrieving key/value pairs.
@@ -59,6 +62,11 @@ public interface KeyValueSessionStore {
      */
     void put(@NonNull String key, @Nullable Serializable value);
 
+    default <T extends Serializable>
+    void put(@NonNull final SessionKey<T> key, @Nullable final T value) {
+    	put(key.id(), value);
+    }
+
     /**
      * Optionally returns the value that is stored under given key,
      * based on whether a corresponding entry exists.
@@ -68,12 +76,22 @@ public interface KeyValueSessionStore {
     <T extends Serializable>
     Optional<T> lookupAs(@NonNull String key, @NonNull Class<T> requiredType);
 
+    default <T extends Serializable>
+    Optional<T> lookup(@NonNull final SessionKey<T> key) {
+    	return lookupAs(key.id(), key.type());
+    }
+
     /**
      * Removes the entry from the store.
      * <p>
      * In case there is no session for storing available, acts as a no-op.
      */
-    void clear(final @NonNull String key);
+    void remove(final @NonNull String key);
+
+    default <T extends Serializable>
+    void remove(@NonNull final SessionKey<T> key) {
+    	remove(key.id());
+    }
 
     // -- SHORTCUTS
 
@@ -83,6 +101,39 @@ public interface KeyValueSessionStore {
 
     default boolean getAsBoolean(final @NonNull String key) {
         return lookupAs(key, Boolean.class).map(Boolean::booleanValue).orElse(false);
+    }
+
+    // -- NOOP
+
+    public static SessionManager NOOP = new SessionManager() {
+    	@Override public boolean isSessionAvailable() { return false; }
+    	@Override public void put(@NonNull final String key, @Nullable final Serializable value) { }
+    	@Override public <T extends Serializable> Optional<T> lookupAs(@NonNull final String key, @NonNull final Class<T> requiredType) {
+    		return Optional.empty();
+    	}
+    	@Override public void remove(@NonNull final String key) { }
+    };
+
+    /**
+     * For testing.
+     */
+    public record InMemory(Map<String, Serializable> map) implements SessionManager {
+    	public InMemory {
+    		map = map!=null
+				? map
+				: new HashMap<>();
+    	}
+    	@Override public boolean isSessionAvailable() { return true; }
+    	@Override public void put(@NonNull final String key, @Nullable final Serializable value) {
+    		map.put(key, value);
+    	}
+    	@Override public <T extends Serializable> Optional<T> lookupAs(@NonNull final String key, @NonNull final Class<T> requiredType) {
+    		return Optional.ofNullable(map.get(key))
+    				.map(requiredType::cast);
+    	}
+    	@Override public void remove(@NonNull final String key) {
+    		map.remove(key);
+    	}
     }
 
 }

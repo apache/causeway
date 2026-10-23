@@ -38,8 +38,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionService;
-import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
@@ -67,19 +66,19 @@ public class AuthenticationManager {
     private final @NonNull RandomCodeGenerator randomCodeGenerator;
     private final @NonNull Can<Registrar> registrars;
     private final @NonNull List<UserMementoRefiner> userMementoRefiners;
-    private final @NonNull UserCurrentSessionTimeZoneHandler timeZoneHandler;
+    private final @NonNull SessionManager kvStore;
 
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
             final InteractionService interactionService,
             final RandomCodeGenerator randomCodeGenerator,
-            final Optional<KeyValueSessionStore> keyValueSessionStore,
+            final Optional<SessionManager> keyValueSessionStoreOpt,
             final List<UserMementoRefiner> userMementoRefiners) {
         this.interactionService = interactionService;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
-        this.timeZoneHandler = new UserCurrentSessionTimeZoneHandler(keyValueSessionStore);
+        this.kvStore = keyValueSessionStoreOpt.orElse(SessionManager.NOOP);
         this.userMementoRefiners = userMementoRefiners;
         if (this.authenticators.isEmpty())
 			throw new NoAuthenticatorException("No authenticators specified");
@@ -113,7 +112,7 @@ public class AuthenticationManager {
                 if (interactionContext != null) {
 
                     var interactionContextWithTimeZone = interactionContext
-                            .withTimeZoneIfAny(timeZoneHandler.getUserTimeZone());
+                        .withTimeZoneIfAny(kvStore.lookup(SessionManager.USER_TIMEZONE_ID));
 
                     var userRefined = UserMementoRefiner.refine(
                             interactionContext.getUser(),

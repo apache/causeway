@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.integration;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.mmtestsupport.InteractionService_forTesting;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
@@ -43,6 +45,8 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.causeway.viewer.commons.model.session.LoginFormModel;
+import org.apache.causeway.viewer.commons.services.session.LoginService;
 
 class AuthenticatedWebSessionForCauseway_SignIn {
 
@@ -88,22 +92,30 @@ class AuthenticatedWebSessionForCauseway_SignIn {
                 Mockito.any(String.class)))
         .thenReturn(InteractionContextFactory.testing());
 
+        var loginService = new LoginService(mmc.getConfiguration(), authMgr, mmc.getTranslationService(), Optional.empty(), new SessionManager.InMemory(new HashMap<>()));
+
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
 
-            @Override
-            public AuthenticationManager getAuthenticationManager() {
+            @Override public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
             }
 
-            @Override
-            public MetaModelContext getMetaModelContext() {
+            @Override public MetaModelContext getMetaModelContext() {
                 return mmc;
+            }
+
+            @Override protected SessionManager sessionManager() {
+            	return sessionManagerRef.orElseSet(loginService::sessionManager);
             }
         };
 
+        var form = new LoginFormModel();
+        form.setUsername("jsmith");
+        form.setPassword("secret");
+
         // when
-        webSession.signIn("john", "secret");
+        loginService.login(form, null, webSession);
 
         // then
         assertThat(webSession.isSignedIn(), is(true));

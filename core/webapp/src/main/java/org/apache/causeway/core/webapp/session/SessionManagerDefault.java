@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.webapp.keyvaluestore;
+package org.apache.causeway.core.webapp.session;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -24,15 +24,15 @@ import java.util.Optional;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpSession;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
-
-import org.jspecify.annotations.NonNull;
+import org.apache.causeway.applib.services.session.SessionManager;
 
 /**
  * Implementation that uses the {@link HttpSession}
@@ -41,9 +41,9 @@ import org.jspecify.annotations.NonNull;
  * @since 2.0 {@index}
  */
 @Component
-@Named("causeway.webapp.KeyValueStoreUsingHttpSession")
+@Named("causeway.webapp.SessionManagerDefault")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-public class KeyValueStoreUsingHttpSession implements KeyValueSessionStore {
+public class SessionManagerDefault implements SessionManager {
 
     @Override
     public boolean isSessionAvailable() {
@@ -53,28 +53,26 @@ public class KeyValueStoreUsingHttpSession implements KeyValueSessionStore {
     @Override
     public void put(final @NonNull String key, final @Nullable Serializable value) {
         if(value==null) {
-            clear(key);
+        	remove(key);
             return;
         }
         httpSession()
-        .ifPresent(session->
-            session.setAttribute(key, value));
+	        .ifPresent(session->session.setAttribute(key, value));
     }
 
     @Override
     public <T extends Serializable>
     Optional<T> lookupAs(final @NonNull String key, final @NonNull Class<T> requiredType) {
         return httpSession()
-                .map(session->session.getAttribute(key))
-                .filter(requiredType::isInstance)
-                .map(requiredType::cast);
+            .map(session->session.getAttribute(key))
+            .filter(requiredType::isInstance)
+            .map(requiredType::cast);
     }
 
     @Override
-    public void clear(final @NonNull String key) {
+    public void remove(final @NonNull String key) {
         httpSession()
-        .ifPresent(session->
-            session.removeAttribute(key));
+        	.ifPresent(session-> session.removeAttribute(key));
     }
 
     // -- HELPER
