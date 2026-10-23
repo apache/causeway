@@ -29,8 +29,7 @@ import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.value.semantics.TimeZoneChoiceProvider;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -48,7 +47,7 @@ public record LoginService(
 		TranslationService translationService,
 		@Qualifier("Login")
 		Optional<TimeZoneChoiceProvider> timeZoneChoiceProviderOpt,
-		Optional<KeyValueSessionStore> keyValueSessionStoreOpt) {
+		SessionManager sessionManager) {
 
 	public Signin signinConf() {
 		return causewayConfiguration().viewer().common().signin();
@@ -71,7 +70,7 @@ public record LoginService(
 				.orElse(null));
 	}
 
-	public boolean login(final LoginFormModel loginFormModel, final CookieHandler cookieHandler, @Nullable final LoginSuccessCallback onLoginSuccess) {
+	public boolean login(final LoginFormModel loginFormModel, @Nullable final CookieHandler cookieHandler, @Nullable final LoginSuccessCallback onLoginSuccess) {
     	var authenticationRequest = new AuthenticationRequestPassword(loginFormModel.getUsername(), loginFormModel.getPassword());
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
 		var interactionContext = authenticationManager.authenticate(authenticationRequest);
@@ -79,7 +78,8 @@ public record LoginService(
 		if(!success)
 			return false;
 
-		if(loginFormModel.isRememberMe()) {
+		if(loginFormModel.isRememberMe()
+				&& cookieHandler!=null) {
             if (StringUtils.hasLength(loginFormModel.getUsername())) {
             	// remember latest username
             	new UsernameCookieHandler(signinConf().rememberMe(), cookieHandler)
@@ -92,10 +92,10 @@ public record LoginService(
             }
 		}
 		if (loginFormModel.getTimezone()!=null) {
-			new UserCurrentSessionTimeZoneHandler(keyValueSessionStoreOpt).setUserTimeZone(loginFormModel.getTimezone());
+			sessionManager.put(SessionManager.USER_TIMEZONE_ID, loginFormModel.getTimezone());
 			interactionContext = interactionContext.withTimeZone(loginFormModel.getTimezone());
 		} else {
-			new UserCurrentSessionTimeZoneHandler(keyValueSessionStoreOpt).clearUserTimeZone();
+			sessionManager.remove(SessionManager.USER_TIMEZONE_ID);
 		}
 		if(onLoginSuccess!=null) {
 			onLoginSuccess.onLoginSuccess(authenticationRequest, interactionContext);

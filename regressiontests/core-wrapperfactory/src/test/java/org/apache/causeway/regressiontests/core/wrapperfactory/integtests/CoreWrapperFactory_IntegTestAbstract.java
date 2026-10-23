@@ -32,6 +32,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -56,7 +57,7 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends CausewayInteg
             CausewayModuleSecurityBypass.class,
             CausewayModulePersistenceJpaEclipselink.class,
             CausewayModuleTestingFixturesApplib.class,
-
+            SessionManager.InMemory.class,
             WrapperTestFixtures.class,
     })
     @EntityScan(basePackageClasses = Counter.class)

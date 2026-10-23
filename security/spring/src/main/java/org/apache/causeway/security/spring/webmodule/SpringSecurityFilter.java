@@ -38,8 +38,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionService;
-import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
@@ -52,7 +51,7 @@ public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;
     @Inject List<AuthenticationConverter> converters;
-    @Inject private Optional<KeyValueSessionStore> keyValueSessionStoreOpt;
+    @Inject private Optional<SessionManager> keyValueSessionStoreOpt;
 
     @Override
     public void doFilter(
@@ -69,8 +68,10 @@ public class SpringSecurityFilter implements Filter {
             return; // either not authenticated or unknown principal type (not handled)
         }
 
+        var kvStore = keyValueSessionStoreOpt.orElse(SessionManager.NOOP);
+
         var interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
-                .withTimeZoneIfAny(new UserCurrentSessionTimeZoneHandler(keyValueSessionStoreOpt).getUserTimeZone());
+        		.withTimeZoneIfAny(kvStore.lookup(SessionManager.USER_TIMEZONE_ID));
 
         var result = interactionService.runAndCatch(
                 interactionContext,

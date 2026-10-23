@@ -29,8 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHandler;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
@@ -53,10 +52,11 @@ public class ApplicationUser_timeZone {
 
     private final ApplicationUser mixee;
 
-    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore;
+    @Inject private Optional<SessionManager> keyValueSessionStoreOpt;
 
     @MemberSupport @Nullable public String prop() {
-        return new UserCurrentSessionTimeZoneHandler(keyValueSessionStore).getUserTimeZone()
+        return keyValueSessionStoreOpt
+    		.flatMap(kvStore->kvStore.lookup(SessionManager.USER_TIMEZONE_ID))
             .map(_Temporals::formatZoneId)
             .orElse(null);
     }

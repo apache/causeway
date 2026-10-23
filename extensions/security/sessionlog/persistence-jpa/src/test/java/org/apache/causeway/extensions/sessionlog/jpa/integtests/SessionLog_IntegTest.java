@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.sessionlog.applib.integtests.SessionLogIntegTestAbstract;
 import org.apache.causeway.extensions.sessionlog.jpa.CausewayModuleExtSessionLogPersistenceJpa;
@@ -41,6 +42,8 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
+
+            SessionManager.InMemory.class
     })
     public static class AppManifest {
     }
