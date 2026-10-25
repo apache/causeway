@@ -77,7 +77,7 @@ public class SessionManagerDefault implements SessionManager {
 
     // -- HELPER
 
-    private static Optional<HttpSession> httpSession() {
+    static Optional<HttpSession> httpSession() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
                 .filter(ServletRequestAttributes.class::isInstance)
                 .map(ServletRequestAttributes.class::cast)

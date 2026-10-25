@@ -37,6 +37,7 @@ import org.apache.causeway.core.webapp.confmenu.ConfigurationViewServiceDefault;
 import org.apache.causeway.core.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.causeway.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.causeway.core.webapp.modules.templresources.WebModuleTemplateResources;
+import org.apache.causeway.core.webapp.session.SessionEventListener;
 import org.apache.causeway.core.webapp.session.SessionManagerDefault;
 import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
@@ -51,6 +52,7 @@ import io.micrometer.common.KeyValues;
         ConfigurationViewServiceDefault.class,
         WebModuleLogOnExceptionLogger.class,
         WebModuleTemplateResources.class,
+        SessionEventListener.class,
 
         org.apache.causeway.core.webapp.modules.observation.WebObservationConfiguration.class,
 
