@@ -100,4 +100,15 @@ extends MetaModelTestAbstract {
 
     }
 
+    @Test
+    void panelActionRemainsAssociatedWithVisibleProperty() {
+        var spec = getSpecificationLoader().specForTypeElseFail(HiddenFirst.class);
+        var gridFacet = spec.lookupFacet(GridFacet.class).orElseThrow();
+        gridFacet.getGrid(ManagedObject.adaptSingular(spec, new HiddenFirst()));
+        var visibleProperty = spec.getProperty("invoiceId").orElseThrow();
+        assertTrue(org.apache.causeway.core.metamodel.spec.feature.ObjectAction.Util
+                .findForAssociation(spec, visibleProperty)
+                .anyMatch(action -> action.getId().equals("perform")));
+    }
+
 }
