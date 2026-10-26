@@ -21,9 +21,9 @@
     <bs:row>
         <bs:col span="12" unreferencedActions="true" unreferencedCollections="true">
             <cpt:fieldSet name="General" unreferencedProperties="true">
-                <cpt:action id="perform" position="PANEL"/>
-                <cpt:property id="summary"/>
-                <cpt:property id="invoiceId"/>
+                <cpt:action id="someAction" position="PANEL"/>
+                <cpt:property id="prop1"/>
+                <cpt:property id="prop2"/>
             </cpt:fieldSet>
         </bs:col>
     </bs:row>

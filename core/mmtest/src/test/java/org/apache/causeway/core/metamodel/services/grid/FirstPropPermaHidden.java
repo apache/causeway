@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import jakarta.inject.Named;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
@@ -28,14 +29,14 @@ import org.apache.causeway.applib.annotation.Where;
 
 @Named("simple.HiddenFirst")
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class HiddenFirst {
+public class FirstPropPermaHidden {
     @Action
-    public void perform() { }
+    public void someAction() { }
 
     @Property
     @PropertyLayout(hidden = Where.OBJECT_FORMS)
-    public String getSummary() { return "hidden"; }
+    public String getProp1() { return "hidden"; }
 
     @Property
-    public String getInvoiceId() { return "synthetic"; }
+    public String getProp2() { return "visible"; }
 }

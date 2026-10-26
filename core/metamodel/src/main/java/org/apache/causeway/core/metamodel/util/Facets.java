@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
@@ -87,6 +88,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.experimental.UtilityClass;
 
@@ -229,6 +231,12 @@ public final class Facets {
     public Predicate<ObjectFeature> hiddenWhereNotMatches(final Predicate<Where> matcher) {
         return hiddenWhereMatches(matcher)
             .negate();
+    }
+
+    public boolean isPermantenlyHiddenInForms(final OneToOneAssociation prop) {
+    	Objects.requireNonNull("null case is undecidable");
+    	return hiddenWhereMatches(where -> where.isAlways() || where == Where.OBJECT_FORMS)
+    			.test(prop);
     }
 
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {

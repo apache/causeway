@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -64,8 +63,8 @@ import org.apache.causeway.core.metamodel.facets.properties.propertylayout.Typic
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 record XmlLayoutRespectingFacetInstaller(
         SpecificationLoader specLoader) {
@@ -133,15 +132,15 @@ record XmlLayoutRespectingFacetInstaller(
                     int memberOrderSequence;
                     if(actionLayoutDataOwner instanceof FieldSet fieldSet) {
                         for (var propertyLayoutData : fieldSet.getProperties()) {
-                            // The viewer collects fieldset actions from properties visible in object forms.
-                            var association = oneToOneAssociationById.get(propertyLayoutData.getId());
-                            if(association != null && Facets.hiddenWhereNotMatches(
-                                    where -> where.isAlways() || where == Where.OBJECT_FORMS).test(association)) {
-                                groupIdAndName = GroupIdAndName
-                                        .forPropertyLayoutData(propertyLayoutData)
-                                        .orElse(null);
-                                break;
-                            }
+                            var prop = oneToOneAssociationById.get(propertyLayoutData.getId());
+                            if(prop==null
+                            		|| Facets.isPermantenlyHiddenInForms(prop)) {
+								continue; // exclude permanently hidden properties from consideration
+							}
+                            groupIdAndName = GroupIdAndName
+                                    .forPropertyLayoutData(propertyLayoutData)
+                                    .orElse(null);
+                            break; // done searching
                         }
                         memberOrderSequence = actionPropertyGroupSequence++;
                     } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {

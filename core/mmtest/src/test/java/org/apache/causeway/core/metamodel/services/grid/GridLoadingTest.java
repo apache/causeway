@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -33,7 +35,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
-import org.junit.jupiter.api.Test;
 
 final class GridLoadingTest
 extends MetaModelTestAbstract {
@@ -102,13 +103,14 @@ extends MetaModelTestAbstract {
 
     @Test
     void panelActionRemainsAssociatedWithVisibleProperty() {
-        var spec = getSpecificationLoader().specForTypeElseFail(HiddenFirst.class);
+    	// FirstPropPermaHidden is setup with prop1 and prop2 where the first one is permanently hidden in Forms
+        var spec = getSpecificationLoader().specForTypeElseFail(FirstPropPermaHidden.class);
         var gridFacet = spec.lookupFacet(GridFacet.class).orElseThrow();
-        gridFacet.getGrid(ManagedObject.adaptSingular(spec, new HiddenFirst()));
-        var visibleProperty = spec.getProperty("invoiceId").orElseThrow();
+        gridFacet.getGrid(ManagedObject.adaptSingular(spec, new FirstPropPermaHidden()));
+        var visibleProperty = spec.getProperty("prop2").orElseThrow();
         assertTrue(org.apache.causeway.core.metamodel.spec.feature.ObjectAction.Util
                 .findForAssociation(spec, visibleProperty)
-                .anyMatch(action -> action.getId().equals("perform")));
+                .anyMatch(action -> action.getId().equals("someAction")));
     }
 
 }
