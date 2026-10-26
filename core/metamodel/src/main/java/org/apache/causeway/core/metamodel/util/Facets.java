@@ -234,7 +234,7 @@ public final class Facets {
     }
 
     public boolean isPermantenlyHiddenInForms(final OneToOneAssociation prop) {
-    	Objects.requireNonNull("null case is undecidable");
+    	Objects.requireNonNull(prop, ()->"null case is undecidable");
     	return hiddenWhereMatches(where -> where.isAlways() || where == Where.OBJECT_FORMS)
     			.test(prop);
     }
