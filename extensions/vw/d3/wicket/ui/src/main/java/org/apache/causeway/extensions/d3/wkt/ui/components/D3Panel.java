@@ -22,6 +22,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.d3.applib.config.D3Config;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeModel;
 import org.apache.causeway.extensions.d3.metamodel.facet.D3GraphFacet;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedCallback;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedEvent;
@@ -46,7 +47,8 @@ import java.io.Serial;
  *
  * @since 2.0 {@index}
  */
-public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.components.D3Panel {
+public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.components.D3Panel
+implements HasAttributeModel {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -75,6 +77,11 @@ public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.c
                 }
             });
         }
+    }
+
+    @Override
+    public UiAttributeWkt attributeModel() {
+        return attributeModel;
     }
 
     // -- HELPER
