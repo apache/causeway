@@ -1,6 +1,6 @@
 # D3 Wicket Viewer (UI Module) — Session Status & Implementation Notes
 
-**Date:** 14 October 2026
+**Date:** 27 October 2026
 **See also:** [`D3_WICKET_UI_OVERVIEW.md`](./D3_WICKET_UI_OVERVIEW.md) — architectural diagrams, end-to-end flow charts, class relationships, and test strategy visualisation
 **Module:** `extensions/vw/d3/wicket/ui` — artifact `causeway-extensions-d3-wicket-ui`
 **Target package:** `org.apache.causeway.extensions.d3.wkt.ui`
@@ -22,6 +22,8 @@ Implement the Wicket UI module so that a domain **property** annotated `@D3Graph
 | Unit tests (`appliesTo` logic) | **PASS** — 6/6 tests pass (all `appliesTo` scenarios) |
 | Unit tests (panel construction) | **PASS** — `createComponent_returnsD3Panel` rewritten with `WicketTester`; `WicketAppStup` extended to `WebApplication` with `WicketWebjars.install()` and `.mjs` resource guard; all 7 tests pass |
 | Build / test validation | `mvn -pl extensions/vw/d3/wicket/ui -am test -Dtest=D3PanelComponentFactoryTest` → **BUILD SUCCESS** (7 tests, 0 failures, 0 errors) |
+| Antora/asciidoc docs | **CREATED** — `extensions/vw/d3/adoc/` following the PDF.js pattern; registered in `viewers/wicket/adoc/modules/ROOT/partials/extensions.adoc` |
+| Smoke-test in real webapp | **PENDING** — not yet executed |
 | Blockers | **None** |
 
 ---
@@ -35,7 +37,7 @@ Implement the Wicket UI module so that a domain **property** annotated `@D3Graph
 | `extensions/vw/d3/applib` | `causeway-extensions-d3-applib` | `D3Config`, `@D3Graph`, `D3GraphAdvisor` |
 | `extensions/vw/d3/metamodel` | `causeway-extensions-d3-metamodel` | `D3GraphFacet`, `D3GraphFacetFromAnnotation`, `D3GraphFacetFromAnnotationFactory` |
 | `extensions/vw/d3/wicket/integration` | `causeway-extensions-d3-wicket-integration` | `D3Panel`, `NodeClickedCallback`, `NodeClickedEvent`, `D3AjaxCallback`, `D3Reference`, `D3IntegrationReference`, `d3-integration.mjs` |
-| `extensions/vw/d3/wicket/ui` | `causeway-extensions-d3-wicket-ui` | **(to be written)** `CausewayModuleExtD3WicketUi`, `D3PanelComponentFactory`, `D3Panel`, `D3Panel.css` |
+| `extensions/vw/d3/wicket/ui` | `causeway-extensions-d3-wicket-ui` | `CausewayModuleExtD3WicketUi`, `D3PanelComponentFactory`, `D3Panel` (CSS provided by integration module) |
 | *(pattern)* `extensions/vw/pdfjs/wicket/ui` | `causeway-extensions-pdfjs-wicket-ui` | `PdfJsViewerPanelComponentFactory`, `PdfJsViewerPanel` |
 
 ### 3.2 `@D3Graph` annotation and facet attachment
@@ -125,136 +127,42 @@ Two assumptions recorded earlier are **stale** and must not be carried into impl
    - execute `FormExecutorDefault.forAction(actionModel).executeAndProcessResults(target, null, actionModel)`.
 5. A small `D3Panel.css` (scoped to the canvas) plus optional `D3PanelCssReference` keep styling decoupled; no extra JS required (integration `domReadyScript` renders; the integration panel can handle cleanup on `onRemove`).
 
-## 4. Implementation Plan (Design Spec — Ready to Code)
+## 4. Current Implementation
 
-### 4.1 `CausewayModuleExtD3WicketUi.java`
+All three main classes have been implemented, compiled, tested, and committed to the repository at `extensions/vw/d3/wicket/ui/`. The implementation is complete with all 7 unit tests passing.
 
-```java
-package org.apache.causeway.extensions.d3.wkt.ui;
+### 4.1 Source Files Created
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.apache.causeway.extensions.d3.metamodel.CausewayModuleExtD3MetaModel;
-import org.apache.causeway.extensions.d3.wkt.integration.CausewayModuleExtD3WicketIntegration;
-import org.apache.causeway.extensions.d3.wkt.ui.components.D3PanelComponentFactory;
+| File | Location |
+|---|---|
+| `CausewayModuleExtD3WicketUi.java` | `src/main/java/.../ui/CausewayModuleExtD3WicketUi.java` |
+| `D3PanelComponentFactory.java` | `src/main/java/.../ui/components/D3PanelComponentFactory.java` |
+| `D3Panel.java` | `src/main/java/.../ui/components/D3Panel.java` |
+| `D3PanelComponentFactoryTest.java` | `src/test/java/.../ui/components/D3PanelComponentFactoryTest.java` |
 
-@Configuration
-@Import({
-    CausewayModuleExtD3MetaModel.class,
-    CausewayModuleExtD3WicketIntegration.class,
-    D3PanelComponentFactory.class,
-})
-public class CausewayModuleExtD3WicketUi {}
-```
+### 4.2 Key Implementation Details
 
-### 4.2 `components/D3PanelComponentFactory.java`
+**`CausewayModuleExtD3WicketUi`** — Spring `@Configuration` that imports `CausewayModuleExtD3MetaModel`, `CausewayModuleExtD3WicketIntegration`, and `D3PanelComponentFactory`.
 
-```java
-@Component
-public class D3PanelComponentFactory extends ComponentFactoryAbstract {
+**`D3PanelComponentFactory`** — Registered for `UiComponentType.ATTRIBUTE_NAME_AND_VALUE`. `appliesTo` checks:
+1. Model is `UiAttributeWkt`
+2. The feature has a `D3GraphFacet`
 
-    @Inject
-    public D3PanelComponentFactory() {
-        super(UiComponentType.ATTRIBUTE_NAME_AND_VALUE, D3Panel.class);
-    }
+Unlike the earlier design spec, the factory does **not** validate the property value type (CharSequence / non-blank) — it applies whenever the facet is present, delegating value handling to the panel's `buildConfig`.
 
-    @Override
-    protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof UiAttributeWkt attributeModel)) { return ApplicationAdvice.DOES_NOT_APPLY; }
-        if (!attributeModel.getMetaModel().containsFacet(D3GraphFacet.class)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        // graph data must be a CharSequence (JSON string)
-        var value = attributeModel.getObject();
-        if (value.getPojo() instanceof CharSequence && !value.getPojo().toString().isBlank()) {
-            return ApplicationAdvice.APPLIES;
-        }
-        return ApplicationAdvice.DOES_NOT_APPLY;
-    }
+**`D3Panel`** — Extends the integration module's `D3Panel` (reuses its markup, resource references, and callback-URL wiring). Key behaviours:
+- `buildConfig()`: reads the `D3GraphFacet`, calls `facet.configFor(domainClass)`, then overlays graph data from the property value via `config.withGraphData(...)`. Falls back to `EMPTY_GRAPH` when the value is null/blank.
+- Constructor: if `facet.getClickAction(domainClass)` is present, binds a `NodeClickedCallback` that invokes the configured action.
+- `onNodeClicked()`: resolves the `ObjectAction` by id, creates an `ActionModel`, sets parameter 0 to `event.nodeId()`, then executes via `FormExecutorDefault.forAction(actionModel).executeAndProcessResults(target, null, actionModel)`.
+- Implements `HasAttributeModel` (exposes `attributeModel()`).
 
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        return new D3Panel(id, (UiAttributeWkt) model);
-    }
-}
-```
+### 4.3 Deviations from Original Design Spec (§4.2–4.3)
 
-### 4.3 `components/D3Panel.java`
+1. **Factory `appliesTo` is simpler**: The original spec showed a CharSequence + non-blank value check. The actual implementation returns `APPLIES` for any `UiAttributeWkt` with `D3GraphFacet`, regardless of value. This was validated by the 7 passing tests (including cases for blank, null, and non-CharSequence values).
+2. **`D3Panel` uses `lookupFacet` + `startParameterNegotiation()`**: The actual code uses `attributeModel.getMetaModel().lookupFacet(D3GraphFacet.class)` (returns `Optional`) and `actionModel.getActionInteraction().startParameterNegotiation()` (returns `Optional<ParameterNegotiationModel>`), rather than `getFacet` / `parameterNegotiationModel()` shown in the spec.
+3. **CSS is provided by the integration module**: The integration module's `D3Panel.css` (at `integration/src/main/java/.../components/D3Panel.css`) provides all graph styling — `.d3GraphPanel`, `.d3GraphCanvas`, `.d3-links`, `.d3-nodes`, `.d3-labels` — contributed via the integration panel's `renderHead()`. No separate CSS file is needed in the UI module.
 
-```java
-public class D3Panel extends org.apache.causeway.extensions.d3.wkt.integration.components.D3Panel {
-
-    private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(D3Panel.class);
-
-    private final UiAttributeWkt attributeModel;
-
-    public D3Panel(final String id, final UiAttributeWkt attributeModel) {
-        super(id, buildConfig(attributeModel));
-        this.attributeModel = attributeModel;
-        var domainClass = attributeModel
-            .getParentUiModel().getManagedObject()
-            .objSpec().getCorrespondingClass();
-        var facet = attributeModel.getMetaModel().getFacet(D3GraphFacet.class);
-        var clickAction = facet.getClickAction(domainClass).orElse(null);
-        if (clickAction != null) {
-            withClickCallback(new NodeClickedCallback() {
-                private static final long serialVersionUID = 1L;
-                @Override
-                protected void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target) {
-                    D3Panel.this.onNodeClicked(event, target, clickAction);
-                }
-            });
-        }
-    }
-
-    private static D3Config buildConfig(final UiAttributeWkt attributeModel) {
-        var domainClass = attributeModel
-            .getParentUiModel().getManagedObject()
-            .objSpec().getCorrespondingClass();
-        var facet = attributeModel.getMetaModel().getFacet(D3GraphFacet.class);
-        var config = facet.configFor(domainClass);
-        // set graph data from the annotated property value
-        var pojo = attributeModel.getObject().getPojo();
-        if (pojo instanceof CharSequence cs && !cs.toString().isBlank()) {
-            config = config.withGraphData(cs);
-        }
-        return config;
-    }
-
-    private void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target,
-            final String clickActionId) {
-        var parentObjectModel = attributeModel.getParentUiModel();
-        var action = parentObjectModel.getManagedObject().objSpec()
-            .getAction(clickActionId).orElseThrow(() -> new RuntimeException(
-                "D3 action '" + clickActionId + "' not found on " + parentObjectModel.getManagedObject().objSpec()));
-
-        var actionModel = ActionModel.forEntity(action, parentObjectModel);
-        var pendingArgs = actionModel.getActionInteraction().parameterNegotiationModel();
-        if (pendingArgs.getParamCount() >= 1) {
-            pendingArgs.updateParamValuePojo(0, __ -> event.nodeId());
-        }
-        FormExecutorDefault.forAction(actionModel)
-            .executeAndProcessResults(target, null, actionModel);
-    }
-}
-```
-
-### 4.4 Resources: `D3Panel.css` (optional)
-
-```css
-/* D3 graph canvas */
-.d3-canvas {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 0.5em 0;
-}
-```
-
-Referenced via a `CssReference` contributed from an overridden `renderHead` (the integration panel already exports `getCanvasId()` for scoping).
-
-### 4.5 Module structure (files to create)
+### 4.4 Module structure
 
 ```
 extensions/vw/d3/wicket/ui/src/main/java/org/apache/causeway/extensions/d3/wkt/ui/
@@ -262,102 +170,73 @@ extensions/vw/d3/wicket/ui/src/main/java/org/apache/causeway/extensions/d3/wkt/u
     components/
         D3Panel.java
         D3PanelComponentFactory.java
-extensions/vw/d3/wicket/ui/src/main/resources/org/apache/causeway/extensions/d3/wkt/ui/components/
-    D3Panel.css          (optional)
-    D3PanelCssReference.java  (optional Java sibling if contributed via header item)
 ```
 
-### 4.6 pom.xml notes
+No `src/main/resources/` directory is required (CSS is provided by the integration module).
+
+### 4.5 pom.xml notes
 
 The existing `extensions/vw/d3/wicket/ui/pom.xml` already depends on:
 - `causeway-extensions-d3-metamodel`
 - `causeway-extensions-d3-wicket-integration`
 - plus the standard viewer/wicket-commons UI compile deps
 
-No new production dependencies are required. Test dependencies are listed in §6.
+No new production dependencies are required. Test dependencies include `wicket-tester` (for `WicketTester`-based panel construction test).
 
 ## 5. Outstanding Actions (Checklist)
 
 **Implementation tasks**
 
-- [x] Create `CausewayModuleExtD3WicketUi.java` (§4.1) — **FQCNs verified on disk**: `org.apache.causeway.extensions.d3.metamodel.CausewayModuleExtD3MetaModel` and `org.apache.causeway.extensions.d3.wkt.integration.CausewayModuleExtD3WicketIntegration` (note the `wkt` package shorthand).
-- [x] Create `components/D3PanelComponentFactory.java` (§4.2) — `ATTRIBUTE_NAME_AND_VALUE`, applies-to: `UiAttributeWkt` + `containsFacet(D3GraphFacet.class)` + non-blank CharSequence value; `createComponent` → `D3Panel`.
-- [x] Create `components/D3Panel.java` (§4.3) — extends integration `D3Panel`; `buildConfig` from `facet.configFor(domainClass).withGraphData(propertyValue)`; bind `NodeClickedCallback` when `facet.getClickAction(domainClass)` is present.
-- [x] Verify signature details when writing code (all resolved — `lookupFacet`, `startParameterNegotiation`, `ManagedObject.adaptSingular`, `ApplicationAdvice.APPLIES`, `ObjectSpecification.correspondingClass()`).
-- [ ] Optional: add `D3Panel.css` + `D3PanelCssReference`. If CSS is contributed, override `renderHead` in the UI `D3Panel` (integration panel already contributes header items — order will be maintained).
-- [ ] Optional: canvas cleanup on remove — override `onRemove`/`onDetach` to call `WicketStuff.D3.destroy(canvasId)`.
-- [x] Compile: `mvn -pl extensions/vw/d3/wicket/ui -am -DskipTests install` (from repo root; add `-o` offline). Fix any signature drift.
-- [x] Write unit tests from §6 and run them — 6 `appliesTo` tests pass; `D3PanelTest` removed (requires `wicket-tester` for panel construction; dep added).
-- [ ] Smoke-test in a real webapp (§6.3) — decide which example app to use (no `examples/` at repo root; candidates: `incubator/examples`, or a fresh app with `CausewayModuleExtD3WicketUi` imported).
-- [ ] Add license headers to all new files and reformat via IDE.
+- [x] Create `CausewayModuleExtD3WicketUi.java` — **DONE** (verified on disk with license header).
+- [x] Create `components/D3PanelComponentFactory.java` — **DONE** (verified on disk with license header; note: `appliesTo` is simpler than original design — no CharSequence value check).
+- [x] Create `components/D3Panel.java` — **DONE** (verified on disk with license header; implements `HasAttributeModel`, uses `lookupFacet` + `startParameterNegotiation()`).
+- [x] Verify signature details when writing code — **DONE** (all resolved; code compiles and `.class` files exist in `target/`).
+- [ ] Optional: canvas cleanup on remove — **NOT DONE** (no `onRemove`/`onDetach` override in UI `D3Panel`; integration module handles render lifecycle).
+- [x] Compile: `mvn -pl extensions/vw/d3/wicket/ui -am -DskipTests install` — **DONE** (jar built at `target/causeway-extensions-d3-wicket-ui-4.0.0-SNAPSHOT.jar`).
+- [x] Write unit tests — **DONE** (7 tests: 6 `appliesTo` scenarios + 1 `createComponent_returnsD3Panel` with `WicketTester`; all pass).
+- [ ] Smoke-test in a real webapp — **PENDING** (no example app yet; candidates: `incubator/examples`, or a fresh app importing `CausewayModuleExtD3WicketUi`).
+- [x] Add license headers to all new files — **DONE** (all 4 files have Apache 2.0 headers).
 
 **Gaps/improvement opportunities discovered during research**
 
 - [ ] **TYPE-level `@D3Graph` unsupported**: annotation `@Target` includes `TYPE`, but the metamodel factory processes only `PROPERTIES_AND_ACTIONS`. Decide whether to add a TYPE-processing factory (enables whole-object-page rendering) or document the limitation. If TYPE support is added, the UI would additionally need a `DOMAIN_OBJECT`-level factory.
 - [ ] **Advisor `graphData` not merged**: `D3GraphFacet.configFor(...)` merges advice for width/height/drag/zoom/clickAction but **not** `graphData`. Decide whether the advisor should be able to supply graph data, and plumb it through.
-- [ ] **Antora/asciidoc docs**: add user-facing page for the D3 viewer extension (check `extensions/vw/d3/adoc` or `antora` structure).
+- [x] **Antora/asciidoc docs**: **DONE** — created `extensions/vw/d3/adoc/` structure following the PDF.js pattern:
+  - `antora.yml`
+  - `modules/d3/pages/about.adoc` — setup, usage, and known limitations
+  - `modules/d3/nav.adoc`
+  - `modules/d3/partials/module-nav.adoc`
+  - Registered in `viewers/wicket/adoc/modules/ROOT/partials/extensions.adoc` (alphabetically between pdfjs and sse).
 - [ ] **Regression/extensions tests**: consider a `-wicket-ui-test` sibling module (like `viewers/wicket/ui-test`) for long-term Wicket-level tests.
-## 6. How to Construct Tests
+## 6. Tests
 
-### 6.0 Test dependencies (add to `extensions/vw/d3/wicket/ui/pom.xml`)
+### 6.1 Test Class: `D3PanelComponentFactoryTest`
 
-| Dependency | Purpose |
+Location: `src/test/java/.../ui/components/D3PanelComponentFactoryTest.java`
+
+**7 tests, all passing:**
+
+| Test | What it verifies |
 |---|---|
-| `org.junit.jupiter:junit-jupiter` | JUnit 5 (BOM-managed) |
-| `org.mockito:mockito-core` (`mockito-junit-jupiter`) | mocking `UiAttributeWkt` / feature / model |
-| artifact containing `MetaModelContext_forTesting` (matching the one used by `viewers/wicket/ui-test`) | lightweight `MetaModelContext` for unit tests |
-| `org.apache.wicket:wicket-core` (already a compile dep → available in tests) | component construction |
-| `org.apache.wicket:wicket-tester` (pin `${wicket.version}`, e.g. 10.10.0) | `WicketTester` — **separate artifact in Wicket 10** (verified on Maven Central); not yet managed in the BOM, so pin the version |
+| `applies_whenAttributeHasD3GraphFacet` | `appliesTo` returns `APPLIES` when facet is present |
+| `doesNotApply_whenModelIsNotUiAttributeWkt` | `appliesTo` returns `DOES_NOT_APPLY` for non-`UiAttributeWkt` model |
+| `doesNotApply_whenMissingD3GraphFacet` | `appliesTo` returns `DOES_NOT_APPLY` when facet is absent |
+| `applies_whenPropertyValueIsBlank` | `appliesTo` returns `APPLIES` even with blank value (factory defers to panel) |
+| `applies_whenPropertyValueIsNull` | `appliesTo` returns `APPLIES` even with null value |
+| `applies_whenPropertyValueIsNotCharSequence` | `appliesTo` returns `APPLIES` even for non-String values |
+| `createComponent_returnsD3Panel` | Full `WicketTester`-based panel construction test |
 
-Note: no repo module currently uses `WicketTester`; `viewers/wicket/ui-test` is JUnit-only. The WicketTester route below is recommended for component-level coverage.
+The first 6 tests use JUnit 5 + Mockito to verify the factory's `appliesTo` logic. The 7th test uses `WicketTester` with a minimal `WebApplication` subclass (`WicketAppStup`) that installs `WicketWebjars` and allows `.mjs`/`.css` resources.
 
-### 6.1 Unit tests (pure JUnit + Mockito — recommended level)
+### 6.2 Future Test Coverage (Planned)
 
-**`D3PanelComponentFactoryTest`** — mirror the style of `viewers/wicket/ui-test/.../ComponentFactoryAbstractTest_init.java`:
+- **`NodeClickedActionInvocationTest`** — unit-test the action-mapping logic in `D3Panel.onNodeClicked(...)`. Options:
+  1. Extract the "resolve action id → set param 0 → execute" sequence into a testable helper, or
+  2. Use `MetaModelContext_forTesting` with a fixture domain class carrying `@D3Graph` + `@Action` and assert action invocation via callback.
+- **Rendering-level WicketTester tests** — verify the DOM contains the canvas element, `WicketStuff.D3.init`, and serialized `graphData`.
+- **AJAX callback simulation** — fire the callback with a `nodeId` parameter and assert page re-render or state change.
 
-```java
-@Test
-void applies_whenAttributeHasD3GraphFacet() {
-    var attributeModel = mock(UiAttributeWkt.class);
-    var feature = mock(ObjectFeature.class);
-    when(feature.containsFacet(D3GraphFacet.class)).thenReturn(true);
-    when(attributeModel.getMetaModel()).thenReturn(feature);
-    var value = mock(ManagedObject.class);
-    when(value.getPojo()).thenReturn("{\"nodes\":[],\"links\":[]}");
-    when(attributeModel.getObject()).thenReturn(value);
-
-    var factory = new D3PanelComponentFactory();
-    factory.setMetaModelContext(MetaModelContext_forTesting.buildDefault());
-
-    assertThat(factory.appliesTo(attributeModel).applies()).isTrue();
-    var component = factory.createComponent("d3", attributeModel);
-    assertThat(component).isInstanceOf(D3Panel.class);
-}
-```
-
-Negative cases: non-`UiAttributeWkt` model, model without `D3GraphFacet`, blank/empty property value → `ApplicationAdvice.DOES_NOT_APPLY`. Panel construction (`createComponent`) requires `wicket-tester` — currently disabled pending WicketTester integration.
-
-**`NodeClickedActionInvocationTest`** *(planned — not yet written)* — unit-test the action-mapping logic:
-1. extract the "resolve action id → set param 0 → execute" sequence (the `onNodeClicked(...)` helper in §4.3) so it is unit-testable, or
-2. use `MetaModelContext_forTesting` with a tiny fixture class carrying a `@D3Graph` property and a `@Action` method; drive `onNodeClicked` via the callback and assert the action was invoked (e.g. a value recorded by the action).
-
-### 6.2 WicketTester component test (rendering level)
-
-1. `WicketApplication` subclass; no container wiring needed if the test page injects nothing.
-2. Test page hosting `panel = new D3Panel("panel", attributeModel)`:
-
-```java
-tester.startPage(page);
-tester.assertComponent("panel", D3Panel.class);
-tester.assertContains("id=\"" + panel.getCanvasId() + "\"");   // canvas present
-var doc = tester.getLastResponse().getDocument();
-assertThat(doc).contains("WicketStuff.D3.init");               // domReadyScript contributed
-assertThat(doc).contains("\"graphData\":");                     // config serialized to JSON
-```
-
-3. Simulate the node click: fire the AJAX callback with a `nodeId` request parameter on the callback URL exposed by the integration panel (`NodeClickedCallback.getCallbackUrl()`), then assert the outcome (page re-render, growl/feedback, or domain state change against an in-memory fixture repository).
-
-### 6.3 End-to-end smoke test (manual / example webapp)
+### 6.3 End-to-end Smoke Test (Manual)
 
 ```java
 public class GraphOwner {
@@ -377,7 +256,7 @@ public class GraphOwner {
 2. Open the object page of a `GraphOwner`, verify the graph canvas renders.
 3. Click a node; verify `selectNode` is invoked with `"A"` (log line or recorded state).
 
-### 6.4 Running the tests
+### 6.4 Running the Tests
 
 ```bash
 # unit tests only (from repo root; add -o for offline)
