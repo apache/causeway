@@ -31,6 +31,7 @@ import java.util.zip.GZIPInputStream;
 import com.sun.net.httpserver.HttpServer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,6 +46,7 @@ import io.opentelemetry.proto.trace.v1.Span;
 import io.opentelemetry.proto.trace.v1.Status;
 
 class MicrometerTracingCompatibilityTest {
+    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void agentJoinsFrameworkAndJdbcWithoutDuplicateSpans() throws Exception {
         try (var collector = new Collector()) {
             launch("agent", collector);
@@ -67,6 +69,7 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
+    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void obsoleteJpaThresholdDoesNotDiscardExportedParents() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
@@ -102,6 +105,7 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
+    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void semanticMembersExportDomainIdentityAndCompactNamesInBothModes() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
@@ -172,6 +176,7 @@ class MicrometerTracingCompatibilityTest {
             assertTrue(collector.spans.isEmpty(), names(collector.spans));
         }
     }
+    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void servletAndQuartzEntryClassificationAndCorrelation() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
