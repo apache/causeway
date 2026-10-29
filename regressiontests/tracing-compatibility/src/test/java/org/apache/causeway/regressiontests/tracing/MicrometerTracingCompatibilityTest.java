@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.regressiontests.tracing;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,13 +25,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 import com.sun.net.httpserver.HttpServer;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
+import io.opentelemetry.proto.common.v1.KeyValue;
 import io.opentelemetry.proto.trace.v1.Span;
 import io.opentelemetry.proto.trace.v1.Status;
 
@@ -66,7 +73,9 @@ class MicrometerTracingCompatibilityTest {
                 launch(mode, collector, "--causeway.observation.jpa-duration-threshold=1d");
                 var actions = collector.spans.stream().filter(s -> s.getName().startsWith("act ")).toList();
                 assertEquals(2, actions.size(), names(collector.spans));
-                for (var action : actions) assertJpaAncestry(collector.spans, action, mode.equals("agent"));
+                for (var action : actions) {
+                    assertJpaAncestry(collector.spans, action, mode.equals("agent"));
+                }
                 assertFalse(collector.spans.stream().anyMatch(s -> attribute(s, "causeway.discard") != null));
             }
         }
@@ -76,7 +85,9 @@ class MicrometerTracingCompatibilityTest {
             launch("boot", collector);
             var actions = collector.spans.stream().filter(s -> s.getName().startsWith("act ")).toList();
             assertEquals(2, actions.size(), names(collector.spans));
-            for (var action : actions) assertJpaAncestry(collector.spans, action, false);
+            for (var action : actions) {
+                assertJpaAncestry(collector.spans, action, false);
+            }
             collector.spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction"))
                     .forEach(s -> assertIdentity(s, "sentinel-user", "sentinel-tenant"));
         }
@@ -106,7 +117,9 @@ class MicrometerTracingCompatibilityTest {
                         assertTrue(span.getName().contains("UpperCaseOwner#"), span.getName());
                         assertTrue(span.getName().length() <= 50);
                         assertFalse(attribute(span, key).contains("implementation."));
-                        if (!key.equals("causeway.action.id")) assertNull(attribute(span, "causeway.action.id"));
+                        if (!key.equals("causeway.action.id")) {
+                            assertNull(attribute(span, "causeway.action.id"));
+                        }
                         var root = collector.spans.stream().filter(parent -> parent.getSpanId().equals(span.getParentSpanId()))
                                 .findFirst().orElseThrow();
                         assertEquals("Causeway Root Interaction", root.getName());
@@ -127,13 +140,13 @@ class MicrometerTracingCompatibilityTest {
         }
     }
 
-    private void assertIdentity(Span span, String userName, String token) {
+    private void assertIdentity(final Span span, final String userName, final String token) {
         var attributes = span.getAttributesList().stream().collect(java.util.stream.Collectors.toMap(
-                a -> a.getKey(), a -> a.getValue().getStringValue()));
+                KeyValue::getKey, a -> a.getValue().getStringValue()));
         assertEquals(userName, attributes.get("causeway.user.name"));
         assertEquals(token, attributes.get("causeway.user.multiTenancyToken"));
     }
-    private void assertJpaAncestry(List<Span> spans, Span action, boolean agent) {
+    private void assertJpaAncestry(final List<Span> spans, final Span action, final boolean agent) {
         var parents = spans.stream().filter(s -> s.getParentSpanId().equals(action.getSpanId())
                 && s.getName().startsWith("Persist ")).toList();
         assertEquals(1, parents.size(), names(spans));
@@ -191,26 +204,32 @@ class MicrometerTracingCompatibilityTest {
                 assertEquals(background.get(0).getSpanId(), replay.getParentSpanId());
                 assertEquals(background.get(0).getTraceId(), replay.getTraceId());
                 for (var span : collector.spans) {
-                    if (!roots.contains(span)) assertNull(attribute(span, "causeway.interaction.id"));
-                    if (!http.contains(span) && !background.contains(span)) assertNull(attribute(span, "causeway.execution.mode"));
+                    if (!roots.contains(span)) {
+                        assertNull(attribute(span, "causeway.interaction.id"));
+                    }
+                    if (!http.contains(span) && !background.contains(span)) {
+                        assertNull(attribute(span, "causeway.execution.mode"));
+                    }
                 }
                 assertEquals(5, roots.stream().map(Span::getTraceId).distinct().count());
                 assertEquals(1, roots.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
             }
         }
     }
-    private static String attribute(Span span, String key) {
+    private static String attribute(final Span span, final String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);
     }
-    private void launch(String mode, Collector collector, String... properties) throws Exception {
+    private void launch(final String mode, final Collector collector, final String... properties) throws Exception {
         launchFixture(MicrometerTracingAgentFixture.class, mode, collector, properties);
     }
-    private void launchFixture(Class<?> fixture, String mode, Collector collector, String... properties) throws Exception {
+    private void launchFixture(final Class<?> fixture, final String mode, final Collector collector, final String... properties) throws Exception {
         boolean agent = mode.equals("agent") || mode.equals("inactive");
         var command = new ArrayList<String>();
         command.add(Path.of(System.getProperty("java.home"), "bin", "java").toString());
-        if (agent) command.add("-javaagent:" + System.getProperty("otel.javaagent.path"));
+        if (agent) {
+            command.add("-javaagent:" + Path.of(io.opentelemetry.javaagent.OpenTelemetryAgent.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+        }
         command.add("-javaagent:" + Path.of(org.mockito.Mockito.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
         command.add("-cp");
         command.add(System.getProperty("surefire.test.class.path", System.getProperty("java.class.path")));
@@ -219,7 +238,9 @@ class MicrometerTracingCompatibilityTest {
         command.add("--management.tracing.sampling.probability=1.0");
         command.add("--management.otlp.metrics.export.url=" + collector.metricsEndpoint());
         command.add("--management.opentelemetry.tracing.export.otlp.endpoint=" + collector.endpoint());
-        if (!agent) command.add("--management.tracing.export.enabled=" + mode.equals("boot"));
+        if (!agent) {
+            command.add("--management.tracing.export.enabled=" + mode.equals("boot"));
+        }
         if (mode.equals("none")) {
             command.add("--spring.autoconfigure.exclude=" + String.join(",",
                     "org.springframework.boot.opentelemetry.autoconfigure.OpenTelemetrySdkAutoConfiguration",
@@ -228,7 +249,9 @@ class MicrometerTracingCompatibilityTest {
                     "org.springframework.boot.micrometer.tracing.autoconfigure.MicrometerTracingAutoConfiguration",
                     "org.springframework.boot.webmvc.autoconfigure.WebMvcObservationAutoConfiguration"));
         }
-        if (!agent) command.add("--management.opentelemetry.map-environment-variables=false");
+        if (!agent) {
+            command.add("--management.opentelemetry.map-environment-variables=false");
+        }
         command.addAll(List.of(properties));
         var builder = new ProcessBuilder(command).redirectErrorStream(true);
         builder.environment().keySet().removeIf(key -> key.startsWith("OTEL_"));
@@ -251,12 +274,12 @@ class MicrometerTracingCompatibilityTest {
         try {
             assertTrue(process.waitFor(120, TimeUnit.SECONDS), "Fixture timed out; see " + output);
             drainer.join(5000);
-            var log = Files.readString(output);
+            var log = Files.readString(output) + "cmd:\n\t" + builder.command().stream().collect(Collectors.joining("\n\t"));
             assertEquals(0, process.exitValue(), log);
             assertTrue(log.contains("CAUSEWAY_TRACING_FIXTURE_OK"), log);
         } finally { process.destroyForcibly(); process.waitFor(10, TimeUnit.SECONDS); }
     }
-    private String names(List<Span> spans) { return spans.stream().map(s -> s.getName() + ":" + s.getKind()).toList().toString(); }
+    private String names(final List<Span> spans) { return spans.stream().map(s -> s.getName() + ":" + s.getKind()).toList().toString(); }
     private static class Collector implements AutoCloseable {
         final List<Span> spans = new CopyOnWriteArrayList<>();
         final List<String> metricNames = new CopyOnWriteArrayList<>();
@@ -284,6 +307,7 @@ class MicrometerTracingCompatibilityTest {
         }
         String endpoint() { return "http://127.0.0.1:" + server.getAddress().getPort() + "/v1/traces"; }
         String metricsEndpoint() { return "http://127.0.0.1:" + server.getAddress().getPort() + "/v1/metrics"; }
+        @Override
         public void close() { server.stop(0); }
     }
 }

@@ -37,8 +37,8 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <opentelemetry-javaagent.version>2.32.0</opentelemetry-javaagent.version>
-        <opentelemetry-proto.version>1.11.0-alpha</opentelemetry-proto.version>
+        <opentelemetry-javaagent.version>2.33.1</opentelemetry-javaagent.version>
+        <opentelemetry-proto.version>1.11.1-alpha</opentelemetry-proto.version>
 
         <jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.tracing.compatibility</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/regressiontests/tracing-compatibility</git-plugin.propertiesDir>
@@ -124,44 +124,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-opentelemetry-javaagent</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>io.opentelemetry.javaagent</groupId>
-                                    <artifactId>opentelemetry-javaagent</artifactId>
-                                    <version>${opentelemetry-javaagent.version}</version>
-                                    <type>jar</type>
-                                    <outputDirectory>${project.build.directory}/agents</outputDirectory>
-                                    <destFileName>opentelemetry-javaagent.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <otel.javaagent.path>${project.build.directory}/agents/opentelemetry-javaagent.jar</otel.javaagent.path>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
