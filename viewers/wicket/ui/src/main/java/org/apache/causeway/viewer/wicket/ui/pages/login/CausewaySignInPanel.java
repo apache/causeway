@@ -18,26 +18,18 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.login;
 
-import java.time.ZoneId;
-import java.util.Optional;
-
 import jakarta.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
@@ -57,7 +49,6 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     @Inject transient ServiceInjector serviceInjector;
     @Inject transient ServiceRegistry serviceRegistry;
     @Inject transient private PageClassRegistry pageClassRegistry;
-    @Inject transient private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
 
     transient Can<UserRegistrationService> anyUserRegistrationService;
     transient Can<EmailNotificationService> anyEmailNotificationService;
@@ -82,36 +73,6 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
         final Component signUpLink = addSignUpLink();
 
         setVisibilityAllowedBasedOnAvailableServices(signUpLink, passwordResetLink);
-    }
-
-    @Override
-    protected void onSignInSucceeded() {
-        if(getWicketViewerSettings().clearOriginalDestination()) {
-            clearOriginalDestination();
-        }
-        super.onSignInSucceeded();
-    }
-
-    @Override
-    protected void storeUserTimeZoneToSession(final @NonNull ZoneId zoneId) {
-        userCurrentSessionTimeZoneHolder.setUserTimeZone(zoneId);
-        // fail early if not wired up correctly: there must be a session available for storage
-        _Assert.assertEquals(zoneId, userCurrentSessionTimeZoneHolder.getUserTimeZone().orElse(null),
-                ()->"no session available to store time-zone data");
-
-        // amend authentication/context with time-zone,
-        // also propagate user's Locale from current InteractionContext to Wicket's session
-        var session = AuthenticatedWebSession.get();
-        ((HasAmendableInteractionContext)session).amendInteractionContext(interactionContext->{
-            Optional.ofNullable(interactionContext.getUser().languageLocale())
-                .ifPresent(session::setLocale);
-            return interactionContext.withTimeZone(zoneId);
-        });
-    }
-
-    @Override
-    protected void clearUserTimeZoneFromSession() {
-        userCurrentSessionTimeZoneHolder.clearUserTimeZone();
     }
 
     // -- HELPER

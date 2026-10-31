@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.extensions.secman.jpa.tenancy.dom;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.secman.applib.mmm.MmmModule;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
@@ -131,6 +133,7 @@ class ApplicationTenancy_IntegTest extends CausewayIntegrationTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtSecmanPersistenceJpa.class,
+            SessionManager.InMemory.class,
             MmmModule.class,
     })
     public static class AppManifest {

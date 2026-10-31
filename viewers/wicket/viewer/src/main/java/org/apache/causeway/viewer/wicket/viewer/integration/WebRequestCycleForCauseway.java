@@ -53,6 +53,7 @@ import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionService;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -85,7 +86,8 @@ public record WebRequestCycleForCauseway(
         PageClassRegistry pageClassRegistry,
         ExceptionRecognizerService exceptionRecognizerService,
         SpecificationLoader specificationLoader,
-        SessionAuthenticator sessionAuthenticator)
+        UserService userService,
+        SessionManager sessionManager)
 implements
     HasMetaModelContext,
     IRequestCycleListener {
@@ -124,13 +126,12 @@ implements
 
     public WebRequestCycleForCauseway(final MetaModelContext mmc, final PageClassRegistry pageClassRegistry) {
         this(mmc.getInteractionService(), pageClassRegistry, mmc.lookupServiceElseFail(ExceptionRecognizerService.class),
-                mmc.getSpecificationLoader(),
-                new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class)));
+                mmc.getSpecificationLoader(), mmc.lookupServiceElseFail(UserService.class), mmc.lookupServiceElseFail(SessionManager.class));
     }
 
     @Override
     public void onBeginRequest(final RequestCycle requestCycle) {
-        sessionAuthenticator.determineInteractionContext()
+        SessionAuthenticator.determineInteractionContext(interactionService, userService, sessionManager)
             .ifPresent(interactionService::openInteraction);
     }
 
