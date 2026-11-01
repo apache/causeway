@@ -37,9 +37,14 @@ extends FacetFactoryAbstract {
 
         @Override
         public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+            // @D3Graph on a property or action
             programmingModel.addFactory(
                     ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
                     new D3GraphFacetFromAnnotationFactory(programmingModel.getMetaModelContext()));
+            // @D3Graph on a type (class)
+            programmingModel.addFactory(
+                    ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
+                    new D3GraphFacetFromAnnotationTypeFactory(programmingModel.getMetaModelContext()));
         }
     }
 
@@ -57,17 +62,11 @@ extends FacetFactoryAbstract {
                             .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), D3Graph.class));
 
         d3GraphIfAny.ifPresent(
-            d3Graph -> {
-                getServiceInjector().injectServicesInto(
-                    D3GraphFacetFromAnnotation
-                        .create(d3Graph, processMethodContext.facetHolder()));
-            }
+            d3Graph -> getServiceInjector().injectServicesInto(
+                D3GraphFacetFromAnnotation
+                    .create(d3Graph, processMethodContext.facetHolder()))
         );
     }
 
-    @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
-        super.processParams(processParameterContext);
-    }
 }
 

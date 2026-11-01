@@ -154,7 +154,6 @@ sequenceDiagram
     WicketPage->>Factory: appliesTo(attributeModel)
     Factory->>Factory: instanceof UiAttributeWkt?
     Factory->>Factory: containsFacet(D3GraphFacet.class)?
-    Factory->>Factory: value instanceof CharSequence && non-blank?
     Factory-->>WicketPage: ApplicationAdvice.APPLIES
 
     WicketPage->>Factory: createComponent("d3", attributeModel)
@@ -327,13 +326,13 @@ flowchart TD
 ```mermaid
 flowchart TD
     subgraph "Unit Tests (JUnit + Mockito)"
-        U1["D3PanelComponentFactoryTest<br/>6 tests ✓ ALL PASS"]:::pass
-        U2["appliesTo: correct type + facet + non-blank → APPLIES"]:::pass
+        U1["D3PanelComponentFactoryTest<br/>7 tests ✓ ALL PASS"]:::pass
+        U2["appliesTo: correct type + facet → APPLIES"]:::pass
         U3["appliesTo: wrong type → DOES_NOT_APPLY"]:::pass
         U4["appliesTo: missing facet → DOES_NOT_APPLY"]:::pass
-        U5["appliesTo: blank value → DOES_NOT_APPLY"]:::pass
-        U6["appliesTo: null value → DOES_NOT_APPLY"]:::pass
-        U7["appliesTo: non-CharSequence value → DOES_NOT_APPLY"]:::pass
+        U5["appliesTo: blank value → APPLIES"]:::pass
+        U6["appliesTo: null value → APPLIES"]:::pass
+        U7["appliesTo: non-CharSequence value → APPLIES"]:::pass
     end
 
     subgraph "Component Tests (WicketTester)"
@@ -369,9 +368,10 @@ flowchart TD
 | `MetaModelContext_forTesting` | (project test-jar from `viewers/commons/testsupport`) | Lightweight `MetaModelContext` without full container |
 | `wicket-tester` | `${wicket.version}` (10.10.0) | `WicketTester` for component rendering tests |
 
-> **Note:** `wicket-tester` is declared in `pom.xml` but panel-level tests (`D3PanelTest`)
-> were removed pending a rewrite. The `createComponent` test in `D3PanelComponentFactoryTest`
-> is disabled with `//TODO` because it requires a full Wicket request cycle.
+> **Note:** `wicket-tester` is declared in `pom.xml` and is used by the
+> `createComponent_returnsD3Panel` test in `D3PanelComponentFactoryTest`, which
+> constructs and renders the panel through a `WicketTester` (backed by a minimal
+> `WebApplication` that installs `WicketWebjars` and allows `.mjs`/`.css` resources).
 
 ---
 
@@ -412,11 +412,11 @@ flowchart TD
 
 | Area | Status | Notes |
 |---|---|---|
-| **TYPE-level `@D3Graph`** | Unsupported | `@Target` includes `TYPE`, but metamodel factory only processes `PROPERTIES_AND_ACTIONS` |
-| **Advisor `graphData` merge** | Not merged | `configFor(...)` merges advisor width/height/drag/zoom/clickAction but not graph data |
+| **TYPE-level `@D3Graph`** | Done | New `D3GraphFacetFromAnnotationTypeFactory` (FeatureType.OBJECT) attaches the facet to the type; new `D3ObjectPanel` + `D3ObjectPanelComponentFactory` (DOMAIN_OBJECT, applies exclusively) render the object page as a graph |
+| **Advisor `graphData` merge** | Done | `configFor(...)` now merges advisor `graphData`; `D3Panel.buildConfig(...)` prefers the property value and falls back to advisor data, else an empty graph |
 | **`D3Panel.css`** | Done | Created with `.d3GraphPanel`, `.d3GraphCanvas`, `.d3-links`, `.d3-nodes`, `.d3-labels` styles; contributed via `CssResourceReference` in `renderHead()` |
-| **Canvas cleanup** | Optional | Override `onRemove`/`onDetach` to call `WicketStuff.D3.destroy(canvasId)` |
-| **Antora docs** | Not started | User-facing page for the D3 viewer extension |
+| **Canvas cleanup** | Done | `WicketStuff.D3.init(...)` now calls `destroy(canvasId)` first, and `destroy(...)` stops the simulation and removes the window `resize` listener — so re-initialising a canvas (e.g. after an AJAX re-render) no longer leaks |
+| **Antora docs** | Done | User-facing page at `extensions/vw/d3/adoc/`; source registered in all four Antora playbooks |
 | **`ui-test` module** | Not started | Long-term Wicket-level regression tests (like `viewers/wicket/ui-test`) |
 
 ---

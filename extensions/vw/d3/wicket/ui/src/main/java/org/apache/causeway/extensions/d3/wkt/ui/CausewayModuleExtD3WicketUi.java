@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.d3.metamodel.CausewayModuleExtD3MetaModel;
 import org.apache.causeway.extensions.d3.wkt.integration.CausewayModuleExtD3WicketIntegration;
+import org.apache.causeway.extensions.d3.wkt.ui.components.D3ObjectPanelComponentFactory;
 import org.apache.causeway.extensions.d3.wkt.ui.components.D3PanelComponentFactory;
 
 /**
@@ -36,6 +37,7 @@ import org.apache.causeway.extensions.d3.wkt.ui.components.D3PanelComponentFacto
 
         // @Component's
         D3PanelComponentFactory.class,
+        D3ObjectPanelComponentFactory.class,
 })
 public class CausewayModuleExtD3WicketUi {
 

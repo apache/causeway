@@ -22,28 +22,22 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 
 import org.apache.causeway.extensions.d3.wkt.integration.components.D3Panel;
 
-import org.jspecify.annotations.NonNull;
+import java.io.Serial;
 
 /**
  * Base class for AJAX callbacks issued by the D3 viewer.
  * <p>
- * The {@code <PLACEHOLDER>} token allows dynamic parameters (for example the
- * clicked node's id) to be appended by the client-side JavaScript to the
- * callback URL, mirroring the fullcalendar extension's pattern.
+ * The {@code <PLACEHOLDER>} token is appended to the callback URL, so that the
+ * client-side JavaScript can substitute it with dynamic parameters (for example
+ * the clicked node's id), mirroring the fullcalendar extension's pattern.
  * </p>
  */
 abstract class D3AjaxCallback extends AbstractDefaultAjaxBehavior {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     static final String PLACEHOLDER = "<PLACEHOLDER>";
-
-    protected abstract String configureCallbackScript(@NonNull String script, @NonNull String urlTail);
-
-    @Override
-    public final CharSequence getCallbackScript() {
-        return configureCallbackScript(super.getCallbackScript().toString(), PLACEHOLDER);
-    }
 
     @Override
     public final CharSequence getCallbackUrl() {

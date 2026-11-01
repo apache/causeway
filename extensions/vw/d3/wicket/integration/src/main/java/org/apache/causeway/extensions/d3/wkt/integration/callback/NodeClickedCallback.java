@@ -21,6 +21,10 @@ package org.apache.causeway.extensions.d3.wkt.integration.callback;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.Request;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serial;
+
 /**
  * Callback that handles a D3 node click event via AJAX.
  * <p>
@@ -30,27 +34,22 @@ import org.apache.wicket.request.Request;
  *
  * @since 2.0 {@index}
  */
+@Slf4j
 public abstract class NodeClickedCallback
-extends D3AjaxCallback
-implements CallbackWithHandler {
+extends D3AjaxCallback {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected String configureCallbackScript(final String script, final String urlTail) {
-        return script.replace(urlTail, "&nodeId=\"+nodeId");
-    }
-
-    @Override
-    public String getHandlerScript() {
-        return "function(nodeId) { " + getCallbackScript() + "}";
-    }
-
-    @Override
     protected void respond(final AjaxRequestTarget target) {
-        final Request r = getD3Panel().getRequest();
-        final String nodeId = r.getRequestParameters().getParameterValue("nodeId").toString();
-        onNodeClicked(new NodeClickedEvent(nodeId), target);
+        final Request request = getD3Panel().getRequest();
+        final var nodeIdParam = request.getRequestParameters().getParameterValue("nodeId");
+        if (nodeIdParam == null || nodeIdParam.isEmpty()) {
+            log.warn("D3 node-click callback invoked without a 'nodeId' request parameter; ignoring.");
+            return;
+        }
+        onNodeClicked(new NodeClickedEvent(nodeIdParam.toString()), target);
     }
 
     /**

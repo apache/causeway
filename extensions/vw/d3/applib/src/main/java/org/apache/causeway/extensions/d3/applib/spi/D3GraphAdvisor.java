@@ -45,17 +45,19 @@ public interface D3GraphAdvisor {
      * Advice for rendering a D3 graph for a given domain class.
      */
     record Advice(
-            /** The JSON graph data as a String (the D3 graph model). */
+            /* The JSON graph data as a String (the D3 graph model). */
             String graphData,
-            /** Optional custom initial width (overrides annotation/default). */
+            /* Optional custom initial width (overrides annotation/default). */
             Integer initialWidth,
-            /** Optional custom initial height (overrides annotation/default). */
+            /* Optional custom initial height (overrides annotation/default). */
             Integer initialHeight,
-            /** Whether node dragging is enabled. */
-            boolean enableDragging,
-            /** Whether zoom/pan is enabled. */
-            boolean enableZoom,
-            /** Optional member id of a domain action to invoke when a graph node is clicked;
+            /* Optional whether node dragging is enabled; {@code null} means keep the
+             *  annotation/config default. */
+            Boolean enableDragging,
+            /* Optional whether zoom/pan is enabled; {@code null} means keep the
+             *  annotation/config default. */
+            Boolean enableZoom,
+            /* Optional member id of a domain action to invoke when a graph node is clicked;
              *  {@code null} means keep the annotation/config default, an empty string means none. */
             String clickAction) {}
 }

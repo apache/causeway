@@ -93,15 +93,20 @@ implements HasAttributeModel {
                 ? facet.configFor(domainClass)
                 : new D3Config();
 
-        // graph data is the annotated property's value (a JSON string);
-        // fall back to an empty graph when the value is null or blank
+        // graph data precedence: the annotated property's value (a JSON string) wins;
+        // else fall back to advisor-provided graph data (merged in by configFor(...)),
+        // else render an empty graph
         var pojo = attributeModel.getObject().getPojo();
         if (pojo instanceof CharSequence cs && !cs.toString().isBlank()) {
             config = config.withGraphData(cs);
-        } else {
+        } else if (isBlank(config.getGraphData())) {
             config = config.withGraphData(EMPTY_GRAPH);
         }
         return config;
+    }
+
+    private static boolean isBlank(final CharSequence cs) {
+        return cs == null || cs.toString().isBlank();
     }
 
     private static Class<?> domainClassOf(final UiAttributeWkt attributeModel) {

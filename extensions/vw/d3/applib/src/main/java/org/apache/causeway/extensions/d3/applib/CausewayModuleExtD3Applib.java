@@ -20,19 +20,10 @@ package org.apache.causeway.extensions.d3.applib;
 
 import org.springframework.context.annotation.Configuration;
 
-import lombok.val;
-
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 public class CausewayModuleExtD3Applib {
-
-    public CausewayModuleExtD3Applib() {
-        val lombok = lombok.Lombok.class;
-        if(lombok == null) {
-            throw new IllegalStateException("Lombok must be on classpath");
-        }
-    }
 
 }

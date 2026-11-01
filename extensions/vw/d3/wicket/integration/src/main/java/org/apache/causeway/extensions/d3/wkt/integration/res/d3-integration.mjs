@@ -35,9 +35,17 @@
 
     var PLACEHOLDER = "<PLACEHOLDER>";
 
+    // Per-canvas bookkeeping so that re-initialising a canvas (e.g. after an AJAX
+    // re-render) tears down the previous simulation and resize listener, avoiding leaks.
+    var simulations = {};
+    var resizeHandlers = {};
+
     WicketStuff.D3 = {
 
         init: function (config) {
+
+            // tear down any previous instance bound to this canvas before re-initialising
+            WicketStuff.D3.destroy(config.canvasId);
 
             var containerEl = document.getElementById(config.canvasId);
             if (!containerEl) {
@@ -111,7 +119,7 @@
                 .force('y', d3.forceY(height / 2).strength(distStrength));
 
             // Re-center/distribute on window resize so the force layout stays proportioned to the container
-            window.addEventListener('resize', function () {
+            var onResize = function () {
                 var w = containerEl.clientWidth;
                 var h = containerEl.clientHeight;
                 if (w && (w !== width || h !== height)) {
@@ -122,7 +130,9 @@
                     simulation.force('y', d3.forceY(height / 2).strength(distStrength));
                     simulation.alpha(0.5).restart();
                 }
-            });
+            };
+            resizeHandlers[config.canvasId] = onResize;
+            window.addEventListener('resize', onResize);
 
             // Zoom behaviour (applied to the container)
             var g = svg.append('g');
@@ -319,21 +329,27 @@
                 });
             });
 
-            // Store the simulation for cleanup (on the DOM element)
-            containerEl._d3Simulation = simulation;
+            // Store the simulation for cleanup (see destroy)
+            simulations[config.canvasId] = simulation;
         },
 
         destroy: function (canvasId) {
-            var containerEl = document.getElementById(canvasId);
-            if (!containerEl) return;
-            var simulation = containerEl._d3Simulation;
+            var simulation = simulations[canvasId];
             if (simulation) {
                 simulation.stop();
-                delete containerEl._d3Simulation;
+                delete simulations[canvasId];
             }
-            // Clear all children (SVG and any other content)
-            while (containerEl.firstChild) {
-                containerEl.removeChild(containerEl.firstChild);
+            var onResize = resizeHandlers[canvasId];
+            if (onResize) {
+                window.removeEventListener('resize', onResize);
+                delete resizeHandlers[canvasId];
+            }
+            // Clear all children (SVG and any other content), if the canvas is still in the DOM
+            var containerEl = document.getElementById(canvasId);
+            if (containerEl) {
+                while (containerEl.firstChild) {
+                    containerEl.removeChild(containerEl.firstChild);
+                }
             }
         }
 

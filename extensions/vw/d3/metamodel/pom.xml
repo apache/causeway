@@ -46,6 +46,26 @@
             <artifactId>causeway-core-metamodel</artifactId>
         </dependency>
 
+        <!-- TESTING -->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-mmtestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

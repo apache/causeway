@@ -191,7 +191,7 @@ No new production dependencies are required. Test dependencies include `wicket-t
 - [x] Create `components/D3PanelComponentFactory.java` — **DONE** (verified on disk with license header; note: `appliesTo` is simpler than original design — no CharSequence value check).
 - [x] Create `components/D3Panel.java` — **DONE** (verified on disk with license header; implements `HasAttributeModel`, uses `lookupFacet` + `startParameterNegotiation()`).
 - [x] Verify signature details when writing code — **DONE** (all resolved; code compiles and `.class` files exist in `target/`).
-- [ ] Optional: canvas cleanup on remove — **NOT DONE** (no `onRemove`/`onDetach` override in UI `D3Panel`; integration module handles render lifecycle).
+- [x] Canvas cleanup / leak prevention — **DONE** (`d3-integration.mjs` now calls `destroy(canvasId)` at the start of `init(...)`; `destroy(...)` stops the force simulation and removes the window `resize` listener, so re-initialising a canvas after an AJAX re-render no longer leaks).
 - [x] Compile: `mvn -pl extensions/vw/d3/wicket/ui -am -DskipTests install` — **DONE** (jar built at `target/causeway-extensions-d3-wicket-ui-4.0.0-SNAPSHOT.jar`).
 - [x] Write unit tests — **DONE** (7 tests: 6 `appliesTo` scenarios + 1 `createComponent_returnsD3Panel` with `WicketTester`; all pass).
 - [ ] Smoke-test in a real webapp — **PENDING** (no example app yet; candidates: `incubator/examples`, or a fresh app importing `CausewayModuleExtD3WicketUi`).
@@ -199,8 +199,8 @@ No new production dependencies are required. Test dependencies include `wicket-t
 
 **Gaps/improvement opportunities discovered during research**
 
-- [ ] **TYPE-level `@D3Graph` unsupported**: annotation `@Target` includes `TYPE`, but the metamodel factory processes only `PROPERTIES_AND_ACTIONS`. Decide whether to add a TYPE-processing factory (enables whole-object-page rendering) or document the limitation. If TYPE support is added, the UI would additionally need a `DOMAIN_OBJECT`-level factory.
-- [ ] **Advisor `graphData` not merged**: `D3GraphFacet.configFor(...)` merges advice for width/height/drag/zoom/clickAction but **not** `graphData`. Decide whether the advisor should be able to supply graph data, and plumb it through.
+- [x] **TYPE-level `@D3Graph`** — **DONE**: added `D3GraphFacetFromAnnotationTypeFactory` (`FeatureType.OBJECTS_ONLY`) which attaches the `D3GraphFacet` to the type's `ObjectSpecification`; added UI `D3ObjectPanel` (extends the integration `D3Panel`, takes a `UiObjectWkt`) and `D3ObjectPanelComponentFactory` (`UiComponentType.DOMAIN_OBJECT`, applies *exclusively* so the object page renders as a graph). Graph data is resolved through the advisor SPI.
+- [x] **Advisor `graphData` merge** — **DONE**: `D3GraphFacetFromAnnotation.configFor(...)` now merges `advice.graphData()`; `D3Panel.buildConfig(...)` gives precedence to the annotated property's value, falling back to advisor data, else an empty graph.
 - [x] **Antora/asciidoc docs**: **DONE** — created `extensions/vw/d3/adoc/` structure following the PDF.js pattern:
   - `antora.yml`
   - `modules/d3/pages/about.adoc` — setup, usage, and known limitations
@@ -208,6 +208,17 @@ No new production dependencies are required. Test dependencies include `wicket-t
   - `modules/d3/partials/module-nav.adoc`
   - Registered in `viewers/wicket/adoc/modules/ROOT/partials/extensions.adoc` (alphabetically between pdfjs and sse).
 - [ ] **Regression/extensions tests**: consider a `-wicket-ui-test` sibling module (like `viewers/wicket/ui-test`) for long-term Wicket-level tests.
+
+**Review fixes applied**
+
+- [x] **BOM registration** — added `causeway-extensions-d3*` entries to `bom/pom.xml` (previously absent, so the BOM import documented in `about.adoc` did not manage the D3 artifacts).
+- [x] **Antora source registration** — added `extensions/vw/d3/adoc` to all four playbooks (`site.yml`, `site-deploy.yml`, `site.NEXT.yml`, `site-verify.yml`); previously the `vw:d3` include in `extensions.adoc` had no matching Antora source.
+- [x] **Inline-script injection hardening** — `D3IntegrationReference.domReadyScript(...)` now escapes `<`, `>`, `&`, U+2028 and U+2029 as `\uXXXX` JSON escapes before embedding the config JSON in the inline `WicketStuff.D3.init(...)` call.
+- [x] **`nodeId` guard** — `NodeClickedCallback.respond(...)` logs and ignores a node-click callback that arrives without a `nodeId` parameter (previously NPE).
+- [x] **Dead code removed** — dropped `CallbackWithHandler`, `NodeClickedCallback.getHandlerScript()`/`configureCallbackScript(...)`, and `D3AjaxCallback.getCallbackScript()`/`configureCallbackScript(...)`; the client uses `clickCallbackUrl` directly.
+- [x] **Advisor nullability aligned** — `D3GraphAdvisor.Advice.enableDragging`/`enableZoom` are now nullable `Boolean`, so an advisor can defer to the annotation/config default (matching `initialWidth`/`initialHeight`).
+- [x] **Unconventional Lombok guard removed** — `CausewayModuleExtD3Applib` no longer throws when Lombok is absent; also removed the no-op `processParams` override in `D3GraphFacetFromAnnotationFactory`.
+
 ## 6. Tests
 
 ### 6.1 Test Class: `D3PanelComponentFactoryTest`

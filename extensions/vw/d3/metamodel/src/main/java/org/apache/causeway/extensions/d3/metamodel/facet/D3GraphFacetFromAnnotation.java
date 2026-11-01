@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.d3.metamodel.facet;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -90,12 +91,21 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
                     if(height != null) {
                         configFromAdvisor = configFromAdvisor.withInitialHeight(height);
                     }
-                    configFromAdvisor = configFromAdvisor
-                            .withEnableDragging(advice.enableDragging())
-                            .withEnableZoom(advice.enableZoom());
+                    final Boolean enableDragging = advice.enableDragging();
+                    if(enableDragging != null) {
+                        configFromAdvisor = configFromAdvisor.withEnableDragging(enableDragging);
+                    }
+                    final Boolean enableZoom = advice.enableZoom();
+                    if(enableZoom != null) {
+                        configFromAdvisor = configFromAdvisor.withEnableZoom(enableZoom);
+                    }
                     final String clickAction = advice.clickAction();
                     if(clickAction != null) {
                         configFromAdvisor = configFromAdvisor.withClickAction(clickAction);
+                    }
+                    final String graphData = advice.graphData();
+                    if(graphData != null && !graphData.isBlank()) {
+                        configFromAdvisor = configFromAdvisor.withGraphData(graphData);
                     }
                     return configFromAdvisor;
                 })
@@ -128,7 +138,7 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
         if(advisors == null) return Optional.empty();
         return advisors.stream()
                 .map(advisor -> advisor.advise(domainClass))
-                .filter(advice -> advice != null)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 

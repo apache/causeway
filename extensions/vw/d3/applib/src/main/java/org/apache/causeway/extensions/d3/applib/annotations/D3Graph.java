@@ -32,9 +32,10 @@ import java.lang.annotation.Target;
  * a custom graph-representation type) is passed to the D3 viewer panel.
  * </p>
  * <p>
- * When placed on a domain object, the annotation can be used to indicate that the object's
- * default representation should use the D3 viewer. An SPI advisor can then resolve the
- * graph data per object instance.
+ * When placed on a domain object, the object's default representation is rendered as a
+ * D3 graph. As there is no annotated property to read the data from, the graph data is
+ * resolved per object instance through a
+ * {@link org.apache.causeway.extensions.d3.applib.spi.D3GraphAdvisor}.
  * </p>
  *
  * @since 2.0 {@index}

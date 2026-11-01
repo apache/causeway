@@ -110,44 +110,29 @@ public GraphOwner selectNode(final String nodeId) {
 
 The `clickAction` attribute specifies the id of a domain action (on the same object) that will be invoked when a graph node is clicked. The action must accept a single `String` parameter which receives the clicked node's id.
 
-Optionally, you can also provide an implementation of the xref:refguide:extensions:index/d3/applib/spi/D3GraphAdvisor.adoc[] SPI, which advises on the graph dimensions, enable dragging/zoom, and the click action id. The framework provides sensible defaults (800x600, dragging and zoom enabled, no click action).
+Optionally, you can also provide an implementation of the xref:refguide:extensions:index/d3/applib/spi/D3GraphAdvisor.adoc[] SPI, which advises on the graph data (`graphData`), the dimensions (`initialWidth`/`initialHeight`), the interaction flags (`enableDragging`/`enableZoom`), and the click action id (`clickAction`). The framework provides sensible defaults (800x600, dragging and zoom enabled, no click action).
+
+Advisor-provided graph data is merged into the effective configuration, but for a *property*-level `@D3Graph` the annotated property's value takes precedence; the advisor's `graphData` is used as a fallback (and is the only source of data for a TYPE-level `@D3Graph`, see below).
 
 
-== Known Limitations
+=== TYPE-level `@D3Graph`
 
-=== TYPE-level `@D3Graph` not supported
-
-The `@D3Graph` annotation has `@Target({METHOD, FIELD, TYPE})`, meaning it was designed to allow annotating both individual properties/actions *and* whole domain classes. However, the metamodel processing factory (`D3GraphFacetFromAnnotationFactory`) is registered only for `FeatureType.PROPERTIES_AND_ACTIONS`. It never processes class-level annotations.
-
-**Consequence:** Writing `@D3Graph` on a domain class like this has **zero effect**:
+`@D3Graph` can also be placed on a domain object (class), in which case the object's default representation is rendered as an interactive D3 graph:
 
 [source,java]
 ----
-@D3Graph(clickAction = "selectNode")
-public class GraphOwner { ... }
-----
+@D3Graph(clickAction = "selectNode")    // <.>
+public class GraphOwner {
 
-If TYPE support were added later, the UI module would also need a new `DOMAIN_OBJECT`-level `ComponentFactory` (alongside the existing `ATTRIBUTE_NAME_AND_VALUE` factory) to render an entire object page as a graph.
-
-**Why it exists:** The current design follows the PDF.js extension pattern, where the viewer renders a *single property*. Supporting TYPE-level would be a more ambitious feature (whole-page graph rendering) that was not in scope for the initial implementation.
-
-This limitation may be addressed in a future release.
-
-=== Advisor `graphData` not merged
-
-The `D3GraphAdvisor` SPI allows users to provide dynamic configuration for graph dimensions (`initialWidth`/`initialHeight`), interaction flags (`enableDragging`/`enableZoom`), and the click action (`clickAction`). The `D3GraphFacet.configFor(Class<?>)` method properly merges all of these advisor values into the `D3Config`.
-
-However, `graphData` — the actual JSON payload describing nodes and links — is **excluded from this merge**. The graph data is always taken directly from the annotated property's runtime value, not from the advisor:
-
-[source,java]
-----
-// In D3Panel.buildConfig():
-var pojo = attributeModel.getObject().getPojo();
-if (pojo instanceof CharSequence cs && !cs.toString().isBlank()) {
-    config = config.withGraphData(cs);  // always from the property value
+    @Action
+    public GraphOwner selectNode(final String nodeId) {
+        // handle node click
+        return this;
+    }
 }
 ----
+<.> indicates that the object page should be rendered as an interactive D3.js force-layout graph.
 
-**Consequence:** An advisor cannot supply or override graph data. If a property returns `null` or an empty string, the graph renders with empty data — there is no way for an advisor to provide a fallback or computed graph.
+As there is no annotated property to read the graph data from, the graph data must be supplied by a xref:refguide:extensions:index/d3/applib/spi/D3GraphAdvisor.adoc[D3GraphAdvisor] (via the `graphData` attribute of its `Advice`); if no advisor supplies data, an empty graph is rendered.
 
-**Why it exists:** This is an intentional simplification — the advisor `D3Config` advice interface may not have been designed to carry `graphData`, or the merge logic in `configFor(...)` was never extended to handle it. The `graphData` field on `D3Config` is settable via `withGraphData(...)`, so plumbing it through the advisor would be technically straightforward in a future update.
+NOTE: A TYPE-level `@D3Graph` *replaces* the standard object page rendering (its properties, collections and actions), so it is best suited to domain objects whose primary purpose is the graph itself.
