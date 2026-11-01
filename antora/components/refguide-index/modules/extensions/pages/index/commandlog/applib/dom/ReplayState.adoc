@@ -1,9 +1,7 @@
 = ReplayState _(enum)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Curently unused.
-
-This enum to support the (incubating) _Command Replay_ extension.
+Introduced in support of the Command Replay Feature.
 
 == API
 
@@ -17,7 +15,18 @@ enum ReplayState {
   OK     // <.>
   FAILED     // <.>
   EXCLUDED     // <.>
+  boolean isExported()
   boolean isFailed()
+  boolean isExportable()
+  boolean isPendingOrFailed()
+  boolean isReplayable()
+  boolean isOkOrExcluded()
+  boolean isExecutedOk()     // <.>
+  boolean isExportable(ReplayState replayState)
+  boolean isExported(ReplayState replayState)
+  boolean isPendingOrFailed(ReplayState replayState)
+  boolean isReplayable(ReplayState replayState)
+  boolean isOkOrExcluded(ReplayState replayState)
 }
 ----
 
@@ -51,6 +60,11 @@ For use on secondary system, indicates that the command has been replayed but en
 --
 For use on secondary system, indicates that the command should not be replayed.
 --
+<.> xref:#isExecutedOk_[isExecutedOk()]
++
+--
+Whether the command is considered to have executed successfully: either a recorded-only command that was never replayed ( _#UNDEFINED_ ), or one that replayed successfully ( _#OK_ ). Used to decide when a participant's recorded bookmark may stand in as its actual bookmark.
+--
 
 == Members
 
@@ -83,3 +97,8 @@ For use on secondary system, indicates that the command has been replayed but en
 === EXCLUDED
 
 For use on secondary system, indicates that the command should not be replayed.
+
+[#isExecutedOk_]
+=== isExecutedOk()
+
+Whether the command is considered to have executed successfully: either a recorded-only command that was never replayed ( _#UNDEFINED_ ), or one that replayed successfully ( _#OK_ ). Used to decide when a participant's recorded bookmark may stand in as its actual bookmark.

@@ -18,6 +18,11 @@
  */
 package org.apache.causeway.core.runtimeservices.command;
 
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -26,8 +31,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
@@ -35,18 +38,16 @@ import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration.Core.RuntimeServices.CommandExecutorService.InteractionAdvisorPolicy;
-import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.Allow;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
 
 class CommandExecutorInteractionAdvisorTest {
 

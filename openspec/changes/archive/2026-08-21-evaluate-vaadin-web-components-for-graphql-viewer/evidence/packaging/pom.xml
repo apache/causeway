@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements. See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.causeway.analysis</groupId>
+    <artifactId>causeway-vaadin-web-component-analysis-assets</artifactId>
+    <version>1.0.0-analysis</version>
+    <packaging>jar</packaging>
+    <name>Causeway Vaadin Web Component Analysis Assets</name>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>../harness/generated</directory>
+                <targetPath>META-INF/resources/causeway-vaadin-analysis</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>vaadin-selective.js</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../harness/generated/split</directory>
+                <targetPath>META-INF/resources/causeway-vaadin-analysis/split</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>../harness/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-analysis</targetPath>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

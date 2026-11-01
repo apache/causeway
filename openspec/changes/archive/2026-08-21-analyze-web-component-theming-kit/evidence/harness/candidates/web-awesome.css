@@ -1,0 +1,18 @@
+:root { --fixture-shell-width: 82rem; --fixture-content-width: 76rem; --wa-font-family-body: system-ui, sans-serif; --wa-font-family-heading: system-ui, sans-serif; --wa-border-radius-scale: 1; --wa-space-scale: 1; }
+html[data-theme="dark"] { color-scheme: dark; }
+body { background: var(--wa-color-surface-lowered, Canvas); color: var(--wa-color-text-normal, CanvasText); font-family: var(--wa-font-family-body); }
+.fixture-header { background: var(--wa-color-brand-fill-loud, #075985); color: var(--wa-color-brand-on-loud, white); box-shadow: var(--wa-shadow-s); }
+.fixture-mark { background: var(--wa-color-neutral-fill-loud, #fff); color: var(--wa-color-brand-fill-loud, #075985); }
+.fixture-card, .fixture-status, .fixture-menu-panel { background: var(--wa-color-surface-default, Canvas); border: var(--wa-border-width-s) solid var(--wa-color-surface-border, GrayText); border-radius: var(--wa-border-radius-m); box-shadow: var(--wa-shadow-s); }
+.fixture-card wa-button, .fixture-actions wa-button { margin: .125rem; }
+.fixture-eyebrow, .fixture-property-label { color: var(--wa-color-text-quiet, GrayText); }
+.fixture-error { color: var(--wa-color-danger-fill-loud, #b91c1c); }
+.fixture-status[data-tone="success"] { border-inline-start: .35rem solid var(--wa-color-success-fill-loud, green); }
+.fixture-status[data-tone="warning"] { border-inline-start: .35rem solid var(--wa-color-warning-fill-loud, orange); }
+.fixture-status[data-tone="danger"] { border-inline-start: .35rem solid var(--wa-color-danger-fill-loud, red); }
+.fixture-table th { background: var(--wa-color-surface-raised, color-mix(in srgb, Canvas 90%, CanvasText)); }
+.fixture-table th, .fixture-table td { border-block-end: var(--wa-border-width-s) solid var(--wa-color-surface-border, GrayText); }
+.fixture-footer { background: var(--wa-color-surface-raised, Canvas); color: var(--wa-color-text-quiet, GrayText); }
+wa-dialog::part(dialog) { max-inline-size: min(38rem, calc(100vw - 2rem)); }
+wa-dropdown::part(panel) { min-inline-size: 17rem; }
+wa-button::part(base):focus-visible, wa-dropdown-item::part(base):focus-visible { outline: .2rem solid var(--wa-color-focus, Highlight); outline-offset: .1rem; }

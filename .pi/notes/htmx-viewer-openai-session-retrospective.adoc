@@ -1,0 +1,82 @@
+= Token-saving notes for HTMX viewer sessions
+
+== Biggest sources of waste observed
+
+The historical pi sessions accumulated 54 compactions, which repeatedly forced rediscovery of skills, repository structure, active OpenSpec state, JDK settings, and test commands.
+The principal OpenSpec skills were reread unchanged 124 times.
+One unchanged Petclinic Playwright command was run 14 times, returning the same failure 13 times before succeeding.
+Large browser snapshots and command output were sometimes returned directly into model context.
+Git status, diff checks, OpenSpec listing, and validation were often run separately and repeatedly.
+
+== Rules for future sessions
+
+Use a fresh pi session for one coherent change or a small set of closely related changes.
+Treat the first compaction as a warning and the second as a reason to finish the current atomic step and restart with a short handoff.
+
+Read the required workflow skill once when its workflow begins.
+Keep a short digest of its commands and rules instead of rereading it after compaction.
+
+Create a working dossier at session start containing only:
+
+* the active OpenSpec change;
+* the relevant specifications and source files;
+* the selected JDK;
+* the focused test commands;
+* the current failure or next task;
+* the current Git state.
+
+Update the dossier when a fact changes rather than rediscovering stable information.
+
+Batch OpenSpec list and status, Git status, recent commits, JDK discovery, and relevant file checks into one startup operation.
+Batch `git diff --check`, `git status`, task counting, and OpenSpec validation at lifecycle boundaries.
+Do not run these checks between edits unless their result can affect the next decision.
+
+After a test failure, save the complete output, extract the first causal error, form a hypothesis, and change something observable before rerunning.
+Do not rerun an identical expensive command merely to see whether the result changes unless explicitly diagnosing flakiness.
+
+Run the narrowest relevant Node, Maven, or Playwright test while editing.
+Run module tests only after the focused test passes.
+Run broad Maven and Playwright gates at implementation or archive boundaries.
+
+Write browser snapshots, console output, network traces, Maven output, and test logs to files.
+Use context-mode to process those files and return only a diagnostic summary to the model.
+
+Use Context7 once for a third-party API question and retain the returned `docRef`.
+Reuse the cached document instead of issuing a semantically equivalent query after compaction.
+
+When multiple IntelliJ projects prevent project inference, switch immediately to repository-scoped `read`, `ctx_execute`, or `ctx_execute_file` calls.
+Do not retry an unchanged IDE call that already failed to identify the project.
+
+Use semantic search once to locate a symbol, then read the known file or offset directly.
+Do not alternate repeatedly among symbol search, text search, regex search, and shell grep for the same question.
+
+Prefer `edit` for small patches.
+Use `write` only for new files or deliberate complete rewrites, and preserve content not explicitly superseded.
+
+== Minimal repository map
+
+The framework-neutral components are in `viewers/webcomponents/foundation/`.
+The generic viewer is in `viewers/webcomponents/htmx/`.
+The principal sample is in `viewers/webcomponents/sample-htmx-petclinic/`.
+The broad regression fixture is in `regressiontests/referenceapp/htmx/`.
+The roadmap and deferred proposals are in `openspec/planned-changes/web-component-viewer/`.
+The canonical accumulated specifications are in `openspec/specs/`.
+
+A focused foundation check normally starts with `cd viewers/webcomponents/foundation && node --test` or a narrowed `--test-name-pattern`.
+Determine the required JDK once per session and retain the exact Maven command in the dossier.
+
+== Copy-paste briefing
+
+[source,text]
+----
+Work from one explicit OpenSpec change at a time.
+Read each required workflow skill once and retain a short digest.
+Maintain a dossier with the active change, relevant specs and files, JDK, focused tests, current failure, and Git state.
+Batch discovery and lifecycle checks.
+After a failure, inspect the saved full log and make a concrete change before rerunning.
+Use focused tests during implementation and broad gates only after they pass.
+Save large browser and build output to files and summarize it with context-mode.
+Reuse Context7 docRefs and other cached static information.
+Restart with a short handoff after a second compaction.
+Preserve existing content unless the task explicitly supersedes it.
+----

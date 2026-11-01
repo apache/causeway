@@ -8,6 +8,21 @@
 ----
 class ActionInvocation {
   ActionInvocation(Interaction interaction, Identifier memberId, Object target, List<Object> args)
+  ActionInvocation(Interaction interaction, Identifier memberId, Object target, List<Object> args, RuleChecking ruleChecking)
+  ActionInvocation(Interaction interaction, Identifier memberId, Identifier domainFacingLogicalMemberIdentifier, Object target, List<Object> args, RuleChecking ruleChecking)
+  RuleChecking getRuleChecking()
+  Identifier getDomainFacingLogicalMemberIdentifier()
+  List<Object> getArgs()
 }
 ----
 
+
+== Invocation identity and rule status
+
+The inherited `target` is the physical method receiver: the domain object for a regular action, or the transient mixin instance for a mixin action.
+`logicalMemberIdentifier` identifies the invoked method; `domainFacingLogicalMemberIdentifier` separately identifies the contributed domain action.
+For regular actions and constructors without a separate domain identifier, both identifiers are the same.
+
+`RuleChecking` has values `CHECKED`, `SKIPPED` and `UNKNOWN`; `isChecked()` returns true only for `CHECKED`.
+The original constructor remains available and defaults to `UNKNOWN`.
+Rule status is aggregate framework execution information and does not change or trigger validation.

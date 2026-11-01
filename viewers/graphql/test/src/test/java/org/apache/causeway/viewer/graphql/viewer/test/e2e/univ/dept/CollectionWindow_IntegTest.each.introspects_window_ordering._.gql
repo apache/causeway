@@ -1,0 +1,8 @@
+{
+  __type(name: "rich__gqlv_collection_window_ordering") {
+    kind
+    name
+    description
+    enumValues(includeDeprecated: true) { name description }
+  }
+}

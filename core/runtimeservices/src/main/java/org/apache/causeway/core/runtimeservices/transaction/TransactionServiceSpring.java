@@ -314,7 +314,7 @@ implements
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-        var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ObservationClosure());
+        var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ArrayList<>());
         interaction.putAttribute(OnCloseHandle.class, onCloseHandle);
 
         platformTransactionManagers.forEach(txManager -> {
@@ -322,8 +322,10 @@ implements
             var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
             txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
+            var observationClosure = new ObservationClosure();
+            onCloseHandle.observationClosures().add(observationClosure);
             @SuppressWarnings("unused")
-			var obs = onCloseHandle.observationClosure().startAndOpenScope(observationProvider.get("Transaction"))
+			var obs = observationClosure.startAndOpenScope(observationProvider.get("Transaction"))
                 .observation()
                 .highCardinalityKeyValue("txManager", txManager.getClass().getName());
 
@@ -332,7 +334,7 @@ implements
                     .observe(()->txManager.getTransaction(txDefn));
             if(!txStatus.isNewTransaction()) {
                 // discard telemetry data when participating in existing transaction
-                onCloseHandle.observationClosure().discard();
+                observationClosure.discard();
                 // we are participating in an exiting transaction (or testing), nothing to do
                 return;
             }
@@ -405,7 +407,7 @@ implements
 
     private record OnCloseHandle(
             List<CloseTask> onCloseTasks,
-            ObservationClosure observationClosure) {
+            List<ObservationClosure> observationClosures) {
 
         void requestRollback() {
             onCloseTasks.forEach(onCloseTask->{
@@ -425,7 +427,18 @@ implements
                             ex);
                 }
             });
-            observationClosure.close();
+            Throwable failure = null;
+            for (int i = observationClosures.size() - 1; i >= 0; --i) {
+                try {
+                    observationClosures.get(i).close();
+                } catch (RuntimeException | Error ex) {
+                    if (failure == null) failure = ex;
+                    else if (failure != ex) failure.addSuppressed(ex);
+                }
+            }
+            observationClosures.clear();
+            if (failure instanceof RuntimeException ex) throw ex;
+            if (failure instanceof Error ex) throw ex;
         }
     }
 }

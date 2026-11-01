@@ -35,7 +35,7 @@ public class ScalarMarshallerCharacterWrapper extends ScalarMarshallerAbstract<C
 
     @Inject
     public ScalarMarshallerCharacterWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Character.class, ExtendedScalars.GraphQLChar, causewayConfiguration);
+        super(Character.class, ExtendedScalars.GraphQLChar, causewayConfiguration, true);
     }
 
     @Override

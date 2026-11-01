@@ -40,11 +40,15 @@ public class ScalarMarshallerBigInteger extends ScalarMarshallerAbstract<BigInte
 
     @Inject
     public ScalarMarshallerBigInteger(final CausewayConfiguration causewayConfiguration) {
-        super(BigInteger.class, Scalars.GraphQLString, causewayConfiguration);
+        super(BigInteger.class, Scalars.GraphQLString, causewayConfiguration, true);
     }
 
     @Override
     public BigInteger unmarshal(Object graphValue, Class<?> targetType) {
-        return new BigInteger((String) graphValue);
+        try {
+            return new BigInteger((String) graphValue);
+        } catch (RuntimeException ignored) {
+            throw new IllegalArgumentException("Invalid BigInteger value");
+        }
     }
 }

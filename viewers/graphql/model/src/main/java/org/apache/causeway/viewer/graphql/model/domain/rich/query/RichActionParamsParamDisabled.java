@@ -57,9 +57,8 @@ public class RichActionParamsParamDisabled extends Element {
 
         var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
+        if (objectSpecification == null)
             return "Disabled";
-        }
 
         var objectAction = actionParamInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -70,7 +69,7 @@ public class RichActionParamsParamDisabled extends Element {
         var argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
         var usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
+        return usable.isVetoed() ? usable.reasonAsString().orElse("Disabled") : null;
     }
 
 }

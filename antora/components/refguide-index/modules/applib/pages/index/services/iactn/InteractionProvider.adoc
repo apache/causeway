@@ -14,6 +14,11 @@ interface InteractionProvider {
   boolean isInInteraction()     // <.>
   Optional<Interaction> currentInteraction()     // <.>
   Optional<InteractionContext> currentInteractionContext()     // <.>
+  Optional<ActionInvocation> currentActionInvocation()
+  boolean isCurrentActionInvocation(Object target, Identifier identifier)
+  boolean isCurrentActionInvocation(Object target, String memberName)
+  boolean isCurrentActionInvocation(Object target, Identifier identifier, ActionInvocation.RuleChecking ruleChecking)
+  boolean isCurrentActionInvocation(Object target, String memberName, ActionInvocation.RuleChecking ruleChecking)
   Optional<UUID> getInteractionId()     // <.>
   int getInteractionLayerCount()     // <.>
   Interaction currentInteractionElseFail()
@@ -73,3 +78,33 @@ Unique id of the current request- or test-scoped xref:refguide:applib:index/serv
 === getInteractionLayerCount()
 
 interaction-layer-stack size
+
+== Current action invocation
+
+`currentActionInvocation()` returns the current framework action execution, or empty when there is no action execution (including during a nested property edit).
+Nested wrapper calls temporarily expose the child invocation and restore the parent when control returns, including after failure.
+
+An action can retain defensive validation for direct Java callers while avoiding a duplicate check after framework validation:
+
+[source,java]
+----
+public void updateName(String name) {
+    if (!interactionService.isCurrentActionInvocation(
+            this, "updateName", ActionInvocation.RuleChecking.CHECKED)) {
+        // Perform the defensive checks needed for direct or skip-rules callers.
+        checkName(name);
+    }
+    this.name = name;
+}
+----
+
+Receiver matching uses Java identity (`==`), not entity equality.
+The full `Identifier` overload distinguishes parameter signatures; the member-name form does not distinguish same-name overloads.
+For a mixin implementation, use the mixin receiver (`this`) and its invoked method name, typically `"act"`.
+The invocation's separate `domainFacingLogicalMemberIdentifier` identifies the contributed domain action.
+
+`CHECKED` describes the framework's rule-checking mode, `SKIPPED` an intentionally unchecked invocation, and `UNKNOWN` an invocation constructed without that information.
+Presence of an invocation alone does not imply that rules were checked, and the aggregate status is not an inventory of individual supporting methods evaluated.
+
+Direct Java calls create no execution frames.
+If such a call occurs inside a framework action, queries can still see that outer action; this API does not inspect arbitrary Java stack frames.

@@ -1,0 +1,92 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+export const GRAPHQL_CLIENT_REQUEST_EVENT = 'causeway-graphql-client-request';
+export const OBJECT_CONTEXT_REQUEST_EVENT = 'causeway-object-context-request';
+export const OBJECT_CONTEXT_STATE_EVENT = 'causeway-object-context-state-change';
+export const OBJECT_MEMBER_ALLOCATION_REQUEST_EVENT = 'causeway-object-member-allocation-request';
+export const COMPONENT_STATE_EVENT = 'causeway-component-state-change';
+export const NAVIGATION_REQUEST_EVENT = 'causeway-navigation-request';
+export const ACTION_REQUEST_EVENT = 'causeway-action-request';
+export const ACTION_PROMPT_STATE_EVENT = 'causeway-action-prompt-state-change';
+export const ACTION_RESULT_EVENT = 'causeway-action-result';
+export const ACTION_RESULTS_DISMISS_REQUEST_EVENT = 'causeway-action-results-dismiss-request';
+export const PROPERTY_INTERACTION_STATE_EVENT = 'causeway-property-interaction-state-change';
+export const PROPERTY_UPDATED_EVENT = 'causeway-property-updated';
+export const COLLECTION_STATE_EVENT = 'causeway-collection-state-change';
+export const COLLECTION_CONFIGURATION_EVENT = 'causeway-collection-configuration-change';
+export const COLLECTION_PREVIEW_STATE_EVENT = 'causeway-collection-preview-state-change';
+export const COLLECTION_PREVIEW_DIAGNOSTIC_EVENT = 'causeway-collection-preview-diagnostic';
+export const OBJECT_LAYOUT_STATE_EVENT = 'causeway-object-layout-state-change';
+export const OBJECT_LAYOUT_DIAGNOSTIC_EVENT = 'causeway-object-layout-diagnostic';
+export const MENU_BARS_CONTEXT_REQUEST_EVENT = 'causeway-menubars-context-request';
+export const MENU_BARS_STATE_EVENT = 'causeway-menubars-state-change';
+export const MENU_BARS_DIAGNOSTIC_EVENT = 'causeway-menubars-diagnostic';
+
+export function requestGraphQLClient(requester) {
+  let client = null;
+  requester.dispatchEvent(createSemanticEvent(GRAPHQL_CLIENT_REQUEST_EVENT, {
+    provide(candidate) {
+      client ??= candidate;
+    }
+  }));
+  return client;
+}
+
+export function requestMenuBarsContext(requester) {
+  let context = null;
+  requester.dispatchEvent(createSemanticEvent(MENU_BARS_CONTEXT_REQUEST_EVENT, {
+    provide(candidate) {
+      context ??= candidate;
+    }
+  }));
+  return context;
+}
+
+export function requestObjectContext(requester) {
+  let context = null;
+  requester.dispatchEvent(createSemanticEvent(OBJECT_CONTEXT_REQUEST_EVENT, {
+    provide(candidate) {
+      context ??= candidate;
+    }
+  }));
+  return context;
+}
+
+export function requestObjectMemberAllocation(requester) {
+  let coordinator = null;
+  requester.dispatchEvent(createSemanticEvent(OBJECT_MEMBER_ALLOCATION_REQUEST_EVENT, {
+    provide(candidate) {
+      coordinator ??= candidate;
+    }
+  }));
+  return coordinator;
+}
+
+export function createSemanticEvent(type, detail, {bubbles = true, composed = true, cancelable = false} = {}) {
+  if (typeof globalThis.CustomEvent === 'function') {
+    return new CustomEvent(type, {detail, bubbles, composed, cancelable});
+  }
+  const event = new Event(type, {bubbles, cancelable});
+  Object.defineProperties(event, {
+    detail: {value: detail, enumerable: true},
+    composed: {value: composed, enumerable: true}
+  });
+  return event;
+}

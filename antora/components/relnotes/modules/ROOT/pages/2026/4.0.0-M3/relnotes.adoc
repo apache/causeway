@@ -58,8 +58,9 @@ https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 
 🔨 Dependency Upgrades
 
-- Upgrade to Spring Boot 4.0.5
-- Upgrade to EclipseLink 5.0.0
+- Requires Java 21+ runtime
+- Upgrade to Spring Boot 4.x 
+- Upgrade to EclipseLink 5.x
 
 == Appendix
 

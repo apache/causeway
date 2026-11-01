@@ -1,0 +1,146 @@
+# These operations are representative evidence, not a normal automated test suite.
+# Encoded view-model identifiers are obtained from preceding action results and are intentionally not committed.
+
+query Smoke {
+  __typename
+}
+
+query TargetedType($name: String!) {
+  __type(name: $name) {
+    kind
+    name
+    fields(includeDeprecated: true) {
+      name
+      description
+      args {
+        name
+        type {
+          kind
+          name
+          ofType {
+            kind
+            name
+          }
+        }
+      }
+      type {
+        kind
+        name
+        ofType {
+          kind
+          name
+        }
+      }
+    }
+  }
+}
+
+mutation OpenActionValidationPage {
+  demo_ActionValidateMenu__validate {
+    _meta {
+      id
+      logicalTypeName
+      title
+    }
+  }
+}
+
+query PropertyValidation {
+  rich {
+    demo_PropertyMenu {
+      mustSatisfy {
+        invoke {
+          results {
+            customerAge {
+              get
+              datatype
+              validate(customerAge: 12)
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query ConfiguredPagingDoesNotBoundRows {
+  rich {
+    demo_CollectionLayoutMenu {
+      paged {
+        invoke {
+          results {
+            children {
+              datatype
+              get {
+                _meta {
+                  title
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query LocalDateTimeFallbackFails($value: String!) {
+  rich {
+    demo_JavaTimeTypesMenu {
+      localDateTimes {
+        invoke {
+          results {
+            openViewModel {
+              invoke(initialValue: $value) {
+                results {
+                  _meta {
+                    logicalTypeName
+                    title
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query ResourcePolicyProbe {
+  rich {
+    demo_PropertyMenu {
+      fileAccept {
+        invoke {
+          results {
+            pdfProperty {
+              datatype
+              get {
+                bytes
+                mimeType
+              }
+            }
+            txtProperty {
+              datatype
+              get {
+                name
+                mimeType
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query HomePageLookupWithoutIdentity {
+  rich {
+    demo_Homepage {
+      _meta {
+        logicalTypeName
+        title
+      }
+    }
+  }
+}

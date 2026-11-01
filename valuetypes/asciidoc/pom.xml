@@ -37,6 +37,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <jnr-jffi.version>1.4.3</jnr-jffi.version>
     </properties>
 
     <dependencyManagement>
@@ -63,7 +64,7 @@
             <dependency>
                 <groupId>org.jruby</groupId>
                 <artifactId>jruby</artifactId>
-                <version>10.1.1.0</version>
+                <version>10.1.2.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.github.jnr</groupId>
@@ -94,7 +95,7 @@
             <dependency>
                 <groupId>com.github.jnr</groupId>
                 <artifactId>jnr-posix</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.5</version>
                 <exclusions>
                     <!-- convergence issues -->
                     <exclusion>
@@ -110,7 +111,7 @@
             <dependency>
                 <groupId>com.github.jnr</groupId>
                 <artifactId>jnr-enxio</artifactId>
-                <version>0.33.1</version>
+                <version>0.33.4</version>
                 <exclusions>
                     <!-- convergence issues -->
                     <exclusion>
@@ -126,18 +127,24 @@
             <dependency>
                 <groupId>com.github.jnr</groupId>
                 <artifactId>jnr-constants</artifactId>
-                <version>0.11.0</version>
+                <version>0.11.2</version>
             </dependency>
             <dependency>
                 <groupId>com.github.jnr</groupId>
                 <artifactId>jnr-ffi</artifactId>
-                <version>2.3.1</version>
+                <version>2.3.4</version>
             </dependency>
 			<dependency>
 				<groupId>com.github.jnr</groupId>
 				<artifactId>jffi</artifactId>
-				<version>1.4.0</version>
+				<version>${jnr-jffi.version}</version>
 			</dependency>
+			<dependency>
+                <groupId>com.github.jnr</groupId>
+                <artifactId>jffi</artifactId>
+                <classifier>native</classifier>
+                <version>${jnr-jffi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

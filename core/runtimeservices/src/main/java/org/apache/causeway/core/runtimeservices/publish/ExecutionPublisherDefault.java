@@ -113,8 +113,9 @@ implements ExecutionPublisher {
                 this::getCannotPublishReason);
 
         if(canPublish()) {
-            observationProvider.get("Execution Publishing (subscribers=%d)"
-                    .formatted(enabledSubscribers.size()))
+            observationProvider.get("causeway.execution.publish")
+                .contextualName("Execution Publishing")
+                .highCardinalityKeyValue("causeway.execution.subscriber-count", Integer.toString(enabledSubscribers.size()))
                 .observe(()->{
                     for (var subscriber : enabledSubscribers) {
                         subscriber.onExecution(execution);

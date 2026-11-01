@@ -53,9 +53,25 @@ public final class InteractionLayerStack {
             final Observation observation) {
         var parent = currentLayer().orElse(null);
         var interactionCarrier = new InteractionCarrierDefault(executionContext);
-        @SuppressWarnings("resource")
-        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)
-        	.addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
+        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier);
+        if (parent == null) {
+            observation.highCardinalityKeyValue("causeway.interaction.id",
+                    newLayer.interaction().getInteractionId().toString());
+        }
+        var closure = new ObservationClosure(observation);
+        newLayer.addOnCloseListener(() -> {
+            try {
+                // Replay can replace the command's opening-time identifier. Bind to
+                // this root, not whichever nested layer happens to be current.
+                if (parent == null) {
+                    observation.highCardinalityKeyValue("causeway.interaction.id",
+                            newLayer.interaction().getInteractionId().toString());
+                }
+            } finally {
+                closure.close();
+            }
+        });
+        newLayer.interaction().putAttribute(ObservationClosure.class, closure);
         set(newLayer);
         return newLayer;
     }
@@ -80,6 +96,16 @@ public final class InteractionLayerStack {
     	} finally {
     		threadLocalLayer.remove();
     	}
+    }
+
+    public void onError(final Throwable failure) {
+        var layer = peek();
+        if (layer != null) {
+            var closure = layer.interaction().getAttribute(ObservationClosure.class);
+            if (closure != null) {
+                closure.onError(failure);
+            }
+        }
     }
 
     public boolean isEmpty() {

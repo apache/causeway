@@ -23,8 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -132,19 +130,6 @@ implements
 
     @Override
     public void onBeginRequest(final RequestCycle requestCycle) {
-
-        if (!Session.exists()) {
-            // Track if session was created from an expired one to notify user of the refresh.
-            // If there is no remember me cookie, user will be redirected to sign in and no need to notify.
-            if (userHasSessionWithRememberMe(requestCycle)) {
-                requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.EXPIRED);
-                if(log.isTraceEnabled()) {
-                    log.trace("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
-                }
-            }
-            return;
-        }
-
         sessionAuthenticator.determineInteractionContext()
             .ifPresent(interactionService::openInteraction);
     }
@@ -411,30 +396,12 @@ implements
 
     /**
      * TODO: this is very hacky...
-     *
-     * <p>
-     * Matters should improve once CAUSEWAY-299 gets implemented...
+     * <p>Matters should improve once CAUSEWAY-299 gets implemented...
      */
     protected boolean isSignedIn() {
         if(!interactionService.isInInteraction())
             return false;
         return AuthenticatedWebSession.get().isSignedIn();
-    }
-
-    private boolean userHasSessionWithRememberMe(final RequestCycle requestCycle) {
-        var containerRequest = requestCycle.getRequest().getContainerRequest();
-
-        if (containerRequest instanceof HttpServletRequest) {
-            var cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
-            var cookieKey = _Strings.nullToEmpty(
-                    getConfiguration().viewer().wicket().rememberMe().cookieKey());
-
-            for (var cookie : cookies) {
-                if (cookieKey.equals(cookie.getName()))
-                    return true;
-            }
-        }
-        return false;
     }
 
 }

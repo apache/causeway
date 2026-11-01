@@ -53,6 +53,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -255,6 +260,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -1600,6 +1610,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -3023,6 +3038,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetFromConfiguration">
+                <mml:attr name="facet" value="LockingFacetFromConfiguration"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -4241,6 +4261,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -5630,6 +5655,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -5844,6 +5874,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -7232,6 +7267,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -7452,6 +7492,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -8854,6 +8899,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -10800,6 +10850,11 @@
                 <mml:attr name="origin" value="LayoutMethod"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -12278,6 +12333,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -13692,6 +13752,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -15108,6 +15173,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -16455,6 +16525,11 @@
                 <mml:attr name="intent.layout" value="UI_HINT"/>
                 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.layout()"/>
                 <mml:attr name="origin" value="LayoutMethod"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
@@ -18121,6 +18196,11 @@
                 <mml:attr name="facet" value="IconFacetViaIconMethod"/>
                 <mml:attr name="intent.icon" value="UI_HINT"/>
                 <mml:attr name="methods" value="public default org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconSize)"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
@@ -19902,6 +19982,11 @@
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -21199,6 +21284,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
@@ -22504,6 +22594,11 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -23801,6 +23896,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -27926,6 +28026,11 @@
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -29590,6 +29695,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
@@ -31262,6 +31372,11 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -32915,6 +33030,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -33240,6 +33360,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -33553,6 +33678,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
@@ -33882,6 +34012,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -34210,6 +34345,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -34396,6 +34536,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
@@ -34717,6 +34862,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -34938,6 +35088,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
@@ -35161,6 +35316,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -35361,6 +35521,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
@@ -35593,6 +35758,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -35824,6 +35994,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -36031,6 +36206,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -38250,6 +38430,11 @@
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -38426,6 +38611,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
@@ -38606,6 +38796,11 @@
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -38782,6 +38977,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
@@ -38962,6 +39162,11 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -39138,6 +39343,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
@@ -39318,6 +39528,11 @@
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -39496,6 +39711,11 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -39668,6 +39888,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
@@ -39921,6 +40146,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
@@ -40324,6 +40554,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -41825,6 +42060,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -43122,6 +43362,11 @@
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -44513,6 +44758,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
@@ -46240,6 +46490,11 @@
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -47887,6 +48142,11 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
                 <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
@@ -49517,6 +49777,11 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetImpl"/>
@@ -49719,6 +49984,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
@@ -51225,6 +51495,11 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="IntrospectionPolicyFacetForDomainObjectAnnotation"/>
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="policy" value="OPTIMISTIC"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">

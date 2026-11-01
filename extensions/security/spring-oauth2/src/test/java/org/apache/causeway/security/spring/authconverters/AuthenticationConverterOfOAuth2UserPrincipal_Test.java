@@ -19,6 +19,8 @@
 package org.apache.causeway.security.spring.authconverters;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -108,7 +110,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
     class avatarUrl {
 
         @Test
-        void given_avatarUrl_attr_exists_and_can_be_parsed_then_used() throws MalformedURLException {
+        void given_avatarUrl_attr_exists_and_can_be_parsed_then_used() throws MalformedURLException, URISyntaxException {
 
             // given
             final OAuth2User oAuth2User = new OAuth2User() {
@@ -129,7 +131,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(new URI("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png").toURL());
         }
 
         @Test

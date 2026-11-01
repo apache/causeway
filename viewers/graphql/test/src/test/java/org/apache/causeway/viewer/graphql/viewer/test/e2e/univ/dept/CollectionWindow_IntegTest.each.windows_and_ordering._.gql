@@ -1,0 +1,96 @@
+{
+  rich {
+    university_dept_Departments {
+      physics: findDepartmentByName {
+        invoke(name: "Physics") {
+          results {
+            defaultWindow: staffMembers {
+              window {
+                offset
+                requestedSize
+                returnedCount
+                totalCount
+                maximumSize
+                hasPrevious
+                hasNext
+                ordering
+                rows { name { get } }
+              }
+            }
+            middleWindow: staffMembers {
+              window(offset: 5, size: 5) {
+                offset
+                requestedSize
+                returnedCount
+                totalCount
+                maximumSize
+                hasPrevious
+                hasNext
+                ordering
+                rows { name { get } }
+              }
+            }
+            lastWindow: staffMembers {
+              window(offset: 10, size: 5) {
+                offset
+                requestedSize
+                returnedCount
+                totalCount
+                maximumSize
+                hasPrevious
+                hasNext
+                ordering
+                rows { name { get } }
+              }
+            }
+            outOfRange: staffMembers {
+              window(offset: 99, size: 5) {
+                offset
+                requestedSize
+                returnedCount
+                totalCount
+                maximumSize
+                hasPrevious
+                hasNext
+                ordering
+                rows { name { get } }
+              }
+            }
+            configuredStaffMembers {
+              window(size: 3) {
+                ordering
+                rows { name { get } }
+              }
+            }
+            disabledStaffMembers {
+              disabled
+              window(size: 2) {
+                returnedCount
+                rows { name { get } }
+              }
+            }
+            legacy: staffMembers {
+              get { name { get } }
+            }
+          }
+        }
+      }
+      empty: findDepartmentByName {
+        invoke(name: "Textiles") {
+          results {
+            staffMembers {
+              window(size: 5) {
+                offset
+                returnedCount
+                totalCount
+                hasPrevious
+                hasNext
+                rows { name { get } }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  rich {
+    university_dept_Department(object: {id: "$departmentId"}) {
+      staffMembers {
+        metadata {
+          friendlyName
+          description
+          cssClassFa
+          cssClassFaPosition
+          resultElementLogicalTypeName
+          maxLength
+        }
+      }
+      changeName {
+        metadata {
+          friendlyName
+          description
+          cssClassFa
+          cssClassFaPosition
+          resultElementLogicalTypeName
+        }
+        params {
+          newName {
+            metadata {
+              friendlyName
+              description
+              cssClassFa
+              cssClassFaPosition
+              resultElementLogicalTypeName
+              maxLength
+              pattern
+              patternFlags
+              multiLine
+              typicalLength
+            }
+          }
+        }
+      }
+    }
+    university_dept_Departments {
+      findAllDepartments {
+        metadata {
+          resultElementLogicalTypeName
+        }
+      }
+    }
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            name {
+              metadata {
+                friendlyName
+                description
+                cssClassFa
+                cssClassFaPosition
+                maxLength
+                pattern
+                patternFlags
+                multiLine
+                labelPosition
+                typicalLength
+              }
+            }
+            photo {
+              get {
+                fileAccept
+              }
+            }
+            hiddenPhoto {
+              hidden
+              metadata {
+                friendlyName
+                description
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

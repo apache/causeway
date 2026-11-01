@@ -1,0 +1,14 @@
+{
+  "name": "causeway-pdfjs-property-reader",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audit": "npm audit --omit=dev",
+    "build": "node build.mjs",
+    "update-policy": "node build.mjs --write-policy",
+    "verify": "node verify.mjs"
+  },
+  "dependencies": {
+    "pdfjs-dist": "5.0.375"
+  }
+}

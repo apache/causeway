@@ -38,6 +38,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatur
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
@@ -119,7 +120,13 @@ public class SimpleMutationForProperty extends Element {
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(oneToOneAssociation.asciiId());
-        ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
+        Object argumentPojo = ObjectFeatureUtils.unmarshalValue(
+                oneToOneAssociation.getElementType(),
+                argumentValue,
+                environment,
+                context);
+        ResourceValueTypes.validateFileAccept(oneToOneAssociation, argumentPojo);
+        ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentPojo);
 
         var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed())

@@ -64,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.properties.propertylayout.Uncha
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 record XmlLayoutRespectingFacetInstaller(
         SpecificationLoader specLoader) {
@@ -131,13 +132,15 @@ record XmlLayoutRespectingFacetInstaller(
                     int memberOrderSequence;
                     if(actionLayoutDataOwner instanceof FieldSet fieldSet) {
                         for (var propertyLayoutData : fieldSet.getProperties()) {
-                            // any will do; choose the first one that we know is valid
-                            if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
-                                groupIdAndName = GroupIdAndName
-                                        .forPropertyLayoutData(propertyLayoutData)
-                                        .orElse(null);
-                                break;
-                            }
+                            var prop = oneToOneAssociationById.get(propertyLayoutData.getId());
+                            if(prop==null
+                            		|| Facets.isPermantenlyHiddenInForms(prop)) {
+								continue; // exclude permanently hidden properties from consideration
+							}
+                            groupIdAndName = GroupIdAndName
+                                    .forPropertyLayoutData(propertyLayoutData)
+                                    .orElse(null);
+                            break; // done searching
                         }
                         memberOrderSequence = actionPropertyGroupSequence++;
                     } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {

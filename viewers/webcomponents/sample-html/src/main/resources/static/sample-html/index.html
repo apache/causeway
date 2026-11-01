@@ -1,0 +1,643 @@
+<!doctype html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Executable vanilla HTML reference showcase for Apache Causeway semantic web-component rendering and interactions.">
+  <link rel="icon" href="data:,">
+  <title>Causeway web-component interaction showcase</title>
+  <link rel="stylesheet" href="/causeway-webcomponents/component-styles.css">
+  <link rel="stylesheet" href="/causeway-webcomponents/theme.css">
+  <style id="sample-theme">
+    :root {
+      --sample-section-width: 82rem;
+    }
+
+    body {
+      margin: 0;
+      background: var(--causeway-page-background);
+      color: var(--causeway-text);
+    }
+
+    .sample-shell {
+      width: min(calc(100% - (2 * var(--causeway-space-4))), var(--sample-section-width));
+      margin-inline: auto;
+      padding-block: var(--causeway-space-5);
+    }
+
+    .sample-hero {
+      min-height: 8rem;
+      margin-block-end: var(--causeway-space-5);
+      padding: var(--causeway-space-5);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--causeway-space-5);
+      border-radius: var(--causeway-radius-lg);
+      background: var(--causeway-nav-background);
+      color: var(--causeway-nav-text);
+      box-shadow: var(--causeway-shadow-md);
+    }
+
+    .sample-hero h1 {
+      margin: 0;
+      color: inherit;
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 520;
+    }
+
+    .sample-eyebrow,
+    .sample-section-kicker {
+      margin: 0 0 var(--causeway-space-1);
+      color: var(--causeway-muted);
+      font-size: var(--causeway-font-size-sm);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sample-hero .sample-eyebrow,
+    .sample-hero-copy {
+      color: color-mix(in srgb, var(--causeway-nav-text) 94%, transparent);
+    }
+
+    .sample-hero-copy,
+    .sample-section-heading p {
+      max-width: 72ch;
+      margin: var(--causeway-space-2) 0 0;
+      line-height: 1.55;
+    }
+
+    .sample-readiness {
+      flex: 0 0 auto;
+      padding: var(--causeway-space-2) var(--causeway-space-3);
+      border: 1px solid currentColor;
+      border-radius: var(--causeway-radius-pill);
+      background: rgb(0 0 0 / 0.12);
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--causeway-space-4);
+    }
+
+    .sample-card {
+      min-width: 0;
+      grid-column: span 12;
+      padding: var(--causeway-space-5);
+      border: 1px solid var(--causeway-border);
+      border-radius: var(--causeway-radius-md);
+      background: var(--causeway-surface);
+      box-shadow: var(--causeway-shadow-sm);
+    }
+
+    .sample-card-object,
+    .sample-card-actions {
+      grid-column: span 5;
+    }
+
+    .sample-card-coverage,
+    .sample-card-events {
+      grid-column: span 7;
+    }
+
+    .sample-section-heading {
+      margin: calc(-1 * var(--causeway-space-5)) calc(-1 * var(--causeway-space-5)) var(--causeway-space-4);
+      padding: var(--causeway-space-3) var(--causeway-space-5);
+      border-block-end: 1px solid var(--causeway-border);
+      border-radius: var(--causeway-radius-md) var(--causeway-radius-md) 0 0;
+      background: var(--causeway-surface-subtle);
+    }
+
+    .sample-section-heading h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    [data-testid="section-menubars"] {
+      --causeway-menubar-background: var(--causeway-surface-subtle);
+      --causeway-menubar-border: 1px solid var(--causeway-border);
+      --causeway-menubar-color: var(--causeway-text);
+      --causeway-menubar-control-active-background: color-mix(in srgb, var(--causeway-link) 12%, transparent);
+      --causeway-menu-panel-color: var(--causeway-text);
+    }
+
+    .sample-standalone-menus {
+      margin-block-start: var(--causeway-space-4);
+      padding: var(--causeway-space-3);
+      border: 1px solid var(--causeway-border);
+      border-radius: var(--causeway-radius-sm);
+    }
+
+    .sample-standalone-menus summary {
+      cursor: pointer;
+      font-weight: 650;
+    }
+
+    .sample-property-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--causeway-space-3) var(--causeway-space-5);
+    }
+
+    .sample-property-grid .causeway-property {
+      grid-template-columns: minmax(7rem, var(--causeway-label-width)) minmax(0, 1fr) auto;
+    }
+
+    .sample-property-grid cw-property[data-testid="property-summary"],
+    .sample-property-grid cw-property[data-testid="property-related-object"] {
+      grid-column: 1 / -1;
+    }
+
+    .sample-action-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--causeway-space-2);
+    }
+
+    .sample-coverage-list {
+      margin: 0;
+      padding-inline-start: 1.2rem;
+      display: grid;
+      gap: var(--causeway-space-2);
+    }
+
+    .sample-coverage-list strong {
+      display: block;
+    }
+
+    .sample-diagnostic-grid,
+    .sample-collection-stack {
+      min-width: 0;
+      display: grid;
+      gap: var(--causeway-space-3);
+    }
+
+    .sample-collection-panel {
+      min-width: 0;
+    }
+
+    .sample-collection-panel-narrow {
+      inline-size: min(100%, 44rem);
+    }
+
+    .sample-diagnostic {
+      min-width: 0;
+      padding: var(--causeway-space-3);
+      border: 1px solid var(--causeway-border);
+      border-radius: var(--causeway-radius-sm);
+      background: var(--causeway-surface-subtle);
+    }
+
+    .sample-diagnostic-label {
+      display: block;
+      color: var(--causeway-muted);
+      font-size: var(--causeway-font-size-sm);
+      font-weight: 650;
+    }
+
+    .sample-diagnostic output {
+      display: block;
+      overflow-wrap: anywhere;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .sample-footer {
+      margin-block-start: var(--causeway-space-5);
+      padding-block: var(--causeway-space-4);
+      border-block-start: 1px solid var(--causeway-border);
+      color: var(--causeway-muted);
+      font-size: var(--causeway-font-size-sm);
+      text-align: center;
+    }
+
+    @media (max-width: 60rem) {
+      .sample-card-object,
+      .sample-card-actions,
+      .sample-card-coverage,
+      .sample-card-events {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 48rem) {
+      .sample-shell {
+        width: min(calc(100% - (2 * var(--causeway-space-3))), var(--sample-section-width));
+        padding-block: var(--causeway-space-3);
+      }
+
+      .sample-hero {
+        min-height: 0;
+        padding: var(--causeway-space-4);
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .sample-card {
+        padding: var(--causeway-space-4);
+      }
+
+      .sample-section-heading {
+        margin: calc(-1 * var(--causeway-space-4)) calc(-1 * var(--causeway-space-4)) var(--causeway-space-3);
+        padding-inline: var(--causeway-space-4);
+      }
+
+      .sample-property-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .sample-property-grid .causeway-property {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .sample-property-grid :is(.causeway-property-label, .causeway-property-description) {
+        grid-column: 1 / -1;
+      }
+
+      .sample-property-grid :is(.causeway-property-value, .causeway-property-editor) {
+        grid-column: 1;
+      }
+
+      .sample-property-grid cw-property[data-testid="property-summary"],
+      .sample-property-grid cw-property[data-testid="property-related-object"] {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="sample-shell" data-testid="sample-app" data-state="booting" aria-busy="true">
+    <header class="sample-hero">
+      <div>
+        <p class="sample-eyebrow">Apache Causeway · Vanilla HTML</p>
+        <h1>Component interaction showcase</h1>
+        <p class="sample-hero-copy">A deterministic application shell and domain page for semantic menu bars, object rendering, property editing, action prompts, and typed results using packaged native custom elements and the same-origin rich GraphQL endpoint.</p>
+      </div>
+      <div class="sample-readiness" aria-label="Object context state">
+        <output data-testid="sample-state" aria-live="polite">booting</output>
+      </div>
+    </header>
+
+    <cw-graphql-client endpoint="/graphql" data-testid="graphql-client">
+      <section class="sample-card" data-testid="section-menubars" aria-labelledby="sample-menubars-heading">
+        <div class="sample-section-heading">
+          <p class="sample-section-kicker">Application entry point</p>
+          <h2 id="sample-menubars-heading">Effective semantic menu bars</h2>
+          <p>The composite shares one authorized effective-menu generation across all present bars; the standalone examples exercise the same public bar components independently.</p>
+        </div>
+        <cw-menubars data-testid="menubars-composite"></cw-menubars>
+        <details class="sample-standalone-menus">
+          <summary>Standalone semantic bar examples</summary>
+          <cw-menubar-primary data-testid="menubar-primary-standalone"></cw-menubar-primary>
+          <cw-menubar-secondary data-testid="menubar-secondary-standalone"></cw-menubar-secondary>
+          <cw-menubar-tertiary data-testid="menubar-tertiary-standalone"></cw-menubar-tertiary>
+        </details>
+      </section>
+
+      <cw-object-context
+          logical-type="causeway.webcomponents.sample.SampleObject"
+          object-id="s_sample-1"
+          data-testid="sample-object">
+        <div class="sample-grid">
+          <section class="sample-card sample-card-object" data-testid="section-object-summary" aria-labelledby="sample-object-summary-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Object context</p>
+              <h2 id="sample-object-summary-heading">Semantic identity</h2>
+              <p>The header and bookmark metadata share the same coordinated object projection as every member below.</p>
+            </div>
+            <cw-object-header data-testid="object-header"></cw-object-header>
+          </section>
+
+          <aside class="sample-card sample-card-coverage" data-testid="sample-coverage" aria-labelledby="sample-coverage-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Coverage guide</p>
+              <h2 id="sample-coverage-heading">States represented here</h2>
+              <p>The explanatory copy describes the fixture; component-rendered state remains the source of truth.</p>
+            </div>
+            <ul class="sample-coverage-list">
+              <li><strong>Qualified presentation</strong>Text, multiline, exact and machine numbers, Boolean, enum, local date, local time, and local date-time demonstrate default read-only Vaadin fields, while null and object reference values retain their established renderers.</li>
+              <li><strong>Disabled semantics</strong>Code, object reference, and archive retain explicit reasons supplied by Causeway.</li>
+              <li><strong>Semantic reference</strong>The related object publishes navigation intent without choosing a URL or router.</li>
+              <li><strong>Collections</strong>A deterministic wide window qualifies virtual Grid, a disabled sibling preserves its reason, and narrow, empty, and encounter-ordered siblings retain native presentation; use `?grid-mode=bounded` to retain the current window with Causeway previous and next controls and no invented total.</li>
+              <li><strong>Intentionally hidden</strong>The secret property and hidden action produce no semantic content, and their hidden value is never repeated here.</li>
+              <li><strong>Framework-neutral interactions</strong>Ordinary actions demonstrate the independent Vaadin Button closure, while property interaction controls and prompts remain native and no HTMX, frontend framework, npm build, automatic routing, or component-owned GraphQL construction is present.</li>
+              <li><strong>Rollback and failure</strong>Use `?component-toolkit=native`, `?menu-state=empty`, `?menu-state=unsupported`, `?fail-field=basic`, `?fail-action=true`, `?fail-grid=true`, or `?fail-menubar=true` for deterministic empty, unsupported, complete rollback, and family-isolated native recovery states.</li>
+            </ul>
+          </aside>
+
+          <section class="sample-card" data-testid="section-properties" aria-labelledby="sample-properties-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Value renderer registry</p>
+              <h2 id="sample-properties-heading">Representative properties</h2>
+              <p>Each member derives capability from targeted schema introspection and instance state from the nearest object context.</p>
+            </div>
+            <div class="sample-property-grid">
+              <cw-property id="name" data-testid="property-name"></cw-property>
+              <cw-property id="code" data-testid="property-code"></cw-property>
+              <cw-property id="summary" editable data-testid="property-summary"></cw-property>
+              <cw-property id="capacity" editable data-testid="property-capacity"></cw-property>
+              <cw-property id="featured" editable data-testid="property-featured"></cw-property>
+              <cw-property id="status" editable data-testid="property-status"></cw-property>
+              <cw-property id="notes" editable data-testid="property-notes"></cw-property>
+              <cw-property id="scheduledDate" editable data-testid="property-scheduled-date"></cw-property>
+              <cw-property id="startsAt" editable data-testid="property-starts-at"></cw-property>
+              <cw-property id="lastReviewedAt" editable data-testid="property-last-reviewed-at"></cw-property>
+              <cw-property id="relatedObject" data-testid="property-related-object"></cw-property>
+              <cw-property id="secret" data-testid="property-secret"></cw-property>
+            </div>
+          </section>
+
+          <section class="sample-card sample-card-actions" data-testid="section-actions" aria-labelledby="sample-actions-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Semantic interaction controller</p>
+              <h2 id="sample-actions-heading">Semantic actions</h2>
+              <p>Enabled requests are handled by the standard controller; disabled and hidden states remain unavailable.</p>
+            </div>
+            <div class="sample-action-stack" aria-label="Interactive action affordances">
+              <cw-action id="inspect" data-testid="action-inspect"></cw-action>
+              <cw-action id="updateDetails" data-testid="action-update-details"></cw-action>
+              <cw-action id="findRelated" data-testid="action-find-related"></cw-action>
+              <cw-action id="selectRelated" data-testid="action-select-related"></cw-action>
+              <cw-action id="clearNotes" data-testid="action-clear-notes"></cw-action>
+              <cw-action id="archive" data-testid="action-archive"></cw-action>
+              <cw-action id="hiddenAction" data-testid="action-hidden"></cw-action>
+            </div>
+          </section>
+
+          <section class="sample-card sample-card-events" data-testid="section-events" aria-labelledby="sample-events-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Plain JavaScript observer</p>
+              <h2 id="sample-events-heading">Live diagnostics</h2>
+              <p>Use the related-object link or enabled action to observe framework-neutral semantic payloads.</p>
+            </div>
+            <div class="sample-diagnostic-grid">
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Latest semantic request</span>
+                <output data-testid="sample-event" aria-live="polite">No semantic event</output>
+              </div>
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Latest interaction state</span>
+                <output data-testid="sample-interaction-event" aria-live="polite">No interaction</output>
+              </div>
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Related collection</span>
+                <output data-testid="collection-related-count" aria-live="polite">Waiting for rows</output>
+              </div>
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Application menu</span>
+                <output data-testid="menubars-state" aria-live="polite">Waiting for menus</output>
+              </div>
+            </div>
+          </section>
+
+          <section class="sample-card" data-testid="section-collections" aria-labelledby="sample-collections-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Lazy secondary projections</p>
+              <h2 id="sample-collections-heading">Related objects</h2>
+              <p>Declared columns shape the collection operation, and returned rows hydrate nested object contexts.</p>
+            </div>
+            <div class="sample-collection-stack">
+              <div class="sample-collection-panel">
+                <cw-collection id="relatedObjects" active data-testid="collection-related-objects">
+                  <cw-collection-column id="name" label="Name" data-testid="column-related-name"></cw-collection-column>
+                  <cw-collection-column id="code" label="Code" data-testid="column-related-code"></cw-collection-column>
+                </cw-collection>
+              </div>
+              <div class="sample-collection-panel">
+                <cw-collection id="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></cw-collection>
+              </div>
+              <div class="sample-collection-panel sample-collection-panel-narrow">
+                <cw-collection id="narrowRelatedObjects" active data-testid="collection-narrow-related-objects">
+                  <cw-collection-column id="name" label="Name"></cw-collection-column>
+                  <cw-collection-column id="code" label="Code"></cw-collection-column>
+                </cw-collection>
+              </div>
+              <div class="sample-collection-panel">
+                <cw-collection id="disabledRelatedObjects" active data-testid="collection-disabled-related-objects">
+                  <cw-collection-column id="name" label="Name"></cw-collection-column>
+                </cw-collection>
+              </div>
+              <div class="sample-collection-panel">
+                <cw-collection id="encounterRelatedObjects" active data-testid="collection-encounter-related-objects">
+                  <cw-collection-column id="name" label="Name"></cw-collection-column>
+                </cw-collection>
+              </div>
+            </div>
+          </section>
+        </div>
+        <cw-interaction-controller data-testid="action-interaction-controller"></cw-interaction-controller>
+      </cw-object-context>
+
+      <div class="sample-grid sample-composite-grid">
+        <section class="sample-card" data-testid="section-composite-object" aria-labelledby="sample-composite-heading">
+          <div class="sample-section-heading">
+            <p class="sample-section-kicker">Automatic semantic composition</p>
+            <h2 id="sample-composite-heading">Complete object from context plus component</h2>
+            <p>This independent context demonstrates effective-grid retrieval, canonical fallback semantics, and generated established children without page-authored member structure.</p>
+          </div>
+          <cw-object-context
+              logical-type="causeway.webcomponents.sample.SampleObject"
+              object-id="s_sample-1"
+              data-testid="composite-object-context">
+            <cw-object editable data-testid="composite-object"></cw-object>
+            <cw-interaction-controller data-testid="composite-interaction-controller"></cw-interaction-controller>
+          </cw-object-context>
+        </section>
+      </div>
+    </cw-graphql-client>
+
+    <footer class="sample-footer">Public semantic components · Same-origin GraphQL interactions · No frontend build</footer>
+  </main>
+
+  <script type="module">
+    const options = new URLSearchParams(location.search);
+    const componentToolkit = options.get('component-toolkit') === 'native' ? 'native' : 'vaadin';
+    const forcedMenuState = ['empty', 'unsupported'].includes(options.get('menu-state'))
+      ? options.get('menu-state')
+      : null;
+    document.documentElement.dataset.causewayComponentToolkit = componentToolkit;
+    document.documentElement.dataset.causewayToolkitSource = 'vanilla-sample';
+    document.documentElement.dataset.causewayPresentation = componentToolkit;
+    document.documentElement.dataset.causewayActionButtons = componentToolkit;
+    document.documentElement.dataset.causewayCollectionGrid = componentToolkit;
+    document.documentElement.dataset.causewayGridModuleUrl = '/causeway-webcomponents/vaadin-grid/vaadin-grid.js';
+    document.documentElement.dataset.causewayApplicationMenubar = forcedMenuState ? 'native' : componentToolkit;
+    document.documentElement.dataset.causewayApplicationMenubarUrl = options.get('fail-menubar') === 'true'
+      ? '/sample-html/missing-vaadin-menubar.js'
+      : '/causeway-webcomponents/vaadin-menubar/vaadin-menubar.js';
+    document.documentElement.dataset.causewayReferenceWidgets = componentToolkit;
+    document.documentElement.dataset.causewayFieldFamilies = componentToolkit === 'native'
+      ? ''
+      : 'basic,numeric,local-temporal';
+
+    const application = document.querySelector('[data-testid="sample-app"]');
+    application.dataset.componentToolkit = componentToolkit;
+    const stateOutput = document.querySelector('[data-testid="sample-state"]');
+    const eventOutput = document.querySelector('[data-testid="sample-event"]');
+    const interactionOutput = document.querySelector('[data-testid="sample-interaction-event"]');
+    const collectionCountOutput = document.querySelector('[data-testid="collection-related-count"]');
+    const menuStateOutput = document.querySelector('[data-testid="menubars-state"]');
+
+    const report = (output, value) => {
+      output.value = value;
+      output.textContent = value;
+    };
+
+    application.addEventListener('causeway-object-context-state-change', event => {
+      const state = event.detail.state.status;
+      application.dataset.state = state;
+      application.setAttribute('aria-busy', String(state === 'schema-loading' || state === 'object-loading'));
+      report(stateOutput, state);
+    });
+
+    application.addEventListener('causeway-component-state-change', event => {
+      if (event.detail.element?.getAttribute('data-testid') === 'property-related-object' && event.detail.state.status === 'ready') {
+        event.detail.element.querySelector('cw-object-link')?.setAttribute('data-testid', 'object-link-related-object');
+      }
+    });
+
+    application.addEventListener('causeway-collection-state-change', event => {
+      if (event.detail.member !== 'relatedObjects') {
+        return;
+      }
+      if (event.detail.state.status === 'loading') {
+        report(collectionCountOutput, 'Loading rows');
+        return;
+      }
+      const rows = event.detail.state.rows
+        ?? event.detail.state.data?.window?.rows
+        ?? event.detail.state.data?.get;
+      if (Array.isArray(rows)) {
+        report(collectionCountOutput, `${rows.length} ${rows.length === 1 ? 'row' : 'rows'} loaded`);
+      }
+    });
+
+    application.addEventListener('causeway-menubars-state-change', event => {
+      if (event.detail.element?.getAttribute?.('data-testid') === 'menubars-composite') {
+        report(menuStateOutput, event.detail.state.status);
+      }
+    });
+
+    application.addEventListener('causeway-navigation-request', event => {
+      report(eventOutput, `navigate:${event.detail.target.logicalTypeName}:${event.detail.target.id}`);
+    });
+
+    application.addEventListener('causeway-action-request', event => {
+      const service = event.detail.serviceLogicalTypeName ? `:${event.detail.serviceLogicalTypeName}` : '';
+      report(eventOutput, `action:${event.detail.actionId}${service}`);
+    });
+
+    application.addEventListener('causeway-property-interaction-state-change', event => {
+      report(interactionOutput, `property:${event.detail.member}:${event.detail.status}`);
+    });
+
+    application.addEventListener('causeway-property-updated', event => {
+      report(interactionOutput, `property:${event.detail.member}:updated`);
+    });
+
+    application.addEventListener('causeway-action-prompt-state-change', event => {
+      report(interactionOutput, `action:${event.detail.actionId}:${event.detail.status}`);
+    });
+
+    application.addEventListener('causeway-action-result', event => {
+      const result = event.detail.result;
+      const value = result?.kind === 'scalar' ? `:${result.value}` : '';
+      const target = event.detail.target?.kind === 'service' ? `:${event.detail.target.logicalTypeName}` : '';
+      report(interactionOutput, `result:${event.detail.actionId}:${result?.kind ?? 'unknown'}${value}${target}`);
+    });
+
+    const components = await import('/causeway-webcomponents/index.mjs');
+    if (forcedMenuState) {
+      const roles = ['primary', 'secondary', 'tertiary'];
+      const state = Object.freeze({
+        status: forcedMenuState === 'empty' ? 'ready' : 'unsupported',
+        generation: 1,
+        plan: forcedMenuState === 'empty'
+          ? Object.freeze({bars: Object.freeze(Object.fromEntries(roles.map(role => [role, Object.freeze({role, menus: Object.freeze([])})])))})
+          : null,
+        diagnostics: Object.freeze([])
+      });
+      const context = Object.freeze({
+        subscribe(listener) {
+          listener(state);
+          return () => {};
+        },
+        refresh: async () => state,
+        serviceContext: () => null
+      });
+      document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')
+        .forEach(bar => { bar.context = context; });
+    }
+    const failedFieldFamily = options.get('fail-field');
+    if (['basic', 'numeric', 'local-temporal'].includes(failedFieldFamily)) {
+      components.configureCausewayFieldWidgets({
+        families: ['basic', 'numeric', 'local-temporal'],
+        presentation: true,
+        moduleUrls: {[failedFieldFamily]: `/sample-html/missing-vaadin-${failedFieldFamily}.js`}
+      });
+    }
+    if (options.get('fail-action') === 'true') {
+      components.configureCausewayActionWidgets({
+        enabled: true,
+        moduleUrl: '/sample-html/missing-vaadin-actions.js'
+      });
+    }
+    if (options.get('fail-grid') === 'true') {
+      components.configureCausewayGridWidgets({
+        enabled: true,
+        moduleUrl: '/sample-html/missing-vaadin-grid.js'
+      });
+    } else if (options.get('fail-grid') === 'renderer') {
+      components.failCausewayGridWidget({
+        phase: 'renderer',
+        classification: 'GRID_RENDERER_UNAVAILABLE'
+      });
+    }
+    if (options.get('grid-mode') === 'bounded') {
+      const collection = document.querySelector("cw-collection[id='relatedObjects']");
+      await new Promise(resolve => {
+        if (['ready', 'partial-error'].includes(collection.collectionState?.status)) resolve();
+        else {
+          const ready = event => {
+            if (!['ready', 'partial-error'].includes(event.detail.state.status)) return;
+            collection.removeEventListener('causeway-collection-state-change', ready);
+            resolve();
+          };
+          collection.addEventListener('causeway-collection-state-change', ready);
+        }
+      });
+      const context = collection._resolvedContext;
+      const delegate = context.loadCollection.bind(context);
+      context.loadCollection = async request => {
+        const result = await delegate(request);
+        return Object.freeze({
+          ...result,
+          window: Object.freeze({...result.window, totalCount: null, countAvailable: false})
+        });
+      };
+      await collection.load({force: true, offset: 0, size: 1});
+    }
+  </script>
+</body>
+</html>

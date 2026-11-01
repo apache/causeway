@@ -1,0 +1,29 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/Scenario/When/university_dept_People/nameOf/invoke/results) : The selected logical type is not assignable to required type 'university.dept.Person'",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 9
+    } ],
+    "path" : [ "rich", "Scenario", "When", "university_dept_People", "nameOf", "invoke", "results" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Name" : "Reject unrelated logical type for abstract person input",
+        "When" : {
+          "university_dept_People" : {
+            "nameOf" : {
+              "invoke" : {
+                "results" : null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

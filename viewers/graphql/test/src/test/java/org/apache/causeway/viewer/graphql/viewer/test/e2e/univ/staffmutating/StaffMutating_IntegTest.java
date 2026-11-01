@@ -41,7 +41,22 @@ public class StaffMutating_IntegTest extends Abstract_IntegTest {
     @Test
     @UseReporter(DiffReporter.class)
     void staff_member_edit_name() throws Exception {
+        Approvals.verify(submitForJohnGartner(), jsonOptions());
+    }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void staff_member_edit_resources() throws Exception {
+        Approvals.verify(submitForJohnGartner(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void staff_member_rejects_unaccepted_resource() throws Exception {
+        Approvals.verify(submitForJohnGartner(), jsonOptions());
+    }
+
+    private String submitForJohnGartner() throws Exception {
         final Bookmark bookmark =
                 transactionService.callTransactional(
                         Propagation.REQUIRED,
@@ -51,9 +66,6 @@ public class StaffMutating_IntegTest extends Abstract_IntegTest {
                         }
                 ).valueAsNonNullElseFail();
 
-        var response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.identifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+        return submit(_Maps.unmodifiable("$staffMemberId", bookmark.identifier()));
     }
 }

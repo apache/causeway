@@ -18,12 +18,18 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import org.springframework.boot.test.util.TestPropertyValues;
 
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -60,10 +66,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.boot.test.util.TestPropertyValues;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -329,7 +331,7 @@ class SyntheticNavigationActionTest {
         var noMatchArgs = arguments(mmc, action, Map.of("name", "missing"));
         assertThat(action.isArgumentSetValid(
                         action.interactionHead(leaseAdapter), noMatchArgs, InteractionInitiatedBy.USER)
-                .getReasonAsString().orElseThrow()).contains("0 items match");
+                .reasonAsString().orElseThrow()).contains("0 items match");
         assertThatThrownBy(() -> invoke(action, leaseAdapter, noMatchArgs))
                 .isInstanceOf(RecoverableException.class)
                 .hasMessageContaining("0 items match");
@@ -337,7 +339,7 @@ class SyntheticNavigationActionTest {
         var noFilters = arguments(mmc, action, Map.of());
         assertThat(action.isArgumentSetValid(
                         action.interactionHead(leaseAdapter), noFilters, InteractionInitiatedBy.USER)
-                .getReasonAsString().orElseThrow()).contains("2 items match");
+                .reasonAsString().orElseThrow()).contains("2 items match");
         assertThatThrownBy(() -> invoke(action, leaseAdapter, noFilters))
                 .isInstanceOf(RecoverableException.class)
                 .hasMessageContaining("2 items match");

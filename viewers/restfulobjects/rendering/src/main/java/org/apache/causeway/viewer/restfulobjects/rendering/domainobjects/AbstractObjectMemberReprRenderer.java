@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
-import tools.jackson.databind.node.NullNode;
-
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -37,6 +35,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
+
+import tools.jackson.databind.node.NullNode;
 
 public abstract class AbstractObjectMemberReprRenderer<T extends ObjectMember>
 extends ReprRendererAbstract<ManagedMember> {
@@ -221,9 +221,8 @@ extends ReprRendererAbstract<ManagedMember> {
      * mutators}.
      */
     protected void addLinkFor(final @NonNull MutatorSpec mutatorSpec) {
-        if (!mutatorSpec.appliesTo(objectMember)) {
+        if (!mutatorSpec.appliesTo(objectMember))
             return;
-        }
         final JsonRepresentation arguments = mutatorArgs(mutatorSpec);
         final RepresentationType representationType = objectMemberType.getRepresentationType();
         final JsonRepresentation mutatorLink = linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, objectMemberType, objectMember, representationType, mutatorSpec.suffix).withHttpMethod(mutatorSpec.httpMethod).withArguments(arguments).build();
@@ -243,9 +242,8 @@ extends ReprRendererAbstract<ManagedMember> {
      * overridden (ie by actions) if required.
      */
     protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
-        if (mutatorSpec.arguments.isNone()) {
+        if (mutatorSpec.arguments.isNone())
             return null;
-        }
         if (mutatorSpec.arguments.isOne()) {
             final JsonRepresentation repr = JsonRepresentation.newMap();
             repr.mapPutJsonNode("value", NullNode.getInstance()); // force a null into
@@ -257,9 +255,8 @@ extends ReprRendererAbstract<ManagedMember> {
     }
 
     private void addDetailsLinkIfPersistent() {
-        if (!ManagedObjects.isIdentifiable(objectAdapter)) {
+        if (!ManagedObjects.isIdentifiable(objectAdapter))
             return;
-        }
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();
         getLinks().arrayAdd(link);
 
@@ -278,10 +275,9 @@ extends ReprRendererAbstract<ManagedMember> {
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     protected final void putDisabledReasonIfDisabled() {
-        if(resourceContext.config().suppressMemberDisabledReason()) {
+        if(resourceContext.config().suppressMemberDisabledReason())
             return;
-        }
-        final String disabledReasonRep = usability().getReasonAsString().orElse(null);
+        final String disabledReasonRep = usability().reasonAsString().orElse(null);
         representation.mapPutString("disabledReason", disabledReasonRep);
     }
 

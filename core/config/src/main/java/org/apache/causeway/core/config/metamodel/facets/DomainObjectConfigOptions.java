@@ -29,6 +29,11 @@ public final class DomainObjectConfigOptions {
         NONE;
     }
 
+    public enum LockingPolicy {
+        OPTIMISTIC,
+        PESSIMISTIC;
+    }
+
     public enum EditingObjectsConfiguration {
         TRUE,
         FALSE;

@@ -35,7 +35,7 @@ public class ScalarMarshallerBooleanPrimitive extends ScalarMarshallerAbstract<B
 
     @Inject
     public ScalarMarshallerBooleanPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(boolean.class, Scalars.GraphQLBoolean, causewayConfiguration);
+        super(boolean.class, Scalars.GraphQLBoolean, causewayConfiguration, true);
     }
 
     @Override

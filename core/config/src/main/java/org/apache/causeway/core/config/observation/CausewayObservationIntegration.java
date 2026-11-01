@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.config.observation;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -38,14 +37,22 @@ import org.apache.causeway.core.config.observation.CausewayObservationAutoConfig
 import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Context;
-import io.micrometer.observation.ObservationConvention;
 import io.micrometer.observation.ObservationRegistry;
 
 /**
- * Holder of {@link ObservationRegistry} which comes as a dependency of <i>spring-context</i>.
+ * Framework entry point for creating observations in the configured telemetry
+ * context. Consumers use this integration instead of choosing registries or
+ * constructing tracers themselves.
+ *
+ * @param observationRegistry registry selected by
+ *        {@link CausewayObservationAutoConfiguration}: a single/primary
+ *        application registry or the fallback when observation is enabled,
+ *        otherwise {@link ObservationRegistry#NOOP}. Its handlers bridge
+ *        observations to the chosen tracing pipeline and parent context; the
+ *        registry is not itself an SDK or exporter. A null registry is treated
+ *        as no-op for manually constructed instances.
  */
-public record CausewayObservationIntegration(
-        ObservationRegistry observationRegistry) {
+public record CausewayObservationIntegration(ObservationRegistry observationRegistry) {
 
     public CausewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
@@ -92,7 +99,7 @@ public record CausewayObservationIntegration(
 
     public static KeyValue currentThreadId() {
         var ct = Thread.currentThread();
-        return KeyValue.of("causeway.threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
+        return KeyValue.of("causeway.threadId", "%d [%s]".formatted(ct.threadId(), ct.getName()));
     }
 
     public static KeyValue moduleName(final String moduleName) {
@@ -102,7 +109,7 @@ public record CausewayObservationIntegration(
             ? moduleName.substring(9)
             : moduleName);
     }
-    
+
     /**
      * UTC ISO format
      */
@@ -140,69 +147,12 @@ public record CausewayObservationIntegration(
     // -- SPAN EXPORT DISCARDING SUPPORT
 
     /**
-     * Denies span export, in collaboration with a Spring registered {@link DiscardedSpanExportingPredicate}.
+     * Marks an observation for suppression by the Spring-registered
+     * {@link DiscardedSpanExportingPredicate}. Exporters that do not consume that
+     * predicate, such as the Java agent's exporter, do not honor this marker.
      */
     public static void discard(@Nullable final Observation obs) {
     	ObservationClosure.discard(obs);
-    }
-
-    //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
-    // that are way off a base-line; this would require some profiling to establish base-lines
-    public record ObservationWithTimeThreshold(Observation delegate, Duration threshold, Timer timer) implements Observation {
-        private static class Timer {
-            long startNanos;
-            void start() { this.startNanos = System.nanoTime(); }
-            long elapsedNanos() { return System.nanoTime() - startNanos; }
-        }
-        public ObservationWithTimeThreshold(final Observation delegate, final Duration threshold) {
-            this(delegate, threshold, new Timer());
-        }
-        @Override public Observation contextualName(@Nullable final String contextualName) {
-            return delegate.contextualName(contextualName);
-        }
-        @Override public Observation parentObservation(@Nullable final Observation parentObservation) {
-            return delegate.parentObservation(parentObservation);
-        }
-        @Override public Observation lowCardinalityKeyValue(final KeyValue keyValue) {
-            return delegate.lowCardinalityKeyValue(keyValue);
-        }
-        @Override public Observation lowCardinalityKeyValue(final String key, final String value) {
-            return delegate.lowCardinalityKeyValue(key, value);
-        }
-        @Override public Observation highCardinalityKeyValue(final KeyValue keyValue) {
-            return delegate.highCardinalityKeyValue(keyValue);
-        }
-        @Override public Observation highCardinalityKeyValue(final String key, final String value) {
-            return delegate.highCardinalityKeyValue(key, value);
-        }
-        @Override public Observation observationConvention(final ObservationConvention<?> observationConvention) {
-            return delegate.observationConvention(observationConvention);
-        }
-        @Override public Observation error(final Throwable error) {
-            return delegate.error(error);
-        }
-        @Override public Observation event(final Event event) {
-            return delegate.event(event);
-        }
-        @Override public Observation start() {
-            timer.start();
-            return delegate.start();
-        }
-        @Override public Context getContext() {
-            return delegate.getContext();
-        }
-        @Override public void stop() {
-            if(timer.elapsedNanos() < threshold.toNanos()) {
-                discard(delegate);
-            }
-            delegate.stop();
-        }
-        @Override public Scope openScope() {
-            return delegate.openScope();
-        }
-        @Override public String toString() {
-            return delegate.toString();
-        }
     }
 
 }

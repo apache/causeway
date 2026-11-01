@@ -35,7 +35,7 @@ public class ScalarMarshallerFloatPrimitive extends ScalarMarshallerAbstract<Flo
 
     @Inject
     public ScalarMarshallerFloatPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(float.class, Scalars.GraphQLFloat, causewayConfiguration);
+        super(float.class, Scalars.GraphQLFloat, causewayConfiguration, true);
     }
 
     @Override

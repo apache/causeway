@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
@@ -76,6 +77,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcce
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet;
@@ -86,6 +88,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.experimental.UtilityClass;
 
@@ -230,6 +233,12 @@ public final class Facets {
             .negate();
     }
 
+    public boolean isPermantenlyHiddenInForms(final OneToOneAssociation prop) {
+    	Objects.requireNonNull(prop, ()->"null case is undecidable");
+    	return hiddenWhereMatches(where -> where.isAlways() || where == Where.OBJECT_FORMS)
+    			.test(prop);
+    }
+
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(IconFacet.class);
     }
@@ -327,6 +336,15 @@ public final class Facets {
                 .orElseGet(OptionalInt::empty);
     }
 
+    public OptionalInt maxLengthExplicit(final FacetHolder facetHolder) {
+        return facetHolder
+                .lookupNonFallbackFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::value)
+                .filter(value -> value > 0 && value < Integer.MAX_VALUE)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
+
     public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(MixinFacet.class);
     }
@@ -340,6 +358,29 @@ public final class Facets {
         return feature
             .lookupFacet(MultiLineFacet.class)
             .map(MultiLineFacet::numberOfLines)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt multilineNumberOfLinesExplicit(final ObjectFeature feature) {
+        return feature
+            .lookupNonFallbackFacet(MultiLineFacet.class)
+            .map(MultiLineFacet::numberOfLines)
+            .filter(value -> value > 0)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
+    }
+
+    public Optional<String> regularExpressionPattern(final ObjectFeature feature) {
+        return feature.lookupNonFallbackFacet(RegExFacet.class)
+            .map(RegExFacet::regexp)
+            .filter(pattern -> !pattern.isBlank());
+    }
+
+    public OptionalInt regularExpressionPatternFlags(final ObjectFeature feature) {
+        return feature.lookupNonFallbackFacet(RegExFacet.class)
+            .filter(facet -> !facet.regexp().isBlank())
+            .map(RegExFacet::patternFlags)
             .map(OptionalInt::of)
             .orElseGet(OptionalInt::empty);
     }
@@ -374,6 +415,14 @@ public final class Facets {
     public Optional<ResolvedType> typeOfAnyCardinality(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
             .map(TypeOfFacet::value);
+    }
+
+    public OptionalInt typicalLength(final ObjectFeature feature) {
+        return feature.lookupFacet(TypicalLengthFacet.class)
+                .map(TypicalLengthFacet::value)
+                .filter(value -> value > 0)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
     }
 
     public OptionalInt typicalLength(

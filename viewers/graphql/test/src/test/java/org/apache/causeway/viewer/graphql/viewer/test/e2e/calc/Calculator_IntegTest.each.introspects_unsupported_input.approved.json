@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "__type" : {
+      "kind" : "SCALAR",
+      "name" : "UnsupportedValue",
+      "description" : "Unsupported Causeway value. Strict output is redacted and input requires an explicit reversible ScalarMarshaller or TypeMapper."
+    }
+  }
+}

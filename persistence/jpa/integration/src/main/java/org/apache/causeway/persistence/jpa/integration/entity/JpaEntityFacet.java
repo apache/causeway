@@ -19,7 +19,6 @@
 package org.apache.causeway.persistence.jpa.integration.entity;
 
 import java.lang.reflect.Method;
-import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -32,13 +31,14 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
+import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions.LockingPolicy;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationWithTimeThreshold;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
+import org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
@@ -49,10 +49,13 @@ import org.springframework.data.jpa.repository.JpaContext;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceUnitUtil;
 import jakarta.persistence.TypedQuery;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import io.micrometer.observation.Observation;
 
 @Slf4j
 class JpaEntityFacet
@@ -78,10 +81,8 @@ class JpaEntityFacet
         this.entityClass = entityClass;
         this.primaryKeyType = idStringifierLookupService
                 .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
-        var timeThreshold = Duration.ofMillis(2);
         this.observationProvider = observationIntegration.provider(getClass(),
-                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE)
-                .andThen(obs->new ObservationWithTimeThreshold(obs, timeThreshold)));
+                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE));
     }
 
     @Override
@@ -120,10 +121,14 @@ class JpaEntityFacet
     @Override
     public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
         log.debug("fetchEntity; bookmark={}", bookmark);
-        return observationProvider.get("Fetch by Bookmark (%s)".formatted(bookmark))
+        return observation("fetch-by-bookmark", "Fetch by Bookmark")
             .observe(()->{
                 var primaryKey = primaryKeyType.destring(bookmark.identifier());
-                return Optional.ofNullable(getEntityManager().find(entityClass, primaryKey));
+                var policy = facetHolder().lookupFacet(LockingFacet.class)
+                        .map(LockingFacet::getPolicy).orElse(LockingPolicy.OPTIMISTIC);
+                return Optional.ofNullable(policy == LockingPolicy.PESSIMISTIC
+                        ? getEntityManager().find(entityClass, primaryKey, LockModeType.PESSIMISTIC_WRITE)
+                        : getEntityManager().find(entityClass, primaryKey));
             });
     }
 
@@ -154,8 +159,7 @@ class JpaEntityFacet
                 typedQuery.setMaxResults(range.getLimitAsInt());
             }
 
-            var obs = observationProvider.get("Fetch all Instances (%s)"
-                    .formatted(queryFindAllInstances.getDescription()));
+            var obs = observation("fetch-all", "Fetch all Instances");
 
             return obs.observe(()->
                     Can.ofStream(typedQuery.getResultStream().map(adapter)));
@@ -181,8 +185,9 @@ class JpaEntityFacet
                     .forEach((paramName, paramValue) ->
                             namedQuery.setParameter(paramName, paramValue));
 
-            var obs = observationProvider.get("Fetch all Instances (%s)"
-                    .formatted(applibNamedQuery.getDescription()));
+            var obs = observation("named-query", "Named Query")
+                    .lowCardinalityKeyValue("causeway.query.name", applibNamedQuery.getName())
+                    .contextualName("Named Query " + entityClass.getName() + " " + applibNamedQuery.getName());
             return obs.observe(()->
                     Can.ofStream(namedQuery.getResultStream().map(adapter)));
         }
@@ -203,7 +208,7 @@ class JpaEntityFacet
 
         log.debug("about to persist entity {}", pojo);
 
-        observationProvider.get("Persist (type=%s)".formatted(entityClass.getName()))
+        observation("persist", "Persist")
             .observe(()->entityManager.persist(pojo));
     }
 
@@ -216,7 +221,7 @@ class JpaEntityFacet
 
         var entityManager = getEntityManager();
 
-        observationProvider.get("Refresh (type=%s)".formatted(entityClass.getName()))
+        observation("refresh", "Refresh")
             .observe(()->entityManager.refresh(pojo));
 
         return pojo;
@@ -232,7 +237,7 @@ class JpaEntityFacet
 
         var entityManager = getEntityManager();
 
-        observationProvider.get("Remove (type=%s)".formatted(entityClass.getName()))
+        observation("remove", "Remove")
             .observe(()->entityManager.remove(pojo));
     }
 
@@ -273,10 +278,17 @@ class JpaEntityFacet
 
         var entityManager = getEntityManager();
 
-        observationProvider.get("Detach (type=%s)".formatted(entityClass.getName()))
+        observation("detach", "Detach")
             .observe(()->entityManager.detach(pojo));
 
         return pojo;
+    }
+
+    /** Only static entity metadata enters telemetry; never a bookmark or query description. */
+    private Observation observation(final String operation, final String label) {
+        return observationProvider.get("causeway.jpa." + operation)
+                .contextualName(label + " " + entityClass.getName())
+                .lowCardinalityKeyValue("causeway.entity.type", entityClass.getName());
     }
 
     // -- JPA METAMODEL

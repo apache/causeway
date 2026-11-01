@@ -38,12 +38,12 @@ Also note that association that have been explicitly hidden from tables using _P
 .TableColumnOrderServiceUsingTxtFile.java
 ----
 class TableColumnOrderServiceUsingTxtFile {
-  List<String> orderParented(Object domainObject, String collectionId, Class<?> elementType, List<String> associationIds)     // <.>
+  List<String> orderParented(Class<?> parentType, String collectionId, Class<?> elementType, List<String> associationIds)     // <.>
   List<String> orderStandalone(Class<?> domainType, List<String> associationIds)     // <.>
 }
 ----
 
-<.> xref:#orderParented_Object_String_Class_List[orderParented(Object, String, Class, List)]
+<.> xref:#orderParented_Class_String_Class_List[orderParented(Class, String, Class, List)]
 +
 --
 Reads association Ids of the parented collection from a file.
@@ -56,8 +56,8 @@ Reads associationIds of a standalone collection from a file.
 
 == Members
 
-[#orderParented_Object_String_Class_List]
-=== orderParented(Object, String, Class, List)
+[#orderParented_Class_String_Class_List]
+=== orderParented(Class, String, Class, List)
 
 Reads association Ids of the parented collection from a file.
 

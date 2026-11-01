@@ -1,0 +1,71 @@
+= Vue: Getting Started
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Install the host integration
+
+Use `@apache-causeway/vue-viewer` with its Vue 3 and Vue Router 4 peer dependencies in the application frontend.
+For source snapshots, use the local package built by the repository rather than assuming the matching version has been published.
+The xref:prerequisites.adoc[backend] still supplies rich GraphQL and same-origin Causeway component registration modules, styles, and toolkit assets.
+The Vue package is a host integration, not a replacement GraphQL backend or a bundle of every component asset.
+
+In the application's Vite Vue plugin configuration, compile Causeway tags as native custom elements:
+
+[source,typescript]
+----
+vue({
+  template: {
+    compilerOptions: {
+      isCustomElement: tag => tag.startsWith('cw-')
+    }
+  }
+})
+----
+
+This belongs in the build-time plugin configuration, not only in runtime application compiler options.
+The source sample's `frontend/vite.config.ts` demonstrates the complete configuration.
+
+Create Vue Router with the application's history base, include `createCausewayRouteRecords()`, and pass the router to `createCausewayVueViewer()`.
+Configure `endpoint`, `basePath`, and an immutable exact-logical-type `pages` registry before installing `viewer.plugin` on the Vue application.
+The sample's `frontend/src/main.ts` is the complete bootstrap reference, including component registration and presentation policy.
+
+The application server must return the Vue document for intended client routes such as `/vue/object/**`.
+Do not let that fallback capture `/graphql`, authentication endpoints, or static assets.
+`applicationResourceBase` controls typed application-local resource navigation independently of the viewer's `basePath`.
+
+== Run Petclinic
+
+From the repository root, with the xref:prerequisites.adoc[development prerequisites] installed:
+
+[source,shell]
+----
+./viewers/webcomponents/sample-vue-petclinic/run.sh
+----
+
+Open `http://localhost:8080/vue/`.
+For native presentation comparison, open `http://localhost:8080/vue/?toolkit=native`.
+This query parameter is application policy in the sample.
+
+Try these deterministic routes:
+
+[cols="1,3",options="header"]
+|===
+|Object |Path
+|Mary Smith |`/vue/object/petclinic.PetOwner/s_owner-mary`
+|Basil |`/vue/object/petclinic.Pet/s_pet-basil`
+|Basil's visit |`/vue/object/petclinic.Visit/s_visit-basil-checkup`
+|Generic fallback |`/vue/object/petclinic.ViewerFallback/s_viewer-fallback`
+|===
+
+Navigate through owners, pets, and visits, try an authorised action or edit, and use Back and Forward.
+Compare the exact-type owner page with the generic fallback while observing that menus and the shell remain stable.
+GraphiQL is available at `http://localhost:8080/graphiql` for this development sample.
+
+The launcher accepts `JAVA_HOME`, an optional `MVN` executable, and additional Maven arguments.
+Stop the sample before starting another launcher on port 8080.
+
+== Supported host model
+
+The current integration supports client-rendered Vue applications.
+Nuxt, server-side rendering, streaming hydration, runtime page-registry mutation, and inherited logical-type matching are not supported.
+See xref:vue/customisation.adoc[custom pages and shells] and xref:vue/security.adoc[local SecMan authentication] for the application-owned extension points.

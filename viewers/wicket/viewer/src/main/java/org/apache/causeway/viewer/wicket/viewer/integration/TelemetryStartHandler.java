@@ -53,6 +53,18 @@ implements IRequestCycleListener {
     }
 
     @Override
+    public void onEndRequest(final RequestCycle requestCycle) {
+        if (requestCycle instanceof RequestCycle2 requestCycle2) {
+            // Wicket ends listeners in reverse registration order. This listener
+            // starts before the Causeway interaction, so it must also close the
+            // outer scope after that interaction has closed its inner scopes.
+            // Closing in TelemetryStopHandler would restore a stale parent scope
+            // when the interaction subsequently closes on this servlet thread.
+            requestCycle2.observationClosure.close();
+        }
+    }
+
+    @Override
     public IRequestHandler onException(final RequestCycle requestCycle, final Exception ex) {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
             requestCycle2.observationClosure.onError(ex);

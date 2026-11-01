@@ -20,7 +20,10 @@ package org.apache.causeway.persistence.jpa.integration.typeconverters.java.net;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
@@ -45,9 +48,9 @@ implements AttributeConverter<URL, String> {
     public URL convertToEntityAttribute(final String datastoreValue) {
         try {
             return (datastoreValue != null)
-                ? new URL(datastoreValue)
+                ? new URI(datastoreValue).toURL()
                 : null;
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new IllegalArgumentException("Invalid URL format in database: " + datastoreValue, e);
         }
     }

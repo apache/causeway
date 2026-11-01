@@ -757,7 +757,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
 
-            java.net.URL theUrl = new java.net.URL("https://causeway.apache.org");
+            java.net.URL theUrl = new java.net.URI("https://causeway.apache.org").toURL();
 
             //
             // when

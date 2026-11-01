@@ -103,15 +103,13 @@ public class ObjectAdapterUpdateHelper {
 
             // no value provided
             if(intent.shouldValidate()) {
-                if(invisible || disabled) {
+                if(invisible || disabled)
                     // that's ok, indeed expected
                     return allOk;
-                }
             }
-            if (!property.isMandatory()) {
+            if (!property.isMandatory())
                 // optional, so also not a problem
                 return allOk;
-            }
 
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
@@ -127,14 +125,13 @@ public class ObjectAdapterUpdateHelper {
 
             if(intent.shouldValidate()) {
                 // value has been provided
-                if (invisible) {
+                if (invisible)
                     // silently ignore; don't want to acknowledge the
                     // existence of this property to the caller
                     return allOk;
-                }
                 if (disabled) {
                     // not allowed to update
-                    propertyRepr.mapPutString("invalidReason", usability.getReasonAsString().orElse(null));
+                    propertyRepr.mapPutString("invalidReason", usability.reasonAsString().orElse(null));
                     allOk = false;
                     return allOk;
                 }
@@ -163,7 +160,7 @@ public class ObjectAdapterUpdateHelper {
                     allOk = false;
                 }
             } else {
-                propertyRepr.mapPutString("invalidReason", validity.getReasonAsString().orElse(null));
+                propertyRepr.mapPutString("invalidReason", validity.reasonAsString().orElse(null));
                 allOk = false;
             }
         }

@@ -33,6 +33,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -40,6 +41,7 @@ import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -56,13 +58,18 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
 
-        if(iocContainer!=null)
-			return iocContainer.select(type, qualifiers);
-
+        if(iocContainer!=null) {
+			iocContainer.select(type, _NullSafe.stream(qualifiers)
+            		.map(annot->annot instanceof Qualifier qualifier
+            				? qualifier : null)
+            		.filter(Objects::nonNull)
+            		.findFirst()
+            		.orElse(null));
 // ignore
 //        if(qualifiers!=null && qualifiers.length>0) {
 //            throw _Exceptions.notImplemented();
 //        }
+		}
 
         Optional<T> match = streamBeans()
                 .filter(SingletonBeanProvider.satisfying(type))

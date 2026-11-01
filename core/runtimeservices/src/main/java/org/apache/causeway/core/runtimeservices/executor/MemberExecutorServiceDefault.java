@@ -30,6 +30,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
@@ -46,6 +47,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
@@ -75,8 +77,11 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
 
+import io.micrometer.observation.Observation;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * Default implementation of {@link MemberExecutorService}.
@@ -120,15 +125,20 @@ implements MemberExecutorService {
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
 
+    private Observation memberObservation(final String operation,
+            final String label, final Identifier memberId) {
+        var observation = observationProvider.get(operation).contextualName(label);
+        // A missing static identifier must not trigger a fallback to runtime object data.
+        return memberId == null ? observation : observation
+                .contextualName(label + " " + memberId)
+                .lowCardinalityKeyValue("causeway.member.id", memberId.toString());
+    }
+
     @Override
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        var executionResult = observationProvider.get("Action Invocation (%s)"
-                .formatted(actionExecutor.owningAction().getFeatureIdentifier()))
-                .lowCardinalityKeyValue("causeway.execution.initiatedBy", actionExecutor.interactionInitiatedBy().name())
-                //could also add action's args as tags (but potentially sensitive)
-                //(we do this with Xray, but that is local for debugging only)
+        var executionResult = semanticMemberObservation(actionExecutor)
             .observe(()->
                 actionExecutor.interactionInitiatedBy().isPassThrough()
                 ? Try.call(()->
@@ -138,6 +148,33 @@ implements MemberExecutorService {
 
         return executionResult
                 .valueAsNullableElseFail();
+    }
+
+    private Observation semanticMemberObservation(final ActionExecutor executor) {
+        var invokedId = executor.owningAction().getFeatureIdentifier();
+        var association = executor.mixedInAssociation();
+        var domainId = association.map(member -> member.getFeatureIdentifier())
+                .orElseGet(() -> invokedId == null ? null : domainFacingActionIdentifier(executor.head(), executor.owningAction()));
+        var property = association.map(member -> member.isSingular()).orElse(false);
+        var operation = association.isEmpty() ? "causeway.member.action"
+                : property ? "causeway.property.access" : "causeway.collection.access";
+        var prefix = association.isEmpty() ? "act" : property ? "prop" : "coll";
+        var identityKey = association.isEmpty() ? "causeway.action.id"
+                : property ? "causeway.property.id" : "causeway.collection.id";
+        var observation = observationProvider.get(operation).contextualName(prefix)
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", executor.interactionInitiatedBy().name());
+        // Generic metadata retains the physical identity for existing consumers.
+        // The semantic key carries the complete domain identity, independently
+        // of the compact display name and without runtime values or arguments.
+        if (invokedId != null) {
+            observation.lowCardinalityKeyValue("causeway.member.id", invokedId.toString());
+        }
+        if (domainId != null) {
+            observation.contextualName(CausewayObservationNaming.forMember(
+                    prefix, domainId.logicalTypeName(), domainId.memberLogicalName()))
+                    .lowCardinalityKeyValue(identityKey, domainId.getLogicalIdentityString("#"));
+        }
+        return observation;
     }
 
     private ManagedObject invokeActionInternally(
@@ -172,7 +209,10 @@ implements MemberExecutorService {
                 .collect(_Lists.toUnmodifiable());
 
         var actionInvocation = new ActionInvocation(
-        		interactionCarrier.interaction(), actionId, targetPojo, argumentPojos);
+                interactionCarrier.interaction(), actionId, domainFacingActionIdentifier(head, owningAction),
+                targetPojo, argumentPojos, interactionInitiatedBy.isUser()
+                        ? ActionInvocation.RuleChecking.CHECKED
+                        : ActionInvocation.RuleChecking.SKIPPED);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         execute(interactionCarrier, actionExecutor, actionInvocation);
@@ -234,8 +274,8 @@ implements MemberExecutorService {
     public ManagedObject setOrClearProperty(
             final @NonNull PropertyModifier propertyExecutor) {
 
-        var executionResult = observationProvider.get("Property Update (%s)"
-                .formatted(propertyExecutor.owningProperty().getFeatureIdentifier()))
+        var executionResult = memberObservation("causeway.member.property-update", "Property Update",
+                propertyExecutor.owningProperty().getFeatureIdentifier())
                 .lowCardinalityKeyValue("causeway.execution.initiatedBy", propertyExecutor.interactionInitiatedBy().name())
                 //could also add property's old and new value as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)
@@ -393,6 +433,20 @@ implements MemberExecutorService {
         }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    /** Keeps physical invocation identity intact while exposing a contributed action's name. */
+    static Identifier domainFacingActionIdentifier(final InteractionHead head, final ObjectAction owningAction) {
+        var invokedId = owningAction.getFeatureIdentifier();
+        if (!owningAction.isDeclaredOnMixin()) {
+            return invokedId;
+        }
+        // Main carries the mixee/mixin pair instead of maintenance's managed
+        // action head. Use the strategy that constructs contributed members.
+        var contributedName = owningAction.getProgrammingModel().mixinNamingStrategy()
+                .memberId(invokedId.logicalType().correspondingClass());
+        return Identifier.actionIdentifier(head.owner().objSpec().logicalType(),
+                contributedName, invokedId.memberParameterClassNames());
     }
 
     private ManagedObject resultFilteredHonoringVisibility(

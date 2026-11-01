@@ -72,8 +72,8 @@ public record FormExecutorDefault(
                     Category.CONSTRAINT_VIOLATION,
                     actionOrPropertyModel
                         .fold(
-                                act->act.getValidityConsent().getReasonAsString().orElse(null),
-                                prop->prop.getReasonInvalidIfAny()));
+                                act->act.getValidityConsent().reasonAsString().orElse(null),
+                                PropertyModel::getReasonInvalidIfAny));
 
             if (invalidReasonIfAny.isPresent()) {
                 raiseErrorMessage(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
@@ -96,8 +96,8 @@ public record FormExecutorDefault(
             //XXX triggers BookmarkedObjectWkt.getObjectAndReAttach() down the call-stack
             //XXX applies the pending property
             var resultAdapter = actionOrPropertyModel.fold(
-                    act->act.executeActionAndReturnResult(),
-                    prop->prop.applyValueThenReturnOwner());
+                    ActionModel::executeActionAndReturnResult,
+                    PropertyModel::applyValueThenReturnOwner);
 
             // if we are in a nested dialog/form, that supports an action parameter,
             // the result must be fed back into the calling dialog's/form's parameter
@@ -126,9 +126,8 @@ public record FormExecutorDefault(
 
             // attempt to recognize this exception using the ExceptionRecognizers (but only when not in inline prompt context!?)
             if(!formExecutorContext.isWithinInlinePrompt()
-                    && recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
+                    && recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent())
                 return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
-            }
 
             // throwing an exception will get caught by WebRequestCycleForCauseway#onException(...)
             throw ex; // redirect to the error page.

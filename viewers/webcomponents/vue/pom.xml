@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-webcomponents</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>causeway-viewer-webcomponents-vue</artifactId>
+    <name>Apache Causeway Viewer - Web Components (Vue Integration)</name>
+    <packaging>jar</packaging>
+
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.webcomponents.vue</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/viewer/webcomponents/vue</git-plugin.propertiesDir>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>dist</directory>
+                <targetPath>META-INF/resources/causeway-vue</targetPath>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <exclude>package-lock.json</exclude>
+                        <exclude>dist/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-vue-distribution</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <available file="${project.basedir}/dist/causeway-vue.js" property="vue.distribution.present"/>
+                                <fail unless="vue.distribution.present" message="Vue distribution is missing; run Maven with -Pregenerate-vue-viewer."/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>regenerate-vue-viewer</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vue-viewer</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="verify"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

@@ -24,8 +24,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -38,8 +36,8 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public record MethodFinder(
         @NonNull Class<?> correspondingClass,
@@ -145,14 +143,14 @@ public record MethodFinder(
         var classCache = _ClassCache.getInstance();
         var isEncapsulationSupported = encapsulationPolicy().isEncapsulatedMembersSupported();
 
-        if(methodNameCandidates.equals(ANY_NAME)) {
-            //stream all
+        if(methodNameCandidates.equals(ANY_NAME))
+			//stream all
             return (isEncapsulationSupported
                     ? classCache.streamResolvedMethods(type)
                     : classCache.streamPublicMethods(type))
-                        .filter(method->Arrays.equals(paramTypes, method.paramTypes()))
+                        .filter(method->
+                    		Arrays.equals(paramTypes, method.paramTypes()))
                         .filter(mustSatisfy);
-        }
 
         return methodNameCandidates.stream()
             .map(name->isEncapsulationSupported

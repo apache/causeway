@@ -13,9 +13,11 @@ Using DTOs based on
 interface GridService {
   boolean supportsReloading()     // <.>
   void invalidate(Class<?> domainClass)     // <.>
+  void addPatchedLayout(LayoutKey layoutKey, LayoutResource layoutResource)     // <.>
   BSGrid load(LayoutKey layoutKey)     // <.>
   EnumSet<CommonMimeType> supportedFormats()
   Optional<GridMarshaller> marshaller(CommonMimeType format)
+  void clearCache()     // <.>
 }
 ----
 
@@ -29,10 +31,20 @@ Whether dynamic reloading of layouts is enabled.
 --
 To support metamodel invalidation/rebuilding of spec.
 --
+<.> xref:#addPatchedLayout_LayoutKey_LayoutResource[addPatchedLayout(LayoutKey, LayoutResource)]
++
+--
+Allows to replace or prime layout caches with a custom layout (as provided by given xref:refguide:applib:index/layout/resource/LayoutResource.adoc[LayoutResource] ). Useful for prototyping.
+--
 <.> xref:#load_LayoutKey[load(LayoutKey)]
 +
 --
 Returns a xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid] for given _LayoutKey_ .
+--
+<.> xref:#clearCache_[clearCache()]
++
+--
+Clears any pre-calculated BSGrid instances from the cache. Useful to start with a clean slate, after the MM was initialized.
 --
 
 == Members
@@ -51,6 +63,13 @@ To support metamodel invalidation/rebuilding of spec.
 
 Acts as a no-op if not _#supportsReloading()_ .
 
+[#addPatchedLayout_LayoutKey_LayoutResource]
+=== addPatchedLayout(LayoutKey, LayoutResource)
+
+Allows to replace or prime layout caches with a custom layout (as provided by given xref:refguide:applib:index/layout/resource/LayoutResource.adoc[LayoutResource] ). Useful for prototyping.
+
+This patching is potentially in conflict with layout reloading. Patched layouts must stick around even when a layout reload attempt is made.
+
 [#load_LayoutKey]
 === load(LayoutKey)
 
@@ -59,6 +78,13 @@ Returns a xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid] f
 The default implementation uses the layout name to search for a differently named layout file, `[domainClass].layout.[layout].xml` .
 
 When no specific grid layout is found returns a generic fallback.
+
+[#clearCache_]
+=== clearCache()
+
+Clears any pre-calculated BSGrid instances from the cache. Useful to start with a clean slate, after the MM was initialized.
+
+The MM needs to be aware of all mixins, in order to reliably produce valid BSGrid instances. During MM initialization incomplete BSGrid instances might be created and cached, which are missing e.g. mixed-in Actions.
 
 include::hooks/GridService_010-implementation.adoc[]
 

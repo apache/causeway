@@ -19,7 +19,11 @@
 package org.apache.causeway.extensions.spring.security.oauth2.authconverters;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -28,8 +32,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.
@@ -54,8 +56,8 @@ extends AuthenticationConverter.Abstract<OAuth2User> {
 
     protected String usernameFrom(final OAuth2User oAuth2User) {
         var loginAttr = oAuth2User.getAttributes().get("login");
-        return loginAttr instanceof CharSequence
-                ? ((CharSequence) loginAttr).toString()
+        return loginAttr instanceof CharSequence c
+                ? c.toString()
                 : oAuth2User.getName();
     }
 
@@ -63,8 +65,8 @@ extends AuthenticationConverter.Abstract<OAuth2User> {
         final Object avatarUrlObj = oAuth2User.getAttributes().get("avatar_url");
         if(avatarUrlObj instanceof String) {
             try {
-                return new URL((String)avatarUrlObj);
-            } catch (MalformedURLException e) {
+                return new URI((String)avatarUrlObj).toURL();
+            } catch (MalformedURLException | URISyntaxException e) {
                 return null;
             }
         }
@@ -73,9 +75,8 @@ extends AuthenticationConverter.Abstract<OAuth2User> {
 
     protected String realNameFrom(final OAuth2User oAuth2User) {
         final Object nameAttr = oAuth2User.getAttributes().get("name");
-        if(nameAttr instanceof String) {
+        if(nameAttr instanceof String)
             return (String)nameAttr;
-        }
         return null;
     }
 

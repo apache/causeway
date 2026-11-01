@@ -41,19 +41,26 @@ public class ExecutionGraphQlServiceForCauseway implements ExecutionGraphQlServi
     private final BatchLoaderRegistry batchLoaderRegistry;
     private final GraphQlSource graphQlSource;
 
-    DefaultExecutionGraphQlService delegate;
+    private volatile DefaultExecutionGraphQlService delegate;
 
     @Override
     public Mono<ExecutionGraphQlResponse> execute(final ExecutionGraphQlRequest request) {
-        if(delegate == null) {
-            try {
-                delegate = new DefaultExecutionGraphQlService(graphQlSource);
-                delegate.addDataLoaderRegistrar(batchLoaderRegistry);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
+        return delegate().execute(request);
+    }
+
+    private DefaultExecutionGraphQlService delegate() {
+        var current = delegate;
+        if (current != null) {
+            return current;
+        }
+        synchronized (this) {
+            current = delegate;
+            if (current == null) {
+                current = new DefaultExecutionGraphQlService(graphQlSource);
+                current.addDataLoaderRegistrar(batchLoaderRegistry);
+                delegate = current;
             }
         }
-        return delegate.execute(request);
+        return current;
     }
 }

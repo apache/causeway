@@ -1,0 +1,327 @@
+# GraphQL Web Component Context Specification
+
+## Purpose
+
+Define a framework-neutral browser foundation that discovers Causeway rich-schema domain objects through targeted GraphQL introspection, coordinates semantic object reads, and exposes observable state to web components and application code.
+## Requirements
+### Requirement: Public rich-schema consumption
+The web-component foundation SHALL obtain domain type descriptions and object state exclusively through the public rich GraphQL schema and GraphQL execution contract.
+
+#### Scenario: Foundation describes a domain object
+- **WHEN** a client requests a context for a Causeway logical type
+- **THEN** the foundation uses GraphQL introspection to discover that type and its members
+- **AND** it does not require a separate member-list endpoint or direct access to Causeway metamodel services
+
+### Requirement: Rich-schema naming grammar
+The web-component foundation SHALL provide a deterministic mapping between Causeway logical identifiers and the generated rich-schema object, property, collection, action, parameter, and metadata names.
+
+#### Scenario: Member wrapper classification
+- **WHEN** introspection returns generated wrapper types for an object
+- **THEN** the foundation classifies each wrapper according to the rich-schema naming grammar
+- **AND** exposes the result to components using semantic member kinds and identifiers
+
+#### Scenario: Unrecognized generated type
+- **WHEN** an introspected type does not conform to a supported rich-schema grammar rule
+- **THEN** the foundation reports a diagnostic identifying the type and failed classification
+
+### Requirement: Targeted schema introspection
+The GraphQL client SHALL discover only the requested object type and the schema types reachable from the members required to describe it, rather than requiring complete-schema introspection.
+
+#### Scenario: First object context of a type
+- **WHEN** the first object context for a logical type is connected
+- **THEN** the client introspects the generated object type and its reachable member wrapper types
+
+#### Scenario: Repeated object type
+- **WHEN** another object context uses a type already described by the same GraphQL client
+- **THEN** the client reuses its cached schema description without repeating equivalent introspection requests
+
+### Requirement: Replaceable GraphQL executor
+The GraphQL client SHALL execute introspection and object operations through a replaceable framework-neutral executor contract.
+
+#### Scenario: Default browser execution
+- **WHEN** no executor is injected
+- **THEN** the client uses the default browser executor and the standard GraphQL HTTP request and response shape
+
+#### Scenario: Application-provided execution
+- **WHEN** an application injects an executor
+- **THEN** all GraphQL operations use that executor without changing descendant component APIs
+
+### Requirement: Shared GraphQL client provider
+The `<cw-graphql-client>` element SHALL provide endpoint, execution, cancellation, schema-name, and schema-cache services to descendant Causeway contexts.
+
+#### Scenario: Several object contexts share a client
+- **WHEN** several object contexts are descendants of one GraphQL client provider
+- **THEN** they share the provider's executor and schema-description cache
+- **AND** retain independent object snapshots and active read projections
+
+### Requirement: Semantic object context
+The `<cw-object-context>` element SHALL represent one domain object using its logical type name and identifier and SHALL expose a semantic context API to descendant components.
+
+#### Scenario: Descendant requests context
+- **WHEN** a descendant dispatches the standard bubbling and composed context-request event
+- **THEN** the nearest object context supplies its semantic context API
+
+#### Scenario: Nested object contexts
+- **WHEN** a component is nested beneath more than one object context
+- **THEN** its context request resolves to the nearest object context
+
+#### Scenario: Missing object identity
+- **WHEN** an object context lacks a logical type name or required object identifier
+- **THEN** it enters a diagnostic error state without issuing an object query
+
+### Requirement: Semantic read registration
+The object context SHALL allow descendants to register and release semantic read requirements without exposing generated GraphQL names or GraphQL document construction to those descendants.
+
+#### Scenario: Property requirement registration
+- **WHEN** a property component registers a read requirement using a semantic member identifier
+- **THEN** the context resolves the member through its schema description and adds the required visibility, usability, and value selections to its active projection
+
+#### Scenario: Component disconnects
+- **WHEN** a component releases its requirement or disconnects
+- **THEN** the released requirement is omitted from subsequent complete projection refreshes
+- **AND** the release alone does not cause a network request
+
+### Requirement: Coordinated object read projection
+The object context SHALL maintain the union of active semantic read requirements and coordinate them as an evolving GraphQL object projection.
+
+#### Scenario: Initial component composition
+- **WHEN** an object header and multiple property components register requirements during the same rendering turn
+- **THEN** the context coalesces their selections into one initial object operation
+
+#### Scenario: Newly active component
+- **WHEN** a newly active component requires an object field absent from the current snapshot
+- **THEN** the context loads the missing selection and merges the returned data into the object snapshot
+
+#### Scenario: Complete refresh
+- **WHEN** the object context is invalidated or explicitly refreshed
+- **THEN** it executes the complete currently active projection
+- **AND** distributes the refreshed snapshot to all active subscribers
+
+### Requirement: Observable object state
+The object context SHALL expose deterministic observable schema-loading, object-loading, ready, partial-error, and terminal-error states to descendant components.
+
+#### Scenario: Successful object read
+- **WHEN** a coordinated object operation returns without errors
+- **THEN** the context publishes an immutable ready snapshot containing the returned metadata and member state
+
+#### Scenario: Superseded response
+- **WHEN** an older request completes after a newer request generation has become authoritative
+- **THEN** the older response does not replace the newer context state
+
+### Requirement: GraphQL partial-error preservation
+The object context SHALL preserve successful GraphQL data when the same response also contains errors and SHALL associate path-addressable errors with the narrowest corresponding semantic requirement.
+
+#### Scenario: One property fails
+- **WHEN** a response contains valid object and property data plus an error whose path identifies another property
+- **THEN** components for the successful data receive their normal state
+- **AND** the failing property receives an error state derived from that path
+
+#### Scenario: Object lookup fails
+- **WHEN** an error prevents the requested object from being resolved
+- **THEN** the object context publishes a terminal object error state with the GraphQL diagnostic available to consumers
+
+### Requirement: Minimal context-validation components
+The foundation SHALL provide a minimal object-header component and scalar read-only property component that consume the semantic object context.
+
+#### Scenario: Object header rendering
+- **WHEN** `<cw-object-header>` is connected beneath a ready object context
+- **THEN** it renders the object title and semantic identity obtained through the context
+
+#### Scenario: Visible scalar property
+- **WHEN** `<cw-property>` identifies a visible scalar property
+- **THEN** it renders the current value supplied by the context
+
+#### Scenario: Hidden property
+- **WHEN** the rich schema reports that a requested property is hidden for the current object and user
+- **THEN** the property component does not render the property value
+
+### Requirement: Framework-neutral consumption
+The public foundation SHALL use web-platform custom elements, attributes, JavaScript properties, and semantic custom events without requiring HTMX or another host framework runtime.
+
+#### Scenario: Vanilla HTML application
+- **WHEN** the `sample-html` application loads its page using plain HTML and ECMAScript modules
+- **THEN** its GraphQL client, object context, object header, and property components operate without HTMX, React, Vue, Svelte, or an equivalent host framework
+
+#### Scenario: Structured service injection
+- **WHEN** a host framework supplies an executor or context through a JavaScript property
+- **THEN** the supplied service is used without requiring framework-specific public component APIs
+
+### Requirement: Executable vanilla-HTML sample
+The first vertical slice SHALL include a bootable `sample-html` Causeway application that consumes the packaged foundation artifact through a real rich GraphQL endpoint.
+
+#### Scenario: Same-origin packaged consumption
+- **WHEN** the sample application is started
+- **THEN** `/sample-html/index.html`, the packaged ECMAScript modules, and `/graphql` are served from the same application origin
+- **AND** the page loads the modules from the foundation artifact rather than from copied source files
+
+#### Scenario: No frontend build runtime
+- **WHEN** the sample page is built and served
+- **THEN** it uses vanilla HTML, native custom elements, ECMAScript modules, and plain CSS without npm build tooling or a host frontend framework
+
+### Requirement: Deterministic sample object
+The sample application SHALL provide deterministic domain data suitable for repeatable component and endpoint verification.
+
+#### Scenario: Stable sample identity
+- **WHEN** the sample application starts with its normal or test configuration
+- **THEN** a sample entity with a documented stable logical type and string identifier is available through the rich GraphQL object lookup
+
+#### Scenario: Representative read semantics
+- **WHEN** the stable sample entity is queried
+- **THEN** its schema and data provide predictable title, version, visible property, hidden property, and disabled property semantics
+
+### Requirement: Browser-automation contract
+The sample application SHALL expose stable browser-facing hooks so browser automation can observe component readiness and semantic output without depending on incidental markup.
+
+#### Scenario: Stable sample route and selectors
+- **WHEN** automation opens `/sample-html/index.html`
+- **THEN** the page exposes documented semantic `data-testid` selectors for the sample application, object context, object header, and rendered properties
+
+#### Scenario: Observable readiness
+- **WHEN** the object context changes state
+- **THEN** the sample page reflects the semantic context state on a documented readiness marker that automation can wait for
+
+### Requirement: Automated sample integration verification
+The Maven build SHALL exercise the runnable sample application against its packaged page, modules, deterministic data, and real GraphQL endpoint.
+
+#### Scenario: Application and resource smoke test
+- **WHEN** the sample integration test starts the application on a random port
+- **THEN** the sample HTML page and packaged ECMAScript entry module are served successfully
+
+#### Scenario: Real GraphQL contract test
+- **WHEN** the sample integration test calls the running `/graphql` endpoint
+- **THEN** targeted standard introspection resolves the sample object's generated rich-schema types
+- **AND** a rich-schema object lookup returns the deterministic object's metadata and property state
+
+### Requirement: Semantic breadcrumbs requirement
+The object context SHALL accept a semantic breadcrumbs read requirement and SHALL translate it to the supported current-object identity, title, and navigable-ancestor metadata fields without exposing generated GraphQL names to the consumer.
+
+#### Scenario: Breadcrumb consumer joins initial composition
+- **WHEN** a breadcrumbs consumer and other domain components register during the same rendering turn
+- **THEN** the context coalesces their selections into one initial object operation
+- **AND** breadcrumb metadata is returned through the consumer's local requirement state
+
+#### Scenario: Breadcrumb consumer connects later
+- **WHEN** breadcrumbs are registered after an object snapshot already exists without their selection
+- **THEN** the context loads only the missing metadata selection
+- **AND** merges it into the immutable current snapshot
+
+#### Scenario: Breadcrumb consumer disconnects
+- **WHEN** the consumer releases its requirement
+- **THEN** the requirement is omitted from subsequent complete refresh projections
+- **AND** release alone causes no network request
+
+### Requirement: Targeted breadcrumb schema discovery
+The GraphQL client SHALL discover the shared breadcrumb-entry object type through targeted introspection only when it is reachable from requested object metadata.
+
+#### Scenario: Metadata supports breadcrumb entries
+- **WHEN** an object description exposes `breadcrumbs` as a list of breadcrumb-entry objects
+- **THEN** targeted discovery loads that entry type and its supported fields
+- **AND** the semantic requirement selects only supported identity and title fields
+
+#### Scenario: Schema lacks breadcrumb support
+- **WHEN** the introspected metadata type has no `breadcrumbs` field or no usable entry identity fields
+- **THEN** the breadcrumb requirement reports an unsupported local state
+- **AND** existing header and member requirements remain usable
+
+### Requirement: Breadcrumb partial-error isolation
+The object context SHALL associate a GraphQL error on navigable breadcrumb metadata with the breadcrumbs requirement while preserving successful sibling metadata and member state.
+
+#### Scenario: Ancestor traversal fails
+- **WHEN** the object response contains current metadata and member data plus an error at the breadcrumb field path
+- **THEN** the breadcrumbs consumer receives a partial-error state
+- **AND** successful header, property, action, and collection consumers retain their normal state
+
+### Requirement: Targeted collection heading metadata
+A semantic collection requirement SHALL select supported canonical `friendlyName` and `description` fields from the collection wrapper's existing metadata object alongside collection visibility and usability state.
+
+#### Scenario: Collection metadata fields are supported
+- **WHEN** targeted introspection finds `metadata.friendlyName` or `metadata.description` on a requested collection wrapper
+- **THEN** the object-context selection includes only the supported heading metadata fields
+- **AND** accepted response metadata is delivered with the current collection requirement state
+
+#### Scenario: Collection metadata is unavailable or partially erroneous
+- **WHEN** the wrapper lacks either heading field or GraphQL reports a nullable field-local error
+- **THEN** the remaining supported collection state stays usable
+- **AND** the component can apply explicit HTML overrides or safe fallbacks without a complete-schema read
+
+#### Scenario: Collection heading attribute changes
+- **WHEN** an HTML-only name or description override changes after metadata has loaded
+- **THEN** the component reuses the current requirement state
+- **AND** no extra GraphQL request is issued solely for presentation text
+
+### Requirement: Action presentation metadata continuity
+The GraphQL Web Component context SHALL discover available canonical action name, description, static Font Awesome classes, and icon position and preserve them through ordinary component state and action preparation.
+Discovery MUST remain compatible with rich schemas that omit the additive icon fields.
+
+#### Scenario: Current schema advertises action presentation metadata
+- **WHEN** action discovery introspects the additive metadata fields
+- **THEN** the current action state contains bounded canonical name, description, icon classes, and position
+- **AND** unrelated metadata and hidden members are not selected
+
+#### Scenario: Older schema omits icon fields
+- **WHEN** action discovery introspects a compatible schema without additive Font Awesome metadata
+- **THEN** the generated operation omits the unsupported fields
+- **AND** naming, description, action preparation, and invocation remain available
+
+#### Scenario: Parameterized action is prepared
+- **WHEN** current action preparation succeeds with one or more parameters
+- **THEN** the prepared capabilities retain the current canonical action presentation
+- **AND** subsequent parameter recomputation preserves it until the prompt generation is retired
+
+#### Scenario: Action generation is superseded
+- **WHEN** route, object, service, authorization, refresh, or action generation changes
+- **THEN** stale action presentation cannot replace current control or prompt metadata
+- **AND** no stale icon, tooltip, name, or description is rendered
+
+### Requirement: Declarative context-boundary ownership
+Applications SHALL be able to declare `<cw-graphql-client>` and `<cw-object-context>` directly in ordinary HTML or framework-native templates, while a host router supplies endpoint and canonical object-identity values without constructing GraphQL operations or duplicating domain state.
+The component library SHALL NOT require HTMX, Vue, Svelte, Angular, or another host framework to manufacture those semantic elements imperatively.
+
+#### Scenario: Plain HTML composition is authored
+- **WHEN** application markup declares one GraphQL client containing an object context and semantic descendants
+- **THEN** the descendants obtain client and object services through the established bubbling context protocols
+- **AND** no host-specific wrapper is required
+
+#### Scenario: Framework route values are bound
+- **WHEN** a host router binds a GraphQL endpoint, logical type, and object identifier to already-declared context elements
+- **THEN** the elements load the same authoritative object state as equivalent static attributes
+- **AND** the framework does not need to mirror GraphQL object, member, validation, or interaction state
+
+#### Scenario: Declared object context awaits identity
+- **WHEN** an authored object context connects without a complete logical type and object identifier while its host prepares route bindings
+- **THEN** it issues no object query
+- **AND** it becomes operational when complete valid identity is supplied
+
+#### Scenario: Route template disconnects
+- **WHEN** a framework router removes an authored route template
+- **THEN** its object context releases subscriptions, requirements, cancellation state, and obsolete responses according to the normal disconnect contract
+- **AND** cleanup does not depend on which host router removed it
+
+### Requirement: Coordinated metadata-layout consumption
+
+The object context SHALL allow `<cw-metadata>` to consume the current object's schema description and effective-grid structural resource through the established layout requirement and structural-resource policy.
+The component MUST NOT create an independent GraphQL client, construct a structural URL, bypass context generation, or weaken same-origin resource controls.
+
+#### Scenario: Metadata component requests effective layout
+
+- **WHEN** a connected `<cw-metadata>` registers beneath the current object context
+- **THEN** its layout requirement coalesces with other current semantic requirements
+- **AND** the authoritative grid resource reference is selected only when supported by the schema and response
+
+#### Scenario: Metadata component loads the referenced grid
+
+- **WHEN** the current layout state contains an effective grid reference
+- **THEN** the component loads it through `loadStructuralResource` with the established XML accept policy, credentials, redirect checks, same-origin checks, and byte bounds
+- **AND** raw resource content remains internal to foundation parsing
+
+#### Scenario: Metadata descendants connect
+
+- **WHEN** the effective metadata fieldset yields property and action member identities
+- **THEN** generated `<cw-property>` and `<cw-action>` descendants register their ordinary requirements on the same context
+- **AND** batching, selection minimization, authorization, partial errors, invocation, and lifecycle isolation remain unchanged
+
+#### Scenario: Context changes during metadata loading
+
+- **WHEN** the parent context generation or identity changes before metadata preparation completes
+- **THEN** the pending structural operation is aborted or ignored by generation
+- **AND** no stale member component connects under the newer context

@@ -3,10 +3,7 @@
 
 Marker interface for domain types whose bookmarked instances are stable replay reference data.
 
-Implementing this marker asserts that the type's logical type and bookmark identifiers are well-known and that matching instances are provisioned in every replay environment.
-The marker is part of applib, has no methods, and does not introduce a dependency on the commandlog extension or any persistence mapping.
-
-Applications can also classify reference data without implementing this marker by providing a commandlog `CommandReplayReferenceDataService`.
+Implement this only for types whose logical type and bookmark identifiers are well-known and expected to exist in every replay environment. The marker deliberately has no dependency on the commandlog extension.
 
 == API
 
@@ -16,3 +13,4 @@ Applications can also classify reference data without implementing this marker b
 interface RefData {
 }
 ----
+

@@ -21,15 +21,15 @@ package org.apache.causeway.viewer.graphql.viewer.test.e2e.calc;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
-
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestFactory;
 
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest_SkipGoodFaithIntrospection;
+
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
-public class Calculator_IntegTest extends Abstract_IntegTest {
+public class Calculator_IntegTest extends Abstract_IntegTest_SkipGoodFaithIntrospection {
 
     @Override
     @TestFactory

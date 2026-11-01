@@ -1,0 +1,56 @@
+= HTMX: Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+All properties below use the prefix `causeway.viewer.webcomponents.htmx.`.
+
+[cols="2,1,3",options="header"]
+|===
+|Property |Default |Purpose
+|`base-path` |`/htmx` |Bounded non-root origin-relative viewer mount
+|`graph-ql-endpoint` |`/graphql` |Backend endpoint used by the stable client
+|`brand` |`Apache Causeway` |Application branding
+|`language` |`en` |Document language
+|`application-stylesheet` |Unset |One same-origin stylesheet after the default theme
+|`resource-page-mode` |`cached` |Validate/cache packaged pages and shell, or re-read registered resources with `reload`
+|`component-toolkit` |`vaadin` |Common presentation policy; `native` disables all Vaadin adapters
+|`reference-minimum-search-length` |`2` |Autocomplete search threshold
+|`reference-maximum-results` |`50` |Window request fallback and legacy complete-response bound
+|`wicket-comparison-path` |Unset |Optional footer comparison link for samples
+|===
+
+An advertised autocomplete field's smaller introspected default window takes precedence over the configured fallback.
+The deprecated `editor-toolkit`, `vaadin-reference-widgets`, and `vaadin-field-families` settings remain compatibility inputs; prefer `component-toolkit` for new applications.
+An explicit common component policy takes precedence over those legacy settings.
+
+[source,properties]
+----
+causeway.viewer.webcomponents.htmx.base-path=/htmx
+causeway.viewer.webcomponents.htmx.graph-ql-endpoint=/graphql
+causeway.viewer.webcomponents.htmx.component-toolkit=native
+----
+
+The native setting is a complete presentation rollback, not a change to permissions or GraphQL semantics.
+See xref:presentation.adoc[presentation boundaries].
+
+== Resource reload
+
+Production-oriented `cached` mode validates packaged HTML once at startup.
+Development `reload` mode reopens and validates an already registered page on each render and the selected shell on each full-document render.
+It does not rescan registrations: adding, deleting, or renaming a resource requires restarting the application context.
+An invalid reload fails the request rather than showing stale content or silently selecting the generic page.
+
+The HTMX Petclinic sample opts into reload mode.
+After editing a resource in an IDE, build the project so the updated resource reaches the running application's classpath, then refresh the browser.
+
+== Routes and deployment
+
+Canonical object routes have the form `/htmx/object/<logical-type>/<identifier>` with independently percent-encoded segments.
+Each decoded source segment and each final encoded segment is bounded to 4,096 bytes or ASCII characters respectively.
+Proxies and containers must permit valid canonical routes without decoding encoded separators.
+
+`HX-Request: true` requests receive a route fragment and an `HX-Push-Url` header.
+History restoration also replaces only the route region.
+Authorization-sensitive history snapshots are disabled; cache misses re-fetch the authorised fragment.
+The full shell is `private, no-store` and retains a restrictive same-origin CSP.
+Configure security through the xref:htmx/security.adoc[security integration], not by relying on browser caching or hidden controls.

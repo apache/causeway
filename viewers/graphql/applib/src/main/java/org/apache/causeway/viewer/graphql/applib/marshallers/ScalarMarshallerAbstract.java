@@ -23,14 +23,12 @@ import graphql.schema.GraphQLScalarType;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Convenience adapter for {@link ScalarMarshaller} SPI.
  *
  * @param <K>
  */
-@RequiredArgsConstructor
 public abstract class ScalarMarshallerAbstract<K> implements ScalarMarshaller<K> {
 
     final Class<? extends K> javaClass;
@@ -40,8 +38,40 @@ public abstract class ScalarMarshallerAbstract<K> implements ScalarMarshaller<K>
 
     protected final CausewayConfiguration causewayConfiguration;
 
-    public boolean handles(Class<?> javaClass) {
+    private final boolean supportsInput;
+
+    /**
+     * Compatibility constructor for output-only application marshallers.
+     */
+    protected ScalarMarshallerAbstract(
+            final Class<? extends K> javaClass,
+            final GraphQLScalarType gqlScalarType,
+            final CausewayConfiguration causewayConfiguration) {
+        this(javaClass, gqlScalarType, causewayConfiguration, false);
+    }
+
+    /**
+     * Constructor for marshallers that explicitly declare their input capability.
+     */
+    protected ScalarMarshallerAbstract(
+            final Class<? extends K> javaClass,
+            final GraphQLScalarType gqlScalarType,
+            final CausewayConfiguration causewayConfiguration,
+            final boolean supportsInput) {
+        this.javaClass = javaClass;
+        this.gqlScalarType = gqlScalarType;
+        this.causewayConfiguration = causewayConfiguration;
+        this.supportsInput = supportsInput;
+    }
+
+    @Override
+    public boolean handles(final Class<?> javaClass) {
         return this.javaClass.isAssignableFrom(javaClass);
+    }
+
+    @Override
+    public boolean supportsInput() {
+        return supportsInput;
     }
 
 }

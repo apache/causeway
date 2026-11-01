@@ -18,14 +18,20 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.mutation;
 
+import java.util.ArrayList;
+
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Optional;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -44,16 +50,8 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatur
 import org.apache.causeway.viewer.graphql.model.domain.rich.query.RichAction;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-import org.jspecify.annotations.Nullable;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -134,35 +132,8 @@ public class RichMutationForAction extends Element {
         if (isService) {
             sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.correspondingClass());
         } else {
-            Object target = dataFetchingEnvironment.getArgument(argumentName);
-            Optional<Object> result;
-            @SuppressWarnings("unchecked")
-			var argumentValue = (Map<String, ?>) target;
-            String idValue = (String)argumentValue.get("id");
-            if (idValue != null) {
-                var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
-                Optional<Bookmark> bookmarkIfAny;
-                if (objectSpecArg != null) {
-                    bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
-                } else {
-                    Class<?> paramClass = objectSpec.correspondingClass();
-                    bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
-                }
-                result = bookmarkIfAny
-                        .map(context.bookmarkService::lookup)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get);
-            } else {
-                var refValue = (String)argumentValue.get("ref");
-                if (refValue != null) {
-                    String key = ObjectFeatureUtils.keyFor(refValue);
-                    BookmarkedPojo value = environment.getGraphQlContext().get(key);
-                    result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-                } else
-					throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-            }
-            sourcePojo = result
-                    .orElseThrow(); // TODO: better error handling if no such object found.
+            var target = dataFetchingEnvironment.getArgument(argumentName);
+            sourcePojo = ObjectFeatureUtils.requirePojo(objectSpec, target, environment, context);
         }
 
         ManagedObject managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
@@ -180,7 +151,7 @@ public class RichMutationForAction extends Element {
 
         var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed())
-			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
+			throw new IllegalArgumentException(validityConsent.reasonAsString().orElse("Invalid"));
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();

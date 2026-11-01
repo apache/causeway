@@ -14,7 +14,7 @@ interface CommandLogEntryRepository {
   List<CommandLogEntry> findByParent(CommandLogEntry parent)
   List<CommandLogEntry> findByParentInteractionId(UUID parentInteractionId)
   List<CommandLogEntry> findByFromAndTo(LocalDate from, LocalDate to)
-  List<CommandLogEntry> findCurrent()
+  List<CommandLogEntry> findCurrent()     // <.>
   List<CommandLogEntry> findCompleted()
   List<CommandLogEntry> findByTargetAndFromAndTo(Bookmark target, LocalDate from, LocalDate to)
   List<CommandLogEntry> findMostRecent()
@@ -23,12 +23,21 @@ interface CommandLogEntryRepository {
   List<CommandLogEntry> findRecentByTarget(Bookmark target)
   List<CommandLogEntry> findRecentByTargetOrResult(Bookmark targetOrResult)
   List<CommandLogEntry> findSince(UUID interactionId, Integer batchSize)     // <.>
+  List<CommandLogEntry> findForegroundSinceTimestamp(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestamp(Timestamp since, Integer limitIfAny)
+  List<CommandLogEntry> findForegroundBeforeTimestamp(Timestamp before, Integer limitIfAny)
+  List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since)     // <.>
+  List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(Timestamp since)
+  List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since)     // <.>
   List<CommandLogEntry> findBackgroundAndNotYetStarted()     // <.>
   List<CommandLogEntry> findRecentBackgroundByTarget(Bookmark target)
   Optional<CommandLogEntry> findMostRecentReplayed()     // <.>
   Optional<CommandLogEntry> findMostRecentCompleted()     // <.>
-  List<CommandLogEntry> findNotYetReplayed()
   CommandLogEntry saveForReplay(CommandDto dto)
+  List<CommandLogEntry> saveForReplay(List<CommandDto> commandDtoList)
   List<CommandLogEntry> saveForReplay(CommandsDto commandsDto)
   void persist(CommandLogEntry commandLogEntry)
   void truncateLog()
@@ -38,10 +47,25 @@ interface CommandLogEntryRepository {
 }
 ----
 
+<.> xref:#findCurrent_[findCurrent()]
++
+--
+Still running, not completed yet.
+--
 <.> xref:#findSince_UUID_Integer[findSince(UUID, Integer)]
 +
 --
 Intended to support the replay of commands on a secondary instance of the application. This finder returns all (completed) xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s started after the command with the specified interactionId. The number of commands returned can be limited so that they can be applied in batches. If the provided interactionId is null, then only a single xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is returned. This is intended to support the case when the secondary does not yet have any xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s replicated. In practice this is unlikely; typically we expect that the secondary will be set up to run against a copy of the primary instance's DB (restored from a backup), in which case there will already be a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] representing the current high water mark on the secondary system. If the interactionId is not null but the corresponding xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is not found, then `null` is returned. In the replay scenario the caller will probably interpret this as an error because it means that the high water mark on the secondary is inaccurate, referring to a non-existent xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] on the primary.
+--
+<.> xref:#findForegroundSinceTimestampAndWithReplayPendingOrFailed_Timestamp[findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp)]
++
+--
+Command Replay feature: Can replay or retry.
+--
+<.> xref:#findSinceAndWithReplayOkOrExcluded_Timestamp[findSinceAndWithReplayOkOrExcluded(Timestamp)]
++
+--
+Command Replay feature: Cannot replay or retry.
 --
 <.> xref:#findBackgroundAndNotYetStarted_[findBackgroundAndNotYetStarted()]
 +
@@ -71,10 +95,25 @@ intended for testing purposes only
 
 == Members
 
+[#findCurrent_]
+=== findCurrent()
+
+Still running, not completed yet.
+
 [#findSince_UUID_Integer]
 === findSince(UUID, Integer)
 
 Intended to support the replay of commands on a secondary instance of the application. This finder returns all (completed) xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s started after the command with the specified interactionId. The number of commands returned can be limited so that they can be applied in batches. If the provided interactionId is null, then only a single xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is returned. This is intended to support the case when the secondary does not yet have any xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s replicated. In practice this is unlikely; typically we expect that the secondary will be set up to run against a copy of the primary instance's DB (restored from a backup), in which case there will already be a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] representing the current high water mark on the secondary system. If the interactionId is not null but the corresponding xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] is not found, then `null` is returned. In the replay scenario the caller will probably interpret this as an error because it means that the high water mark on the secondary is inaccurate, referring to a non-existent xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] on the primary.
+
+[#findForegroundSinceTimestampAndWithReplayPendingOrFailed_Timestamp]
+=== findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp)
+
+Command Replay feature: Can replay or retry.
+
+[#findSinceAndWithReplayOkOrExcluded_Timestamp]
+=== findSinceAndWithReplayOkOrExcluded(Timestamp)
+
+Command Replay feature: Cannot replay or retry.
 
 [#findBackgroundAndNotYetStarted_]
 === findBackgroundAndNotYetStarted()

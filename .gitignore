@@ -16,6 +16,11 @@ nohup.out
 # Node
 package-lock.json
 package.json
+# Required inputs for reproducible, Maven-verified viewer assets
+!/viewers/webcomponents/foundation/vaadin-actions/package.json
+!/viewers/webcomponents/foundation/vaadin-actions/package-lock.json
+!/viewers/webcomponents/foundation/vaadin-grid/package.json
+!/viewers/webcomponents/foundation/vaadin-grid/package-lock.json
 pnpmfile.js
 pnpm-lock.yaml
 webpack.config.js

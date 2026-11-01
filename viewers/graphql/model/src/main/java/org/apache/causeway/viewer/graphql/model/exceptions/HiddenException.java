@@ -25,7 +25,7 @@ public class HiddenException extends InteractionException {
 	private static final long serialVersionUID = 1L;
 
     public HiddenException(final Consent consent) {
-        super(consent.getReasonAsString().orElse("Hidden"));
+        super(consent.reasonAsString().orElse("Hidden"));
     }
 
     public HiddenException(final Identifier identifier) {

@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-webcomponents</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>causeway-viewer-webcomponents-foundation</artifactId>
+    <name>Apache Causeway Viewer - Web Components (Foundation)</name>
+    <packaging>jar</packaging>
+
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.webcomponents.foundation</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/viewer/webcomponents/foundation</git-plugin.propertiesDir>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-reference/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-reference</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-reference/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-reference</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>pdfjs/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/pdfjs</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>pdfjs/generated/licenses</directory>
+                <targetPath>META-INF/licenses/pdfjs</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-fields/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-fields</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-fields/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-fields</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-actions/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-actions</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-actions/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-actions</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-grid/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-grid</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-grid/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-grid</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-menubar/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-menubar</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-menubar/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-menubar</targetPath>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <exclude>vaadin-reference/generated/assets/vaadin-reference.js</exclude>
+                        <exclude>pdfjs/generated/assets/**</exclude>
+                        <exclude>vaadin-fields/generated/assets/vaadin-*.js</exclude>
+                        <exclude>vaadin-actions/generated/assets/vaadin-actions.js</exclude>
+                        <exclude>vaadin-grid/generated/assets/vaadin-grid.js</exclude>
+                        <exclude>vaadin-menubar/generated/assets/vaadin-menubar.js</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-vaadin-reference-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-pdfjs-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/pdfjs" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-vaadin-field-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-fields" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-vaadin-action-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-actions" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-vaadin-grid-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-grid" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-vaadin-menubar-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-menubar" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-web-components</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}" failonerror="true">
+                                    <arg value="--test"/>
+                                    <arg value="--test-concurrency=1"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>regenerate-pdfjs-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-pdfjs-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/pdfjs" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/pdfjs" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>regenerate-vaadin-menubar-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-menubar-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-menubar" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-menubar" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>regenerate-vaadin-grid-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-grid-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-grid" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-grid" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>regenerate-vaadin-action-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-action-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-actions" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-actions" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>regenerate-vaadin-field-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-field-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-fields" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-fields" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>regenerate-vaadin-reference-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-reference-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

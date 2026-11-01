@@ -28,12 +28,18 @@ class CommandLogEntryRepositoryAbstract<C> {
   List<CommandLogEntry> findRecentBackgroundByTarget(Bookmark target)
   Optional<CommandLogEntry> findMostRecentReplayed()     // <.>
   Optional<CommandLogEntry> findMostRecentCompleted()     // <.>
-  List<CommandLogEntry> findNotYetReplayed()
-  C saveForReplay(CommandDto dto)
-  List<CommandLogEntry> saveForReplay(CommandsDto commandsDto)
+  C saveForReplay(CommandDto commandToReplay)
   void persist(CommandLogEntry commandLogEntry)
   void truncateLog()
   List<CommandLogEntry> findCommandsOnPrimaryElseFail(UUID interactionId, Integer batchSize)
+  List<CommandLogEntry> findForegroundSinceTimestamp(Timestamp since, Integer limitIfAny)
+  List<CommandLogEntry> findForegroundBeforeTimestamp(Timestamp before, Integer limitIfAny)
+  List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(Timestamp since)
+  List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(Timestamp since)
+  List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since)     // <.>
   List<CommandLogEntry> findAll()     // <.>
   void removeAll()     // <.>
 }
@@ -58,6 +64,11 @@ The most recent replayed command previously replicated from primary to secondary
 +
 --
 The most recent completed command, as queried on the secondary.
+--
+<.> xref:#findSinceAndWithReplayOkOrExcluded_Timestamp[findSinceAndWithReplayOkOrExcluded(Timestamp)]
++
+--
+Command Replay feature: Cannot replay or retry.
 --
 <.> xref:#findAll_[findAll()]
 +
@@ -97,6 +108,11 @@ This should always exist except for the very first times (after restored the pro
 The most recent completed command, as queried on the secondary.
 
 After a restart following the production database being restored from primary to secondary, would correspond to the last command run on primary before the production database was restored to the secondary.
+
+[#findSinceAndWithReplayOkOrExcluded_Timestamp]
+=== findSinceAndWithReplayOkOrExcluded(Timestamp)
+
+Command Replay feature: Cannot replay or retry.
 
 [#findAll_]
 === findAll()

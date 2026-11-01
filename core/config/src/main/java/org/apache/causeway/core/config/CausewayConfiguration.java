@@ -84,6 +84,8 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.applib.services.userreg.EmailNotificationService;
+import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.functional.Try;
@@ -437,6 +439,14 @@ public record CausewayConfiguration(
             }
 
             public record DomainObject(
+                /**
+                 * Default locking policy for Causeway JPA bookmark loads.
+                 * Pessimistic loads require an active transaction and acquire a write lock.
+                 * Overridden by {@link DomainObject#locking()}.
+                 */
+                @DefaultValue("OPTIMISTIC")
+                DomainObjectConfigOptions.LockingPolicy locking,
+
                 /**
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
                  * sent through to {@link EntityChangesSubscriber}s and
@@ -2247,7 +2257,9 @@ public record CausewayConfiguration(
              * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
              */
             @DefaultValue
-            List<Credit> credit) {
+            List<Credit> credit,
+            @DefaultValue
+            Signin signin) {
 
             public record Application(
                 /**
@@ -2345,6 +2357,59 @@ public record CausewayConfiguration(
                  */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
+
+            public record Signin(
+
+                    /**
+                     * Whether to suppress the sign-up link on the sign-in page.
+                     *
+                     * <p>Although this is disabled by default (in other words the sign-up link is not suppressed), note that
+                     * in addition the application must provide an implementation of the
+                     * {@link UserRegistrationService} as well as a
+                     * configured {@link EmailNotificationService} (same conditions
+                     * as for the {@link #isSuppressPasswordReset()} password reset link).
+                     */
+                    @DefaultValue("false")
+                    boolean suppressSignUp,
+
+                    /**
+                     * Whether to suppress the password reset link on the sign-in page.
+                     *
+                     * <p>Although this is disabled by default (in other words the 'reset password' link is not suppressed),
+                     * note that in addition the application must provide an implementation of the
+                     * {@link UserRegistrationService} as well as a
+                     * configured {@link EmailNotificationService} (same conditions
+                     * as for the {@link #isSuppressSignUp()} sign-up link).
+                     */
+                    @DefaultValue("false")
+                    boolean suppressPasswordReset,
+
+                    @DefaultValue
+                    RememberMe rememberMe
+            		) {
+
+                public record RememberMe(
+                        /**
+                         * Whether the sign-in page should have a 'remember me' link (the default), or if it should
+                         * be suppressed.
+                         *
+                         * <p> If 'remember me' is available and checked, then the viewer will remember 'username' and 'timezone'
+                         * for the login page using cookies. This does not include any secrets nor requires encryption.
+                         */
+                        @DefaultValue("false")
+                        boolean suppress,
+
+                        /**
+                         * If the 'remember me' feature is available, specifies the cookie name prefix that is used for cookies to store timezone and username data.
+                         */
+                        @DefaultValue("causewayRememberMe")
+                        String cookieKey,
+
+                        @DefaultValue("Remember 'username' and 'timezone' for the next login.")
+                        String description) {
+                }
+            }
+
         }
 
         public record Graphql(
@@ -2383,6 +2448,12 @@ public record CausewayConfiguration(
             Mutation mutation,
             @DefaultValue
             ScalarMarshaller scalarMarshaller,
+            @DefaultValue
+            Values values,
+            @DefaultValue
+            Collections collections,
+            @DefaultValue
+            Autocomplete autocomplete,
             @DefaultValue
             Resources resources,
             @DefaultValue
@@ -2593,9 +2664,81 @@ public record CausewayConfiguration(
             }
 
             /**
+             * Controls GraphQL behavior for values without an explicit marshaller or structured mapping.
+             */
+            public record Values(
+                    /**
+                     * How an unknown value is represented on output.
+                     * Input remains unsupported under every policy.
+                     */
+                    @DefaultValue("REDACTED")
+                    UnsupportedOutputPolicy unsupportedOutputPolicy) {
+
+                public enum UnsupportedOutputPolicy {
+                    /**
+                     * Return a constant non-disclosing unsupported representation without invoking the value's
+                     * {@code toString()} method.
+                     */
+                    REDACTED,
+                    /**
+                     * Temporarily retain the previous implicit GraphQL String serialization during migration.
+                     */
+                    LEGACY_STRING
+                }
+            }
+
+            /**
+             * Controls bounded rich GraphQL collection windows.
+             */
+            public record Collections(
+                    /**
+                     * Default row count used when a collection window omits its size.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("20")
+                    int defaultWindowSize,
+                    /**
+                     * Hard maximum row count accepted for one collection window.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("100")
+                    int maxWindowSize) {
+
+                public Collections {
+                    if (defaultWindowSize > maxWindowSize)
+						throw new IllegalArgumentException(
+                                "causeway.viewer.graphql.collections.default-window-size must not exceed max-window-size");
+                }
+            }
+
+            /**
+             * Controls bounded rich GraphQL autocomplete response windows.
+             */
+            public record Autocomplete(
+                    /**
+                     * Default item count used when an autocomplete window omits its size.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("20")
+                    int defaultWindowSize,
+                    /**
+                     * Hard maximum item count accepted for one autocomplete window.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("100")
+                    int maxWindowSize) {
+
+                public Autocomplete {
+                    if (defaultWindowSize > maxWindowSize)
+						throw new IllegalArgumentException(
+                                "causeway.viewer.graphql.autocomplete.default-window-size must not exceed max-window-size");
+                }
+            }
+
+            /**
              * The different ways in which resources ({@link org.apache.causeway.applib.value.Blob} bytes,
-             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
-             * resource controller.
+             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) are made available.
+             * For Blob and Clob values this policy also gates bounded GraphQL input and action-result content.
              */
             public enum ResponseType {
                 /**
@@ -2603,7 +2746,8 @@ public record CausewayConfiguration(
                  *
                  * <p>In this case any {@link org.apache.causeway.applib.value.Blob} and
                  * {@link org.apache.causeway.applib.value.Clob} properties will <i>not</i> provide a link to
-                 * the URL.  Attempting to download from the resource controller will result in a 403 (forbidden).
+                 * the URL, resource input is unsupported, and action results remain metadata-only.
+                 * Attempting to download from the resource controller will result in a 403 (forbidden).
                  */
                 FORBIDDEN,
                 /**
@@ -2625,16 +2769,62 @@ public record CausewayConfiguration(
 
             public record Resources(
                 /**
-                 * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
-                 * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
-                 * resource controller.
+                 * Compatibility setting used for a resource category whose category-specific response type is not
+                 * configured.
                  *
-                 * <p>By default the download of these resources if {@link ResponseType#FORBIDDEN}, but alternatively
-                 * they can be enabled to download either {@link ResponseType#DIRECT}ly or as an
-                 * {@link ResponseType#ATTACHMENT}.
+                 * <p>By default resources are {@link ResponseType#FORBIDDEN}.
+                 * Prefer {@link #structuralMetadataResponseType()} and {@link #valueContentResponseType()} for new
+                 * applications.
                  */
+                @Deprecated
                 @DefaultValue("FORBIDDEN")
-                ResponseType responseType) {
+                ResponseType responseType,
+                /**
+                 * How effective grids, icons, and other structural metadata resources are returned.
+                 * If unset, temporarily falls back to {@link #responseType()}.
+                 */
+                @Nullable
+                ResponseType structuralMetadataResponseType,
+                /**
+                 * How {@link org.apache.causeway.applib.value.Blob} bytes and
+                 * {@link org.apache.causeway.applib.value.Clob} characters are returned, and whether bounded
+                 * GraphQL resource input and action-result content are enabled.
+                 * If unset, temporarily falls back to {@link #responseType()}.
+                 */
+                @Nullable
+                ResponseType valueContentResponseType,
+                /**
+                 * Maximum decoded byte size accepted for inline Blob or UTF-8 Clob GraphQL input.
+                 */
+                @Min(value = 1)
+                @DefaultValue("1048576")
+                int inlineInputMaxBytes,
+                /**
+                 * Maximum byte size emitted inline for Blob or UTF-8 Clob action results.
+                 * Larger values remain metadata-only and property content continues to use secured resource links.
+                 */
+                @Min(value = 1)
+                @DefaultValue("1048576")
+                int inlineOutputMaxBytes,
+                /**
+                 * Optional externally visible path prefix for a deployment behind a path-rewriting reverse proxy.
+                 * The prefix is combined with the servlet context and configured GraphQL endpoint path when links are
+                 * published.
+                 */
+                @Nullable
+                String externalPathPrefix) {
+
+                public ResponseType effectiveStructuralMetadataResponseType() {
+                    return structuralMetadataResponseType != null
+                            ? structuralMetadataResponseType
+                            : Objects.requireNonNullElse(responseType, ResponseType.FORBIDDEN);
+                }
+
+                public ResponseType effectiveValueContentResponseType() {
+                    return valueContentResponseType != null
+                            ? valueContentResponseType
+                            : Objects.requireNonNullElse(responseType, ResponseType.FORBIDDEN);
+                }
             }
 
             public record Authentication(
@@ -3007,30 +3197,6 @@ public record CausewayConfiguration(
             boolean stripWicketTags,
 
             /**
-             * Whether to suppress the sign-up link on the sign-in page.
-             *
-             * <p>Although this is disabled by default (in other words the sign-up link is not suppressed), note that
-             * in addition the application must provide an implementation of the
-             * {@link UserRegistrationService} as well as a
-             * configured {@link EmailNotificationService} (same conditions
-             * as for the {@link #isSuppressPasswordReset()} password reset link).
-             */
-            @DefaultValue("false")
-            boolean suppressSignUp,
-
-            /**
-             * Whether to suppress the password reset link on the sign-in page.
-             *
-             * <p>Although this is disabled by default (in other words the 'reset password' link is not suppressed),
-             * note that in addition the application must provide an implementation of the
-             * {@link UserRegistrationService} as well as a
-             * configured {@link EmailNotificationService} (same conditions
-             * as for the {@link #isSuppressSignUp()} sign-up link).
-             */
-            @DefaultValue("false")
-            boolean suppressPasswordReset,
-
-            /**
              * How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
              */
             @DefaultValue("TEXT")
@@ -3079,8 +3245,6 @@ public record CausewayConfiguration(
             DevelopmentUtilities developmentUtilities,
             @DefaultValue
             FileUpload fileUpload,
-            @DefaultValue
-            RememberMe rememberMe,
             @DefaultValue
             Themes themes,
             @DefaultValue
@@ -3248,51 +3412,6 @@ public record CausewayConfiguration(
         			 */
             		@DefaultValue("true")
         			boolean showPreview) {
-            }
-
-            public record RememberMe(
-                /**
-                 * Whether the sign-in page should have a 'remember me' link (the default), or if it should
-                 * be suppressed.
-                 *
-                 * <p>
-                 *     If 'remember me' is available and checked, then the viewer will allow users to login
-                 *     based on encrypted credentials stored in a cookie.  An {@link #getEncryptionKey() encryption key}
-                 *     can optionally be specified.
-                 *
-                 */
-                @DefaultValue("false")
-                boolean suppress,
-
-                /**
-                 * If the 'remember me' feature is available, specifies the key to hold the encrypted
-                 * credentials in the cookie.
-                 */
-                @DefaultValue("causewayWicketRememberMe")
-                String cookieKey,
-                /**
-                 * If the 'remember me' feature is available, optionally specifies an encryption key
-                 * (a complex string acting as salt to the encryption algorithm) for computing the encrypted
-                 * credentials.
-                 *
-                 * <p>
-                 *     If not set, then (in production mode) the Wicket viewer will compute a random key each time it
-                 *     is started.  This will mean that any credentials stored between sessions will become invalid.
-                 *
-                 *
-                 * <p>
-                 *     Conversely, if set then (in production mode) then the same salt will be used each time the app
-                 *     is started, meaning that cached credentials can continue to be used across restarts.
-                 *
-                 *
-                 * <p>
-                 *     In prototype mode this setting is effectively ignored, because the same key will always be
-                 *     provided (either as set, or a fixed literal otherwise).
-                 *
-                 */
-                @DefaultValue
-                Optional<String> encryptionKey) {
-
             }
 
             public record Themes(

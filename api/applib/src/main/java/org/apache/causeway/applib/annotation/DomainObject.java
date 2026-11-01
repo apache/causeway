@@ -160,6 +160,20 @@ public @interface DomainObject {
             default Introspection.NOT_SPECIFIED;
 
     /**
+     * Locking policy for Causeway JPA bookmark loads, including REST action
+     * reference parameters. Pessimistic loading requires an active transaction
+     * and holds a write lock until commit or rollback.
+     * <p>
+     * Does not apply to queries, repository loads, lazy relationships or JDO.
+     * Optimistic loading preserves existing ORM version behavior.
+     * </p>
+     * @apiNote Acquire the lock before modifying the entity: the provider may
+     * refresh previously unlocked managed state on first acquisition.
+     * @since 4.0
+     */
+    Locking locking() default Locking.DEFAULT;
+
+    /**
      * Applicable only if {@link #nature()} is {@link Nature#MIXIN}, indicates
      * the name of the method within the mixin class to be inferred as the
      * action of that mixin.

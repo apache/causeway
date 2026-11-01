@@ -1,0 +1,19 @@
+{
+  sqlTime: __type(name: "SqlTime") { kind name description }
+  locale: __type(name: "Locale") { kind name description }
+  bookmark: __type(name: "Bookmark") { kind name description }
+  applicationFeatureId: __type(name: "ApplicationFeatureId") { kind name description }
+  password: __type(name: "Password") { kind name description }
+  markup: __type(name: "Markup") { kind name description }
+  localResourcePathInput: __type(name: "LocalResourcePathInput") {
+    kind
+    name
+    inputFields { name type { kind name ofType { kind name } } }
+  }
+  localResourcePathValue: __type(name: "LocalResourcePathValue") {
+    kind
+    name
+    fields { name type { kind name ofType { kind name } } }
+  }
+  unsupported: __type(name: "UnsupportedValue") { kind name description }
+}

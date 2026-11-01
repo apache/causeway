@@ -1,0 +1,13 @@
+{
+  rich {
+    university_calc_Calculator {
+      echoBlob {
+        invoke(value: {name: "private.pdf", mimeType: "application/pdf", base64: "U0VOU0lUSVZFX0JMT0JfQ09OVEVOVA=="}) {
+          results {
+            name
+          }
+        }
+      }
+    }
+  }
+}

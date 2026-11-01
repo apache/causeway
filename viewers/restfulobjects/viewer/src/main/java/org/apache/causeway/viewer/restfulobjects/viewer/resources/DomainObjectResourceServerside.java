@@ -114,7 +114,7 @@ implements DomainObjectResource {
         if (validity.isVetoed())
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, validity.getReasonAsString().orElse(null)));
+                    .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, validity.reasonAsString().orElse(null)));
 
         MmEntityUtils.persistInCurrentTransaction(adapter);
 
@@ -175,7 +175,7 @@ implements DomainObjectResource {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
-                        HttpStatus.BAD_REQUEST, argRepr, validity.getReasonAsString().orElse(null)));
+                        HttpStatus.BAD_REQUEST, argRepr, validity.reasonAsString().orElse(null)));
 
         var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 

@@ -30,6 +30,8 @@ import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
@@ -195,18 +197,24 @@ extends SecureViewModelFacet {
     }
 
     private static Object[] resolveArgsForConstructor(
-            final ResolvedConstructor constructor,
+            final ResolvedConstructor resolvedConstructor,
             final ServiceRegistry serviceRegistry,
             final String memento) {
 
-        var paramTypes = Can.ofArray(constructor.paramTypes());
-        var args = new Object[constructor.paramCount()];
+        var paramTypes = Can.ofArray(resolvedConstructor.paramTypes());
+        var args = new Object[resolvedConstructor.paramCount()];
         paramTypes.forEach(IndexedConsumer.zeroBased((final int i, final Class<?> paramType)->{
             if(paramType.equals(String.class)) {
                 args[i] = memento; // its ok to do this never, once, or more than once per constructor, see ViewModel java-doc
                 return;
             }
-            args[i] = serviceRegistry.lookupServiceElseFail(paramType);
+            var paramAnnot = resolvedConstructor.paramAnnotations(i);
+            args[i] = serviceRegistry.select(paramType, paramAnnot)
+                	.getSingleton()
+                	.orElseThrow(()->_Exceptions.noSuchElement("unresolvable injection point for constructor parameter %s%s", paramType,
+                			_Strings.nonEmpty(Can.ofArray(paramAnnot).join(","))
+                			.map(" with annotations={%s}"::formatted)
+                			.orElse("")));
         }));
         return args;
     }

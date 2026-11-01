@@ -32,24 +32,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.jspecify.annotations.NonNull;
-
 import org.springframework.core.BridgeMethodResolver;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.ClassUtils;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.semantics.CollectionSemantics;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -182,31 +177,26 @@ public class _GenericResolver {
          */
         public static int methodCompare(final ResolvedMethod a, final ResolvedMethod b) {
             if(a.method().equals(b.method())
-                    && a.implementationClass().equals(b.implementationClass()) ) {
-                return 0; // exact match
-            }
+                    && a.implementationClass().equals(b.implementationClass()) )
+				return 0; // exact match
             int c = a.name().compareTo(b.name());
-            if(c!=0) {
-                return c;
-            }
+            if(c!=0)
+				return c;
             c = Integer.compare(a.paramCount(), b.paramCount());
-            if(c!=0) {
-                return c;
-            }
+            if(c!=0)
+				return c;
             var paramsA = a.paramTypes();
             var paramsB = b.paramTypes();
             for(int i=0; i<a.paramCount(); ++i) {
                 c = _Reflect.typesCompare(paramsA[i], paramsB[i]);
-                if(c!=0) {
-                    return c;
-                }
+                if(c!=0)
+					return c;
             }
             c = _Reflect.typesCompare(a.returnType(), b.returnType());
-            if(c!=0) {
-                return _Reflect.shareSameTypeHierarchy(a.returnType(), b.returnType())
+            if(c!=0)
+				return _Reflect.shareSameTypeHierarchy(a.returnType(), b.returnType())
                         ? 0 // same
                         : c;
-            }
             return 0; // equal
         }
         /**
@@ -215,9 +205,8 @@ public class _GenericResolver {
          */
         public static boolean methodsWeaklySame(final ResolvedMethod a, final ResolvedMethod b) {
             if(a.method().equals(b.method())
-                    && a.implementationClass().equals(b.implementationClass()) ) {
-                return true; // exact match
-            }
+                    && a.implementationClass().equals(b.implementationClass()) )
+				return true; // exact match
             return a.name().equals(b.name())
                 && _Reflect.methodSignatureWeaklyMatch(a.paramTypes(), b.paramTypes());
         }
@@ -237,6 +226,7 @@ public class _GenericResolver {
         default Class<?> paramType(final int paramIndex) {
             return paramTypes()[paramIndex];
         }
+        Annotation[] paramAnnotations(int paramIndex);
         default boolean isNoArg() { return paramCount()==0; }
         default boolean isSingleArg() { return paramCount()==1; }
         Class<?> resolveFirstGenericTypeArgumentOnParameter(int paramIndex);
@@ -392,9 +382,8 @@ public class _GenericResolver {
             final Type[] genericParameterTypes = method.getGenericParameterTypes();
             for(int i=0; i<method.getParameterCount(); ++i) {
                 if((genericParameterTypes[i] instanceof TypeVariable<?>)
-                        && paramTypes[i].equals(Object.class)) {
-                    return false;
-                }
+                        && paramTypes[i].equals(Object.class))
+					return false;
             }
             return true;
         }
@@ -423,32 +412,45 @@ public class _GenericResolver {
 //        }
     }
 
-    @EqualsAndHashCode
-    @Getter @Accessors(fluent=true)
-    private static class SimpleResolvedConstructor implements ResolvedConstructor {
-
-        private final Constructor<?> constructor;
-        private final Class<?> implementationClass;
-
-        @EqualsAndHashCode.Exclude
-        private final Class<?>[] paramTypes;
+    private record SimpleResolvedConstructor(
+    		Class<?> implementationClass,
+    		Constructor<?> constructor,
+            Class<?>[] paramTypes
+    		) implements ResolvedConstructor {
 
         public SimpleResolvedConstructor(final Constructor<?> constructor, final Class<?> implementationClass) {
-            this.constructor = constructor;
-            this.implementationClass = implementationClass;
-            this.paramTypes = _GenericResolver.resolveParameterTypes(constructor, implementationClass);
+        	this(implementationClass, constructor,
+        			_GenericResolver.resolveParameterTypes(constructor, implementationClass));
         }
-        @Override
-        public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+        @Override public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
             return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementationClass), 0)
                     .toClass();
         }
         @Override
-        public String toString() {
+        public Annotation[] paramAnnotations(final int paramIndex) {
+        	if(implementationClass.isRecord()
+        			&& constructor.isSynthetic())
+				// compiler generated constructor for Java record types:
+        		// rather reflect on the record components, than on the constructor params
+    		    return implementationClass.getRecordComponents()[paramIndex]
+    		    		.getAnnotations();
+        	var param = new MethodParameter(constructor, paramIndex);
+        	return param.getParameterAnnotations();
+        }
+        @Override public String toString() {
             return String.format("ResolvedConstructor[%s(%s)]", implementationClass.getName(),
-                    Can.ofArray(paramTypes).stream()
+            		_NullSafe.stream(paramTypes)
                         .map(Class::getSimpleName)
                         .collect(Collectors.joining(",")));
+        }
+        @Override public final int hashCode() {
+        	return Objects.hashCode(implementationClass);
+        }
+        @Override public final boolean equals(final Object obj) {
+        	return (obj instanceof SimpleResolvedConstructor other)
+        			? Objects.equals(this.implementationClass, other.implementationClass)
+        					&& Objects.equals(this.constructor, other.constructor)
+					: false;
         }
         // -- HELPER
 //        private Try<SimpleResolvedConstructor> adopt(final @NonNull ClassLoader classLoader) {
@@ -476,8 +478,8 @@ public class _GenericResolver {
     }
 
     private MethodParameter methodParameter(final Executable executable, final int paramIndex) {
-        return (executable instanceof Method)
-                ? new MethodParameter((Method) executable, paramIndex)
+        return (executable instanceof Method m)
+                ? new MethodParameter(m, paramIndex)
                 : new MethodParameter((Constructor<?>) executable, paramIndex);
     }
 
@@ -495,15 +497,12 @@ public class _GenericResolver {
 
         var m = BridgeMethodResolver.findBridgedMethod(
                 ClassUtils.getMostSpecificMethod(a.method(), implType));
-        if(m.isBridge()) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
-        if(a.method().equals(m)) {
-            return a;
-        }
-        if(b.method().equals(m)) {
-            return b;
-        }
+        if(m.isBridge())
+			throw _Exceptions.unexpectedCodeReach();
+        if(a.method().equals(m))
+			return a;
+        if(b.method().equals(m))
+			return b;
         return _GenericResolver.resolveMethod(m, implType)
                 .orElseThrow(()->_Exceptions.illegalArgument("most specific method\n"
                         + "%s is not resolvable while deciding for methods\n"

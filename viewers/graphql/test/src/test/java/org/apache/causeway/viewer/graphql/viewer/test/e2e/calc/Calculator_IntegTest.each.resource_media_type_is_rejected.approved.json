@@ -1,0 +1,24 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_calc_Calculator/echoBlob/invoke/results) : Resource media type is not accepted for member 'org.apache.causeway.viewer.graphql.viewer.test.domain.calc.Calculator#echoBlob[0]'",
+    "locations" : [ {
+      "column" : 11,
+      "line" : 6
+    } ],
+    "path" : [ "rich", "university_calc_Calculator", "echoBlob", "invoke", "results" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_calc_Calculator" : {
+        "echoBlob" : {
+          "invoke" : {
+            "results" : null
+          }
+        }
+      }
+    }
+  }
+}

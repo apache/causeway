@@ -15,7 +15,7 @@
                 "get" : {
                   "name" : "StaffMember-photo-Bar.pdf",
                   "mimeType" : "application/pdf",
-                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                  "bytes" : "/graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
                 }
               }
             }, {
@@ -29,7 +29,7 @@
                 "get" : {
                   "name" : null,
                   "mimeType" : null,
-                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                  "bytes" : "/graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
                 }
               }
             }, {
@@ -43,7 +43,7 @@
                 "get" : {
                   "name" : "StaffMember-photo-Foo.pdf",
                   "mimeType" : "application/pdf",
-                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                  "bytes" : "/graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
                 }
               }
             }, {
@@ -57,7 +57,7 @@
                 "get" : {
                   "name" : null,
                   "mimeType" : null,
-                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                  "bytes" : "/graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
                 }
               }
             }, {
@@ -71,7 +71,7 @@
                 "get" : {
                   "name" : "StaffMember-photo-Fizz.pdf",
                   "mimeType" : "application/pdf",
-                  "bytes" : "///graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+                  "bytes" : "/graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
                 }
               }
             } ]

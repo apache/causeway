@@ -35,6 +35,8 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.viewer.web;
 
     requires static lombok;
+    requires static micrometer.tracing.bridge.otel;
+    requires static io.opentelemetry.api;
 
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
@@ -57,6 +59,7 @@ module org.apache.causeway.core.config {
     requires spring.boot.autoconfigure;
     requires org.slf4j;
 
+    opens org.apache.causeway.core.config.observation to spring.core;
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
     opens org.apache.causeway.core.config.environment to spring.core;
 }

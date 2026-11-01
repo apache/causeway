@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.services.user;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -73,7 +74,7 @@ class UserMemento_value_Test extends ValueTypeContractTestAbstract<UserMemento> 
 
     @SneakyThrows
     private static URL newURL(final String s) {
-        return new URL(s);
+        return new URI(s).toURL();
     }
 
 }

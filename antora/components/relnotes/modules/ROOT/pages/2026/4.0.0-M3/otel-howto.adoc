@@ -1,9 +1,236 @@
-= Open Telemetry Setup
+= OpenTelemetry Setup and Local Verification
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-Add the following dependencies into your application:
+This guide explains how Causeway supports open telemetry tracing and metrics, using first Boot-managed tracing and then using Agent-initiated tracing.
+It uses the petclinic application to demonstrate.
+
+It also outlines how to enable for your own applications.
+
+
+== Start the local telemetry services
+
+From the Causeway repository root, with Docker Desktop or a Docker daemon running and Docker Compose v2 or later available:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh start
+./scripts/metrics-local.sh start
+----
+
+The first command starts Jaeger; the second starts Prometheus and Grafana and provisions Grafana's Prometheus data source.
+Each script checks readiness independently.
+The Petclinic launcher does not start or stop these services.
+Repeated starts reuse running services.
+All published ports bind to localhost.
+
+[cols="1,2",options="header"]
+|===
+|Address |Purpose
+|http://localhost:16686 |Jaeger trace UI
+|http://localhost:4318/v1/traces |Jaeger OTLP HTTP trace receiver
+|http://localhost:9090 |Prometheus query UI
+|http://localhost:9090/api/v1/otlp/v1/metrics |Prometheus OTLP HTTP metrics receiver
+|http://localhost:3000 |Grafana; initial login `admin` / `admin`
+|===
+
+Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
+
+Jaeger stores traces in memory, so
+restarting Jaeger will lose earlier traces.
+Similarly Prometheus and Grafana data directories use size-limited tmpfs; there are no persistent data volumes or host data directories.
+
+To check status:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh status
+./scripts/metrics-local.sh status
+----
+
+To inspect logs:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh logs
+./scripts/metrics-local.sh logs
+----
+
+
+== Run with Boot-managed telemetry
+
+Use a checkout whose Causeway dependencies have been built and installed into your local Maven repository.
+The launcher builds the webcomponents modules; changes to other modules (such as the Wicket viewer) must be installed before running it.
+The Petclinic launcher requires Maven and a supported build JDK, respects `JAVA_HOME` and `MVN`, and runs in the foreground:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
+
+[TIP]
+====
+Additional Maven options can be specified after `--`, for example `run-with-telemetry.sh -- -o` for an offline build.
+====
+
+The launcher activates the Maven `observation` profile for dependencies and the Spring `observation` profile for framework instrumentation and export configuration.
+
+Boot owns the tracing, no Java agent is attached in this mode.
+Micrometer meanwhile exports metrics.
+The petclinic sample is configured so that traces are fully sampled and metrics are exported every ten seconds (this can be adjusted, see xref:#configuring-your-own-app[below].)
+
+
+
+=== Exercise the application
+
+Open the app:
+
+* http://localhost:8080/htmx (htmx viewer)
++
+no password (uses bypass authentication); or
+
+* http://localhost:8080/wicket/ (Wicket viewer)
++
+sign in with `sven` / `pass`
+
+Try:
+
+* opening Mary Smith
+* changing an owner's name
+* registering a pet.
+
+
+[[inspect-traces-and-metrics]]
+=== Inspect traces and metrics
+
+In Jaeger:
+
+* select service *Causeway Pet Clinic*
+* click *Find Traces*
+* open a recent trace from a domain operation.
++
+HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
+
+* Expand the span tree and inspect the spans
++
+Span display names identify the domain member being interacted with, for example `act petclinic.PetOwner#updateName`, `prop petclinic.PetOwner#name` or `coll petclinic.PetOwner#visits`.
+Display names retain identifier casing and are limited to 50 characters: long names lose their namespace first, then are truncated if still too long.
++
+Each member span also has its full identifier under `causeway.action.id`, `causeway.property.id` or `causeway.collection.id`.
+The full identifier attribute is never truncated.
++
+Within the member span, there may be spans for updates (using `Property Update`) or to persist (using `Persist <entity type>`).
++
+[NOTE]
+====
+instance identifiers, object titles or argument values are _not_ included in the spans.
+====
+
+
+
+
+=== Micrometer
+
+Underlying Micrometer operation names are categories such as `causeway.member.action` and `causeway.jpa.persist`.
+
+Repeat operations on different owners:
+
+* the Causeway member/JPA span names and member/entity metadata describe the operation and type
+
+In Prometheus:
+
+* open directly
+
+In Grafana:
+
+* log in (`admin` / `admin`).
+* choose *Explore*
+* select *Prometheus* in the data-source dropdown at the top, and switch to *Code* mode for PromQL.
++
+The provisioned *Prometheus* source is also listed under *Connections → Data sources*.
+
+After exercising Petclinic, wait 10–20 seconds and try these queries separately:
+
+* JVM memory used bytes
++
+[source,promql]
+----
+jvm_memory_used_bytes
+----
+
+* discover available Causeway metric names and counts their series:
++
+[source,promql]
+----
+count by (__name__) ({__name__=~"causeway_.*"})
+----
+
+* select an actual metric name to inspect values.
+
+Note that Prometheus metric names can differ from contextual span names, including dots translated to underscores.
+
+
+
+
+== Switch to agent-managed tracing
+
+The principal benefit of using agent-managed tracing is that the agent will instrument libraries, such as JDBC access.
+This setup requires both:
+
+* The JVM option `-javaagent:/path/to/opentelemetry-javaagent.jar`, which attaches the agent to supply the tracing SDK, exporter and automatic HTTP/JDBC instrumentation.
+* The Spring profiles `observation,agent`: `observation` enables Causeway instrumentation, while `agent` selects Causeway's bridge to the agent and disables competing Boot tracing auto-configuration.
+
+Activating the profiles does not attach the Java agent, and attaching the agent does not activate the profiles.
+The sample launcher handles both settings for you when passed `--agent`.
+
+=== Try it out
+
+Stop the Boot-managed Petclinic process, keep all three telemetry services running, then add `--agent`:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
+----
+
+On first use, Maven downloads the (compatible) agent into the sample's `target/agents/` directory.
+The launcher attaches it to the application JVM with `spring-boot.run.agents` (the Maven equivalent of `-javaagent`) and activates `observation,agent` with `spring-boot.run.profiles`.
+
+Alternatively, the location of the agent JAR can be specified using an env var:
+
+[source,bash]
+----
+OTEL_JAVAAGENT_PATH=/absolute/path/to/opentelemetry-javaagent.jar \
+  ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
+----
+
+
+Micrometer continues to export metrics to Prometheus in both modes; the agent's own metrics exporter is disabled to avoid duplicate JVM metrics.
+This setup also disables agent log export.
+
+The launcher sets OTLP HTTP trace export, full trace sampling and service name *Causeway Pet Clinic* by default.
+
+
+== Stop the local services
+
+When finished, stop Petclinic with Ctrl-C, then stop all telemetry services:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh stop
+./scripts/metrics-local.sh stop
+----
+
+The Jaeger command discards stored traces.
+The metrics command discards metrics and Grafana UI changes and removes its Compose network.
+Each script manages only its own services.
+`./scripts/metrics-local.sh config` validates Compose configuration without starting services.
+
+
+[#configuring-your-own-app]
+== Configuring your own app.
+
+Use the BOM-managed starter, which includes the Micrometer OTLP metrics registry:
 
 [source,xml]
 .pom.xml
@@ -12,65 +239,85 @@ Add the following dependencies into your application:
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-opentelemetry</artifactId>
 </dependency>
-<dependency>
-    <groupId>io.micrometer</groupId>
-    <artifactId>micrometer-registry-otlp</artifactId>
-</dependency>
 ----
 
-And update configuration:
+Activate `observation` alongside the application's other Spring profiles:
 
-[source,yml,subs="attributes+"]
+[source,yaml]
 .application.yaml
 ----
 spring:
   application:
-    name: <name of service>
-
+    name: my-causeway-app
+  profiles:
+    active: observation
 management:
   tracing:
     sampling:
-      probability: 1
+      probability: 1.0
   opentelemetry:
     tracing:
       export:
         otlp:
-          endpoint: http://<my-endpoint>:4318/v1/traces
+          endpoint: http://localhost:4318/v1/traces
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: http://localhost:9090/api/v1/otlp/v1/metrics
+        step: 10s
+        aggregation-temporality: cumulative
 ----
 
+Traces are sent to Jaeger, and metrics to Prometheus using the endpoints above.
+The configuration records every trace (sampling probability) and exports metrics every ten seconds.
 
-In Spring app, disable the 'metric' export (we are currently only using 'traces') in a suitable `@Configuration`, for example `AppManifest`:
 
-[source,java]
-.AppManifest.java
+=== To configure agent-managed tracing
+
+Keep the starter and Micrometer metrics configuration above, and add the BOM-managed OpenTelemetry bridge dependency:
+
+[source,xml]
+.pom.xml
 ----
-@Bean
-OtlpConfig otlpConfig() {
-    return new OtlpConfig() {
-        @Override public @Nullable String get(final String key) { return null;}
-        @Override public boolean enabled() { return false; }
-    };
-}
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-tracing-bridge-otel</artifactId>
+</dependency>
 ----
 
-Run up Jaeger as a telemetry collector:
-+
+With `observation,agent` active, Causeway automatically connects its observations to the agent and disables competing Boot tracing configuration.
+No custom Java configuration or manual Boot exclusions are needed.
+The agent supplies trace sampling and export, so the Boot tracing settings above are unused in this mode; the Micrometer metrics settings still apply.
+
+Obtain an OpenTelemetry Java agent JAR (the sample uses version 2.31.1), configure its export settings, and launch with both `-javaagent` and the `observation,agent` profiles:
+
 [source,bash]
-.Docker - one of many options is to use Jaeger as telemetry collector
 ----
-docker run -d --name jaeger \
--p 16686:16686 \
--p 4317:4317 \
--p 4318:4318 \
--p 5778:5778 \
--p 9411:9411 \
-cr.jaegertracing.io/jaegertracing/jaeger
+export OTEL_SERVICE_NAME=my-causeway-app
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+export OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:4318/v1/traces
+export OTEL_TRACES_SAMPLER=always_on
+export OTEL_METRICS_EXPORTER=none
+export OTEL_LOGS_EXPORTER=none
+java -javaagent:/absolute/path/to/opentelemetry-javaagent.jar \
+  -jar application.jar --spring.profiles.active=observation,agent
 ----
 
-This will expose Jaeger's UI at http://<my-endpoint>:16686
+These settings send traces to Jaeger and leave metrics with Micrometer.
+Causeway prevents the agent's `OTEL_METRICS_EXPORTER=none` setting from disabling Micrometer's metrics exporter.
+JVM and Causeway metrics remain available; Boot's HTTP request observation meters are absent because the agent supplies HTTP instrumentation.
 
-=== Open Telemetry Usage
+If you already provide a custom tracer or observation registry, Causeway uses it.
+A custom registry must configure its tracing handlers to use the same single or primary tracer as Causeway.
 
-- See blog: https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot
-- See also: https://www.jaegertracing.io/docs/2.16/getting-started/
 
+
+== Further reading
+
+* https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot[OpenTelemetry with Spring Boot]
+* https://www.jaegertracing.io/docs/2.21/getting-started/[Jaeger getting started]
+* https://prometheus.io/docs/guides/opentelemetry/[Prometheus OTLP ingestion]
+* https://grafana.com/docs/grafana/latest/administration/provisioning/[Grafana provisioning]

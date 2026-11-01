@@ -41,7 +41,7 @@ enum AttributePanelAdditionalButton {
             return precondition
                     && attributeModel.disabledReason()
                         .map(InteractionVeto::vetoConsent)
-                        .flatMap(Consent::getReason)
+                        .flatMap(Consent::reason)
                         .map(VetoReason::uiHint)
                         .map(VetoReason.UiHint::isShowBanIcon)
                         .orElse(false);
@@ -59,7 +59,7 @@ enum AttributePanelAdditionalButton {
             return precondition
                     && attributeModel.disabledReason()
                         .map(InteractionVeto::vetoConsent)
-                        .flatMap(Consent::getReason)
+                        .flatMap(Consent::reason)
                         .map(VetoReason::uiHint)
                         // opposite of logic in DISABLED_REASON above,
                         // because DISABLED_REASON_PROTOTYPING should only ever activate when DISABLED_REASON is not active
@@ -77,9 +77,8 @@ enum AttributePanelAdditionalButton {
             // check some preconditions
             switch (fieldFragment) {
             case LINK_TO_PROMT:
-                if(renderScenario==RenderScenario.CAN_EDIT_INLINE_VIA_ACTION) {
+                if(renderScenario==RenderScenario.CAN_EDIT_INLINE_VIA_ACTION)
                     return false;
-                }
                 break; // else fall through
             case NO_LINK_VIEWING:
                 return false;
@@ -90,9 +89,8 @@ enum AttributePanelAdditionalButton {
             }
 
             // hide if editing is vetoed
-            if(attributeModel.disabledReason().isPresent()) {
+            if(attributeModel.disabledReason().isPresent())
                 return false;
-            }
 
             // visible only if feature is not required and not already cleared
             return attributeModel.getConfiguration().viewer().wicket().clearFieldButtonEnabled()

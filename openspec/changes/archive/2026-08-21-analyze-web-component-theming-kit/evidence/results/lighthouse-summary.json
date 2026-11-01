@@ -1,0 +1,535 @@
+{
+  "generatedAt": "2026-08-20T22:30:55.586Z",
+  "reports": {
+    "baseline-desktop": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=baseline&theme=light&state=all",
+      "fetchTime": "2026-08-20T21:40:18.308Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 96,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "score": 0,
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "div.fixture-app > header.fixture-header > div.fixture-navbar > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-nav-trigger=\"\" aria-expanded=\"false\" aria-controls=\"fixture-navigation\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-menu-trigger=\"\" aria-expanded=\"false\" aria-controls=\"pet-owner-menu\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-object-action=\"update\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"danger\" type=\"button\" data-object-action=\"delete\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#details-tab",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"details-tab\" aria-selected=\"true\" aria-controls=\"details-panel\" data-tab=\"details-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#notes-tab",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"notes-tab\" aria-selected=\"false\" aria-controls=\"notes-panel\" data-tab=\"notes-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-page-grid > aside.fixture-card > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        },
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "baseline-mobile": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=baseline&theme=dark&state=responsive-nav&motion=reduce",
+      "fetchTime": "2026-08-20T21:40:36.282Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 96,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "score": 0,
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "div.fixture-app > header.fixture-header > div.fixture-navbar > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-nav-trigger=\"\" aria-expanded=\"true\" aria-controls=\"fixture-navigation\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-menu-trigger=\"\" aria-expanded=\"true\" aria-controls=\"pet-owner-menu\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-menubars.fixture-menus > div.fixture-menu > div#pet-owner-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"primary\" type=\"button\" data-menu-action=\"create\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #121212, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-menubars.fixture-menus > div.fixture-menu > div#pet-owner-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-menu-action=\"find\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-menubars.fixture-menus > div.fixture-menu > div#pet-owner-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-menu-action=\"long\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-object-action=\"update\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"primary\" type=\"button\" data-object-action=\"book\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #121212, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"danger\" type=\"button\" data-object-action=\"delete\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#details-tab",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"details-tab\" aria-selected=\"true\" aria-controls=\"details-panel\" data-tab=\"details-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#notes-tab",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"notes-tab\" aria-selected=\"false\" aria-controls=\"notes-panel\" data-tab=\"notes-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-page-grid > aside.fixture-card > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"primary\" type=\"button\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #121212, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-page-grid > aside.fixture-card > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.41 (foreground color: #1f2937, background color: #18704a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        },
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "bootstrap-desktop": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=bootstrap&theme=light&state=all",
+      "fetchTime": "2026-08-20T21:40:57.748Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 96,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "score": 0,
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "div.fixture-app > header.fixture-header > div.fixture-navbar > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-nav-trigger=\"\" aria-expanded=\"false\" aria-controls=\"fixture-navigation\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-menu-trigger=\"\" aria-expanded=\"false\" aria-controls=\"pet-owner-menu\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-heading-row > div > p > code",
+              "snippet": "<code>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.26 (foreground color: #d63384, background color: #f8f9fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-object-action=\"update\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #6c757d, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        },
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "bootstrap-mobile": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=bootstrap&theme=dark&state=responsive-nav&motion=reduce",
+      "fetchTime": "2026-08-20T21:41:20.181Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 96,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "score": 0,
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "div.fixture-app > header.fixture-header > div.fixture-navbar > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-nav-trigger=\"\" aria-expanded=\"true\" aria-controls=\"fixture-navigation\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-menu-trigger=\"\" aria-expanded=\"true\" aria-controls=\"pet-owner-menu\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-menubars.fixture-menus > div.fixture-menu > div#pet-owner-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-menu-action=\"find\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-menubars.fixture-menus > div.fixture-menu > div#pet-owner-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-menu-action=\"long\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "nav#fixture-navigation > causeway-menubars.fixture-menus > div.fixture-menu > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" aria-expanded=\"false\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" data-object-action=\"update\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.83 (foreground color: #6c757d, background color: #2b3035, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#details-tab",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"details-tab\" aria-selected=\"true\" aria-controls=\"details-panel\" data-tab=\"details-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#notes-tab",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"notes-tab\" aria-selected=\"false\" aria-controls=\"notes-panel\" data-tab=\"notes-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-page-grid > aside.fixture-card > div.fixture-actions > button.btn",
+              "snippet": "<button class=\"btn btn-outline-secondary\" data-kind=\"secondary\" type=\"button\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.28 (foreground color: #6c757d, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        },
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "openprops-desktop": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=openprops&theme=light&state=all",
+      "fetchTime": "2026-08-20T21:42:19.198Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "openprops-mobile": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=openprops&theme=dark&state=responsive-nav&motion=reduce",
+      "fetchTime": "2026-08-20T21:42:36.175Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 96,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "score": 0,
+          "displayValue": null,
+          "items": [
+            {
+              "selector": "header.fixture-header > div.fixture-navbar > a.fixture-brand > span",
+              "snippet": "<span>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.96 (foreground color: #ffffff, background color: #748ffc, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-menubars.fixture-menus > div.fixture-menu > div#pet-owner-menu > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"primary\" type=\"button\" data-menu-action=\"create\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.96 (foreground color: #ffffff, background color: #748ffc, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-heading-row > div > p > code",
+              "snippet": "<code>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.06 (foreground color: #f1f3f5, background color: #e9ecef, font size: 13.2pt (17.6px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" data-object-action=\"update\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.11 (foreground color: #f1f3f5, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"primary\" type=\"button\" data-object-action=\"book\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.96 (foreground color: #ffffff, background color: #748ffc, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "main#fixture-main > div.fixture-heading-row > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"danger\" type=\"button\" data-object-action=\"delete\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.11 (foreground color: #f1f3f5, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#details-tab",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"details-tab\" aria-selected=\"true\" aria-controls=\"details-panel\" data-tab=\"details-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.11 (foreground color: #f1f3f5, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "causeway-object.fixture-card > div.fixture-tabs > div > button#notes-tab",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\" role=\"tab\" id=\"notes-tab\" aria-selected=\"false\" aria-controls=\"notes-panel\" data-tab=\"notes-panel\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.11 (foreground color: #f1f3f5, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-tabs > div#details-panel > div.fixture-properties > a",
+              "snippet": "<a href=\"mailto:mary@example.test\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.09 (foreground color: #4263eb, background color: #212529, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-page-grid > aside.fixture-card > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"primary\" type=\"button\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.96 (foreground color: #ffffff, background color: #748ffc, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "div.fixture-page-grid > aside.fixture-card > div.fixture-actions > button.fixture-button",
+              "snippet": "<button class=\"fixture-button\" data-kind=\"secondary\" type=\"button\">",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.11 (foreground color: #f1f3f5, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > thead > tr > th",
+              "snippet": "<th>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.77 (foreground color: #030507, background color: #343a40, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > thead > tr > th",
+              "snippet": "<th>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.77 (foreground color: #030507, background color: #343a40, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > thead > tr > th",
+              "snippet": "<th>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.77 (foreground color: #030507, background color: #343a40, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > thead > tr > th",
+              "snippet": "<th>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.77 (foreground color: #030507, background color: #343a40, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > thead > tr > th",
+              "snippet": "<th>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.77 (foreground color: #030507, background color: #343a40, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > thead > tr > th",
+              "snippet": "<th>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.77 (foreground color: #030507, background color: #343a40, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "selector": "table.fixture-table > tbody > tr > td",
+              "snippet": "<td>",
+              "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #f1f3f5, background color: #f8f9fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        },
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "webawesome-desktop": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=webawesome&theme=light&state=all",
+      "fetchTime": "2026-08-20T21:41:35.255Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    },
+    "webawesome-mobile": {
+      "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=webawesome&theme=dark&state=responsive-nav&motion=reduce",
+      "fetchTime": "2026-08-20T21:41:53.719Z",
+      "lighthouseVersion": "13.1.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "categories": {
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 90
+      },
+      "failedAudits": [
+        {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "score": 0,
+          "displayValue": null,
+          "items": []
+        }
+      ]
+    }
+  }
+}

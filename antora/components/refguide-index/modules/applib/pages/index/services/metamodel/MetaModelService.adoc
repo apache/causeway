@@ -20,6 +20,13 @@ interface MetaModelService {
   CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)     // <.>
   MetamodelDto exportMetaModel(Config config)     // <.>
   ObjectGraph exportObjectGraph(BiPredicate<BeanSort, LogicalType> filter)     // <.>
+  Stream<Identifier> streamActions(Class<?> domainType)     // <.>
+  Stream<Identifier> streamProperties(Class<?> domainType)     // <.>
+  Stream<Identifier> streamCollections(Class<?> domainType)     // <.>
+  Stream<Identifier> streamTypeHierarchy(Class<?> domainType)     // <.>
+  Stream<Identifier> parentedAssociationsForColumnRendering(Object parentDomainObject, Identifier collectionId, AssociationsLookup lookup)     // <.>
+  Stream<Identifier> standaloneAssociationsForColumnRendering(LogicalType logicalType, AssociationsLookup lookup)     // <.>
+  void patchColumnOrder(Identifier identifier, Can<String> columnsInOrder)     // <.>
 }
 ----
 
@@ -78,6 +85,37 @@ Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 --
 Can be used to create object relation diagrams (e.g. Plantuml).
 --
+<.> xref:#streamActions_Class[streamActions(Class)]
++
+--
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Actions_ of given domainType, including mixed-in ones, but excluding _Actions_ , that are only available for PROTOTYPING.
+--
+<.> xref:#streamProperties_Class[streamProperties(Class)]
++
+--
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Properties_ of given domainType, including mixed-in ones.
+--
+<.> xref:#streamCollections_Class[streamCollections(Class)]
++
+--
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Collections_ of given domainType, including mixed-in ones.
+--
+<.> xref:#streamTypeHierarchy_Class[streamTypeHierarchy(Class)]
++
+--
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the type hierarchy of given domainType, starting at given domainType, going 'up' in the hierarchy, but excluding _Object_ .
+--
+<.> xref:#parentedAssociationsForColumnRendering_Object_Identifier_AssociationsLookup[parentedAssociationsForColumnRendering(Object, Identifier, AssociationsLookup)]
++
+--
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Columns_ for specified PARENTED collection.
+--
+<.> xref:#standaloneAssociationsForColumnRendering_LogicalType_AssociationsLookup[standaloneAssociationsForColumnRendering(LogicalType, AssociationsLookup)]
++
+--
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Columns_ for specified STANDALONE collection.
+--
+<.> xref:#patchColumnOrder_Identifier_Can[patchColumnOrder(Identifier, Can)]
 
 == Members
 
@@ -147,6 +185,51 @@ The xref:refguide:applib:index/services/metamodel/Config.adoc[Config] parameter 
 === exportObjectGraph(BiPredicate)
 
 Can be used to create object relation diagrams (e.g. Plantuml).
+
+[#streamActions_Class]
+=== streamActions(Class)
+
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Actions_ of given domainType, including mixed-in ones, but excluding _Actions_ , that are only available for PROTOTYPING.
+
+[#streamProperties_Class]
+=== streamProperties(Class)
+
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Properties_ of given domainType, including mixed-in ones.
+
+[#streamCollections_Class]
+=== streamCollections(Class)
+
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Collections_ of given domainType, including mixed-in ones.
+
+[#streamTypeHierarchy_Class]
+=== streamTypeHierarchy(Class)
+
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the type hierarchy of given domainType, starting at given domainType, going 'up' in the hierarchy, but excluding _Object_ .
+
+Included are all types in the hierarchy, that are recognized by the Metamodel, recognized Interfaces last.
+
+[#parentedAssociationsForColumnRendering_Object_Identifier_AssociationsLookup]
+=== parentedAssociationsForColumnRendering(Object, Identifier, AssociationsLookup)
+
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Columns_ for specified PARENTED collection.
+
+Columns returned are those that are either in principle AVAILABLE or currently ENABLED, based on given _AssociationsLookup_ .
+
+The availability lookup returns xref:refguide:applib:index/Identifier.adoc[Identifier] (s) in no particular order, whereas the enablement lookup returns them in same order as rendered.
+
+If parentDomainObject is null returns an empty _Stream_ .
+
+[#standaloneAssociationsForColumnRendering_LogicalType_AssociationsLookup]
+=== standaloneAssociationsForColumnRendering(LogicalType, AssociationsLookup)
+
+Stream of xref:refguide:applib:index/Identifier.adoc[Identifier] representing the _Columns_ for specified STANDALONE collection.
+
+Columns returned are those that are either in principle AVAILABLE or currently ENABLED, based on given _AssociationsLookup_ .
+
+The availability lookup returns xref:refguide:applib:index/Identifier.adoc[Identifier] (s) in no particular order, whereas the enablement lookup returns them in same order as rendered.
+
+[#patchColumnOrder_Identifier_Can]
+=== patchColumnOrder(Identifier, Can)
 
 include::hooks/MetaModelService_010-implementation.adoc[]
 

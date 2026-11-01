@@ -1,0 +1,25 @@
+{
+  "data" : {
+    "create" : {
+      "age" : {
+        "get" : 18
+      },
+      "_meta" : {
+        "saveAs" : "mutable"
+      }
+    },
+    "update" : {
+      "age" : {
+        "get" : 30
+      },
+      "_meta" : {
+        "saveAs" : "updated"
+      }
+    },
+    "updateAgain" : {
+      "age" : {
+        "get" : 31
+      }
+    }
+  }
+}

@@ -21,6 +21,7 @@ package org.apache.causeway.testdomain.model.valuetypes;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -191,7 +192,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Boolean value = Boolean.TRUE;
         @Getter
-        private Boolean updateValue = Boolean.FALSE;
+        private final Boolean updateValue = Boolean.FALSE;
         @Action @Override
         public Boolean sampleAction(@Parameter final @Nullable Boolean value) { return value; }
     }
@@ -204,7 +205,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Character value = 'a';
         @Getter
-        private Character updateValue = 'b';
+        private final Character updateValue = 'b';
         @Action @Override
         public Character sampleAction(@Parameter final @Nullable Character value) { return value; }
     }
@@ -217,7 +218,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private String value = "aString";
         @Getter
-        private String updateValue = "anotherString";
+        private final String updateValue = "anotherString";
         @Action @Override
         public String sampleAction(@Parameter final @Nullable String value) { return value; }
     }
@@ -230,7 +231,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Password value = Password.of("aPassword");
         @Getter
-        private Password updateValue = Password.of("anotherPassword");
+        private final Password updateValue = Password.of("anotherPassword");
         @Action @Override
         public Password sampleAction(@Parameter final @Nullable Password value) { return value; }
     }
@@ -243,7 +244,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private BufferedImage value = new BufferedImage(4, 4, BufferedImage.TYPE_INT_RGB);
         @Getter
-        private BufferedImage updateValue = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
+        private final BufferedImage updateValue = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
         @Action @Override
         public BufferedImage sampleAction(@Parameter final @Nullable BufferedImage value) { return value; }
     }
@@ -256,7 +257,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Blob value = Blob.of("aBlob", CommonMimeType.BIN, new byte[] {1, 2, 3});
         @Getter
-        private Blob updateValue = Blob.of("anotherBlob", CommonMimeType.BIN, new byte[] {3, 4});
+        private final Blob updateValue = Blob.of("anotherBlob", CommonMimeType.BIN, new byte[] {3, 4});
         @Action @Override
         public Blob sampleAction(@Parameter final @Nullable Blob value) { return value; }
     }
@@ -269,7 +270,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Clob value = Clob.of("aClob", CommonMimeType.TXT, "abc");
         @Getter
-        private Clob updateValue = Clob.of("anotherClob", CommonMimeType.TXT, "ef");
+        private final Clob updateValue = Clob.of("anotherClob", CommonMimeType.TXT, "ef");
         @Action @Override
         public Clob sampleAction(@Parameter final @Nullable Clob value) { return value; }
     }
@@ -282,7 +283,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private LocalResourcePath value = new LocalResourcePath("img/a");
         @Getter
-        private LocalResourcePath updateValue = new LocalResourcePath("img/b");
+        private final LocalResourcePath updateValue = new LocalResourcePath("img/b");
         @Action @Override
         public LocalResourcePath sampleAction(@Parameter final @Nullable LocalResourcePath value) { return value; }
     }
@@ -295,10 +296,10 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private URL value = url("https://a.b.c");
         @Getter
-        private URL updateValue = url("https://b.c.d");
+        private final URL updateValue = url("https://b.c.d");
         @SneakyThrows
         private static URL url(final String url) {
-            return new URL(url);
+            return new URI(url).toURL();
         }
         @Action @Override
         public URL sampleAction(@Parameter final @Nullable URL value) { return value; }
@@ -309,11 +310,11 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleMarkup
     extends ValueTypeExample<Markup> {
-        private MarkupValueSemantics markupSemantics = new MarkupValueSemantics();
+        private final MarkupValueSemantics markupSemantics = new MarkupValueSemantics();
         @Property @Getter @Setter
         private Markup value = markupSemantics.getExamples().getElseFail(0);
         @Getter
-        private Markup updateValue = markupSemantics.getExamples().getElseFail(1);
+        private final Markup updateValue = markupSemantics.getExamples().getElseFail(1);
         @Override
         public Can<ParseExpectation<Markup>> getParseExpectations() {
             var htmlSample = "<a href=\"https://www.apache.org\" rel=\"nofollow\">link</a>";
@@ -334,11 +335,11 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleVega
     extends ValueTypeExample<Vega> {
-        private VegaValueSemantics vegaSemantics = new VegaValueSemantics();
+        private final VegaValueSemantics vegaSemantics = new VegaValueSemantics();
         @Property @Getter @Setter
         private Vega value = vegaSemantics.getExamples().getElseFail(0);
         @Getter
-        private Vega updateValue = vegaSemantics.getExamples().getElseFail(1);
+        private final Vega updateValue = vegaSemantics.getExamples().getElseFail(1);
         @Action @Override
         public Vega sampleAction(@Parameter final @Nullable Vega value) { return value; }
     }
@@ -351,7 +352,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private UUID value = UUID.randomUUID();
         @Getter
-        private UUID updateValue = UUID.randomUUID();
+        private final UUID updateValue = UUID.randomUUID();
         @Action @Override
         public UUID sampleAction(@Parameter final @Nullable UUID value) { return value; }
     }
@@ -364,7 +365,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Locale value = Locale.US;
         @Getter
-        private Locale updateValue = Locale.GERMAN;
+        private final Locale updateValue = Locale.GERMAN;
         @Action @Override
         public Locale sampleAction(@Parameter final @Nullable Locale value) { return value; }
     }
@@ -379,7 +380,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Byte value = -63;
         @Getter
-        private Byte updateValue = 0;
+        private final Byte updateValue = 0;
         @Action @Override
         public Byte sampleAction(@Parameter final @Nullable Byte value) { return value; }
     }
@@ -392,7 +393,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Short value = -63;
         @Getter
-        private Short updateValue = 0;
+        private final Short updateValue = 0;
         @Action @Override
         public Short sampleAction(@Parameter final @Nullable Short value) { return value; }
     }
@@ -405,7 +406,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Integer value = -63;
         @Getter
-        private Integer updateValue = 0;
+        private final Integer updateValue = 0;
         @Action @Override
         public Integer sampleAction(@Parameter final @Nullable Integer value) { return value; }
     }
@@ -418,7 +419,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Long value = -63L;
         @Getter
-        private Long updateValue = 0L;
+        private final Long updateValue = 0L;
         @Action @Override
         public Long sampleAction(@Parameter final @Nullable Long value) { return value; }
     }
@@ -431,7 +432,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Float value = -63.1f;
         @Getter
-        private Float updateValue = 0.f;
+        private final Float updateValue = 0.f;
 
         //FIXME does not handle example Float.MIN_VALUE well
         @Deprecated // remove override once fixed
@@ -450,7 +451,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Double value = -63.1;
         @Getter
-        private Double updateValue = 0.;
+        private final Double updateValue = 0.;
 
         //FIXME does not handle example Double.MIN_VALUE well
         @Deprecated // remove override once fixed
@@ -471,7 +472,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private BigInteger value = BigInteger.valueOf(-63L);
         @Getter
-        private BigInteger updateValue = BigInteger.ZERO;
+        private final BigInteger updateValue = BigInteger.ZERO;
         @Action @Override
         public BigInteger sampleAction(@Parameter final @Nullable BigInteger value) { return value; }
     }
@@ -486,7 +487,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private BigDecimal value = new BigDecimal("-63.123456");
         @Getter
-        private BigDecimal updateValue = BigDecimal.ZERO;
+        private final BigDecimal updateValue = BigDecimal.ZERO;
         @Action @Override
         public BigDecimal sampleAction(@Parameter final @Nullable BigDecimal value) { return value; }
     }
@@ -500,7 +501,7 @@ public abstract class ValueTypeExample<T> {
         @Getter @Setter
         private BigDecimal value = new BigDecimal("-63.12");
         @Getter
-        private BigDecimal updateValue = BigDecimal.ZERO;
+        private final BigDecimal updateValue = BigDecimal.ZERO;
 
         // with this example maxFractionalDigits = 2 must not be exceeded
         @Override public Can<BigDecimal> getParserRoundtripExamples() {
@@ -559,7 +560,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private java.util.Date value = new java.util.Date();
         @Getter
-        private java.util.Date updateValue = new java.util.Date(0L);
+        private final java.util.Date updateValue = new java.util.Date(0L);
         @Action @Override
         public java.util.Date sampleAction(@Parameter final java.util.@Nullable Date value) { return value; }
     }
@@ -572,7 +573,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private java.sql.Date value = new java.sql.Date(new java.util.Date().getTime());
         @Getter
-        private java.sql.Date updateValue = new java.sql.Date(0L);
+        private final java.sql.Date updateValue = new java.sql.Date(0L);
         @Action @Override
         public java.sql.Date sampleAction(@Parameter final java.sql.@Nullable Date value) { return value; }
     }
@@ -585,7 +586,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private java.sql.Time value = new java.sql.Time(new java.util.Date().getTime());
         @Getter
-        private java.sql.Time updateValue = new java.sql.Time(0L);
+        private final java.sql.Time updateValue = new java.sql.Time(0L);
         @Action @Override
         public java.sql.Time sampleAction(@Parameter final java.sql.@Nullable Time value) { return value; }
     }
@@ -598,7 +599,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Timestamp value = new Timestamp(new java.util.Date().getTime());
         @Getter
-        private Timestamp updateValue = new Timestamp(0L);
+        private final Timestamp updateValue = new Timestamp(0L);
         @Action @Override
         public Timestamp sampleAction(@Parameter final @Nullable Timestamp value) { return value; }
     }
@@ -613,7 +614,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private LocalDate value = _Temporals.sampleLocalDate().getElseFail(0);
         @Getter
-        private LocalDate updateValue = getValue().plusDays(2);
+        private final LocalDate updateValue = getValue().plusDays(2);
         @Action @Override
         public LocalDate sampleAction(@Parameter final @Nullable LocalDate value) { return value; }
     }
@@ -626,7 +627,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private LocalDateTime value = _Temporals.sampleLocalDateTime().getElseFail(0);
         @Getter
-        private LocalDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
+        private final LocalDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
         @Action @Override
         public LocalDateTime sampleAction(@Parameter final @Nullable LocalDateTime value) { return value; }
     }
@@ -640,7 +641,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private LocalTime value = _Temporals.sampleLocalTime().getElseFail(0);
         @Getter
-        private LocalTime updateValue = getValue().plusSeconds(15);
+        private final LocalTime updateValue = getValue().plusSeconds(15);
         @Action @Override
         public LocalTime sampleAction(@Parameter final @Nullable LocalTime value) { return value; }
     }
@@ -653,7 +654,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private OffsetDateTime value = _Temporals.sampleOffsetDateTime().getElseFail(0);
         @Getter
-        private OffsetDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
+        private final OffsetDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
         @Action @Override
         public OffsetDateTime sampleAction(@Parameter final @Nullable OffsetDateTime value) { return value; }
     }
@@ -666,7 +667,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private OffsetTime value = _Temporals.sampleOffsetTime().getElseFail(0);
         @Getter
-        private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
+        private final OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
         @Action @Override
         public OffsetTime sampleAction(@Parameter final @Nullable OffsetTime value) { return value; }
     }
@@ -679,7 +680,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private ZonedDateTime value = _Temporals.sampleZonedDateTime().getElseFail(0);
         @Getter
-        private ZonedDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
+        private final ZonedDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
         @Action @Override
         public ZonedDateTime sampleAction(@Parameter final @Nullable ZonedDateTime value) { return value; }
     }
@@ -694,7 +695,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private ApplicationFeatureId value = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(0);
         @Getter
-        private ApplicationFeatureId updateValue = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(1);
+        private final ApplicationFeatureId updateValue = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(1);
         @Action @Override
         public ApplicationFeatureId sampleAction(@Parameter final @Nullable ApplicationFeatureId value) { return value; }
     }
@@ -707,7 +708,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Identifier value = new IdentifierValueSemantics().getExamples().getElseFail(0);
         @Getter
-        private Identifier updateValue = new IdentifierValueSemantics().getExamples().getElseFail(1);
+        private final Identifier updateValue = new IdentifierValueSemantics().getExamples().getElseFail(1);
         @Action @Override
         public Identifier sampleAction(@Parameter final @Nullable Identifier value) { return value; }
     }
@@ -722,7 +723,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private TreePath value = TreePath.root();
         @Getter
-        private TreePath updateValue = TreePath.of(0, 1, 2, 3, 4);
+        private final TreePath updateValue = TreePath.of(0, 1, 2, 3, 4);
         @Action @Override
         public TreePath sampleAction(@Parameter final @Nullable TreePath value) { return value; }
     }
@@ -737,7 +738,7 @@ public abstract class ValueTypeExample<T> {
         private TreeNode<String> value = TreeNode.root(
                 "root", new TreeAdapterString(), TreeState.rootCollapsed());
         @Getter
-        private TreeNode<String> updateValue = TreeNode.root(
+        private final TreeNode<String> updateValue = TreeNode.root(
                 "anotherRoot", new TreeAdapterString(), TreeState.rootCollapsed());
 
         private static class TreeAdapterString implements TreeAdapter<String> {
@@ -763,7 +764,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private ExampleEnum value = ExampleEnum.HALLO;
         @Getter
-        private ExampleEnum updateValue = ExampleEnum.WORLD;
+        private final ExampleEnum updateValue = ExampleEnum.WORLD;
         @Action @Override
         public ExampleEnum sampleAction(@Parameter final @Nullable ExampleEnum value) { return value; }
     }
@@ -778,7 +779,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private CalendarEvent value = new CalendarEventSemantics().getExamples().getElseFail(0);
         @Getter
-        private CalendarEvent updateValue = new CalendarEventSemantics().getExamples().getElseFail(1);
+        private final CalendarEvent updateValue = new CalendarEventSemantics().getExamples().getElseFail(1);
         @Action @Override
         public CalendarEvent sampleAction(@Parameter final @Nullable CalendarEvent value) { return value; }
     }
@@ -795,7 +796,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private Bookmark value = Bookmark.parseElseFail("a:b");
         @Getter
-        private Bookmark updateValue = Bookmark.parseElseFail("c:d");
+        private final Bookmark updateValue = Bookmark.parseElseFail("c:d");
         @Action @Override
         public Bookmark sampleAction(@Parameter final @Nullable Bookmark value) { return value; }
     }
@@ -808,7 +809,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private OidDto value = Bookmark.parseElseFail("a:b").toOidDto();
         @Getter
-        private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
+        private final OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
         @Action @Override
         public OidDto sampleAction(@Parameter final @Nullable OidDto value) { return value; }
     }
@@ -821,7 +822,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private ChangesDto value = new ChangesDto();
         @Getter
-        private ChangesDto updateValue = new ChangesDto();
+        private final ChangesDto updateValue = new ChangesDto();
         @Action @Override
         public ChangesDto sampleAction(@Parameter final @Nullable ChangesDto value) { return value; }
     }
@@ -834,7 +835,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private CommandDto value = new CommandDto();
         @Getter
-        private CommandDto updateValue = new CommandDto();
+        private final CommandDto updateValue = new CommandDto();
         @Action @Override
         public CommandDto sampleAction(@Parameter final @Nullable CommandDto value) { return value; }
     }
@@ -847,7 +848,7 @@ public abstract class ValueTypeExample<T> {
         @Property @Getter @Setter
         private InteractionDto value = new InteractionDto();
         @Getter
-        private InteractionDto updateValue = new InteractionDto();
+        private final InteractionDto updateValue = new InteractionDto();
         @Action @Override
         public InteractionDto sampleAction(@Parameter final @Nullable InteractionDto value) { return value; }
     }

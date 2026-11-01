@@ -20,6 +20,13 @@ record MetaModelServiceDefault {
   CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier)
   MetamodelDto exportMetaModel(Config config)
   ObjectGraph exportObjectGraph(BiPredicate<BeanSort, LogicalType> filter)
+  Stream<Identifier> streamActions(Class<?> domainType)
+  Stream<Identifier> streamProperties(Class<?> domainType)
+  Stream<Identifier> streamCollections(Class<?> domainType)
+  Stream<Identifier> streamTypeHierarchy(Class<?> domainType)
+  Stream<Identifier> parentedAssociationsForColumnRendering(Object parentDomainObject, Identifier collectionId, AssociationsLookup columnQueryMode)
+  Stream<Identifier> standaloneAssociationsForColumnRendering(LogicalType logicalType, AssociationsLookup columnQueryMode)
+  void patchColumnOrder(Identifier identifier, Can<String> columnsInOrder)
 }
 ----
 

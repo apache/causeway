@@ -1,0 +1,81 @@
+{
+  "generatedAt": "2026-08-21T08:55:56.690Z",
+  "mode": "headless same-origin analysis injection",
+  "before": {
+    "routeState": "ready",
+    "menuState": "ready",
+    "causewayElementCount": 17,
+    "analysisAdapterCount": 0,
+    "vaadinDefined": false,
+    "flowRuntime": false,
+    "horizontalOverflow": 0,
+    "bodyBackground": "rgb(243, 245, 248)"
+  },
+  "after": {
+    "routeState": "ready",
+    "menuState": "ready",
+    "causewayElementCount": 17,
+    "analysisAdapterCount": 1,
+    "vaadinDefined": true,
+    "flowRuntime": false,
+    "horizontalOverflow": 0,
+    "bodyBackground": "rgb(243, 245, 248)"
+  },
+  "menuOpened": "true",
+  "menuClosed": "false",
+  "failures": [
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    },
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3a64dNOQwcII785DP1PNJieaL3Lbu50dIaJGcJ6xwQ4='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    },
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    },
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-WVYjqCndm5Rg7tULwhGngT2GtzCD2oFrfyb9r6y+dZQ='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    }
+  ],
+  "knownCspStyleFailures": [
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    },
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3a64dNOQwcII785DP1PNJieaL3Lbu50dIaJGcJ6xwQ4='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    },
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    },
+    {
+      "kind": "console-error",
+      "message": "Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-WVYjqCndm5Rg7tULwhGngT2GtzCD2oFrfyb9r6y+dZQ='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked."
+    }
+  ],
+  "unexpectedFailures": [],
+  "externalRequests": [],
+  "screenshot": "integration-vaadin.jpg",
+  "compatibility": {
+    "strictStyleCspCompatible": false,
+    "requiredPolicyChange": "Vaadin inserts component styles that the current style-src self policy blocks; adoption requires a reviewed nonce, hash, adopted-stylesheet, or policy strategy."
+  },
+  "assertions": {
+    "routeRemainedReady": true,
+    "menuRemainedReady": true,
+    "menuDismissal": true,
+    "oneInjectedAdapter": true,
+    "vaadinDefined": true,
+    "noFlowRuntime": true,
+    "noNewOverflow": true,
+    "noUnexpectedBrowserFailures": true,
+    "cspFailureClassified": true,
+    "noExternalRequests": true
+  }
+}

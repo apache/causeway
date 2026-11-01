@@ -24,8 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.el.ELResolver;
-import jakarta.el.ExpressionFactory;
 import jakarta.enterprise.context.spi.Context;
 import jakarta.enterprise.context.spi.Contextual;
 import jakarta.enterprise.context.spi.CreationalContext;
@@ -200,16 +198,6 @@ public class BeanManagerForEntityListeners implements BeanManager {
     }
 
     @Override
-    public ELResolver getELResolver() {
-        throw _Exceptions.notImplemented();
-    }
-
-    @Override
-    public ExpressionFactory wrapExpressionFactory(final ExpressionFactory expressionFactory) {
-        throw _Exceptions.notImplemented();
-    }
-
-    @Override
     public <T> InjectionTargetFactory<T> getInjectionTargetFactory(final AnnotatedType<T> annotatedType) {
         return _Util.createInjectionTargetFactory(annotatedType, serviceInjectorProvider);
     }
@@ -292,5 +280,10 @@ public class BeanManagerForEntityListeners implements BeanManager {
             final Set<Annotation> observedEventQualifiers) {
         throw _Exceptions.notImplemented();
     }
+
+	@Override
+	public <T> T unwrapClientProxy(final T reference) {
+		throw _Exceptions.notImplemented();
+	}
 
 }

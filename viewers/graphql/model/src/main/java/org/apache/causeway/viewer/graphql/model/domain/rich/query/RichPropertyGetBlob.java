@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -29,15 +30,20 @@ import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 
 public class RichPropertyGetBlob
         extends ElementCustom {
 
     final MemberInteractor<OneToOneAssociation> memberInteractor;
 
-    final RichPropertyGetBlobBytes blobName;
+    final RichPropertyGetBlobName blobName;
     final RichPropertyGetBlobMimeType blobMimeType;
-    final RichPropertyGetBlobName blobBytes;
+    final RichPropertyGetBlobByteLength blobByteLength;
+    final RichScalarMetadataField fileAccept;
+    final RichScalarMetadataField inputMaxBytes;
+    final RichScalarMetadataField transferMode;
+    final RichPropertyGetBlobBytes blobBytes;
 
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
@@ -53,13 +59,33 @@ public class RichPropertyGetBlob
             // type already exists, nothing else to do.
             this.blobName = null;
             this.blobMimeType = null;
+            this.blobByteLength = null;
+            this.fileAccept = null;
+            this.inputMaxBytes = null;
+            this.transferMode = null;
             this.blobBytes = null;
             return;
         }
 
-        addChildFieldFor(blobName = new RichPropertyGetBlobBytes(memberInteractor, context));
+        addChildFieldFor(blobName = new RichPropertyGetBlobName(memberInteractor, context));
         addChildFieldFor(blobMimeType = new RichPropertyGetBlobMimeType(memberInteractor, context));
-        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new RichPropertyGetBlobName(memberInteractor, context) : null);
+        addChildFieldFor(blobByteLength = new RichPropertyGetBlobByteLength(memberInteractor, context));
+        addChildFieldFor(fileAccept = new RichScalarMetadataField(
+                context,
+                "fileAccept",
+                Scalars.GraphQLString,
+                () -> ResourceValueTypes.fileAccept(memberInteractor.getObjectMember()).orElse(null)));
+        addChildFieldFor(inputMaxBytes = new RichScalarMetadataField(
+                context,
+                "inlineInputMaxBytes",
+                Scalars.GraphQLInt,
+                () -> graphqlConfiguration.resources().inlineInputMaxBytes()));
+        addChildFieldFor(transferMode = new RichScalarMetadataField(
+                context,
+                "transferMode",
+                Scalars.GraphQLString,
+                () -> isValueContentEnabled() ? "RESOURCE_LINK" : "METADATA_ONLY"));
+        addChildFieldFor(blobBytes = isValueContentEnabled() ? new RichPropertyGetBlobBytes(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
@@ -67,8 +93,9 @@ public class RichPropertyGetBlob
                     .build());
     }
 
-    private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+    private boolean isValueContentEnabled() {
+        return graphqlConfiguration.resources().effectiveValueContentResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     @Override
@@ -83,6 +110,10 @@ public class RichPropertyGetBlob
         }
         blobName.addDataFetcher(this);
         blobMimeType.addDataFetcher(this);
+        blobByteLength.addDataFetcher(this);
+        fileAccept.addDataFetcher(this);
+        inputMaxBytes.addDataFetcher(this);
+        transferMode.addDataFetcher(this);
         if (blobBytes != null) {
             blobBytes.addDataFetcher(this);
         }

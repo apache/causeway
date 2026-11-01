@@ -1,0 +1,22 @@
+= Vaadin Menu Bar closure
+
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This directory builds the pinned free-core Vaadin Menu Bar asset used internally by qualified `cw-menubar-*` tiers when the resolved component toolkit is `vaadin`.
+The closure is independent from reference, field-family, action-button, and Grid assets so its stable-shell cost, CSP, failure, and rollback remain separately reviewable.
+Applications continue to consume Causeway semantic elements, state, events, GraphQL interactions, and navigation policy rather than raw Vaadin items or events.
+
+Ordinary Maven builds verify the checked-in generated asset, checksum, budgets, policy metadata, and licenses without invoking npm.
+Regeneration is explicit through the foundation `regenerate-vaadin-menubar` Maven profile or these commands:
+
+[source,shell]
+----
+npm ci --ignore-scripts
+npm run update-policy
+npm run verify
+----
+
+The build aliases Vaadin usage statistics to its opt-out module, rejects prohibited runtime markers and external imports, records all production package licenses, and enforces an exact compressed budget.
+The browser audit verifies nested and disabled items, activation events, CSP style hashes, accessibility, dark and forced-colors modes, narrow overflow, no external requests, and no page overflow.

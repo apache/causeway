@@ -21,33 +21,6 @@ display.min-scale
 
 
 |
-[[causeway.value-types.big-decimal.display.use-grouping-separator]]
-causeway.value-types.big-decimal. +
-display.use-grouping-separator
-
-|  true
-| null
-
-
-|
-[[causeway.value-types.big-decimal.editing.preserve-scale]]
-causeway.value-types.big-decimal. +
-editing.preserve-scale
-
-| 
-| null
-
-
-|
-[[causeway.value-types.big-decimal.editing.use-grouping-separator]]
-causeway.value-types.big-decimal. +
-editing.use-grouping-separator
-
-| 
-| null
-
-
-|
 [[causeway.value-types.big-decimal.use-scale-for-min-fractional-facet]]
 causeway.value-types.big-decimal. +
 use-scale-for-min-fractional-facet

@@ -1,24 +1,55 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.causeway.core.config.observation;
 
-import java.util.Optional;
-
-import org.apache.causeway.commons.internal.observation.ObservationClosure;
-import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration.DiscardedSpanExportingPredicate;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
+
+import org.apache.causeway.commons.internal.observation.ObservationClosure;
+import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration.DiscardedSpanExportingPredicate;
 
 import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.tracing.Tracer;
 import io.micrometer.tracing.exporter.FinishedSpan;
 import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
 /**
- * Makes observation an opt-in choice based on Spring Profile 'observation' being active.
+ * Connects Causeway instrumentation to Micrometer when the {@code observation}
+ * Spring profile is active. The registry's handlers determine what observations
+ * produce (for example, tracing spans); this configuration does not create an SDK
+ * or exporter.
  *
- * <p>see Spring's org.springframework.boot.micrometer.observation.autoconfigure.ObservationAutoConfiguration
+ * <p>Normally Boot configures the tracing handlers and export pipeline. The
+ * {@code observation,agent} profiles instead enable Causeway's built-in bridge
+ * to the Java agent and exclude competing Boot tracing auto-configuration.
+ * Both arrangements use the same Causeway integration below.
+ *
+ * <p>With the profile inactive, only Causeway's integration is disabled. We do
+ * not register a no-op registry bean: that could interfere with the application's
+ * own observations or make registry injection ambiguous.
  */
 @AutoConfiguration
 @ConditionalOnClass(ObservationRegistry.class)
@@ -28,7 +59,11 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
 public class CausewayObservationAutoConfiguration {
 
 	/**
-	 * Does not allow discarded spans to be exported. Register with Spring (before auto configuration is running).
+	 * Lets the Spring-managed tracing pipeline drop observations explicitly marked
+	 * for discard by Causeway. The marker alone does not suppress
+	 * export: the pipeline must consume this predicate. In particular, an
+	 * agent-owned exporter does not discover Spring beans, so explicit discards
+	 * are subject to that exporter's policy.
 	 */
 	public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
 		@Override
@@ -37,27 +72,52 @@ public class CausewayObservationAutoConfiguration {
 		}
 	}
 
-	@Profile("!observation")
-	@Bean
-	public ObservationRegistry noopObservationRegistry() {
-		return ObservationRegistry.NOOP;
-	}
-
 	/**
-	 * Same as in org.springframework.boot.micrometer.observation.autoconfigure.ObservationAutoConfiguration,
-	 * that is, acts as a fallback.
+	 * Supplies an active-profile fallback only when no registry bean is already
+	 * available. As with Boot's fallback, creating a registry does not itself
+	 * enable export; observation handlers must be registered by the tracing setup.
 	 */
-	@Profile("observation")
+	@Profile("observation & !agent")
 	@Bean
 	@ConditionalOnMissingBean
 	public ObservationRegistry observationRegistry() {
 		return ObservationRegistry.create();
 	}
 
-	@Bean
-	public CausewayObservationIntegration causewayObservationIntegration(
-            final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationIntegration(observationRegistryOpt);
+    /**
+     * Tags the current entry span through the same tracer used by observation
+     * handlers. Inactive profiles and missing tracers are inert; an active
+     * configuration must supply a single or primary tracer to avoid tagging
+     * an unrelated tracing pipeline. This bean creates no spans or SDK.
+     */
+    @Bean
+    public CausewayTraceClassifier causewayTraceClassifier(
+            final ObjectProvider<Tracer> tracers,
+            final Environment environment) {
+        // Do not resolve application tracers when inactive, including ambiguous ones.
+        var tracer = environment.acceptsProfiles(Profiles.of("observation"))
+                ? tracers.getIfAvailable(() -> Tracer.NOOP)
+                : Tracer.NOOP;
+        return new CausewayTraceClassifier(tracer);
+    }
+
+    /**
+     * Always supplies the integration used by framework consumers, including
+     * when Causeway observations are disabled.
+     *
+     * <p>The provider defers registry resolution until after checking the
+     * profile. When active, Spring selects the single or primary registry;
+     * ambiguous candidates deliberately fail configuration rather than selecting
+     * an arbitrary telemetry pipeline. When inactive, application registries are
+     * not resolved or modified.
+     */
+    @Bean
+    public CausewayObservationIntegration causewayObservationIntegration(
+            final ObjectProvider<ObservationRegistry> registries,
+            final Environment environment) {
+        return new CausewayObservationIntegration(environment.acceptsProfiles(Profiles.of("observation"))
+                ? registries.getIfAvailable(() -> ObservationRegistry.NOOP)
+                : ObservationRegistry.NOOP);
     }
 
 }

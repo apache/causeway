@@ -1,0 +1,199 @@
+= Rich GraphQL value and resource semantics
+
+The rich GraphQL schema advertises a value as input-capable only when GraphQL coercion can reconstruct its declared Java type.
+Output compatibility alone does not establish input support.
+
+== Canonical standard values
+
+The viewer provides the following reversible mappings in addition to its established scalar mappings:
+
+[cols="2,2,4",options="header"]
+|===
+|Java type
+|GraphQL scalar
+|Canonical representation
+
+|`java.time.LocalDateTime`
+|`LocalDateTime`
+|ISO-8601 local date-time without an offset or zone, preserving fractional seconds.
+
+|`java.net.URL`
+|`Url`
+|An absolute URL and its normalized external form.
+
+|`java.util.Date`
+|`LegacyDateTime`
+|ISO-8601 UTC instant.
+
+|`java.sql.Date`
+|`SqlDate`
+|ISO-8601 date-only value.
+
+|`java.sql.Timestamp`
+|`SqlTimestamp`
+|ISO-8601 local date-time preserving fractional seconds.
+
+|`java.sql.Time`
+|`SqlTime`
+|ISO-8601 time-only value at second precision.
+
+|`java.util.Locale`
+|`Locale`
+|IETF BCP 47 language tag.
+
+|`org.apache.causeway.applib.services.bookmark.Bookmark`
+|`Bookmark`
+|Causeway `logical-type:identifier` bookmark text.
+
+|`org.apache.causeway.applib.services.appfeat.ApplicationFeatureId`
+|`ApplicationFeatureId`
+|URL-safe encoded Causeway application-feature identifier.
+|===
+
+Malformed values fail during GraphQL coercion before the domain member is invoked.
+Error messages identify the required scalar without echoing variable content.
+Null remains available only where the Causeway member is optional.
+
+A client can inspect one scalar at a time using targeted standard introspection:
+
+[source,graphql]
+----
+query LocalDateTimeContract {
+  __type(name: "LocalDateTime") {
+    kind
+    name
+    description
+  }
+}
+----
+
+The existing rich `datatype` field continues to identify the declared Causeway semantics when multiple Java types use related textual representations.
+No separate datatype catalogue is introduced.
+
+== Built-in classification
+
+Every framework-provided Causeway value semantics has a reviewed GraphQL classification.
+The classification coverage fails if a new framework value is introduced without a decision.
+
+[cols="2,4",options="header"]
+|===
+|Classification
+|Built-in treatment
+
+|Reversible scalar
+|Primitive wrappers, strings, numbers, supported temporal values, URL, UUID, Locale, Bookmark, and ApplicationFeatureId.
+
+|Structured
+|Blob, Clob, and LocalResourcePath.
+
+|Protected
+|Password accepts explicit input but always serializes its Causeway suppressed placeholder.
+
+|Output-only
+|Markup returns its HTML through the documented `Markup` scalar and is never advertised as input-capable.
+
+|Unsupported
+|Composite Identifier, schema DTO, image, and tree values remain non-disclosing until dedicated representations are defined.
+|===
+
+== Application value extensions
+
+An application can register a scalar-shaped value by providing a Spring bean implementing `ScalarMarshaller<T>`.
+The bean selects the Java class and supplies a documented `GraphQLScalarType`.
+A marshaller is output-only by default.
+A reversible implementation explicitly returns `true` from `supportsInput()`, or passes `true` to the corresponding `ScalarMarshallerAbstract` constructor, and reconstructs `T` from the value produced by that scalar's coercion.
+Existing compiled application marshallers remain output-capable but no longer imply input support.
+
+Marshaller ordering follows the existing `@Priority` chain, with the first matching marshaller winning.
+A custom scalar must use typed GraphQL coercion exceptions and must not place rejected input values in messages.
+The example `ComplexNumber` marshaller uses conventional algebraic text such as `3+4i` or `3-4i`.
+Structured application values can replace the `TypeMapper` SPI when a scalar is not an appropriate representation.
+The viewer does not infer constructors, parsers, or factories from `toString()`.
+
+When no explicit marshaller exists, output uses `UnsupportedValue` and returns the constant `[unsupported]` without invoking the domain value's `toString()` method.
+Input uses the same documented scalar, which always rejects coercion and directs the application to register `ScalarMarshaller` or `TypeMapper`.
+This replaces the previous behavior that serialized arbitrary output and passed a raw Java `String` to an incompatible domain member.
+Applications requiring a migration interval can explicitly set xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.values.unsupported-output-policy[`causeway.viewer.graphql.values.unsupported-output-policy=LEGACY_STRING`].
+The legacy policy restores only output serialization; input remains unsupported.
+
+== Local resource paths
+
+`LocalResourcePath` uses structured input and output so its path and browser-opening strategy both survive a round trip:
+
+[source,graphql]
+----
+input LocalResourcePathInput {
+  path: String!
+  openUrlStrategy: OpenUrlStrategy!
+}
+
+type LocalResourcePathValue {
+  path: String!
+  openUrlStrategy: OpenUrlStrategy!
+}
+----
+
+The `OpenUrlStrategy` enum contains `NEW_WINDOW` and `SAME_WINDOW`.
+This value is separate from Blob and Clob content policy because it identifies an application-local navigation target rather than transferring resource bytes.
+
+== Blob and Clob input
+
+When value-content policy is enabled, Blob input uses this generated shape:
+
+[source,graphql]
+----
+input BlobInput {
+  name: String!
+  mimeType: String!
+  base64: String!
+}
+----
+
+Clob input uses this generated shape:
+
+[source,graphql]
+----
+input ClobInput {
+  name: String!
+  mimeType: String!
+  chars: String!
+}
+----
+
+Blob content is RFC 4648 base64 and Clob limits are measured using its UTF-8 encoded byte length.
+The viewer validates the configured limit before constructing the Causeway `Blob` or `Clob`.
+It also enforces a member's `fileAccept` constraint using exact media types, wildcard media groups, or filename extensions.
+Normal Causeway visibility, usability, and validity checks still run before property update or action invocation.
+
+The default decoded input limit is one mebibyte.
+Configure it with xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.inline-input-max-bytes[`causeway.viewer.graphql.resources.inline-input-max-bytes`].
+When value-content policy is `FORBIDDEN`, resource input resolves to `UnsupportedValue` and resource parameter metadata reports `FORBIDDEN`.
+Both `DIRECT` and `ATTACHMENT` enable bounded GraphQL resource values; attachment disposition continues to apply only to resource-controller responses.
+
+== Resource output and metadata
+
+Blob and Clob properties retain their secured, same-origin resource links from the resource-link safety contract.
+Their metadata now also reports byte length, member `fileAccept`, input limit, and transfer mode without transferring content.
+Clob metadata additionally reports character length.
+
+Blob and Clob action results use `BlobValue` and `ClobValue` output objects.
+These expose name, media type, byte length, transfer mode, and the configured inline-output limit.
+Content is included only when value-content policy is enabled and the value is within that limit.
+An oversized action result reports `METADATA_ONLY` and returns null for its base64 or character-content field.
+
+The default inline-output limit is one mebibyte.
+Configure it with xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.inline-output-max-bytes[`causeway.viewer.graphql.resources.inline-output-max-bytes`].
+Large property values continue to use the authorization-rechecking resource controller rather than inline GraphQL output.
+
+== Security and migration
+
+Passwords can be submitted through the protected `Password` scalar but retain only their Causeway suppressed placeholder on every output and never expose their underlying value.
+Hidden member values and resource capabilities remain unavailable, and negotiation or invocation attempts are vetoed before submitted content is processed.
+Opaque, tree-shaped, composite, or custom values without an explicit strategy return only `[unsupported]` and reject input through `UnsupportedValue`.
+Resource validation, coercion errors, and diagnostics are bounded and do not include submitted content.
+
+Existing clients reading implicit fallback strings must either register an explicit safe output marshaller or temporarily select `LEGACY_STRING`.
+Existing custom marshallers that require input must explicitly opt in after verifying reversible coercion.
+Clients that previously submitted arbitrary strings for unsupported inputs must register a reversible strategy or stop advertising that operation as input-capable.
+Clients submitting Blob or Clob arguments must migrate from descriptive strings to `BlobInput` or `ClobInput`.
+The category-specific resource policies and legacy global fallback are documented in xref:gqlv:ROOT:about.adoc[GraphQL API].

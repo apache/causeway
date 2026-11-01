@@ -53,10 +53,8 @@ class _Observation {
 
         _Strings.nonEmpty(ic.getUser().multiTenancyToken())
             .ifPresent(value->obs.highCardinalityKeyValue(userMultiTenancyToken(value)));
-
         _Strings.nonEmpty(ic.getUser().name())
             .ifPresent(value->obs.highCardinalityKeyValue(userName(value)));
-
     }
 
 }

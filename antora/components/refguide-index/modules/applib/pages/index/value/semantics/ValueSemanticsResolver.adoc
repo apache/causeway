@@ -9,8 +9,8 @@
 interface ValueSemanticsResolver {
   boolean hasValueSemantics(Class<?> valueType)
   Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType)
+  Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType, String requiredQualifier)
   Stream<Class<?>> streamClassesWithValueSemantics()
-  Can<ValueSemanticsProvider<T>> selectValueSemantics(Identifier featureIdentifier, Class<T> valueType)
 }
 ----
 

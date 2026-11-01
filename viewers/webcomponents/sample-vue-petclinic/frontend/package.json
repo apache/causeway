@@ -1,0 +1,27 @@
+{
+  "name": "@apache-causeway/sample-vue-petclinic",
+  "version": "4.0.0-SNAPSHOT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "dev": "vite",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@apache-causeway/vue-viewer": "file:../../vue",
+    "vue": "3.5.42",
+    "vue-router": "4.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "24.12.0",
+    "@vitejs/plugin-vue": "6.0.8",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "4.1.11",
+    "vue-tsc": "3.2.6"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

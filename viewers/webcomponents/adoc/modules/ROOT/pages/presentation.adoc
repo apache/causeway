@@ -1,0 +1,55 @@
+= Presentation, Resources, and Toolkits
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Stable semantic elements
+
+Author applications against Causeway elements and their documented contracts, not raw Vaadin items, events, or internal DOM structures.
+Optional adapters replace eligible presentation while retaining the same GraphQL, validation, result, and routing behaviour.
+The native presentation is the complete diagnostic rollback.
+
+HTMX defaults to `causeway.viewer.webcomponents.htmx.component-toolkit=vaadin`.
+Set it to `native` to disable all Vaadin presentation without changing application markup or persisted values.
+The Vue Petclinic host selects its toolkit as application policy and offers `?toolkit=native` for comparison; that query parameter is a sample convention, not a universal Vue viewer setting.
+
+== Supported boundaries
+
+Qualified field presentation includes standard text, Boolean, enum/bounded choices, numeric values, and supported local temporal values.
+Nulls, protected values, references, resources, LOBs, offset/zoned temporals, and custom renderers retain their established presentation where the field adapter does not apply.
+Reference editors have their own eligibility and autocomplete contracts.
+
+Only ordinary action buttons use the action adapter.
+Property save/cancel controls, prompts, and shell controls are not silently converted into Vaadin actions.
+Menu Bar qualifies independently for representable non-empty menu tiers and preserves semantic action dispatch and disabled reasons.
+
+Grid qualifies only for active collections wider than 48rem with bounded windows, configured ordering, supported projections, and safe totals or paging metadata.
+It does not introduce sorting, filtering, selection, editing, row actions, or persistence pushdown.
+Narrow, inactive, and unsupported collections retain their normal presentation.
+
+== Styling and accessibility
+
+Use packaged structural styles and the optional Causeway theme, application classes, and documented `--causeway-*` custom properties.
+Keep application shell CSS separate from semantic component ownership.
+Preserve loading/status announcements, focusable page boundaries, and menu/result landmarks when replacing a shell.
+Test keyboard navigation, narrow layouts, light/dark presentation, reduced motion, and forced colours for application-specific customisations.
+
+The HTMX shell uses external same-origin scripts and styles with a restrictive Content Security Policy.
+Its reviewed toolkit style hashes do not permit arbitrary inline styles or handlers.
+Do not solve a customisation failure by adding `unsafe-inline` or `unsafe-eval`.
+A Vue application owns its deployment policy and must serve the required assets consistently with that policy.
+
+== Resource and PDF presentation
+
+Authorised resource URLs remain backend-owned opaque paths.
+Do not turn a resource link into an authorization cache: the server checks access again when it is dereferenced.
+Blob and Clob policy is independent of layout/icon policy.
+See xref:gqlv:ROOT:about.adoc#resources-blobs-clobs-layouts-icons[the GraphQL resource reference].
+
+Eligible PDF properties use the foundation's lazy PDF.js reader.
+The display module, module worker, support assets, and PDF content stay on the application origin.
+An automatic reader, or an activated manual reader, loads these assets when needed rather than as part of every route.
+The HTMX shell permits same-origin workers with `worker-src 'self'`.
+
+Page controls scroll the reader's own viewport, and the toolbar retains an authorised download link.
+Zoom supports page width, page height, page fit, actual size, and percentage choices.
+These controls remain foundation behaviour in both viewers; Vue should not duplicate reader state and HTMX should not intercept the download as an object route.

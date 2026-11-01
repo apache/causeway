@@ -148,7 +148,6 @@ public interface ServiceRegistry {
      * Particularly useful when discarding
      * a meta-model instance, that is, purging the {@link org.apache.causeway.core.metamodel.spec.ObjectSpecification} cache.
      */
-    @SuppressWarnings("javadoc")
     void clearRegisteredBeans();
 
 }

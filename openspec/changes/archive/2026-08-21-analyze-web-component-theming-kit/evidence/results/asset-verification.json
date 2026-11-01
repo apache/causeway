@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-08-20T23:16:07.903Z",
+  "command": "npm ci --ignore-scripts --no-audit --no-fund && npm run verify-assets -- --write",
+  "packages": [
+    {
+      "package": "bootstrap",
+      "version": "5.3.8",
+      "license": "MIT",
+      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.8.tgz",
+      "integrity": "sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg==",
+      "directDependencies": [],
+      "licenseFile": "LICENSE",
+      "licenseSha256": "4620c84ad5ce8602ff65640ed6b7c8b78ebb9e036584f0ebc1ccc88206a4bb51"
+    },
+    {
+      "package": "@awesome.me/webawesome",
+      "version": "3.11.0",
+      "license": "MIT",
+      "resolved": "https://registry.npmjs.org/@awesome.me/webawesome/-/webawesome-3.11.0.tgz",
+      "integrity": "sha512-WM8kyP+AdAT3/zwNpc/YzN3Nu5pRD6ksREFZAct/DIn6KMnQs8lPVfiPbJrOpKMk8OaSnQX19iiwFGjoswXVXw==",
+      "directDependencies": [
+        "@ctrl/tinycolor",
+        "@floating-ui/dom",
+        "@konnorr/qr-creator",
+        "@lit-labs/ssr",
+        "@lit-labs/ssr-client",
+        "@lit/context",
+        "@lit/react",
+        "@shoelace-style/animations",
+        "@shoelace-style/localize",
+        "composed-offset-position",
+        "lit",
+        "marked",
+        "nanoid"
+      ],
+      "licenseFile": "LICENSE.md",
+      "licenseSha256": "e024db6c0a83b08f33eedda3eb92d90439169903f7d9d7cfeb200c989cd62881"
+    },
+    {
+      "package": "open-props",
+      "version": "1.7.23",
+      "license": "MIT",
+      "resolved": "https://registry.npmjs.org/open-props/-/open-props-1.7.23.tgz",
+      "integrity": "sha512-+xyrJmxV9QUBFbSwPROYhOg/FLXry+uuPr4R+B5EaE4556Oc18/8ZC/fL5A+/lbRSwNvA0Alh+C0KpyFWLmLZg==",
+      "directDependencies": [],
+      "licenseFile": "LICENSE",
+      "licenseSha256": "fed3aa342094f6bb33701d09133c159a4c124e509ede255a889dd2c28ec3ab6e"
+    },
+    {
+      "package": "esbuild",
+      "version": "0.28.2",
+      "license": "MIT",
+      "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz",
+      "integrity": "sha512-HKVLS8dvII+xoKW9kmqxbRKrnWEXfJJr/FZhhJmiqIB0e053QNYFqOBouTMO/k5sID4MvCiUCvv8b9M4h32wIA==",
+      "directDependencies": [],
+      "licenseFile": "LICENSE.md",
+      "licenseSha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+    },
+    {
+      "package": "playwright",
+      "version": "1.61.0",
+      "license": "Apache-2.0",
+      "resolved": "https://registry.npmjs.org/playwright/-/playwright-1.61.0.tgz",
+      "integrity": "sha512-Z+7BeeqQPRRzklHsVFP4KTGIyMxKUmfeRA4WisM6G3/XW6nwGeX6fX9qYaDa+CiUqpOkb2f6X3nar05R3kSuJQ==",
+      "directDependencies": [
+        "playwright-core"
+      ],
+      "licenseFile": "LICENSE",
+      "licenseSha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+    }
+  ],
+  "selectedAssets": [
+    {
+      "path": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "bytes": 232111,
+      "sha256": "d85327d99c7a3ee1f9b5d0500d1370acea3ad2db39c163c2f51f232baedbdede"
+    },
+    {
+      "path": "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "bytes": 80496,
+      "sha256": "e4fd49181388c48ec5040bd3fe66f57c29c8e67fcd8502b3354b96ec7ab47cc7"
+    },
+    {
+      "path": "node_modules/@awesome.me/webawesome/dist-cdn/styles/webawesome.css",
+      "bytes": 195,
+      "sha256": "430b1d49fda2eb30becc5aa1713e93b28b3e818db45ae03e8b6bd45bcbc27ef7"
+    },
+    {
+      "path": "node_modules/@awesome.me/webawesome/dist-cdn/webawesome.loader.js",
+      "bytes": 1442,
+      "sha256": "1723775ca7a6e28552e21b49753cdb95cae5cf86d28787b1488bde6190b4d9f4"
+    },
+    {
+      "path": "node_modules/open-props/open-props.min.css",
+      "bytes": 29566,
+      "sha256": "4bc9bec663eb7fef2cb7680d2983e21f0f79778a61a77bee74224030dc981f5c"
+    },
+    {
+      "path": "node_modules/open-props/normalize.min.css",
+      "bytes": 9041,
+      "sha256": "4de6907a35c5f343da7b6c6683f71b8cdd990619bb78fe1152d5e472856b5b03"
+    },
+    {
+      "path": "node_modules/open-props/buttons.min.css",
+      "bytes": 9181,
+      "sha256": "0df32ae2a066d72609ad51598f987e47301144e07100c67e0dd31012cfe06631"
+    }
+  ]
+}

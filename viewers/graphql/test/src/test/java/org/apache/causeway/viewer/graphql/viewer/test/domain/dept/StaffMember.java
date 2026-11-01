@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -30,15 +32,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Navigable;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
 import lombok.Getter;
@@ -70,7 +77,17 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     private Long id;
 
     @Getter @Setter
-    @Property(editing = Editing.ENABLED)
+    @Property(
+            editing = Editing.ENABLED,
+            maxLength = 40,
+            regexPattern = "[A-Za-z .!'-]+",
+            regexPatternFlags = java.util.regex.Pattern.CASE_INSENSITIVE)
+    @PropertyLayout(
+            named = "Staff display name",
+            describedAs = "Name shown for the staff member",
+            multiLine = 2,
+            labelPosition = LabelPosition.TOP,
+            typicalLength = 24)
     private String name;
     public String validateName(final String proposedName) {
         if(proposedName.contains("!")) {
@@ -79,11 +96,30 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
         return null;
     }
 
-    @Getter @Setter
-    @Property
+    private static final AtomicInteger DEPARTMENT_READ_COUNT = new AtomicInteger();
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @Property
+    @PropertyLayout(navigable = Navigable.PARENT)
+    public Department getDepartment() {
+        DEPARTMENT_READ_COUNT.incrementAndGet();
+        return department;
+    }
+
+    public void setDepartment(final Department department) {
+        this.department = department;
+    }
+
+    public static void resetDepartmentReadCount() {
+        DEPARTMENT_READ_COUNT.set(0);
+    }
+
+    public static int departmentReadCount() {
+        return DEPARTMENT_READ_COUNT.get();
+    }
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
@@ -97,13 +133,47 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     @Embedded
     private BlobJpaEmbeddable photo;
 
-    @Property(optionality = Optionality.OPTIONAL)
+    @Property(
+            optionality = Optionality.OPTIONAL,
+            editing = Editing.ENABLED,
+            fileAccept = "application/pdf")
     @PropertyLayout(fieldSetId = "content", sequence = "1")
     public Blob getPhoto() {
         return BlobJpaEmbeddable.toBlob(photo);
     }
     public void setPhoto(final Blob photo) {
         this.photo = BlobJpaEmbeddable.fromBlob(photo);
+    }
+
+    @Transient
+    private Clob profile;
+
+    @Property(editing = Editing.ENABLED, fileAccept = "text/plain")
+    @PropertyLayout(fieldSetId = "content", sequence = "2")
+    public Clob getProfile() {
+        return profile != null
+                ? profile
+                : new Clob("profile.txt", "text/plain", "Profile for " + name);
+    }
+    public void setProfile(final Clob profile) {
+        this.profile = profile;
+    }
+
+    @Property
+    public String getWindowProbe() {
+        if ("Window Error".equals(name)) {
+            throw new IllegalStateException("Window probe unavailable");
+        }
+        return name;
+    }
+
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
+    public Blob getHiddenPhoto() {
+        return new Blob(
+                "hidden.pdf",
+                "application/pdf",
+                "CONFIDENTIAL_RESOURCE_CONTENT".getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

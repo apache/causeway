@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "intellij": {
+      "type": "sse",
+      "url": "http://127.0.0.1:${INTELLIJ_MCP_PORT:-64342}/sse"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
+      "directTools": false
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "directTools": false
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  }
+}

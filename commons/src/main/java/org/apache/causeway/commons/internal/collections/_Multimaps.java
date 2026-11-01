@@ -156,6 +156,19 @@ public class _Multimaps {
             public ListMultimap<K, V> asUnmodifiable() {
                 return new ListMultimapWrapper<>(Collections.unmodifiableMap(delegate), elementCollectionFactory);
             }
+            @Override
+            public final boolean equals(final Object obj) {
+            	return obj == this
+            			|| delegate.equals(obj);
+            }
+            @Override
+            public final int hashCode() {
+	            return delegate.hashCode();
+            }
+            @Override
+            public final String toString() {
+            	return "ListMultimapWrapper[delegate=%s]".formatted(delegate);
+            }
     }
 
     /**
@@ -219,16 +232,27 @@ public class _Multimaps {
             public void putElement(final K key, final V value) {
                 getOrElseNew(key).add(value);
             }
-
             @Override
             public Set<V> getOrElseNew(final K key) {
                 var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
                 return collection;
             }
-
             @Override
             public SetMultimap<K, V> asUnmodifiable() {
                 return new SetMultimapWrapper<>(Collections.unmodifiableMap(delegate), elementCollectionFactory);
+            }
+            @Override
+            public final boolean equals(final Object obj) {
+            	return obj == this
+            			|| delegate.equals(obj);
+            }
+            @Override
+            public final int hashCode() {
+	            return delegate.hashCode();
+            }
+            @Override
+            public final String toString() {
+            	return "SetMultimapWrapper[delegate=%s]".formatted(delegate);
             }
     }
 
@@ -324,19 +348,29 @@ public class _Multimaps {
             public void putElement(final K1 key, final K2 subkey, final V value) {
                 getOrElseNew(key).put(subkey, value);
             }
-
             @Override
             public V getElement(final K1 key, final K2 subkey) {
                 final Map<K2, V> elementMap = delegate.get(key);
                 return elementMap!=null ? elementMap.get(subkey) : null;
             }
-
             @Override
             public Map<K2, V> getOrElseNew(final K1 key) {
                 var elementMap = delegate.computeIfAbsent(key, __->elementMapFactory.get());
                 return elementMap;
             }
-
+            @Override
+            public final boolean equals(final Object obj) {
+            	return obj == this
+            			|| delegate.equals(obj);
+            }
+            @Override
+            public final int hashCode() {
+	            return delegate.hashCode();
+            }
+            @Override
+            public final String toString() {
+            	return "MapMultimap[delegate=%s]".formatted(delegate);
+            }
         };
     }
 

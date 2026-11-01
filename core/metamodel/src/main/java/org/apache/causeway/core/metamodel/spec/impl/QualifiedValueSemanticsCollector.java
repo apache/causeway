@@ -21,18 +21,17 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.ClassUtils;
-
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,6 +70,7 @@ record QualifiedValueSemanticsCollector(CausewaySystemEnvironment systemEnvironm
             });
     }
 
+    //TODO this code is duplicated in SpringContextHolder
     private static Optional<String> lookupQualifier(final String id, final ConfigurableListableBeanFactory beanFactory) {
         var beanDefinition = beanFactory.getBeanDefinition(id);
         if (beanDefinition instanceof AnnotatedBeanDefinition annotatedBeanDefinition) {

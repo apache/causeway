@@ -19,6 +19,7 @@ If - for the currently logged on user - none of the domain object's members are 
   String editingDisabledReason() default "";     // <.>
   Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Introspection introspection() default Introspection.NOT_SPECIFIED;     // <.>
+  Locking locking() default Locking.DEFAULT;     // <.>
   String mixinMethod() default "$$";     // <.>
   Nature nature() default Nature.NOT_SPECIFIED;     // <.>
   Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;     // <.>
@@ -77,6 +78,11 @@ Whether entity changes (persistent property updates) should be published to _org
 +
 --
 Controls on a per class basis, how meta-model class introspection should process members, supporting methods and callback methods.
+--
+<.> xref:#locking[locking]
++
+--
+Locking policy for Causeway JPA bookmark loads, including REST entity reference parameters.
 --
 <.> xref:#mixinMethod[mixinMethod]
 +
@@ -212,6 +218,13 @@ Whether entity changes (persistent property updates) should be published to _org
 === introspection
 
 Controls on a per class basis, how meta-model class introspection should process members, supporting methods and callback methods.
+
+[#locking]
+=== locking
+
+Selects the locking policy for Causeway JPA bookmark loads.
+Defaults to `Locking.DEFAULT`, allowing inherited or meta-annotation policies before falling back to configuration.
+See <<locking-policy,Locking Policy>> for configuration, transaction requirements and callback usage.
 
 [#mixinMethod]
 === mixinMethod
@@ -390,5 +403,7 @@ include::hooks/DomainObject_027-bounding.adoc[]
 include::hooks/DomainObject_028-autoCompleteRepository.adoc[]
 
 include::hooks/DomainObject_029-mixinMethod.adoc[]
+
+include::hooks/DomainObject_030-locking.adoc[]
 
 include::hooks/DomainObject_040-see-also.adoc[]

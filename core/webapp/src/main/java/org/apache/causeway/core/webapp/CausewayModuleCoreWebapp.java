@@ -52,6 +52,8 @@ import io.micrometer.common.KeyValues;
         WebModuleLogOnExceptionLogger.class,
         WebModuleTemplateResources.class,
 
+        org.apache.causeway.core.webapp.modules.observation.WebObservationConfiguration.class,
+
         // @Component's
 
         HealthIndicatorUsingHealthCheckService.class,

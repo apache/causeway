@@ -1,0 +1,29 @@
+query ApplicationEntry {
+  rich {
+    application {
+      menuBars {
+        href
+        mediaType
+        formatVersion
+        generation
+        cacheControl
+      }
+      home {
+        kind
+        logicalTypeName
+        object {
+          __typename
+          ... on rich__university_calc_EditableMementoViewModel {
+            age {
+              get
+            }
+          }
+        }
+      }
+      issues {
+        code
+        message
+      }
+    }
+  }
+}

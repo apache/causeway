@@ -177,6 +177,7 @@
         <module>cmdexecauditsess</module>
         <module>publishing-jpa</module>
         <module>rest-jpa</module>
+        <module>tracing-compatibility</module>
         <module>value</module>
         <module>viewers-common</module>
         <module>viewers-jpa</module>

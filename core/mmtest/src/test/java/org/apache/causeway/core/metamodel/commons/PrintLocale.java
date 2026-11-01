@@ -27,7 +27,7 @@ public class PrintLocale {
         if (args.length >= 2) {
             final String localeSetting = args[0];
             System.out.println("Setting Locale to " + localeSetting + "\n");
-            Locale.setDefault(new Locale(localeSetting));
+            Locale.setDefault(Locale.of(localeSetting));
 
             final String timezoneSetting = args[1];
             System.out.println("Setting TimeZone to " + timezoneSetting + "\n");

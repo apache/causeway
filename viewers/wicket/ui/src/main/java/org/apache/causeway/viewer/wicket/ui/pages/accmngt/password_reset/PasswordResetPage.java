@@ -44,13 +44,11 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    private PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    private PasswordResetPage(final PageParameters parameters, final ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
 
-        boolean suppressPasswordResetLink = getWicketViewerSettings().suppressPasswordReset();
-        if(suppressPasswordResetLink) {
-            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
-        }
+        if(getCommonViewerSettings().signin().suppressPasswordReset())
+			throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
     }
 
     @Override
@@ -94,7 +92,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
      * @param uuid A unique id used to identify the email of the user whose password will be reset
      * @return A panel with "password reset" form fields
      */
-    protected PasswordResetPanel addPasswordResetPanel(String id, String uuid) {
+    protected PasswordResetPanel addPasswordResetPanel(final String id, final String uuid) {
         final PasswordResetPanel passwordResetPanel = new PasswordResetPanel(id, uuid);
         addOrReplace(passwordResetPanel);
         return passwordResetPanel;
@@ -109,7 +107,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
      * @param id The component id
      * @return A panel with "send email for password reset" functionality
      */
-    protected PasswordResetEmailPanel addPasswordResetEmailPanel(String id) {
+    protected PasswordResetEmailPanel addPasswordResetEmailPanel(final String id) {
         final PasswordResetEmailPanel passwordResetEmailPanel = new PasswordResetEmailPanel(id);
         addOrReplace(passwordResetEmailPanel);
         return passwordResetEmailPanel;

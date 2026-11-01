@@ -1,0 +1,73 @@
+= HTMX: Custom Pages and Shells
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Register an exact-type page
+
+Place a UTF-8 HTML resource at `src/main/resources/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html`.
+The filename before `.html` is the exact public logical type.
+No bean, annotation, template controller, or browser-side template fetch is needed.
+Without an exact registration the viewer selects its generic `<cw-object editable>` page.
+
+A minimal owner page follows this structure:
+
+[source,html]
+----
+<section class="causeway-route-page causeway-route-object"
+         data-route-state="loading" data-page-kind="custom"
+         data-testid="causeway-route-page" tabindex="-1" aria-label="Object page">
+  <cw-object-context logical-type="{{causeway.logicalType}}"
+                     object-id="{{causeway.objectId}}">
+    <cw-object-header></cw-object-header>
+    <cw-property id="knownAs" editable></cw-property>
+    <cw-interaction-controller></cw-interaction-controller>
+  </cw-object-context>
+</section>
+----
+
+Keep exactly one route-level context and one interaction controller inside it.
+The viewer binds only the two reserved identity tokens using escaped replacement.
+It does not evaluate expressions, fetch domain data into the template, or repair missing semantic wrappers.
+Nested contexts with explicit non-route identities are distinct from the route context.
+
+Resources are private server-composition inputs, not public static URLs.
+They are trusted packaged application code; do not insert arbitrary user-supplied HTML.
+Duplicate exact-type registrations, invalid content, and conflicting resource/factory registrations fail startup rather than selecting by classpath order.
+Startup accepts at most 512 page resources and 256 KiB per page.
+See xref:htmx/configuration.adoc[reload configuration] for development changes.
+
+For dynamic composition, a Spring bean implementing `HtmxPageFragmentFactory` can return the same complete page hierarchy for a logical type.
+It receives public `HtmxObjectRoute` identity, not a persistence session, metamodel object, or GraphQL response.
+Prefer packaged HTML unless dynamic host composition is genuinely required.
+
+== Compose semantic members
+
+Use xref:components.adoc[shared layout and member elements] rather than reproducing domain interaction in HTMX handlers.
+The Petclinic owner page illustrates rows, columns, Identity and Metadata tabs, an automatically empty-suppressed unreferenced-property destination, actions, and collections.
+Its source is under the sample's `META-INF/causeway/webcomponents/pages/` directory.
+
+Collection defaults can be packaged separately beneath `META-INF/causeway/webcomponents/collections/`, and preview defaults beneath `META-INF/causeway/webcomponents/previews/`, using exact logical-type filenames.
+A preview resource has a `<cw-preview>` root and consumes its row context; it is not another route page.
+Keep explicit collection/action presentation when a particular result needs different columns from the type-wide default.
+
+== Own the stable body shell
+
+Package one resource at `META-INF/causeway/webcomponents/shells/htmx.html` to replace the built-in body shell.
+Begin by copying `htmx/src/main/resources/META-INF/causeway/webcomponents/htmx/default-shell.html`, then alter ordinary wrappers, branding, and classes.
+The viewer still owns the doctype, HTML/head scaffold, scripts, CSP-sensitive metadata, and configured application stylesheet.
+
+Retain these protocol landmarks inside the single stable `<cw-graphql-client endpoint="{{causeway.graphQlEndpoint}}">`:
+
+* One `<cw-menubars>`.
+* `causeway-route`, containing `{{causeway.routeContent}}` and the history boundary.
+* `causeway-result`, `causeway-route-loading`, and `causeway-route-announcement`.
+* The `{{causeway.authenticationChrome}}` slot.
+
+The value bindings are `{{causeway.basePath}}`, `{{causeway.brand}}`, and `{{causeway.graphQlEndpoint}}`.
+The structural bindings are authentication chrome, route content, and the optional `{{causeway.comparisonLink}}`.
+This is a closed vocabulary, not a general template language.
+Do not add executable scripts, a head element, duplicate landmarks, or a route-level object context to the shell.
+
+Apply custom styling through the configured same-origin application stylesheet, not inline handlers or styles.
+Removing the application shell and restarting restores the built-in shell.
+Fragment navigation leaves the shell, menus, client, and global result outlet connected.

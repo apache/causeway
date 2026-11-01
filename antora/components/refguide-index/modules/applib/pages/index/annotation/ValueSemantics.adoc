@@ -11,9 +11,10 @@ Collects all the value-type specific customization attributes.
 @interface ValueSemantics {
   public final static int AS_DAY_BEFORE;     // <.>
   String provider() default "";     // <.>
-  int maxTotalDigits() default 65;     // <.>
+  int maxTotalDigits() default 0;     // <.>
+  int maxIntegerDigits() default 0;     // <.>
   int minIntegerDigits() default 1;     // <.>
-  int maxFractionalDigits() default 30;     // <.>
+  int maxFractionalDigits() default -1;     // <.>
   int minFractionalDigits() default 0;     // <.>
   FormatStyle dateFormatStyle() default FormatStyle.MEDIUM;     // <.>
   FormatStyle timeFormatStyle() default FormatStyle.MEDIUM;     // <.>
@@ -36,22 +37,27 @@ Allows to select xref:refguide:applib:index/value/semantics/ValueSemanticsProvid
 <.> xref:#maxTotalDigits[maxTotalDigits]
 +
 --
-If associated with a _Number_ , the maximum number of total digits accepted for this number.Can be omitted, if _Column#precision()_ is used.default = _65_
+If associated with _BigDecimal_ , _BigInteger_ , or any Java integer type (long, int, short, byte), the maximum number of total digits accepted for input (editing).
+--
+<.> xref:#maxIntegerDigits[maxIntegerDigits]
++
+--
+If associated with any Java number type _BigDecimal_ , _BigInteger_ , long, int, short, byte, double or float, the maximum number of integer digits required for input (editing).
 --
 <.> xref:#minIntegerDigits[minIntegerDigits]
 +
 --
-If associated with a _Number_ , the minimum number of integer digits required for this number.default = _1_
+If associated with any Java number type _BigDecimal_ , _BigInteger_ , long, int, short, byte, double or float, the minimum number of integer digits required for input (editing).
 --
 <.> xref:#maxFractionalDigits[maxFractionalDigits]
 +
 --
-If associated with a _BigDecimal_ , the maximum number of fractional digits accepted for this number.Can be omitted, if _Column#scale()_ is used.default = _30_
+If associated with any non-integer _Number_ type, the maximum number of fractional decimal digits displayed.
 --
 <.> xref:#minFractionalDigits[minFractionalDigits]
 +
 --
-If associated with a _BigDecimal_ , the minimum number of fractional digits required for this number.default = _0_
+If associated with any non-integer _Number_ type, the minimum number of fractional digits displayed.
 --
 <.> xref:#dateFormatStyle[dateFormatStyle]
 +
@@ -71,7 +77,7 @@ If associated with a temporal time value, the time of day precision, used for ed
 <.> xref:#timeZoneTranslation[timeZoneTranslation]
 +
 --
-If associated with a temporal value, that has time-zone or time-offset information, the rendering mode, as to whether to transform the rendered value to the user's local/current time-zone or not.default = _TimeZoneTranslation#TO_LOCAL_TIMEZONE_
+If associated with a temporal value, that has time-zone or time-offset information, the rendering mode, as to whether to transform the rendered value to the user's local/current time-zone or not.
 --
 <.> xref:#dateRenderAdjustDays[dateRenderAdjustDays]
 +
@@ -94,22 +100,55 @@ Allows to select xref:refguide:applib:index/value/semantics/ValueSemanticsProvid
 [#maxTotalDigits]
 === maxTotalDigits
 
-If associated with a _Number_ , the maximum number of total digits accepted for this number.Can be omitted, if _Column#precision()_ is used.default = _65_
+If associated with _BigDecimal_ , _BigInteger_ , or any Java integer type (long, int, short, byte), the maximum number of total digits accepted for input (editing).
+
+But input is not constrained for double/float, since those types have fixed intrinsic precision and their bit representation does not directly correspond to decimal digits. Further more, double/float may support scientific notation for input (as well as display), where the notion of 'total digits' is no longer viable.
+
+When _Column#precision()_ _>0_ is used, while _ValueSemantics#maxTotalDigits()_ is not used (<=0), then _Column#precision()_ is undersood as an alias for this annotation attribute.
+
+default = _0_ understood as unlimited
+
+[#maxIntegerDigits]
+=== maxIntegerDigits
+
+If associated with any Java number type _BigDecimal_ , _BigInteger_ , long, int, short, byte, double or float, the maximum number of integer digits required for input (editing).
+
+For double/float specifically, requires their decimal representation, to satisfy this requirement. Those types may support scientific notation for input (as well as display), where the notion of 'integer digits' is still viable.
+
+_Digits#integer()_ can be used as a replacement. If both are used, the stronger constraint applies.
+
+default = _0_ understood as unlimited
 
 [#minIntegerDigits]
 === minIntegerDigits
 
-If associated with a _Number_ , the minimum number of integer digits required for this number.default = _1_
+If associated with any Java number type _BigDecimal_ , _BigInteger_ , long, int, short, byte, double or float, the minimum number of integer digits required for input (editing).
+
+For double/float specifically, requires their decimal representation, to satisfy this requirement. Those types may support scientific notation for input (as well as display), where the notion of 'integer digits' is still viable.
+
+default = _1_
 
 [#maxFractionalDigits]
 === maxFractionalDigits
 
-If associated with a _BigDecimal_ , the maximum number of fractional digits accepted for this number.Can be omitted, if _Column#scale()_ is used.default = _30_
+If associated with any non-integer _Number_ type, the maximum number of fractional decimal digits displayed.
+
+If associated with a _BigDecimal_ specifically, also governs the maximum number of fractional digits accepted for input (editing).
+
+But input is not constrained for double/float, since those types have fixed intrinsic precision and their bit representation does not directly correspond to decimal digits.
+
+_Digits#fraction()_ can be used as a replacement. If both are used, the stronger constraint applies.
+
+When _Column#scale()_ _>0_ is used on a _BigDecimal_ , while _ValueSemantics#maxFractionalDigits()_ is not used (<0), then _Column#scale()_ is undersood as an alias for this annotation attribute.
+
+default = _-1_ understood as unlimited
 
 [#minFractionalDigits]
 === minFractionalDigits
 
-If associated with a _BigDecimal_ , the minimum number of fractional digits required for this number.default = _0_
+If associated with any non-integer _Number_ type, the minimum number of fractional digits displayed.
+
+default = _0_
 
 [#dateFormatStyle]
 === dateFormatStyle
@@ -129,7 +168,9 @@ If associated with a temporal time value, the time of day precision, used for ed
 [#timeZoneTranslation]
 === timeZoneTranslation
 
-If associated with a temporal value, that has time-zone or time-offset information, the rendering mode, as to whether to transform the rendered value to the user's local/current time-zone or not.default = _TimeZoneTranslation#TO_LOCAL_TIMEZONE_
+If associated with a temporal value, that has time-zone or time-offset information, the rendering mode, as to whether to transform the rendered value to the user's local/current time-zone or not.
+
+default = _TimeZoneTranslation#TO_LOCAL_TIMEZONE_
 
 [#dateRenderAdjustDays]
 === dateRenderAdjustDays

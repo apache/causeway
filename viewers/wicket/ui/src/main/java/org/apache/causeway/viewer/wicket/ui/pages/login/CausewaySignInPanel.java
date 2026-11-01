@@ -27,6 +27,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
@@ -40,7 +41,6 @@ import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionC
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
-import org.jspecify.annotations.NonNull;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -62,34 +62,12 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     transient Can<UserRegistrationService> anyUserRegistrationService;
     transient Can<EmailNotificationService> anyEmailNotificationService;
 
-    private final boolean signUpLink;
-    private final boolean passwordResetLink;
-    private final boolean isClearOriginalDestination;
-
-    /**
-     * Constructor
-     *  @param id
-     *            the component id
-     * @param rememberMe
-     *            True if form should include a remember-me checkbox
-     * @param signUpLink
-     * @param passwordResetLink
-     *            True if form should include the password reset link
-     * @param continueToOriginalDestination
-     */
     public CausewaySignInPanel(
-            final String id,
-            final boolean rememberMe,
-            final boolean signUpLink,
-            final boolean passwordResetLink,
-            final boolean continueToOriginalDestination) {
-        super(id, rememberMe);
-        this.signUpLink = signUpLink;
-        this.passwordResetLink = passwordResetLink;
-        this.isClearOriginalDestination = !continueToOriginalDestination;
+            final String id) {
+        super(id);
     }
 
-    @Override
+	@Override
     protected void onInitialize() {
         super.onInitialize();
 
@@ -108,18 +86,10 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
 
     @Override
     protected void onSignInSucceeded() {
-        if(isClearOriginalDestination) {
+        if(getWicketViewerSettings().clearOriginalDestination()) {
             clearOriginalDestination();
         }
         super.onSignInSucceeded();
-    }
-
-    @Override
-    protected void onSignInRemembered() {
-        if(isClearOriginalDestination) {
-            clearOriginalDestination();
-        }
-        super.onSignInRemembered();
     }
 
     @Override
@@ -147,11 +117,13 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     // -- HELPER
 
     private BookmarkablePageLink<Void> addPasswordResetLink() {
-        return addLink("passwdResetLink", PageType.PASSWORD_RESET, this.passwordResetLink);
+    	var signinConf = getConfiguration().viewer().common().signin();
+        return addLink("passwdResetLink", PageType.PASSWORD_RESET, !signinConf.suppressPasswordReset());
     }
 
     private BookmarkablePageLink<Void> addSignUpLink() {
-        return addLink("signUpLink", PageType.SIGN_UP, this.signUpLink);
+    	var signinConf = getConfiguration().viewer().common().signin();
+    	return addLink("signUpLink", PageType.SIGN_UP, !signinConf.suppressSignUp());
     }
 
     private BookmarkablePageLink<Void> addLink(

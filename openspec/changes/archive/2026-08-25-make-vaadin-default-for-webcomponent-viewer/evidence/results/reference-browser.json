@@ -1,0 +1,1602 @@
+{
+  "generatedAt": "2026-08-21T20:03:03.632Z",
+  "browserVersion": "151.0.7922.172",
+  "headless": true,
+  "scenarios": [
+    {
+      "scenario": {
+        "name": "desktop-light",
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "colorScheme": "light"
+      },
+      "candidateRequestsBeforeEditor": 0,
+      "candidateRequests": 1,
+      "initializationMs": 25.5,
+      "candidateResource": {
+        "duration": 1.100000023841858,
+        "transferSize": 191642,
+        "encodedBodySize": 191342,
+        "decodedBodySize": 191342
+      },
+      "snapshot": {
+        "editors": {
+          "required-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "failed",
+            "pendingValue": null,
+            "error": "Select at least one owner.",
+            "calls": [
+              "prepare",
+              "validate"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "disabled-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "saving",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": true
+          },
+          "multiple-owners": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            ],
+            "error": null,
+            "calls": [
+              "prepare",
+              "validate",
+              "validate"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-multi-select-combo-box",
+            "controlDisabled": false
+          },
+          "search-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            },
+            "error": null,
+            "calls": [
+              "prepare",
+              "search:Owner 002",
+              "validate"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "single-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          }
+        },
+        "semanticEvents": [
+          {
+            "member": "single-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "multiple-owners",
+            "status": "preparing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "search-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "validating",
+            "value": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            }
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              },
+              {
+                "id": "owner-2",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 002"
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "validating",
+            "value": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              },
+              {
+                "id": "owner-2",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 002"
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              },
+              {
+                "id": "owner-2",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 002"
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "validating",
+            "value": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            ]
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "validating",
+            "value": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "id": "owner-2",
+              "logicalTypeName": "petclinic.Owner",
+              "title": "Owner 002"
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": null
+          },
+          {
+            "member": "single-owner",
+            "status": "validating",
+            "value": null
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": null
+          },
+          {
+            "member": "required-owner",
+            "status": "editing",
+            "value": null
+          },
+          {
+            "member": "required-owner",
+            "status": "validating",
+            "value": null
+          },
+          {
+            "member": "required-owner",
+            "status": "failed",
+            "value": null
+          },
+          {
+            "member": "single-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          }
+        ],
+        "overlayCount": 0,
+        "horizontalOverflow": 0,
+        "vaadinDefined": true,
+        "flowRuntime": false
+      },
+      "axe": {
+        "violations": [],
+        "incomplete": []
+      },
+      "cspViolations": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "pilot-desktop-light.jpg"
+    },
+    {
+      "scenario": {
+        "name": "desktop-dark-reduced",
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "colorScheme": "dark",
+        "reducedMotion": "reduce"
+      },
+      "candidateRequestsBeforeEditor": 0,
+      "candidateRequests": 1,
+      "initializationMs": 23.700000047683716,
+      "candidateResource": {
+        "duration": 1.1999999284744263,
+        "transferSize": 191642,
+        "encodedBodySize": 191342,
+        "decodedBodySize": 191342
+      },
+      "snapshot": {
+        "editors": {
+          "single-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "required-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "disabled-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "saving",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": true
+          },
+          "multiple-owners": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ],
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-multi-select-combo-box",
+            "controlDisabled": false
+          },
+          "search-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          }
+        },
+        "semanticEvents": [
+          {
+            "member": "single-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "multiple-owners",
+            "status": "preparing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "search-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          }
+        ],
+        "overlayCount": 0,
+        "horizontalOverflow": 0,
+        "vaadinDefined": true,
+        "flowRuntime": false
+      },
+      "axe": {
+        "violations": [],
+        "incomplete": []
+      },
+      "cspViolations": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "pilot-desktop-dark-reduced.jpg"
+    },
+    {
+      "scenario": {
+        "name": "narrow-light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "colorScheme": "light"
+      },
+      "candidateRequestsBeforeEditor": 0,
+      "candidateRequests": 1,
+      "initializationMs": 18.699999928474426,
+      "candidateResource": {
+        "duration": 0.8000000715255737,
+        "transferSize": 191642,
+        "encodedBodySize": 191342,
+        "decodedBodySize": 191342
+      },
+      "snapshot": {
+        "editors": {
+          "single-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "required-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "disabled-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "saving",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": true
+          },
+          "multiple-owners": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ],
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-multi-select-combo-box",
+            "controlDisabled": false
+          },
+          "search-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          }
+        },
+        "semanticEvents": [
+          {
+            "member": "single-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "multiple-owners",
+            "status": "preparing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "search-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          }
+        ],
+        "overlayCount": 0,
+        "horizontalOverflow": 0,
+        "vaadinDefined": true,
+        "flowRuntime": false
+      },
+      "axe": {
+        "violations": [],
+        "incomplete": []
+      },
+      "cspViolations": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "pilot-narrow-light.jpg"
+    },
+    {
+      "scenario": {
+        "name": "narrow-dark-reduced",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "colorScheme": "dark",
+        "reducedMotion": "reduce"
+      },
+      "candidateRequestsBeforeEditor": 0,
+      "candidateRequests": 1,
+      "initializationMs": 28.09999990463257,
+      "candidateResource": {
+        "duration": 1.2000000476837158,
+        "transferSize": 191642,
+        "encodedBodySize": 191342,
+        "decodedBodySize": 191342
+      },
+      "snapshot": {
+        "editors": {
+          "single-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "required-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "disabled-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "saving",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": true
+          },
+          "multiple-owners": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ],
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-multi-select-combo-box",
+            "controlDisabled": false
+          },
+          "search-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          }
+        },
+        "semanticEvents": [
+          {
+            "member": "single-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "multiple-owners",
+            "status": "preparing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "search-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          }
+        ],
+        "overlayCount": 0,
+        "horizontalOverflow": 0,
+        "vaadinDefined": true,
+        "flowRuntime": false
+      },
+      "axe": {
+        "violations": [],
+        "incomplete": []
+      },
+      "cspViolations": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "pilot-narrow-dark-reduced.jpg"
+    },
+    {
+      "scenario": {
+        "name": "forced-colors",
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "colorScheme": "light",
+        "forcedColors": "active"
+      },
+      "candidateRequestsBeforeEditor": 0,
+      "candidateRequests": 1,
+      "initializationMs": 19.199999928474426,
+      "candidateResource": {
+        "duration": 0.8999999761581421,
+        "transferSize": 191642,
+        "encodedBodySize": 191342,
+        "decodedBodySize": 191342
+      },
+      "snapshot": {
+        "editors": {
+          "single-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "required-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          },
+          "disabled-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "saving",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": true
+          },
+          "multiple-owners": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ],
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-multi-select-combo-box",
+            "controlDisabled": false
+          },
+          "search-owner": {
+            "connected": true,
+            "editor": "vaadin-reference",
+            "status": "editing",
+            "pendingValue": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            },
+            "error": null,
+            "calls": [
+              "prepare"
+            ],
+            "widgetState": "ready",
+            "control": "vaadin-combo-box",
+            "controlDisabled": false
+          }
+        },
+        "semanticEvents": [
+          {
+            "member": "single-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "single-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "required-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "disabled-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "multiple-owners",
+            "status": "preparing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "multiple-owners",
+            "status": "editing",
+            "value": [
+              {
+                "_meta": {
+                  "id": "owner-1",
+                  "logicalTypeName": "petclinic.Owner",
+                  "title": "Owner 001"
+                }
+              }
+            ]
+          },
+          {
+            "member": "search-owner",
+            "status": "preparing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          },
+          {
+            "member": "search-owner",
+            "status": "editing",
+            "value": {
+              "_meta": {
+                "id": "owner-1",
+                "logicalTypeName": "petclinic.Owner",
+                "title": "Owner 001"
+              }
+            }
+          }
+        ],
+        "overlayCount": 0,
+        "horizontalOverflow": 0,
+        "vaadinDefined": true,
+        "flowRuntime": false
+      },
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aa",
+              "wcag143",
+              "TTv5",
+              "TT13.c",
+              "EN-301-549",
+              "EN-9.1.4.3",
+              "ACT"
+            ],
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",
+            "nodes": [
+              {
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#ffffff",
+                      "bgColor": "#ffffff",
+                      "contrastRatio": 1,
+                      "fontSize": "12.0pt (16px)",
+                      "fontWeight": "normal",
+                      "messageKey": "equalRatio",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "relatedNodes": [
+                      {
+                        "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"single-owner-save\">Save</button>",
+                        "target": [
+                          "button[data-testid=\"single-owner-save\"]"
+                        ]
+                      }
+                    ],
+                    "impact": "serious",
+                    "message": "Element has a 1:1 contrast ratio with the background"
+                  }
+                ],
+                "all": [],
+                "none": [],
+                "impact": "serious",
+                "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"single-owner-save\">Save</button>",
+                "target": [
+                  "button[data-testid=\"single-owner-save\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has a 1:1 contrast ratio with the background"
+              },
+              {
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#ffffff",
+                      "bgColor": "#ffffff",
+                      "contrastRatio": 1,
+                      "fontSize": "12.0pt (16px)",
+                      "fontWeight": "normal",
+                      "messageKey": "equalRatio",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "relatedNodes": [
+                      {
+                        "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"required-owner-save\">Save</button>",
+                        "target": [
+                          "button[data-testid=\"required-owner-save\"]"
+                        ]
+                      }
+                    ],
+                    "impact": "serious",
+                    "message": "Element has a 1:1 contrast ratio with the background"
+                  }
+                ],
+                "all": [],
+                "none": [],
+                "impact": "serious",
+                "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"required-owner-save\">Save</button>",
+                "target": [
+                  "button[data-testid=\"required-owner-save\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has a 1:1 contrast ratio with the background"
+              },
+              {
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#ffffff",
+                      "bgColor": "#ffffff",
+                      "contrastRatio": 1,
+                      "fontSize": "12.0pt (16px)",
+                      "fontWeight": "normal",
+                      "messageKey": "equalRatio",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "relatedNodes": [
+                      {
+                        "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"multiple-owners-save\">Save</button>",
+                        "target": [
+                          "button[data-testid=\"multiple-owners-save\"]"
+                        ]
+                      }
+                    ],
+                    "impact": "serious",
+                    "message": "Element has a 1:1 contrast ratio with the background"
+                  }
+                ],
+                "all": [],
+                "none": [],
+                "impact": "serious",
+                "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"multiple-owners-save\">Save</button>",
+                "target": [
+                  "button[data-testid=\"multiple-owners-save\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has a 1:1 contrast ratio with the background"
+              },
+              {
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#ffffff",
+                      "bgColor": "#ffffff",
+                      "contrastRatio": 1,
+                      "fontSize": "12.0pt (16px)",
+                      "fontWeight": "normal",
+                      "messageKey": "equalRatio",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "relatedNodes": [
+                      {
+                        "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"search-owner-save\">Save</button>",
+                        "target": [
+                          "button[data-testid=\"search-owner-save\"]"
+                        ]
+                      }
+                    ],
+                    "impact": "serious",
+                    "message": "Element has a 1:1 contrast ratio with the background"
+                  }
+                ],
+                "all": [],
+                "none": [],
+                "impact": "serious",
+                "html": "<button type=\"button\" data-causeway-action=\"save\" data-testid=\"search-owner-save\">Save</button>",
+                "target": [
+                  "button[data-testid=\"search-owner-save\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has a 1:1 contrast ratio with the background"
+              }
+            ]
+          }
+        ]
+      },
+      "cspViolations": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "pilot-forced-colors.jpg"
+    }
+  ],
+  "summary": {
+    "scenarios": 5,
+    "axeViolations": 0,
+    "cspViolations": 0,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "externalRequests": 0,
+    "overflowScenarios": 0
+  }
+}

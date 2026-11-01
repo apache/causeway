@@ -18,7 +18,14 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -32,12 +39,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-import org.jspecify.annotations.Nullable;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -123,7 +125,7 @@ public class RichActionInvokeResult extends Element {
 
         var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed())
-			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
+			throw new IllegalArgumentException(validityConsent.reasonAsString().orElse("Invalid"));
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();

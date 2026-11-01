@@ -1,0 +1,92 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.viewer.graphql.model.domain.rich.query;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+import graphql.Scalars;
+import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.application.ApplicationEntryService;
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
+import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
+class RichScalarMetadataFieldTest {
+
+    private final Context context = new Context(
+            mock(BookmarkService.class),
+            mock(SpecificationLoader.class),
+            mock(TypeMapper.class),
+            mock(ServiceRegistry.class),
+            mock(CausewayConfiguration.class, Answers.RETURNS_DEEP_STUBS),
+            mock(CausewaySystemEnvironment.class),
+            mock(ObjectManager.class),
+            mock(GraphQLTypeRegistry.class),
+            mock(ApplicationEntryService.class));
+
+    @Test
+    void exposesTheConfiguredNameDescriptionAndScalarType() {
+        var field = new RichScalarMetadataField(
+                context,
+                "friendlyName",
+                "Canonical name.",
+                Scalars.GraphQLString,
+                () -> "Customer name");
+
+        assertThat(field.getField().getName()).isEqualTo("friendlyName");
+        assertThat(field.getField().getDescription()).isEqualTo("Canonical name.");
+        assertThat(field.getField().getType()).isSameAs(Scalars.GraphQLString);
+    }
+
+    @Test
+    void evaluatesTheSupplierOnlyAtRequestTimeAndDoesNotCacheIt() {
+        var calls = new AtomicInteger();
+        var field = new RichScalarMetadataField(
+                context,
+                "description",
+                Scalars.GraphQLString,
+                calls::incrementAndGet);
+
+        assertThat(calls).hasValue(0);
+        assertThat(field.fetchData(null)).isEqualTo(1);
+        assertThat(field.fetchData(null)).isEqualTo(2);
+        assertThat(calls).hasValue(2);
+    }
+
+    @Test
+    void preservesNullAsGraphQLAbsence() {
+        var field = new RichScalarMetadataField(
+                context,
+                "description",
+                Scalars.GraphQLString,
+                () -> null);
+
+        assertThat(field.fetchData(null)).isNull();
+    }
+}
