@@ -78,8 +78,8 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     }
 
     @Override
-    public void detach() {
-        super.detach();
+    public void onDetachAlways() {
+        super.onDetachAlways();
         propertyNegotiationModel.clear();
     }
 
