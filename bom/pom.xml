@@ -98,6 +98,9 @@ identified
         Spring Boot 4 preview, remove later -->
         <htmlparser.version>2.1</htmlparser.version>
 
+        <jackson-bom.version>3.2.4</jackson-bom.version> <!-- overriding Spring -->
+        <jackson-2-bom.version>2.22.4</jackson-2-bom.version> <!-- 2.x and 3.x must converge on jackson-annotations -->
+
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.33.0-GA</javassist.version>
 
