@@ -20,8 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import jakarta.inject.Named;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.swagger.Format;
@@ -56,13 +54,8 @@ public record OpenApiSpecGenerator(
 
         return switch (format) {
 	        case JSON -> Json.pretty(swagger);
-	        case YAML -> {
-	            try {
-	                yield Yaml.pretty().writeValueAsString(swagger);
-	            } catch (JsonProcessingException e) {
-	                throw new RuntimeException(e);
-	            }}
-        	};
+	        case YAML -> Yaml.pretty().writeValueAsString(swagger);
+        };
     }
 
 }

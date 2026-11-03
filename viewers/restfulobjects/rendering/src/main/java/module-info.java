@@ -32,8 +32,8 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires static lombok;
 
     requires org.apache.causeway.viewer.restfulobjects.applib;
-    requires tools.jackson.core; requires com.fasterxml.jackson.core; //swagger 2.2.40
-    requires tools.jackson.databind; requires com.fasterxml.jackson.databind; //swagger 2.2.40
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
     requires jakarta.activation;
     requires jakarta.annotation;
     requires jakarta.inject;
@@ -54,5 +54,5 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires spring.core;
     requires io.swagger.v3.oas.models;
     requires io.swagger.v3.core;
-	
+
 }

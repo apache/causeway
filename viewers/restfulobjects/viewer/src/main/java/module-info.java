@@ -27,8 +27,6 @@ module org.apache.causeway.viewer.restfulobjects.viewer {
 
     requires static lombok;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
     requires jakarta.annotation;
     requires jakarta.inject;
     requires jakarta.transaction;

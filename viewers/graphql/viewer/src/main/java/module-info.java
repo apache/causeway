@@ -21,8 +21,6 @@ module org.apache.causeway.incubator.viewer.graphql.viewer {
     exports org.apache.causeway.viewer.graphql.viewer.integration;
     exports org.apache.causeway.viewer.graphql.viewer.controller;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
     requires com.graphqljava;
     requires jakarta.annotation;
     requires jakarta.inject;
