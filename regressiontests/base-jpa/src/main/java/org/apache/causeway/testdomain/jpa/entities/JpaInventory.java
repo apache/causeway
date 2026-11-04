@@ -79,7 +79,7 @@ public class JpaInventory {
 
     // 1:n relation
     @Collection
-    @OneToMany(cascade = CascadeType.PERSIST) @JoinColumn(nullable = true)
+    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(nullable = true)
     @ToString.Exclude
     @Getter @Setter
     private java.util.Collection<JpaProduct> products;
