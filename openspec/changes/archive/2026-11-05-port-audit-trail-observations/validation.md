@@ -42,6 +42,13 @@ The initial temporary-output attempt was rejected by safe-mode path confinement;
 Strict `openspec validate port-audit-trail-observations --strict` and `git diff --check` passed.
 The new capability contains four requirements; no existing capability requirements are replaced.
 
+## Archive checkpoint
+
+Implementation committed as `155174a0707`.
+Fresh post-checkpoint validation repeated the focused reactor build/install (five tests) and complete tracing/JPA suite (seventeen tests), all passing without skips.
+The delta requirements were synced directly to `openspec/specs/audit-trail-write-observation/spec.md` and the change archived on 2026-11-05.
+Roadmap step 8a is complete; entity-change evaluation (8b) remains next.
+
 ## Limits
 
 The export fixture invokes the actual audit subscriber and production interaction/action services, with a mocked repository executing real H2 table creation and inserts.
