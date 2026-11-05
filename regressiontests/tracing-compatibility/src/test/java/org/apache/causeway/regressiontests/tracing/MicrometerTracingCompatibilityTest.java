@@ -373,6 +373,53 @@ class MicrometerTracingCompatibilityTest {
         }
     }
 
+    @Test void auditCallbacksExportAggregateJdbcAncestryInBothOwners() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.audit=true");
+                var spans = collector.spans;
+                var audits = spans.stream().filter(s -> s.getName().equals("write audit trail")).toList();
+                assertEquals(4, audits.size(), names(spans));
+                assertEquals(1, audits.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                var roots = spans.stream().filter(s -> s.getName().equals("Causeway Root Interaction")).toList();
+                assertEquals(2, roots.size(), names(spans));
+                assertNotEquals(roots.get(0).getTraceId(), roots.get(1).getTraceId());
+                for (var root : roots) {
+                    assertEquals(2, audits.stream().filter(s -> s.getParentSpanId().equals(root.getSpanId())
+                            && s.getTraceId().equals(root.getTraceId())).count(), names(spans));
+                }
+                for (var audit : audits) {
+                    assertEquals("EntityPropertyChangeSubscriberForAuditTrail", attribute(audit, "causeway.bean"));
+                    assertEquals("ext.auditTrail", attribute(audit, "causeway.module"));
+                    assertEquals(java.util.Set.of("causeway.bean", "causeway.module"), audit.getAttributesList().stream()
+                            .map(KeyValue::getKey).filter(k -> k.startsWith("causeway.")).collect(Collectors.toSet()));
+                    assertFalse(audit.toString().contains("sentinel"), audit.toString());
+                    assertTrue(spans.stream().anyMatch(s -> s.getTraceId().equals(audit.getTraceId())
+                            && ancestorIs(spans, s, audit)
+                            && (mode.equals("agent") ? s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT
+                                    : s.getName().equals("fixture.audit.jdbc"))), names(spans));
+                }
+            }
+        }
+    }
+
+    @Test void auditCallbacksAreSafeWhenDisabledInactiveOrExporterIsAbsent() throws Exception {
+        for (String mode : List.of("boot", "agent", "inactive", "none")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.audit=true", "--fixture.audit-enabled=false");
+                assertFalse(collector.spans.stream().anyMatch(s -> s.getName().equals("write audit trail")), names(collector.spans));
+            }
+        }
+        for (String mode : List.of("inactive", "none")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.audit=true");
+                assertFalse(collector.spans.stream().anyMatch(s -> s.getName().equals("write audit trail")), names(collector.spans));
+                if (mode.equals("inactive")) assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT), names(collector.spans));
+                else assertTrue(collector.spans.isEmpty(), names(collector.spans));
+            }
+        }
+    }
+
     private static String attribute(final Span span, final String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);

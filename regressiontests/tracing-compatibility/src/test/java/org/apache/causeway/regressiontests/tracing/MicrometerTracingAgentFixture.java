@@ -89,6 +89,7 @@ public class MicrometerTracingAgentFixture {
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
             var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
+            boolean audit = context.getEnvironment().getProperty("fixture.audit", Boolean.class, false);
             boolean collections = context.getEnvironment().getProperty("fixture.collections", Boolean.class, false);
             boolean wicket = context.getEnvironment().getProperty("fixture.wicket", Boolean.class, false);
             boolean semantic = context.getEnvironment().getProperty("fixture.semantic", Boolean.class, false);
@@ -135,6 +136,10 @@ public class MicrometerTracingAgentFixture {
                         } else {
                             members.invokeAction(action);
                         }
+                        if (audit) AuditTrailTracingFixture.write(integration,
+                                context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")),
+                                context.getEnvironment().getProperty("fixture.audit-enabled", Boolean.class, true),
+                                exchange.getRequestURI().getQuery() != null);
                         if (exchange.getRequestURI().getQuery() != null) throw new IllegalStateException("fixture failure");
                         return null;
                     });
