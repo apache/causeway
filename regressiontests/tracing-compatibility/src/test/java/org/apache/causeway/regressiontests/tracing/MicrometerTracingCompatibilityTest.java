@@ -420,6 +420,58 @@ class MicrometerTracingCompatibilityTest {
         }
     }
 
+    @Test void evaluationAndAuditExportDistinctSiblingBoundariesInBothOwners() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            for (boolean fail : List.of(false, true)) {
+                try (var collector = new Collector()) {
+                    launch(mode, collector, "--fixture.evaluation=true", "--fixture.evaluation-fail=" + fail);
+                    var spans = collector.spans;
+                    var evaluations = spans.stream().filter(s -> s.getName().equals("evaluate property changes")).toList();
+                    var audits = spans.stream().filter(s -> s.getName().equals("write audit trail")).toList();
+                    assertEquals(2, evaluations.size(), names(spans));
+                    assertEquals(fail ? 2 : 4, audits.size(), names(spans));
+                    assertEquals(fail ? 1 : 0, evaluations.stream()
+                            .filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                    assertNotEquals(evaluations.get(0).getTraceId(), evaluations.get(1).getTraceId());
+                    for (var evaluation : evaluations) {
+                        var root = spans.stream().filter(s -> s.getSpanId().equals(evaluation.getParentSpanId()))
+                                .findFirst().orElseThrow(() -> new AssertionError(names(spans)));
+                        assertEquals("Causeway Root Interaction", root.getName());
+                        assertEquals(root.getTraceId(), evaluation.getTraceId());
+                        assertEquals("EntityChangeTrackerDefault", attribute(evaluation, "causeway.bean"));
+                        assertEquals("persistence.commons", attribute(evaluation, "causeway.module"));
+                        assertEquals(java.util.Set.of("causeway.bean", "causeway.module"), evaluation.getAttributesList().stream()
+                                .map(KeyValue::getKey).filter(k -> k.startsWith("causeway.")).collect(Collectors.toSet()));
+                        assertFalse(evaluation.toString().contains("sentinel"), evaluation.toString());
+                        assertTrue(spans.stream().anyMatch(s -> s.getTraceId().equals(evaluation.getTraceId())
+                                && ancestorIs(spans, s, evaluation)
+                                && (mode.equals("agent") ? s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT
+                                        : s.getName().equals("fixture.evaluation.jdbc"))), names(spans));
+                    }
+                    for (var audit : audits) {
+                        var evaluation = evaluations.stream().filter(s -> s.getTraceId().equals(audit.getTraceId())).findFirst().orElseThrow();
+                        assertEquals(evaluation.getParentSpanId(), audit.getParentSpanId());
+                        assertTrue(evaluation.getEndTimeUnixNano() <= audit.getStartTimeUnixNano(), names(spans));
+                        assertFalse(ancestorIs(spans, audit, evaluation), names(spans));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test void emptyInactiveAndAbsentExporterEvaluationRemainSafe() throws Exception {
+        for (String mode : List.of("boot", "agent", "inactive", "none")) {
+            boolean active = mode.equals("boot") || mode.equals("agent");
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.evaluation=true", "--fixture.evaluation-empty=" + active);
+                assertFalse(collector.spans.stream().anyMatch(s -> s.getName().equals("evaluate property changes")), names(collector.spans));
+                if (active) assertEquals(4, collector.spans.stream().filter(s -> s.getName().equals("write audit trail")).count());
+                else if (mode.equals("inactive")) assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT), names(collector.spans));
+                else assertTrue(collector.spans.isEmpty(), names(collector.spans));
+            }
+        }
+    }
+
     private static String attribute(final Span span, final String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);

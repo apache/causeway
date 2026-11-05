@@ -81,6 +81,6 @@ Inactive observation SHALL preserve post-value access, changed-record results, p
 
 #### Scenario: Inactive profile or absent exporter
 
-- **WHEN** evaluation runs with observation inactive or an exporter/agent absent
+- **WHEN** evaluation runs with observation inactive or without an exporting tracing pipeline
 - **THEN** evaluation and publication still run normally
 - **AND** no Causeway evaluation span is exported

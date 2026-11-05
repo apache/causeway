@@ -52,6 +52,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
 import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
@@ -117,6 +118,9 @@ implements
     TransactionSynchronization,
     Ordered {
 
+    static final String ENTITY_CHANGE_EVALUATION_OBSERVATION_NAME = "causeway.entitychange.evaluate";
+    static final String ENTITY_CHANGE_EVALUATION_CONTEXTUAL_NAME = "evaluate property changes";
+
     static AtomicInteger transactionCounter = new AtomicInteger(0);
 
     @Inject
@@ -124,7 +128,8 @@ implements
             final EntityPropertyChangePublisher entityPropertyChangePublisher,
             final EntityChangesPublisher entityChangesPublisher,
             final Provider<InteractionLayerTracker> interactionProviderProvider,
-            final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
+            final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService,
+            final CausewayObservationIntegration observationIntegration) {
 
         if(log.isDebugEnabled()) {
             var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
@@ -135,6 +140,7 @@ implements
         this.entityChangesPublisher = entityChangesPublisher;
         this.interactionTrackerProvider = interactionProviderProvider;
         this.preAndPostValueEvaluatorService = preAndPostValueEvaluatorService;
+        this.observationIntegration = observationIntegration;
     }
 
     @Programmatic
@@ -147,6 +153,7 @@ implements
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionLayerTracker> interactionTrackerProvider;
     private final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
+    private final CausewayObservationIntegration observationIntegration;
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
@@ -195,6 +202,17 @@ implements
     }
 
     private Set<PropertyChangeRecord> evaluateChangedProperties() {
+        if (enlistedPropertyChangeRecordsById.isEmpty()) {
+            return evaluateChangedPropertiesUnobserved();
+        }
+        return observationIntegration.provider(EntityChangeTrackerDefault.class,
+                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceCommons.NAMESPACE))
+                .get(ENTITY_CHANGE_EVALUATION_OBSERVATION_NAME)
+                .contextualName(ENTITY_CHANGE_EVALUATION_CONTEXTUAL_NAME)
+                .observe(this::evaluateChangedPropertiesUnobserved);
+    }
+
+    private Set<PropertyChangeRecord> evaluateChangedPropertiesUnobserved() {
         Set<PropertyChangeRecord> dirtiedProperties;
         try {
             dirtiedProperties = changedRecords(enlistedPropertyChangeRecordsById.values());

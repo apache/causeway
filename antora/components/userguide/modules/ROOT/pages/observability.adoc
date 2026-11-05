@@ -71,6 +71,24 @@ User identity attributes are included automatically alongside interaction correl
 In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
 Searches can only find traces that were sampled, exported and retained by the backend.
 
+== Entity property-change evaluation
+
+When candidate property-change records are enlisted, the tracker observes their aggregate evaluation as `causeway.entitychange.evaluate`, displayed as `evaluate property changes`.
+This encloses obtaining current post-values and comparing pre/post values, including SQL executed by derived accessors.
+There is one observation for the evaluation, not one per property or retry attempt.
+Empty candidate collections create no evaluation observation; candidates that ultimately have no publishable difference are still observed.
+
+The existing concurrent-modification defensive retry stays inside that same observation.
+Non-deadlock accessor errors already converted to unknown values retain that behavior, while escaping failures are recorded and rethrown unchanged.
+Lazy evaluation through tracker APIs is covered even before transaction completion, and subsequent use of the memoized result does not create another evaluation span.
+
+Evaluation inherits the current action, interaction, request or background context and closes before publication callbacks.
+Consequently `evaluate property changes` and `write audit trail` are siblings under their natural parent rather than nesting audit persistence inside evaluation.
+Existing transaction, publishing and JPA boundaries remain distinct, and Java-agent JDBC instrumentation remains agent-owned.
+Only static tracker bean and persistence module metadata are added, not entity/property identities, values, users, transaction IDs or counts.
+Inactive observation leaves evaluation and publication behavior unchanged and needs no new configuration.
+The regression fixture uses the real tracker, records and managed objects with controlled accessors/publishers and H2 SQL rather than a complete domain ORM deployment.
+
 == Audit-trail writing
 
 When audit persistence is enabled, the audit-trail subscriber wraps each repository callback in operation `causeway.audittrail.write`, displayed as `write audit trail`.

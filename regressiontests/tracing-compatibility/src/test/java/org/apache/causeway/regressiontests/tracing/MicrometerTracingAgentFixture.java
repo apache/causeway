@@ -89,6 +89,8 @@ public class MicrometerTracingAgentFixture {
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
             var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
+            boolean evaluation = context.getEnvironment().getProperty("fixture.evaluation", Boolean.class, false);
+            boolean evaluationFailure = context.getEnvironment().getProperty("fixture.evaluation-fail", Boolean.class, false);
             boolean audit = context.getEnvironment().getProperty("fixture.audit", Boolean.class, false);
             boolean collections = context.getEnvironment().getProperty("fixture.collections", Boolean.class, false);
             boolean wicket = context.getEnvironment().getProperty("fixture.wicket", Boolean.class, false);
@@ -136,7 +138,15 @@ public class MicrometerTracingAgentFixture {
                         } else {
                             members.invokeAction(action);
                         }
-                        if (audit) AuditTrailTracingFixture.write(integration,
+                        if (evaluation) {
+                            boolean agent = context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent"));
+                            org.apache.causeway.persistence.commons.integration.changetracking.EntityChangeEvaluationTracingFixture.evaluate(
+                                    integration, agent,
+                                    context.getEnvironment().getProperty("fixture.evaluation-empty", Boolean.class, false),
+                                    evaluationFailure && exchange.getRequestURI().getQuery() != null,
+                                    () -> AuditTrailTracingFixture.write(integration, agent, true,
+                                            !evaluationFailure && exchange.getRequestURI().getQuery() != null));
+                        } else if (audit) AuditTrailTracingFixture.write(integration,
                                 context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")),
                                 context.getEnvironment().getProperty("fixture.audit-enabled", Boolean.class, true),
                                 exchange.getRequestURI().getQuery() != null);
