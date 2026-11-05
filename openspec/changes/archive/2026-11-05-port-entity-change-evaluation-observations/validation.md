@@ -41,6 +41,14 @@ The observability guide rendered successfully with Asciidoctor 2.0.26 Ruby core 
 Safe-mode conversion wrote `target/evaluation-observability.html`, containing the new evaluation section.
 Strict change validation and whitespace checks passed.
 
+## Archive checkpoint
+
+Implementation committed as `5460d2fbbf6`.
+Fresh post-checkpoint validation built and installed `persistence/commons,extensions/security/audittrail/applib` with both focused test classes: all eight tracker and five audit tests passed without skips.
+The complete tracing/JPA suite then passed all nineteen tests again without skips.
+Five requirements were synced directly to `openspec/specs/entity-change-evaluation-observation/spec.md` and the change archived on 2026-11-05.
+Roadmap step 8b is complete; step 9, application-defined spans (CAUSEWAY-4065), is next.
+
 ## Limits
 
 Property records and managed-object wrappers are real, while the metamodel, accessors, comparison service, interaction-tracker provider and publisher collaborators are controlled.
