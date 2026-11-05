@@ -1,7 +1,7 @@
 = Observability
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Causeway's `observation` Spring profile enables framework observations for interactions, actions, property editing, transactions, execution publishing, metamodel initialization and JPA operations.
+Causeway's `observation` Spring profile enables framework observations for interactions, actions, property editing, transactions, execution publishing, audit-trail writing, metamodel initialization and JPA operations.
 Without that profile, Causeway uses a no-op integration; an application's own observation registry remains usable.
 
 == Boot-managed tracing
@@ -70,6 +70,22 @@ It is distinct from the trace ID and retains the command's identifier during rep
 User identity attributes are included automatically alongside interaction correlation; they are not added as metric labels.
 In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
 Searches can only find traces that were sampled, exported and retained by the backend.
+
+== Audit-trail writing
+
+When audit persistence is enabled, the audit-trail subscriber wraps each repository callback in operation `causeway.audittrail.write`, displayed as `write audit trail`.
+An individual callback creates one observation; a bulk callback creates one aggregate observation, not one per audit entry.
+Small publications delivered as individual callbacks can therefore produce sibling audit spans.
+
+The observation inherits the context current at callback entry, whether an action, interaction, request or background boundary; it does not reconstruct an action parent.
+Synchronous entry creation, initialization, persistence and flushing are enclosed, so JDBC work remains beneath that audit boundary.
+Java-agent JDBC instrumentation remains agent-owned; Boot deployments retain their configured JDBC instrumentation.
+Repository failures are recorded and rethrown unchanged, and scopes close on success and failure.
+
+Audit observations add only static bean and module metadata, not changed properties, targets, old/new values, identities or entry counts.
+They require no new configuration beyond the audit extension and existing observation setup.
+Disabled audit persistence creates neither repository work nor audit observations, and inactive observation leaves persistence behavior unchanged.
+The exported-trace regression uses the actual subscriber with controlled H2 repository work rather than a complete audit entity ORM deployment.
 
 == JPA span retention
 
