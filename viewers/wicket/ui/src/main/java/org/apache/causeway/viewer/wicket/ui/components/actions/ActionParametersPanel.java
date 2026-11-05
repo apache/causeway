@@ -23,6 +23,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationPolicy;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -48,6 +51,9 @@ extends PanelAbstract<ManagedObject, ActionModel> {
     public ActionParametersPanel(final String id, final ActionModel actionModel, final boolean showHeader) {
         super(id, actionModel);
         this.showHeader = showHeader;
+        var actionId = WicketRenderObservationPolicy.actionIdentifier(actionModel);
+        WicketRenderObservationBehavior.addTo(this, WicketRenderObservationDescriptor.actionPrompt(
+                actionId.logicalTypeName(), actionId.getLogicalIdentityString("#"), actionId.memberLogicalName()));
     }
 
     ActionModel getActionModel() {

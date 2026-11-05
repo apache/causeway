@@ -112,6 +112,23 @@ In Jaeger:
 +
 HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
 
+* Inspect the HTTP entry span and its display name.
++
+In both Boot-managed and agent-managed tracing, Causeway names eligible foreground requests from their domain outcome: `act <logical-type>#<action>`, `prompt <logical-type>#<action>` or `view <logical-type>`.
+In Wicket, opening Mary Smith's object page gives `view petclinic.PetOwner`; opening *Update Name* gives `prompt petclinic.PetOwner#updateName`; submitting that action gives `act petclinic.PetOwner#updateName`.
+Use fresh requests for each operation, then refresh *Find Traces* to inspect their names in the trace list.
++
+An eligible top-level action takes priority over a prompt, which takes priority over a page view; the first candidate wins ties.
+The selected entry has `causeway.trace.name` and the complete `causeway.action.id` (including parameter types) or `causeway.object.type`.
+These entry attributes describe static domain identity; `causeway.user.name`, tenancy and interaction UUID remain on the root interaction span.
++
+Action naming applies to matching top-level commands across servlet entry points, including GraphQL/HTMX.
+Page-view and prompt nominations come from Wicket rendering.
+A request without a supported outcome, such as a static-resource request or an arbitrary Ajax subtree refresh, retains its HTTP display name.
+Wicket detail and span-budget settings do not suppress entry-name nominations, even with `NONE` detail or an exhausted budget.
+HTTP method, route/path and status attributes remain available; use those attributes when you want to group by route rather than domain outcome.
+Naming covers synchronous work in the initial request dispatch, without propagating nominations to asynchronous continuations.
+
 * Expand the span tree and inspect the spans
 +
 Span display names identify the domain member being interacted with, for example `act petclinic.PetOwner#updateName`, `prop petclinic.PetOwner#name` or `coll petclinic.PetOwner#visits`.
@@ -128,6 +145,53 @@ instance identifiers, object titles or argument values are _not_ included in the
 ====
 
 
+* For Wicket object pages, inspect the preparation and rendering regions.
++
+Opening an owner shows `prepare petclinic.PetOwner` for building/configuring the page and preparing its child components, followed by `render petclinic.PetOwner` for rendering the page markup.
+The preparation scope finishes before markup rendering starts.
+Within the page render, look for regions such as `render fieldset identity`, `render property petclinic.PetOwner#name` and `render collection petclinic.PetOwner#visits`.
+Object action controls have `render action <logical-type>#<member>` regions.
+These describe UI rendering; `act`, `prop` and `coll` spans describe domain member execution and access.
++
+Open the owner's *Update Name* action prompt to see `prompt petclinic.PetOwner#updateName`.
+Inspect its `causeway.action.id` attribute for the complete identifier, including declared parameter types: `petclinic.PetOwner#updateName(java.lang.String)`.
+Region spans carry `causeway.object.type` and, where applicable, `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id` or `causeway.action.id`.
+Full identifier attributes remain intact when a display name is shortened.
+In Jaeger's *Attributes* search field, for example use `causeway.action.id="petclinic.PetOwner#updateName(java.lang.String)"` with *All Span Names* selected; this can find action execution, action-control rendering and prompt rendering.
++
+Ajax updates render only the selected component subtree, so they can contain member rendering regions without a page-render region.
+Hidden regions and action parameter widgets do not produce domain-property rendering regions.
+These Wicket regions work in both tracing modes with the existing launcher and configuration.
+HTMX `/graphql` traces retain their domain-operation spans; they do not contain Wicket regions.
+Parented collections also have `prepare collection <logical-type>#<member>` and table/header/body/footer rendering regions.
+Within the table body, `render row <element-type>` encloses logical property and row-action rendering; `prepare row <element-type>` measures row population during collection preparation.
+Only rows participating in the current page or Ajax update are measured.
+Header labels, navigation controls and decorative cells do not produce member spans.
+The HTTP entry display describes the request outcome; these child regions describe rendering work within that request.
++
+The default detail is `MEMBERS`, with no Wicket span limit.
+To reduce collection detail and bound the number of Causeway semantic Wicket observations, export settings before starting the existing launcher:
++
+[source,bash]
+----
+export CAUSEWAY_VIEWER_WICKET_OBSERVATION_DETAIL=REGIONS
+export CAUSEWAY_VIEWER_WICKET_OBSERVATION_MAX_SPANS_PER_REQUEST=100
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
++
+These startup settings work in both tracing modes; add `--agent` to the launcher command for agent-managed tracing.
+Detail is cumulative: `NONE` omits Causeway semantic Wicket observations, `PAGE` includes page preparation/rendering and prompts, `REGIONS` adds fieldsets, collections and table phases, `ROWS` adds row preparation/rendering, and `MEMBERS` adds logical properties and eligible actions.
+The limit counts admitted observations across the entire request, including preparation and all collections; closing an observation does not free a place.
+`0` means unlimited.
+A small part of a finite budget is reserved for page/region observations, but a sufficiently small budget can omit those too.
+The enclosing Apache Wicket Request Cycle, HTTP, interaction, transaction, domain-execution, JPA and agent JDBC spans are unaffected.
++
+Select an admitted collection preparation/render span in Jaeger to inspect `causeway.wicket.collection.row.count`, `causeway.wicket.collection.row.duration.total.nanos` and `causeway.wicket.collection.row.duration.max.nanos`.
+Render spans also report `causeway.wicket.collection.logical-cell.count` and, when positive, `causeway.wicket.collection.suppressed.children`.
+These describe participating callbacks, not total collection size; row durations and logical-cell counts remain available when child spans are omitted.
+Positive `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` attributes on surviving page/region spans explain omissions.
+There is no summary span if its carrier was itself omitted.
+Unset the two exported variables to restore defaults for the next application start.
 
 
 === Micrometer

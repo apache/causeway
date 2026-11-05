@@ -71,6 +71,14 @@ public final class CausewayObservationNaming {
         return bounded(prefix + simpleTypeName(typeName) + "#" + memberName);
     }
 
+    /** Formats a render region without including action signatures in its display name. */
+    public static String forRenderRegion(final String region, final String identifier) {
+        final String id = requireText(identifier, "identifier");
+        final int parameters = id.indexOf('(');
+        return forLogicalMember("render " + requireText(region, "region"),
+                parameters >= 0 ? id.substring(0, parameters) : id.replace("<default>", "default"));
+    }
+
     public static String bounded(final String contextualName) {
         final String name = requireText(contextualName, "contextualName");
         return name.length() <= MAX_CONTEXTUAL_NAME_LENGTH

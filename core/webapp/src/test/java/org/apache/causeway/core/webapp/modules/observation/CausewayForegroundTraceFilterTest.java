@@ -31,9 +31,29 @@ import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
 import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 
 class CausewayForegroundTraceFilterTest {
+    @Test void failureAppliesCapturedEntryNameAndLeavesLaterRequestUnnominated() throws Exception {
+        var classifier = mock(CausewayTraceClassifier.class);
+        var tracer = mock(io.micrometer.tracing.Tracer.class);
+        var failedEntry = mock(io.micrometer.tracing.Span.class);
+        var laterEntry = mock(io.micrometer.tracing.Span.class);
+        when(tracer.currentSpan()).thenReturn(failedEntry, laterEntry);
+        var filter = new CausewayForegroundTraceFilter(classifier,
+                new org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer(tracer));
+        var failure = new ServletException("work failed");
+        assertSame(failure, assertThrows(ServletException.class, () ->
+            filter.doFilter(new MockHttpServletRequest(), new MockHttpServletResponse(), (req, res) -> {
+                org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.nominateAction("demo.Owner#run()");
+                throw failure;
+            })));
+        filter.doFilter(new MockHttpServletRequest(), new MockHttpServletResponse(), (req, res) -> {});
+        verify(failedEntry).name("act demo.Owner#run");
+        verify(laterEntry, never()).name(anyString());
+        verify(failedEntry, never()).end(); verify(laterEntry, never()).end();
+    }
+
     @Test void classifiesEveryEntryPathBeforeDownstreamWork() throws Exception {
         var classifier = mock(CausewayTraceClassifier.class);
-        var filter = new CausewayForegroundTraceFilter(classifier);
+        var filter = new CausewayForegroundTraceFilter(classifier, new org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer(io.micrometer.tracing.Tracer.NOOP));
         for (String path : new String[]{"/wicket/", "/graphql", "/restful/", "/static/test.js"}) {
             clearInvocations(classifier);
             var request = new MockHttpServletRequest("GET", path);
@@ -47,7 +67,7 @@ class CausewayForegroundTraceFilterTest {
     }
     @Test void propagatesFailureAndCleansRequestMarker() throws Exception {
         var classifier = mock(CausewayTraceClassifier.class);
-        var filter = new CausewayForegroundTraceFilter(classifier);
+        var filter = new CausewayForegroundTraceFilter(classifier, new org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer(io.micrometer.tracing.Tracer.NOOP));
         var request = new MockHttpServletRequest();
         var response = new MockHttpServletResponse();
         var failure = new ServletException("downstream");
@@ -58,7 +78,7 @@ class CausewayForegroundTraceFilterTest {
     }
     @Test void skipsAsyncAndErrorRedispatch() throws Exception {
         var classifier = mock(CausewayTraceClassifier.class);
-        var filter = new CausewayForegroundTraceFilter(classifier);
+        var filter = new CausewayForegroundTraceFilter(classifier, new org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer(io.micrometer.tracing.Tracer.NOOP));
         for (var type : new DispatcherType[]{DispatcherType.ASYNC, DispatcherType.ERROR}) {
             var request = new MockHttpServletRequest();
             request.setDispatcherType(type);

@@ -40,6 +40,19 @@ import io.micrometer.observation.ObservationHandler;
 import io.micrometer.observation.ObservationRegistry;
 
 class MemberObservationPolicyTest {
+    @Test void traceNominationRequiresRequestedRealActionAndKeepsSignature() {
+        var canonical = Identifier.actionIdentifier(LogicalType.eager(Target.class, "demo.Owner"), "UpdateName", String.class);
+        var span = mock(io.micrometer.tracing.Span.class);
+        try (var naming = org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer.open(span)) {
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(true, true, canonical);
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(false, false, canonical);
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(false, true, null);
+            MemberExecutorServiceDefault.nominateSemanticTraceActionIfEligible(false, true, canonical);
+        }
+        verify(span).name("act demo.Owner#UpdateName");
+        verify(span).tag("causeway.action.id", canonical.getLogicalIdentityString("#"));
+    }
+
     @Test void propertyMetadataDoesNotChangeInvocationOrIncludeValues() {
         var stopped = new ArrayList<Observation.Context>();
         var integration = integration(stopped);

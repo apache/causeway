@@ -163,6 +163,116 @@ class MicrometerTracingCompatibilityTest {
         assertFalse((jpa.getName() + jpa.getAttributesList()).contains("sentinel"));
         assertTrue(action.getAttributesList().stream().anyMatch(a -> a.getKey().equals("causeway.member.id")));
     }
+    @Test void wicketRegionsExportRealRenderAndAjaxAncestryInBothModes() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.wicket=true");
+                var spans = collector.spans;
+                var regions = spans.stream().filter(span -> attribute(span, "causeway.object.type") != null).toList();
+                assertFalse(regions.isEmpty(), names(spans));
+                for (var region : regions) {
+                    assertTrue(region.getName().length() <= 50);
+                    assertEquals("fixture.UpperCaseOwner", attribute(region, "causeway.object.type"));
+                    assertTrue(region.getName().contains("UpperCaseOwner") || region.getName().equals("render fieldset identity"), names(spans));
+                    var parent = spans.stream().filter(span -> span.getSpanId().equals(region.getParentSpanId())).findFirst().orElseThrow(() -> new AssertionError(names(spans)));
+                    assertEquals(parent.getTraceId(), region.getTraceId());
+                }
+                assertEquals(2, regions.stream().filter(span -> span.getName().equals("prepare fixture.UpperCaseOwner")).count());
+                assertEquals(2, regions.stream().filter(span -> span.getName().equals("render fixture.UpperCaseOwner")).count());
+                var properties = regions.stream().filter(span -> attribute(span, "causeway.property.id") != null).toList();
+                assertEquals(3, properties.size(), names(spans)); // failed full render, successful full render, Ajax update
+                assertEquals(1, properties.stream().filter(span -> span.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                assertEquals(1, regions.stream().filter(span -> span.getName().equals("prompt fixture.UpperCaseOwner#updateName")).count());
+                assertTrue(regions.stream().anyMatch(span -> "fixture.UpperCaseOwner#updateName(java.lang.String)".equals(attribute(span, "causeway.action.id"))));
+                var framework = spans.stream().filter(span -> span.getName().startsWith("Apache Wicket Request Cycle")).toList();
+                assertTrue(framework.stream().anyMatch(span -> span.getName().endsWith("(AJAX)")), names(spans));
+                for (var property : properties) {
+                    var actions = spans.stream().filter(span -> span.getParentSpanId().equals(property.getSpanId()) && span.getName().startsWith("act ")).toList();
+                    assertEquals(1, actions.size(), names(spans));
+                    assertJpaAncestry(spans, actions.get(0), mode.equals("agent"));
+                }
+                var ajax = framework.stream().filter(span -> span.getName().endsWith("(AJAX)")).findFirst().orElseThrow();
+                var ajaxRoot = spans.stream().filter(span -> span.getParentSpanId().equals(ajax.getSpanId()) && span.getName().equals("Causeway Root Interaction")).findFirst().orElseThrow();
+                assertTrue(properties.stream().anyMatch(span -> span.getParentSpanId().equals(ajaxRoot.getSpanId())));
+                for (var request : framework) {
+                    assertTrue(spans.stream().anyMatch(span -> span.getSpanId().equals(request.getParentSpanId()) && span.getKind() == Span.SpanKind.SPAN_KIND_SERVER), names(spans));
+                }
+            }
+        }
+    }
+    @Test void collectionCallbacksExportInBothModesWithSummariesAndAdmission() throws Exception {
+        for(String mode : List.of("boot", "agent")) {
+            for(String detail : List.of("MEMBERS", "REGIONS")) {
+                try(var collector = new Collector()) {
+                    launch(mode, collector, "--fixture.collections=true",
+                            "--causeway.viewer.wicket.observation.detail=" + detail);
+                    var spans = collector.spans;
+                    var collections = spans.stream().filter(span -> span.getName().startsWith("render collection ")).toList();
+                    assertEquals(3, collections.size(), names(spans)); // failed full render, successful full render, Ajax
+                    assertTrue(collections.stream().anyMatch(span -> "2".equals(attribute(span, "causeway.wicket.collection.row.count"))), names(spans));
+                    assertTrue(collections.stream().anyMatch(span -> "2".equals(attribute(span, "causeway.wicket.collection.logical-cell.count"))), names(spans));
+                    var rows = spans.stream().filter(span -> span.getName().startsWith("render row ")).toList();
+                    assertEquals(detail.equals("MEMBERS"), !rows.isEmpty(), names(spans));
+                    for(var row : rows) {
+                        var parent = spans.stream().filter(span -> span.getSpanId().equals(row.getParentSpanId())).findFirst().orElseThrow();
+                        assertTrue(parent.getName().startsWith("render table body "), names(spans));
+                        assertEquals("fixture.CollectionOwner#items", attribute(row, "causeway.collection.id"));
+                    }
+                    var actions = spans.stream().filter(span -> span.getName().startsWith("act ")).toList();
+                    assertFalse(actions.isEmpty(), names(spans));
+                    for(var action : actions) assertJpaAncestry(spans, action, mode.equals("agent"));
+                    if(detail.equals("REGIONS")) assertTrue(spans.stream().anyMatch(span -> attribute(span, "causeway.wicket.suppressed.detail") != null));
+                }
+            }
+        }
+    }
+    @Test void collectionBudgetIsHardAndDoesNotSuppressDomainWork() throws Exception {
+        for(String mode : List.of("boot", "agent")) {
+            try(var collector = new Collector()) {
+                launch(mode, collector, "--fixture.collections=true", "--causeway.viewer.wicket.observation.max-spans-per-request=5");
+                var spans = collector.spans;
+                var frameworks = spans.stream().filter(span -> span.getName().startsWith("Apache Wicket Request Cycle")).toList();
+                assertTrue(frameworks.stream().anyMatch(span -> span.getName().endsWith("(AJAX)")), names(spans));
+                for(var framework : frameworks) {
+                    long count = spans.stream().filter(span -> attribute(span, "causeway.object.type") != null
+                            && ancestorIs(spans, span, framework)).count();
+                    assertTrue(count <= 5, names(spans));
+                }
+                // Group by framework interactions: the agent can add servlet
+                // boundaries inside the synthetic WicketTester HTTP requests.
+                var roots = spans.stream().filter(span -> span.getName().equals("Causeway Root Interaction")).toList();
+                long accounted = 0;
+                for(var root : roots) {
+                    long count = spans.stream().filter(span ->
+                            "fixture.CollectionOwner".equals(attribute(span, "causeway.object.type"))
+                            && ancestorIs(spans, span, root)).count();
+                    assertTrue(count <= 5, names(spans));
+                    accounted += count;
+                }
+                assertEquals(15, accounted, names(spans)); // failed full render, success, Ajax
+                assertTrue(spans.stream().anyMatch(span -> attribute(span, "causeway.wicket.suppressed.budget") != null));
+                assertTrue(spans.stream().anyMatch(span -> span.getName().startsWith("act ")), names(spans));
+            }
+        }
+    }
+    private static boolean ancestorIs(List<Span> spans, Span span, Span ancestor) {
+        for(int depth=0; depth<100 && !span.getParentSpanId().isEmpty(); depth++) {
+            if(span.getParentSpanId().equals(ancestor.getSpanId())) return true;
+            var parentId = span.getParentSpanId();
+            var parent = spans.stream().filter(candidate -> candidate.getSpanId().equals(parentId)).findFirst();
+            if(parent.isEmpty()) return false;
+            span = parent.get();
+        }
+        return false;
+    }
+    @Test void wicketRegionsAreSafeWhenInactiveOrExporterIsAbsent() throws Exception {
+        for (String mode : List.of("inactive", "none")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.wicket=true");
+                assertFalse(collector.spans.stream().anyMatch(span -> attribute(span, "causeway.object.type") != null));
+            }
+        }
+    }
     @Test void inactiveProfileLeavesAutomaticAgentSpansWorking() throws Exception {
         try (var collector = new Collector()) {
             launch("inactive", collector);
@@ -221,6 +331,48 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
+    @Test void semanticEntryNamesSurviveExportInBothOwnersAndAdmissionSettings() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            for (String setting : List.of("--causeway.viewer.wicket.observation.detail=MEMBERS",
+                    "--causeway.viewer.wicket.observation.detail=NONE",
+                    "--causeway.viewer.wicket.observation.max-spans-per-request=1")) {
+                try (var collector = new Collector()) {
+                    launchFixture(SemanticTraceTracingFixture.class, mode, collector, setting);
+                    var entries = collector.spans.stream().filter(s -> "foreground".equals(attribute(s, "causeway.execution.mode"))).toList();
+                    assertEquals(6, entries.size(), names(collector.spans));
+                    assertEquals(1, entries.stream().filter(s -> s.getName().equals("view " + SemanticTraceTracingFixture.TYPE)).count(), names(entries));
+                    assertEquals(1, entries.stream().filter(s -> s.getName().equals("prompt " + SemanticTraceTracingFixture.TYPE + "#UpdateName")).count(), names(entries));
+                    assertEquals(2, entries.stream().filter(s -> s.getName().equals("act " + SemanticTraceTracingFixture.TYPE + "#UpdateName")).count(), names(entries));
+                    assertEquals(2, entries.stream().filter(s -> attribute(s, "causeway.trace.name") == null).count(), names(entries));
+                    for (var entry : entries) {
+                        assertEquals(Span.SpanKind.SPAN_KIND_SERVER, entry.getKind());
+                        assertEquals("0123456789abcdef0123456789abcdef", java.util.HexFormat.of().formatHex(entry.getTraceId().toByteArray()));
+                        assertEquals("0123456789abcdef", java.util.HexFormat.of().formatHex(entry.getParentSpanId().toByteArray()));
+                        assertEquals("GET", attribute(entry, mode.equals("boot") ? "method" : "http.request.method"), entry.toString());
+                        String status = entry.getAttributesList().stream()
+                                .filter(a -> a.getKey().equals(mode.equals("boot") ? "status" : "http.response.status_code"))
+                                .map(a -> a.getValue().hasIntValue() ? Long.toString(a.getValue().getIntValue()) : a.getValue().getStringValue())
+                                .findFirst().orElseThrow(() -> new AssertionError(entry.toString()));
+                        assertEquals("/fail".equals(attribute(entry, mode.equals("boot") ? "http.url" : "url.path")) ? "500" : "204", status);
+                        assertNotNull(attribute(entry, mode.equals("boot") ? "http.url" : "url.path"), entry.toString());
+                        assertNotNull(attribute(entry, mode.equals("boot") ? "uri" : "http.route"), entry.toString());
+                        if (attribute(entry, "causeway.trace.name") != null) assertEquals(entry.getName(), attribute(entry, "causeway.trace.name"));
+                        if (entry.getName().startsWith("act ") || entry.getName().startsWith("prompt ")) {
+                            assertEquals(SemanticTraceTracingFixture.ACTION, attribute(entry, "causeway.action.id"));
+                        }
+                        if (entry.getName().startsWith("view ")) assertEquals(SemanticTraceTracingFixture.TYPE, attribute(entry, "causeway.object.type"));
+                        var children = collector.spans.stream().filter(s -> s.getName().equals("fixture.security") && s.getParentSpanId().equals(entry.getSpanId())).toList();
+                        assertEquals(1, children.size(), names(collector.spans));
+                        assertEquals(entry.getTraceId(), children.get(0).getTraceId());
+                        assertNull(attribute(children.get(0), "causeway.trace.name"));
+                    }
+                    if (setting.endsWith("NONE")) assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("render ") || s.getName().startsWith("prompt ") && !entries.contains(s)), names(collector.spans));
+                    assertEquals(6, entries.stream().map(Span::getSpanId).distinct().count());
+                }
+            }
+        }
+    }
+
     private static String attribute(final Span span, final String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);
