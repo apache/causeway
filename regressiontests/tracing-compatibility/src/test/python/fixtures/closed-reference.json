@@ -1,0 +1,15 @@
+{
+  "format": "synthetic-closed-graph-v1",
+  "closure": "explicit synthetic fixture manifest, not a production completion signal",
+  "threshold_ns": 10000000,
+  "spans": [
+    {"trace_id": "fixture-trace", "span_id": "root", "parent_id": "", "name": "synthetic root", "start_ns": 0, "end_ns": 1000000, "error": false, "attributes": {"fixture": "no application data"}},
+    {"trace_id": "fixture-trace", "span_id": "parent", "parent_id": "root", "start_ns": 0, "end_ns": 1000000, "error": false},
+    {"trace_id": "fixture-trace", "span_id": "slow", "parent_id": "parent", "start_ns": 0, "end_ns": 20000000, "error": false, "links": [{"trace_id": "external-trace", "span_id": "external-span"}]},
+    {"trace_id": "fixture-trace", "span_id": "failed", "parent_id": "parent", "start_ns": 0, "end_ns": 1000000, "error": true, "events": [{"name": "exception"}]},
+    {"trace_id": "fixture-trace", "span_id": "trivial", "parent_id": "root", "start_ns": 0, "end_ns": 1000000, "error": false},
+    {"trace_id": "fixture-trace", "span_id": "external-entry", "parent_id": "outside-capture", "start_ns": 0, "end_ns": 1000000, "error": false}
+  ],
+  "expected_retained": ["root", "parent", "slow", "failed", "external-entry"],
+  "expected_pruned": ["trivial"]
+}

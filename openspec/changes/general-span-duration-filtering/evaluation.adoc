@@ -1,0 +1,151 @@
+= Span duration filtering evaluation (CAUSEWAY-4080)
+
+Status: investigation complete; *no-go for unrestricted live individual-span pruning* under the existing contracts.
+Closed-dataset pruning is conditionally feasible for offline analysis only; no production filtering is enabled.
+
+== Baseline
+
+The investigation branch is `CAUSEWAY-4080`, with planning checkpoint `5426c84be1c`.
+Current application profiles and the single Boot/agent SDK/export ownership remain unchanged.
+The existing tracing compatibility fixture supplies the retain-all reference; experimental captures and replay output are isolated under its ignored target directory.
+
+Resolved versions on 2026-11-06: Boot 4.2.0-RC1, Micrometer Observation 1.18.0-RC1, Micrometer Tracing 1.8.0-RC1, OTel API/SDK 1.67.0, Java agent 2.33.1, OTLP protobuf 1.11.1-alpha and protobuf-java 4.36.2.
+Java execution uses 25.0.4-tem; Python experiments use the standard library only.
+Dependency evidence: `/tmp/causeway-duration-dependencies.log`, produced with the tracing module's Maven `dependency:list` goal.
+
+== Architecture comparison
+
+|===
+|Location |Visibility / completion |Ownership / operational cost |Savings boundary |Assessment
+
+|JVM SpanProcessor/exporter |Sees only that process's spans; onEnd does not close async/remote descendants |Would require separately integrated Boot and agent hooks; must not add a second SDK |Potential application export savings if buffering were safe |Reject unrestricted local pruning: cannot prove distributed ancestor closure
+|Collector trace buffer |Can group received spans by trace ID, but routing/late/missing spans remain assumptions |Stateful deployment, trace-affine routing, bounded buffering and decision caches |Potential Collector-to-backend savings, not application-to-Collector savings |Prototype replay boundary; completion remains a feasibility gate
+|Backend/UI |Can inspect stored graph; incomplete ingestion and backend-specific queries still matter |Backend-dependent; no SDK ownership change |Display noise; storage already paid unless a separate storage transformation exists |Viable separately scoped alternative, not export filtering
+|Whole-trace tail sampling |Keeps/drops a trace decision, not individual trivial spans |Existing Collector component with state/cache/routing requirements |Downstream trace volume |Control only; not a replacement answer to the individual-span question
+|===
+
+Pinned Collector source reference: https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.164.1/processor/tailsamplingprocessor/README.md[contrib v0.164.1 tail-sampling README], latest release at the lookup date (published 2026-10-26).
+It states that all spans for a trace must reach the same Collector and that late spans may inherit cached decisions without influencing the original decision; after cache removal they may be reconsidered as a new trace fragment.
+Its decision wait and trace limits are operational bounds, not proof of distributed completeness.
+The Collector binary is not installed or deployed by this investigation.
+
+API sources checked before prototype work include protobuf generated-message serialization and the resolved Micrometer 1.8.0-RC1 Tracer/Span/TraceContext builder signatures.
+
+== Experiment contract
+
+The candidate is a standard-library replay buffer, not a production processor or Collector plugin.
+Only a trusted closed-fixture manifest permits pruning; timeout/pressure/unknown data retains input and switches the replay session to conservative pass-through.
+A deliberately unsafe wait-window mode is a negative control used to demonstrate the late-descendant failure, never a supported setting.
+Default replay bounds are eight pending traces, 256 pending spans, 1 MiB of serialized pending model data, decision age 100 replay-clock units, eight cached decisions and cache lifetime 100 units.
+The declared larger corpus preset is 128 traces, 4,096 spans, 16 MiB and 128 cached decisions, retaining the same age/lifetime settings.
+These bound queued model data and identity-cache counts, not total process RSS or the caller's already-materialized input.
+Declared benchmarks use three warmups and ten measured repetitions over small (32 spans), deep (1,024), deep-with-error (1,024) and concurrent (64 traces × 32 spans) datasets at an experimental 10 ms threshold.
+No value is a supported production default.
+
+== Initial conformance and real export results
+
+The oracle/replay conformance suite passed 17 deterministic Python tests, including intentionally unsafe negative controls.
+IDE compilation succeeded without reported problems.
+The opt-in async/remote-context export test passed in both owners: one JUnit test launches separate Boot and agent child processes.
+The controlled child starts after its observation parent ends, retains that parent ID and exports ERROR status under a fixture-supplied external parent context.
+This is real async/export evidence with a controlled remote-parent context, not a second remote service or proof of distributed completion.
+Smoke captures are in `regressiontests/tracing-compatibility/target/span-duration-evaluation/smoke/`; Maven evidence is `/tmp/causeway-duration-smoke.log`.
+
+The first combined corpus/benchmark runner exposed an overly strict sequence-equality assertion: replay emits trace groups while the oracle preserves interleaved arrival order.
+The comparison now checks unique retained identities and complete payloads rather than unrelated cross-trace ordering, with regression tests that still reject missing, changed or duplicate payloads.
+The full corpus/measurement run subsequently passed.
+
+== Full exported corpus
+
+The full opt-in Maven run passed *24 tests*, comprising the original 23 compatibility/policy tests and the additional async scenario, without failures or skips.
+Of 58 generated capture files, 42 non-empty Boot/agent captures were evaluated; inactive/no-export/other modes are deliberately excluded from pruning measurements, not counted as missing spans.
+Each file is a separate fixture invocation; totals are sums across experiments, not a merged distributed trace.
+
+[cols="<,>,>,>,<,>,>"]
+|===
+|Mode |Captures |Input spans |Retained spans |Serialized Span bytes before → after |Offline span reduction |Offline message-byte reduction
+
+|Boot |21 |500 |182 |400,448 → 309,474 |63.60% |22.72%
+|Agent |21 |633 |241 |472,016 → 331,271 |61.93% |29.82%
+|===
+
+All 1,133 captured spans were checked; 423 were retained by the closed-dataset policy and within-preset replay.
+There were *zero newly orphaned retained parent edges* and zero changed retained payloads.
+All slow/error spans and their captured ancestor paths survived, and known external parents were not fabricated or reparented.
+The corpus contains 49 Boot and 82 agent error-signalled spans, 34/56 SERVER spans and 19 external-parent edges per mode.
+Agent captures include 98 SQL-named automatic spans; Boot captures have no automatic JDBC agent spans and instead contain 57 manually instrumented `fixture.jdbc` spans.
+This mode difference is expected and is not hidden by claiming identical automatic instrumentation.
+
+The byte figures sum protobuf-generated Span-message lengths at the receiver; resource/scope/request envelopes and transport overhead are excluded.
+They measure an offline transformation after all input was exported, *not* reduced application traffic, actual Collector-to-backend export, storage or UI performance.
+Opaque Span bytes preserve attributes, events and links; this does not establish a general cross-trace link-target retention policy.
+
+== Declared-workload measurements
+
+Environment: Python 3.14.7 on macOS 26.6.2 arm64, three warmups and ten measured repetitions, with separately traced allocation runs.
+Times are per already-materialized input graph and exclude real export/decision waiting; the tiny retain-all baseline can fall below process-clock resolution.
+No performance threshold is used and these are not production benchmarks.
+
+[cols="<,<,>,<,<,<"]
+|===
+|Workload |Input → oracle retained |Default bounded replay retained |Retain-all / oracle / replay median elapsed |Oracle / replay median CPU |Oracle / replay peak traced Python bytes
+
+|Small |32 → 1 |1 |0.375 / 21.458 / 102.520 μs |21.500 / 102.000 μs |3,576 / 7,468
+|Deep |1,024 → 1 |1,024 |1.687 / 682.541 / 2,317.604 μs |682.500 / 2,317.500 μs |94,856 / 26,380
+|Deep with error |1,024 → 1,024 |1,024 |1.708 / 803.167 / 2,197.479 μs |803.000 / 2,197.500 μs |131,496 / 26,380
+|Concurrent |2,048 → 64 |2,048 |3.125 / 1,322.541 / 4,406.500 μs |1,323.500 / 4,406.500 μs |192,160 / 57,240
+|===
+
+The deep useful-error chain retains every ancestor, intentionally eliminating pruning savings there.
+Default replay hit pressure limits on deep/concurrent inputs and retained all spans instead of pretending that the oracle's larger offline savings were achievable with those bounds.
+Default peak pending spans/traces/serialized bytes were 32/1/3,188 (small), 256/1/25,377 (each deep case) and 8/8/728 (concurrent).
+The declared larger corpus preset matched the oracle; actual captured files peaked at 59 pending spans and 106,324 serialized pending model bytes.
+Count/serialized-byte bounds do not bound arbitrary caller input, transient serialization or whole-process RSS.
+
+== Safety counterexamples and failure handling
+
+[cols="<,>,<"]
+|===
+|Experiment |New orphaned retained edges |Meaning
+
+|Retain on timeout |0 |Pending input and later arrivals pass through; no unsafe pruning decision
+|Prune after wait window |1 |Useful late child references a parent already removed
+|Unexpected child after declared fixture close |1 |Detecting the late arrival does not recover the pruned parent
+|Late child after decision-cache expiry |1 |Forgetting a decision does not make a trace fragment complete
+|===
+
+Decision-cache eviction is bounded in the tests (two retained records after ten closes), but is not a late-span safety guarantee.
+Overflow, byte/span/trace pressure, mismatched manifests and shutdown release pending input and latch conservative pass-through.
+Modelled exporter/backpressure failures are counted separately as delivery failures, not intentional pruning; there is no unbounded retry queue.
+These are synchronous deterministic sink-failure experiments, not live network/exporter interruption tests.
+
+Whole-fast-trace sampling and UI projection controls were labelled models: sampling drops both spans of a complete trivial trace; the UI projection shows one while storing/exporting both.
+Neither is reported as a deployable individual-span filtering integration.
+
+== Decision and production follow-up boundary
+
+*No-go for unrestricted live duration pruning with the existing arbitrary async/remote-span contracts.*
+The counterexamples disprove the wait-window/finite-cache safety claims of the evaluated strategy; an ended parent and bounded wait do not prove that future useful descendants cannot reference it.
+The conservative bounded alternative preserves safety by retaining uncertain data, but therefore provides no guaranteed general pruning benefit.
+
+*Conditional feasibility: explicitly closed offline datasets only.*
+The oracle demonstrates potential topology-preserving pruning and stage-specific size reduction when an external test driver supplies the complete captured set.
+Observed manifests and finished fixture processes are not deployable distributed completion signals, so this conditional result does not authorize a live JVM/Collector filter.
+
+A production follow-up would need an approved concrete closure or genuinely child-free eligibility contract, trace-affine visibility/routing, documented late/missing-span behavior, bounded byte/state/backpressure handling and tests against actual pipeline/export failures.
+It must preserve single-owner Boot/agent integration and separately update observation-policy requirements and operator guidance before enabling any threshold.
+Alternatively, pursue backend/UI collapsing or whole-trace sampling as a separately stated goal, without claiming equivalent individual-span export/storage savings.
+No new application configuration, profile, SDK/exporter, dependency or production default was introduced here.
+
+== Reproduce and evidence
+
+See link:../../../regressiontests/tracing-compatibility/src/test/python/README.md[the experiment README] for exact commands and test-only options.
+The experiment parameters, runner and sanitized synthetic manifest are committed-source candidates; raw captures and `results.json` remain generated/ignored under `regressiontests/tracing-compatibility/target/span-duration-evaluation/`.
+The final Python conformance suite has 20 tests, including the committed expected-retention manifest and order-insensitive graph-comparison regression coverage.
+Maven full-run evidence is `/tmp/causeway-duration-full-tracing.log`; the local machine-readable measurement output is `regressiontests/tracing-compatibility/target/span-duration-evaluation/results.json`.
+Final conformance evidence is `/tmp/causeway-duration-python-conformance.log` (20 passed).
+A separate default-mode check passed four existing Boot/agent/JPA tests while the opt-in research test was correctly skipped (five discovered, one intentional skip); see `/tmp/causeway-duration-default-mode.log`.
+Existing lifecycle/discard and Boot/agent auto-configuration gates also passed all 21 tests; see `/tmp/causeway-duration-foundation.log`.
+That gate used `mvn -B -pl commons,core/config -am -Dtest=ObservationClosureTest,CausewayObservationAutoConfigurationTest,CausewayAgentObservationAutoConfigurationTest -Dsurefire.failIfNoSpecifiedTests=false -Dmaven.source.skip=true -Dmaven.javadoc.skip=true test`.
+No production-source or POM changes were introduced.
+No full repository reactor, live Collector plugin, backend storage integration, second remote application or production deployment was exercised.

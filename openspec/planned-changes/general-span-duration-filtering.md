@@ -1,16 +1,18 @@
 # General span duration filtering
 
-Status: [investigation proposed](../changes/general-span-duration-filtering/proposal.md); no implementation ticket assigned.
-The active change is investigation/proof-of-concept only, with an explicit go/conditional-go/no-go decision before any separately approved production filtering work.
+Status: CAUSEWAY-4080 investigation complete; [evaluation and evidence](../changes/general-span-duration-filtering/evaluation.adoc) are ready for review.
+The outcome is no-go for unrestricted live individual-span pruning under the existing arbitrary async/remote-span contracts, with conditional feasibility only for explicitly closed offline datasets.
+No production filtering or supported threshold was introduced; any production implementation, UI collapsing or whole-trace sampling requires a separately approved scope.
 
 Explicitly retained by user request on 2026-11-06 as idea #2 following the [maintenance-to-v4 reconciliation](forward-port-reconciliation-2026-11-06.md).
 This remains a separate exploration, not an outstanding maintenance forward port or work included in the audit.
 
-Explore whether trivial spans of any kind can be removed by duration, consistently in Boot-managed and Java-agent-managed tracing. This includes Causeway framework spans and automatic HTTP/JDBC/library spans, rather than a JPA-only policy.
+The investigation evaluated whether trivial spans can be removed by duration consistently across Boot-managed and Java-agent-managed tracing.
+Its corpus includes Causeway framework and HTTP spans, agent SQL spans and Boot fixture JDBC observations rather than claiming identical automatic JDBC instrumentation in both modes.
 
 The removed JPA threshold decided at parent completion, after children might already have been exported. Dropping a parent alone leaves orphaned JDBC spans and an incomplete trace tree. A replacement must explicitly resolve that problem.
 
-Questions to investigate:
+Questions evaluated (see the linked evidence and limitations):
 
 - Where should filtering live: SDK/agent extension, collector, or backend presentation?
 - Can spans and descendants be buffered until a decision is possible, within bounded memory and time limits, including concurrent/async and remote children?

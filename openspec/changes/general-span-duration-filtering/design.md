@@ -70,7 +70,7 @@ Record span counts and serialized bytes at clearly named stages, distinguishing 
 An offline transformation proves graph behavior but does not by itself demonstrate application export or storage savings.
 Measure elapsed processing time, allocation/CPU where practical and peak pending state for declared small, deep and high-concurrency workloads against a retain-all baseline.
 Use repeatable runs with recorded warmup/environment; do not introduce machine-dependent performance pass/fail thresholds or claim production gains from fixture timing.
-Produce `evaluation.md` in this change with the comparison matrix, runnable commands, correctness/resource results, measured limits and recommendation.
+Produce `evaluation.adoc` in this change with the comparison matrix, runnable commands, correctness/resource results, measured limits and recommendation.
 Keep generated captures/results under the module's ignored `target/span-duration-evaluation/`, using sanitized deterministic manifests for committed fixtures.
 
 ### 6. End with a decision, not an implicit production rollout
