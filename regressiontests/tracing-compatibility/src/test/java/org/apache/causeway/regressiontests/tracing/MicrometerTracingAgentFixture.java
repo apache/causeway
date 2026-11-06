@@ -207,6 +207,9 @@ public class MicrometerTracingAgentFixture {
                     connection.disconnect();
                 }
                 if (primers != null) primers.verifyTotals();
+                if (context.getEnvironment().getProperty("fixture.duration-evaluation", Boolean.class, false)) {
+                    SpanDurationAsyncFixture.run(context.getBean(io.micrometer.tracing.Tracer.class), integration);
+                }
                 System.out.println("CAUSEWAY_TRACING_FIXTURE_OK");
             } finally { server.stop(0); executor.shutdownNow(); }
         }

@@ -31,6 +31,7 @@ import java.util.zip.GZIPInputStream;
 import com.sun.net.httpserver.HttpServer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -613,10 +614,37 @@ class MicrometerTracingCompatibilityTest {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);
     }
+    @Test
+    @EnabledIfSystemProperty(named = "causeway.tracing.evaluation", matches = "true")
+    void durationEvaluationCapturesLateChildAndExternalParentInBothOwners() throws Exception {
+        for (var mode : List.of("boot", "agent")) {
+            // given: the existing single-owner fixture and an explicit investigation-only scenario
+            try (var collector = new Collector()) {
+                // when: the child JVM runs real observation and asynchronous tracing APIs
+                launch(mode, collector, "--fixture.duration-evaluation=true");
+
+                // then: an exported error child really starts after its original parent ended
+                var parent = collector.spans.stream().filter(s -> s.getName().equals("causeway.evaluation.parent"))
+                        .findFirst().orElseThrow();
+                var child = collector.spans.stream().filter(s -> s.getName().equals("duration.evaluation.late-error"))
+                        .findFirst().orElseThrow();
+                var entry = collector.spans.stream().filter(s -> s.getName().equals("duration.evaluation.remote-entry"))
+                        .findFirst().orElseThrow();
+                assertEquals(parent.getSpanId(), child.getParentSpanId());
+                assertEquals(parent.getTraceId(), child.getTraceId());
+                assertTrue(child.getStartTimeUnixNano() >= parent.getEndTimeUnixNano());
+                assertEquals(Status.StatusCode.STATUS_CODE_ERROR, child.getStatus().getCode());
+                assertEquals(entry.getSpanId(), parent.getParentSpanId());
+                assertEquals("7777777777777777", java.util.HexFormat.of().formatHex(entry.getParentSpanId().toByteArray()));
+            }
+        }
+    }
+
     private void launch(final String mode, final Collector collector, final String... properties) throws Exception {
         launchFixture(MicrometerTracingAgentFixture.class, mode, collector, properties);
     }
     private void launchFixture(final Class<?> fixture, final String mode, final Collector collector, final String... properties) throws Exception {
+        final int firstSpan = collector.spans.size();
         boolean agent = mode.equals("agent") || mode.equals("inactive");
         var command = new ArrayList<String>();
         command.add(Path.of(System.getProperty("java.home"), "bin", "java").toString());
@@ -670,6 +698,8 @@ class MicrometerTracingCompatibilityTest {
             var log = Files.readString(output) + "cmd:\n\t" + builder.command().stream().collect(Collectors.joining("\n\t"));
             assertEquals(0, process.exitValue(), log);
             assertTrue(log.contains("CAUSEWAY_TRACING_FIXTURE_OK"), log);
+            var captured = List.copyOf(collector.spans);
+            SpanDurationCapture.write(fixture, mode, captured.subList(firstSpan, captured.size()));
         } finally { process.destroyForcibly(); process.waitFor(10, TimeUnit.SECONDS); }
     }
     private String names(final List<Span> spans) { return spans.stream().map(s -> s.getName() + ":" + s.getKind()).toList().toString(); }
