@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.valuetypes.markdown.applib.value;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.value.Markup;
+import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 import org.apache.causeway.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
@@ -44,6 +46,7 @@ import lombok.experimental.Accessors;
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
 public class Markdown implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static Markdown valueOf(final String markdown) {
@@ -55,7 +58,7 @@ public class Markdown implements Serializable {
     @EqualsAndHashCode.Exclude
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     @Accessors(fluent = true)
-    private final String html = Converter.mdToHtml(getMarkdown());
+    private final String html = _Hardening.toSafeRichHtml(Converter.mdToHtml(getMarkdown()));
 
     public Markdown() {
         this(null);

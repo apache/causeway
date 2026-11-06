@@ -48,6 +48,55 @@
 			<artifactId>asciidoctorj-api</artifactId>
 		</dependency>
 
+		<!-- TESTING -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- same as in ../builder and ../ui, needed to run Asciidoctor from within tests -->
+		<dependency>
+			<groupId>org.asciidoctor</groupId>
+			<artifactId>asciidoctorj</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jruby</groupId>
+			<artifactId>jruby</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-posix</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-enxio</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-constants</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-ffi</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jffi</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 </project>

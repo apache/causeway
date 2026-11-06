@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.applib.value;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.value.Markup;
+import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib.AdocToHtmlConverter;
 import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
@@ -45,6 +47,7 @@ import lombok.experimental.Accessors;
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
 public final class AsciiDoc implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static AsciiDoc valueOf(final String adoc) {
@@ -56,7 +59,8 @@ public final class AsciiDoc implements Serializable {
     @EqualsAndHashCode.Exclude
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     @Accessors(fluent = true)
-    private final String html = AdocToHtmlConverter.instance().adocToHtml(getAdoc());
+    private final String html = _Hardening.toSafeRichHtml(
+            AdocToHtmlConverter.instance().adocToHtml(getAdoc()));
 
     public AsciiDoc() {
         this(null);

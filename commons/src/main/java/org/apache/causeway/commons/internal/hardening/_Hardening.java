@@ -29,8 +29,17 @@ import org.apache.causeway.commons.internal.base._Strings;
  * Various hardening utilities.
  * <p>
  * Introduced as a consequence of CAUSEWAY-3077.
+ * Extended for CAUSEWAY-4079
  */
 public class _Hardening {
+
+    /**
+     * A {@link Safelist} that is safe against script/event-handler injection, yet rich enough to
+     * preserve the structural HTML and CSS classes emitted by markup languages such as AsciiDoc and
+     * Markdown (headings, tables, images, code blocks, ...).
+     */
+    private static final Safelist RICH_HTML_SAFELIST = Safelist.relaxed()
+            .addAttributes(":all", "class", "id");
 
     /**
      * @see "https://jsoup.org/cookbook/cleaning-html/safelist-sanitizer"
@@ -40,6 +49,20 @@ public class _Hardening {
             return untrustedHtml;
         }
         return Jsoup.clean(untrustedHtml, Safelist.basic());
+    }
+
+    /**
+     * Like {@link #toSafeHtml(String)}, but preserves a richer set of HTML elements and attributes
+     * (e.g. as produced by AsciiDoc or Markdown), while still stripping scripts, event handlers and
+     * {@code javascript:} URLs.
+     *
+     * @see "https://jsoup.org/cookbook/cleaning-html/safelist-sanitizer"
+     */
+    public static String toSafeRichHtml(final @Nullable String untrustedHtml) {
+        if(_Strings.isEmpty(untrustedHtml)) {
+            return untrustedHtml;
+        }
+        return Jsoup.clean(untrustedHtml, RICH_HTML_SAFELIST);
     }
 
 }
