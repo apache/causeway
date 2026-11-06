@@ -47,6 +47,20 @@ It rendered successfully with Asciidoctor 2.0.26 Ruby core and data from cached 
 Strict `openspec validate port-application-defined-spans --strict` and `git diff --check` passed.
 Seven new capability requirements are additive; existing action context and other observation requirements are retained.
 
+## Pre-archive checkpoint status
+
+Implementation committed as `ce2ed793a19`.
+Fresh post-checkpoint focused build/install added the six existing `ObservationClosureTest` tests and seven `InteractionServiceObservationTest` tests to the original fifty, passing all sixty-three without failures or skips.
+The fresh complete tracing/JPA rerun exceeded the execution tool's 600-second limit and was terminated before a final compatibility-test result.
+Its log is `/tmp/causeway-application-spans-checkpoint-tracing.log`; two JPA tests completed, but the tracing class did not report completion.
+The preceding complete run passed all twenty-one tests, but the timed-out fresh run is not counted as a pass.
+No matching fixture or Surefire processes remained after termination.
+The fresh retry passed all twenty-one tracing/JPA tests without failures or skips in 2 minutes 33 seconds, resolving the timeout blocker.
+Retry log: `/tmp/causeway-application-spans-checkpoint-tracing-retry.log`.
+No implementation changes were needed between the timed-out run and the successful retry.
+Seven requirements were synced directly to `openspec/specs/application-defined-spans/spec.md` and the change archived on 2026-11-06.
+Roadmap step 9 is complete; step 10a, application priming hooks (CAUSEWAY-4066), is next.
+
 ## Limits
 
 Exported tests use real interaction and member observation services, the real carrier lifecycle, reflection dispatch and the real JPA facet with H2 SQL; action metadata and non-telemetry collaborators are controlled.
