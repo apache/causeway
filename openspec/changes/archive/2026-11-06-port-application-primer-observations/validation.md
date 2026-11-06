@@ -59,6 +59,13 @@ Both pages rendered successfully with Asciidoctor 2.0.26 core/data from cached A
 Strict change validation and whitespace checks passed.
 Six additive requirements preserve the existing priming-hook and observation contracts.
 
+## Archive checkpoint
+
+Implementation committed as `1f60a777ba9`.
+Fresh post-checkpoint validation passed all sixty-six focused tests, the full Wicket UI/viewer suite (113 executed, five existing skips) and all twenty-three tracing/JPA tests without failures or errors.
+Six requirements were synced directly to `openspec/specs/application-primer-observation/spec.md` and the change archived on 2026-11-06.
+Roadmap 10b is complete; the remaining independent roadmap items are metamodel introspection diagnostics (4060) and mixin prefiltering (4061).
+
 ## Limits
 
 Metamodel specifications, registrar discovery, visible page models and non-telemetry collaborators are controlled test doubles.
