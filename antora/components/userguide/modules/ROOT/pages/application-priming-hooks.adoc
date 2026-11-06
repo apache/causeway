@@ -78,4 +78,6 @@ Do not dispatch background/async work or retain request-scoped entities for late
 A callback failure propagates through the existing action or Wicket boundary and stops normal method/page preparation; it is not an optional optimization failure that the framework suppresses or retries.
 A failing view primer is not retried by lifecycle re-entry during the same request.
 Applications without registrars require no changes.
-Priming does not depend on the `observation` profile and this feature adds no dedicated primer spans.
+Priming does not depend on the `observation` profile.
+With observation active, each invoked callback has its own semantic observation; see xref:observability.adoc#application-primer-callbacks[Application primer callbacks].
+No application-supplied tracing labels or telemetry APIs are required.

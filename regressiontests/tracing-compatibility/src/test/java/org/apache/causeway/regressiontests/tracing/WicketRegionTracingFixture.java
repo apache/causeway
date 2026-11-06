@@ -47,6 +47,11 @@ final class WicketRegionTracingFixture {
 
     static void render(CausewayObservationIntegration integration, InteractionServiceDefault interactions,
             Runnable memberWork, boolean fail) {
+        render(integration, interactions, memberWork, fail, null);
+    }
+
+    static void render(CausewayObservationIntegration integration, InteractionServiceDefault interactions,
+            Runnable memberWork, boolean fail, java.util.function.Consumer<Object> viewPriming) {
         var enclosingObservation = integration.observationRegistry().getCurrentObservation();
         var tester = new WicketTester();
         var userContext = InteractionContext.ofUserWithSystemDefaults(UserMemento.ofName("sentinel-user"));
@@ -64,7 +69,7 @@ final class WicketRegionTracingFixture {
             }
         });
         try {
-            var page = new PreparedRegion("component", integration);
+            var page = new PreparedRegion("component", integration, viewPriming);
             var fieldset = new Region("fieldset", integration,
                     WicketRenderObservationDescriptor.fieldset(TYPE, "identity"));
             var property = new Region("property", integration,
@@ -81,7 +86,7 @@ final class WicketRegionTracingFixture {
             property.setOutputMarkupId(true);
             fieldset.add(property);
             var refresh = new AjaxLink<Void>("refresh") {
-                public void onClick(AjaxRequestTarget target) { target.add(property); }
+                public void onClick(AjaxRequestTarget target) { page.primeForRequest(); target.add(property); }
             };
             page.add(fieldset, refresh,
                     new Region("collection", integration, WicketRenderObservationDescriptor.collection(TYPE, TYPE + "#items")),
@@ -117,11 +122,14 @@ final class WicketRegionTracingFixture {
     private static final class PreparedRegion extends Region {
         private final WicketPagePreparationObservation preparation = new WicketPagePreparationObservation(
                 WicketRenderObservationDescriptor.pagePreparation(TYPE));
-        PreparedRegion(String id, CausewayObservationIntegration integration) {
+        private final transient java.util.function.Consumer<Object> viewPriming;
+        PreparedRegion(String id, CausewayObservationIntegration integration, java.util.function.Consumer<Object> viewPriming) {
             super(id, integration, WicketRenderObservationDescriptor.page(TYPE));
+            this.viewPriming = viewPriming;
         }
-        protected void onInitialize() { preparation.configure(this, () -> super.onInitialize()); }
-        protected void onConfigure() { preparation.configure(this, () -> super.onConfigure()); }
+        void primeForRequest() { if (viewPriming != null) viewPriming.accept(this); }
+        protected void onInitialize() { primeForRequest(); preparation.configure(this, () -> super.onInitialize()); }
+        protected void onConfigure() { primeForRequest(); preparation.configure(this, () -> super.onConfigure()); }
         protected void onBeforeRender() { preparation.beforeRender(() -> super.onBeforeRender()); }
         protected void onDetach() { preparation.detach(() -> super.onDetach()); }
     }

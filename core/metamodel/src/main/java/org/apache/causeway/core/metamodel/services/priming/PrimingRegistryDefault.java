@@ -30,16 +30,23 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.priming.ActionArguments;
 import org.apache.causeway.applib.services.priming.ActionPrimer;
 import org.apache.causeway.applib.services.priming.PrimingRegistrar;
 import org.apache.causeway.applib.services.priming.PrimingRegistry;
 import org.apache.causeway.applib.services.priming.ViewPrimer;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.internal.observation.ObservationClosure;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -50,6 +57,9 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".PrimingRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 public final class PrimingRegistryDefault implements PrimingRegistry, PrimingService, MetamodelListener {
+    static final String ACTION_OBSERVATION_NAME = "causeway.priming.action";
+    static final String VIEW_OBSERVATION_NAME = "causeway.priming.view";
+
     private final SpecificationLoader specificationLoader;
     private final ServiceRegistry serviceRegistry;
     private volatile Snapshot snapshot = new Snapshot(Map.of(), Map.of());
@@ -105,12 +115,14 @@ public final class PrimingRegistryDefault implements PrimingRegistry, PrimingSer
             if (name == null || name.isBlank() || !name.equals(name.trim()) || name.indexOf('#') >= 0) {
                 throw invalid("Invalid local action logical name", domainType, name);
             }
-            if (!specification.getAction(name, MixedIn.INCLUDED)
-                    .map(action -> name.equals(action.getFeatureIdentifier().memberLogicalName())).orElse(false)) {
-                throw invalid("Unknown local action logical name", domainType, name);
-            }
-            pendingActions.computeIfAbsent(actionKey(specification, name), __ -> new ArrayList<>())
-                    .add(new RegisteredActionPrimer<>(domainType, primer));
+            final var action = specification.getAction(name, MixedIn.INCLUDED)
+                    .filter(candidate -> name.equals(candidate.getFeatureIdentifier().memberLogicalName()))
+                    .orElseThrow(() -> invalid("Unknown local action logical name", domainType, name));
+            final var memberKey = actionKey(specification, name);
+            final var canonicalId = Identifier.actionIdentifier(LogicalType.eager(domainType, specification.logicalTypeName()),
+                    name, action.getFeatureIdentifier().memberParameterClassNames()).getLogicalIdentityString("#");
+            pendingActions.computeIfAbsent(memberKey, __ -> new ArrayList<>())
+                    .add(new RegisteredActionPrimer<>(domainType, primer, specification.logicalTypeName(), memberKey, canonicalId));
         }
     }
 
@@ -120,7 +132,7 @@ public final class PrimingRegistryDefault implements PrimingRegistry, PrimingSer
         Objects.requireNonNull(primer, "primer");
         final var specification = exactSpecification(domainType);
         pendingViews.computeIfAbsent(specification.logicalTypeName(), __ -> new ArrayList<>())
-                .add(new RegisteredViewPrimer<>(domainType, primer));
+                .add(new RegisteredViewPrimer<>(domainType, primer, specification.logicalTypeName()));
     }
 
     @Override
@@ -129,14 +141,16 @@ public final class PrimingRegistryDefault implements PrimingRegistry, PrimingSer
         final var matching = snapshot.actions().get(actionKey(targetSpecification, actionLogicalName));
         if (matching == null) return;
         final var snapshotArguments = ActionArguments.of(arguments);
-        matching.forEach(registered -> registered.prime(target, snapshotArguments));
+        final var provider = observationProvider();
+        matching.forEach(registered -> registered.prime(target, snapshotArguments, provider));
     }
 
     @Override
     public void primeView(final ObjectSpecification targetSpecification, final Object target) {
         final var matching = snapshot.views().get(targetSpecification.logicalTypeName());
         if (matching == null) return;
-        matching.forEach(registered -> registered.prime(target));
+        final var provider = observationProvider();
+        matching.forEach(registered -> registered.prime(target, provider));
     }
 
     private ObjectSpecification exactSpecification(final Class<?> domainType) {
@@ -170,10 +184,46 @@ public final class PrimingRegistryDefault implements PrimingRegistry, PrimingSer
     private record Snapshot(Map<String, List<RegisteredActionPrimer<?>>> actions,
             Map<String, List<RegisteredViewPrimer<?>>> views) { }
 
-    private record RegisteredActionPrimer<T>(Class<T> domainType, ActionPrimer<? super T> primer) {
-        void prime(final Object target, final ActionArguments arguments) { primer.prime(domainType.cast(target), arguments); }
+    private @Nullable ObservationProvider observationProvider() {
+        return serviceRegistry.lookupService(CausewayObservationIntegration.class)
+                .filter(integration -> !integration.isNoop())
+                .map(integration -> integration.provider(getClass(),
+                        CausewayObservationIntegration.withModuleName(CausewayModuleCoreMetamodel.NAMESPACE)))
+                .orElse(null);
     }
-    private record RegisteredViewPrimer<T>(Class<T> domainType, ViewPrimer<? super T> primer) {
-        void prime(final Object target) { primer.prime(domainType.cast(target)); }
+
+    private static void observePrimer(final @Nullable ObservationProvider provider, final String logicalType,
+            final @Nullable String memberKey, final @Nullable String canonicalId, final Runnable callback) {
+        if (provider == null) {
+            callback.run();
+            return;
+        }
+        final var observation = provider.get(memberKey != null ? ACTION_OBSERVATION_NAME : VIEW_OBSERVATION_NAME)
+                .contextualName(memberKey != null ? CausewayObservationNaming.forLogicalMember("prime action", memberKey)
+                        : CausewayObservationNaming.forType("prime view", logicalType))
+                .lowCardinalityKeyValue("causeway.object.type", logicalType);
+        if (canonicalId != null) observation.lowCardinalityKeyValue("causeway.action.id", canonicalId);
+        final var closure = new ObservationClosure();
+        try {
+            closure.startAndOpenScope(observation);
+            callback.run();
+        } catch (RuntimeException | Error failure) {
+            closure.onError(failure);
+            throw failure;
+        } finally {
+            closure.close();
+        }
+    }
+
+    private record RegisteredActionPrimer<T>(Class<T> domainType, ActionPrimer<? super T> primer,
+            String logicalType, String memberKey, String canonicalId) {
+        void prime(final Object target, final ActionArguments arguments, final @Nullable ObservationProvider provider) {
+            observePrimer(provider, logicalType, memberKey, canonicalId, () -> primer.prime(domainType.cast(target), arguments));
+        }
+    }
+    private record RegisteredViewPrimer<T>(Class<T> domainType, ViewPrimer<? super T> primer, String logicalType) {
+        void prime(final Object target, final @Nullable ObservationProvider provider) {
+            observePrimer(provider, logicalType, null, null, () -> primer.prime(domainType.cast(target)));
+        }
     }
 }

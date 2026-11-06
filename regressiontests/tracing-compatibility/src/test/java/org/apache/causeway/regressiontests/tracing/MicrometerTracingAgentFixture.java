@@ -94,11 +94,19 @@ public class MicrometerTracingAgentFixture {
             var action = action(executionContext, integration,
                     context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")), applicationSpans);
             var applicationActions = applicationSpans != null ? semanticActions(action).subList(0, 2) : List.<ActionExecutor>of();
+            var primers = context.getEnvironment().getProperty("fixture.primers", Boolean.class, false)
+                    ? new PrimerObservationTracingFixture(integration,
+                            context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")),
+                            context.getEnvironment().getProperty("fixture.primer-failure", "action")) : null;
+            if (primers != null) {
+                var target = (JdbcAction) action.head().target().getPojo();
+                target.primerWork = () -> primers.primeAction(target);
+            }
             boolean evaluation = context.getEnvironment().getProperty("fixture.evaluation", Boolean.class, false);
             boolean evaluationFailure = context.getEnvironment().getProperty("fixture.evaluation-fail", Boolean.class, false);
             boolean audit = context.getEnvironment().getProperty("fixture.audit", Boolean.class, false);
             boolean collections = context.getEnvironment().getProperty("fixture.collections", Boolean.class, false);
-            boolean wicket = context.getEnvironment().getProperty("fixture.wicket", Boolean.class, false);
+            boolean wicket = context.getEnvironment().getProperty("fixture.wicket", Boolean.class, false) || primers != null;
             boolean semantic = context.getEnvironment().getProperty("fixture.semantic", Boolean.class, false);
             var semanticActions = semantic ? semanticActions(action) : List.<ActionExecutor>of();
             var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
@@ -110,6 +118,7 @@ public class MicrometerTracingAgentFixture {
                 try {
                     if (integration.observationRegistry().getCurrentObservation() != null)
                         throw new AssertionError("stale Causeway observation");
+                    if (primers != null) primers.beginRequest(exchange.getRequestURI().getQuery() != null);
                     if (wicket || collections) {
                         Runnable render = () -> {
                             if(collections) WicketCollectionTracingFixture.render(integration,
@@ -118,7 +127,8 @@ public class MicrometerTracingAgentFixture {
                                                     org.springframework.boot.context.properties.bind.Bindable.of(org.apache.causeway.core.config.CausewayConfiguration.Causeway.class))), interactions,
                                     () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null);
                             else WicketRegionTracingFixture.render(integration, interactions,
-                                    () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null);
+                                    () -> members.invokeAction(action), exchange.getRequestURI().getQuery() != null,
+                                    primers == null ? null : primers::primeView);
                         };
                         if (context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent"))) {
                             render.run(); // The agent owns the real JDK HTTP server boundary.
@@ -196,6 +206,7 @@ public class MicrometerTracingAgentFixture {
                         throw new AssertionError("unexpected HTTP result: " + connection.getResponseCode());
                     connection.disconnect();
                 }
+                if (primers != null) primers.verifyTotals();
                 System.out.println("CAUSEWAY_TRACING_FIXTURE_OK");
             } finally { server.stop(0); executor.shutdownNow(); }
         }
@@ -269,6 +280,7 @@ public class MicrometerTracingAgentFixture {
         private final org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet jpa;
         private final org.apache.causeway.applib.services.span.ApplicationSpanService applicationSpans;
         private boolean failApplicationSpan;
+        private Runnable primerWork;
         public JdbcAction(final CausewayObservationIntegration integration, final boolean agent,
                 final org.apache.causeway.applib.services.span.ApplicationSpanService applicationSpans) {
             this.applicationSpans = applicationSpans;
@@ -283,6 +295,7 @@ public class MicrometerTracingAgentFixture {
                     });
         }
         public String executeJdbc() {
+            if (primerWork != null) primerWork.run();
             if (applicationSpans != null) {
                 return applicationSpans.call("load", () -> applicationSpans.call("process", () -> {
                     persist();

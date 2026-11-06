@@ -106,6 +106,32 @@ Regions cannot outlive the service call and do not propagate their scopes to asy
 When observation is inactive, work still runs normally without application spans or conditional tracing code.
 For standalone tests, `ApplicationSpanService.NOOP` executes work directly without naming validation or observation infrastructure.
 
+[#application-primer-callbacks]
+== Application primer callbacks
+
+With `observation` active, each invoked application primer has its own semantic observation:
+
+* `causeway.priming.action`, displayed as `prime action <logical-type>#<local-action>`.
+* `causeway.priming.view`, displayed as `prime view <logical-type>`.
+
+Several callbacks for the same key produce sequential sibling spans with the same semantic name and canonical metadata, not an aggregate parent.
+Unmatched keys, excluded action accessors, unauthorized pages and repeated page visits excluded by request admission create no primer span.
+Contextual names preserve case and use the existing namespace fallback and deterministic truncation to stay within 50 characters.
+
+Both kinds retain full `causeway.object.type`; action primers also retain full domain-facing `causeway.action.id`, including its resolved parameter signature, for example `demo.Invoice#SendEmail(java.lang.String)`.
+The display omits that signature and contributed actions use the mixee identity, not the mixin implementation method.
+Only static canonical type/action and framework bean/module attributes are added, never callback classes or lambda names, order/counts, targets, arguments, values, bookmarks, titles, user/tenant identities, transaction IDs or component paths.
+
+Action primers inherit the current action context, while view primers inherit the current request/interaction context before page preparation.
+View-primer spans are siblings of subsequent preparation/rendering boundaries, not children of an artificial preparation or aggregate span.
+Synchronous SQL remains under its primer through existing instrumentation; Java-agent JDBC instrumentation remains agent-owned.
+
+Callback failures are recorded and rethrown unchanged after cleanup, retaining fail-fast behavior and preventing later callbacks or normal method/page work from proceeding.
+Observation does not retry callbacks or change the once-per-page/request view guard.
+Absent or inactive integration preserves execution without primer observations, and no exporter means no exported primer spans.
+Plan for one extra span per invoked callback, not one per registration key.
+See xref:application-priming-hooks.adoc[Application Priming Hooks] for registration and synchronous read-only callback contracts.
+
 == Entity property-change evaluation
 
 When candidate property-change records are enlisted, the tracker observes their aggregate evaluation as `causeway.entitychange.evaluate`, displayed as `evaluate property changes`.
