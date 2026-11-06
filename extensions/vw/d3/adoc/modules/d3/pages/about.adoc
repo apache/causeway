@@ -1,0 +1,138 @@
+= D3.js
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The D3.js module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering a domain property containing a JSON graph structure (nodes and links) as an interactive D3.js force-layout graph using the link:https://d3js.org/[D3.js] library.
+
+Clicking a graph node invokes a configurable domain action whose single `String` parameter receives the clicked node's id.
+
+
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-d3</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayreleaseversion}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+In those modules where there are domain objects with properties containing graph data (a JSON string with `nodes` and `links`), add a dependency/import to the applib module:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-d3-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtD3Applib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, in the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-d3-wicket-ui</artifactId>
+</dependency>
+----
+
+And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        CausewayModuleExtD3WicketUi.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== Usage
+
+To use the extension, annotate a `String` property (returning a JSON graph structure) with the xref:refguide:extensions:index/d3/applib/annotations/D3Graph.adoc[@D3Graph] annotation.
+
+For example:
+
+[source,java]
+----
+@D3Graph(clickAction = "selectNode")    // <.>
+@Property()
+@PropertyLayout(fieldSetId = "content", sequence = "1")
+public String getGraph() {
+    return "{\"nodes\":[{\"id\":\"A\",\"name\":\"Node A\"}],\"links\":[]}";
+}
+
+@Action
+public GraphOwner selectNode(final String nodeId) {
+    // handle node click
+    return this;
+}
+----
+<.> indicates that the property returns a JSON graph structure, and so should be rendered as an interactive D3.js force-layout graph.
+
+The `clickAction` attribute specifies the id of a domain action (on the same object) that will be invoked when a graph node is clicked. The action must accept a single `String` parameter which receives the clicked node's id.
+
+Optionally, you can also provide an implementation of the xref:refguide:extensions:index/d3/applib/spi/D3GraphAdvisor.adoc[] SPI, which advises on the graph data (`graphData`), the dimensions (`initialWidth`/`initialHeight`), the interaction flags (`enableDragging`/`enableZoom`), and the click action id (`clickAction`). The framework provides sensible defaults (800x600, dragging and zoom enabled, no click action).
+
+Advisor-provided graph data is merged into the effective configuration, but for a *property*-level `@D3Graph` the annotated property's value takes precedence; the advisor's `graphData` is used as a fallback (and is the only source of data for a TYPE-level `@D3Graph`, see below).
+
+
+=== TYPE-level `@D3Graph`
+
+`@D3Graph` can also be placed on a domain object (class), in which case the object's default representation is rendered as an interactive D3 graph:
+
+[source,java]
+----
+@D3Graph(clickAction = "selectNode")    // <.>
+public class GraphOwner {
+
+    @Action
+    public GraphOwner selectNode(final String nodeId) {
+        // handle node click
+        return this;
+    }
+}
+----
+<.> indicates that the object page should be rendered as an interactive D3.js force-layout graph.
+
+As there is no annotated property to read the graph data from, the graph data must be supplied by a xref:refguide:extensions:index/d3/applib/spi/D3GraphAdvisor.adoc[D3GraphAdvisor] (via the `graphData` attribute of its `Advice`); if no advisor supplies data, an empty graph is rendered.
+
+NOTE: A TYPE-level `@D3Graph` *replaces* the standard object page rendering (its properties, collections and actions), so it is best suited to domain objects whose primary purpose is the graph itself.

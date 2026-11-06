@@ -31,16 +31,19 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import org.jspecify.annotations.NonNull;
 
+import java.io.Serial;
+
 /**
  * A panel for rendering PDF documents inline in the page
  */
 public class PdfJsPanel extends Panel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final static String ID_PDFJSCANVAS = "pdfJsCanvas";
 
-    private PdfJsConfig config;
+    private final PdfJsConfig config;
 
     /**
      * Constructor.
@@ -55,6 +58,7 @@ public class PdfJsPanel extends Panel {
         this.config = config
                 .withWorkerUrl(PdfJsWorkerReference.workerUrl())
                 .withCmapsUrl(PdfJsCmapsReference.cmapsUrl())
+                .withPdfUrl(PdfJsReference.pdfUrl())
                 .withCanvasId(pdfJsCanvas.getMarkupId());
     }
 

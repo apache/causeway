@@ -20,11 +20,6 @@
 
     'use strict';
 
-	if (!pdfjsLib.getDocument) {
-	  console.error("Missing pdf.mjs prerequisites.");
-	  exit;
-	}
-
     if (typeof(WicketStuff) !== 'object') {
         window.WicketStuff = {};
     }
@@ -33,24 +28,22 @@
         return;
     }
 
-    WicketStuff.PDFJS = {
-        Topic: {
-            TOTAL_PAGES: 'Wicket.PDFJS.TotalPages',
-            NEXT_PAGE: 'Wicket.PDFJS.NextPage',
-            PREVIOUS_PAGE: 'Wicket.PDFJS.PreviousPage',
-            PAGE_TO: 'Wicket.PDFJS.PageTo',
-            ZOOM_TO: 'Wicket.PDFJS.ZoomTo',
-            HEIGHT_TO: 'Wicket.PDFJS.HeightTo',
-            CURRENT_PAGE: 'Wicket.PDFJS.CurrentPage',
-            CURRENT_ZOOM : 'Wicket.PDFJS.CurrentZoom',
-            CURRENT_HEIGHT : 'Wicket.PDFJS.CurrentHeight',
-            CURRENT_PRINT_PAGE : 'Wicket.PDFJS.CurrentPrintPage',
-            PRINT : 'Wicket.PDFJS.Print'
-        },
+    /**
+     * Actual PDF.js initialisation.
+     * <p>
+     * The pdf.js library (pdf.min.mjs) is a pure ES module exposing named
+     * bindings only; since pdfjs-dist v4 there is no global {@code pdfjsLib}
+     * anymore. The library is therefore loaded dynamically at init time
+     * (see WicketStuff.PDFJS.init) and handed into this function explicitly.
+     */
+    function initPdfJs(pdfjsLib, config) {
 
-        init: function (config) {
+        if (!pdfjsLib || !pdfjsLib.getDocument) {
+            console.error("pdfjs-integration: missing the pdf.mjs library (failed to import).");
+            return;
+        }
 
-            pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerUrl;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerUrl;
 
             var pdfDoc = null,
                 pageNum = config.initialPage || 1,
@@ -421,6 +414,33 @@
                 Wicket.Event.publish(WicketStuff.PDFJS.Topic.TOTAL_PAGES, pdfDoc.numPages, {"canvasId": config.canvasId});
                 renderPage(pageNum);
             });
+        }
+
+    WicketStuff.PDFJS = {
+
+        Topic: {
+            TOTAL_PAGES: 'Wicket.PDFJS.TotalPages',
+            NEXT_PAGE: 'Wicket.PDFJS.NextPage',
+            PREVIOUS_PAGE: 'Wicket.PDFJS.PreviousPage',
+            PAGE_TO: 'Wicket.PDFJS.PageTo',
+            ZOOM_TO: 'Wicket.PDFJS.ZoomTo',
+            HEIGHT_TO: 'Wicket.PDFJS.HeightTo',
+            CURRENT_PAGE: 'Wicket.PDFJS.CurrentPage',
+            CURRENT_ZOOM : 'Wicket.PDFJS.CurrentZoom',
+            CURRENT_HEIGHT : 'Wicket.PDFJS.CurrentHeight',
+            CURRENT_PRINT_PAGE : 'Wicket.PDFJS.CurrentPrintPage',
+            PRINT : 'Wicket.PDFJS.Print'
+        },
+
+        init: function (config) {
+            import(config.pdfUrl)
+                .then(function (pdfjsLib) {
+                    initPdfJs(pdfjsLib, config);
+                })
+                .catch(function (error) {
+                    console.error("pdfjs-integration: failed to dynamically import the pdf.mjs library from "
+                            + config.pdfUrl, error);
+                });
         }
     };
 })(jQuery);
