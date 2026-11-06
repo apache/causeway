@@ -30,9 +30,7 @@ import java.util.zip.GZIPInputStream;
 
 import com.sun.net.httpserver.HttpServer;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -46,10 +44,13 @@ import io.opentelemetry.proto.common.v1.KeyValue;
 import io.opentelemetry.proto.trace.v1.Span;
 import io.opentelemetry.proto.trace.v1.Status;
 
-@Disabled("Fragile test infrastructure, incompatible with Java 28-ea."
-		+ " Occasionally running into timeouts after 2 min failing the entire build.")
+/**
+ * Fragile test infrastructure, incompatible with Java 28-ea.
+ * JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)
+ *
+ * <p>Occasionally running into timeouts after 2 min failing the entire build.
+ */
 class MicrometerTracingCompatibilityTest {
-    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void agentJoinsFrameworkAndJdbcWithoutDuplicateSpans() throws Exception {
         try (var collector = new Collector()) {
             launch("agent", collector);
@@ -72,7 +73,6 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
-    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void obsoleteJpaThresholdDoesNotDiscardExportedParents() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
@@ -108,7 +108,6 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
-    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void semanticMembersExportDomainIdentityAndCompactNamesInBothModes() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
@@ -223,8 +222,12 @@ class MicrometerTracingCompatibilityTest {
                     }
                     var actions = spans.stream().filter(span -> span.getName().startsWith("act ")).toList();
                     assertFalse(actions.isEmpty(), names(spans));
-                    for(var action : actions) assertJpaAncestry(spans, action, mode.equals("agent"));
-                    if(detail.equals("REGIONS")) assertTrue(spans.stream().anyMatch(span -> attribute(span, "causeway.wicket.suppressed.detail") != null));
+                    for(var action : actions) {
+						assertJpaAncestry(spans, action, mode.equals("agent"));
+					}
+                    if(detail.equals("REGIONS")) {
+						assertTrue(spans.stream().anyMatch(span -> attribute(span, "causeway.wicket.suppressed.detail") != null));
+					}
                 }
             }
         }
@@ -258,7 +261,7 @@ class MicrometerTracingCompatibilityTest {
             }
         }
     }
-    private static boolean ancestorIs(List<Span> spans, Span span, Span ancestor) {
+    private static boolean ancestorIs(final List<Span> spans, Span span, final Span ancestor) {
         for(int depth=0; depth<100 && !span.getParentSpanId().isEmpty(); depth++) {
             if(span.getParentSpanId().equals(ancestor.getSpanId())) return true;
             var parentId = span.getParentSpanId();
@@ -289,7 +292,6 @@ class MicrometerTracingCompatibilityTest {
             assertTrue(collector.spans.isEmpty(), names(collector.spans));
         }
     }
-    @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void servletAndQuartzEntryClassificationAndCorrelation() throws Exception {
         for (String mode : List.of("boot", "agent")) {
             try (var collector = new Collector()) {
@@ -359,17 +361,23 @@ class MicrometerTracingCompatibilityTest {
                         assertEquals("/fail".equals(attribute(entry, mode.equals("boot") ? "http.url" : "url.path")) ? "500" : "204", status);
                         assertNotNull(attribute(entry, mode.equals("boot") ? "http.url" : "url.path"), entry.toString());
                         assertNotNull(attribute(entry, mode.equals("boot") ? "uri" : "http.route"), entry.toString());
-                        if (attribute(entry, "causeway.trace.name") != null) assertEquals(entry.getName(), attribute(entry, "causeway.trace.name"));
+                        if (attribute(entry, "causeway.trace.name") != null) {
+							assertEquals(entry.getName(), attribute(entry, "causeway.trace.name"));
+						}
                         if (entry.getName().startsWith("act ") || entry.getName().startsWith("prompt ")) {
                             assertEquals(SemanticTraceTracingFixture.ACTION, attribute(entry, "causeway.action.id"));
                         }
-                        if (entry.getName().startsWith("view ")) assertEquals(SemanticTraceTracingFixture.TYPE, attribute(entry, "causeway.object.type"));
+                        if (entry.getName().startsWith("view ")) {
+							assertEquals(SemanticTraceTracingFixture.TYPE, attribute(entry, "causeway.object.type"));
+						}
                         var children = collector.spans.stream().filter(s -> s.getName().equals("fixture.security") && s.getParentSpanId().equals(entry.getSpanId())).toList();
                         assertEquals(1, children.size(), names(collector.spans));
                         assertEquals(entry.getTraceId(), children.get(0).getTraceId());
                         assertNull(attribute(children.get(0), "causeway.trace.name"));
                     }
-                    if (setting.endsWith("NONE")) assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("render ") || s.getName().startsWith("prompt ") && !entries.contains(s)), names(collector.spans));
+                    if (setting.endsWith("NONE")) {
+						assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("render ") || s.getName().startsWith("prompt ") && !entries.contains(s)), names(collector.spans));
+					}
                     assertEquals(6, entries.stream().map(Span::getSpanId).distinct().count());
                 }
             }
@@ -417,8 +425,11 @@ class MicrometerTracingCompatibilityTest {
             try (var collector = new Collector()) {
                 launch(mode, collector, "--fixture.audit=true");
                 assertFalse(collector.spans.stream().anyMatch(s -> s.getName().equals("write audit trail")), names(collector.spans));
-                if (mode.equals("inactive")) assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT), names(collector.spans));
-                else assertTrue(collector.spans.isEmpty(), names(collector.spans));
+                if (mode.equals("inactive")) {
+					assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT), names(collector.spans));
+				} else {
+					assertTrue(collector.spans.isEmpty(), names(collector.spans));
+				}
             }
         }
     }

@@ -177,7 +177,7 @@
         <module>cmdexecauditsess</module>
         <module>publishing-jpa</module>
         <module>rest-jpa</module>
-        <module>tracing-compatibility</module>
+<!--        <module>tracing-compatibility</module> unstable tests-->
         <module>value</module>
         <module>viewers-common</module>
         <module>viewers-jpa</module>
