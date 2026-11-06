@@ -32,6 +32,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.hardening._Hardening;
+import org.apache.causeway.commons.internal.hardening._Hardening.SafelistSelect;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
@@ -87,7 +88,7 @@ implements
     @Override
     public Markup parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         return text!=null
-                ? new Markup(_Hardening.toSafeHtml(text))
+                ? new Markup(_Hardening.toSafeHtml(text, SafelistSelect.MARKUP))
                 : null;
     }
 

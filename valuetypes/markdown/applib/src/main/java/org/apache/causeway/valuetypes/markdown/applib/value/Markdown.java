@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.valuetypes.markdown.applib.value;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -27,13 +26,9 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.commons.internal.hardening._Hardening;
+import org.apache.causeway.commons.internal.hardening._Hardening.SafelistSelect;
 import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 import org.apache.causeway.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
-
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * Immutable value type holding pre-rendered HTML.
@@ -42,34 +37,39 @@ import lombok.experimental.Accessors;
  */
 @Named(CausewayModuleValMarkdownApplib.NAMESPACE + ".Markdown")
 @org.apache.causeway.applib.annotation.Value
-@EqualsAndHashCode
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
-public class Markdown implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
+public record Markdown(String markdown, String asHtml) implements Serializable {
 
     public static Markdown valueOf(final String markdown) {
         return new Markdown(markdown);
     }
 
-    @Getter private final String markdown;
-
-    @EqualsAndHashCode.Exclude
-    @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    @Accessors(fluent = true)
-    private final String html = _Hardening.toSafeRichHtml(Converter.mdToHtml(getMarkdown()));
+    public Markdown {
+    	markdown = markdown != null
+        		? markdown
+				: "";
+    	asHtml = _Hardening.toSafeHtml(
+        		Converter.mdToHtml(markdown), SafelistSelect.MARKDOWN);
+    }
 
     public Markdown() {
-        this(null);
+        this("", null);
     }
 
     public Markdown(final String markdown) {
-        this.markdown = markdown !=null ? markdown : "";
+        this(markdown, null);
     }
 
-    public String asHtml() {
-        return html();
+    @Override
+    public final boolean equals(final Object o) {
+    	return o instanceof Markdown other
+			? Objects.equals(this.markdown, other.markdown)
+			: false;
+    }
+
+    @Override
+    public final int hashCode() {
+    	return Objects.hashCode(markdown);
     }
 
     public boolean isEqualTo(final Markdown other) {
@@ -81,5 +81,15 @@ public class Markdown implements Serializable {
         return String.format("Markdown[length=%d,content=%s]",
                 markdown.length(), Markup.summarizeHtmlAsTitle(markdown));
     }
+
+    // -- DEPRECATIONS
+
+    /**
+     * @deprecated use {@link #markdown()} instead.
+     */
+    @Deprecated
+    public String getMarkdown() {
+		return markdown();
+	}
 
 }

@@ -18,8 +18,13 @@
  */
 package org.apache.causeway.valuetypes.vega.metamodel.semantics;
 
-import java.util.Map;
 import java.util.UUID;
+
+import jakarta.inject.Named;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.Parser;
@@ -28,14 +33,9 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
-import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
-
-import jakarta.inject.Named;
 
 @Component
 @Named(CausewayModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
@@ -94,14 +94,6 @@ implements
     private String asHtml(final @NonNull Vega vega) {
         var containerId = "vegaContainer" + UUID.randomUUID();
 
-        // CAUSEWAY-4079: the JSON payload is inlined into a <script> element, hence
-        //  - it must be a valid JSON object, and
-        //  - it must not be able to break out of the script context
-        if(!isValidJsonObject(vega.getJson())) {
-            return "<!-- invalid Vega (not a JSON object) -->";
-        }
-        var safeJson = escapeForScriptContext(vega.getJson());
-
         return switch (vega.getSchema()) {
 		case VEGA -> {
 			var htmlFragment = String.format("""
@@ -118,7 +110,7 @@ implements
 				});\
 				</script>""",
                     containerId,
-                    safeJson,
+                    vega.getJson(),
                     "canvas", // renderer (canvas or svg)
                     true // enable hover processing
                     );
@@ -134,24 +126,11 @@ implements
 				});\
 				</script>""",
                     containerId,
-                    safeJson);
+                    vega.getJson());
 			yield htmlFragment;
 		}
 		default -> "<!-- empty Vega (unsupported schema) -->";
 		};
-    }
-
-    private static boolean isValidJsonObject(final String json) {
-        return JsonUtils.tryRead(Map.class, json).getValue().isPresent();
-    }
-
-    /**
-     * Makes JSON safe to inline into a {@code <script>} element, by escaping {@code '<'} such that a
-     * literal {@code </script>} can never occur - this prevents breaking out of the script context
-     * (see CAUSEWAY-4079).
-     */
-    private static String escapeForScriptContext(final String json) {
-        return json.replace("<", "\\u003c");
     }
 
     // -- PARSER
