@@ -62,6 +62,15 @@ Strict change validation and whitespace checks passed.
 The production-Java diff relative to the planning checkpoint is empty, and no dependency/configuration change was introduced.
 No new runtime performance claim is made.
 
+## Fresh checkpoint validation
+
+Checkpoint `a48dc8a3648` was clean before rerunning both Maven gates.
+All 44 focused tests and all 121 domain-model tests passed again without failures or skips.
+The guide rendered again without warnings, three additive requirements synchronized exactly and all 67 pre-archive OpenSpec items passed strict validation.
+Production-source/dependency diffs since planning and whitespace checks remained clean.
+Fresh logs are `/tmp/causeway-mixin-verification-checkpoint-focused.log` and `/tmp/causeway-mixin-verification-checkpoint-domainmodel.log`.
+After archive, all 66 main specs passed strict validation, no active changes remained, schema metadata was retained and all tasks were checked.
+
 ## Limits
 
 Interaction tests use controlled metadata and empty member streams to isolate the discovery boundary; actual contribution creation is covered by the real bootstrap test.
