@@ -39,6 +39,7 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.scratchpad;
     exports org.apache.causeway.core.runtimeservices.ia;
     exports org.apache.causeway.core.runtimeservices.sitemap;
+    exports org.apache.causeway.core.runtimeservices.span;
     exports org.apache.causeway.core.runtimeservices.spring;
     exports org.apache.causeway.core.runtimeservices.transaction;
     exports org.apache.causeway.core.runtimeservices.urlencoding;

@@ -88,7 +88,12 @@ public class MicrometerTracingAgentFixture {
             constructor.setAccessible(true);
             var members = (MemberExecutorServiceDefault) constructor.newInstance(
                     interactions, null, null, null, null, null, null, integration);
-            var action = action(executionContext, integration, context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")));
+            org.apache.causeway.applib.services.span.ApplicationSpanService applicationSpans =
+                    context.getEnvironment().getProperty("fixture.application", Boolean.class, false)
+                            ? new org.apache.causeway.core.runtimeservices.span.ApplicationSpanServiceDefault(interactions, integration) : null;
+            var action = action(executionContext, integration,
+                    context.getEnvironment().acceptsProfiles(org.springframework.core.env.Profiles.of("agent")), applicationSpans);
+            var applicationActions = applicationSpans != null ? semanticActions(action).subList(0, 2) : List.<ActionExecutor>of();
             boolean evaluation = context.getEnvironment().getProperty("fixture.evaluation", Boolean.class, false);
             boolean evaluationFailure = context.getEnvironment().getProperty("fixture.evaluation-fail", Boolean.class, false);
             boolean audit = context.getEnvironment().getProperty("fixture.audit", Boolean.class, false);
@@ -131,7 +136,24 @@ public class MicrometerTracingAgentFixture {
                     } else interactions.call(org.apache.causeway.applib.services.iactn.InteractionContext.ofUserWithSystemDefaults(
                             org.apache.causeway.applib.services.user.UserMemento.ofName("sentinel-user")
                                     .withMultiTenancyToken("sentinel-tenant")), () -> {
-                        if (semantic) {
+                        if (applicationSpans != null) {
+                            ((JdbcAction) action.head().target().getPojo()).failApplicationSpan = exchange.getRequestURI().getQuery() != null;
+                            for (var applicationAction : applicationActions) {
+                                // The existing fixture dispatches pass-through actions. Supply their
+                                // execution identity through the real carrier's push/pop lifecycle.
+                                var carrier = interactions.currentInteractionCarrierElseFail();
+                                var invoked = applicationAction.owningAction().getFeatureIdentifier();
+                                var domain = applicationAction.owningAction().isDeclaredOnMixin()
+                                        ? Identifier.actionIdentifier(applicationAction.head().owner().objSpec().logicalType(), "updateName", String.class)
+                                        : invoked;
+                                var invocation = new org.apache.causeway.applib.services.iactn.ActionInvocation(
+                                        carrier.interaction(), invoked, domain, applicationAction.head().target().getPojo(),
+                                        List.of(), org.apache.causeway.applib.services.iactn.ActionInvocation.RuleChecking.SKIPPED);
+                                carrier.execute(invocation, () -> members.invokeAction(applicationAction));
+                            }
+                            applicationSpans.run("fallback", () -> { });
+                            applicationSpans.run("s".repeat(46), () -> { });
+                        } else if (semantic) {
                             for (var semanticAction : semanticActions) {
                                 members.invokeAction(semanticAction);
                             }
@@ -154,6 +176,12 @@ public class MicrometerTracingAgentFixture {
                         return null;
                     });
                 } catch (IllegalStateException expected) { status = 500; }
+                catch (org.apache.causeway.applib.exceptions.unrecoverable.ReflectiveActionException expected) {
+                    // The action dispatcher retains its existing reflective exception contract.
+                    if (applicationSpans != null && expected.getCause() instanceof IllegalStateException cause
+                            && "application phase failure".equals(cause.getMessage())) status = 500;
+                    else { expected.printStackTrace(); status = 599; }
+                }
                 catch (Throwable failure) { failure.printStackTrace(); status = 599; }
                 exchange.sendResponseHeaders(status, -1);
                 exchange.close();
@@ -172,12 +200,13 @@ public class MicrometerTracingAgentFixture {
             } finally { server.stop(0); executor.shutdownNow(); }
         }
     }
-    private static ActionExecutor action(final ExecutionContext executionContext, final CausewayObservationIntegration integration, final boolean agent) throws Exception {
+    private static ActionExecutor action(final ExecutionContext executionContext, final CausewayObservationIntegration integration,
+            final boolean agent, final org.apache.causeway.applib.services.span.ApplicationSpanService applicationSpans) throws Exception {
         var specification = mock(org.apache.causeway.core.metamodel.spec.ObjectSpecification.class);
         var loader = mock(org.apache.causeway.core.metamodel.specloader.SpecificationLoader.class);
         when(specification.getSpecificationLoader()).thenReturn(loader);
         when(loader.specForType(JdbcAction.class)).thenReturn(java.util.Optional.of(specification));
-        var target = ManagedObject.other(specification, new JdbcAction(integration, agent));
+        var target = ManagedObject.other(specification, new JdbcAction(integration, agent, applicationSpans));
         var head = mock(InteractionHead.class);
         when(head.target()).thenReturn(target);
         var objectManager = mock(ObjectManager.class);
@@ -238,7 +267,11 @@ public class MicrometerTracingAgentFixture {
 
     public static class JdbcAction {
         private final org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet jpa;
-        public JdbcAction(final CausewayObservationIntegration integration, final boolean agent) {
+        private final org.apache.causeway.applib.services.span.ApplicationSpanService applicationSpans;
+        private boolean failApplicationSpan;
+        public JdbcAction(final CausewayObservationIntegration integration, final boolean agent,
+                final org.apache.causeway.applib.services.span.ApplicationSpanService applicationSpans) {
+            this.applicationSpans = applicationSpans;
             jpa = org.apache.causeway.persistence.jpa.integration.entity.JpaObservationFixture.create(integration,
                     () -> {
                         if (agent) {
@@ -250,8 +283,18 @@ public class MicrometerTracingAgentFixture {
                     });
         }
         public String executeJdbc() {
-            jpa.persist(new org.apache.causeway.persistence.jpa.integration.entity.JpaObservationFixture.Entity());
+            if (applicationSpans != null) {
+                return applicationSpans.call("load", () -> applicationSpans.call("process", () -> {
+                    persist();
+                    if (failApplicationSpan) throw new IllegalStateException("application phase failure");
+                    return "compatible";
+                }));
+            }
+            persist();
             return "compatible";
+        }
+        private void persist() {
+            jpa.persist(new org.apache.causeway.persistence.jpa.integration.entity.JpaObservationFixture.Entity());
         }
         private static void executeSql() {
             try (var connection = DriverManager.getConnection("jdbc:h2:mem:tracing;DB_CLOSE_DELAY=-1");

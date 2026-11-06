@@ -68,6 +68,7 @@ import org.apache.causeway.core.runtimeservices.recognizer.dae.ExceptionRecogniz
 import org.apache.causeway.core.runtimeservices.render.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.causeway.core.runtimeservices.sitemap.SitemapServiceDefault;
+import org.apache.causeway.core.runtimeservices.span.ApplicationSpanServiceDefault;
 import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
@@ -87,6 +88,7 @@ import lombok.extern.slf4j.Slf4j;
         CausewayModuleCoreCodegenByteBuddy.class,
 
         // @Service's
+        ApplicationSpanServiceDefault.class,
         BookmarkServiceDefault.class,
         CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,

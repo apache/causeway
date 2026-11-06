@@ -20,6 +20,8 @@ package org.apache.causeway.core.config.observation;
 
 import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Creates compact contextual names with a bounded display length for semantic observations.
  *
@@ -28,6 +30,7 @@ import java.util.Objects;
 public final class CausewayObservationNaming {
 
     public static final int MAX_CONTEXTUAL_NAME_LENGTH = 50;
+    public static final int MAX_APPLICATION_SPAN_SUFFIX_LENGTH = 46;
 
     private CausewayObservationNaming() {}
 
@@ -69,6 +72,24 @@ public final class CausewayObservationNaming {
         final String typeName = identifier.substring(0, memberSeparator);
         final String memberName = identifier.substring(memberSeparator + 1);
         return bounded(prefix + simpleTypeName(typeName) + "#" + memberName);
+    }
+
+    /** Builds a bounded application display name without truncating its suffix. */
+    public static String forApplicationSpan(final @Nullable String logicalMemberIdentifier, final String suffix) {
+        final String validatedSuffix = requireText(suffix, "suffix");
+        if (validatedSuffix.length() > MAX_APPLICATION_SPAN_SUFFIX_LENGTH) {
+            throw new IllegalArgumentException("suffix must be at most " + MAX_APPLICATION_SPAN_SUFFIX_LENGTH + " characters");
+        }
+        final String identifier = logicalMemberIdentifier != null
+                ? requireText(logicalMemberIdentifier, "logicalMemberIdentifier") : "app";
+        final String fullName = identifier + " " + validatedSuffix;
+        if (fullName.length() <= MAX_CONTEXTUAL_NAME_LENGTH) return fullName;
+
+        final int separator = identifier.indexOf('#');
+        final String compact = separator > 0 && separator + 1 < identifier.length()
+                ? simpleTypeName(identifier.substring(0, separator)) + identifier.substring(separator) : identifier;
+        final int available = MAX_CONTEXTUAL_NAME_LENGTH - 1 - validatedSuffix.length();
+        return (compact.length() <= available ? compact : compact.substring(0, available)) + " " + validatedSuffix;
     }
 
     /** Formats a render region without including action signatures in its display name. */
