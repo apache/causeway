@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.applib.value;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -27,14 +26,10 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.commons.internal.hardening._Hardening;
+import org.apache.causeway.commons.internal.hardening._Hardening.SafelistSelect;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib.AdocToHtmlConverter;
 import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
-
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * Immutable value type holding pre-rendered HTML.
@@ -43,35 +38,39 @@ import lombok.experimental.Accessors;
  */
 @Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDoc")
 @org.apache.causeway.applib.annotation.Value
-@EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
-public final class AsciiDoc implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
+public record AsciiDoc(String adoc, String asHtml) implements Serializable {
 
     public static AsciiDoc valueOf(final String adoc) {
-        return new AsciiDoc(adoc);
+        return new AsciiDoc(adoc, null);
     }
 
-    @Getter private final String adoc;
-
-    @EqualsAndHashCode.Exclude
-    @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    @Accessors(fluent = true)
-    private final String html = _Hardening.toSafeRichHtml(
-            AdocToHtmlConverter.instance().adocToHtml(getAdoc()));
+    public AsciiDoc {
+    	adoc = adoc != null
+        		? adoc
+				: "";
+    	asHtml = _Hardening.toSafeHtml(
+    			AdocToHtmlConverter.instance().adocToHtml(adoc), SafelistSelect.ASCIIDOC);
+    }
 
     public AsciiDoc() {
-        this(null);
+        this("", null);
     }
 
     public AsciiDoc(final String adoc) {
-        this.adoc = adoc !=null ? adoc : "";
+        this(adoc, null);
     }
 
-    public String asHtml() {
-        return html();
+    @Override
+    public final boolean equals(final Object o) {
+    	return o instanceof AsciiDoc other
+			? Objects.equals(this.adoc, other.adoc)
+			: false;
+    }
+
+    @Override
+    public final int hashCode() {
+    	return Objects.hashCode(adoc);
     }
 
     public boolean isEqualTo(final AsciiDoc other) {
@@ -84,4 +83,13 @@ public final class AsciiDoc implements Serializable {
                 adoc.length(), Markup.summarizeHtmlAsTitle(adoc));
     }
 
+    // -- DEPRECATIONS
+
+    /**
+     * @deprecated use {@link #adoc()} instead.
+     */
+    @Deprecated
+    public String getAdoc() {
+    	return adoc();
+    }
 }
