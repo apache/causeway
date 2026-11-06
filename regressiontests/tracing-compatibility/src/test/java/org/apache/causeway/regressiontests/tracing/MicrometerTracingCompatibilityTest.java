@@ -30,6 +30,7 @@ import java.util.zip.GZIPInputStream;
 
 import com.sun.net.httpserver.HttpServer;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
 
@@ -45,6 +46,8 @@ import io.opentelemetry.proto.common.v1.KeyValue;
 import io.opentelemetry.proto.trace.v1.Span;
 import io.opentelemetry.proto.trace.v1.Status;
 
+@Disabled("Fragile test infrastructure, incompatible with Java 28-ea."
+		+ " Occasionally running into timeouts after 2 min failing the entire build.")
 class MicrometerTracingCompatibilityTest {
     @DisabledForJreRange(minVersion = 28, disabledReason = "JDK-28 EA breaks OTEL Quartz instrumentation (NoSuchFieldError)")
     @Test void agentJoinsFrameworkAndJdbcWithoutDuplicateSpans() throws Exception {
