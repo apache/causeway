@@ -27,7 +27,7 @@ Implementation targets **main**, not the maintenance working tree in which these
 No public applib API change is intended.
 Error-span retention can increase exported short-failure spans.
 Registry wiring changes require application-registry compatibility tests.
-The completed port mapping and source references are in [the reconciliation audit](../../../planned-changes/forward-port-reconciliation-2026-11-06.md).
+The completed port mapping and source references are preserved in the [historical reconciliation audit](https://github.com/apache/causeway/blob/4948a5d0d2a/openspec/planned-changes/forward-port-reconciliation-2026-11-06.md).
 
 ## Non-goals
 
