@@ -72,6 +72,9 @@ Measure elapsed processing time, allocation/CPU where practical and peak pending
 Use repeatable runs with recorded warmup/environment; do not introduce machine-dependent performance pass/fail thresholds or claim production gains from fixture timing.
 Produce `evaluation.adoc` in this change with the comparison matrix, runnable commands, correctness/resource results, measured limits and recommendation.
 Keep generated captures/results under the module's ignored `target/span-duration-evaluation/`, using sanitized deterministic manifests for committed fixtures.
+After the completed investigation, retire the disposable Python harness, fixture and README rather than keeping them as permanent regression maintenance.
+Preserve their complete source/reproduction checkpoint (`fdf4346734b`) in the evaluation report and clearly distinguish the historical 20-test evidence from current test gates.
+The Java export fixtures and production regression tests remain unchanged by that retirement.
 
 ### 6. End with a decision, not an implicit production rollout
 

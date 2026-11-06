@@ -8,7 +8,8 @@ Dropping a short JPA parent while retaining independently exported JDBC children
 - Retain successful and failed Causeway JPA spans regardless of duration, subject to normal sampling and export; retain existing names, attributes and ancestry.
 - Remove filtering examples and agent-only threshold overrides from the guides and Petclinic launcher.
 - Preserve explicit discard behavior used by transaction instrumentation; it is independent of duration filtering.
-- Track possible general duration filtering for all span types in `openspec/planned-changes/general-span-duration-filtering.md`, including descendant handling and Boot/agent consistency. No replacement filtering is implemented here.
+- Track possible general duration filtering for all span types, including descendant handling and Boot/agent consistency; see the subsequent [CAUSEWAY-4080 investigation](../../general-span-duration-filtering/evaluation.adoc).
+No replacement filtering is implemented here.
 
 ## Capabilities
 

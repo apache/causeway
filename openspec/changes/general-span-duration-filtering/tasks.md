@@ -33,3 +33,7 @@
 
 - [x] 6.1 Run the new conformance/corpus experiments and existing Boot/agent tracing compatibility regressions, confirming unchanged production duration retention, explicit discard semantics and single-owner behavior.
 - [x] 6.2 Document how to reproduce the investigation, distinguish experimental settings from supported configuration, and update the retained backlog note with the outcome without enabling production filtering or adding a production BOM/profile dependency.
+
+## 7. Retire disposable research tooling
+
+- [x] 7.1 Remove the Python prototype, tests, synthetic fixture and README after recording results; retain their complete Git checkpoint and historical reproduction instructions, verify no live references remain, and leave Java fixtures/production regressions unchanged.

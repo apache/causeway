@@ -123,7 +123,7 @@ No full repository reactor, live SSO browser flow or production deployment was t
 
 ## Retained idea #2
 
-[General span duration filtering](general-span-duration-filtering.md) remains an explicit follow-up for exploration, as requested by the user.
-It is not an outstanding maintenance forward port and was not implemented during reconciliation.
-Retain the existing requirement to preserve meaningful trace ancestry, failures and bounded resource use rather than restoring the removed JPA-only threshold.
-The next functional port and the duration-filtering exploration can be scheduled independently.
+The retained general span duration filtering idea was subsequently investigated as [CAUSEWAY-4080](../changes/general-span-duration-filtering/evaluation.adoc).
+The outcome is no-go for unrestricted live individual-span pruning under the existing contracts, with conditional feasibility only for explicitly closed offline datasets.
+It is not an outstanding maintenance forward port, and no production filtering was introduced.
+The retired backlog note remains available in Git history.

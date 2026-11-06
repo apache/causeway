@@ -5,12 +5,19 @@
 The investigation SHALL keep prototypes and experimental configuration isolated from the active production observation/export pipeline.
 It MUST preserve existing duration-independent observation retention, explicit discard semantics and single SDK/export ownership.
 It SHALL NOT introduce a supported production duration threshold or enable filtering through existing application profiles.
+If completed prototype tooling is retired, the evaluation report SHALL preserve its source/reproduction checkpoint and distinguish historical results from currently maintained tests.
 
 #### Scenario: Existing application and tracing regressions
 
 - **WHEN** existing Boot-managed or agent-managed fixtures run without the investigation prototype
 - **THEN** their existing retention, identity, ancestry and ownership assertions remain unchanged
 - **AND** no duration-based discard or additional SDK/export owner is installed
+
+#### Scenario: Retire completed investigation tooling
+
+- **WHEN** disposable prototype sources and fixtures are removed after results are recorded
+- **THEN** the report retains a Git checkpoint containing the complete tools and reproduction instructions
+- **AND** it does not present their historical test results as a current regression gate
 
 ### Requirement: Explicit scope and placement comparison
 

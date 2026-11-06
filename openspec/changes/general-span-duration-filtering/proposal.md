@@ -12,6 +12,7 @@ Before introducing a general replacement, establish whether individual-span dura
 - Evaluate bounded buffering, timeout/overflow/shutdown/exporter behavior, operational complexity and measured overhead/savings at each pipeline stage.
 - Produce an evidence-backed go/no-go recommendation and identify the prerequisites, limitations and separate production change needed if an approach is viable.
 - Retain current duration-independent observations, explicit discard behavior and single SDK/export ownership throughout the investigation.
+- Retire disposable Python research tooling after recording the completed results, preserving its source/reproduction checkpoint in Git history rather than maintaining it as a regression suite.
 
 ## Capabilities
 
@@ -29,4 +30,5 @@ The existing `observation-policy` and `main-observation-foundation` contracts re
 Primarily test/experimental fixtures around `regressiontests/tracing-compatibility` and investigation documentation.
 Any prototype dependencies or Collector configuration must be isolated, version-pinned and absent from the production BOM, application profiles and default export pipeline.
 No new public API, production threshold, agent extension, second SDK/exporter or deployment requirement is introduced by this investigation.
-The retained [backlog note](../../planned-changes/general-span-duration-filtering.md) and the archived [JPA-filter removal](../archive/2026-10-07-remove-jpa-duration-filtering/proposal.md) supply provenance.
+The archived [JPA-filter removal](../archive/2026-10-07-remove-jpa-duration-filtering/proposal.md) and the retired backlog note in Git history supply provenance.
+The completed investigation outcome is recorded in [evaluation.adoc](evaluation.adoc).

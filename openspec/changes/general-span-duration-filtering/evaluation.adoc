@@ -139,9 +139,20 @@ No new application configuration, profile, SDK/exporter, dependency or productio
 
 == Reproduce and evidence
 
-See link:../../../regressiontests/tracing-compatibility/src/test/python/README.md[the experiment README] for exact commands and test-only options.
-The experiment parameters, runner and sanitized synthetic manifest are committed-source candidates; raw captures and `results.json` remain generated/ignored under `regressiontests/tracing-compatibility/target/span-duration-evaluation/`.
-The final Python conformance suite has 20 tests, including the committed expected-retention manifest and order-insensitive graph-comparison regression coverage.
+The disposable Python prototype, fixtures and README were removed after the investigation to avoid leaving research tooling as maintained regression code.
+Their complete source, parameters, synthetic manifest and reproduction instructions remain available at commit `fdf4346734b`.
+To inspect the historical instructions:
+
+[source,bash]
+----
+git show fdf4346734b:regressiontests/tracing-compatibility/src/test/python/README.md
+----
+
+For reproduction, use a separate detached worktree at that checkpoint and follow its README rather than restoring the retired tools into the current branch.
+Build that checkout's dependencies first if locally installed snapshot artifacts no longer match it.
+The Java export fixtures remain available; raw captures and `results.json` are generated/ignored under `regressiontests/tracing-compatibility/target/span-duration-evaluation/`.
+The recorded Python conformance suite passed 20 tests, including the synthetic expected-retention manifest and order-insensitive graph-comparison coverage; it is historical evidence, not a current test gate.
+After retirement, the unchanged Java async/export smoke test passed again in both Boot and agent modes (one JUnit test); evidence is `/tmp/causeway-duration-python-retirement.log`.
 Maven full-run evidence is `/tmp/causeway-duration-full-tracing.log`; the local machine-readable measurement output is `regressiontests/tracing-compatibility/target/span-duration-evaluation/results.json`.
 Final conformance evidence is `/tmp/causeway-duration-python-conformance.log` (20 passed).
 A separate default-mode check passed four existing Boot/agent/JPA tests while the opt-in research test was correctly skipped (five discovered, one intentional skip); see `/tmp/causeway-duration-default-mode.log`.
