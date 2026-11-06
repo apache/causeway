@@ -15,34 +15,35 @@ This is a bounded audit of that source lineage, not a claim about every remote b
 ## Findings
 
 1. No additional production gap was identified in the original observability/priming/metamodel roadmap.
-All 23 relevant production-touching maintenance commits are named by the roadmap's source anchors, and all fourteen corresponding archived change task lists have zero unchecked tasks and recorded validation evidence.
+All 23 relevant production-touching maintenance commits are accounted for in the coverage table below, and all fourteen corresponding archived change task lists have zero unchecked tasks and recorded validation evidence.
 2. Three later tracing-harness commits require explicit classification rather than being mistaken for missing production features; see below.
 3. CAUSEWAY-4070 domain-object locking, outside the original roadmap, is already ported and archived in v4, including its approval corrections.
 4. CAUSEWAY-4078 transparent-SSO original-destination handling is a concrete additional forward-port candidate and is not present in the inspected v4 sign-in-page path.
 
-The roadmap has fifteen completed/covered rows because it also includes the main-specific CAUSEWAY-4096 observation-policy work.
+The completed roadmap covered fifteen items because it also included the main-specific [CAUSEWAY-4096 observation-policy work](../changes/archive/2026-10-05-standardize-observation-policy/proposal.md).
+This audit supersedes that roadmap; its historical content remains available in Git history.
 Mapping a source commit is not proof of byte-identical implementation: v4 intentionally retains its different observation ownership, interaction model, phased loader and Wicket structure.
 
 ## Original production-source coverage
 
 | Area | Maintenance production anchors | Destination evidence |
 |---|---|---|
-| Foundation | `9b8b66d5b7b`, `e6752f882b5` | `reconcile-main-observation-foundation`; Boot/agent ownership, shared integration and robust closure |
-| Classification/correlation | `024bd33128d`, `0325232a3c7`, `3083a51eabd` | `classify-and-correlate-observations`; foreground filter/classifier and interaction identity |
-| Current action context | `6d037db6609` | `port-current-action-context`; current action/rule-checking state |
-| Semantic member identity | `a2ae5877c99`, `d5ecd49a1f3`, `45e01ff6f42` | `port-semantic-member-names`; canonical domain-facing names |
-| Wicket regions/preparation | `a8264fd1f9b` and semantic-member portions | `port-wicket-region-observations`; v4 page/member observation hooks |
-| Collection detail/budgets | `8e5eaab6145`, `036a28a23c2`, `5a1dc2dd17b` | `port-wicket-collection-observations`; row/cell/action detail and volume controls |
-| Trace display names | `e17c3088ac2` | `port-semantic-trace-display-names`; foreground nominations and naming ownership |
-| Audit writing | `7961910a089` | `port-audit-trail-observations`; subscriber callback boundary |
-| Entity-change evaluation | `02786054574` | `port-entity-change-evaluation-observations`; evaluation boundary |
-| Application spans | `ea32b739d0f`, `5da64c34b57`, `f66b8f17a89` | `port-application-defined-spans`; no-op service and preserved physical invoked identity |
-| Priming hooks | `19d2a36d2f9` | `port-application-priming-hooks`; effective action arguments and authorized request-local view hooks |
-| Primer observations | `473454f2447` | `port-application-primer-observations`; per-callback observation boundaries |
-| Introspection diagnostics | `fb28fa67e06` | `port-metamodel-introspection-diagnostics`; retained chains and stable traversal |
-| Mixin prefilter | `680ac40ef52` | `verify-v4-mixin-prefiltering`; existing eager index verified rather than redundantly rewritten |
+| Foundation | `9b8b66d5b7b`, `e6752f882b5` | [reconcile-main-observation-foundation](../changes/archive/2026-09-27-reconcile-main-observation-foundation/validation.md); Boot/agent ownership, shared integration and robust closure |
+| Classification/correlation | `024bd33128d`, `0325232a3c7`, `3083a51eabd` | [classify-and-correlate-observations](../changes/archive/2026-10-07-classify-and-correlate-observations/validation.md); foreground filter/classifier and interaction identity |
+| Current action context | `6d037db6609` | [port-current-action-context](../changes/archive/2026-10-09-port-current-action-context/validation.md); current action/rule-checking state |
+| Semantic member identity | `a2ae5877c99`, `d5ecd49a1f3`, `45e01ff6f42` | [port-semantic-member-names](../changes/archive/2026-10-09-port-semantic-member-names/validation.md); canonical domain-facing names |
+| Wicket regions/preparation | `a8264fd1f9b` and semantic-member portions | [port-wicket-region-observations](../changes/archive/2026-10-09-port-wicket-region-observations/validation.md); v4 page/member observation hooks |
+| Collection detail/budgets | `8e5eaab6145`, `036a28a23c2`, `5a1dc2dd17b` | [port-wicket-collection-observations](../changes/archive/2026-10-10-port-wicket-collection-observations/validation.md); row/cell/action detail and volume controls |
+| Trace display names | `e17c3088ac2` | [port-semantic-trace-display-names](../changes/archive/2026-10-10-port-semantic-trace-display-names/validation.md); foreground nominations and naming ownership |
+| Audit writing | `7961910a089` | [port-audit-trail-observations](../changes/archive/2026-11-05-port-audit-trail-observations/validation.md); subscriber callback boundary |
+| Entity-change evaluation | `02786054574` | [port-entity-change-evaluation-observations](../changes/archive/2026-11-05-port-entity-change-evaluation-observations/validation.md); evaluation boundary |
+| Application spans | `ea32b739d0f`, `5da64c34b57`, `f66b8f17a89` | [port-application-defined-spans](../changes/archive/2026-11-06-port-application-defined-spans/validation.md); no-op service and preserved physical invoked identity |
+| Priming hooks | `19d2a36d2f9` | [port-application-priming-hooks](../changes/archive/2026-11-06-port-application-priming-hooks/validation.md); effective action arguments and authorized request-local view hooks |
+| Primer observations | `473454f2447` | [port-application-primer-observations](../changes/archive/2026-11-06-port-application-primer-observations/validation.md); per-callback observation boundaries |
+| Introspection diagnostics | `fb28fa67e06` | [port-metamodel-introspection-diagnostics](../changes/archive/2026-11-06-port-metamodel-introspection-diagnostics/validation.md); retained chains and stable traversal |
+| Mixin prefilter | `680ac40ef52` | [verify-v4-mixin-prefiltering](../changes/archive/2026-11-06-verify-v4-mixin-prefiltering/validation.md); existing eager index verified rather than redundantly rewritten |
 
-Archive links and exact validation records are indexed by the [roadmap](otel-forward-port-roadmap.md).
+The destination-evidence links above point directly to archived validation records.
 The 23 commits touch 68 distinct production/build paths; fifty retain their source path in v4 and eighteen require explicit relocation or architectural mapping.
 
 Important mappings checked include:
