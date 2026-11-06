@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
+import org.asciidoctor.SafeMode;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,11 +40,23 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 
 class ReplayableCommandTargetProjectionTest {
 
     // an id longer than the 10-char abbreviation used by getTargetId()
     private static final String LONG_ID = "0123456789-abcdef";
+
+    @BeforeAll
+    static void initConverter() {
+        // mirrors CausewayModuleValAsciidocApplib.createAdocToHtmlConverter(...)
+        var asciidoctor = Asciidoctor.Factory.create();
+        new CausewayModuleValAsciidocApplib.AdocToHtmlConverter(asciidoctor,
+                Options.builder()
+                        .safe(SafeMode.UNSAFE)
+                        .toFile(false)
+                        .build());
+    }
 
     @Test
     void getTargetExposesTheFullRecordedBookmark() {
@@ -71,7 +87,6 @@ class ReplayableCommandTargetProjectionTest {
     @Test
     void dtoViewIncludesTheRecordedResult() {
         var command = fixture(ReplayState.OK, Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "42"));
-
         assertThat(command.getDto().adoc()).contains("demo.Invoice", "42");
     }
 

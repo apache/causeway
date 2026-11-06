@@ -40,17 +40,18 @@ import org.asciidoctor.extension.Contexts;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.asciidoctor.extension.Reader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.jspecify.annotations.Nullable;
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -87,10 +88,10 @@ public class CausewayModuleValAsciidocApplib {
     public static final class AdocToHtmlConverter {
 
         public static AdocToHtmlConverter instance() {
-            return instance;
+            return INSTANCE;
         }
 
-        private static AdocToHtmlConverter instance;
+        private static AdocToHtmlConverter INSTANCE;
 
         private final @NonNull Asciidoctor asciidoctor;
         private final @NonNull Options options;
@@ -99,7 +100,7 @@ public class CausewayModuleValAsciidocApplib {
             super();
             this.asciidoctor = asciidoctor;
             this.options = options;
-            instance = this;
+            INSTANCE = this;
         }
 
         /**
@@ -113,9 +114,9 @@ public class CausewayModuleValAsciidocApplib {
          * @see <a href="https://prismjs.com/">prismjs.com</a>
          */
         public String adocToHtml(final @Nullable String adoc) {
-            return _Strings.isEmpty(adoc)
-                    ? ""
-                    : asciidoctor.convert(adoc, options);
+            return StringUtils.hasLength(adoc)
+                ? asciidoctor.convert(adoc, options)
+        		: "";
         }
 
     }
