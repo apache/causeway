@@ -37,6 +37,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -44,6 +45,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.services.priming.PrimingService;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
@@ -154,9 +156,8 @@ public class DomainObjectPage extends PageAbstract {
             throw new ObjectMember.AuthorizationException(ex);
         }
 
-        // check that the entity overall can be viewed.
-        if(!model.isVisible())
-            throw new ObjectMember.AuthorizationException();
+        // Authorize and prime before title, layout or member traversal.
+        primeForRendering(this, model, objectAdapter, getServiceRegistry());
 
         var objectSpec = objectAdapter.objSpec();
         // The object is already needed to build the page. Only static metadata
@@ -261,6 +262,16 @@ public class DomainObjectPage extends PageAbstract {
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
                         .orElseThrow());
+        primeForRendering(this, model, mo, getServiceRegistry());
+    }
+
+    static void primeForRendering(final Object page, final UiObjectWkt objectModel,
+            final ManagedObject root, final ServiceRegistry services) {
+        if (!objectModel.isVisible()) throw new ObjectMember.AuthorizationException();
+        if (WicketViewPrimingGuard.firstVisit(page)) {
+            services.lookupService(PrimingService.class)
+                    .ifPresent(priming -> priming.primeView(root.objSpec(), root.getPojo()));
+        }
     }
 
     @Override

@@ -27,5 +27,6 @@ Existing action context, authorization and observation boundaries are preserved.
 Adds applib and metamodel service packages/exports and explicit metamodel module registration.
 Adapts maintenance's mutable action executor to v4's record-based `ActionExecutor` and its `InteractionHead.owner()`/separate domain-facing invocation identity.
 Adapts maintenance's entity page hook to v4's `DomainObjectPage`, including initial authorized preparation and its existing refresh lifecycle.
-No dependency, telemetry configuration, schema, automatic bulk-loading policy or asynchronous execution is introduced.
+No production dependency, telemetry configuration, schema, automatic bulk-loading policy or asynchronous execution is introduced.
+The metamodel module adds managed JUnit/Mockito dependencies in test scope for its new focused tests.
 The branch is stacked on application-span PR #3911 and can be rebased after that merges.

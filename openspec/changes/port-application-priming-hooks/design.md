@@ -8,7 +8,9 @@ Its current action invocation already separates physical and domain-facing ident
 
 **Goals:** Exact validated startup registration, immutable positional arguments, synchronous ordinary-action hooks after effective argument adjustment, authorized once-per-page/request view hooks and transparent callback failures.
 
-**Non-Goals:** Primer observations (10b), background/async work, automatic batch-fetching algorithms, hierarchy matching, configurable per-request registration, persistence changes or new dependencies.
+**Non-Goals:** Primer observations (10b), background/async work, automatic batch-fetching algorithms, hierarchy matching, configurable per-request registration, persistence changes or new production dependencies.
+
+Metamodel focused tests use directly declared BOM-managed JUnit/Mockito test dependencies, avoiding the circular dependency that importing core internal test support would create.
 
 ## Decisions
 

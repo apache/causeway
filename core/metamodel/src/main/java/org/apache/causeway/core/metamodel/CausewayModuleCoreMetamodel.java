@@ -45,6 +45,7 @@ import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectMenu;
 import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectView;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.causeway.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.causeway.core.metamodel.services.priming.PrimingRegistryDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForDomainObjects;
@@ -194,6 +195,7 @@ import jakarta.inject.Provider;
         MetaModelServiceDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
+        PrimingRegistryDefault.class,
         // TableColumnOrderServiceUsingTxtFile.class, NOT here ... use @ComponentScan instead, see below
         TitleServiceDefault.class,
 
