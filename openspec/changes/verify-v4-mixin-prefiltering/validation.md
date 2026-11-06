@@ -62,6 +62,14 @@ Strict change validation and whitespace checks passed.
 The production-Java diff relative to the planning checkpoint is empty, and no dependency/configuration change was introduced.
 No new runtime performance claim is made.
 
+## Readability follow-up
+
+The published archive commit was reverted without rewriting history to reopen this change for the user's readability request.
+Both test classes now label given/when/then stages, use separate result variables where helpful and group the real-bootstrap expectations by purpose.
+The fixtures and asserted behavior are unchanged.
+The 44 focused tests and all 121 domain-model tests passed again without failures or skips on the rebased branch.
+IntelliJ remained unavailable for this worktree; Maven supplied compilation and regression validation.
+
 ## Limits
 
 Interaction tests use controlled metadata and empty member streams to isolate the discovery boundary; actual contribution creation is covered by the real bootstrap test.
