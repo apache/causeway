@@ -53,6 +53,14 @@ It rendered successfully with Asciidoctor 2.0.26 core/data from cached Asciidoct
 Strict `openspec validate port-application-priming-hooks --strict` and `git diff --check` passed.
 Six requirements are additive; existing authorization, invocation identity and observation requirements are retained.
 
+## Archive checkpoint
+
+Implementation committed as `bc3a6872611`.
+Fresh post-checkpoint validation repeated the focused build/install (fifty-three passing tests) and complete Wicket UI/viewer suite (113 executed tests, five existing skips), with no failures or errors.
+The complete tracing/JPA compatibility suite additionally passed all twenty-one tests without skips, preserving prior observation/export behavior after the new hooks were introduced.
+Six requirements were synced directly to `openspec/specs/application-priming-hooks/spec.md` and the change archived on 2026-11-06.
+Roadmap 10a is complete; 10b, observations around primer callbacks, remains next.
+
 ## Limits
 
 Tests use real managed-object wrappers, executor/reflection logic and Wicket request cycles, but metamodel specifications, service registry, domain-event helper, ORM-related collaborators and page/model services are controlled.
