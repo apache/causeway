@@ -71,6 +71,41 @@ User identity attributes are included automatically alongside interaction correl
 In Jaeger, select *All Span Names* and search separately by execution mode or interaction ID: they appear on different spans.
 Searches can only find traces that were sampled, exported and retained by the backend.
 
+== Application-defined spans
+
+Inject `org.apache.causeway.applib.services.span.ApplicationSpanService` to observe synchronous application phases without importing telemetry APIs:
+
+[source,java]
+----
+@Inject
+ApplicationSpanService spans;
+
+public void invoiceAll() {
+    var invoices = spans.call("load", this::loadInvoices);
+    spans.run("process", () -> processInvoices(invoices));
+}
+----
+
+Both operations execute work exactly once; `call` returns the original result, including `null`, and `run` accepts a throwing runnable.
+The stable operation name is `causeway.application.span`.
+During an action, names use the current domain-facing member identity followed by a space and the suffix, for example `demo.InvoiceSummary#invoiceAll load`.
+Contributed actions use their domain-facing identity rather than the mixin implementation method, without changing the physical invocation identity used by existing consumers.
+Nested current executions use their own identities, not the outer command's identity.
+Without a current execution, names use `app <suffix>` and omit the member attribute.
+
+Choose static suffixes such as `load` and `process`, never identifiers, titles, bookmarks, arguments, record values, users, tenants or other per-invocation data.
+Suffixes must be non-null, nonblank and no longer than 46 characters; invalid suffixes are rejected before work starts, even with observation inactive.
+Display names are at most 50 characters: Causeway first removes the type namespace and then, if needed, truncates only the identity portion, preserving the entire suffix.
+The full canonical identity without parameter signatures remains in `causeway.member.id`, and the suffix is retained in `causeway.application.span.suffix`.
+Only those static attributes and framework bean/module metadata are added.
+
+Regions inherit the current observation context in Boot and agent modes.
+Nested regions become children of their enclosing region, and synchronous JDBC work retains that ancestry through the configured instrumentation.
+Checked exceptions, runtime exceptions and errors escape unchanged and unwrapped after error recording and cleanup, following the interaction-service convention without declaring checked exceptions in the public API.
+Regions cannot outlive the service call and do not propagate their scopes to asynchronous work.
+When observation is inactive, work still runs normally without application spans or conditional tracing code.
+For standalone tests, `ApplicationSpanService.NOOP` executes work directly without naming validation or observation infrastructure.
+
 == Entity property-change evaluation
 
 When candidate property-change records are enlisted, the tracker observes their aggregate evaluation as `causeway.entitychange.evaluate`, displayed as `evaluate property changes`.

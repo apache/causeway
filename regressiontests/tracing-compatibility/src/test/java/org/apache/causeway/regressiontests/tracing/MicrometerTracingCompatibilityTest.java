@@ -486,6 +486,65 @@ class MicrometerTracingCompatibilityTest {
         }
     }
 
+    @Test void applicationRegionsExportCurrentIdentityNestedJdbcAndCleanupInBothOwners() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.application=true");
+                var spans = collector.spans;
+                var applications = spans.stream().filter(s -> attribute(s, "causeway.application.span.suffix") != null).toList();
+                assertEquals(8, applications.size(), names(spans));
+                assertEquals(2, applications.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                var loads = applications.stream().filter(s -> "load".equals(attribute(s, "causeway.application.span.suffix"))).toList();
+                var processes = applications.stream().filter(s -> "process".equals(attribute(s, "causeway.application.span.suffix"))).toList();
+                assertEquals(3, loads.size(), names(spans));
+                assertEquals(3, processes.size(), names(spans));
+                assertEquals(2, loads.stream().map(Span::getTraceId).distinct().count());
+                assertEquals(java.util.Set.of("domain.UpperCaseOwner#executeJdbc", "domain.UpperCaseOwner#updateName"), loads.stream()
+                        .map(s -> attribute(s, "causeway.member.id")).collect(Collectors.toSet()));
+                for (var load : loads) {
+                    var action = spans.stream().filter(s -> s.getSpanId().equals(load.getParentSpanId())).findFirst().orElseThrow();
+                    assertEquals(load.getTraceId(), action.getTraceId());
+                    assertTrue(action.getName().startsWith("act "), names(spans));
+                    assertTrue(attribute(action, "causeway.action.id").startsWith(attribute(load, "causeway.member.id") + "("));
+                    if (attribute(load, "causeway.member.id").endsWith("#updateName"))
+                        assertEquals(org.apache.causeway.applib.Identifier.actionIdentifier(
+                                org.apache.causeway.applib.id.LogicalType.eager(MicrometerTracingAgentFixture.JdbcAction.class,
+                                        "implementation.Owner_updateName"), "executeJdbc", String.class).toString(),
+                                attribute(action, "causeway.member.id"));
+                    assertEquals(1, processes.stream().filter(s -> s.getParentSpanId().equals(load.getSpanId())).count());
+                }
+                for (var process : processes) {
+                    assertTrue(spans.stream().anyMatch(s -> s.getTraceId().equals(process.getTraceId()) && ancestorIs(spans, s, process)
+                            && (mode.equals("agent") ? s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT : s.getName().equals("fixture.jdbc"))), names(spans));
+                }
+                var fallbacks = applications.stream().filter(s -> attribute(s, "causeway.member.id") == null).toList();
+                assertEquals(java.util.Set.of("app fallback", "app " + "s".repeat(46)), fallbacks.stream().map(Span::getName).collect(Collectors.toSet()));
+                for (var app : applications) {
+                    assertTrue(app.getName().length() <= 50);
+                    assertTrue(app.getName().endsWith(" " + attribute(app, "causeway.application.span.suffix")));
+                    assertFalse(app.toString().contains("sentinel"), app.toString());
+                    assertEquals("ApplicationSpanServiceDefault", attribute(app, "causeway.bean"));
+                    assertEquals("runtimeservices", attribute(app, "causeway.module"));
+                    var keys = app.getAttributesList().stream().map(KeyValue::getKey).filter(k -> k.startsWith("causeway.")).collect(Collectors.toSet());
+                    var expected = new java.util.HashSet<>(java.util.Set.of("causeway.bean", "causeway.module", "causeway.application.span.suffix"));
+                    if (attribute(app, "causeway.member.id") != null) expected.add("causeway.member.id");
+                    assertEquals(expected, keys);
+                }
+            }
+        }
+    }
+
+    @Test void applicationRegionsRemainSafeWhenInactiveOrExporterIsAbsent() throws Exception {
+        for (String mode : List.of("inactive", "none")) {
+            try (var collector = new Collector()) {
+                launch(mode, collector, "--fixture.application=true");
+                assertFalse(collector.spans.stream().anyMatch(s -> attribute(s, "causeway.application.span.suffix") != null), names(collector.spans));
+                if (mode.equals("inactive")) assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT), names(collector.spans));
+                else assertTrue(collector.spans.isEmpty(), names(collector.spans));
+            }
+        }
+    }
+
     private static String attribute(final Span span, final String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);

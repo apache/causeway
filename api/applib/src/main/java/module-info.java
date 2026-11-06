@@ -100,6 +100,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.filter;
     exports org.apache.causeway.applib.services.session;
     exports org.apache.causeway.applib.services.sitemap;
+    exports org.apache.causeway.applib.services.span;
     exports org.apache.causeway.applib.services.sudo;
     exports org.apache.causeway.applib.services.swagger;
     exports org.apache.causeway.applib.services.tablecol;
