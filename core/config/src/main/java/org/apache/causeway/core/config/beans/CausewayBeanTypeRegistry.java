@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -125,7 +126,9 @@ public class CausewayBeanTypeRegistry {
 
     public Stream<CausewayBeanMetaData> streamScannedTypes() { return scannedTypes.stream(); }
     public Stream<Class<?>> streamDomainServices() { return domainServices.keySet().stream(); }
-    public Stream<Class<?>> streamMixinTypes() { return mixinTypes.keySet().stream(); }
+    public Stream<Class<?>> streamMixinTypes() {
+        return mixinTypes.keySet().stream().sorted(Comparator.comparing(Class::getName));
+    }
     public Stream<Class<?>> streamValueTypes() { return valueTypes.keySet().stream(); }
     public Stream<Class<?>> streamEntityTypes() { return streamEntityTypes(persistenceStack); }
     public Stream<Class<?>> streamEntityTypes(final @Nullable PersistenceStack selectedStack) {

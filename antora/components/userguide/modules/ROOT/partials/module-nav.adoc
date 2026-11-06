@@ -9,6 +9,7 @@
 * xref:userguide::mixins.adoc[Mixins]
 * xref:userguide::events.adoc[Events]
 * xref:userguide::modules.adoc[Modules]
+* xref:userguide::metamodel-introspection-diagnostics.adoc[Metamodel Introspection Diagnostics]
 * xref:userguide::observability.adoc[Observability]
 * xref:userguide::application-priming-hooks.adoc[Application Priming Hooks]
 * xref:userguide::value-types.adoc[Value types]
