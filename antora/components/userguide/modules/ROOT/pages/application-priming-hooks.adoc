@@ -1,0 +1,81 @@
+= Application Priming Hooks
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Applications can register selected synchronous preloading callbacks before ordinary actions and authorized Wicket domain-object page preparation.
+These callbacks can load objects likely to be needed into the current ORM persistence context, reducing repeated lazy-loading queries during the following work.
+The framework does not choose a batch-fetching strategy or open a separate transaction for a primer.
+
+== Registering primers
+
+Implement `org.apache.causeway.applib.services.priming.PrimingRegistrar` as an application service:
+
+[source,java]
+----
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.apache.causeway.applib.services.priming.PrimingRegistrar;
+import org.apache.causeway.applib.services.priming.PrimingRegistry;
+
+@Service
+public class InvoicePrimers implements PrimingRegistrar {
+    private final InvoiceRepository invoices;
+
+    public InvoicePrimers(InvoiceRepository invoices) {
+        this.invoices = invoices;
+    }
+
+    @Override
+    public void register(PrimingRegistry registry) {
+        registry.actions(Invoice.class, List.of("approve", "recalculate"),
+                (invoice, arguments) -> invoices.loadRelated(invoice));
+        registry.action(Invoice.class, "send", (invoice, arguments) -> {
+            var mode = arguments.get(0, DeliveryMode.class);
+            invoices.loadForDelivery(invoice, mode);
+        });
+        registry.view(Invoice.class, invoices::loadForDisplay);
+    }
+}
+----
+
+The domain class and local action logical name are resolved against the completed metamodel; callers do not supply or parse full identifiers.
+Use the mixee class and contributed action name for mixin actions, not the mixin implementation class or its `act` method.
+Multiple callbacks can match one exact key and all run deterministically, but they must not depend on their relative order.
+
+Registrars run after metamodel loading, and the resulting registry is immutable before requests are served.
+Unknown exact classes, malformed names and unresolved actions fail startup with registration diagnostics.
+Registrations do not apply by superclass, interface or subtype assignability: another logical type needs its own registration.
+Do not retain the registry for later mutation; mutation is rejected outside the registration window, including after failed initialization.
+
+== Action timing and arguments
+
+Action primers run after rule validation and any executing-event argument adjustments, immediately before the method or query-cache lookup.
+They share the existing action interaction, thread, transaction and ORM persistence context.
+A contributed action receives the mixed-in domain object, not the transient mixin receiver.
+Nested ordinary invocations have their own priming opportunity.
+Pass-through calls and synthetic mixed-in property/collection accessors do not gain action primers.
+Unmatched actions execute normally.
+
+`ActionArguments` provides `size()`, `get(index)`, `get(index, requiredType)` and `asList()`.
+It is an unmodifiable shallow snapshot of the effective positional arguments, retaining nulls and treating an array-valued parameter as one slot.
+Typed nulls remain null; incompatible typed access fails with the argument index and expected type.
+The list cannot be modified, but referenced argument objects and arrays are not deep-copied and must not be mutated by primers.
+
+== Entity-view timing
+
+Wicket view primers run after object visibility authorization and before title, layout, property and collection preparation.
+They use the current rendering request's persistence context.
+An initial page and later full/Ajax requests can each prime the page, after the existing refresh and authorization path where applicable.
+Repeated lifecycle visits admit a given page instance at most once per request; different page instances have independent opportunities even when they represent the same object.
+Admission is held only in request-cycle metadata, not serialized page state.
+Unauthorized roots never reach application primers.
+
+== Callback contract
+
+Implement callbacks as synchronous, read-only, independently idempotent and safe for concurrent invocation.
+Read-only behavior is an application responsibility, not a new framework transaction mode.
+Do not dispatch background/async work or retain request-scoped entities for later use.
+
+A callback failure propagates through the existing action or Wicket boundary and stops normal method/page preparation; it is not an optional optimization failure that the framework suppresses or retries.
+A failing view primer is not retried by lifecycle re-entry during the same request.
+Applications without registrars require no changes.
+Priming does not depend on the `observation` profile and this feature adds no dedicated primer spans.

@@ -91,6 +91,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.metrics;
     exports org.apache.causeway.applib.services.publishing.log;
     exports org.apache.causeway.applib.services.publishing.spi;
+    exports org.apache.causeway.applib.services.priming;
     exports org.apache.causeway.applib.services.queryresultscache;
     exports org.apache.causeway.applib.services.registry;
     exports org.apache.causeway.applib.services.render;

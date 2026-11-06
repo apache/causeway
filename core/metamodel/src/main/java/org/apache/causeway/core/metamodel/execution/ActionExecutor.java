@@ -49,6 +49,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.services.priming.PrimingService;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -142,7 +143,7 @@ implements MemberExecutor<ActionInvocation> {
 
         if(!isPostable()) {
         	// don't emit domain events
-        	return executeWithoutEvents(arguments);
+            return executeWithoutEvents(arguments, currentExecution);
         }
 
         // ... post the EXECUTING event
@@ -169,7 +170,7 @@ implements MemberExecutor<ActionInvocation> {
         currentExecution.setEvent(executingEvent);
 
         // invoke method
-        var resultPojo = executeWithoutEvents(argsForInvocation);
+        var resultPojo = executeWithoutEvents(argsForInvocation, currentExecution);
 
         if (executingEvent != null) {
         	return observationProvider.get("Domain Event EXECUTED")
@@ -194,12 +195,26 @@ implements MemberExecutor<ActionInvocation> {
     // -- HELPER
     
     @SneakyThrows
-    private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
+    private Object executeWithoutEvents(final Can<ManagedObject> arguments, final ActionInvocation currentExecution) {
+        prime(arguments, currentExecution);
         // invoke method
 		var resultPojo = invokeMethodElseFromCache(method, head, arguments);
         return serviceInjector().injectServicesInto(resultPojo);			
     }
     
+    private void prime(final Can<ManagedObject> effectiveArguments, final ActionInvocation currentExecution) {
+        if (interactionInitiatedBy.isPassThrough()
+                || actionInvocationFacetAbstract instanceof ActionInvocationFacetForMixedInPropertyOrCollection) {
+            return;
+        }
+        facetHolder.lookupService(PrimingService.class).ifPresent(primingService -> {
+            final var owner = head.owner();
+            final var target = Objects.requireNonNull(MmUnwrapUtils.single(owner), "Action priming requires a domain target");
+            primingService.primeAction(owner.objSpec(), currentExecution.getDomainFacingLogicalMemberIdentifier().memberLogicalName(),
+                    target, MmUnwrapUtils.multipleAsList(effectiveArguments));
+        });
+    }
+
     private boolean isPostable() {
     	// when mixed-in prop/coll always returns false
     	return actionInvocationFacetAbstract.isPostable();
