@@ -1,6 +1,7 @@
 # General span duration filtering
 
-Status: backlog / exploration; no implementation ticket assigned.
+Status: [investigation proposed](../changes/general-span-duration-filtering/proposal.md); no implementation ticket assigned.
+The active change is investigation/proof-of-concept only, with an explicit go/conditional-go/no-go decision before any separately approved production filtering work.
 
 Explicitly retained by user request on 2026-11-06 as idea #2 following the [maintenance-to-v4 reconciliation](forward-port-reconciliation-2026-11-06.md).
 This remains a separate exploration, not an outstanding maintenance forward port or work included in the audit.
