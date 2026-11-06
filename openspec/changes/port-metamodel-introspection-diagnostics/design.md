@@ -22,7 +22,7 @@ An overflow during registration still has the requested type/request even when c
 ### Keep diagnostics internal, best-effort and thread-local
 
 Use a package-private helper in `spec.impl` with per-thread active frames and idempotent scopes.
-Capture a compact caller through a lazily traversed StackWalker, excluding helper/loader plumbing and falling back to unavailable if capture fails.
+Capture a compact caller through a lazily traversed StackWalker, excluding helper/loader and JDK plumbing and falling back to unavailable if capture fails.
 Render retained frames only on overflow; successful requests do not log or build reports.
 Deduplicate by error identity while the outer chain is active, report before unwinding loses frames, and release thread state once scopes and an optional test capture are gone.
 Reporting or cleanup failure must not replace the original metamodel failure.

@@ -1,0 +1,56 @@
+= Metamodel Introspection Diagnostics
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Nested metamodel loading can involve collection element types, mixed-in members, derived action return types and synthetic recording-navigation actions.
+A JVM stack trace may show the framework recursion without identifying the domain types that requested each nested load.
+Causeway retains that active type chain and reports it best-effort if specification loading encounters a `StackOverflowError`.
+
+== Reading a report
+
+The existing specification-loader logger emits an error beginning with:
+
+[source,text]
+----
+Metamodel specification introspection chain at StackOverflowError:
+[0] type=example.Invoice requested=FULL current=TYPE_INTROSPECTED caller=example.Loader#load:42
+[1] type=example.Invoice_lines requested=FULL effective=TYPE_ONLY current=TYPE_INTROSPECTED caller=example.MemberDiscovery#discover:85
+----
+
+Entries are ordered from the outermost active request to the innermost retained request.
+`requested` describes the v4 loading request: `REGISTER`, `TYPE_ONLY` or `FULL`.
+`effective` is included when the existing phased loader downgrades that request, for example while introspecting mixins.
+`substituted` is included when a class substitutor selects a different Java type.
+`current` is a passive state snapshot taken before the requested transition; it is not a claim that the state remained unchanged until failure.
+State or caller information may be unavailable if registration has not produced a specification yet or safe capture fails.
+Caller locations distinguish requesting paths and may have unavailable line numbers in binaries compiled without debug information.
+
+The loader reports the chain before unwinding loses its inner entries, suppresses duplicate reports for the same error on that thread, and rethrows the identical original error through existing failure handling.
+Diagnostic reporting and cleanup failures do not replace the original metamodel failure.
+If stack or memory is too scarce even for diagnostics, reporting remains best-effort rather than becoming a second failure.
+
+== Scope and overhead
+
+Chains are local to individual bootstrap threads; parallel startup can therefore produce separate reports with separate thread labels.
+Active frame and error-suppression state is released when the outer load finishes, on success or failure.
+The diagnostic helper captures static type/request/state/caller information, not domain instances or action arguments.
+
+Successful loading emits no overflow report at standard log levels and does not format the retained chain.
+Retaining frames and capturing callers still adds work to non-null requests, including cached loads.
+A warmed helper-level timing sample is recorded in the change's validation evidence; it is not a production benchmark or a performance guarantee.
+The feature does not require the `observation` profile and does not install telemetry infrastructure or add new configuration.
+
+== Deterministic mixin traversal
+
+The shared registry returns mixin classes in ascending fully qualified class-name order, independently of insertion order.
+Both eager and on-the-fly discovery consume that sequence.
+This does not change applicability, explicit layout/member sequence, cache identity, class substitution, aliases or the existing introspection phases and locks.
+Equal class names from different classloaders are not assigned a new tie-breaking policy.
+
+== Investigating a failure
+
+Retain the first chain report for the failing thread together with the original stack trace.
+Record framework/JDK versions, JVM stack-size settings, metamodel parallelization and any relevant class substitution.
+Compare the repeated types and caller paths, particularly where collection/navigation synthesis requests action element types or other fully introspected members.
+
+These diagnostics improve observability and reproducibility; they do not fix recursion, increase JVM stack size or add a mixin-applicability prefilter.
+A follow-up optimization must be assessed against v4's existing phased/eager mixin pipeline rather than replaying an older loader implementation.

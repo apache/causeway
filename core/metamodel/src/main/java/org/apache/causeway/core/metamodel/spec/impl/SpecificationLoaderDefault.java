@@ -638,42 +638,45 @@ implements
         if(type==null)
         	return null;
 
-        var substitute = classSubstitutorRegistry.getSubstitution(type);
-        if (substitute.isNeverIntrospect())
-        	return null; // never inspect
+        var diagnosticScope = _IntrospectionDiagnostics.enter(type, request);
+        try {
+            var substitute = classSubstitutorRegistry.getSubstitution(type);
+            if (substitute.isNeverIntrospect())
+                return null; // never inspect
 
-        var substitutedType = substitute.apply(type);
+            var substitutedType = substitute.apply(type);
+            var spec = cache.computeIfAbsent(substitutedType, _spec ->
+                logicalTypeResolver.register(createSpecification(beanClassifier.apply(substitutedType))));
 
-        var spec = cache.computeIfAbsent(substitutedType, _spec->
-            logicalTypeResolver
-                .register(
-                        createSpecification(beanClassifier.apply(substitutedType))));
+            var effectiveRequest = (phase == Phase.INTROSPECTING_MIXINS
+                    && request == IntrospectionRequest.FULL
+                    && !spec.isMixin())
+                    ? IntrospectionRequest.TYPE_ONLY : request;
 
-        var effectiveRequest = (phase == Phase.INTROSPECTING_MIXINS
-        		&& request==IntrospectionRequest.FULL
-        		&& !spec.isMixin())
-    		? IntrospectionRequest.TYPE_ONLY
-			: request;
+            diagnosticScope.note(substitutedType, effectiveRequest, currentStateForDiagnostics(spec));
+            introspect(spec, effectiveRequest);
 
-        introspect(spec, effectiveRequest);
-
-        if(spec.aliases().isNotEmpty()
-            // this bool. expr. is an optimization, not strictly required ... a bit of hack though
-            && request == IntrospectionRequest.TYPE_ONLY) {
-
-            //XXX[3063] hitting this a couple of times
-            //(~5 see org.apache.causeway.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
-            // per spec (with aliases), even though already registered;
-            // room for performance optimizations, but at the time of writing
-            // don't want to add a ObjectSpecification flag to keep track of alias registered state;
-            // as an alternative purge the aliased facets and introspect aliased attributes from annotations
-            // much earlier in the bootstrap process, same as we do with @Named processing
-
-            logicalTypeResolver
-                .registerAliases(spec);
+            if (spec.aliases().isNotEmpty()
+                    // This check is an existing optimization, not a new introspection decision.
+                    && request == IntrospectionRequest.TYPE_ONLY) {
+                // CAUSEWAY-3063: preserve alias registration for already-registered specifications.
+                logicalTypeResolver.registerAliases(spec);
+            }
+            return spec;
+        } catch (StackOverflowError error) {
+            try {
+                _IntrospectionDiagnostics.reportStackOverflow(error, log::error);
+            } catch (Throwable diagnosticFailure) {
+                // Even preparing the reporter can fail when stack space is scarce.
+            }
+            throw error;
+        } finally {
+            try {
+                diagnosticScope.close();
+            } catch (Throwable diagnosticFailure) {
+                // Diagnostic cleanup must not replace an existing metamodel failure.
+            }
         }
-
-        return spec;
     }
 
 	/**
@@ -766,6 +769,24 @@ implements
         });
         serviceRegistry.lookupService(GridService.class)
             .ifPresent(GridService::clearCache);
+    }
+
+    private static @Nullable String currentStateForDiagnostics(final ObjectSpecificationInternal spec) {
+        try {
+            if (spec instanceof ObjectSpecificationDefault legacy) {
+                return legacy.introspectionStateHandler().introspectionState().name();
+            }
+            if (spec instanceof ObjectSpecificationFacade facade) {
+                return switch (facade.objectMetaData()) {
+                    case ObjectSpecificationFacade.ObjectMetaDataInitial ignored -> "NOT_INTROSPECTED";
+                    case ObjectSpecificationFacade.ObjectMetaDataTypeOnly ignored -> "TYPE_INTROSPECTED";
+                    case ObjectSpecificationFacade.ObjectMetaDataFull ignored -> "FULLY_INTROSPECTED";
+                };
+            }
+        } catch (Throwable ignored) {
+            // State capture must not force introspection or affect the loader's outcome.
+        }
+        return null;
     }
 
     private void introspect(final ObjectSpecificationInternal internalSpec, final IntrospectionRequest request) {
