@@ -46,6 +46,14 @@ Both eager and on-the-fly discovery consume that sequence.
 This does not change applicability, explicit layout/member sequence, cache identity, class substitution, aliases or the existing introspection phases and locks.
 Equal class names from different classloaders are not assigned a new tie-breaking policy.
 
+== Existing v4 applicability pipeline
+
+V4 bootstraps registered mixins separately, then builds an eager index keyed by each mixin facet's mixee type before domain member discovery.
+Per-target discovery selects from that index using the target's Java class, superclasses and implemented interfaces, including ordinary interfaces without `Domain.Include`.
+Action and association discovery read members only from selected candidates; an unrelated target does not trigger another member scan or loader request for a rejected candidate.
+The existing Object-mixin action exclusion for contributing services remains in effect.
+This avoids the maintenance loader's per-target eager scan of unrelated mixins, but does not mean unrelated registered mixins are never fully introspected during the independent bootstrap phase.
+
 == Investigating a failure
 
 Retain the first chain report for the failing thread together with the original stack trace.
@@ -53,4 +61,4 @@ Record framework/JDK versions, JVM stack-size settings, metamodel parallelizatio
 Compare the repeated types and caller paths, particularly where collection/navigation synthesis requests action element types or other fully introspected members.
 
 These diagnostics improve observability and reproducibility; they do not fix recursion, increase JVM stack size or add a mixin-applicability prefilter.
-A follow-up optimization must be assessed against v4's existing phased/eager mixin pipeline rather than replaying an older loader implementation.
+Any further optimization must preserve the distinction between independent eager mixin bootstrap and per-target candidate/member discovery.
