@@ -66,6 +66,17 @@ It rendered with Asciidoctor 2.0.26 core/data from cached AsciidoctorJ 3.0.1 usi
 Strict change validation and whitespace checks passed.
 Four additive requirements preserve existing loading and ordering contracts.
 
+## Fresh checkpoint validation
+
+Implementation checkpoint `9b0539109d0` was clean before rerunning both Maven gates.
+Fresh validation again passed thirty-seven focused tests and all 120 domain-model tests without failures or skips.
+The helper sample was 48.6 ms for 20,000 scopes, or 2,432 ns per scope; it remains non-gating.
+Both independent graph contexts bootstrapped successfully, and the complete domain-model log contained zero overflow-chain reports.
+The guide rendered again without warnings, all four additive requirements matched the new main spec exactly, and strict validation passed all 66 pre-archive items.
+
+Fresh logs are `/tmp/causeway-introspection-diagnostics-checkpoint-focused.log` and `/tmp/causeway-introspection-diagnostics-checkpoint-domainmodel.log`.
+After direct spec sync and archive, all 65 main specifications passed strict validation, no active changes remained, schema metadata was retained and whitespace checks passed.
+
 ## Limits
 
 Real bootstrap tests exercise v4's current eager/phased metamodel path, not the original maintenance implementation or a production application's overflowing graph.
