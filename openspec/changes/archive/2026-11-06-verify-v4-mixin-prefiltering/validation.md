@@ -69,6 +69,9 @@ Both test classes now label given/when/then stages, use separate result variable
 The fixtures and asserted behavior are unchanged.
 The 44 focused tests and all 121 domain-model tests passed again without failures or skips on the rebased branch.
 IntelliJ remained unavailable for this worktree; Maven supplied compilation and regression validation.
+Fresh validation of clean readability checkpoint `d4397e473af` again passed all 44 focused and 121 domain-model tests without failures or skips.
+Logs are `/tmp/causeway-mixin-readability-checkpoint-focused.log` and `/tmp/causeway-mixin-readability-checkpoint-domainmodel.log`.
+Re-archive retained the three requirements unchanged; all 66 main specs passed strict validation, no active changes remained and whitespace checks passed.
 
 ## Limits
 
