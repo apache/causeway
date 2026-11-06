@@ -37,7 +37,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <jnr-jffi.version>1.4.5</jnr-jffi.version>
+        <jnr-jffi.version>1.4.7</jnr-jffi.version>
     </properties>
 
     <dependencyManagement>
