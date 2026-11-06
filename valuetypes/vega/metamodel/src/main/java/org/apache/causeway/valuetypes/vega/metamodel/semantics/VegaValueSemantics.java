@@ -67,7 +67,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Vega value) {
-        return decomposeAsString(value, Vega::getJson, ()->null);
+        return decomposeAsString(value, Vega::json, ()->null);
     }
 
     @Override
@@ -94,7 +94,7 @@ implements
     private String asHtml(final @NonNull Vega vega) {
         var containerId = "vegaContainer" + UUID.randomUUID();
 
-        return switch (vega.getSchema()) {
+        return switch (vega.schema()) {
 		case VEGA -> {
 			var htmlFragment = String.format("""
 				<div id="%1$s"></div>
@@ -110,7 +110,7 @@ implements
 				});\
 				</script>""",
                     containerId,
-                    vega.getJson(),
+                    vega.json(),
                     "canvas", // renderer (canvas or svg)
                     true // enable hover processing
                     );
@@ -126,7 +126,7 @@ implements
 				});\
 				</script>""",
                     containerId,
-                    vega.getJson());
+                    vega.json());
 			yield htmlFragment;
 		}
 		default -> "<!-- empty Vega (unsupported schema) -->";
@@ -137,7 +137,7 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Vega vega) {
-        return vega!=null ? vega.getJson() : null;
+        return vega!=null ? vega.json() : null;
     }
 
     @Override

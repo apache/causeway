@@ -32,7 +32,7 @@ public class CausewayMarkdownConverter implements AttributeConverter<Markdown, S
     @Override
     public String convertToDatabaseColumn(final Markdown memberValue) {
         return memberValue != null
-                ? memberValue.getMarkdown()
+                ? memberValue.markdown()
                 : null;
     }
 

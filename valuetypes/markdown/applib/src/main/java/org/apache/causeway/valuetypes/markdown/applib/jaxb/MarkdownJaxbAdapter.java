@@ -41,20 +41,18 @@ public final class MarkdownJaxbAdapter extends XmlAdapter<String, Markdown> {
     private final Base64.Decoder decoder = Base64.getDecoder(); // is thread-safe ?
 
     @Override
-    public Markdown unmarshal(String v) throws Exception {
-        if(v==null) {
-            return null;
-        }
+    public Markdown unmarshal(final String v) throws Exception {
+        if(v==null)
+			return null;
         final String markdown = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
         return Markdown.valueOf(markdown);
     }
 
     @Override
-    public String marshal(Markdown v) throws Exception {
-        if(v==null) {
-            return null;
-        }
-        final String markdown = v.getMarkdown();
+    public String marshal(final Markdown v) throws Exception {
+        if(v==null)
+			return null;
+        final String markdown = v.markdown();
         return encoder.encodeToString(_Strings.toBytes(markdown, StandardCharsets.UTF_8));
     }
 }

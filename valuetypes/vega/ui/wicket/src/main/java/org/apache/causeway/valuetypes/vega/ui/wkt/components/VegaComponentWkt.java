@@ -68,15 +68,14 @@ public class VegaComponentWkt extends MarkupComponent {
 
     private Optional<Vega.Schema> vegaSchema() {
         var modelObject = getDefaultModelObject();
-        if(modelObject==null) {
-            return Optional.empty();
-        }
+        if(modelObject==null)
+			return Optional.empty();
         if(!(modelObject instanceof ManagedObject)) {
             log.error("framework bug: unexpected type {}", modelObject.getClass().getName());
             return Optional.empty();
         }
         return _Casts.castTo(Vega.class, MmUnwrapUtils.single((ManagedObject)modelObject))
-                .map(Vega::getSchema);
+                .map(Vega::schema);
     }
 
 }

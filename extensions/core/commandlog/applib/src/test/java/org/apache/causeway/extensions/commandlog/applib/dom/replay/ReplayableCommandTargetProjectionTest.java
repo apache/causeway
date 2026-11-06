@@ -24,6 +24,10 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -32,10 +36,6 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ReplayableCommandTargetProjectionTest {
 
@@ -72,7 +72,7 @@ class ReplayableCommandTargetProjectionTest {
     void dtoViewIncludesTheRecordedResult() {
         var command = fixture(ReplayState.OK, Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "42"));
 
-        assertThat(command.getDto().getAdoc()).contains("demo.Invoice", "42");
+        assertThat(command.getDto().adoc()).contains("demo.Invoice", "42");
     }
 
     private static ReplayableCommand fixture(final ReplayState replayState, final Bookmark result) {

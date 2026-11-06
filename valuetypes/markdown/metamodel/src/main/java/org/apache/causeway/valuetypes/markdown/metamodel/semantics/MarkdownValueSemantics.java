@@ -54,7 +54,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Markdown value) {
-        return decomposeAsString(value, Markdown::getMarkdown, ()->null);
+        return decomposeAsString(value, Markdown::markdown, ()->null);
     }
 
     @Override
@@ -78,17 +78,15 @@ implements
 
     @Override
     public String parseableTextRepresentation(final Context context, final Markdown value) {
-        if(value==null) {
-            return null;
-        }
-        return value.getMarkdown();
+        if(value==null)
+			return null;
+        return value.markdown();
     }
 
     @Override
     public Markdown parseTextRepresentation(final Context context, final String text) {
-        if(text==null) {
-            return null;
-        }
+        if(text==null)
+			return null;
         return Markdown.valueOf(text);
     }
 
