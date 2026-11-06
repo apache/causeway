@@ -545,6 +545,70 @@ class MicrometerTracingCompatibilityTest {
         }
     }
 
+    @Test void primerCallbacksExportSeparateNaturalScopesAndJdbcInBothOwners() throws Exception {
+        for (String mode : List.of("boot", "agent")) {
+            for (String failureKind : List.of("action", "view")) {
+                try (var collector = new Collector()) {
+                    launch(mode, collector, "--fixture.primers=true", "--fixture.primer-failure=" + failureKind);
+                    var spans = collector.spans;
+                    var actions = spans.stream().filter(s -> s.getName().startsWith("prime action ")).toList();
+                    var views = spans.stream().filter(s -> s.getName().startsWith("prime view ")).toList();
+                    assertEquals(failureKind.equals("action") ? 5 : 4, actions.size(), names(spans));
+                    assertEquals(failureKind.equals("action") ? 6 : 5, views.size(), names(spans));
+                    assertEquals(failureKind.equals("action") ? 1 : 0, actions.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                    assertEquals(failureKind.equals("view") ? 1 : 0, views.stream().filter(s -> s.getStatus().getCode() == Status.StatusCode.STATUS_CODE_ERROR).count());
+                    assertEquals(2, views.stream().map(Span::getTraceId).distinct().count());
+                    for (var primer : java.util.stream.Stream.concat(actions.stream(), views.stream()).toList()) {
+                        boolean action = actions.contains(primer);
+                        assertTrue(primer.getName().length() <= 50);
+                        assertEquals("PrimingRegistryDefault", attribute(primer, "causeway.bean"));
+                        assertEquals("metamodel", attribute(primer, "causeway.module"));
+                        assertEquals(action ? PrimerObservationTracingFixture.ACTION_TYPE : PrimerObservationTracingFixture.VIEW_TYPE,
+                                attribute(primer, "causeway.object.type"));
+                        assertEquals(action ? "causeway.TracingFixture#executeJdbc()" : null, attribute(primer, "causeway.action.id"));
+                        var expected = new java.util.HashSet<>(java.util.Set.of("causeway.bean", "causeway.module", "causeway.object.type"));
+                        if (action) expected.add("causeway.action.id");
+                        assertEquals(expected, primer.getAttributesList().stream().map(KeyValue::getKey)
+                                .filter(k -> k.startsWith("causeway.")).collect(Collectors.toSet()));
+                        assertFalse(primer.toString().contains("sentinel"), primer.toString());
+                        var parent = spans.stream().filter(s -> s.getSpanId().equals(primer.getParentSpanId())).findFirst().orElseThrow();
+                        assertEquals(parent.getTraceId(), primer.getTraceId());
+                        if (action) assertTrue(parent.getName().startsWith("act "), names(spans));
+                        else assertFalse(parent.getName().startsWith("prepare ") || parent.getName().startsWith("render "), names(spans));
+                        assertTrue(spans.stream().anyMatch(s -> s.getTraceId().equals(primer.getTraceId()) && ancestorIs(spans, s, primer)
+                                && (mode.equals("agent") ? s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT
+                                        : s.getName().equals("fixture.primer.jdbc"))), names(spans));
+                    }
+                    var preparations = spans.stream().filter(s -> s.getName().equals("prepare fixture.UpperCaseOwner")).toList();
+                    assertFalse(preparations.isEmpty(), names(spans));
+                    for (var preparation : preparations) {
+                        var siblings = views.stream().filter(s -> s.getParentSpanId().equals(preparation.getParentSpanId())).toList();
+                        assertEquals(2, siblings.size(), names(spans));
+                        assertTrue(siblings.stream().allMatch(s -> s.getEndTimeUnixNano() <= preparation.getStartTimeUnixNano()), names(spans));
+                    }
+                    for (var group : java.util.stream.Stream.concat(actions.stream(), views.stream())
+                            .collect(Collectors.groupingBy(s -> java.util.HexFormat.of().formatHex(s.getParentSpanId().toByteArray()) + s.getName())).values()) {
+                        var ordered = group.stream().sorted(java.util.Comparator.comparingLong(Span::getStartTimeUnixNano)).toList();
+                        for (int i = 1; i < ordered.size(); i++) assertTrue(ordered.get(i - 1).getEndTimeUnixNano() <= ordered.get(i).getStartTimeUnixNano(), names(spans));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test void primerCallbacksKeepAdmissionAndFailuresWithoutActiveExport() throws Exception {
+        for (String mode : List.of("inactive", "none")) {
+            for (String failureKind : List.of("action", "view")) {
+                try (var collector = new Collector()) {
+                    launch(mode, collector, "--fixture.primers=true", "--fixture.primer-failure=" + failureKind);
+                    assertFalse(collector.spans.stream().anyMatch(s -> s.getName().startsWith("prime action ") || s.getName().startsWith("prime view ")), names(collector.spans));
+                    if (mode.equals("inactive")) assertTrue(collector.spans.stream().anyMatch(s -> s.getKind() == Span.SpanKind.SPAN_KIND_CLIENT), names(collector.spans));
+                    else assertTrue(collector.spans.isEmpty(), names(collector.spans));
+                }
+            }
+        }
+    }
+
     private static String attribute(final Span span, final String key) {
         return span.getAttributesList().stream().filter(a -> a.getKey().equals(key))
                 .map(a -> a.getValue().getStringValue()).findFirst().orElse(null);
