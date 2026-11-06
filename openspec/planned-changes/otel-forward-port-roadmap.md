@@ -6,6 +6,14 @@ Prepared 2026-09-27 from maintenance merge `7e799dfd360` (PR #3813, CAUSEWAY-406
 
 Main already contains CAUSEWAY-3975, including instrumentation absent from the smaller maintenance backport. The task is to reconcile and extend main, not replay the merge or replace its observation implementation. Use feature-sized PRs with the originating ticket as provenance. Numeric ticket order is not a dependency order, and no 4064 implementation was identified in this merge.
 
+## Reconciliation audit (2026-11-06)
+
+The [maintenance-to-v4 reconciliation](forward-port-reconciliation-2026-11-06.md) accounts for all 23 original production source anchors and the later tracing-harness follow-ups.
+No additional production gap was identified in the completed roadmap below.
+Newer CAUSEWAY-4070 locking is already ported separately; CAUSEWAY-4078 transparent-SSO original-destination handling is the next concrete functional forward-port candidate outside this roadmap.
+The audit's consolidated gates passed 113 executed Wicket tests (five existing skips) and all 23 tracing compatibility tests.
+[General span duration filtering](general-span-duration-filtering.md) remains explicitly retained as a separate exploration, not an unfinished forward port.
+
 ## Roadmap
 
 | Sequence | Ticket / feature | Status and proposed scope | Implementation source anchors |

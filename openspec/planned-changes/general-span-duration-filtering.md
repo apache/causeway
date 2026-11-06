@@ -2,6 +2,9 @@
 
 Status: backlog / exploration; no implementation ticket assigned.
 
+Explicitly retained by user request on 2026-11-06 as idea #2 following the [maintenance-to-v4 reconciliation](forward-port-reconciliation-2026-11-06.md).
+This remains a separate exploration, not an outstanding maintenance forward port or work included in the audit.
+
 Explore whether trivial spans of any kind can be removed by duration, consistently in Boot-managed and Java-agent-managed tracing. This includes Causeway framework spans and automatic HTTP/JDBC/library spans, rather than a JPA-only policy.
 
 The removed JPA threshold decided at parent completion, after children might already have been exported. Dropping a parent alone leaves orphaned JDBC spans and an incomplete trace tree. A replacement must explicitly resolve that problem.
