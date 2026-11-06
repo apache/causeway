@@ -160,3 +160,13 @@ Existing lifecycle/discard and Boot/agent auto-configuration gates also passed a
 That gate used `mvn -B -pl commons,core/config -am -Dtest=ObservationClosureTest,CausewayObservationAutoConfigurationTest,CausewayAgentObservationAutoConfigurationTest -Dsurefire.failIfNoSpecifiedTests=false -Dmaven.source.skip=true -Dmaven.javadoc.skip=true test`.
 No production-source or POM changes were introduced.
 No full repository reactor, live Collector plugin, backend storage integration, second remote application or production deployment was exercised.
+
+== Archive checkpoint validation
+
+Clean cleanup checkpoint `ccfe304f7a3` was validated again before archive on 2026-11-06.
+All 24 retained tracing tests (including the opt-in Boot/agent async scenario) and all 21 lifecycle/discard/ownership foundation tests passed without failures or skips.
+Logs are `/tmp/causeway-duration-archive-tracing.log` and `/tmp/causeway-duration-archive-foundation.log`.
+The retired Python tests were not rerun or presented as a current gate.
+The AsciiDoc report rendered with Asciidoctor 2.0.26 without warnings, all 19 tasks were complete and strict change/whitespace validation passed.
+After direct spec sync and archive, all 67 main specifications passed strict validation, the six additive requirements matched the archived delta exactly, local documentation links resolved and no active changes remained.
+The archived report rendered again without warnings.

@@ -123,7 +123,7 @@ No full repository reactor, live SSO browser flow or production deployment was t
 
 ## Retained idea #2
 
-The retained general span duration filtering idea was subsequently investigated as [CAUSEWAY-4080](../changes/general-span-duration-filtering/evaluation.adoc).
+The retained general span duration filtering idea was subsequently investigated as [CAUSEWAY-4080](../changes/archive/2026-11-06-general-span-duration-filtering/evaluation.adoc).
 The outcome is no-go for unrestricted live individual-span pruning under the existing contracts, with conditional feasibility only for explicitly closed offline datasets.
 It is not an outstanding maintenance forward port, and no production filtering was introduced.
 The retired backlog note remains available in Git history.

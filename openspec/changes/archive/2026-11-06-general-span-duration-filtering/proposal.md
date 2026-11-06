@@ -30,5 +30,5 @@ The existing `observation-policy` and `main-observation-foundation` contracts re
 Primarily test/experimental fixtures around `regressiontests/tracing-compatibility` and investigation documentation.
 Any prototype dependencies or Collector configuration must be isolated, version-pinned and absent from the production BOM, application profiles and default export pipeline.
 No new public API, production threshold, agent extension, second SDK/exporter or deployment requirement is introduced by this investigation.
-The archived [JPA-filter removal](../archive/2026-10-07-remove-jpa-duration-filtering/proposal.md) and the retired backlog note in Git history supply provenance.
+The archived [JPA-filter removal](../2026-10-07-remove-jpa-duration-filtering/proposal.md) and the retired backlog note in Git history supply provenance.
 The completed investigation outcome is recorded in [evaluation.adoc](evaluation.adoc).
