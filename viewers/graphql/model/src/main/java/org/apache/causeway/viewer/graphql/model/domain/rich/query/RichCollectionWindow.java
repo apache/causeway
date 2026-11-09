@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -55,7 +56,6 @@ public class RichCollectionWindow extends Element {
     private static final int MAX_SORT_MEMBER_LENGTH = 128;
 
     private final MemberInteractor<OneToManyAssociation> memberInteractor;
-    private final int defaultWindowSize;
     private final int maxWindowSize;
 
     public RichCollectionWindow(
@@ -63,7 +63,7 @@ public class RichCollectionWindow extends Element {
             final Context context) {
         super(context);
         this.memberInteractor = memberInteractor;
-        this.defaultWindowSize = graphqlConfiguration.collections().defaultWindowSize();
+        int defaultWindowSize = graphqlConfiguration.collections().defaultWindowSize();
         this.maxWindowSize = graphqlConfiguration.collections().maxWindowSize();
 
         var association = memberInteractor.getObjectMember();
@@ -113,13 +113,13 @@ public class RichCollectionWindow extends Element {
     protected Object fetchData(final DataFetchingEnvironment environment) {
         var offset = environment.<Integer>getArgument("offset");
         var size = environment.<Integer>getArgument("size");
-        var sortBy = normalize(environment.<String>getArgument("sortBy"));
+        var sortBy = normalize(environment.getArgument("sortBy"));
         var sortDirection = environment.<MmSortUtils.SortDirection>getArgument("sortDirection");
-        var search = normalize(environment.<String>getArgument("search"));
+        var search = normalize(environment.getArgument("search"));
         validate(offset, size, sortBy, sortDirection, search);
 
         var association = memberInteractor.getObjectMember();
-        var managedObject = RichCollectionAccess.visibleSource(environment, association, context);
+        var managedObject = RichMemberAccess.visibleSource(environment, association, context);
         if (managedObject == null) {
             return null;
         }
@@ -128,7 +128,7 @@ public class RichCollectionWindow extends Element {
         var columns = table.dataColumnsObservable().getValue();
         var sortableMembers = columns.stream()
                 .filter(column -> column.associationMetaModel().getSpecialization().leftIfAny() != null)
-                .map(column -> column.columnId())
+                .map(DataColumn::columnId)
                 .toList();
         if (sortBy != null) {
             var columnIndex = IntStream.range(0, columns.size())

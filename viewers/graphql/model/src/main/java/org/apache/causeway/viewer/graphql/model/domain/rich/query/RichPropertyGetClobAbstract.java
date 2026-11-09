@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public abstract class RichPropertyGetClobAbstract extends Element {
 
@@ -60,17 +59,11 @@ public abstract class RichPropertyGetClobAbstract extends Element {
     }
 
     protected Object fetchDataFromClob(DataFetchingEnvironment environment, Function<Clob, ?> mapper) {
-        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
-
-        var sourcePojoClass = sourcePojo.getClass();
-        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
+        var association = holder.getObjectMember();
+        var managedObject = RichMemberAccess.visibleSource(environment, association, context);
+        if (managedObject == null) {
             return null;
         }
-
-        var association = holder.getObjectMember();
-        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         var resultManagedObject = association.get(managedObject);
 
         return Optional.ofNullable(resultManagedObject)

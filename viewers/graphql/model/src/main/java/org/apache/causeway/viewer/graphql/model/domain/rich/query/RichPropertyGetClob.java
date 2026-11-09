@@ -102,6 +102,11 @@ public class RichPropertyGetClob
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+        var association = memberInteractor.getObjectMember();
+        var managedObject = RichMemberAccess.visibleSource(dataFetchingEnvironment, association, context);
+        if (managedObject == null) {
+            return null;
+        }
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 
