@@ -9,12 +9,11 @@
  *
  *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
@@ -25,20 +24,31 @@ import graphql.schema.DataFetchingEnvironment;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Resolves the (managed) source object of a rich-schema read resolver, after
+ * enforcing the framework's {@code isVisible()} visibility/authorization
+ * consent for the member being read (CWE-863).
+ *
+ * <p>
+ * Shared by collection, property and Blob/Clob read resolvers so that a member
+ * the {@code Authorizor} (or an imperative {@code hideXxx()}) would hide can
+ * never be read.
+ * </p>
+ */
 @UtilityClass
-class RichCollectionAccess {
+class RichMemberAccess {
 
     @Nullable
     ManagedObject visibleSource(
             final DataFetchingEnvironment environment,
-            final OneToManyAssociation association,
+            final ObjectAssociation association,
             final Context context) {
 
         var sourcePojo = BookmarkedPojo.sourceFrom(environment);

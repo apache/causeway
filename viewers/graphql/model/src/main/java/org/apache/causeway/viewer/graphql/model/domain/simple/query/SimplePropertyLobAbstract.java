@@ -21,12 +21,15 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import graphql.Scalars;
@@ -62,6 +65,11 @@ public abstract class SimplePropertyLobAbstract extends Element {
 
         var association = memberInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+
+        var visibleConsent = association.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (visibleConsent.isVetoed())
+            throw new HiddenException(association.getFeatureIdentifier());
+
         var resultManagedObject = association.get(managedObject);
 
         return Optional.ofNullable(resultManagedObject)
