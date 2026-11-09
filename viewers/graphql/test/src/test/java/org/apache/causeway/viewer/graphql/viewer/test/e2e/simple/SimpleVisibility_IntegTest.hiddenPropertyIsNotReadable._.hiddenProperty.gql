@@ -1,0 +1,9 @@
+{
+  simple {
+    university_dept_Staff {
+      findStaffMemberByName(name: "Gerry Jones") {
+        hiddenName
+      }
+    }
+  }
+}

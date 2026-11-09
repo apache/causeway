@@ -6589,6 +6589,8 @@ type rich__university_dept_StaffMember {
   department: rich__university_dept_StaffMember__department__gqlv_property
   "Grade"
   grade: rich__university_dept_StaffMember__grade__gqlv_property
+  "Hidden Name"
+  hiddenName: rich__university_dept_StaffMember__hiddenName__gqlv_property
   "Hidden Photo"
   hiddenPhoto: rich__university_dept_StaffMember__hiddenPhoto__gqlv_property
   "Name shown for the staff member"
@@ -6638,6 +6640,17 @@ type rich__university_dept_StaffMember__grade__gqlv_property {
   metadata: RichMemberMetadata!
   set(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): rich__university_dept_StaffMember
   validate(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
+}
+
+type rich__university_dept_StaffMember__hiddenName__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
+  set(hiddenName: String!): rich__university_dept_StaffMember
+  validate(hiddenName: String): String
 }
 
 type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property {
@@ -7648,6 +7661,7 @@ type simple__university_dept_StaffMember {
   _meta: simple__university_dept_StaffMember__gqlv_meta
   department: simple__university_dept_Department
   grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
+  hiddenName: String!
   hiddenPhoto: simple__university_dept_StaffMember__hiddenPhoto__gqlv_member
   name: String!
   photo: simple__university_dept_StaffMember__photo__gqlv_member

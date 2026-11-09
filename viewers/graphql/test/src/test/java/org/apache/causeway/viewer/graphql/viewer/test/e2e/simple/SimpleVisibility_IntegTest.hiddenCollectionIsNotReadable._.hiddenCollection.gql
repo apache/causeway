@@ -1,0 +1,11 @@
+{
+  simple {
+    university_dept_Departments {
+      findDepartmentByName(name: "Physics") {
+        hiddenStaffMembers {
+          name
+        }
+      }
+    }
+  }
+}
