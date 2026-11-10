@@ -50,34 +50,21 @@ public class ObjectAdapterUpdateHelper {
         this.resourceContext = resourceContext;
     }
 
-    enum Intent {
-        UPDATE_EXISTING,
-        PERSISTING_NEW;
-        private boolean shouldValidate() {
-            return this == UPDATE_EXISTING;
-        }
-    }
-
     boolean copyOverProperties(
-            final JsonRepresentation propertiesMap,
-            final Intent intent) {
+            final JsonRepresentation propertiesMap) {
 
         var allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
 
         objectAdapter.objSpec().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only
-        .forEach(association->{
-
-            allOk.update(ok->ok &= copyOverProperty(association, propertiesMap, intent));
-        });
+        .forEach(association-> allOk.update(ok->ok &= copyOverProperty(association, propertiesMap)));
 
         return allOk.isTrue();
     }
 
     private boolean copyOverProperty(
             final ObjectAssociation association,
-            final JsonRepresentation propertiesMap,
-            final Intent intent) {
+            final JsonRepresentation propertiesMap) {
 
         boolean allOk = true;
 
@@ -102,11 +89,9 @@ public class ObjectAdapterUpdateHelper {
         if(!valueProvided) {
 
             // no value provided
-            if(intent.shouldValidate()) {
-                if(invisible || disabled)
-                    // that's ok, indeed expected
-                    return allOk;
-            }
+            if(invisible || disabled)
+                // cannot be provided anyway, so not a problem
+                return allOk;
             if (!property.isMandatory())
                 // optional, so also not a problem
                 return allOk;
@@ -123,22 +108,19 @@ public class ObjectAdapterUpdateHelper {
 
         } else {
 
-            if(intent.shouldValidate()) {
-                // value has been provided
-                if (invisible)
-                    // silently ignore; don't want to acknowledge the
-                    // existence of this property to the caller
-                    return allOk;
-                if (disabled) {
-                    // not allowed to update
-                    propertyRepr.mapPutString("invalidReason", usability.reasonAsString().orElse(null));
-                    allOk = false;
-                    return allOk;
-                }
+            // value has been provided
+            if (invisible)
+                // silently ignore; don't want to acknowledge the
+                // existence of this property to the caller
+                return allOk;
+            if (disabled) {
+                // not allowed to update
+                propertyRepr.mapPutString("invalidReason", usability.reasonAsString().orElse(null));
+                allOk = false;
+                return allOk;
             }
 
-            // ok, we have a value, and
-            // (if validating) then the property is not invisible, and is not disabled
+            // ok, we have a value, and the property is not invisible, and is not disabled
             final ManagedObject valueAdapter;
             try {
                 valueAdapter = new JsonParserHelper(resourceContext, propertySpec).objectAdapterFor(propertyRepr);
