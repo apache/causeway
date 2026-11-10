@@ -21,7 +21,14 @@ package org.apache.causeway.extensions.d3.applib.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.commons.io.JsonUtils;
 
@@ -30,9 +37,13 @@ import org.apache.causeway.commons.io.JsonUtils;
  * (seeded) builder, the validating {@code withXxx(...)} copy methods and JSON
  * serialization/deserialization.
  */
+@DisplayName("D3Config — immutable value type")
 class D3ConfigTest {
 
+    // -- DEFAULTS & BUILDER
+
     @Test
+    @DisplayName("defaults() exposes the documented default values")
     void defaults_hasExpectedValues() {
         var config = D3Config.defaults();
 
@@ -51,11 +62,13 @@ class D3ConfigTest {
     }
 
     @Test
+    @DisplayName("builder() is pre-seeded with the defaults")
     void builder_isSeededWithDefaults() {
         assertThat(D3Config.builder().build()).isEqualTo(D3Config.defaults());
     }
 
     @Test
+    @DisplayName("builder() allows overriding individual components")
     void builder_allowsOverridingDefaults() {
         var config = D3Config.builder()
                 .initialWidth(1024)
@@ -71,7 +84,10 @@ class D3ConfigTest {
         assertThat(config.enableZoom()).isTrue();
     }
 
+    // -- withXxx(...) COPY METHODS
+
     @Test
+    @DisplayName("withXxx(...) returns a new instance, leaving the original untouched")
     void with_returnsNewInstance_andLeavesOriginalUntouched() {
         var original = D3Config.defaults();
 
@@ -82,51 +98,38 @@ class D3ConfigTest {
         assertThat(original.initialWidth()).isEqualTo(800); // original unchanged
     }
 
-    @Test
-    void withInitialWidth_rejectsOutOfRange() {
-        assertThatThrownBy(() -> D3Config.defaults().withInitialWidth(199))
+    @ParameterizedTest(name = "rejects out-of-range {0}")
+    @MethodSource("outOfRangeMutations")
+    @DisplayName("withXxx(...) rejects out-of-range values")
+    void with_rejectsOutOfRange(final String field, final Function<D3Config, D3Config> mutation) {
+        assertThatThrownBy(() -> mutation.apply(D3Config.defaults()))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("initialWidth");
-        assertThatThrownBy(() -> D3Config.defaults().withInitialWidth(4001))
-                .isInstanceOf(IllegalArgumentException.class);
+                .hasMessageContaining(field);
+    }
+
+    static Stream<Arguments> outOfRangeMutations() {
+        return Stream.of(
+                Arguments.of("initialWidth", mutate(c -> c.withInitialWidth(199))),
+                Arguments.of("initialWidth", mutate(c -> c.withInitialWidth(4001))),
+                Arguments.of("initialHeight", mutate(c -> c.withInitialHeight(199))),
+                Arguments.of("initialHeight", mutate(c -> c.withInitialHeight(4001))),
+                Arguments.of("linkDistance", mutate(c -> c.withLinkDistance(19))),
+                Arguments.of("linkDistance", mutate(c -> c.withLinkDistance(1001))),
+                Arguments.of("repulsionStrength", mutate(c -> c.withRepulsionStrength(1))),
+                Arguments.of("repulsionStrength", mutate(c -> c.withRepulsionStrength(-5001))),
+                Arguments.of("collisionRadius", mutate(c -> c.withCollisionRadius(-1))),
+                Arguments.of("collisionRadius", mutate(c -> c.withCollisionRadius(501))),
+                Arguments.of("distributionStrength", mutate(c -> c.withDistributionStrength(-0.1))),
+                Arguments.of("distributionStrength", mutate(c -> c.withDistributionStrength(1.5))));
+    }
+
+    /** Gives the argument a target type, so the lambda need not be cast in {@link Arguments#of}. */
+    private static Function<D3Config, D3Config> mutate(final Function<D3Config, D3Config> mutation) {
+        return mutation;
     }
 
     @Test
-    void withInitialHeight_rejectsOutOfRange() {
-        assertThatThrownBy(() -> D3Config.defaults().withInitialHeight(199))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("initialHeight");
-    }
-
-    @Test
-    void withLinkDistance_rejectsOutOfRange() {
-        assertThatThrownBy(() -> D3Config.defaults().withLinkDistance(19))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("linkDistance");
-    }
-
-    @Test
-    void withRepulsionStrength_rejectsOutOfRange() {
-        assertThatThrownBy(() -> D3Config.defaults().withRepulsionStrength(1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("repulsionStrength");
-    }
-
-    @Test
-    void withCollisionRadius_rejectsOutOfRange() {
-        assertThatThrownBy(() -> D3Config.defaults().withCollisionRadius(501))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("collisionRadius");
-    }
-
-    @Test
-    void withDistributionStrength_rejectsOutOfRange() {
-        assertThatThrownBy(() -> D3Config.defaults().withDistributionStrength(1.5))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("distributionStrength");
-    }
-
-    @Test
+    @DisplayName("withXxx(...) accepts boundary values")
     void with_boundaryValues_areAccepted() {
         var config = D3Config.defaults()
                 .withInitialWidth(200)
@@ -151,6 +154,7 @@ class D3ConfigTest {
     }
 
     @Test
+    @DisplayName("asBuilder() round-trips to an equal instance")
     void asBuilder_roundTripsToEqualInstance() {
         var config = D3Config.defaults()
                 .withLinkDistance(300)
@@ -159,7 +163,10 @@ class D3ConfigTest {
         assertThat(config.asBuilder().build()).isEqualTo(config);
     }
 
+    // -- JSON
+
     @Test
+    @DisplayName("toJsonString() contains all properties")
     void toJsonString_containsAllProperties() {
         var json = D3Config.defaults().withCanvasId("c").toJsonString();
 
@@ -179,6 +186,7 @@ class D3ConfigTest {
     }
 
     @Test
+    @DisplayName("JSON round-trip preserves the value")
     void jsonRoundTrip_preservesValue() {
         var config = D3Config.defaults()
                 .withCanvasId("canvas-1")
@@ -192,7 +200,10 @@ class D3ConfigTest {
         assertThat(restored).isEqualTo(config);
     }
 
+    // -- VALUE SEMANTICS
+
     @Test
+    @DisplayName("equals/hashCode are value-based")
     void equalsAndHashCode_areValueBased() {
         var a = D3Config.defaults().withGraphData("g");
         var b = D3Config.defaults().withGraphData("g");

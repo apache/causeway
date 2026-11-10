@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
@@ -33,6 +34,7 @@ import org.apache.causeway.extensions.d3.applib.spi.D3GraphAdvisor;
  * Verifies that {@link D3GraphFacetFromAnnotation#configFor(Class)} merges advisor-provided
  * advice (including {@code graphData}) into the {@link org.apache.causeway.extensions.d3.applib.config.D3Config}.
  */
+@DisplayName("D3GraphFacetFromAnnotation — advisor merging")
 class D3GraphFacetFromAnnotationAdvisorTest {
 
     @D3Graph(clickAction = "selectNode")
@@ -54,7 +56,10 @@ class D3GraphFacetFromAnnotationAdvisorTest {
         return D3GraphFacetFromAnnotation.create(annotation, objectSpec);
     }
 
+    // -- advisor merging
+
     @Test
+    @DisplayName("merges advisor-provided graph data into the config")
     void mergesAdvisorGraphData() {
         var facet = facet();
         facet.advisors = List.of(domainClass -> new D3GraphAdvisor.Advice(
@@ -66,6 +71,7 @@ class D3GraphFacetFromAnnotationAdvisorTest {
     }
 
     @Test
+    @DisplayName("advisor can override the click action")
     void advisorCanOverrideClickAction() {
         var facet = facet();
         facet.advisors = List.of(domainClass -> new D3GraphAdvisor.Advice(
@@ -77,27 +83,7 @@ class D3GraphFacetFromAnnotationAdvisorTest {
     }
 
     @Test
-    void graphDataNull_whenNoAdvisor() {
-        var config = facet().configFor(Fixture.class);
-
-        assertThat(config.graphData()).isNull();
-        assertThat(config.clickAction()).isEqualTo("selectNode");
-    }
-
-    @Test
-    void advisorCanDeferDraggingAndZoom() {
-        var facet = facet();
-        // null dragging/zoom => keep annotation/config defaults (true)
-        facet.advisors = List.of(domainClass -> new D3GraphAdvisor.Advice(
-                null, null, null, null, null, null));
-
-        var config = facet.configFor(Fixture.class);
-
-        assertThat(config.enableDragging()).isTrue();
-        assertThat(config.enableZoom()).isTrue();
-    }
-
-    @Test
+    @DisplayName("advisor can override dimensions, dragging and zoom")
     void advisorCanOverrideDimensionsDraggingAndZoom() {
         var facet = facet();
         facet.advisors = List.of(domainClass -> new D3GraphAdvisor.Advice(
@@ -112,16 +98,59 @@ class D3GraphFacetFromAnnotationAdvisorTest {
     }
 
     @Test
+    @DisplayName("null advice fields keep the annotation/config defaults")
+    void nullAdviceFields_keepDefaults() {
+        var facet = facet();
+        facet.advisors = List.of(domainClass -> new D3GraphAdvisor.Advice(
+                null, null, null, null, null, null));
+
+        var config = facet.configFor(Fixture.class);
+
+        assertThat(config.enableDragging()).isTrue();
+        assertThat(config.enableZoom()).isTrue();
+        assertThat(config.clickAction()).isEqualTo("selectNode");
+    }
+
+    @Test
+    @DisplayName("an advisor returning null is ignored (next advisor wins)")
+    void advisorReturningNull_isIgnored() {
+        var facet = facet();
+        facet.advisors = List.of(
+                domainClass -> null,
+                domainClass -> new D3GraphAdvisor.Advice(ADVISOR_GRAPH_DATA, null, null, null, null, null));
+
+        var config = facet.configFor(Fixture.class);
+
+        assertThat(config.graphData()).isEqualTo(ADVISOR_GRAPH_DATA);
+    }
+
+    @Test
+    @DisplayName("without an advisor, graph data stays null (annotation click action retained)")
+    void graphDataNull_whenNoAdvisor() {
+        var config = facet().configFor(Fixture.class);
+
+        assertThat(config.graphData()).isNull();
+        assertThat(config.clickAction()).isEqualTo("selectNode");
+    }
+
+    // -- click action resolution
+
+    @Test
+    @DisplayName("getClickAction(...) returns the action when set")
     void getClickAction_presentWhenSet() {
         assertThat(facet().getClickAction(Fixture.class)).contains("selectNode");
     }
 
     @Test
+    @DisplayName("getClickAction(...) is empty when the action is blank")
     void getClickAction_emptyWhenBlank() {
         assertThat(facet(BlankFixture.class).getClickAction(BlankFixture.class)).isEmpty();
     }
 
+    // -- attribute exposure
+
     @Test
+    @DisplayName("visitAttributes(...) exposes the configuration")
     void visitAttributes_exposesConfiguration() {
         var attributes = new LinkedHashMap<String, Object>();
         facet().visitAttributes(attributes::put);
