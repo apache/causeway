@@ -142,7 +142,7 @@ class D3PanelComponentFactoryTest {
         var feature = attributeModel.getMetaModel();
         var d3GraphFacet = mock(D3GraphFacet.class);
         doReturn(Optional.of(d3GraphFacet)).when(feature).lookupFacet(D3GraphFacet.class);
-        when(d3GraphFacet.configFor(D3PanelComponentFactoryTest.class)).thenReturn(new D3Config());
+        when(d3GraphFacet.configFor(D3PanelComponentFactoryTest.class)).thenReturn(D3Config.defaults());
         when(d3GraphFacet.getClickAction(D3PanelComponentFactoryTest.class)).thenReturn(Optional.empty());
 
         // WicketTester provides the full Wicket infrastructure (Application, Session, RequestCycle)

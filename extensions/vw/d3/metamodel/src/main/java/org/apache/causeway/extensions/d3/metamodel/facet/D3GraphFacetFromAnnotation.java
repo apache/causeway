@@ -33,36 +33,17 @@ import org.apache.causeway.extensions.d3.applib.spi.D3GraphAdvisor;
 
 public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements FacetWithAttributes {
 
-    private final int initialWidth;
-    private final int initialHeight;
-    private final boolean enableDragging;
-    private final boolean enableZoom;
-    private final int linkDistance;
-    private final int repulsionStrength;
-    private final int collisionRadius;
-    private final double distributionStrength;
-    private final String clickAction;
-
     @Inject List<D3GraphAdvisor> advisors;
 
     public D3GraphFacetFromAnnotation(final D3Config config, final FacetHolder holder) {
         super(config, holder);
-        initialWidth = config.getInitialWidth();
-        initialHeight = config.getInitialHeight();
-        enableDragging = config.isEnableDragging();
-        enableZoom = config.isEnableZoom();
-        linkDistance = config.getLinkDistance();
-        repulsionStrength = config.getRepulsionStrength();
-        collisionRadius = config.getCollisionRadius();
-        distributionStrength = config.getDistributionStrength();
-        clickAction = config.getClickAction();
     }
 
     public static D3GraphFacetFromAnnotation create(
             final D3Graph annotation,
             final FacetHolder holder) {
 
-        var config = new D3Config()
+        var config = D3Config.defaults()
                 .withInitialWidth(annotation.initialWidth())
                 .withInitialHeight(annotation.initialHeight())
                 .withEnableDragging(annotation.enableDragging())
@@ -114,22 +95,23 @@ public class D3GraphFacetFromAnnotation extends D3GraphFacetAbstract implements 
 
     @Override
     public Optional<String> getClickAction(final Class<?> domainClass) {
-        return Optional.ofNullable(configFor(domainClass).getClickAction())
+        return Optional.ofNullable(configFor(domainClass).clickAction())
                 .filter(s -> !s.isBlank());
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("initialWidth", initialWidth);
-        visitor.accept("initialHeight", initialHeight);
-        visitor.accept("enableDragging", enableDragging);
-        visitor.accept("enableZoom", enableZoom);
-        visitor.accept("linkDistance", linkDistance);
-        visitor.accept("repulsionStrength", repulsionStrength);
-        visitor.accept("collisionRadius", collisionRadius);
-        visitor.accept("distributionStrength", distributionStrength);
-        visitor.accept("clickAction", clickAction);
+        var config = config();
+        visitor.accept("initialWidth", config.initialWidth());
+        visitor.accept("initialHeight", config.initialHeight());
+        visitor.accept("enableDragging", config.enableDragging());
+        visitor.accept("enableZoom", config.enableZoom());
+        visitor.accept("linkDistance", config.linkDistance());
+        visitor.accept("repulsionStrength", config.repulsionStrength());
+        visitor.accept("collisionRadius", config.collisionRadius());
+        visitor.accept("distributionStrength", config.distributionStrength());
+        visitor.accept("clickAction", config.clickAction());
     }
 
     // -- HELPER

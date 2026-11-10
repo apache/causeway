@@ -53,7 +53,8 @@ public class D3ObjectPanel extends org.apache.causeway.extensions.d3.wkt.integra
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private static final String EMPTY_GRAPH = "{\"nodes\":[],\"links\":[]}";
+    private static final String EMPTY_GRAPH = """
+            {"nodes":[],"links":[]}""";
 
     private final UiObjectWkt objectModel;
 
@@ -84,11 +85,11 @@ public class D3ObjectPanel extends org.apache.causeway.extensions.d3.wkt.integra
         var facet = objectModel.getTypeOfSpecification().lookupFacet(D3GraphFacet.class).orElse(null);
         var config = facet != null
                 ? facet.configFor(domainClassOf(objectModel))
-                : new D3Config();
+                : D3Config.defaults();
 
         // graph data is advisor-provided (merged in by configFor(...));
         // fall back to an empty graph when none is available
-        if (isBlank(config.getGraphData())) {
+        if (isBlank(config.graphData())) {
             config = config.withGraphData(EMPTY_GRAPH);
         }
         return config;

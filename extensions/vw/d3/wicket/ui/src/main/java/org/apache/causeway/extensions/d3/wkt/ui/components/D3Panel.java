@@ -53,7 +53,8 @@ implements HasAttributeModel {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private static final String EMPTY_GRAPH = "{\"nodes\":[],\"links\":[]}";
+    private static final String EMPTY_GRAPH = """
+            {"nodes":[],"links":[]}""";
 
     private final UiAttributeWkt attributeModel;
 
@@ -91,7 +92,7 @@ implements HasAttributeModel {
         var facet = attributeModel.getMetaModel().lookupFacet(D3GraphFacet.class).orElse(null);
         var config = facet != null
                 ? facet.configFor(domainClass)
-                : new D3Config();
+                : D3Config.defaults();
 
         // graph data precedence: the annotated property's value (a JSON string) wins;
         // else fall back to advisor-provided graph data (merged in by configFor(...)),
@@ -99,7 +100,7 @@ implements HasAttributeModel {
         var pojo = attributeModel.getObject().getPojo();
         if (pojo instanceof CharSequence cs && !cs.toString().isBlank()) {
             config = config.withGraphData(cs);
-        } else if (isBlank(config.getGraphData())) {
+        } else if (isBlank(config.graphData())) {
             config = config.withGraphData(EMPTY_GRAPH);
         }
         return config;

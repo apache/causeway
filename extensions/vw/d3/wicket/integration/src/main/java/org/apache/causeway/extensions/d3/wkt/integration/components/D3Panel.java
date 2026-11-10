@@ -100,7 +100,7 @@ public class D3Panel extends Panel {
     }
 
     public CharSequence getCanvasId() {
-        return config.getCanvasId();
+        return config.canvasId();
     }
 
 }

@@ -42,6 +42,13 @@ implements D3GraphFacet {
         this.config = config;
     }
 
+    /**
+     * The (annotation-derived) configuration backing this facet.
+     */
+    protected final D3Config config() {
+        return config;
+    }
+
     @Override
     public D3Config configFor(final Class<?> domainClass) {
         return config;
@@ -49,7 +56,7 @@ implements D3GraphFacet {
 
     @Override
     public Optional<String> getClickAction(final Class<?> domainClass) {
-        return Optional.ofNullable(config.getClickAction())
+        return Optional.ofNullable(config.clickAction())
                 .filter(s -> !s.isBlank());
     }
 

@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.d3.metamodel.facet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -37,12 +38,19 @@ class D3GraphFacetFromAnnotationAdvisorTest {
     @D3Graph(clickAction = "selectNode")
     static class Fixture {}
 
+    @D3Graph // clickAction defaults to "" (none)
+    static class BlankFixture {}
+
     private static final String ADVISOR_GRAPH_DATA = "{\"nodes\":[{\"id\":\"A\"}],\"links\":[]}";
 
     private D3GraphFacetFromAnnotation facet() {
+        return facet(Fixture.class);
+    }
+
+    private D3GraphFacetFromAnnotation facet(final Class<?> domainClass) {
         var mmc = MetaModelContext_forTesting.buildDefault();
-        var objectSpec = mmc.getSpecificationLoader().loadSpecification(Fixture.class);
-        var annotation = Fixture.class.getAnnotation(D3Graph.class);
+        var objectSpec = mmc.getSpecificationLoader().loadSpecification(domainClass);
+        var annotation = domainClass.getAnnotation(D3Graph.class);
         return D3GraphFacetFromAnnotation.create(annotation, objectSpec);
     }
 
@@ -54,7 +62,7 @@ class D3GraphFacetFromAnnotationAdvisorTest {
 
         var config = facet.configFor(Fixture.class);
 
-        assertThat(config.getGraphData()).isEqualTo(ADVISOR_GRAPH_DATA);
+        assertThat(config.graphData()).isEqualTo(ADVISOR_GRAPH_DATA);
     }
 
     @Test
@@ -65,15 +73,15 @@ class D3GraphFacetFromAnnotationAdvisorTest {
 
         var config = facet.configFor(Fixture.class);
 
-        assertThat(config.getClickAction()).isEqualTo("advisorClickAction");
+        assertThat(config.clickAction()).isEqualTo("advisorClickAction");
     }
 
     @Test
     void graphDataNull_whenNoAdvisor() {
         var config = facet().configFor(Fixture.class);
 
-        assertThat(config.getGraphData()).isNull();
-        assertThat(config.getClickAction()).isEqualTo("selectNode");
+        assertThat(config.graphData()).isNull();
+        assertThat(config.clickAction()).isEqualTo("selectNode");
     }
 
     @Test
@@ -85,8 +93,44 @@ class D3GraphFacetFromAnnotationAdvisorTest {
 
         var config = facet.configFor(Fixture.class);
 
-        assertThat(config.isEnableDragging()).isTrue();
-        assertThat(config.isEnableZoom()).isTrue();
+        assertThat(config.enableDragging()).isTrue();
+        assertThat(config.enableZoom()).isTrue();
+    }
+
+    @Test
+    void advisorCanOverrideDimensionsDraggingAndZoom() {
+        var facet = facet();
+        facet.advisors = List.of(domainClass -> new D3GraphAdvisor.Advice(
+                null, 1024, 768, false, false, null));
+
+        var config = facet.configFor(Fixture.class);
+
+        assertThat(config.initialWidth()).isEqualTo(1024);
+        assertThat(config.initialHeight()).isEqualTo(768);
+        assertThat(config.enableDragging()).isFalse();
+        assertThat(config.enableZoom()).isFalse();
+    }
+
+    @Test
+    void getClickAction_presentWhenSet() {
+        assertThat(facet().getClickAction(Fixture.class)).contains("selectNode");
+    }
+
+    @Test
+    void getClickAction_emptyWhenBlank() {
+        assertThat(facet(BlankFixture.class).getClickAction(BlankFixture.class)).isEmpty();
+    }
+
+    @Test
+    void visitAttributes_exposesConfiguration() {
+        var attributes = new LinkedHashMap<String, Object>();
+        facet().visitAttributes(attributes::put);
+
+        assertThat(attributes)
+                .containsKeys("initialWidth", "initialHeight", "enableDragging", "enableZoom",
+                        "linkDistance", "repulsionStrength", "collisionRadius",
+                        "distributionStrength", "clickAction");
+        assertThat(attributes.get("clickAction")).isEqualTo("selectNode");
     }
 
 }

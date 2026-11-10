@@ -55,7 +55,7 @@ extends JavaScriptResourceReference {
     public static OnDomReadyHeaderItem domReadyScript(
             final D3Config config) {
         return OnDomReadyHeaderItem.forScript(
-                String.format("WicketStuff.D3.init(%s)", escapeJsonForInlineScript(config.toJsonString())));
+                "WicketStuff.D3.init(%s)".formatted(escapeJsonForInlineScript(config.toJsonString())));
     }
 
     /**
