@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.secman.applib.ApplicationPermissionRepositoryIntegTestAbstract;
 import org.apache.causeway.extensions.secman.applib.mmm.MmmModule;
@@ -42,7 +43,7 @@ class ApplicationPermissionRepository_IntegTest extends ApplicationPermissionRep
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtSecmanPersistenceJpa.class,
-
+            SessionManager.InMemory.class,
             MmmModule.class,
     })
     public static class AppManifest {

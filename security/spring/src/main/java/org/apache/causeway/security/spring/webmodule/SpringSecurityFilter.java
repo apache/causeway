@@ -30,18 +30,18 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionService;
-import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -51,7 +51,7 @@ public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;
     @Inject List<AuthenticationConverter> converters;
-    @Inject private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
+    @Inject private Optional<SessionManager> keyValueSessionStoreOpt;
 
     @Override
     public void doFilter(
@@ -68,8 +68,10 @@ public class SpringSecurityFilter implements Filter {
             return; // either not authenticated or unknown principal type (not handled)
         }
 
+        var kvStore = keyValueSessionStoreOpt.orElse(SessionManager.NOOP);
+
         var interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
-                .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder.getUserTimeZone());
+        		.withTimeZoneIfAny(kvStore.lookup(SessionManager.USER_TIMEZONE_ID));
 
         var result = interactionService.runAndCatch(
                 interactionContext,
@@ -106,21 +108,19 @@ public class SpringSecurityFilter implements Filter {
             final @NonNull Authentication springAuthentication) {
 
         // make sure session is actually authenticated
-        if(!springAuthentication.isAuthenticated()) {
-            return Optional.empty();
-        }
+        if(!springAuthentication.isAuthenticated())
+			return Optional.empty();
 
         for (final AuthenticationConverter converter : converters) {
             try {
                 var userMemento = converter.convert(springAuthentication);
-                if(userMemento != null) {
-                    return Optional.of(
+                if(userMemento != null)
+					return Optional.of(
                             // adds generic authorized user role to indicate 'authorized'
                             // (as required by Wicket viewer)
                             userMemento
                                 .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
                                 .withAuthenticationSource(AuthenticationSource.EXTERNAL));
-                }
             } catch(final Throwable ignored) {
             }
         }

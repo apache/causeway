@@ -17,11 +17,12 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.commons.services {
+	exports org.apache.causeway.viewer.commons.services;
+	exports org.apache.causeway.viewer.commons.services.session;
     exports org.apache.causeway.viewer.commons.services.userprof;
     exports org.apache.causeway.viewer.commons.services.branding;
     exports org.apache.causeway.viewer.commons.services.header;
     exports org.apache.causeway.viewer.commons.services.menu;
-    exports org.apache.causeway.viewer.commons.services;
 
     requires static lombok;
 
@@ -40,4 +41,6 @@ module org.apache.causeway.viewer.commons.services {
     requires spring.beans;
     requires spring.context;
     requires org.apache.causeway.viewer.commons.model;
+	requires org.apache.causeway.security.api;
+	requires org.jspecify;
 }

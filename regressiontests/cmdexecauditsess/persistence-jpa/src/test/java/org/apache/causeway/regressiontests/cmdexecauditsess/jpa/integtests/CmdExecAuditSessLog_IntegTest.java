@@ -28,6 +28,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrailPersistenceJpa;
 import org.apache.causeway.extensions.audittrail.jpa.dom.AuditTrailEntry;
@@ -59,6 +60,7 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
             CausewayModuleExtAuditTrailPersistenceJpa.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
+            SessionManager.InMemory.class,
     })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, CmdExecAuditSessTestDomainModel.class})

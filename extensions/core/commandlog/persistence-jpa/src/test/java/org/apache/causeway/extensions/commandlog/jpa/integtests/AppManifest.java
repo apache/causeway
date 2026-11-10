@@ -24,6 +24,7 @@ import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
 import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
@@ -36,7 +37,7 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
         CausewayModuleCoreRuntimeServices.class,
         CausewayModuleSecurityBypass.class,
         CausewayModuleExtCommandLogPersistenceJpa.class,
-
+        SessionManager.InMemory.class
 })
 @EntityScan(basePackageClasses = {Counter.class})
 @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class})
