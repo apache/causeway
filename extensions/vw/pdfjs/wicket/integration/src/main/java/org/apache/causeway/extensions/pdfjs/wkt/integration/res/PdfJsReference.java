@@ -22,14 +22,19 @@ import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceType;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+
 public class PdfJsReference
 extends WebjarsJavaScriptResourceReference {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
@@ -46,6 +51,24 @@ extends WebjarsJavaScriptResourceReference {
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance())
                 .setType(JavaScriptReferenceType.MODULE);
+    }
+
+    /**
+     * URL of the pdf.js library (pdf.min.mjs).
+     * <p>
+     * The library is a pure ES module with named exports; it does not set a
+     * global {@code pdfjsLib} (since pdfjs-dist v4). The integration script
+     * therefore loads it dynamically via {@code import()} at init time.
+     */
+    public static String pdfUrl() {
+        return asUrl().toString();
+    }
+
+    // -- HELPER
+
+    private static Url asUrl() {
+        var pdfJsUrl = RequestCycle.get().urlFor(instance(), null);
+        return Url.parse(pdfJsUrl);
     }
 
 }
