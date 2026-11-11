@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.d3.wkt.ui.components;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.when;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Url;
@@ -37,6 +39,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -133,8 +136,8 @@ class D3ObjectPanelComponentFactoryTest {
 
         var d3GraphFacet = mock(D3GraphFacet.class);
         doReturn(Optional.of(d3GraphFacet)).when(objectSpec).lookupFacet(D3GraphFacet.class);
-        when(d3GraphFacet.configFor(any())).thenReturn(config);
-        when(d3GraphFacet.getClickAction(any())).thenReturn(Optional.empty());
+        when(d3GraphFacet.configFor(D3ObjectPanelComponentFactoryTest.class)).thenReturn(config);
+        when(d3GraphFacet.getClickAction(D3ObjectPanelComponentFactoryTest.class)).thenReturn(Optional.empty());
 
         var objSpec = mmc.getSpecificationLoader().loadSpecification(D3ObjectPanelComponentFactoryTest.class);
         when(objectModel.getManagedObject())
@@ -206,6 +209,7 @@ class D3ObjectPanelComponentFactoryTest {
 
     @Test
     @DisplayName("invokes the configured domain action, binding the clicked node id, on node click")
+    @SuppressWarnings("unchecked")
     void invokesDomainAction_onNodeClicked() {
         var action = hostSpec().getAction("selectNode").orElseThrow();
         var objectModel = objectModelWithClickAction(hostObject(), "selectNode");
@@ -222,7 +226,7 @@ class D3ObjectPanelComponentFactoryTest {
         try {
             var panel = (D3ObjectPanel) factory.createComponent("d3", objectModel);
             tester.startPage(new D3TestPage(panel));
-            var callback = panel.getBehaviors(NodeClickedCallback.class).get(0);
+            var callback = panel.getBehaviors(NodeClickedCallback.class).getFirst();
 
             try (var actionModelStatic = mockStatic(ActionModel.class);
                  var formExecutorStatic = mockStatic(FormExecutorDefault.class)) {
@@ -232,8 +236,61 @@ class D3ObjectPanelComponentFactoryTest {
 
                 tester.executeAjaxUrl(callbackUrl(callback, "node-42"));
 
-                verify(pendingArgs).updateParamValuePojo(eq(0), any());
+                // capture the pojo-updater function and invoke it, proving the clicked
+                // node id (not null / not any other value) is what gets bound
+                var nodeIdFn = ArgumentCaptor.forClass(Function.class);
+                verify(pendingArgs).updateParamValuePojo(eq(0), nodeIdFn.capture());
+                assertThat(nodeIdFn.getValue().apply(null)).isEqualTo("node-42");
                 verify(formExecutor).executeAndProcessResults(any(), isNull(), eq(actionModel));
+            }
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    @DisplayName("throws when the configured click action is not present on the object")
+    void throws_whenClickActionNotFound() {
+        var objectModel = objectModelWithClickAction(hostObject(), "doesNotExist");
+
+        var tester = new WicketTester(new D3PanelComponentFactoryTest.WicketAppStup());
+        try {
+            var panel = (D3ObjectPanel) factory.createComponent("d3", objectModel);
+            tester.startPage(new D3TestPage(panel));
+            var callback = panel.getBehaviors(NodeClickedCallback.class).getFirst();
+
+            assertThatThrownBy(() -> tester.executeAjaxUrl(callbackUrl(callback, "node-42")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("doesNotExist")
+                    .hasMessageContaining("not found");
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    @DisplayName("throws when the click action cannot start parameter negotiation")
+    void throws_whenParameterNegotiationUnavailable() {
+        var action = hostSpec().getAction("selectNode").orElseThrow();
+        var objectModel = objectModelWithClickAction(hostObject(), "selectNode");
+
+        var actionInteraction = mock(ActionInteraction.class);
+        when(actionInteraction.startParameterNegotiation()).thenReturn(Optional.empty());
+        var actionModel = mock(ActionModel.class);
+        when(actionModel.getActionInteraction()).thenReturn(actionInteraction);
+
+        var tester = new WicketTester(new D3PanelComponentFactoryTest.WicketAppStup());
+        try {
+            var panel = (D3ObjectPanel) factory.createComponent("d3", objectModel);
+            tester.startPage(new D3TestPage(panel));
+            var callback = panel.getBehaviors(NodeClickedCallback.class).getFirst();
+
+            try (var actionModelStatic = mockStatic(ActionModel.class)) {
+                actionModelStatic.when(() -> ActionModel.forEntity(action, objectModel)).thenReturn(actionModel);
+
+                assertThatThrownBy(() -> tester.executeAjaxUrl(callbackUrl(callback, "node-42")))
+                        .isInstanceOf(RuntimeException.class)
+                        .hasMessageContaining("could not start parameter negotiation");
             }
         } finally {
             tester.destroy();
@@ -267,8 +324,8 @@ class D3ObjectPanelComponentFactoryTest {
 
         var d3GraphFacet = mock(D3GraphFacet.class);
         doReturn(Optional.of(d3GraphFacet)).when(objectSpec).lookupFacet(D3GraphFacet.class);
-        when(d3GraphFacet.configFor(any())).thenReturn(D3Config.defaults());
-        when(d3GraphFacet.getClickAction(any())).thenReturn(Optional.of(clickAction));
+        when(d3GraphFacet.configFor(GraphHost.class)).thenReturn(D3Config.defaults());
+        when(d3GraphFacet.getClickAction(GraphHost.class)).thenReturn(Optional.of(clickAction));
 
         when(objectModel.getManagedObject()).thenReturn(hostObject);
         return objectModel;

@@ -154,6 +154,26 @@ class D3ConfigTest {
     }
 
     @Test
+    @DisplayName("withXxx(...) accepts the complementary boundary values")
+    void with_complementaryBoundaryValues_areAccepted() {
+        // the opposite end of each validated range to with_boundaryValues_areAccepted
+        var config = D3Config.defaults()
+                .withInitialWidth(4000)
+                .withInitialHeight(200)
+                .withLinkDistance(1000)
+                .withRepulsionStrength(0)
+                .withCollisionRadius(500)
+                .withDistributionStrength(0.0);
+
+        assertThat(config.initialWidth()).isEqualTo(4000);
+        assertThat(config.initialHeight()).isEqualTo(200);
+        assertThat(config.linkDistance()).isEqualTo(1000);
+        assertThat(config.repulsionStrength()).isZero();
+        assertThat(config.collisionRadius()).isEqualTo(500);
+        assertThat(config.distributionStrength()).isEqualTo(0.0);
+    }
+
+    @Test
     @DisplayName("asBuilder() round-trips to an equal instance")
     void asBuilder_roundTripsToEqualInstance() {
         var config = D3Config.defaults()

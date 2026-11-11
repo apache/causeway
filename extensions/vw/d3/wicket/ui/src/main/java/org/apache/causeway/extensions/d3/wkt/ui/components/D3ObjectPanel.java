@@ -26,9 +26,7 @@ import org.apache.causeway.extensions.d3.applib.config.D3Config;
 import org.apache.causeway.extensions.d3.metamodel.facet.D3GraphFacet;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedCallback;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedEvent;
-import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
 
 /**
  * Wicket panel that renders a domain object whose <b>type</b> is annotated with
@@ -56,15 +54,12 @@ public class D3ObjectPanel extends org.apache.causeway.extensions.d3.wkt.integra
     private static final String EMPTY_GRAPH = """
             {"nodes":[],"links":[]}""";
 
-    private final UiObjectWkt objectModel;
-
     public D3ObjectPanel(final String id, final UiObjectWkt objectModel) {
         super(id, buildConfig(objectModel));
-        this.objectModel = objectModel;
 
         var facet = objectModel.getTypeOfSpecification().lookupFacet(D3GraphFacet.class).orElse(null);
         var clickAction = facet != null
-                ? facet.getClickAction(domainClassOf(objectModel)).orElse(null)
+                ? facet.getClickAction(D3PanelSupport.domainClassOf(objectModel.getManagedObject())).orElse(null)
                 : null;
 
         if (clickAction != null) {
@@ -73,7 +68,7 @@ public class D3ObjectPanel extends org.apache.causeway.extensions.d3.wkt.integra
                 private static final long serialVersionUID = 1L;
                 @Override
                 protected void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target) {
-                    D3ObjectPanel.this.onNodeClicked(event, target, clickAction);
+                    D3PanelSupport.invokeClickAction(event, target, clickAction, objectModel);
                 }
             });
         }
@@ -84,44 +79,15 @@ public class D3ObjectPanel extends org.apache.causeway.extensions.d3.wkt.integra
     private static D3Config buildConfig(final UiObjectWkt objectModel) {
         var facet = objectModel.getTypeOfSpecification().lookupFacet(D3GraphFacet.class).orElse(null);
         var config = facet != null
-                ? facet.configFor(domainClassOf(objectModel))
+                ? facet.configFor(D3PanelSupport.domainClassOf(objectModel.getManagedObject()))
                 : D3Config.defaults();
 
         // graph data is advisor-provided (merged in by configFor(...));
         // fall back to an empty graph when none is available
-        if (isBlank(config.graphData())) {
+        if (D3PanelSupport.isBlank(config.graphData())) {
             config = config.withGraphData(EMPTY_GRAPH);
         }
         return config;
-    }
-
-    private static Class<?> domainClassOf(final UiObjectWkt objectModel) {
-        return objectModel.getManagedObject().getCorrespondingClass();
-    }
-
-    private static boolean isBlank(final CharSequence cs) {
-        return cs == null || cs.toString().isBlank();
-    }
-
-    private void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target,
-            final String clickActionId) {
-        var objectSpec = objectModel.getManagedObject().objSpec();
-        var action = objectSpec.getAction(clickActionId)
-                .orElseThrow(() -> new RuntimeException(
-                        "D3 node-click action '" + clickActionId + "' not found on "
-                        + objectSpec.logicalTypeName()));
-
-        var actionModel = ActionModel.forEntity(action, objectModel);
-        var pendingArgs = actionModel.getActionInteraction().startParameterNegotiation()
-                .orElseThrow(() -> new RuntimeException(
-                        "could not start parameter negotiation for D3 node-click action '"
-                        + clickActionId + "'"));
-        if (pendingArgs.getParamCount() >= 1) {
-            pendingArgs.updateParamValuePojo(0, __ -> event.nodeId());
-        }
-
-        FormExecutorDefault.forAction(actionModel)
-                .executeAndProcessResults(target, null, actionModel);
     }
 
 }

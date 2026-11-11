@@ -26,9 +26,7 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeMo
 import org.apache.causeway.extensions.d3.metamodel.facet.D3GraphFacet;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedCallback;
 import org.apache.causeway.extensions.d3.wkt.integration.callback.NodeClickedEvent;
-import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
 
 import java.io.Serial;
 
@@ -62,7 +60,7 @@ implements HasAttributeModel {
         super(id, buildConfig(attributeModel));
         this.attributeModel = attributeModel;
 
-        var domainClass = domainClassOf(attributeModel);
+        var domainClass = D3PanelSupport.domainClassOf(parentObjectOf(attributeModel));
         var facet = attributeModel.getMetaModel().lookupFacet(D3GraphFacet.class).orElse(null);
         var clickAction = facet != null
                 ? facet.getClickAction(domainClass).orElse(null)
@@ -74,7 +72,7 @@ implements HasAttributeModel {
                 private static final long serialVersionUID = 1L;
                 @Override
                 protected void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target) {
-                    D3Panel.this.onNodeClicked(event, target, clickAction);
+                    D3PanelSupport.invokeClickAction(event, target, clickAction, attributeModel.getParentUiModel());
                 }
             });
         }
@@ -88,7 +86,7 @@ implements HasAttributeModel {
     // -- HELPER
 
     private static D3Config buildConfig(final UiAttributeWkt attributeModel) {
-        var domainClass = domainClassOf(attributeModel);
+        var domainClass = D3PanelSupport.domainClassOf(parentObjectOf(attributeModel));
         var facet = attributeModel.getMetaModel().lookupFacet(D3GraphFacet.class).orElse(null);
         var config = facet != null
                 ? facet.configFor(domainClass)
@@ -100,44 +98,14 @@ implements HasAttributeModel {
         var pojo = attributeModel.getObject().getPojo();
         if (pojo instanceof CharSequence cs && !cs.toString().isBlank()) {
             config = config.withGraphData(cs);
-        } else if (isBlank(config.graphData())) {
+        } else if (D3PanelSupport.isBlank(config.graphData())) {
             config = config.withGraphData(EMPTY_GRAPH);
         }
         return config;
     }
 
-    private static boolean isBlank(final CharSequence cs) {
-        return cs == null || cs.toString().isBlank();
-    }
-
-    private static Class<?> domainClassOf(final UiAttributeWkt attributeModel) {
-        return parentObjectOf(attributeModel).getCorrespondingClass();
-    }
-
     private static ManagedObject parentObjectOf(final UiAttributeWkt attributeModel) {
         return attributeModel.getParentUiModel().getManagedObject();
-    }
-
-    private void onNodeClicked(final NodeClickedEvent event, final AjaxRequestTarget target,
-            final String clickActionId) {
-        var parentUiModel = attributeModel.getParentUiModel();
-        var objectSpec = parentUiModel.getManagedObject().objSpec();
-        var action = objectSpec.getAction(clickActionId)
-                .orElseThrow(() -> new RuntimeException(
-                        "D3 node-click action '" + clickActionId + "' not found on "
-                        + objectSpec.logicalTypeName()));
-
-        var actionModel = ActionModel.forEntity(action, parentUiModel);
-        var pendingArgs = actionModel.getActionInteraction().startParameterNegotiation()
-                .orElseThrow(() -> new RuntimeException(
-                        "could not start parameter negotiation for D3 node-click action '"
-                        + clickActionId + "'"));
-        if (pendingArgs.getParamCount() >= 1) {
-            pendingArgs.updateParamValuePojo(0, __ -> event.nodeId());
-        }
-
-        FormExecutorDefault.forAction(actionModel)
-                .executeAndProcessResults(target, null, actionModel);
     }
 
 }

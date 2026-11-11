@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.d3.wkt.ui.components;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
@@ -33,10 +34,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import de.agilecoders.wicket.webjars.WicketWebjars;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -189,6 +192,7 @@ class D3PanelComponentFactoryTest {
             var component = factory.createComponent("d3", attributeModel);
             tester.startComponentInPage(component);
             assertThat(component).isInstanceOf(D3Panel.class);
+            assertThat(((D3Panel) component).attributeModel()).isSameAs(attributeModel);
         } finally {
             tester.destroy();
         }
@@ -263,6 +267,20 @@ class D3PanelComponentFactoryTest {
     }
 
     @Test
+    @DisplayName("keeps advisor-provided graph data when the property value is not a CharSequence")
+    void keepsAdvisorGraphData_whenPropertyNotCharSequence() {
+        // non-CharSequence property value => the annotated-value branch is skipped,
+        // so isBlank(config.graphData()) is evaluated against a NON-null (non-blank) value
+        var config = D3Config.defaults().withGraphData("{\"nodes\":[{\"id\":\"ADVISOR\"}]}");
+        var attributeModel = attributeModelWith(managedInt(123), config);
+
+        var response = renderPanel(attributeModel);
+
+        // proves EMPTY_GRAPH was NOT substituted for the advisor-provided data
+        assertThat(response).contains("ADVISOR");
+    }
+
+    @Test
     @DisplayName("falls back to the defaults (and EMPTY_GRAPH) when the facet is absent")
     void rendersDefaults_whenFacetAbsent() {
         var attributeModel = attributeModelWithoutFacet(managedInt(123));
@@ -287,6 +305,7 @@ class D3PanelComponentFactoryTest {
 
     @Test
     @DisplayName("invokes the configured domain action, binding the clicked node id, on node click")
+    @SuppressWarnings("unchecked")
     void invokesDomainAction_onNodeClicked() {
         var action = hostSpec().getAction("selectNode").orElseThrow();
         var attributeModel = attributeModelForClickAction(hostObject(), "selectNode");
@@ -304,7 +323,7 @@ class D3PanelComponentFactoryTest {
         try {
             var panel = (D3Panel) factory.createComponent("d3", attributeModel);
             tester.startPage(new D3TestPage(panel));
-            var callback = panel.getBehaviors(NodeClickedCallback.class).get(0);
+            var callback = panel.getBehaviors(NodeClickedCallback.class).getFirst();
 
             try (var actionModelStatic = mockStatic(ActionModel.class);
                  var formExecutorStatic = mockStatic(FormExecutorDefault.class)) {
@@ -314,8 +333,62 @@ class D3PanelComponentFactoryTest {
 
                 tester.executeAjaxUrl(callbackUrl(callback, "node-42"));
 
-                verify(pendingArgs).updateParamValuePojo(eq(0), any());
+                // capture the pojo-updater function and invoke it, proving the clicked
+                // node id (not null / not any other value) is what gets bound
+                var nodeIdFn = ArgumentCaptor.forClass(Function.class);
+                verify(pendingArgs).updateParamValuePojo(eq(0), nodeIdFn.capture());
+                assertThat(nodeIdFn.getValue().apply(null)).isEqualTo("node-42");
                 verify(formExecutor).executeAndProcessResults(any(), isNull(), eq(actionModel));
+            }
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    @DisplayName("throws when the configured click action is not present on the object")
+    void throws_whenClickActionNotFound() {
+        var attributeModel = attributeModelForClickAction(hostObject(), "doesNotExist");
+
+        var tester = new WicketTester(new WicketAppStup());
+        try {
+            var panel = (D3Panel) factory.createComponent("d3", attributeModel);
+            tester.startPage(new D3TestPage(panel));
+            var callback = panel.getBehaviors(NodeClickedCallback.class).getFirst();
+
+            assertThatThrownBy(() -> tester.executeAjaxUrl(callbackUrl(callback, "node-42")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("doesNotExist")
+                    .hasMessageContaining("not found");
+        } finally {
+            tester.destroy();
+        }
+    }
+
+    @Test
+    @DisplayName("throws when the click action cannot start parameter negotiation")
+    void throws_whenParameterNegotiationUnavailable() {
+        var action = hostSpec().getAction("selectNode").orElseThrow();
+        var attributeModel = attributeModelForClickAction(hostObject(), "selectNode");
+        var parentUiModel = attributeModel.getParentUiModel();
+
+        var actionInteraction = mock(ActionInteraction.class);
+        when(actionInteraction.startParameterNegotiation()).thenReturn(Optional.empty());
+        var actionModel = mock(ActionModel.class);
+        when(actionModel.getActionInteraction()).thenReturn(actionInteraction);
+
+        var tester = new WicketTester(new WicketAppStup());
+        try {
+            var panel = (D3Panel) factory.createComponent("d3", attributeModel);
+            tester.startPage(new D3TestPage(panel));
+            var callback = panel.getBehaviors(NodeClickedCallback.class).getFirst();
+
+            try (var actionModelStatic = mockStatic(ActionModel.class)) {
+                actionModelStatic.when(() -> ActionModel.forEntity(action, parentUiModel)).thenReturn(actionModel);
+
+                assertThatThrownBy(() -> tester.executeAjaxUrl(callbackUrl(callback, "node-42")))
+                        .isInstanceOf(RuntimeException.class)
+                        .hasMessageContaining("could not start parameter negotiation");
             }
         } finally {
             tester.destroy();
@@ -350,8 +423,8 @@ class D3PanelComponentFactoryTest {
         var feature = attributeModel.getMetaModel();
         var d3GraphFacet = mock(D3GraphFacet.class);
         doReturn(Optional.of(d3GraphFacet)).when(feature).lookupFacet(D3GraphFacet.class);
-        when(d3GraphFacet.configFor(any())).thenReturn(D3Config.defaults());
-        when(d3GraphFacet.getClickAction(any())).thenReturn(Optional.of(clickAction));
+        when(d3GraphFacet.configFor(GraphHost.class)).thenReturn(D3Config.defaults());
+        when(d3GraphFacet.getClickAction(GraphHost.class)).thenReturn(Optional.of(clickAction));
         return attributeModel;
     }
 

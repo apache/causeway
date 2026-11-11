@@ -78,6 +78,32 @@ class D3PanelRenderHeadTest {
     }
 
     @Test
+    @DisplayName("renders the panel-scoped D3Panel.css stylesheet")
+    void renderHead_rendersPanelStylesheet() {
+        var panel = new D3Panel("d3", D3Config.defaults());
+
+        tester.startPage(new D3TestPage(panel));
+
+        // the D3Panel.css resource is served under the D3Panel class' resource path
+        // (the filename carries a Wicket version suffix, hence we match the path)
+        assertThat(tester.getLastResponseAsString())
+                .contains("rel=\"stylesheet\"")
+                .contains("components.D3Panel/D3Panel");
+    }
+
+    @Test
+    @DisplayName("exposes the canvas id that the emitted init(...) call targets")
+    void getCanvasId_isExposed_andRendered() {
+        var panel = new D3Panel("d3", D3Config.defaults());
+
+        tester.startPage(new D3TestPage(panel));
+
+        var canvasId = panel.getCanvasId();
+        assertThat(canvasId).isNotNull();
+        assertThat(tester.getLastResponseAsString()).contains(canvasId);
+    }
+
+    @Test
     @DisplayName("includes the callback URL in the config when a click callback is bound")
     void renderHead_includesCallbackUrl_whenClickCallbackBound() {
         var panel = new D3Panel("d3", D3Config.defaults()).withClickCallback(new NoopCallback());

@@ -155,6 +155,8 @@ class D3GraphFacetFromAnnotationAdvisorTest {
         var attributes = new LinkedHashMap<String, Object>();
         facet().visitAttributes(attributes::put);
 
+        // the super (FacetWithAttributes default) contributes these
+        assertThat(attributes).containsKeys("facet", "precedence");
         assertThat(attributes)
                 .containsKeys("initialWidth", "initialHeight", "enableDragging", "enableZoom",
                         "linkDistance", "repulsionStrength", "collisionRadius",

@@ -70,5 +70,62 @@
         <module>metamodel</module>
         <module>wicket</module>
     </modules>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.30.2</version> <!-- Use the latest stable version for your Java version -->
+                <executions>
+                    <execution>
+                        <id>pitest-run</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Specify the packages or classes you want to mutate.
+                         NOTE: '*' matches any characters including '.', so this single
+                         pattern covers all sub-packages of every d3 module (applib,
+                         metamodel, wkt.*). Only the current module's own classes are on
+                         the classpath, so there is no cross-module contamination. -->
+                    <targetClasses>
+                        <param>org.apache.causeway.extensions.d3.*</param>
+                    </targetClasses>
+                    <!-- Specify your test classes (optional if they follow standard naming) -->
+                    <targetTests>
+                        <param>org.apache.causeway.extensions.d3.*Test</param>
+                    </targetTests>
+                    <!-- Formats for the report output -->
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                    </outputFormats>
+                    <!-- Do NOT inherit surefire's argLine.
+                         By default pitest parses surefire's argLine, which (via the
+                         causeway parent POM) contains
+                           -javaagent:${settings.localRepository}/.../mockito-core-*.jar
+                         pitest does NOT resolve the ${settings.localRepository}
+                         placeholder, so the minion JVM fails to start with
+                         "Error opening zip file or JAR manifest missing". -->
+                    <parseSurefireArgLine>false</parseSurefireArgLine>
+                    <!-- Explicit argLine used instead (mockito's inline mock maker
+                         still self-attaches thanks to EnableDynamicAgentLoading). -->
+                    <argLine>-Xmx512m -XX:+EnableDynamicAgentLoading</argLine>
+                </configuration>
+                <dependencies>
+                    <!-- JUnit 5/6 support: without this plugin pitest refuses to run
+                         the JUnit (Jupiter) tests, reporting
+                         "JUnit 5 is on the classpath but the pitest junit 5 plugin
+                         is not installed". -->
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.3</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

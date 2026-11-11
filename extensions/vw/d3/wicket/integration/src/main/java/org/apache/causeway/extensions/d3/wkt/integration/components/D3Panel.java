@@ -86,8 +86,8 @@ public class D3Panel extends Panel {
 
     @Override
     public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-
+        // NOTE: no super.renderHead(response) call: Component.renderHead is a no-op
+        // (Panel does not override it), so the call would be dead code.
         response.render(CssHeaderItem.forReference(new CssResourceReference(D3Panel.class, "D3Panel.css")));
 
         var configWithCallback = clickCallback != null

@@ -108,4 +108,17 @@ class D3GraphFacetFromAnnotationFactoryTest {
 
         assertThat(property.containsFacet(D3GraphFacet.class)).isFalse();
     }
+
+    // -- ambiguity
+
+    @Test
+    @DisplayName("@D3Graph on both the type and one of its members is reported as an ambiguous annotation")
+    void ambiguousAnnotations_areReportedAsValidationFailure() {
+        // AnnotatedType carries @D3Graph on the type AND on its 'graph' property
+        mmc.getSpecificationLoader().loadSpecification(AnnotatedType.class);
+
+        var messages = mmc.getSpecificationLoader().getOrAssessValidationResult().getMessages();
+
+        assertThat(messages).anySatisfy(message -> assertThat(message).contains("@D3Graph"));
+    }
 }
