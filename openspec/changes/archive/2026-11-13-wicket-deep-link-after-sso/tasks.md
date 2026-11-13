@@ -17,5 +17,5 @@
 
 ## 4. Verify in a consuming application
 
-- [ ] 4.1 Build the framework (`mvn clean install -Drevision=2.2.0-SNAPSHOT ...` for affected modules) and verify manually with a Spring Security–based app (e.g. Estatio in `local` form-login mode): open `/wicket/entity/<logicalType>:<id>` in a fresh browser session → lands on the entity page
+- [x] 4.1 Build the framework (`mvn clean install -Drevision=2.2.0-SNAPSHOT ...` for affected modules) and verify manually with a Spring Security–based app (e.g. Estatio in `local` form-login mode): open `/wicket/entity/<logicalType>:<id>` in a fresh browser session → lands on the entity page
 - [ ] 4.2 Verify session expiry case (shorten `server.servlet.session.timeout`, wait, reload a bookmarkable URL → same page)
