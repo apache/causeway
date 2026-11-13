@@ -72,8 +72,8 @@
                 </property>
             </activation>
             <properties>
-                <gradle.skipTests>-xtest</gradle.skipTests>
-                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+                <gradle.skipTests>-xjsTest</gradle.skipTests>
+                <gradle.skipBrowserTests>-xjsBrowserTest</gradle.skipBrowserTests>
             </properties>
         </profile>
         <profile>
@@ -84,7 +84,7 @@
                 </property>
             </activation>
             <properties>
-                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+                <gradle.skipBrowserTests>-xjsBrowserTest</gradle.skipBrowserTests>
             </properties>
         </profile>
 

@@ -20,17 +20,13 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
     val kotlinVersion: String by System.getProperties()
+    kotlin("multiplatform") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
-    kotlin("js") version kotlinVersion
     val kvisionVersion: String by System.getProperties()
     id("io.kvision") version kvisionVersion
 }
 
 var version = "2.0.0-SNAPSHOT"
-
-kotlin.sourceSets.all {
-    languageSettings.optIn("org.mylibrary.OptInAnnotation")
-}
 
 repositories {
     maven ("https://repository.int.kn/nexus/content/repositories/thirdparty/")
@@ -60,7 +56,13 @@ kotlin {
         }
         binaries.executable()
     }
-    sourceSets["main"].dependencies {
+    // The KVision Gradle plugin requires the standard Kotlin Multiplatform source set
+    // names ('jsMain'/'jsTest').  This project keeps its Maven-style directory layout,
+    // so the source and resource directories are wired up explicitly here.
+    sourceSets["jsMain"].kotlin.srcDir("src/main/kotlin")
+    sourceSets["jsMain"].resources.srcDir("src/main/resources")
+    sourceSets["jsMain"].resources.srcDir(webDir)
+    sourceSets["jsMain"].dependencies {
         implementation(npm("react-awesome-button", "*"))
         implementation(npm("prop-types", "*"))
         implementation("io.kvision:kvision:$kvisionVersion")
@@ -87,47 +89,46 @@ kotlin {
         implementation("io.kvision:kvision-rest:$kvisionVersion")
 //        implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
-        implementation(npm("xmltojson", "1.3.5", false))
-        implementation(npm("flatted", "3.2.2", false))
-        implementation(npm("diff", "5.0.0", false))
-        implementation(npm("diff2html", "3.4.13", false))
-        implementation(npm("xml-beautify", "1.1.2", false))
-        implementation(npm("xterm", "4.15.0", false))
-        implementation(npm("pdfjs", "2.4.7", false))
-        implementation(npm("vega", "5.22.1", false))
-//        implementation(npm("vega-lite", "5.6.0", true))
-        implementation(npm("element-resize-event", "3.0.6", false))
-        implementation(npm("asciidoctor", "2.2.6", false))
+        implementation(npm("xmltojson", "1.3.5"))
+        implementation(npm("flatted", "3.2.2"))
+        implementation(npm("diff", "5.0.0"))
+        implementation(npm("diff2html", "3.4.13"))
+        implementation(npm("xml-beautify", "1.1.2"))
+        implementation(npm("xterm", "4.15.0"))
+        implementation(npm("pdfjs", "2.4.7"))
+        implementation(npm("vega", "5.22.1"))
+//        implementation(npm("vega-lite", "5.6.0"))
+        implementation(npm("element-resize-event", "3.0.6"))
+        implementation(npm("asciidoctor", "2.2.6"))
     }
-    sourceSets["test"].dependencies {
+    sourceSets["jsTest"].kotlin.srcDir("src/test/kotlin")
+    sourceSets["jsTest"].resources.srcDir("src/test/resources")
+    sourceSets["jsTest"].dependencies {
         implementation(kotlin("test-js"))
         implementation("io.kvision:kvision-testutils:$kvisionVersion")
     }
-    sourceSets["main"].resources.srcDir(webDir)
 }
 
 afterEvaluate {
-    tasks {
-        create("jar", Jar::class) {
-            dependsOn("browserProductionWebpack")
-//            manifest.writeTo("$buildDir/mymanifest.mf")
-            group = "package"
-            destinationDirectory.set(file("$buildDir/libs"))
-            val distribution =
-                project.tasks.getByName(
-                    "browserProductionWebpack",
-                    KotlinWebpack::class
-                ).destinationDirectory
-            from(distribution) {
-                include("**/*.*")
-                into("/public/kroviz/")
-            }
-            from(webDir) { into("/public/kroviz/") }
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-            inputs.files(distribution, webDir)
-            outputs.file(archiveFile)
-
+    // 'jsBrowserProductionWebpack' is contributed by the Kotlin Multiplatform plugin and is only
+    // available once the project has been evaluated.  The task (and the providers derived from it)
+    // are resolved here, so that the lazy 'jar' task configuration below does not have to touch
+    // the (deprecated at execution time) Task.project API.
+    val webpackTask = tasks.getByName("jsBrowserProductionWebpack", KotlinWebpack::class)
+    val webpackOutput = webpackTask.outputDirectory
+    val libsDir = layout.buildDirectory.dir("libs")
+    tasks.register("jar", Jar::class) {
+        dependsOn(webpackTask)
+        group = "package"
+        destinationDirectory.set(libsDir)
+        from(webpackOutput) {
+            include("**/*.*")
+            into("/public/kroviz/")
         }
-    }
+        from(webDir) { into("/public/kroviz/") }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        inputs.files(webpackOutput, webDir)
+        outputs.file(archiveFile)
 
+    }
 }
