@@ -63,6 +63,8 @@ kotlin {
     sourceSets["jsMain"].resources.srcDir("src/main/resources")
     sourceSets["jsMain"].resources.srcDir(webDir)
     sourceSets["jsMain"].dependencies {
+        // platform independent RESTful Objects transfer objects (JS and JVM)
+        implementation(project(":model"))
         implementation(npm("react-awesome-button", "*"))
         implementation(npm("prop-types", "*"))
         implementation("io.kvision:kvision:$kvisionVersion")
@@ -105,6 +107,7 @@ kotlin {
     sourceSets["jsTest"].resources.srcDir("src/test/resources")
     sourceSets["jsTest"].dependencies {
         implementation(kotlin("test-js"))
+        implementation(project(":snapshots"))
         implementation("io.kvision:kvision-testutils:$kvisionVersion")
     }
 }

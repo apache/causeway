@@ -19,6 +19,7 @@
 package org.apache.causeway.client.kroviz.utils
 
 import io.kvision.utils.obj
+import org.apache.causeway.client.kroviz.model.Xml
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.utils.js.XmlBeautify
 import org.apache.causeway.client.kroviz.utils.js.XmlToJson
@@ -35,9 +36,11 @@ inline val RequestDestination.Companion.XSLT: RequestDestination
 
 object XmlHelper {
 
+    /**
+     * @see org.apache.causeway.client.kroviz.model.Xml
+     */
     fun isXml(input: String): Boolean {
-        val s = input.trim()
-        return s.startsWith("<") && s.endsWith(">")
+        return Xml.isXml(input)
     }
 
     fun nonTextChildren(node: Node): List<Node> {

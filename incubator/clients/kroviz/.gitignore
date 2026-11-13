@@ -3,6 +3,8 @@ build
 ./target
 .idea/
 .gradle
+.kotlin-js-store
+kotlin-js-store
 *.iml
 *.ipr
 *.iws

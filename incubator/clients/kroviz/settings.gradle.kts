@@ -33,3 +33,15 @@ pluginManagement {
     }
 }
 rootProject.name = "kroviz"
+
+// The kroviz client is split by concern, not by target:
+//
+//   :snapshots  recorded RESTful Objects responses, shared by the test suites of
+//               the other modules
+//   :model      platform independent RESTful Objects DTO layer (JS *and* JVM), so
+//               that it can be reused by other front ends, e.g. a Vaadin client
+//
+// The root project holds the KVision based user interface.  All three projects are
+// built from this single Maven module.
+include(":snapshots")
+include(":model")

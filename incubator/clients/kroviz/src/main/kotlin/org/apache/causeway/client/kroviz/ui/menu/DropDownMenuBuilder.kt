@@ -135,9 +135,10 @@ class DropDownMenuBuilder : MenuBuilder() {
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
             section.serviceAction.forEach { sa ->
-                val saTitle = StringUtils.deCamel(sa.id!!)
+                val saId = sa.id!!
+                val saTitle = StringUtils.deCamel(saId)
                 if (saTitle == actionTitle) {
-                    val action = buildActionLink(sa.id, menuTitle)
+                    val action = buildActionLink(saId, menuTitle)
                     action.label = ""
                     action.onClick {
                         ResourceProxy().fetch(sa.link!!)

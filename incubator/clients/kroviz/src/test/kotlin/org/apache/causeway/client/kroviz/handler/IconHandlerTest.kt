@@ -49,12 +49,12 @@ class IconHandlerTest : IntegrationTest() {
             val handler = IconHandler()
             handler.handle(logEntry)
             val icon = handler.parse("") as Icon
-            val image = icon.image
+            val imageUrl = icon.imageUrl
 
             //then
-            assertTrue(image.sizes != "")
+            assertTrue(imageUrl.isNotEmpty())
             console.log("[IHT.handleTest]")
-            console.log(image.sizes)
+            console.log(imageUrl)
         }
     }
 

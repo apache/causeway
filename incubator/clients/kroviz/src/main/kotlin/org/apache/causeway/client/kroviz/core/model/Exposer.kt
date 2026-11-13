@@ -62,7 +62,7 @@ class Exposer(val delegate: TObject) {
     }
 
     fun setIcon(icon: Icon) {
-        this.asDynamic()["icon"] = icon.image.src
+        this.asDynamic()["icon"] = icon.imageUrl
     }
 
 }

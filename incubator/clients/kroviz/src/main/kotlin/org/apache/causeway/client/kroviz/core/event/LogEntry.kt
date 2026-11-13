@@ -222,7 +222,7 @@ data class LogEntry(
 
     //TODO this should be moved to a ValueSemanticsProvider
     private fun extractType(wl: WithLinks): String {
-        val firstLink = wl.getLinks().firstOrNull()!!
+        val firstLink = wl.links.firstOrNull()!!
         val result = firstLink.simpleType()
         if (result.isEmpty()) {
             console.log("[LE.extractType]")

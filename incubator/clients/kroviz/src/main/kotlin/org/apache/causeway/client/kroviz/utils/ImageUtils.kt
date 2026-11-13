@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.utils
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.to.Icon
-import org.w3c.dom.Image
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 
@@ -28,15 +27,15 @@ object ImageUtils {
 
     fun extractIcon(logEntry: LogEntry): Icon {
         val blob = logEntry.blob!!
-        val image = blob.toImage()
-        return Icon(image)
+        return Icon(blob.toImageUrl())
     }
 
-    private fun Blob.toImage(): Image {
-        val url = URL.createObjectURL(this)
-        val image = Image()
-        image.src = url
-        return image
+    /**
+     * Icons arrive as blobs.  The model only carries the resulting object URL, so
+     * creating the DOM image is left to whoever displays it.
+     */
+    private fun Blob.toImageUrl(): String {
+        return URL.createObjectURL(this)
     }
 
 }

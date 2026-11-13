@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.utils
 
+import org.apache.causeway.client.kroviz.model.Strings
 import org.apache.causeway.client.kroviz.to.Argument
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.TObject
@@ -26,46 +27,26 @@ import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 object StringUtils {
 
+    /**
+     * Case conversion is part of the platform independent model layer.
+     * @see org.apache.causeway.client.kroviz.model.Strings
+     */
     fun enCamel(input: String): String {
-        var output = ""
-        val words = input.split(" ")
-        for (w in words) {
-            output += capitalize(w)
-        }
-        return decapitalize(output)
+        return Strings.enCamel(input)
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
+    /**
+     * @see org.apache.causeway.client.kroviz.model.Strings
+     */
     fun capitalize(input: String): String {
-        return if (input.length > 0) {
-            val output = input.substring(1, input.length)
-            input.first().uppercaseChar() + output
-        } else {
-            input
-        }
+        return Strings.capitalize(input)
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
-    private fun decapitalize(input: String): String {
-        val output = input.substring(1, input.length)
-        return input.first().lowercaseChar() + output
-    }
-
-    @OptIn(ExperimentalStdlibApi::class)
+    /**
+     * @see org.apache.causeway.client.kroviz.model.Strings
+     */
     fun deCamel(input: String): String {
-        var output = ""
-        for ((i, c) in input.withIndex()) {
-            val cuc = c.uppercaseChar()
-            if (i == 0) {
-                output += cuc
-            } else {
-                val o = if (cuc == c) " $c" else c.toString()
-                output += o
-            }
-        }
-        // Skip acronyms like OK, USA
-        val outputWithoutWhiteSpace = output.replace("\\s".toRegex(), "")
-        return if (input == outputWithoutWhiteSpace) input else output
+        return Strings.deCamel(input)
     }
 
     fun shortTitle(url: String): String {

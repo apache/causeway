@@ -46,7 +46,7 @@ class SystemAggregator : BaseAggregator() {
                     when (UrlUtils.isApplicationIcon(url)) {
                         url.contains("48") -> {
                             (displayModel as SystemDM).addSmallIcon(icon)
-                            val iconUrl = icon.image.src
+                            val iconUrl = icon.imageUrl
                             SessionManager.setApplicationIcon(iconUrl)
                         }
 
