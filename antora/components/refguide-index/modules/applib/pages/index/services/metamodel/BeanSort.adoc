@@ -17,21 +17,22 @@ enum BeanSort {
   VALUE     // <.>
   COLLECTION     // <.>
   ABSTRACT     // <.>
+  PROGRAMMATIC     // <.>
   VETOED     // <.>
   UNKNOWN
+  BeanPolicy policy()
   boolean isManagedBeanContributing()
   boolean isManagedBeanNotContributing()
-  boolean isManagedBeanAny()
   boolean isMixin()
   boolean isViewModel()
   boolean isValue()
   boolean isCollection()
   boolean isEntity()
   boolean isAbstract()
+  boolean isProgrammatic()
   boolean isVetoed()
   boolean isUnknown()
-  boolean isToBeIntrospected()
-  boolean isWrappingSupported()
+  boolean isManagedBeanAny()
 }
 ----
 
@@ -63,7 +64,7 @@ Object associated with an _entity_ , _viewmodel_ or _domain-service_ to act as c
 <.> xref:#VALUE[VALUE]
 +
 --
-Immutable, serializable object.
+Immutable, serializable object. Values (including enums) my have object support methods, hence needs introspection.
 --
 <.> xref:#COLLECTION[COLLECTION]
 +
@@ -73,12 +74,17 @@ Container of objects.
 <.> xref:#ABSTRACT[ABSTRACT]
 +
 --
-A non concrete type, that is a placeholder for a its concrete implementer.
+A non concrete type, that is a placeholder for a concrete implementer.
+--
+<.> xref:#PROGRAMMATIC[PROGRAMMATIC]
++
+--
+Type must NOT be added to the meta-model, eg. by means of _org.apache.causeway.applib.annotation.Domain.Exclude_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] . Consequently the specification-loader should skip introspection of those types.
 --
 <.> xref:#VETOED[VETOED]
 +
 --
-Type must not be added to the meta-model, eg. by means of _org.apache.causeway.applib.annotation.Domain.Exclude_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
+Type must not be added to the meta-model, eg. by means of _javax.enterprise.inject.Vetoed_ or _Profile_ . Consequently the specification-loader should skip introspection of those types. If discovered by Spring during class-path scanning, we remove the corresponding _BeanDefinition_ .
 --
 
 == Members
@@ -106,12 +112,22 @@ see also _#VIEW_MODEL_
 
 Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
 
+In other words: Indicates that the class is a Spring managed bean, which IS also contributing to the UI or WEB API. Hence needs introspection.
+
+The _ServiceRegistry_ must be aware.
+
 to be introspected: YES
 
 [#MANAGED_BEAN_NOT_CONTRIBUTING]
 === MANAGED_BEAN_NOT_CONTRIBUTING
 
 Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
+
+In other words: Indicates that the class is a Spring managed bean, which is NOT contributing to the UI or WEB API. Hence not introspected.
+
+The _ServiceRegistry_ must be aware regardless.
+
+This is also the fallback xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort] for beans originating from _Bean_ annotated factory methods, when the bean class itself declares no annotations.
 
 to be introspected: NO
 
@@ -123,7 +139,7 @@ Object associated with an _entity_ , _viewmodel_ or _domain-service_ to act as c
 [#VALUE]
 === VALUE
 
-Immutable, serializable object.
+Immutable, serializable object. Values (including enums) my have object support methods, hence needs introspection.
 
 [#COLLECTION]
 === COLLECTION
@@ -133,9 +149,26 @@ Container of objects.
 [#ABSTRACT]
 === ABSTRACT
 
-A non concrete type, that is a placeholder for a its concrete implementer.
+A non concrete type, that is a placeholder for a concrete implementer.
+
+E.g. action return types or collection element types could be interfaces or abstract types (as discovered by reflection during introspection)
+
+[#PROGRAMMATIC]
+=== PROGRAMMATIC
+
+Type must NOT be added to the meta-model, eg. by means of _org.apache.causeway.applib.annotation.Domain.Exclude_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] . Consequently the specification-loader should skip introspection of those types.
+
+In other words: Indicates that the class is some bean, which is NOT contributing to the UI or WEB API, and also NOT managed by Spring.
+
+_ServiceRegistry_ will NOT be aware.
+
+_FactoryService#create(Class)_ will nevertheless support those programmatic beans. They may have injection points that need resolving.
 
 [#VETOED]
 === VETOED
 
-Type must not be added to the meta-model, eg. by means of _org.apache.causeway.applib.annotation.Domain.Exclude_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
+Type must not be added to the meta-model, eg. by means of _javax.enterprise.inject.Vetoed_ or _Profile_ . Consequently the specification-loader should skip introspection of those types. If discovered by Spring during class-path scanning, we remove the corresponding _BeanDefinition_ .
+
+_ServiceRegistry_ must not be aware of those types.
+
+_FactoryService#getOrCreate(Class)_ must fail for those types.

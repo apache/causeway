@@ -39,7 +39,6 @@ import org.apache.causeway.extensions.secman.applib.user.man.ApplicationUserMana
 import org.apache.causeway.extensions.secman.applib.user.man.mixins.ApplicationUserManager_newDelegateUser.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  *
@@ -94,12 +93,10 @@ public class ApplicationUserManager_newDelegateUser {
     }
 
     @MemberSupport public ApplicationRole defaultInitialRole() {
-        val regularUserRoleName = config.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
+        var regularUserRoleName = config.extensions().secman().seed().regularUser().roleName();
         return applicationRoleRepository
                 .findByNameCached(regularUserRoleName)
                 .orElse(null);
     }
-
-
 
 }

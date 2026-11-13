@@ -31,26 +31,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.logging.log4j.Level;
-
 import org.apache.causeway.commons.concurrent.AwaitableLatch;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(staticName = "named")
-@Log4j2
+@Slf4j
 public class _ConcurrentTaskList {
 
     @Getter private final String name;
 
-    private final List<_ConcurrentTask<?>> tasks = _Lists.newArrayList();
+    private final List<_ConcurrentTask<?>> tasks = new ArrayList<>();
     private final AtomicBoolean wasStarted = new AtomicBoolean();
     private final CountDownLatch allFinishedLatch = new CountDownLatch(1);
-    private final AwaitableLatch awaitableLatch = AwaitableLatch.of(allFinishedLatch);
+    private final AwaitableLatch awaitableLatch = new AwaitableLatch(allFinishedLatch);
     private final LongAdder tasksExecuted = new LongAdder();
     private long executionTimeNanos;
 
@@ -63,7 +60,7 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList addTask(final _ConcurrentTask<?> task) {
         synchronized (tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can no longer modify collection of tasks!";
+                var msg = "Tasks already started execution, can no longer modify collection of tasks!";
                 throw new IllegalStateException(msg);
             }
             tasks.add(task);
@@ -74,7 +71,7 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList addTasks(final Collection<? extends _ConcurrentTask<?>> tasks) {
         synchronized (this.tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can no longer modify collection of tasks!";
+                var msg = "Tasks already started execution, can no longer modify collection of tasks!";
                 throw new IllegalStateException(msg);
             }
             this.tasks.addAll(tasks);
@@ -88,13 +85,13 @@ public class _ConcurrentTaskList {
 
         synchronized (tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can not start again!";
+                var msg = "Tasks already started execution, can not start again!";
                 throw new IllegalStateException(msg);
             }
             wasStarted.set(true);
         }
 
-        val t0 = System.nanoTime();
+        var t0 = System.nanoTime();
 
         if(context.shouldRunSequential()) {
             for(_ConcurrentTask<?> task : tasks) {
@@ -109,15 +106,15 @@ public class _ConcurrentTaskList {
 
         // else run with executor ...
 
-        val futures = new ArrayList<Future<?>>(tasks.size());
+        var futures = new ArrayList<Future<?>>(tasks.size());
 
         for(_ConcurrentTask<?> task : tasks) {
-            futures.add(context.executorService.submit(task));
+            futures.add(context.executorService().submit(task));
         }
 
         // now wait for all futures to complete on a separate thread
 
-        val thread = new Thread() {
+        var thread = new Thread() {
 
             @Override
             public void run() {
@@ -171,8 +168,7 @@ public class _ConcurrentTaskList {
     // -- EXECUTION LOGGING
 
     private void onFinished(final _ConcurrentContext context) {
-
-        for(val task: tasks) {
+        for(var task: tasks) {
             if(task.getFailedWith()!=null) {
                 log.error("----------------------------------------");
                 log.error("Failed TaskList: " + this.getName());
@@ -181,18 +177,25 @@ public class _ConcurrentTaskList {
             }
         }
 
-        if(!context.enableExecutionLogging) {
-            return;
-        }
+        if(!context.enableExecutionLogging())
+			return;
 
-        log.printf(Level.INFO,
-                "TaskList '%s' running %d/%d tasks %s, took %.3f milliseconds ",
-                getName(),
+        log.info("TaskList '%s' running %d/%d tasks %s, took %.3f milliseconds "
+            .formatted(getName(),
                 tasksExecuted.longValue(),
                 tasks.size(),
                 context.shouldRunSequential() ? "sequential" : "concurrent",
-                        0.000_001 * executionTimeNanos);
+                        0.000_001 * executionTimeNanos));
 
+    }
+
+    @SneakyThrows
+    public void rethrow() {
+        for(var task: tasks) {
+            if(task.getFailedWith()!=null) {
+            	throw task.getFailedWith();
+            }
+        }
     }
 
     // -- SHORTCUTS
@@ -204,6 +207,5 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList submit(final _ConcurrentContext._ConcurrentContextBuilder contextBuilder) {
         return submit(contextBuilder.build());
     }
-
 
 }

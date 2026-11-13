@@ -23,17 +23,14 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.exceptions.TranslatableException;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks
@@ -47,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@Log4j2
+@Slf4j
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
 
     @Inject protected TranslationService translationService;
@@ -104,8 +101,6 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         this(Category.OTHER, predicate);
     }
 
-
-
     private Optional<String> recognizeRootCause(final Throwable ex) {
 
         return _Exceptions.streamCausalChain(ex)
@@ -114,29 +109,26 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
             if(logRecognizedExceptions) {
                 log.info("Recognized exception, stacktrace : ", throwable);
             }
-            if(ex instanceof TranslatableException) {
-                val translatableException = (TranslatableException) ex;
-                val translatableMessage = translatableException.getTranslatableMessage();
-                val translationContext = translatableException.getTranslationContext();
+            if(ex instanceof TranslatableException translatableException) {
+                var translatableMessage = translatableException.getTranslatableMessage();
+                var translationContext = translatableException.getTranslationContext();
                 if(translatableMessage != null
-                        && translationContext != null) {
-                    return translatableMessage.translate(translationService, translationContext);
-                }
+                        && translationContext != null)
+					return translatableMessage.translate(translationService, translationContext);
             }
             final String formattedMessage = _Exceptions.getRootCause(throwable)
                 .map(rootCauseMessageFormatter::apply)
                 .orElse("");
             return formattedMessage;
         })
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .findFirst();
     }
 
     @Override
     public Optional<Recognition> recognize(final Throwable ex) {
-        if(disabled) {
-            return Optional.empty();
-        }
+        if(disabled)
+			return Optional.empty();
         return Recognition.of(category, recognizeRootCause(ex).orElse(null));
     }
 

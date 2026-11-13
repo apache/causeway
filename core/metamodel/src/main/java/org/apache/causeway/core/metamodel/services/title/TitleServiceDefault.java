@@ -19,12 +19,12 @@
 package org.apache.causeway.core.metamodel.services.title;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -34,59 +34,42 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
+/**
+ * Default implementation of {@link TitleService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TitleServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-public class TitleServiceDefault implements TitleService {
-
-    private final WrapperFactory wrapperFactory;
-    private final ObjectManager objectManager;
+public record TitleServiceDefault(
+    ObjectManager objectManager,
+    WrapperFactory wrapperFactory)
+implements TitleService {
 
     @Override
     public String titleOf(final Object domainObject) {
+        var pojo = unwrapped(domainObject);
+        var objectAdapter = objectManager.adapt(pojo);
 
-        if(objectManager == null) { // simplified JUnit test support
-            return "" + domainObject;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return "[UNSPECIFIED]";
 
-        val pojo = unwrapped(domainObject);
-        val objectAdapter = objectManager.adapt(pojo);
-
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "[UNSPECIFIED]";
-        }
-
-        if(MmEntityUtils.getEntityState(objectAdapter).isTransientOrRemoved()) {
+        return MmEntityUtils.getEntityState(objectAdapter).isTransientOrRemoved()
             // here we just mean NOT-ATTACHED (and not the concrete DETACHED entity state)
-            return "[DETACHED]";
-        } else {
-            return objectAdapter.getSpecification().getTitle(
-                    TitleRenderRequest.builder()
-                    .object(objectAdapter)
-                    .build());
-        }
+            ? "[DETACHED]"
+            : objectAdapter.objSpec().getTitle(TitleRenderRequest.forObject(objectAdapter));
     }
 
     @Override
-    public String iconNameOf(final Object domainObject) {
+    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconSize iconSize) {
+        var pojo = unwrapped(domainObject);
+        var objectAdapter = objectManager.adapt(pojo);
 
-        if(objectManager == null) { // simplified JUnit test support
-            return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
-        }
-
-        val pojo = unwrapped(domainObject);
-        val objectAdapter = objectManager.adapt(pojo);
-
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "unspecified";
-        }
-
-        return objectAdapter.getSpecification().getIconName(objectAdapter);
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
+            ? null
+            : objectAdapter.objSpec().getIcon(objectAdapter, iconSize)
+                .orElse(null);
     }
 
     //-- HELPER

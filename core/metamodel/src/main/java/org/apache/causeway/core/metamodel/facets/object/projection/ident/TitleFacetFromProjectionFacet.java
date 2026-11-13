@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 public class TitleFacetFromProjectionFacet
 extends TitleFacetAbstract {
 
@@ -42,8 +40,8 @@ extends TitleFacetAbstract {
 
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
-        final ManagedObject targetAdapter = titleRenderRequest.getObject();
-        val projectedAdapter = projectionFacet.projected(targetAdapter);
+        final ManagedObject targetAdapter = titleRenderRequest.object();
+        var projectedAdapter = projectionFacet.projected(targetAdapter);
         return projectedAdapter.getTitle();
     }
 
@@ -52,6 +50,5 @@ extends TitleFacetAbstract {
         super.visitAttributes(visitor);
         visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
-
 
 }

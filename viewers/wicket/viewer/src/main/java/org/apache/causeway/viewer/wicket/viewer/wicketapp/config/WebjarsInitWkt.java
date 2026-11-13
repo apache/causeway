@@ -18,20 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import org.apache.wicket.protocol.http.WebApplication;
+import java.util.Optional;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.AbstractServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ServletWebServerSettings;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
-
 import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 
 @Configuration
@@ -42,8 +41,8 @@ public class WebjarsInitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        final IWebjarsSettings settings = new WebjarsSettings();
-        WicketWebjars.install(webApplication, settings);
+    	webApplication.mount(new AlternativeResourceRequestMapper(webApplication));
+        WicketWebjars.install(webApplication, new WebjarSettingsOptimized());
     }
 
     @Configuration
@@ -51,13 +50,22 @@ public class WebjarsInitWkt implements WicketApplicationInitializer {
     implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
         @Override
         public void customize(final ConfigurableServletWebServerFactory factory) {
-            var mappings = _Casts.castTo(AbstractServletWebServerFactory.class, factory)
-                .map(AbstractServletWebServerFactory::getMimeMappings)
+            var mimeMappings = Optional.ofNullable(factory.getSettings())
+                .map(ServletWebServerSettings::getMimeMappings)
                 .orElseGet(()->new MimeMappings(MimeMappings.DEFAULT));
-            mappings.remove("mjs");
-            mappings.add("mjs", "application/javascript;charset=utf-8");
-            factory.setMimeMappings(mappings);
+            mimeMappings.remove("mjs");
+            mimeMappings.add("mjs", "application/javascript;charset=utf-8");
+            factory.setMimeMappings(mimeMappings);
         }
+    }
+
+    private static class WebjarSettingsOptimized extends WebjarsSettings {
+    	@Override
+		public ClassLoader[] classLoaders() {
+    		return Can.ofArray(super.classLoaders())
+				.distinct((a, b)->System.identityHashCode(a) == System.identityHashCode(b))
+    			.toArray(ClassLoader[]::new);
+    	}
     }
 
 }

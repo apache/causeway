@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -39,7 +37,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
-import lombok.val;
+import tools.jackson.databind.node.NullNode;
 
 public class ObjectActionReprRenderer
 extends AbstractObjectMemberReprRenderer<ObjectAction> {
@@ -70,30 +68,25 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         return representation;
     }
 
-    // ///////////////////////////////////////////////////
-    // details link
-    // ///////////////////////////////////////////////////
+    // DETAILS LINK
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        val where = resourceContext.getWhere();
+        var where = resourceContext.where();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
-    // ///////////////////////////////////////////////////
-    // mutators
-    // ///////////////////////////////////////////////////
+    // MUTATORS
 
     @Override
     protected void addMutatorLinksIfEnabled() {
-        if (usability().isVetoed()) {
-            return;
-        }
+        if (usability().isVetoed())
+			return;
         final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
 
         final SemanticsOf actionSemantics = objectMember.getSemantics();
@@ -111,7 +104,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     @Override
     protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
         final JsonRepresentation argMap = JsonRepresentation.newMap();
-        val parameters = objectMember.getParameters();
+        var parameters = objectMember.getParameters();
         for (int i = 0; i < objectMember.getParameterCount(); i++) {
             argMap.mapPut(parameters.getElseFail(i).getId() + ".value", argValueFor(i));
         }
@@ -123,17 +116,15 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         return NullNode.getInstance();
     }
 
-    // ///////////////////////////////////////////////////
-    // parameter details
-    // ///////////////////////////////////////////////////
+    // PARAMETER DETAILS
 
     private ObjectActionReprRenderer addParameterDetails() {
-        final Map<String,Object> parameters = _Maps.newLinkedHashMap();
+        final Map<String,Object> parameters = new LinkedHashMap<>();
         if(objectMember.getParameterCount()>0) {
-            val act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
-            val paramNeg = act.startParameterNegotiation();
-            for(val paramMod : paramNeg.getParamModels()) {
-                val paramMeta = paramMod.getMetaModel();
+            var act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
+            var paramNeg = act.startParameterNegotiation();
+            for(var paramMod : paramNeg.getParamModels()) {
+                var paramMeta = paramMod.getMetaModel();
                 final Object paramDetails = paramDetails(paramMod, paramNeg);
                 parameters.put(paramMeta.getId(), paramDetails);
             }
@@ -143,12 +134,12 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
+        var paramMeta = paramMod.getMetaModel();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPutInt("num", paramMeta.getParameterIndex());
         paramRep.mapPutString("id", paramMeta.getId());
-        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter.asSupplier()));
-        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asSupplier()));
+        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter));
+        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter));
         final Object paramChoices = choicesFor(paramMod, paramNeg);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);
@@ -163,13 +154,12 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object choicesFor(
             final ManagedParameter paramMod,
             final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
-        val choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
-        if (choiceAdapters == null || choiceAdapters.isEmpty()) {
-            return null;
-        }
-        final List<Object> list = _Lists.newArrayList();
-        for (val choiceAdapter : choiceAdapters) {
+        var paramMeta = paramMod.getMetaModel();
+        var choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
+        if (choiceAdapters == null || choiceAdapters.isEmpty())
+			return null;
+        final List<Object> list = new ArrayList<>();
+        for (var choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
             list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), choiceAdapter));
@@ -178,26 +168,22 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     private Object defaultFor(final ManagedParameter paramMod) {
-        val defaultAdapter = paramMod.getValue().getValue();
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
-            return null;
-        }
+        var defaultAdapter = paramMod.getValue().getValue();
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter))
+			return null;
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        val paramMeta = paramMod.getMetaModel();
+        var paramMeta = paramMod.getMetaModel();
         return DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), defaultAdapter);
     }
 
-    // ///////////////////////////////////////////////////
-    // extensions and links
-    // ///////////////////////////////////////////////////
+    // EXTENSIONS AND LINKS
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().isSuppressDescribedByLinks()) {
-            return;
-        }
-        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
+        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

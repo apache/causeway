@@ -22,6 +22,8 @@ import java.util.UUID;
 
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -34,9 +36,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
-
-import lombok.NonNull;
-import lombok.val;
 
 @Component
 @Named(CausewayModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
@@ -68,7 +67,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Vega value) {
-        return decomposeAsString(value, Vega::getJson, ()->null);
+        return decomposeAsString(value, Vega::json, ()->null);
     }
 
     @Override
@@ -93,53 +92,52 @@ implements
      * and <a href="https://vega.github.io/vega-lite/usage/embed.html">vega-lite</a>
      */
     private String asHtml(final @NonNull Vega vega) {
-        val containerId = "vegaContainer" + UUID.randomUUID().toString();
+        var containerId = "vegaContainer" + UUID.randomUUID();
 
-        switch (vega.getSchema()) {
-        case VEGA: {
-            val htmlFragment = String.format(""
-                    + "<div id=\"%1$s\"></div>\n"
-                    + "<script type=\"text/javascript\">\n"
-                    + "document.addEventListener('DOMContentLoaded', (event) => {\n"
-                    + "  var spec = %2$s;\n"
-                    + "  var view = new vega.View(vega.parse(spec), {\n"
-                    + "    renderer: '%3$s',\n"
-                    + "    container: '#%1$s',\n"
-                    + "    hover: %4$b\n"
-                    + "  });\n"
-                    + "  view.runAsync();\n"
-                    + "});"
-                    + "</script>",
+        return switch (vega.schema()) {
+		case VEGA -> {
+			var htmlFragment = String.format("""
+				<div id="%1$s"></div>
+				<script type="text/javascript">
+				document.addEventListener('DOMContentLoaded', (event) => {
+				  var spec = %2$s;
+				  var view = new vega.View(vega.parse(spec), {
+				    renderer: '%3$s',
+				    container: '#%1$s',
+				    hover: %4$b
+				  });
+				  view.runAsync();
+				});\
+				</script>""",
                     containerId,
-                    vega.getJson(),
+                    vega.json(),
                     "canvas", // renderer (canvas or svg)
                     true // enable hover processing
                     );
-            return htmlFragment;
-        }
-        case VEGA_LITE: {
-            val htmlFragment = String.format(""
-                    + "<div id=\"%1$s\"></div>\n"
-                    + "<script type=\"text/javascript\">\n"
-                    + "document.addEventListener('DOMContentLoaded', (event) => {\n"
-                    + "  var spec = %2$s;\n"
-                    + "  vegaEmbed('#%1$s', spec);"
-                    + "});"
-                    + "</script>",
+			yield htmlFragment;
+		}
+		case VEGA_LITE -> {
+			var htmlFragment = String.format("""
+				<div id="%1$s"></div>
+				<script type="text/javascript">
+				document.addEventListener('DOMContentLoaded', (event) => {
+				  var spec = %2$s;
+				  vegaEmbed('#%1$s', spec);\
+				});\
+				</script>""",
                     containerId,
-                    vega.getJson());
-            return htmlFragment;
-        }
-        default:
-            return "<!-- empty Vega (unsupported schema) -->";
-        }
+                    vega.json());
+			yield htmlFragment;
+		}
+		default -> "<!-- empty Vega (unsupported schema) -->";
+		};
     }
 
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Vega vega) {
-        return vega!=null ? vega.getJson() : null;
+        return vega!=null ? vega.json() : null;
     }
 
     @Override
@@ -157,123 +155,125 @@ implements
     @Override
     public Can<Vega> getExamples() {
         return Can.of(
-                Vega.valueOf("{\n"
-                        + "  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n"
-                        + "  \"data\": {\n"
-                        + "    \"values\": [\n"
-                        + "      {\"a\": \"C\", \"b\": 2},\n"
-                        + "      {\"a\": \"C\", \"b\": 7},\n"
-                        + "      {\"a\": \"C\", \"b\": 4},\n"
-                        + "      {\"a\": \"D\", \"b\": 1},\n"
-                        + "      {\"a\": \"D\", \"b\": 2},\n"
-                        + "      {\"a\": \"D\", \"b\": 6},\n"
-                        + "      {\"a\": \"E\", \"b\": 8},\n"
-                        + "      {\"a\": \"E\", \"b\": 4},\n"
-                        + "      {\"a\": \"E\", \"b\": 7}\n"
-                        + "    ]\n"
-                        + "  },\n"
-                        + "  \"mark\": \"point\",\n"
-                        + "  \"encoding\": {\n"
-                        + "    \"x\": {\"field\": \"a\", \"type\": \"nominal\"},\n"
-                        + "    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n"
-                        + "  }\n"
-                        + "}"),
-                Vega.valueOf("{\n"
-                        + "  \"$schema\": \"https://vega.github.io/schema/vega/v5.json\",\n"
-                        + "  \"description\": \"A basic bar chart example, with value labels shown upon mouse hover.\",\n"
-                        + "  \"width\": 400,\n"
-                        + "  \"height\": 200,\n"
-                        + "  \"padding\": 5,\n"
-                        + "\n"
-                        + "  \"data\": [\n"
-                        + "    {\n"
-                        + "      \"name\": \"table\",\n"
-                        + "      \"values\": [\n"
-                        + "        {\"category\": \"A\", \"amount\": 28},\n"
-                        + "        {\"category\": \"B\", \"amount\": 55},\n"
-                        + "        {\"category\": \"C\", \"amount\": 43},\n"
-                        + "        {\"category\": \"D\", \"amount\": 91},\n"
-                        + "        {\"category\": \"E\", \"amount\": 81},\n"
-                        + "        {\"category\": \"F\", \"amount\": 53},\n"
-                        + "        {\"category\": \"G\", \"amount\": 19},\n"
-                        + "        {\"category\": \"H\", \"amount\": 87}\n"
-                        + "      ]\n"
-                        + "    }\n"
-                        + "  ],\n"
-                        + "\n"
-                        + "  \"signals\": [\n"
-                        + "    {\n"
-                        + "      \"name\": \"tooltip\",\n"
-                        + "      \"value\": {},\n"
-                        + "      \"on\": [\n"
-                        + "        {\"events\": \"rect:mouseover\", \"update\": \"datum\"},\n"
-                        + "        {\"events\": \"rect:mouseout\",  \"update\": \"{}\"}\n"
-                        + "      ]\n"
-                        + "    }\n"
-                        + "  ],\n"
-                        + "\n"
-                        + "  \"scales\": [\n"
-                        + "    {\n"
-                        + "      \"name\": \"xscale\",\n"
-                        + "      \"type\": \"band\",\n"
-                        + "      \"domain\": {\"data\": \"table\", \"field\": \"category\"},\n"
-                        + "      \"range\": \"width\",\n"
-                        + "      \"padding\": 0.05,\n"
-                        + "      \"round\": true\n"
-                        + "    },\n"
-                        + "    {\n"
-                        + "      \"name\": \"yscale\",\n"
-                        + "      \"domain\": {\"data\": \"table\", \"field\": \"amount\"},\n"
-                        + "      \"nice\": true,\n"
-                        + "      \"range\": \"height\"\n"
-                        + "    }\n"
-                        + "  ],\n"
-                        + "\n"
-                        + "  \"axes\": [\n"
-                        + "    { \"orient\": \"bottom\", \"scale\": \"xscale\" },\n"
-                        + "    { \"orient\": \"left\", \"scale\": \"yscale\" }\n"
-                        + "  ],\n"
-                        + "\n"
-                        + "  \"marks\": [\n"
-                        + "    {\n"
-                        + "      \"type\": \"rect\",\n"
-                        + "      \"from\": {\"data\":\"table\"},\n"
-                        + "      \"encode\": {\n"
-                        + "        \"enter\": {\n"
-                        + "          \"x\": {\"scale\": \"xscale\", \"field\": \"category\"},\n"
-                        + "          \"width\": {\"scale\": \"xscale\", \"band\": 1},\n"
-                        + "          \"y\": {\"scale\": \"yscale\", \"field\": \"amount\"},\n"
-                        + "          \"y2\": {\"scale\": \"yscale\", \"value\": 0}\n"
-                        + "        },\n"
-                        + "        \"update\": {\n"
-                        + "          \"fill\": {\"value\": \"steelblue\"}\n"
-                        + "        },\n"
-                        + "        \"hover\": {\n"
-                        + "          \"fill\": {\"value\": \"red\"}\n"
-                        + "        }\n"
-                        + "      }\n"
-                        + "    },\n"
-                        + "    {\n"
-                        + "      \"type\": \"text\",\n"
-                        + "      \"encode\": {\n"
-                        + "        \"enter\": {\n"
-                        + "          \"align\": {\"value\": \"center\"},\n"
-                        + "          \"baseline\": {\"value\": \"bottom\"},\n"
-                        + "          \"fill\": {\"value\": \"#333\"}\n"
-                        + "        },\n"
-                        + "        \"update\": {\n"
-                        + "          \"x\": {\"scale\": \"xscale\", \"signal\": \"tooltip.category\", \"band\": 0.5},\n"
-                        + "          \"y\": {\"scale\": \"yscale\", \"signal\": \"tooltip.amount\", \"offset\": -2},\n"
-                        + "          \"text\": {\"signal\": \"tooltip.amount\"},\n"
-                        + "          \"fillOpacity\": [\n"
-                        + "            {\"test\": \"datum === tooltip\", \"value\": 0},\n"
-                        + "            {\"value\": 1}\n"
-                        + "          ]\n"
-                        + "        }\n"
-                        + "      }\n"
-                        + "    }\n"
-                        + "  ]\n"
-                        + "}"));
+                Vega.valueOf("""
+					{
+					  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+					  "data": {
+					    "values": [
+					      {"a": "C", "b": 2},
+					      {"a": "C", "b": 7},
+					      {"a": "C", "b": 4},
+					      {"a": "D", "b": 1},
+					      {"a": "D", "b": 2},
+					      {"a": "D", "b": 6},
+					      {"a": "E", "b": 8},
+					      {"a": "E", "b": 4},
+					      {"a": "E", "b": 7}
+					    ]
+					  },
+					  "mark": "point",
+					  "encoding": {
+					    "x": {"field": "a", "type": "nominal"},
+					    "y": {"field": "b", "type": "quantitative"}
+					  }
+					}"""),
+                Vega.valueOf("""
+					{
+					  "$schema": "https://vega.github.io/schema/vega/v6.json",
+					  "description": "A basic bar chart example, with value labels shown upon mouse hover.",
+					  "width": 400,
+					  "height": 200,
+					  "padding": 5,
+
+					  "data": [
+					    {
+					      "name": "table",
+					      "values": [
+					        {"category": "A", "amount": 28},
+					        {"category": "B", "amount": 55},
+					        {"category": "C", "amount": 43},
+					        {"category": "D", "amount": 91},
+					        {"category": "E", "amount": 81},
+					        {"category": "F", "amount": 53},
+					        {"category": "G", "amount": 19},
+					        {"category": "H", "amount": 87}
+					      ]
+					    }
+					  ],
+
+					  "signals": [
+					    {
+					      "name": "tooltip",
+					      "value": {},
+					      "on": [
+					        {"events": "rect:mouseover", "update": "datum"},
+					        {"events": "rect:mouseout",  "update": "{}"}
+					      ]
+					    }
+					  ],
+
+					  "scales": [
+					    {
+					      "name": "xscale",
+					      "type": "band",
+					      "domain": {"data": "table", "field": "category"},
+					      "range": "width",
+					      "padding": 0.05,
+					      "round": true
+					    },
+					    {
+					      "name": "yscale",
+					      "domain": {"data": "table", "field": "amount"},
+					      "nice": true,
+					      "range": "height"
+					    }
+					  ],
+
+					  "axes": [
+					    { "orient": "bottom", "scale": "xscale" },
+					    { "orient": "left", "scale": "yscale" }
+					  ],
+
+					  "marks": [
+					    {
+					      "type": "rect",
+					      "from": {"data":"table"},
+					      "encode": {
+					        "enter": {
+					          "x": {"scale": "xscale", "field": "category"},
+					          "width": {"scale": "xscale", "band": 1},
+					          "y": {"scale": "yscale", "field": "amount"},
+					          "y2": {"scale": "yscale", "value": 0}
+					        },
+					        "update": {
+					          "fill": {"value": "steelblue"}
+					        },
+					        "hover": {
+					          "fill": {"value": "red"}
+					        }
+					      }
+					    },
+					    {
+					      "type": "text",
+					      "encode": {
+					        "enter": {
+					          "align": {"value": "center"},
+					          "baseline": {"value": "bottom"},
+					          "fill": {"value": "#333"}
+					        },
+					        "update": {
+					          "x": {"scale": "xscale", "signal": "tooltip.category", "band": 0.5},
+					          "y": {"scale": "yscale", "signal": "tooltip.amount", "offset": -2},
+					          "text": {"signal": "tooltip.amount"},
+					          "fillOpacity": [
+					            {"test": "datum === tooltip", "value": 0},
+					            {"value": 1}
+					          ]
+					        }
+					      }
+					    }
+					  ]
+					}"""));
     }
 
 }

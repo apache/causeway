@@ -18,47 +18,47 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.projection.ident;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.NonNull;
 
-import lombok.NonNull;
-import lombok.val;
+public final class IconFacetFromProjectionFacet
+extends FacetAbstract
+implements IconFacet {
 
-public class IconFacetFromProjectionFacet
-extends IconFacetAbstract {
+    private final ProjectionFacet projectionFacet;
 
-    private final @NonNull ProjectionFacet projectionFacet;
-
-    public IconFacetFromProjectionFacet(
-            final ProjectionFacet projectionFacet,
-            final FacetHolder holder) {
-        super(holder);
-        this.projectionFacet = projectionFacet;
+    public IconFacetFromProjectionFacet(final ProjectionFacet projectionFacet, final FacetHolder facetHolder) {
+    	super(IconFacet.class, facetHolder);
+    	this.projectionFacet = projectionFacet;
     }
 
     @Override
-    public String iconName(final ManagedObject targetAdapter) {
-        val projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.getSpecification().getIconName(projectedAdapter);
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject targetAdapter, final ObjectSupport.IconSize iconSize) {
+        var projectedAdapter = projectionFacet.projected(targetAdapter);
+        return projectedAdapter.objSpec().getIcon(projectedAdapter, iconSize);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	IconFacet.super.visitAttributes(visitor);
         visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof IconFacetFromProjectionFacet
-                ? this.projectionFacet
-                        .semanticEquals(((IconFacetFromProjectionFacet)other).projectionFacet)
-                : false;
+        return other instanceof IconFacetFromProjectionFacet i
+            ? this.projectionFacet
+                    .semanticEquals(i.projectionFacet)
+            : false;
     }
 
 }

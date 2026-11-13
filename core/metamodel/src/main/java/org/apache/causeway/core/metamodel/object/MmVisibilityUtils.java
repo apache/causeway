@@ -26,10 +26,9 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -76,12 +75,11 @@ public final class MmVisibilityUtils {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Class<?> requiredContainerType) {
 
-        val visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
-        val autofittedObjectContainer = CollectionFacet.AutofitUtils
+        var visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
+        var autofittedObjectContainer = CollectionFacet.AutofitUtils
                 .collect(visiblePojoStream, requiredContainerType);
         return autofittedObjectContainer;
     }
-
 
     /**
      * @param adapter - wrapper of domain object whose visibility is being checked,
@@ -96,7 +94,7 @@ public final class MmVisibilityUtils {
             // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
         }
-        val spec = adapter.getSpecification();
+        var spec = adapter.objSpec();
         if(spec.isEntity()) {
             if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
                 return false;
@@ -105,13 +103,13 @@ public final class MmVisibilityUtils {
         if(!interactionInitiatedBy.isUser()) {
             return true;
         }
-        val visibilityContext = createVisibleInteractionContext(
+        var visibilityContext = createVisibleInteractionContext(
                 adapter,
                 InteractionInitiatedBy.USER,
                 Where.OBJECT_FORMS);
 
         return InteractionUtils.isVisibleResult(spec, visibilityContext)
-                .isNotVetoing();
+                .isAllowing();
     }
 
     private static VisibilityContext createVisibleInteractionContext(

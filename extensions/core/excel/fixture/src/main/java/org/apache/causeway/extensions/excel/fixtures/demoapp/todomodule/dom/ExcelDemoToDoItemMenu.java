@@ -27,7 +27,9 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -47,7 +49,7 @@ import lombok.RequiredArgsConstructor;
 
 @DomainService
 @Named("libExcelFixture.ExcelDemoToDoItemMenu")
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@Order(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExcelDemoToDoItemMenu {
 
@@ -97,8 +99,6 @@ public class ExcelDemoToDoItemMenu {
             .withParameter("ownedBy", currentUserName()));
     }
 
-
-
     @ActionLayout(sequence = "40")
     public ExcelDemoToDoItem newToDoItem(
             @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
@@ -132,7 +132,6 @@ public class ExcelDemoToDoItemMenu {
         return Subcategory.validate(category, subcategory);
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(sequence = "50")
     public List<ExcelDemoToDoItem> allMyToDoItems() {
@@ -145,7 +144,6 @@ public class ExcelDemoToDoItemMenu {
         return items;
     }
 
-
     @Programmatic
     public List<ExcelDemoToDoItem> autoComplete(@MinLength(1) final String description) {
         return repositoryService.allMatches(
@@ -153,7 +151,6 @@ public class ExcelDemoToDoItemMenu {
                 .withParameter("ownedBy", currentUserName())
                 .withParameter("description", description));
     }
-
 
     @Programmatic // for use by fixtures
     public ExcelDemoToDoItem newToDoItem(
@@ -195,7 +192,6 @@ public class ExcelDemoToDoItemMenu {
         return (int) (Math.random() * n);
     }
 
-
     @Programmatic
     public List<ExcelDemoToDoItem> allInstances() {
         return repositoryService.allInstances(ExcelDemoToDoItem.class);
@@ -208,6 +204,5 @@ public class ExcelDemoToDoItemMenu {
     private LocalDate currentDate() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
     }
-
 
 }

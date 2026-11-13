@@ -25,10 +25,9 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class ImmutableFacetAbstract
 extends FacetAbstract
@@ -43,14 +42,7 @@ implements ImmutableFacet {
     protected ImmutableFacetAbstract(
             final VetoReason reason,
             final FacetHolder holder) {
-        this(reason, holder, Facet.Precedence.DEFAULT);
-    }
-
-    protected ImmutableFacetAbstract(
-            final VetoReason reason,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
+        super(type(), holder);
         this.reason = reason;
     }
 
@@ -70,15 +62,11 @@ implements ImmutableFacet {
      */
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        final ManagedObject target = ic.getTarget();
-        switch (ic.getInteractionType()) {
-        case PROPERTY_MODIFY:
-        case COLLECTION_ADD_TO:
-        case COLLECTION_REMOVE_FROM:
-            return disabledReason(target);
-        default:
-            return Optional.empty();
-        }
+        final ManagedObject target = ic.target();
+        return switch (ic.interactionType()) {
+			case PROPERTY_MODIFY, COLLECTION_ADD_TO, COLLECTION_REMOVE_FROM -> disabledReason(target);
+			default -> Optional.empty();
+		};
     }
 
 }

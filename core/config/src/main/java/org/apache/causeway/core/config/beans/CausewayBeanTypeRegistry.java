@@ -18,63 +18,149 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-
-import lombok.NonNull;
+import org.apache.causeway.applib.annotation.HomePage;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
- * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
- * @since 2.0
+ * Holds discovered domain types grouped by bean-sort.
+ * <p>
+ * Except for view models, types need to be eagerly discovered by Spring,
+ * hence collections of those types cannot be modified on the fly.
  */
-public interface CausewayBeanTypeRegistry {
+@Programmatic
+public class CausewayBeanTypeRegistry {
 
-    Optional<CausewayBeanMetaData> lookupIntrospectableType(Class<?> type);
-    Stream<CausewayBeanMetaData> streamIntrospectableTypes();
-
-    @NonNull Map<Class<?>, CausewayBeanMetaData> getManagedBeansContributing();
-    @NonNull Map<Class<?>, CausewayBeanMetaData> getEntityTypes();
-    @NonNull Map<Class<?>, CausewayBeanMetaData> getMixinTypes();
-    @NonNull Map<Class<?>, CausewayBeanMetaData> getViewModelTypes();
-    /** discovered per {@code @Value} annotation (vs. registered using a {@link ValueSemanticsProvider})*/
-    @NonNull Map<Class<?>, CausewayBeanMetaData> getDiscoveredValueTypes();
-
-    // -- SHORTCUTS
-
-    default Stream<Class<?>> streamMixinTypes() {
-        return getMixinTypes().keySet().stream();
+    public static CausewayBeanTypeRegistry empty() {
+        return new CausewayBeanTypeRegistry(Can.empty());
     }
 
-    // -- LOOKUPS
-
     /**
-     * If given type is part of the meta-model and is available for injection,
-     * returns the <em>Managed Bean's</em> name (id) as
-     * recognized by the IoC container.
-     *
-     * @param type
+     * (immutable) scan result, as used by the SpecificationLoader for introspection
      */
-    default Optional<String> lookupManagedBeanNameForType(final Class<?> type) {
-        return Optional.ofNullable(getManagedBeansContributing().get(type))
-                .map(CausewayBeanMetaData::getBeanName);
+    private final Can<CausewayBeanMetaData> scannedTypes;
+    private final Can<CausewayBeanMetaData> entities;
+    private final PersistenceStack persistenceStack;
+
+    private final Map<Class<?>, CausewayBeanMetaData> scannedTypesByClass = new HashMap<>();
+
+    // -- DISTINCT CATEGORIES OF BEAN SORTS
+
+    private final Map<Class<?>, CausewayBeanMetaData> domainServices = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> viewmodelTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> mixinTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> valueTypes = new HashMap<>();
+
+    // -- CONSTRUCTOR
+
+    CausewayBeanTypeRegistry(final @NonNull Can<CausewayBeanMetaData> scannedTypes) {
+        this.scannedTypes = scannedTypes;
+
+        var entityTypes = new HashMap<Class<?>, CausewayBeanMetaData>();
+
+        scannedTypes.forEach(typeMeta->{
+
+            var cls = typeMeta.correspondingClass();
+
+            scannedTypesByClass.put(cls, typeMeta);
+
+            switch (typeMeta.beanSort()) {
+            case MANAGED_BEAN_CONTRIBUTING:
+                domainServices.put(cls, typeMeta);
+                return;
+            case MIXIN:
+                mixinTypes.put(cls, typeMeta);
+                return;
+            case ENTITY:
+                if(!typeMeta.persistenceStack().isPresent()) return;
+                entityTypes.put(cls, typeMeta);
+                return;
+            case VIEW_MODEL:
+                viewmodelTypes.put(cls, typeMeta);
+                return;
+            case VALUE:
+                valueTypes.put(cls, typeMeta);
+                return;
+
+            // skip introspection for these
+            case PROGRAMMATIC:
+            case MANAGED_BEAN_NOT_CONTRIBUTING:
+            case COLLECTION:
+            case ABSTRACT: // <-- unexpected code reach
+            case VETOED:
+            case UNKNOWN:
+                return;
+            }
+        });
+
+        this.entities = Can.ofCollection(entityTypes.values());
+        this.persistenceStack = entities.stream()
+                .map(CausewayBeanMetaData::persistenceStack)
+                .filter(PersistenceStack::isPresent)
+                .findFirst()
+                .orElse(PersistenceStack.UNSPECIFIED);
     }
 
+    // -- FIELDS
+
     /**
-     * Returns 'JDO' or 'JPA' based on metadata found during {@link CausewayBeanTypeClassifier type-classification}.
+     * Returns the object store in use for this application, based on metadata found during {@link CausewayBeanTypeClassifier type-classification}.
      * If no (concrete) entity type is found, returns 'UNSPECIFIED'.
      * @implNote assumes that there can be only one persistence stack
      */
-    default PersistenceStack determineCurrentPersistenceStack() {
-        return getEntityTypes().values().stream()
-            .map(meta->meta.getPersistenceStack())
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .filter(persistenceStack->!persistenceStack.isUnspecified())
-            .findFirst()
-            .orElse(PersistenceStack.UNSPECIFIED);
+    public PersistenceStack persistenceStack() {
+        return persistenceStack;
+    }
+
+    // -- STREAMS
+
+    public Stream<CausewayBeanMetaData> streamScannedTypes() { return scannedTypes.stream(); }
+    public Stream<Class<?>> streamDomainServices() { return domainServices.keySet().stream(); }
+    public Stream<Class<?>> streamMixinTypes() {
+        return mixinTypes.keySet().stream().sorted(Comparator.comparing(Class::getName));
+    }
+    public Stream<Class<?>> streamValueTypes() { return valueTypes.keySet().stream(); }
+    public Stream<Class<?>> streamEntityTypes() { return streamEntityTypes(persistenceStack); }
+    public Stream<Class<?>> streamEntityTypes(final @Nullable PersistenceStack selectedStack) {
+        if(selectedStack==null || !selectedStack.isPresent()) return Stream.empty();
+        return entities.stream()
+                .filter(typeMeta->typeMeta.persistenceStack()==selectedStack)
+                .<Class<?>>map(CausewayBeanMetaData::correspondingClass);
+    }
+
+    // -- LOOKUP
+
+    public Optional<String> lookupDomainServiceNameForType(final Class<?> type) {
+        return Optional.ofNullable(domainServices.get(type))
+                .map(CausewayBeanMetaData::beanName);
+    }
+
+    public boolean containsManagedBeansContributing(final @NonNull Class<?> type) {
+        return domainServices.containsKey(type);
+    }
+
+    public Optional<CausewayBeanMetaData> lookupScannedType(final Class<?> type) {
+        return Optional.ofNullable(scannedTypesByClass.get(type));
+    }
+
+    /**
+     * Will only find if initially discovered by Spring.
+     */
+    public Optional<Class<?>> findHomepageViewmodel() {
+        var classCache = _ClassCache.getInstance();
+        return viewmodelTypes.keySet().stream()
+                .filter(viewModelType -> classCache.head(viewModelType).hasAnnotation(HomePage.class))
+                .findFirst();
     }
 
 }

@@ -24,9 +24,10 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
+import org.apache.causeway.viewer.commons.model.about.JarManifestAttributes;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-public final class JarManifestListView extends ListView<JarManifestAttributes> {
+final class JarManifestListView extends ListView<JarManifestAttributes> {
 
     private static final long serialVersionUID = 1L;
     private final String idLine;
@@ -39,7 +40,7 @@ public final class JarManifestListView extends ListView<JarManifestAttributes> {
     @Override
     protected void populateItem(final ListItem<JarManifestAttributes> item) {
         final JarManifestAttributes detail = item.getModelObject();
-        item.add(new AttributeAppender("class", detail.getType().name().toLowerCase()));
-        Wkt.labelAdd(item, idLine, detail.getLine());
+        item.add(new AttributeAppender("class", detail.type().name().toLowerCase()));
+        Wkt.labelAdd(item, idLine, detail.line());
     }
 }

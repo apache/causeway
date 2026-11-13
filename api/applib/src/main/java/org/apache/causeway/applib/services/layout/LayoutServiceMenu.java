@@ -70,7 +70,6 @@ public class LayoutServiceMenu {
         }
     }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = downloadLayouts.ActionDomainEvent.class,
@@ -100,7 +99,6 @@ public class LayoutServiceMenu {
         @MemberSupport public Set<CommonMimeType> choices1Act() {
             return layoutService.supportedObjectLayoutFormats(); }
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,

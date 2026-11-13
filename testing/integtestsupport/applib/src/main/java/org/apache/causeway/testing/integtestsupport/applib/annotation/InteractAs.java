@@ -25,8 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Locale;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 
 /**
  * Offers an alternative to {@link InteractionService}'s imperative approach to switch

@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.core.security.authentication.standard;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
-
-import lombok.val;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
@@ -40,11 +38,10 @@ public abstract class AuthenticatorAbstract implements Authenticator {
             return null;
         }
 
-        val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles())
+        var user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles())
                 .withAuthenticationCode(validationCode);
         return InteractionContext.ofUserWithSystemDefaults(user);
     }
-
 
     /**
      * Whether this {@link Authenticator} is valid/applicable in the running context (and

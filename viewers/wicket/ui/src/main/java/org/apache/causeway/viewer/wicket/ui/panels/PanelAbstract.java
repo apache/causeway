@@ -23,7 +23,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -79,7 +79,7 @@ extends PanelBase<T> {
         return getComponentFactoryRegistry().addOrReplaceComponent(this, uiComponentType, model);
     }
 
-    protected static void setVisible(@Nullable final Component component, final boolean visible) {
+    protected static void setVisible(final @Nullable Component component, final boolean visible) {
         if(component == null) {
             return;
         }

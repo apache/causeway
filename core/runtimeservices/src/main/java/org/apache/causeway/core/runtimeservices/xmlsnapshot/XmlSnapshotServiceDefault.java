@@ -42,6 +42,7 @@ import org.apache.causeway.core.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link XmlSnapshotService}.
  *
  * @since 1.0 {@index}
  */
@@ -108,7 +109,6 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
         return new XmlSnapshotServiceDefaultBuilder(specificationLoader, domainObject);
     }
 
-
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls) {
@@ -165,6 +165,5 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
         throw new IllegalArgumentException(
                 String.format("Datatype of '%s' for element '%s' not recognized", dataType, tagname));
     }
-
 
 }

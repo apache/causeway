@@ -34,7 +34,6 @@ public interface Subpackage {
      */
     String getName();
 
-
     /**
      * A list of the (names of the) subpackages where classes in the same module as this package have access.
      *

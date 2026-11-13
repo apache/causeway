@@ -26,7 +26,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -40,7 +40,6 @@ import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-
 
 /**
  * This service exposes a set of menu actions to search and list {@link SessionLogEntry session}s, by default under
@@ -81,8 +80,6 @@ public class SessionLogMenu {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findSessions.ActionDomainEvent.class,
@@ -108,6 +105,5 @@ public class SessionLogMenu {
             }
         }
     }
-
 
 }

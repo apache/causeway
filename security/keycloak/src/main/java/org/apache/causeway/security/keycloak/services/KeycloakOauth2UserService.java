@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -48,9 +48,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public class KeycloakOauth2UserService extends OidcUserService {
@@ -94,9 +93,9 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         final List<String> combinedRoles = new ArrayList<>();
 
-        if(causewayConfiguration.getSecurity().getKeycloak().isExtractClientRoles()) {
+        if(causewayConfiguration.security().keycloak().extractClientRoles()) {
             // attempt to parse out 'resource_access.${client_id}.roles'
-            val rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.security().keycloak().clientRolePrefix()).orElse("");
             asNonEmptyMap(token.getClaims().get("resource_access"))
             .ifPresent(resourceMap->{
                 final String clientId = userRequest.getClientRegistration().getClientId();
@@ -108,9 +107,9 @@ public class KeycloakOauth2UserService extends OidcUserService {
             });
         }
 
-        if (causewayConfiguration.getSecurity().getKeycloak().isExtractRealmRoles()) {
+        if (causewayConfiguration.security().keycloak().extractRealmRoles()) {
             // attempt to parse out 'realm_access.roles'
-            val rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.security().keycloak().realmRolePrefix()).orElse("");
             asNonEmptyMap(token.getClaims().get("realm_access"))
             .ifPresent(realmAccessMap->{
                 asNonEmptyCollection(realmAccessMap.get("roles"))
@@ -120,9 +119,9 @@ public class KeycloakOauth2UserService extends OidcUserService {
             });
         }
 
-        if (causewayConfiguration.getSecurity().getKeycloak().isExtractRoles()) {
+        if (causewayConfiguration.security().keycloak().extractRoles()) {
             // attempt to parse out 'roles'
-            val rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.security().keycloak().rolePrefix()).orElse("");
             asNonEmptyCollection(token.getClaims().get("roles"))
             .ifPresent(roles->{
                 forEachNonNullIn(roles, role -> combinedRoles.add(rolePrefix + role));
@@ -156,7 +155,6 @@ public class KeycloakOauth2UserService extends OidcUserService {
         return _Casts.castTo(Collection.class, x)
                 .filter(Predicate.not(_NullSafe::isEmpty));
     }
-
 
     private Jwt parseJwt(final String accessTokenValue) {
         try {

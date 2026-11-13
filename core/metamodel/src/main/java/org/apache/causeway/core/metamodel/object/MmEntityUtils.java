@@ -21,20 +21,19 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -42,13 +41,11 @@ public final class MmEntityUtils {
 
     @NonNull
     public Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
-        if(adapter==null) {
-            return Optional.empty();
-        }
-        val spec = adapter.getSpecification();
-        if(spec==null || !spec.isEntity()) {
-            return Optional.empty();
-        }
+        if(adapter==null)
+			return Optional.empty();
+        var spec = adapter.objSpec();
+        if(spec==null || !spec.isEntity())
+			return Optional.empty();
 
         return spec.entityFacet()
                 .map(EntityFacet::getPersistenceStack);
@@ -63,28 +60,32 @@ public final class MmEntityUtils {
 
     public void persistInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        val spec = managedObject.getSpecification();
-        val entityFacet = spec.entityFacetElseFail();
+        var entityFacet = managedObject.objSpec().entityFacetElseFail();
         entityFacet.persist(managedObject.getPojo());
     }
 
     public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        val spec = managedObject.getSpecification();
-        val entityFacet = spec.entityFacetElseFail();
+        var entityFacet = managedObject.objSpec().entityFacetElseFail();
         entityFacet.delete(managedObject.getPojo());
     }
 
+    public <T> T detachedPojo(final ObjectManager objectManager, @Nullable final T pojo) {
+        if(pojo == null) return null;
+        var managedObject = objectManager.adapt(pojo);
+        return isAttachedEntity(managedObject)
+                ? managedObject.objSpec().entityFacetElseFail().detach(pojo)
+                : pojo;
+    }
+
     public void requiresEntity(final ManagedObject managedObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
-            throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
-        }
-        val spec = managedObject.getSpecification();
-        if(!spec.isEntity()) {
-            throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
-                    spec.getCorrespondingClass(),
-                    spec.getBeanSort());
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject))
+			throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
+        var spec = managedObject.objSpec();
+        if(!spec.isEntity())
+			throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
+                    spec.correspondingClass(),
+                    spec.beanSort());
     }
 
     /**
@@ -94,10 +95,9 @@ public final class MmEntityUtils {
      */
     public void ifHasNoOidThenFlush(final @Nullable ManagedObject entity) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
-                || !entity.getSpecialization().isEntity()
-                || entity.isBookmarkMemoized()) {
-            return;
-        }
+                || !entity.specialization().isEntity()
+                || entity.isBookmarkMemoized())
+			return;
         if(!getEntityState(entity).hasOid()) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
@@ -110,7 +110,7 @@ public final class MmEntityUtils {
      */
     public boolean isAttachedEntity(final @Nullable ManagedObject entity) {
         return entity!=null
-                ? entity.getSpecialization().isEntity()
+                ? entity.specialization().isEntity()
                     && entity.isBookmarkMemoized()
                     && entity.getEntityState().isAttached()
                 : false;
@@ -127,14 +127,14 @@ public final class MmEntityUtils {
             ((PackedManagedObject)managedObject).unpack().forEach(MmEntityUtils::requiresAttached);
             return managedObject;
         }
-        val entityState = MmEntityUtils.getEntityState(managedObject);
+        var entityState = MmEntityUtils.getEntityState(managedObject);
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
                     EntityState.ATTACHED,
                     entityState,
                     ()-> String.format("entity %s is required to be attached (not detached)",
-                            managedObject.getSpecification().getLogicalTypeName()));
+                            managedObject.objSpec().logicalTypeName()));
         }
         return managedObject;
     }
@@ -143,26 +143,23 @@ public final class MmEntityUtils {
             final ManagedObject first,
             final ManagedObject second) {
 
-        if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second)) {
-            return;
-        }
-        val secondSpec = second.getSpecification();
-        if(secondSpec.isParented() || !secondSpec.isEntity()) {
-            return;
-        }
+        if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second))
+			return;
+        var secondSpec = second.objSpec();
+        if(secondSpec.isParented() || !secondSpec.isEntity())
+			return;
 
-        if(!MmEntityUtils.getEntityState(second).hasOid()) {
-            throw _Exceptions.illegalArgument(
+        if(!MmEntityUtils.getEntityState(second).hasOid())
+			throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
                     first.getTitle());
-        }
     }
 
     // -- PROPERTY CHANGE PUBLISHING
 
     public Stream<OneToOneAssociation> streamPropertiesEnabledForChangePublishing(final @NonNull ManagedObject entity) {
-        return entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
+        return entity.objSpec().streamProperties(MixedIn.EXCLUDED)
             .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
     }
 
@@ -174,7 +171,7 @@ public final class MmEntityUtils {
     public Optional<OneToOneAssociation> lookupPropertyEnabledForChangePublishing(
             final @NonNull ManagedObject entity, final String propertyName) {
         return entity
-                .getSpecification()
+                .objSpec()
                 .getProperty(propertyName, MixedIn.EXCLUDED)
                 .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
     }

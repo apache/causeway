@@ -18,15 +18,28 @@
  */
 package org.apache.causeway.commons.internal.testing;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import java.io.StringWriter;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.jspecify.annotations.NonNull;
+import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.w3c.dom.Document;
+
+import org.springframework.util.Assert;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 @UtilityClass
 public class _DocumentTester {
@@ -37,7 +50,8 @@ public class _DocumentTester {
         var doc2 = _DocumentFactories.parseDocument(xml2);
         doc1.normalizeDocument();
         doc2.normalizeDocument();
-        _Assert.assertTrue(doc1.isEqualNode(doc2));
+        Assert.isTrue(doc1.isEqualNode(doc2), ()->"XML mismatch\n---- LEFT ----\n%s\n----RIGHT----\n%s"
+            .formatted(convertDocumentToString(doc1), convertDocumentToString(doc2)));
     }
 
     /**
@@ -51,8 +65,34 @@ public class _DocumentTester {
 
     @SneakyThrows
     public void assertYamlEqualsIgnoreOrder(final @NonNull String yaml1, final @NonNull String yaml2) {
-        var mapper = new ObjectMapper(new YAMLFactory());
-        _Assert.assertEquals(mapper.readTree(yaml1), mapper.readTree(yaml2));
+    	var mapper = YAMLMapper.builder(YAMLFactory.builder()
+    			.loadSettings(LoadSettings.builder()
+    					.setParseComments(false)
+    					.build())
+    			.build())
+			.build();
+        
+//debug    	
+//    	System.err.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readTree(yaml1)));
+//    	System.err.println("-------------------------------");
+//    	System.err.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readTree(yaml2)));
+    	
+    	_Assert.assertEquals(mapper.readTree(yaml1), mapper.readTree(yaml2));
+    }
+
+    private static String convertDocumentToString(final Document doc) {
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            transformer.transform(source, result);
+            return writer.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // or handle the exception as needed
+        }
     }
 
 }

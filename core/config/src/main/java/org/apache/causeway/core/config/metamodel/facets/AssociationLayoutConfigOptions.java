@@ -36,13 +36,13 @@ public final class AssociationLayoutConfigOptions {
         }
 
         public static SequencePolicy forProperty(final CausewayConfiguration configuration) {
-            return configuration.getApplib().getAnnotation().getPropertyLayout()
-                    .getSequencePolicyIfUnreferenced();
+            return configuration.applib().annotation().propertyLayout()
+                    .sequencePolicyIfUnreferenced();
         }
 
         public static SequencePolicy forCollection(final CausewayConfiguration configuration) {
-            return configuration.getApplib().getAnnotation().getCollectionLayout()
-                    .getSequencePolicyIfUnreferenced();
+            return configuration.applib().annotation().collectionLayout()
+                    .sequencePolicyIfUnreferenced();
         }
     }
 

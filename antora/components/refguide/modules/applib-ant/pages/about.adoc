@@ -16,7 +16,6 @@ include::partial$about/other.adoc[leveloffset=+1]
 include::partial$about/jee.adoc[leveloffset=+1]
 include::partial$about/jaxb.adoc[leveloffset=+1]
 include::partial$about/jpa.adoc[leveloffset=+1]
-include::partial$about/jdo.adoc[leveloffset=+1]
 
 
 == Examples

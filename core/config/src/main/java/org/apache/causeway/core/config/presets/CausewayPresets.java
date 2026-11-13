@@ -32,12 +32,8 @@ public final class CausewayPresets  {
     public static final String IntrospectLazily = "classpath:/org/apache/causeway/core/config/presets/IntrospectLazily.properties";
     public static final String IntrospectFully = "classpath:/org/apache/causeway/core/config/presets/IntrospectFully.properties";
 
-    public static final String DatanucleusAutocreateNoValidate = "classpath:/org/apache/causeway/core/config/presets/DatanucleusAutocreateNoValidate.properties";
-    public static final String DatanucleusEagerlyCreateTables = "classpath:/org/apache/causeway/core/config/presets/DatanucleusEagerlyCreateTables.properties";
-
-    public static final String DebugPersistence = "classpath:/org/apache/causeway/core/config/presets/DebugPersistence.properties";
-    public static final String DebugRequestScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugRequestScopedServices.properties";
     public static final String DebugTransactionScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugTransactionScopedServices.properties";
+    public static final String DebugInteractionScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugInteractionScopedServices.properties";
 
     public static final String DebugDiscovery = "classpath:/org/apache/causeway/core/config/presets/DebugDiscovery.properties";
 
@@ -48,9 +44,10 @@ public final class CausewayPresets  {
     public static final String SilenceMetaModel = "classpath:/org/apache/causeway/core/config/presets/SilenceMetaModel.properties";
 
     public static final String DebugCausewayInteraction = "classpath:/org/apache/causeway/core/config/presets/DebugCausewayInteraction.properties";
+    
+    public static final String DebugJpaEntityEvents = "classpath:/org/apache/causeway/core/config/presets/DebugJpaEntityEvents.properties";
 
     public static final String SilenceWicket = "classpath:/org/apache/causeway/core/config/presets/SilenceWicket.properties";
-    public static final String UseLog4j2Test = "classpath:/org/apache/causeway/core/config/presets/UseLog4j2Test.properties";
 
     public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/causeway/core/config/presets/H2InMemory_withUniqueSchema.properties";
 

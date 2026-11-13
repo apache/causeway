@@ -14,7 +14,7 @@ class ApplicationFeatureViewModel {
   ApplicationFeatureViewModel(String encodedMemento)
   ApplicationFeatureViewModel newViewModel(ApplicationFeatureId featureId, ApplicationFeatureRepository applicationFeatureRepository, FactoryService factoryService)
   String title()     // <.>
-  String iconName()
+  ObjectSupport.IconResource icon(ObjectSupport.IconSize iconSize)
   String viewModelMemento()
   ApplicationFeature getFeature()
   String getFullyQualifiedName()

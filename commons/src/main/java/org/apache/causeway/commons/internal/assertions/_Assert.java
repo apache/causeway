@@ -22,7 +22,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -30,10 +31,8 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>- internal use only -</h1>
@@ -48,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @UtilityClass
-@Log4j2
+@Slf4j
 public final class _Assert {
 
     // -- TRUE
@@ -233,10 +232,9 @@ public final class _Assert {
      * Asserts, that given {@code type} is an instance of {@code requiredType}.
      */
     public void assertTypeIsInstanceOf(final @NonNull Class<?> type, final @NonNull Class<?> requiredType) {
-        if(!requiredType.isAssignableFrom(type)) {
-            throw _Exceptions.assertionError(
+        if(!requiredType.isAssignableFrom(type))
+			throw _Exceptions.assertionError(
                     "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType);
-        }
     }
 
     /**
@@ -267,7 +265,7 @@ public final class _Assert {
             assertEquals(a, b, lazyMessage);
             return;
         }
-        val maxScale = Math.max(a.scale(), b.scale());
+        var maxScale = Math.max(a.scale(), b.scale());
         assertEquals(
                 a.setScale(maxScale),
                 b.setScale(maxScale),
@@ -286,19 +284,17 @@ public final class _Assert {
      */
     public void assertNumberEquals(final double a, final double b, final double delta,
             final Supplier<String> lazyMessage) {
-        if (Double.isNaN(delta) || delta < 0.0) {
-            throw _Exceptions.assertionError(
+        if (Double.isNaN(delta) || delta < 0.0)
+			throw _Exceptions.assertionError(
                     "%sinvalid delta: '%s'",
                     _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
                     String.valueOf(delta));
-        }
         if((Double.doubleToLongBits(a) != Double.doubleToLongBits(b))
-                || Math.abs(a - b) > delta) {
-            throw _Exceptions.assertionError(
+                && Math.abs(a - b) > delta)
+			throw _Exceptions.assertionError(
                     "%snumbers %s and %s are not equal within delta %s",
                     _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
                     String.valueOf(a), String.valueOf(b), String.valueOf(delta));
-        }
     }
 
     /**
@@ -323,10 +319,10 @@ public final class _Assert {
     // -- HELPER
 
     private static void fail(final String message, final Object expected, final Object actual) {
-        val error = _Exceptions.assertionError(
+        var error = _Exceptions.assertionError(
                 buildPrefix(message)
                 + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
-        log.error(error); // in case exceptions get swallowed, make sure errors at least get logged
+        log.error("assert", error); // in case exceptions get swallowed, make sure errors at least get logged
         throw error;
     }
     private static String buildPrefix(final String message) {

@@ -20,7 +20,8 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -28,18 +29,16 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public final class ManagedProperty
 extends ManagedMember {
 
@@ -57,8 +56,8 @@ extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<OneToOneAssociation>lookup(owner, Identifier.Type.PROPERTY, memberId)
-        .map(objectAction -> of(owner, objectAction, where));
+        return ManagedMember.<OneToOneAssociation>lookup(owner.objSpec(), Identifier.Type.PROPERTY, memberId)
+            .map(objectAction -> of(owner, objectAction, where));
     }
 
     // -- IMPLEMENTATION
@@ -90,15 +89,14 @@ extends ManagedMember {
     }
 
     public Can<ObjectAction> getAssociatedActions() {
-        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner(), getProperty()));
+        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner().objSpec(), getProperty()));
     }
 
     // -- INTERACTION
 
     public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
         try {
-
-            val validityConsent =
+            var validityConsent =
                     property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
 
             return validityConsent.isVetoed()
@@ -113,39 +111,33 @@ extends ManagedMember {
         }
     }
 
-
     /**
      * @param newValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
     public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject newValue) {
+        var interactionVeto = checkValidity(newValue);
+        if(interactionVeto.isPresent()) return interactionVeto;
 
-        val interactionVeto = checkValidity(newValue);
-        if(interactionVeto.isPresent()) {
-            return interactionVeto;
-        }
-
-        val updatedOwner = property.set(getOwner(), newValue, InteractionInitiatedBy.USER);
+        var updatedOwner = property.set(getOwner(), newValue, InteractionInitiatedBy.USER);
         setOwner(updatedOwner);
         observablePropValue.invalidate();
         return Optional.empty();
     }
-
 
     /**
      * If visibility is vetoed, returns an empty but specified ManagedObject.
      * @return the property value as to be used by the UI for representation
      */
     private ManagedObject reassessPropertyValue() {
-        val property = getProperty();
-        val owner = getOwner();
+        var property = getProperty();
+        var owner = getOwner();
 
         return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getElementType());
     }
-
 
     // -- NEGOTIATION
 
@@ -166,4 +158,3 @@ extends ManagedMember {
     }
 
 }
-

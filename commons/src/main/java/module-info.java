@@ -26,13 +26,14 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.handler;
     exports org.apache.causeway.commons.having;
     exports org.apache.causeway.commons.io;
+    exports org.apache.causeway.commons.net;
+    exports org.apache.causeway.commons.tabular;
     // internals exported as well
     exports org.apache.causeway.commons.internal;
     exports org.apache.causeway.commons.internal.assertions;
     exports org.apache.causeway.commons.internal.base;
     exports org.apache.causeway.commons.internal.binding;
     exports org.apache.causeway.commons.internal.codec;
-    exports org.apache.causeway.commons.internal.collections.snapshot;
     exports org.apache.causeway.commons.internal.collections;
     exports org.apache.causeway.commons.internal.compare;
     exports org.apache.causeway.commons.internal.concurrent;
@@ -49,24 +50,28 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.html;
     exports org.apache.causeway.commons.internal.image;
     exports org.apache.causeway.commons.internal.ioc;
-    exports org.apache.causeway.commons.internal.memento;
+    exports org.apache.causeway.commons.internal.observation;
     exports org.apache.causeway.commons.internal.os;
     exports org.apache.causeway.commons.internal.primitives;
     exports org.apache.causeway.commons.internal.proxy;
+    exports org.apache.causeway.commons.internal.ref;
     exports org.apache.causeway.commons.internal.reflection;
     exports org.apache.causeway.commons.internal.resources;
     exports org.apache.causeway.commons.internal.testing;
 
-    requires transitive com.fasterxml.jackson.annotation;
-    requires transitive com.fasterxml.jackson.core;
-    requires transitive com.fasterxml.jackson.databind;
-    requires transitive com.fasterxml.jackson.module.jakarta.xmlbind;
+    requires static lombok;
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
-    requires transitive lombok;
-    requires transitive org.apache.logging.log4j;
+    requires transitive java.management;
+    requires transitive com.fasterxml.jackson.annotation;
+    requires transitive tools.jackson.core;
+    requires transitive tools.jackson.databind;
+    requires transitive tools.jackson.module.jakarta.xmlbind;
+    requires transitive micrometer.commons;
+    requires transitive micrometer.observation;
     requires transitive org.jdom2;
+    requires transitive org.jspecify;
     requires transitive org.jsoup;
     requires transitive org.yaml.snakeyaml;
     requires transitive spring.beans;
@@ -76,9 +81,9 @@ module org.apache.causeway.commons {
     requires transitive jakarta.inject;
     requires jakarta.annotation;
     requires com.sun.xml.bind;
-    requires com.fasterxml.jackson.dataformat.yaml;
-    requires com.fasterxml.jackson.datatype.jsr310;
-    requires com.fasterxml.jackson.datatype.jdk8;
+    requires tools.jackson.dataformat.yaml;
+    requires org.slf4j;
+    requires org.snakeyaml.engine;
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;

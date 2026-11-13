@@ -18,14 +18,10 @@
  */
 package org.apache.causeway.applib.services.health;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * @since 2.0 {@index}
  */
-@AllArgsConstructor
-public class Health {
+public record Health(String message, Throwable cause) {
 
     public static Health ok() {
         return new Health(null, null);
@@ -37,10 +33,9 @@ public class Health {
         return new Health(message, null);
     }
 
-    @Getter
-    private final String message;
-    @Getter
-    private final Throwable cause;
+    public boolean isOk() {
+        return message == null
+            && cause == null;
+    }
 
-    public boolean getResult() { return message == null && cause == null; }
 }

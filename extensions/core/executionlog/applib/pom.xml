@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-executionlog</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-extensions-executionlog-applib</artifactId>
@@ -34,25 +34,6 @@
         <jar-plugin.automaticModuleName>org.apache.causeway.extensions.executionlog.applib</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/extensions/executionlog/applib</git-plugin.propertiesDir>
     </properties>
-
-    <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-    </build>
 
     <dependencies>
 

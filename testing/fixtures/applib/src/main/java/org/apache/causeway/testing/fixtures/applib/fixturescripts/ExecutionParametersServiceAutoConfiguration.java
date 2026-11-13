@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
-
 /**
  * Provides a fallback implementation of {@link ExecutionParametersService} if
  * none has been provided explicitly by the application itself.

@@ -15,6 +15,7 @@ enum SuppressionType {
   ALL     // <.>
   EnumSet<SuppressionType> all()
   EnumSet<SuppressionType> setOf(SuppressionType... types)
+  Optional<String> toLiteral(EnumSet<SuppressionType> suppressionTypes)
 }
 ----
 

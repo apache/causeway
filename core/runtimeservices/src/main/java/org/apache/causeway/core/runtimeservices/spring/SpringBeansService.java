@@ -25,14 +25,13 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Borrowed from BeansEndpoint.
@@ -43,32 +42,23 @@ import lombok.experimental.UtilityClass;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SpringBeansService")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SpringBeansService {
 
     private final ConfigurableApplicationContext context;
 
-    @Inject
-    public SpringBeansService(final ConfigurableApplicationContext context) {
-        this.context = context;
-    }
-
-    public Map<String, ContextBeans> beans() {
-        Map<String, ContextBeans> contexts = new HashMap<>();
-
-        for(ConfigurableApplicationContext context = this.context; context != null; context = Util.getConfigurableParent(context)) {
+    public Map<String, ContextBeans> beansByContextId() {
+        var contexts = new HashMap<String, ContextBeans>();
+        for(ConfigurableApplicationContext context = this.context; context != null; context = getConfigurableParent(context)) {
             contexts.put(context.getId(), ContextBeans.describing(context));
         }
-
         return contexts;
     }
 
-    @UtilityClass
-    static
-    class Util {
-
-        static ConfigurableApplicationContext getConfigurableParent(final ConfigurableApplicationContext context) {
-            ApplicationContext parent = context.getParent();
-            return parent instanceof ConfigurableApplicationContext ? (ConfigurableApplicationContext)parent : null;
-        }
+    static ConfigurableApplicationContext getConfigurableParent(final ConfigurableApplicationContext context) {
+        return context.getParent() instanceof ConfigurableApplicationContext cac 
+            ? cac 
+            : null;
     }
+
 }

@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
-import lombok.val;
-
 public abstract class RichAssociationDatatype<T extends ObjectAssociation> extends Element {
 
     private final MemberInteractor<T> memberInteractor;
@@ -49,7 +47,7 @@ public abstract class RichAssociationDatatype<T extends ObjectAssociation> exten
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val returnType = memberInteractor.getObjectMember().getElementType();
+        var returnType = memberInteractor.getObjectMember().getElementType();
         return TypeNames.objectTypeNameFor(returnType, memberInteractor.getSchemaType());
     }
 

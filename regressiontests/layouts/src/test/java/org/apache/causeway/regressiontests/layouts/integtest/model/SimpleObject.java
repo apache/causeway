@@ -50,8 +50,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
-
 
 @jakarta.persistence.Entity
 @jakarta.persistence.Table(
@@ -91,7 +89,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     private long version;
 
     public static SimpleObject withName(final String name) {
-        val simpleObject = new SimpleObject();
+        var simpleObject = new SimpleObject();
         simpleObject.setName(name);
         return simpleObject;
     }
@@ -99,8 +97,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @Inject @jakarta.persistence.Transient RepositoryService repositoryService;
     @Inject @jakarta.persistence.Transient TitleService titleService;
     @Inject @jakarta.persistence.Transient MessageService messageService;
-
-
 
     @Title
     @Name
@@ -115,7 +111,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @Property(commandPublishing = Publishing.ENABLED, executionPublishing = Publishing.ENABLED)
     @PropertyLayout(fieldSetId = "name", sequence = "2")
     private String notes;
-
 
     @Action(semantics = IDEMPOTENT, commandPublishing = Publishing.ENABLED, executionPublishing = Publishing.ENABLED)
     @ActionLayout(associateWith = "name", promptStyle = PromptStyle.INLINE)
@@ -136,7 +131,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return null;
     }
 
-
     @Action(semantics = NON_IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             position = ActionLayout.Position.PANEL,
@@ -146,8 +140,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
         messageService.informUser(String.format("'%s' deleted", title));
         repositoryService.removeAndFlush(this);
     }
-
-
 
     private final static Comparator<SimpleObject> comparator =
             Comparator.comparing(SimpleObject::getName);

@@ -25,13 +25,12 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class HideForContextFacetViaMethod
 extends HideForContextFacetAbstract
@@ -51,11 +50,10 @@ implements ImperativeFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        final ManagedObject target = ic.getTarget();
-        if (target == null) {
-            return null;
-        }
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        final ManagedObject target = ic.target();
+        if (target == null) return null;
+
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Boolean isHidden = (Boolean) MmInvokeUtils.invokeAutofit(method.method(), target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
@@ -65,6 +63,5 @@ implements ImperativeFacet {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
     }
-
 
 }

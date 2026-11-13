@@ -21,28 +21,34 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromValueSemanticsAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-    public static Optional<MaxFractionalDigitsFacet> create(
-            final Optional<ValueSemantics> digitsIfAny,
+final class MaxFractionalDigitsFacetFromValueSemanticsAnnotation
+extends FacetAbstract
+implements MaxFractionalDigitsFacet {
+
+    static Optional<MaxFractionalDigitsFacet> create(
+            final Optional<ValueSemantics> digitsOpt,
             final FacetHolder holder) {
+        return digitsOpt
+            .filter(digits->digits.maxFractionalDigits()>-1)
+            .map(digits->new MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
+                    digits.maxFractionalDigits(), holder));
+    }
 
-        return digitsIfAny
-        .map(digits->{
-            return new MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
-                    digits.maxFractionalDigits(), holder);
-        });
-   }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int maxFractionalDigits;
 
-   private MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
-           final int maxFractionalDigits, final FacetHolder holder) {
-       super(maxFractionalDigits, holder);
-   }
-
+    private MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
+            final int maxFractionalDigits,
+            final FacetHolder facetHolder) {
+    	super(MaxFractionalDigitsFacet.class, facetHolder);
+    	this.maxFractionalDigits = maxFractionalDigits;
+    }
 
 }

@@ -23,12 +23,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @RequiredArgsConstructor
@@ -43,17 +41,14 @@ public class LogoutHandlerWkt implements LogoutHandler {
             return; // logout is only permissive if within the context of a Wicket request-cycle
         }
 
-        val currentWktSession = AuthenticatedWebSession.get();
+        var currentWktSession = AuthenticatedWebSession.get();
         if(currentWktSession==null) {
             return;
         }
-
-        if(interactionLayerTracker.isInInteraction()) {
-            interactionLayerTracker.currentInteraction()
-            .map(CausewayInteraction.class::cast)
-            .ifPresent(interaction->
-                interaction.setOnClose(currentWktSession::invalidateNow));
-
+        
+        var currentLayer = interactionLayerTracker.currentInteractionLayer().orElse(null);
+        if(currentLayer!=null) {
+        	currentLayer.addOnCloseListener(currentWktSession::invalidateNow);
         } else {
             currentWktSession.invalidateNow();
         }

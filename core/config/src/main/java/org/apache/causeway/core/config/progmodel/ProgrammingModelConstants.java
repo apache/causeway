@@ -20,7 +20,6 @@ package org.apache.causeway.core.config.progmodel;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.time.OffsetDateTime;
@@ -35,54 +34,69 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectLifecycle;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconResource;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._ClassCache.ClassModelHead;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
-
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public final class ProgrammingModelConstants {
 
-    // -- TYPE EXCLUDE MARKERS
+    // -- TYPE MARKERS
 
     @Getter
     @RequiredArgsConstructor
-    public enum TypeExcludeMarker {
-        DOMAIN_EXCLUDE(Domain.Exclude.class)
-        //,VETO(javax.enterprise.inject.Vetoed.class)
+    public enum TypeVetoMarker {
+        //VETO(javax.enterprise.inject.Vetoed.class)
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Class<?> type) {
-            for(TypeExcludeMarker excludeMarker : TypeExcludeMarker.values()) {
-                if(_Annotations.synthesize(type, excludeMarker.getAnnotationType()).isPresent()) {
-                    return true;
-                }
+        public static boolean anyMatchOn(final ClassModelHead typeHead) {
+            for(TypeVetoMarker marker : TypeVetoMarker.values()) {
+                if(typeHead.hasAnnotation(marker.annotationType)) return true;
+            }
+            return false;
+        }
+
+        public static boolean anyMatchOn(final Class<?> cls) {
+            return anyMatchOn(_ClassCache.getInstance().head(cls));
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum TypeProgrammaticMarker {
+        SPRING_CONFIG(Configuration.class),
+        SPRING_REPOSITORY(Repository.class),
+        DOMAIN_EXCLUDE(Domain.Exclude.class),
+        ;
+        private final Class<? extends Annotation> annotationType;
+
+        public static boolean anyMatchOn(final ClassModelHead typeHead) {
+            for(TypeProgrammaticMarker marker : TypeProgrammaticMarker.values()) {
+                if(typeHead.hasAnnotation(marker.annotationType)) return true;
             }
             return false;
         }
@@ -102,14 +116,12 @@ public final class ProgrammingModelConstants {
 
         public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodIncludeMarker includeMarker : MethodIncludeMarker.values()) {
-                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent())
                     return true;
-                }
             }
             return false;
         }
     }
-
 
     // -- METHOD EXCLUDE MARKERS
 
@@ -126,9 +138,8 @@ public final class ProgrammingModelConstants {
 
         public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodExcludeMarker excludeMarker : MethodExcludeMarker.values()) {
-                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent())
                     return true;
-                }
             }
             return false;
         }
@@ -173,7 +184,6 @@ public final class ProgrammingModelConstants {
 
     }
 
-
     // -- MIXIN CONSTRUCTION
 
     public enum MixinConstructor {
@@ -181,29 +191,57 @@ public final class ProgrammingModelConstants {
          * Assuming, mixins do have a public single argument constructor,
          * that receive an instance of the mixee's type.
          */
-        PUBLIC_SINGLE_ARG_RECEIVING_MIXEE;
+    	PUBLIC_SINGLE_ARG_RECEIVING_MIXEE {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructors(cls)
+                        .filter(ResolvedConstructor::isSingleArg))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
+		},
+        PUBLIC_WITH_INJECT_SEMANTICS {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructorsWithInjectSemantics(cls))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
+        },
+        PUBLIC_ANY {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructors(cls))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
+        };
 
-        // while this enum only has a single value, we just provide a (quasi) static method here
-        public <T> Constructor<T> getConstructorElseFail(
-                final @NonNull Class<T> mixinClass,
-                final @NonNull Class<?> mixeeClass) {
-            return _Casts.uncheckedCast(_Reflect
-                        .getPublicConstructors(mixinClass)
-                        .filter(paramCount(1).and(paramAssignableFrom(0, mixeeClass)))
-                    .getSingleton()
-                    .orElseThrow(()->_Exceptions.illegalArgument(
-                            "Failed to locate constructor in '%s' to instantiate,"
-                            + "when using type '%s' as first argument",
-                            mixinClass.getName(), mixinClass.getName())));
+    	public final Can<ResolvedConstructor> getAll(final Class<?> cls) {
+            return streamAll(cls).collect(Can.toCan());
         }
+        public final Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
+            return streamAll(cls).findFirst();
+        }
+        public abstract Stream<ResolvedConstructor> streamAll(Class<?> cls);
 
-        // while this enum only has a single value, we just provide a (quasi) static method here
-        public <T> Can<Constructor<T>> getConstructors(final Class<T> candidateMixinType) {
-            val mixinContructors = _Reflect
-                    .getPublicConstructors(candidateMixinType)
-                    .filter(paramCount(1));
-            return _Casts.uncheckedCast(mixinContructors);
-        }
+//        // while this enum only has a single value, we just provide a (quasi) static method here
+//        public <T> Constructor<T> getConstructorElseFail(
+//                final @NonNull Class<T> mixinClass,
+//                final @NonNull Class<?> mixeeClass) {
+//            return _Casts.uncheckedCast(_Reflect
+//                        .getPublicConstructors(mixinClass)
+//                        .filter(paramCount(1).and(paramAssignableFrom(0, mixeeClass)))
+//                    .getSingleton()
+//                    .orElseThrow(()->_Exceptions.illegalArgument(
+//                            "Failed to locate constructor in '%s' to instantiate,"
+//                            + "when using type '%s' as first argument",
+//                            mixinClass.getName(), mixinClass.getName())));
+//        }
+
     }
 
     // -- LIFECYCLE CALLBACKS
@@ -231,16 +269,16 @@ public final class ProgrammingModelConstants {
         BOOLEAN(boolean.class),
         STRING(String.class),
         TRANSLATABLE(String.class, TranslatableString.class),
-        FONTAWESOME_LAYERS(FontAwesomeLayers.class);
+        ICON_RESOURCE(IconResource.class),
+        ;
         ReturnTypeCategory(final Class<?> ...returnTypes) {
             this.returnTypes = Can.of(returnTypes);
         }
         private final Can<Class<?>> returnTypes;
 
         public static Can<Class<?>> nonScalar(final @NonNull Class<?> elementType) {
-            if(VOID.returnTypes.contains(elementType)) {
+            if(VOID.returnTypes.contains(elementType))
                 return Can.empty();
-            }
             return Can.<Class<?>>of(
                 Can.class,
                 Collection.class,
@@ -274,8 +312,10 @@ public final class ProgrammingModelConstants {
 
         TITLE(ReturnTypeCategory.TRANSLATABLE, "title"),
         CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
+
+        ICON(ReturnTypeCategory.ICON_RESOURCE, "icon"),
         ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
-        ICON_FA_LAYERS(ReturnTypeCategory.FONTAWESOME_LAYERS, "iconFaLayers"),
+
         LAYOUT(ReturnTypeCategory.STRING, "layout"),
 
         /** as a fallback in the absence of other title providers */
@@ -422,7 +462,14 @@ public final class ProgrammingModelConstants {
                 + "without enforcing annotations"),
         UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS("${type}#${member}: "
                 + "has synthesized (effective) annotation @Domain.Include, "
-                + "is assumed to represent or support a property, collection or action."),
+                + "is assumed to represent or support a property, collection or action. "
+                + "Unmet constraint(s): ${unmetConstraints}"),
+        MIXIN_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS(
+        		"${type}: Mixin contract violation: there must be at most one public constructor that has inject semantics, "
+        				+ "but found ${found}."),
+        MIXIN_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS(
+        		"${type}: Mixin contract violation: in absence of inject semantics there must be exactly one public constructor, "
+        				+ "but found ${found}."),
         VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES(
                 "${type}: has multiple incompatible annotations/interfaces indicating that "
                 + "it is a recreatable object of some sort (${facetA} and ${facetB})"),
@@ -491,11 +538,16 @@ public final class ProgrammingModelConstants {
                 + "yet ${type} has action ${memberId}, which did return such an object of type ${returnTypeSpec}."),
         PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE("${paramId} has no choices nor autoComplete, "
                 + "yet represents a domain-object or is a plural."),
+        PARAMETER_HAS_UNSUPPORTED_COLLECTION_TYPE("Collection action parameter found that is not exactly one "
+                + "of the following supported types: "
+                + "List, Set, SortedSet, Collection, Can or Array.  "
+                + "Class: ${type} action: ${action} parameter ${paramIndex}"),
         PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION("${type}#${member}: "
                 + "Can use @ParameterTuple only on parameter of a single arg action."),
         PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS("${type}#${member}: "
                 + "Tuple type ${patType} referenced by @ParameterTuple annotated parameter has no or more than one public constructor."),
-        INVALID_MEMBER_ELEMENT_TYPE("${type}: has a member with vetoed, mixin or managed "
+        MEMBER_INVALID_ANNOTATION("Use of ${annot} is not allowed on ${member}."),
+        MEMBER_INVALID_ELEMENT_TYPE("${type}: has a member with vetoed, mixin or managed "
                 + "element-type ${elementType}, which is not allowed; (allowed types are abstract, value, viewmodel and entity)"),
         MEMBER_ID_CLASH("${type}: has members using the same member-id "
                 + "'${memberId}', which is not allowed; clashes:\n\t[1]${member1}\n\t[2]${member2}"),
@@ -536,8 +588,8 @@ public final class ProgrammingModelConstants {
              * Populates 'type' and 'member' keys (for template variable resolution).
              */
             public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
-                addVariable("type", featureIdentifier.getLogicalType().getClassName());
-                addVariable("member", featureIdentifier.getMemberLogicalName());
+                addVariable("type", featureIdentifier.logicalType().className());
+                addVariable("member", featureIdentifier.memberLogicalName());
                 return this;
             }
             public String buildMessage() {
@@ -568,28 +620,40 @@ public final class ProgrammingModelConstants {
                         .orElse(Stream.empty());
             }
         };
-        public Can<ResolvedConstructor> getAll(final Class<?> cls) {
+        public final Can<ResolvedConstructor> getAll(final Class<?> cls) {
             return streamAll(cls).collect(Can.toCan());
         }
-        public Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
+        public final Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
             return streamAll(cls).findFirst();
         }
         public abstract Stream<ResolvedConstructor> streamAll(Class<?> cls);
 
     }
 
+    // -- LITERALS
+
+    @RequiredArgsConstructor
+    public enum Literal {
+        ACTION_COLUMN_HEADER("Actions", new TranslationContext("tables.action-column-header")),
+        TITLE_COLUMN_HEADER_PARENTED("Related Object", new TranslationContext("tables.title-column-header-parented")),
+        TITLE_COLUMN_HEADER_STANDALONE("Object", new TranslationContext("tables.title-column-header-standalone"));
+        private final String literal;
+        private final TranslationContext translationContext;
+        public String translate(final TranslationService translationService) {
+            return translationService.translate(translationContext, literal);
+        }
+    }
+
     // -- HELPER
 
     private static String getCapitalizedMemberName(final Member member) {
-        if(member instanceof Method) {
-            val method = (Method)member;
-            val methodName = method.getName();
+        if(member instanceof Method method) {
+            var methodName = method.getName();
             if(method.getParameterCount()>0
                     || method.getReturnType().equals(void.class)
-                    || !AccessorSemantics.isCandidateGetterName(methodName)) {
+                    || !AccessorSemantics.isCandidateGetterName(methodName))
                 // definitely an action not a getter
                 return _Strings.capitalize(methodName);
-            }
             // must be a getter
             return _Strings.baseName(methodName);
         }
@@ -601,7 +665,7 @@ public final class ProgrammingModelConstants {
             final String template,
             final Map<String, String> templateVars) {
 
-        val templateRef = _Refs.stringRef(template);
+        var templateRef = _Refs.stringRef(template);
         templateVars.forEach((k, v)->templateRef.update(str->str.replace("${" + k + "}", v)));
         return templateRef.getValue();
     }

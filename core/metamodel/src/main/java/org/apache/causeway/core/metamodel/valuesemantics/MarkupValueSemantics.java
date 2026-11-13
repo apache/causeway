@@ -32,6 +32,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.hardening._Hardening;
+import org.apache.causeway.commons.internal.hardening._Hardening.SafelistSelect;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
@@ -57,7 +58,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Markup value) {
-        return decomposeAsString(value, Markup::asHtml, ()->null);
+        return decomposeAsString(value, Markup::html, ()->null);
     }
 
     @Override
@@ -74,20 +75,20 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Markup adoc) {
-        return renderHtml(adoc, Markup::asHtml);
+        return renderHtml(adoc, Markup::html);
     }
 
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Markup value) {
-        return value != null? value.asHtml(): null;
+        return value != null? value.html(): null;
     }
 
     @Override
     public Markup parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         return text!=null
-                ? new Markup(_Hardening.toSafeHtml(text))
+                ? new Markup(_Hardening.toSafeHtml(text, SafelistSelect.MARKUP))
                 : null;
     }
 
@@ -111,6 +112,5 @@ implements
                         + "    sentence without a paragraph break, in bold italics.</i></b>\n"
                         + "</p>"));
     }
-
 
 }

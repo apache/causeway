@@ -18,17 +18,15 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.builder.include;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.TextUtils;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public final class IncludeStatements {
 
@@ -37,7 +35,7 @@ public final class IncludeStatements {
     public static Can<IncludeStatement> find(
             final @NonNull Iterable<String> lines) {
 
-        val matches = _Lists.<IncludeStatement>newArrayList();
+        var matches = new ArrayList<IncludeStatement>();
         visit(lines, (line, incl)->incl.ifPresent(matches::add));
         return Can.ofCollection(matches);
     }
@@ -52,10 +50,10 @@ public final class IncludeStatements {
             final @NonNull Iterable<String> lines,
             final @NonNull UnaryOperator<IncludeStatement> rewriter) {
 
-        val processedLines = _Lists.<String>newArrayList();
+        var processedLines = new ArrayList<String>();
         visit(lines, (originalLine, inclOptional)->{
 
-            val incl = inclOptional.map(rewriter::apply).orElse(null);
+            var incl = inclOptional.map(rewriter::apply).orElse(null);
             if(incl!=null) {
                 processedLines.add(incl.toAdocAsString());
             } else {
@@ -74,7 +72,7 @@ public final class IncludeStatements {
 
         int zeroBasedLineIndex = 0;
 
-        for(val line : lines) {
+        for(var line : lines) {
 
             // include::[version@]component:module:page$relative-path
 
@@ -83,7 +81,7 @@ public final class IncludeStatements {
                 var cutter = TextUtils.cutter(line)
                         .keepAfter("include::");
 
-                val incl = IncludeStatement.builder();
+                var incl = IncludeStatement.builder();
                 incl.matchingLine(line);
                 incl.zeroBasedLineIndex(zeroBasedLineIndex);
 
@@ -112,7 +110,7 @@ public final class IncludeStatements {
 
                 cutter = TextUtils.cutter(referencePath);
 
-                val namespaceAsString = cutter.keepBeforeLast("/").getValue();
+                var namespaceAsString = cutter.keepBeforeLast("/").getValue();
 
                 incl.namespace(Can.ofStream(_Strings.splitThenStream(namespaceAsString, "/")));
 
@@ -128,6 +126,5 @@ public final class IncludeStatements {
         }
 
     }
-
 
 }

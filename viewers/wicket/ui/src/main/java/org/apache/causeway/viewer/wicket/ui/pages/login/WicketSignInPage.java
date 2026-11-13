@@ -25,13 +25,11 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
-
-import lombok.val;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -39,6 +37,8 @@ import lombok.val;
 public class WicketSignInPage extends AccountManagementPageAbstract {
 
     private static final long serialVersionUID = 1L;
+
+    @Inject private transient PageNavigationService pageNavigationService;
 
     public WicketSignInPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
@@ -56,7 +56,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
-        add(createSignInPanel());
+        add(new CausewaySignInPanel("signInPanel"));
 
         SuccessFeedbackCookieManager.drainSuccessFeedback(this::success);
     }
@@ -68,23 +68,4 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
                 SignInPanelAbstract.getJsForTimezoneSelectDefault()));
     }
 
-
-    protected CausewaySignInPanel createSignInPanel() {
-
-        final boolean rememberMeSuppress = getWicketViewerSettings().getRememberMe().isSuppress();
-        final boolean suppressRememberMe = rememberMeSuppress;
-
-        final boolean suppressSignUpLink = getWicketViewerSettings().isSuppressSignUp();
-        final boolean suppressPasswordResetLink = getWicketViewerSettings().isSuppressPasswordReset();
-        final boolean clearOriginalDestination = getWicketViewerSettings().isClearOriginalDestination();
-        final boolean rememberMe = !suppressRememberMe;
-        final boolean signUpLink = !suppressSignUpLink;
-        final boolean passwordReset = !suppressPasswordResetLink;
-        final boolean continueToOriginalDestination = !clearOriginalDestination;
-        val signInPanel =
-                new CausewaySignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
-        return signInPanel;
-    }
-
-    @Inject private PageNavigationService pageNavigationService;
 }

@@ -1,0 +1,208 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.viewer.wicket.ui.components.object.fieldset;
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.repeater.RepeatingView;
+
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.component.FieldSet;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationBehavior;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationDescriptor;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeModel;
+import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+
+public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt>
+implements HasDynamicallyVisibleContent {
+
+    private static final long serialVersionUID = 1L;
+    private static final String ID_MEMBER_GROUP = "memberGroup";
+    private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
+
+    private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL = "associatedActionLinksPanel";
+    private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN = "associatedActionLinksPanelDropDown";
+
+    private static final String ID_PROPERTIES = "properties";
+    private static final String ID_PROPERTY = "property";
+
+    public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
+        super(id, model);
+        buildGui(fieldSet);
+        WicketRenderObservationBehavior.addTo(this, WicketRenderObservationDescriptor.fieldset(
+                model.getTypeOfSpecification().getFeatureIdentifier().logicalTypeName(), fieldSet.getId()));
+    }
+
+    @Override
+    public UiObjectWkt getModel() {
+        return (UiObjectWkt) getDefaultModel();
+    }
+
+    @Override
+    public void onConfigure() {
+        super.onConfigure();
+        // have all child attribute panels assess their individual visibility
+        streamChildren()
+            .filter(HasAttributeModel.class::isInstance)
+            .forEach(Component::configure);
+        // assess visibility of this Panel, based on whether any of its child attribute panels is visible
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return streamChildren()
+                .filter(HasAttributeModel.class::isInstance)
+                .anyMatch(Component::isVisibilityAllowed);
+    }
+
+    // -- HELPER
+
+    private void buildGui(final FieldSet fieldSet) {
+
+        setOutputMarkupPlaceholderTag(true);
+        setOutputMarkupId(true);
+
+        final WebMarkupContainer div = new WebMarkupContainer(ID_MEMBER_GROUP);
+        div.setMarkupId("fieldSet-" + fieldSet.getId());
+
+        final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
+        div.addOrReplace(propertyRv);
+
+        var properties = propertiesNotStaticallyHidden(fieldSet);
+        var memberGroupActions = collectMemberGroupActions(propertyRv, properties);
+
+        final WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
+        div.addOrReplace(panelHeading);
+        if(_Strings.isNullOrEmpty(fieldSet.getName())) {
+            panelHeading.setVisibilityAllowed(false);
+        } else {
+            Wkt.labelAdd(panelHeading, ID_MEMBER_GROUP_NAME, fieldSet.getName());
+
+            ActionLinksPanel.addActionLinks(
+                    panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
+                    memberGroupActions
+                        .filter(ActionModel.isPositionedAt(ActionLayout.Position.PANEL)),
+                    ActionLinksPanel.ActionPanelStyle.INLINE_LIST,
+                    Where.OBJECT_FORMS);
+
+            ActionLinksPanel.addActionLinks(
+                    panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
+                    memberGroupActions
+                        .filter(ActionModel.isPositionedAt(ActionLayout.Position.PANEL_DROPDOWN)),
+                    ActionLinksPanel.ActionPanelStyle.DROPDOWN,
+                    Where.OBJECT_FORMS);
+        }
+
+        // either add the built content, or hide entire
+        if(properties.isEmpty()) {
+            WktComponents.permanentlyHide(this, div.getId());
+        } else {
+            this.addOrReplace(div);
+        }
+    }
+
+    private Can<ActionModel> collectMemberGroupActions(
+            final RepeatingView container,
+            final Can<OneToOneAssociation> properties) {
+
+        var memberGroupActionList = new ArrayList<ActionModel>();
+
+        for (var property : properties) {
+            var propertyRvContainer = new WebMarkupContainer(container.newChildId());
+            container.addOrReplace(propertyRvContainer);
+            addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActionList::add);
+        }
+
+        return Can.ofCollection(memberGroupActionList);
+    }
+
+    private Can<OneToOneAssociation> propertiesNotStaticallyHidden(final FieldSet fieldSet) {
+
+        var mo = getModel().getManagedObject();
+        var propertyLayouts = fieldSet.getProperties();
+        //
+        // previously we filtered out any invisible properties.
+        // However, the inline prompt/don't redirect logic introduced in 1.15.0 means that we keep the same page,
+        // and it may be that individual properties start out as invisible but then become visible later.
+        //
+        // therefore the responsibility of determining whether an individual property's component should be visible
+        // or not moves to ScalarPanelAbstract2#onConfigure(...)
+        //
+
+        return _NullSafe.stream(propertyLayouts)
+            .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
+            .map(propertyLayoutData -> mo.objSpec()
+                    .getProperty(propertyLayoutData.getId())
+                    .orElse(null))
+            .filter(Objects::nonNull)
+            .filter(Facets.hiddenWhereNotMatches(where ->
+                where.isAlways()
+                    || where == Where.OBJECT_FORMS))
+            .collect(Can.toCan());
+    }
+
+    private Component addPropertyToForm(
+            final UiObjectWkt objectModel,
+            final OneToOneAssociation property,
+            final WebMarkupContainer container,
+            final Consumer<ActionModel> onAssociatedAction) {
+
+        final UiAttributeWkt attributeModel =
+                objectModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
+
+        final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
+                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.ATTRIBUTE_NAME_AND_VALUE, attributeModel);
+//XXX[CAUSEWAY-3026] this is a bad idea
+//        if(scalarNameAndValueComponent instanceof MarkupContainer) {
+//            Wkt.cssAppend(scalarNameAndValueComponent, attributeModel.getIdentifier());
+//        }
+
+        var mo = objectModel.getManagedObject();
+
+        ObjectAction.Util.findForAssociation(mo.objSpec(), property)
+            .map(act->ActionModel.forEntity(act, objectModel))
+            .forEach(onAssociatedAction);
+
+        return scalarNameAndValueComponent;
+    }
+
+}

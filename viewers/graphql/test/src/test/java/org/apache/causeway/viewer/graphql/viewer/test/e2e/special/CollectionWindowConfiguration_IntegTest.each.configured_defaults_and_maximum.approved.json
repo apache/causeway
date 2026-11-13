@@ -1,0 +1,45 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_dept_Departments/findDepartmentByName/invoke/results/oversized/window) : Collection window size exceeds the configured maximum of 3.",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 17
+    } ],
+    "path" : [ "rich", "university_dept_Departments", "findDepartmentByName", "invoke", "results", "oversized", "window" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "defaultWindow" : {
+                "window" : {
+                  "requestedSize" : 2,
+                  "returnedCount" : 2,
+                  "maximumSize" : 3,
+                  "hasNext" : true,
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "John Gartner"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Margaret Randall"
+                    }
+                  } ]
+                }
+              },
+              "oversized" : {
+                "window" : null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

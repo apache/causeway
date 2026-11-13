@@ -20,7 +20,7 @@ package org.apache.causeway.core.config.metamodel.facets;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class DomainObjectConfigOptions {
 
@@ -29,14 +29,19 @@ public final class DomainObjectConfigOptions {
         NONE;
     }
 
+    public enum LockingPolicy {
+        OPTIMISTIC,
+        PESSIMISTIC;
+    }
+
     public enum EditingObjectsConfiguration {
         TRUE,
         FALSE;
     }
-    
+
     public static EntityChangePublishingPolicy entityChangePublishingPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getDomainObject().getEntityChangePublishing();
+        return configuration.applib().annotation().domainObject().entityChangePublishing();
     }
 
 }

@@ -20,9 +20,9 @@ package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -182,7 +182,6 @@ public class ExecutionParametersDefault_Test {
         assertThat(roundTrippedAsT, is(value));
     }
 
-
     @Test
     public void roundTripBigDecimal() throws Exception {
 
@@ -267,6 +266,5 @@ public class ExecutionParametersDefault_Test {
         assertThat(roundTripped, is(value));
         assertThat(roundTrippedAsT, is(value));
     }
-
 
 }

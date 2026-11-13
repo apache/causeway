@@ -21,21 +21,20 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.springframework.lang.Nullable;
+import java.util.Optional;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -47,15 +46,13 @@ public final class MmSpecUtils {
      */
     public ManagedObject enforceMostSpecificSpecOn(final @NonNull ManagedObject obj) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(obj)
-                || ManagedObjects.isPacked(obj)) {
-            return obj;
-        }
-        val pojo = ManagedObjects.peekAtPojoOf(obj);
-        val requiredType = pojo.getClass();
-        val currentSpec = obj.getSpecification();
-        if(currentSpec.getCorrespondingClass().equals(requiredType)) {
-            return obj;
-        }
+                || ManagedObjects.isPacked(obj))
+			return obj;
+        var pojo = ManagedObjects.peekAtPojoOf(obj);
+        var requiredType = pojo.getClass();
+        var currentSpec = obj.objSpec();
+        if(currentSpec.correspondingClass().equals(requiredType))
+			return obj;
         return ManagedObject.adaptSingular(currentSpec.getSpecificationLoader(), pojo);
     }
 
@@ -67,7 +64,7 @@ public final class MmSpecUtils {
     public ObjectSpecification quicklyResolveObjectSpecification(
             final @NonNull ObjectSpecification guess,
             final @NonNull Class<?> requiredType) {
-        return guess.getCorrespondingClass().equals(requiredType)
+        return guess.correspondingClass().equals(requiredType)
                 // when successful guess
                 ? guess
                 // else lookup
@@ -87,23 +84,23 @@ public final class MmSpecUtils {
     /**
      * Introduced for JUnit testing.
      */
-    public String specificationsBySortAsYaml(final @NonNull Can<ObjectSpecification> specs) {
+    public String specificationsBySortAsYaml(final @NonNull Can<? extends ObjectSpecification> specs) {
 
         // collect all ObjectSpecifications into a list-multi-map, where BeanSort is the key
         var specsBySort = _Multimaps.<String, LogicalType>newListMultimap(LinkedHashMap<String, List<LogicalType>>::new, ArrayList::new);
         specs
                 .stream()
                 .sorted()
-                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalType()));
+                .forEach(spec->specsBySort.putElement(spec.beanSort().name(), spec.logicalType()));
 
         // export the list-multi-map to YAML format
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("ObjectSpecifications:\n");
         specsBySort
             .forEach((key, list)->{
                 sb.append(String.format("  %s:\n", key));
                 list.forEach(logicalType->{
-                    sb.append(String.format("  - %s(%s)\n", logicalType.getLogicalTypeName(), logicalType.getClassName()));
+                    sb.append(String.format("  - %s(%s)\n", logicalType.logicalName(), logicalType.className()));
                 });
             });
 
@@ -116,27 +113,32 @@ public final class MmSpecUtils {
      */
     public boolean isJavaRecord(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
-        return spec.getCorrespondingClass().isRecord();
+        return spec.correspondingClass().isRecord();
     }
 
     /**
      * Whether given {@link ObjectSpecification} represents a FixtureScript (from testing.fixtures.applib).
+     * @implNote if testing.fixtures.applib is not available on the class-path,
+     *      then given spec cannot be a fixture-script
      */
     public boolean isFixtureScript(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
-        return getFixtureScriptClass().isAssignableFrom(spec.getCorrespondingClass());
+        return getFixtureScriptClass()
+            .map(fixtureScriptClass->fixtureScriptClass.isAssignableFrom(spec.correspondingClass()))
+            .orElse(false);
     }
 
     // -- HELPER
 
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final Class<?> fixtureScriptClass = loadFixtureScriptClass();
+    private final Optional<Class<?>> fixtureScriptClass = loadFixtureScriptClass().getValue();
 
-    @SneakyThrows
-    private Class<?> loadFixtureScriptClass() {
-        return _Context.loadClass(
-                "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript");
+    /**
+     * Silently ignores the case when testing.fixtures.applib is not on the class-path.
+     */
+    private Try<Class<?>> loadFixtureScriptClass() {
+        return Try.call(()->_Context.loadClass(
+                "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"));
     }
-
 
 }

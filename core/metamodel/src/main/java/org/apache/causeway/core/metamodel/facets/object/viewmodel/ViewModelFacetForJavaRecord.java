@@ -21,147 +21,107 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.util.hmac.Memento;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.jspecify.annotations.NonNull;
+import org.springframework.util.Assert;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * @since 3.0.0
  */
-public class ViewModelFacetForJavaRecord
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForJavaRecord
+extends SecureViewModelFacet {
 
-    public static Optional<ViewModelFacetForJavaRecord> create(
+    static Optional<ViewModelFacetForJavaRecord> create(
             final Class<?> cls,
+            final MementoHmacContext mementoContext,
             final FacetHolder holder) {
-        return cls.isRecord()
-                ? Optional.of(new ViewModelFacetForJavaRecord(cls, holder))
-                : Optional.empty();
+        return mementoContext!=null
+                && cls.isRecord()
+            ? Optional.of(new ViewModelFacetForJavaRecord(cls, mementoContext, holder))
+            : Optional.empty();
     }
 
-    private UrlEncodingService codec;
-    private SerializingAdapter serializer;
-
+    private final MementoHmacContext mementoContext;
     private final Constructor<?> canonicalConstructor;
 
     protected ViewModelFacetForJavaRecord(
             final Class<?> recordClass,
+            final MementoHmacContext mementoContext,
             final FacetHolder holder) {
         // is overruled by ViewModel interface semantics
-        super(holder, Precedence.DEFAULT);
+        super(mementoContext.hmacUrlCodec(), holder);
+        this.mementoContext = mementoContext;
         this.canonicalConstructor = canonicalConstructor(recordClass);
     }
 
     @Override @SneakyThrows
-    protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final Bookmark bookmark) {
+    protected Object createViewmodelPojo(
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
 
-        val memento = parseMemento(bookmark);
+        // throws on de-marshalling failure
+        var memento = mementoContext.parseTrustedMemento(trustedBookmarkIdAsBytes);
 
-        var recordComponentPojos = streamRecordComponents(viewmodelSpec)
-        .map(association->{
-            val associationId = association.getId();
-            val elementType = association.getElementType();
-            val elementClass = elementType.getCorrespondingClass();
-            val associationPojo = association.isProperty()
-                    ? memento.get(associationId, elementClass)
-                    //TODO collection values not yet supported by memento (as workaround use Serializable record)
-                    : null;
-            return associationPojo;
-        }).toArray();
+        var recordComponentPojos = streamRecordComponents(viewmodelSpec.correspondingClass())
+            .map(recComp->memento.get(recComp.getName(), recComp.getType()))
+            .toArray();
 
-        return ManagedObject.viewmodel(viewmodelSpec,
-                canonicalConstructor.newInstance(recordComponentPojos),
-                Optional.of(bookmark));
+        return canonicalConstructor.newInstance(recordComponentPojos);
     }
 
     @Override
-    public String serialize(final ManagedObject viewModel) {
+    public byte[] encodeState(final ManagedObject viewModel) {
 
-        final _Mementos.Memento memento = newMemento();
+        final Memento memento = mementoContext.newMemento();
 
-        val viewmodelSpec = viewModel.getSpecification();
+        Arrays.stream(snapshotRecordComponents(viewModel.getPojo()))
+            .forEach(arg->memento.put(arg.name(), arg.pojo()));
 
-        streamRecordComponents(viewmodelSpec)
-        .forEach(association->{
-
-            final ManagedObject associationValue =
-                    association.get(viewModel, InteractionInitiatedBy.PASS_THROUGH);
-
-            if(association != null
-                    //TODO collection values not yet supported by memento (as workaround use Serializable record)
-                    && association.isProperty()
-                    && associationValue.getPojo()!=null) {
-                memento.put(association.getId(), associationValue.getPojo());
-            }
-        });
-
-        return memento.asString();
+        return memento.stateAsBytes();
     }
 
     // -- HELPER
 
-    private Can<ObjectAssociation> recordComponentsAsAssociations;
-    private Stream<ObjectAssociation> streamRecordComponents(
-            final @NonNull ObjectSpecification viewmodelSpec) {
-        if(recordComponentsAsAssociations==null) {
-            this.recordComponentsAsAssociations = recordComponentsAsAssociations(viewmodelSpec);
-        }
-        return recordComponentsAsAssociations.stream();
-    }
-
-    private void initDependencies() {
-        val serviceRegistry = getServiceRegistry();
-        this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
-        this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
-    }
-
-    private void ensureDependenciesInited() {
-        if(codec==null) {
-            initDependencies();
-        }
-    }
-
-    private _Mementos.Memento newMemento() {
-        ensureDependenciesInited();
-        return _Mementos.create(codec, serializer);
-    }
-
-    private _Mementos.Memento parseMemento(final Bookmark bookmark) {
-        ensureDependenciesInited();
-        return _Mementos.parse(codec, serializer, bookmark.getIdentifier());
-    }
-
-    private static Can<ObjectAssociation> recordComponentsAsAssociations(
-            final @NonNull ObjectSpecification viewmodelSpec) {
-        return Arrays.stream(viewmodelSpec.getCorrespondingClass().getRecordComponents())
-                .map(RecordComponent::getName)
-                .map(memberId->viewmodelSpec.getAssociationElseFail(memberId, MixedIn.EXCLUDED))
-                .collect(Can.toCan());
+    @SneakyThrows
+    private static Stream<RecordComponent> streamRecordComponents(final @NonNull Class<?> recordClass) {
+        Assert.isTrue(recordClass.isRecord(), ()->"Illegal Argument: not a Java record");
+        return Arrays.stream(recordClass.getRecordComponents());
     }
 
     @SneakyThrows
     private static <T> Constructor<T> canonicalConstructor(final @NonNull Class<T> recordClass) {
-        val constructorParamTypes = Arrays.stream(recordClass.getRecordComponents())
+        var constructorParamTypes = streamRecordComponents(recordClass)
                 .map(RecordComponent::getType)
                 .toArray(Class[]::new);
         return recordClass.getDeclaredConstructor(constructorParamTypes);
+    }
+
+    private record NamedArg(String name, Object pojo) {
+    }
+
+    @SneakyThrows
+    private static NamedArg[] snapshotRecordComponents(final Object recordInstance) {
+        final @NonNull Class<?> recordClass = Objects.requireNonNull(recordInstance).getClass();
+        Assert.isTrue(recordClass.isRecord(), ()->"Illegal Argument: not a Java record");
+
+        RecordComponent[] components = recordClass.getRecordComponents();
+        NamedArg[] result = new NamedArg[components.length];
+        for (int i = 0; i < components.length; i++) {
+            result[i] = new NamedArg(
+                    components[i].getName(),
+                    components[i].getAccessor().invoke(recordInstance));
+        }
+        return result;
     }
 
 }

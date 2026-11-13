@@ -35,8 +35,6 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
-import lombok.val;
-
 /**
  * @since 2.x  {@index}
  */
@@ -60,8 +58,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     public ApplicationTypeProperty(final String memento) {
         super(memento);
     }
-
-
 
     // -- returnType
 
@@ -90,8 +86,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
                 .orElse("<none>");
     }
 
-
-
     // -- derived
 
     @Property(
@@ -112,8 +106,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         return getFeature().isPropertyOrCollectionDerived();
     }
 
-
-
     // -- maxLength
 
     @Property(
@@ -133,7 +125,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
     @MaxLength
     public Integer getMaxLength() {
-        val maxLen = getFeature().getPropertyMaxLength();
+        var maxLen = getFeature().getPropertyMaxLength();
         return maxLen.isPresent()
                 ? maxLen.getAsInt()
                 : null; // unexpected code path, as this case should be hidden
@@ -144,8 +136,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         }
         return !String.class.getSimpleName().equals(getReturnType());
     }
-
-
 
     // -- typicalLength
 
@@ -165,7 +155,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
     @TypicalLength
     public Integer getTypicalLength() {
-        val maxLen = getFeature().getPropertyTypicalLength();
+        var maxLen = getFeature().getPropertyTypicalLength();
         return maxLen.isPresent()
                 ? maxLen.getAsInt()
                 : null; // unexpected code path, as this case should be hidden

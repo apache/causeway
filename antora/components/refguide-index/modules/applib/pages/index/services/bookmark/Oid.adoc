@@ -8,18 +8,18 @@
 ----
 interface Oid {
   String SEPARATOR;
-  String getLogicalTypeName()     // <.>
-  String getIdentifier()     // <.>
+  String logicalTypeName()     // <.>
+  String identifier()     // <.>
   String stringify()     // <.>
 }
 ----
 
-<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
+<.> xref:#logicalTypeName_[logicalTypeName()]
 +
 --
 Logical-type-name of the domain object this Oid is representing. (aka. object-type)
 --
-<.> xref:#getIdentifier_[getIdentifier()]
+<.> xref:#identifier_[identifier()]
 +
 --
 Stringified version of the ID of the domain object instance this Oid is representing.
@@ -27,22 +27,22 @@ Stringified version of the ID of the domain object instance this Oid is represen
 <.> xref:#stringify_[stringify()]
 +
 --
-The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is _#getLogicalTypeName() logical-type-name_ _#SEPARATOR_ _#getIdentifier() identifier_ .
+The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is _#logicalTypeName() logical-type-name_ _#SEPARATOR_ _#identifier() identifier_ .
 --
 
 == Members
 
-[#getLogicalTypeName_]
-=== getLogicalTypeName()
+[#logicalTypeName_]
+=== logicalTypeName()
 
 Logical-type-name of the domain object this Oid is representing. (aka. object-type)
 
-[#getIdentifier_]
-=== getIdentifier()
+[#identifier_]
+=== identifier()
 
 Stringified version of the ID of the domain object instance this Oid is representing.
 
 [#stringify_]
 === stringify()
 
-The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is _#getLogicalTypeName() logical-type-name_ _#SEPARATOR_ _#getIdentifier() identifier_ .
+The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is _#logicalTypeName() logical-type-name_ _#SEPARATOR_ _#identifier() identifier_ .

@@ -19,7 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.feature;
 
 /**
- * Modelled after {@link OneToOneAssociation} as a subinterface of
+ * Modeled after {@link OneToOneAssociation} as a sub-interface of
  * {@link ObjectAssociation}.
  */
 public interface OneToOneActionParameter extends ObjectActionParameter, OneToOneFeature {

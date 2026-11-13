@@ -1,0 +1,424 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.extensions.commandlog.applib.dom.replay;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
+
+import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
+
+@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
+@DomainObjectLayout(cssClassFa = "solid circle-play")
+@Named(CommandReplayManager.LOGICAL_TYPE_NAME)
+public record CommandReplayManager(
+        @Property
+        @PropertyLayout(describedAs = "Only commands after this baseline are listed for replay")
+        java.sql.Timestamp baseline,
+        ReplayContext replayContext) implements ViewModel, CommandRecordingSuppressed {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
+
+    public static abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+
+    @Inject
+    public CommandReplayManager(
+            final String memento,
+            final ReplayContext replayContext) {
+        this(   fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),
+                replayContext);
+    }
+
+    @ObjectSupport public String title() {
+        return "Command Replay Manager";
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = previousHour.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "baseline", sequence = "1",
+            named = "Previous",
+            position = ActionLayout.Position.PANEL,
+            describedAs = "Move back one hour")
+    public class previousHour {
+        public class DomainEvent extends ActionDomainEvent<previousHour> { }
+        @MemberSupport public CommandReplayManager act() {
+            return new CommandReplayManager(addSeconds(baseline, -3600), replayContext);
+        }
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = nextHour.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "baseline", sequence = "3",
+            named = "Next",
+            position = ActionLayout.Position.PANEL,
+            describedAs = "Move forward one hour")
+    public class nextHour {
+        public class DomainEvent extends ActionDomainEvent<nextHour> { }
+        @MemberSupport public CommandReplayManager act() {
+            return new CommandReplayManager(addSeconds(baseline, +3600), replayContext);
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = changeBaseline.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "baseline", sequence = "2",
+            named = "Change",
+            position = ActionLayout.Position.PANEL
+    )
+    public class changeBaseline {
+        public class DomainEvent extends ActionDomainEvent<nextHour> { }
+        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp baseline) {
+            return new CommandReplayManager(baseline, replayContext);
+        }
+        @MemberSupport public java.sql.Timestamp defaultBaseline() {
+            return CommandReplayManager.this.baseline;
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = importCommands.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            sequence = "1.1",
+            associateWith = "pendingOrFailed",
+            cssClass = "btn-secondary",
+            describedAs = "Imports commands from yaml format, then persists them with a replayState of PENDING.")
+    public class importCommands {
+        public class DomainEvent extends ActionDomainEvent<importCommands> { }
+        @MemberSupport public CommandReplayManager act(
+                @Parameter(fileAccept = ".yml,.yaml")
+                final Blob commandsYaml,
+                @ParameterLayout(describedAs = "Change the baseline to the timestamp of the oldest, so that they are listed at top")
+                final boolean moveBaselineToOldest) {
+            var yamlDs = commandsYaml.asDataSource();
+
+            // strict decode: accepts the wrapped-export and legacy multi-document forms and fails (rather than
+            // silently importing nothing) on unparseable input, matching the unified importer.
+            final var imported = CommandDtoUtils.fromYamlForReplay(yamlDs);
+            final List<CommandDto> commandDtos = imported.stream()
+                    .map(CommandDtoUtils.ImportedCommandDto::getCommand)
+                    .toList();
+            imported.forEach(value -> {
+                final var entry = commandLogEntryRepository().saveForReplay(value.getCommand());
+                if (value.getResult() != null) {
+                    entry.setResult(value.getResult());
+                }
+            });
+
+            return moveBaselineToOldest
+                ? oldestTimestamp(commandDtos)
+                    .map(timestamp -> new CommandReplayManager(timestamp, replayContext))
+                    .orElse(CommandReplayManager.this)
+                : CommandReplayManager.this;
+        }
+
+        @MemberSupport public boolean defaultMoveBaselineToOldest() {
+            return true;
+        }
+
+        private Optional<Timestamp> oldestTimestamp(final List<CommandDto> commandDtos) {
+            return commandDtos.stream()
+                .map(CommandDto::getTimestamp)
+                .map(JavaSqlXMLGregorianCalendarMarshalling::toTimestamp)
+                .sorted()
+                .findFirst();
+        }
+    }
+
+    // -- PENDING OR FAILED
+
+    @Collection
+    @CollectionLayout(
+            describedAs = "Imported Commands that can be either replayed (if PENDING) or retried (if FAILED)")
+    public List<ReplayableCommand> getPendingOrFailed() {
+        return streamPendingOrFailed()
+            .toList();
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = replayOrRetrySelected.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.2",
+            cssClass = "btn-secondary",
+            cssClassFa = "solid forward",
+            describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
+                    + "If any of the given commands fails, "
+                    + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
+                    + "The command, that caused the failure, gets marked FAILED.")
+    public class replayOrRetrySelected {
+        public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
+        @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(replayContext)) {
+                return CommandReplayManager.this;
+            }
+            var replayables = selected.stream()
+                .sorted()
+                .collect(Collectors.toList());
+            for(var replayableCommand : replayables) {
+                var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
+                if(tryReplayOrRetry.isFailure()
+                        || ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(replayContext))
+                    return CommandReplayManager.this; // stop further execution
+            }
+            return CommandReplayManager.this;
+        }
+        @MemberSupport public String disableAct() {
+            final var backgroundReason = ReplayPendingBackgroundCommands.disableReason(replayContext);
+            if (backgroundReason != null) {
+                return backgroundReason;
+            }
+            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+        }
+        @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null && selected.isEmpty() ? "Select at least one command" : null;
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = replayOrRetrySelected.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.1",
+            cssClassFa = "solid circle-play",
+            cssClass = "btn-primary",
+            describedAs = "Executes the oldest command.")
+    public class replayOrRetryNext {
+        public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
+        @MemberSupport public CommandReplayManager act() {
+            if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(replayContext)) {
+                return CommandReplayManager.this;
+            }
+            var nextIfAny = streamPendingOrFailed().findFirst();
+            // should always be present, due to our guard
+            nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
+            return CommandReplayManager.this;
+        }
+
+        @MemberSupport
+        public String disableAct() {
+            final var backgroundReason = ReplayPendingBackgroundCommands.disableReason(replayContext);
+            if (backgroundReason != null) {
+                return backgroundReason;
+            }
+            return sizePendingOrFailed() == 0 ? "No commands in collection" : null;
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = excludeSelectedFromReplay.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.3",
+            cssClass = "btn-secondary",
+            describedAs = "Marks selected Commands to be EXCLUDED from replay")
+    public class excludeSelectedFromReplay {
+        public class DomainEvent extends ActionDomainEvent<excludeSelectedFromReplay> {}
+        @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            selected.stream()
+                .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
+            return CommandReplayManager.this;
+        }
+        @MemberSupport public String disableAct() {
+            return sizePendingOrFailed() == 0  ? "No commands in collection" : null;
+        }
+        @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null
+                    && selected.isEmpty()
+                ? "Select at least one command"
+                : null;
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = deleteSelectedPendingOrFailed.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.4",
+            cssClass = "btn-danger",
+            named = "Delete Selected",
+            describedAs = "Deletes selected Commands (cannot be undone)")
+    public class deleteSelectedPendingOrFailed {
+        public class DomainEvent extends ActionDomainEvent<deleteSelectedPendingOrFailed> {}
+        @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            selected.stream()
+                .forEach(ReplayableCommand::deleteObj); // filtered on its own responsibility
+            return CommandReplayManager.this;
+        }
+        @MemberSupport public String disableAct() {
+            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+        }
+        @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null
+                    && selected.isEmpty()
+                ? "Select at least one command"
+                : null;
+        }
+    }
+
+    // -- OK OR EXCLUDE
+
+    @Collection
+    @CollectionLayout(
+            describedAs = "Imported Commands that were either replayed with success (replayState=OK) "
+                    + "or marked to be excluded from replay (replayState=EXCLUDE)")
+    public List<ReplayableCommand> getSucceededOrExcluded() {
+        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
+            .filter(entry -> ReplayableCommandEligibility.isEligible(
+                    entry, replayContext.applicationFeatureRepository()))
+            .map(entry->new ReplayableCommand(
+                    entry.getInteractionId(),
+                    replayContext))
+            .collect(Collectors.toList());
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = openCommandManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(sequence = "3", named = "Open Command Manager")
+    public class openCommandManager {
+        public class DomainEvent extends ActionDomainEvent<openCommandManager> { }
+
+        @MemberSupport public CommandManager act() {
+            return new CommandManager(baseline, CommandManager.DEFAULT_LIMIT, replayContext);
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "succeededOrExcluded",
+            semantics = SemanticsOf.IDEMPOTENT,
+            domainEvent = deleteSelectedSucceededOrExcluded.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "succeededOrExcluded",
+            named = "Delete Selected",
+            describedAs = "Deletes selected Commands (cannot be undone)")
+    public class deleteSelectedSucceededOrExcluded {
+        public class DomainEvent extends ActionDomainEvent<deleteSelectedSucceededOrExcluded> { }
+        @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            selected.stream()
+                .forEach(ReplayableCommand::deleteObj); // filtered on its own responsibility
+            return CommandReplayManager.this;
+        }
+        @MemberSupport public String disableAct() {
+            return getSucceededOrExcluded().isEmpty() ? "No commands in collection" : null;
+        }
+        @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null
+                    && selected.isEmpty()
+                ? "Select at least one command"
+                : null;
+        }
+    }
+
+    // -- VM STATE
+
+    @Override
+    public String viewModelMemento() {
+        return TimestampMarshallUtil.toString(this.baseline);
+    }
+
+    // -- HELPER
+
+    private CommandLogEntryRepository commandLogEntryRepository() {
+        return replayContext.commandLogEntryRepository();
+    }
+
+    private static Timestamp addSeconds(final Timestamp ts, final int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
+    }
+
+    private Stream<ReplayableCommand> streamPendingOrFailed() {
+        return commandLogEntryRepository()
+            .findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline).stream()
+            .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext));
+    }
+
+    private long sizePendingOrFailed() {
+        return streamPendingOrFailed().count();
+    }
+}

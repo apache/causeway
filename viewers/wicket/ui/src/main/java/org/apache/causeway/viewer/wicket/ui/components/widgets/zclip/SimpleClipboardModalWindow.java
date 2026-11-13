@@ -28,9 +28,7 @@ public class SimpleClipboardModalWindow extends ModalDialog<Void> {
         return new SimpleClipboardModalWindow(id);
     }
 
-
     // //////////////////////////////////////
-
 
     public SimpleClipboardModalWindow(String id) {
         super(id);

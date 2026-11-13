@@ -136,8 +136,6 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     @Getter @Setter
     private T newValue;
 
-
-
     private static final ToString<PropertyDomainEvent<?,?>> toString =
             ObjectContracts.<PropertyDomainEvent<?,?>>
     toString("source", PropertyDomainEvent::getSource)
@@ -151,6 +149,5 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

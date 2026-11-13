@@ -19,22 +19,18 @@
 package org.apache.causeway.applib.annotation;
 
 /**
- *
  * Tells the framework which method or field to use in order to construct a navigable chain of
  * parent domain object instances. The Navigable.PARENT 'flag' can only be used once per class declaration.
  *
  * @since 2.0 {@index}
  */
 public enum Navigable {
-
     NOT_SPECIFIED,
     IGNORE,
-    PARENT,
-    ;
+    /**
+     * When used via {@link PropertyLayout}, identifies a logical parent, that is navigable via the UI.
+     */
+    PARENT;
 
-    public boolean isParent() {
-        return this == PARENT;
-    }
-
-
+    public boolean isParent() { return this == PARENT; }
 }

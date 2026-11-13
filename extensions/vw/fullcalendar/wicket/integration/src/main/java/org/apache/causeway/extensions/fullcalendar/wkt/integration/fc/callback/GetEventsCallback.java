@@ -24,8 +24,6 @@ import org.apache.wicket.request.handler.TextRequestHandler;
 
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSource;
 
-import lombok.val;
-
 public class GetEventsCallback extends AbstractCallback {
     private static final long serialVersionUID = 1L;
 
@@ -37,14 +35,14 @@ public class GetEventsCallback extends AbstractCallback {
 
     @Override
     protected void respond() {
-        val request = getCalendar().getRequest();
+        var request = getCalendar().getRequest();
 
         var start = getCalendar().startInstant();
         var end = getCalendar().endInstant();
 
-        val sid = request.getRequestParameters().getParameterValue(SOURCE_ID).toString();
-        val eventSource = getCalendar().getEventSource(sid);
-        val eventProvider = eventSource.getEventProvider();
+        var sid = request.getRequestParameters().getParameterValue(SOURCE_ID).toString();
+        var eventSource = getCalendar().getEventSource(sid);
+        var eventProvider = eventSource.getEventProvider();
         final String response = getCalendar().toJson(eventProvider.getEvents(start, end));
 
         getCalendar().getRequestCycle()

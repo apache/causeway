@@ -23,9 +23,9 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -35,9 +35,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
@@ -48,14 +47,11 @@ import org.apache.causeway.testdomain.model.stereotypes.MyObject_mixin;
 import org.apache.causeway.testdomain.model.stereotypes.MyService;
 import org.apache.causeway.testdomain.model.stereotypes.MyView;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
                 CausewaySystemEnvironment.class,
                 MetaModelContextFactory.class,
-                CausewayBeanFactoryPostProcessorForSpring.class,
-                CausewayBeanTypeRegistryDefault.class,
+                CausewayBeanFactoryPostProcessor.class,
                 Configuration_usingStereotypes.class,
                 ServiceRegistryDefault.class
         },
@@ -65,8 +61,7 @@ import lombok.val;
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
-    CausewayPresets.SilenceProgrammingModel,
-    CausewayPresets.UseLog4j2Test,
+    CausewayPresets.SilenceProgrammingModel
 })
 class AutoConfigurationTest {
 
@@ -100,15 +95,15 @@ class AutoConfigurationTest {
 
     @Test
     void domainObjects_shouldBeDiscovered() {
-        for(val cls : nonManaged()) {
-            val type = causewayBeanTypeRegistry.lookupIntrospectableType(cls);
+        for(var cls : nonManaged()) {
+            var type = causewayBeanTypeRegistry.lookupScannedType(cls);
             assertTrue(type.isPresent());
         }
     }
 
     @Test
     void domainObjects_shouldNotBeManaged() {
-        for(val cls : nonManaged()) {
+        for(var cls : nonManaged()) {
             assertThrows(NoSuchBeanDefinitionException.class, ()->{
                 applicationContext.getBean(cls);
             });
@@ -117,14 +112,14 @@ class AutoConfigurationTest {
 
     @Test
     void domainServices_shouldBeManaged() {
-        val myService = applicationContext.getBean(MyService.class);
+        var myService = applicationContext.getBean(MyService.class);
         assertNotNull(myService);
         assertTrue(serviceRegistry.lookupService(MyService.class).isPresent());
     }
 
     // we don't want those managed by Spring
     private static Class<?>[] nonManaged() {
-        val nonManaged = new Class<?>[] {MyObject.class, MyObject_mixin.class, MyView.class};
+        var nonManaged = new Class<?>[] {MyObject.class, MyObject_mixin.class, MyView.class};
         return nonManaged;
     }
 

@@ -17,26 +17,21 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.restfulobjects.viewer {
-    exports org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.context;
+
     exports org.apache.causeway.viewer.restfulobjects.viewer;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth;
+    exports org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
     exports org.apache.causeway.viewer.restfulobjects.viewer.resources;
     exports org.apache.causeway.viewer.restfulobjects.viewer.util;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.mappers.entity;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.mappers;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization;
+    exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
+    exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
+    requires static lombok;
+
     requires jakarta.annotation;
     requires jakarta.inject;
     requires jakarta.transaction;
-    requires jakarta.ws.rs;
     requires jakarta.xml.bind;
     requires jakarta.servlet;
-    requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
@@ -47,7 +42,7 @@ module org.apache.causeway.viewer.restfulobjects.viewer {
     requires org.apache.causeway.viewer.commons.services;
     requires org.apache.causeway.viewer.restfulobjects.applib;
     requires org.apache.causeway.viewer.restfulobjects.rendering;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

@@ -2,21 +2,21 @@
   <mml:domainClassDto id="org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel">
     <mml:facets>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#)"/>
+        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#]"/>
         <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
         <mml:attr name="originalText" value="Some View Model"/>
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="translated" value="Some View Model"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
-        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#)"/>
+        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#]"/>
         <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
         <mml:attr name="hasNoun" value="true"/>
         <mml:attr name="originalText" value="Optional[Some View Model]"/>
         <mml:attr name="precedence" value="SYNTHESIZED"/>
         <mml:attr name="translated" value="Optional[Some View Model]"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet">
         <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
         <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
         <mml:attr name="precedence" value="LOW"/>
@@ -56,8 +56,7 @@
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.GridFacetDefault">
-        <mml:attr name="facet" value="GridFacetDefault"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
         <mml:attr name="precedence" value="DEFAULT"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
@@ -70,6 +69,11 @@
         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="reason" value="Disabled via @DomainObject annotation, reason not given."/>
+      </mml:facet>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.locking.LockingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.locking.LockingFacetForDomainObjectAnnotationAsConfigured">
+        <mml:attr name="facet" value="LockingFacetForDomainObjectAnnotationAsConfigured"/>
+        <mml:attr name="policy" value="OPTIMISTIC"/>
+        <mml:attr name="precedence" value="DEFAULT"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
         <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -108,7 +112,7 @@
       <mml:prop id="pdf" mixedIn="false">
         <mml:facets>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.NamedFacetFallbackFromMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#pdf)"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#pdf]"/>
             <mml:attr name="facet" value="NamedFacetFallbackFromMemberName"/>
             <mml:attr name="originalText" value="Pdf"/>
             <mml:attr name="precedence" value="FALLBACK"/>
@@ -122,13 +126,13 @@
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet">
             <mml:attr name="facet" value="LayoutGroupFacetForLayoutXml"/>
             <mml:attr name="groupId" value="other"/>
             <mml:attr name="groupName" value="Other"/>
             <mml:attr name="precedence" value="LOW"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet">
             <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
             <mml:attr name="precedence" value="LOW"/>
             <mml:attr name="sequence" value="1"/>
@@ -141,12 +145,13 @@
             <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet">
             <mml:attr name="facet" value="LabelAtFacetForPropertyLayoutXml"/>
             <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
             <mml:attr name="precedence" value="LOW"/>
@@ -238,7 +243,7 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ACTION"/>
-            <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
@@ -252,25 +257,21 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads all the .columnOrder.txt files for this object and its collections, as a zip file"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads all the .columnOrder.txt files for this object and its collections, as a zip file"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.NamedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act()]"/>
             <mml:attr name="facet" value="NamedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Download .columnOrder.txt files (ZIP)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -311,8 +312,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -327,7 +329,7 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="File Name"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -398,7 +400,7 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ACTION"/>
-            <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
@@ -412,25 +414,21 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads the Xxx.layout... layout file effective/inferred for this object"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads the Xxx.layout... layout file effective/inferred for this object"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Download Layout"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -471,8 +469,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -487,14 +486,14 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name extension can be omitted."/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="File name extension can be omitted."/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -539,7 +538,7 @@
           <mml:param id="style" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="Style"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -584,7 +583,7 @@
           <mml:param id="format" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="Format"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -662,7 +661,7 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ACTION"/>
-            <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
@@ -676,25 +675,21 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads a representation of the framework's internal metamodel for this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads a representation of the framework's internal metamodel for this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Download Metamodel Xml"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -735,8 +730,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -751,14 +747,14 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
                 <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name extension can be omitted."/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="File name extension can be omitted."/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -829,7 +825,7 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ACTION"/>
-            <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
@@ -843,25 +839,21 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
-            <mml:attr name="originalText" value="Open up a view of the metamodel of this object's domain class"/>
+            <mml:attr name="originalText" value="Opens a meta-model inspection view for this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="translated" value="Open up a view of the metamodel of this object's domain class"/>
+            <mml:attr name="translated" value="Opens a meta-model inspection view for this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Inspect Metamodel"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -873,7 +865,7 @@
             <mml:attr name="value" value="table"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
-            <mml:attr name="classes" value="sitemap"/>
+            <mml:attr name="classes" value="shapes solid"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -902,8 +894,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -943,7 +936,7 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ACTION"/>
-            <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
@@ -957,25 +950,21 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Opens up a view of this object as represented in the (Restful Objects) REST API"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Opens up a view of this object as represented in the (Restful Objects) REST API"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Open Rest Api"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1016,8 +1005,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -1029,6 +1019,381 @@
         </mml:facets>
         <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
         <mml:params/>
+      </mml:act>
+      <mml:act id="patchColumnOrder" mixedIn="true">
+        <mml:facets>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
+            <mml:attr name="eventType" value="org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.ActionDomainEvent"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+            <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+            <mml:attr name="isPostable" value="true"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
+            <mml:attr name="declaringType" value="org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder"/>
+            <mml:attr name="eventType" value="org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.ActionDomainEvent"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
+            <mml:attr name="intent.act" value="EXECUTE"/>
+            <mml:attr name="isPostable" value="true"/>
+            <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.act(org.apache.causeway.applib.Identifier,java.lang.String)"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="returnType" value="java.lang.Object"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
+            <mml:attr name="contributing" value="AS_ACTION"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
+            <mml:attr name="facet" value="ActionPositionFacetForActionLayoutAnnotation"/>
+            <mml:attr name="position" value="PANEL_DROPDOWN"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+            <mml:attr name="deploymentType" value="PRODUCTION"/>
+            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="IDEMPOTENT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+            <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
+            <mml:attr name="originalText" value="Uploads table column order, to be stored in memory for this object type. It overrules the default column order definition lookup. On application restart this information is lost."/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="translated" value="Uploads table column order, to be stored in memory for this object type. It overrules the default column order definition lookup. On application restart this information is lost."/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+            <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+            <mml:attr name="originalText" value="Patch Column Order"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="translated" value="Patch Column Order"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+            <mml:attr name="facet" value="DefaultViewFacetAsConfigured"/>
+            <mml:attr name="precedence" value="LOW"/>
+            <mml:attr name="value" value="table"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+            <mml:attr name="classes" value="file-arrow-up solid"/>
+            <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
+            <mml:attr name="position" value="LEFT"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation">
+            <mml:attr name="facet" value="LayoutGroupFacetFromActionLayoutAnnotation"/>
+            <mml:attr name="groupId" value="metadata"/>
+            <mml:attr name="groupName" value="Metadata"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation">
+            <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="sequence" value="700.2.4"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+            <mml:attr name="bookmarkPolicy" value="NEVER"/>
+            <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
+            <mml:attr name="precedence" value="FALLBACK"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="promptStyle" value="INLINE"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
+            <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+          </mml:facet>
+        </mml:facets>
+        <mml:returnType>java.lang.Object</mml:returnType>
+        <mml:params>
+          <mml:param id="featureId" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
+            <mml:facets>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+                <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
+                <mml:attr name="originalText" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (applies to all STANDALONE Collections of that element-type). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. The Apache Causeway Programming Model also supports {parent-type, element-type} scoped column order definitions, which are not covered by patching yet."/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="translated" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (applies to all STANDALONE Collections of that element-type). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. The Apache Causeway Programming Model also supports {parent-type, element-type} scoped column order definitions, which are not covered by patching yet."/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+                <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
+                <mml:attr name="originalText" value="Feature Id"/>
+                <mml:attr name="precedence" value="LOW"/>
+                <mml:attr name="translated" value="Feature Id"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                <mml:attr name="precedence" value="LOW"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                <mml:attr name="facet" value="MandatoryFacetDefault"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+                <mml:attr name="semantics" value="REQUIRED"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.MaxLengthFacetUnlimited">
+                <mml:attr name="facet" value="MaxLengthFacetUnlimited"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="maxLength" value="2147483647"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.MultiLineFacetNone">
+                <mml:attr name="facet" value="MultiLineFacetNone"/>
+                <mml:attr name="numberOfLines" value="1"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
+                <mml:attr name="choicesType" value="LIST"/>
+                <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
+                <mml:attr name="intent.choicesFeatureId" value="CHOICES_OR_AUTOCOMPLETE"/>
+                <mml:attr name="methods" value="public java.util.List org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.choicesFeatureId()"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">
+                <mml:attr name="facet" value="PrecedingParametersPolicyFacetForParameterAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="RESET"/>
+              </mml:facet>
+            </mml:facets>
+            <mml:type>org.apache.causeway.applib.Identifier</mml:type>
+          </mml:param>
+          <mml:param id="columnListing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
+            <mml:facets>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+                <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
+                <mml:attr name="originalText" value="Automaticly filled in are all currently enabled and available column-ids, one per line. Those available (but not enabled) are commented out. Reorder or remove column-ids as desired."/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="translated" value="Automaticly filled in are all currently enabled and available column-ids, one per line. Those available (but not enabled) are commented out. Reorder or remove column-ids as desired."/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+                <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
+                <mml:attr name="originalText" value="Column Listing"/>
+                <mml:attr name="precedence" value="LOW"/>
+                <mml:attr name="translated" value="Column Listing"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                <mml:attr name="precedence" value="LOW"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                <mml:attr name="facet" value="MandatoryFacetDefault"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+                <mml:attr name="semantics" value="REQUIRED"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.MaxLengthFacetUnlimited">
+                <mml:attr name="facet" value="MaxLengthFacetUnlimited"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="maxLength" value="2147483647"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.MultiLineFacetForParameterLayoutAnnotation">
+                <mml:attr name="facet" value="MultiLineFacetForParameterLayoutAnnotation"/>
+                <mml:attr name="numberOfLines" value="20"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
+                <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
+                <mml:attr name="intent.defaultColumnListing" value="DEFAULTS"/>
+                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.defaultColumnListing(org.apache.causeway.applib.Identifier)"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">
+                <mml:attr name="facet" value="PrecedingParametersPolicyFacetForParameterAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="RESET"/>
+              </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.String</mml:type>
+          </mml:param>
+        </mml:params>
+      </mml:act>
+      <mml:act id="patchLayout" mixedIn="true">
+        <mml:facets>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
+            <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.layout.Object_patchLayout.ActionDomainEvent"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+            <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+            <mml:attr name="isPostable" value="true"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
+            <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.layout.Object_patchLayout"/>
+            <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.layout.Object_patchLayout.ActionDomainEvent"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
+            <mml:attr name="intent.act" value="EXECUTE"/>
+            <mml:attr name="isPostable" value="true"/>
+            <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.layout.Object_patchLayout.act(java.lang.String)"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="returnType" value="java.lang.Object"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
+            <mml:attr name="contributing" value="AS_ACTION"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
+            <mml:attr name="facet" value="ActionPositionFacetForActionLayoutAnnotation"/>
+            <mml:attr name="position" value="PANEL_DROPDOWN"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+            <mml:attr name="deploymentType" value="PRODUCTION"/>
+            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="IDEMPOTENT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_patchLayout#act()]"/>
+            <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
+            <mml:attr name="originalText" value="Uploads layout XML, to be stored in memory for this object type and current layout name. It overrules the default layout resource lookup. On application restart this information is lost."/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="translated" value="Uploads layout XML, to be stored in memory for this object type and current layout name. It overrules the default layout resource lookup. On application restart this information is lost."/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_patchLayout#act()]"/>
+            <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+            <mml:attr name="originalText" value="Patch Layout"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="translated" value="Patch Layout"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+            <mml:attr name="facet" value="DefaultViewFacetAsConfigured"/>
+            <mml:attr name="precedence" value="LOW"/>
+            <mml:attr name="value" value="table"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod">
+            <mml:attr name="facet" value="HideForContextFacetViaMethod"/>
+            <mml:attr name="intent.hideAct" value="CHECK_IF_HIDDEN"/>
+            <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+            <mml:attr name="methods" value="public boolean org.apache.causeway.applib.mixins.layout.Object_patchLayout.hideAct()"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
+            <mml:attr name="classes" value="file-arrow-up solid"/>
+            <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
+            <mml:attr name="position" value="LEFT"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation">
+            <mml:attr name="facet" value="LayoutGroupFacetFromActionLayoutAnnotation"/>
+            <mml:attr name="groupId" value="metadata"/>
+            <mml:attr name="groupName" value="Metadata"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation">
+            <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="sequence" value="700.1.1"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="CommandPublishingFacetForActionAnnotation.Disabled"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation.Disabled">
+            <mml:attr name="facet" value="ExecutionPublishingFacetForActionAnnotation.Disabled"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+            <mml:attr name="bookmarkPolicy" value="NEVER"/>
+            <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
+            <mml:attr name="precedence" value="FALLBACK"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="promptStyle" value="INLINE"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
+            <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+          </mml:facet>
+        </mml:facets>
+        <mml:returnType>java.lang.Object</mml:returnType>
+        <mml:params>
+          <mml:param id="layoutXml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
+            <mml:facets>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_patchLayout#act()]"/>
+                <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
+                <mml:attr name="originalText" value="Layout Xml"/>
+                <mml:attr name="precedence" value="LOW"/>
+                <mml:attr name="translated" value="Layout Xml"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                <mml:attr name="precedence" value="LOW"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                <mml:attr name="facet" value="MandatoryFacetDefault"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+                <mml:attr name="semantics" value="REQUIRED"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.MaxLengthFacetUnlimited">
+                <mml:attr name="facet" value="MaxLengthFacetUnlimited"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="maxLength" value="2147483647"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.MultiLineFacetForParameterLayoutAnnotation">
+                <mml:attr name="facet" value="MultiLineFacetForParameterLayoutAnnotation"/>
+                <mml:attr name="numberOfLines" value="20"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+              </mml:facet>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
+                <mml:attr name="facet" value="PrecedingParametersPolicyFacetFromConfiguration"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="RESET"/>
+              </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.String</mml:type>
+          </mml:param>
+        </mml:params>
       </mml:act>
       <mml:act id="rebuildMetamodel" mixedIn="true">
         <mml:facets>
@@ -1057,7 +1422,7 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ACTION"/>
-            <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+            <mml:attr name="facet" value="ContributingFacetAbstract"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
@@ -1071,25 +1436,21 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Rebuilds the framework's internal metamodel of this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Rebuilds the framework's internal metamodel of this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Rebuild Metamodel"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1130,8 +1491,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>

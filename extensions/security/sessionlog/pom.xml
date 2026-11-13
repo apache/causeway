@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -43,34 +43,20 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sessionlog-applib</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sessionlog-applib</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing-integtestsupport</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -85,7 +71,6 @@
 
     <modules>
     	<module>applib</module>
-    	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>
     </modules>
 </project>

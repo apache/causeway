@@ -20,16 +20,11 @@
 
 package org.apache.causeway.applib.services.bookmark;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
- * to convert back again into the key object used to actually look up the target entity instance;
- * supported by both JDO and JPA persistence mechanisms.
+ * to convert back again into the key object used to actually look up the target entity instance.
  *
  * <p>
  *     This is ultimately used by {@link BookmarkService} where we hold a persistent reference to an entity.  The
@@ -38,14 +33,13 @@ import lombok.val;
  * </p>
  *
  * <p>
- *     The framework provides default implementations of this SPI for JDO (data store and application identity) and
- *     for JPA. Because this is a SPI, other modules or application code can provide their own implementations.
- *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
+ *     The framework provides default implementations of this SPI for the supported value types.  Modules that define
+ *     application-defined primary keys can provide their own implementations of this SPI, for examples see the
+ *     JPA entities defined in the commandlog-jpa module.
  * </p>
  *
  * @since 2.0 {@index}
  */
-@SuppressWarnings("javadoc")
 public interface IdStringifier<T> {
 
     public final static char SEPARATOR = '_';
@@ -64,9 +58,7 @@ public interface IdStringifier<T> {
      * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
      * that can be used to retrieve.
      *
-     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
-     *          we always have this information available, and is needed (at least) by the JDO
-     *          implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.
      * @param stringified - as returned by {@link #enstring(Object)}
      */
     T destring(@NonNull Class<?> targetEntityClass, @NonNull String stringified);
@@ -99,84 +91,8 @@ public interface IdStringifier<T> {
         T destring(@NonNull String stringified);
 
         @Override
-        default T destring(@NonNull final Class<?> targetEntityClass, @NonNull final String stringified) {
+        default T destring(final @NonNull Class<?> targetEntityClass, final @NonNull String stringified) {
             return destring(stringified);
-        }
-
-    }
-
-    /**
-     * Provided for backward compatibility with some v1 Ids that used a prefix to determine their actual type.
-     * <p>
-     * (In v2 we provide this so in the constructor, so there's no need to encode the type in the stringified form
-     * of the value).
-     *
-     * @param <T>
-     *
-     * @deprecated not used within the framework; eventually remove
-     */
-    @Deprecated
-    abstract class AbstractWithPrefix<T> implements IdStringifier<T> {
-
-        /**
-         * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,
-         * or a custom class for application-defined PKs.
-         */
-        @Getter private final Class<T> correspondingClass;
-
-        private final String prefix;
-
-        public AbstractWithPrefix(
-                @NonNull final Class<T> correspondingClass,
-                @NonNull final String typeCode) {
-            _Assert.assertFalse(correspondingClass.isPrimitive(),
-                    ()->String.format("not allowed to be initialzed with a primitive class (%s), "
-                            + "use the boxed variant instead",
-                            correspondingClass));
-            this.correspondingClass = correspondingClass;
-            this.prefix = typeCode + SEPARATOR;
-        }
-
-        @Override
-        public final String enstring(final @NonNull T value) {
-            return prefix + doEnstring(value);
-        }
-
-        /**
-         * Overridable hook
-         */
-        protected String doEnstring(final T value) {
-            return value.toString();
-        }
-
-        @Override
-        public final T destring(
-                final @NonNull Class<?> targetEntityClass,
-                final @NonNull String stringified) {
-            val suffix = removePrefix(stringified);
-            return doDestring(suffix, targetEntityClass);
-        }
-
-        /**
-         * Mandatory hook
-         */
-        protected abstract T doDestring(
-                final @NonNull String idStr,
-                final @NonNull Class<?> targetEntityClass);
-
-        private String removePrefix(final String str) {
-            if (str.startsWith(prefix)) {
-                return str.substring(prefix.length());
-            }
-            throw new IllegalArgumentException(
-                    String.format("expected id to start with '%s', but got '%s'", prefix, str));
-        }
-
-        /**
-         * Not API
-         */
-        public boolean recognizes(final String stringified) {
-            return stringified.startsWith(prefix);
         }
 
     }

@@ -46,10 +46,9 @@ public class AuthorizationHeaderFactoryBasic implements AuthorizationHeaderFacto
                 .build();
     }
 
-
     @Override
     public String create() {
-        return "Basic " + encode(creds.getUsername(), creds.getPassword());
+        return "Basic " + encode(creds.username(), creds.password());
     }
 
     static String encode(final String username, final String password) {
@@ -59,6 +58,5 @@ public class AuthorizationHeaderFactoryBasic implements AuthorizationHeaderFacto
     static byte[] asBytes(final String username, final String password) {
         return String.format("%s:%s", username, password).getBytes();
     }
-
 
 }

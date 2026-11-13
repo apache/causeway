@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.collections.javautilcollection
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.causeway.commons.internal.collections._Arrays.toArray;
-
-import lombok.val;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
@@ -62,7 +60,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
             return Stream.of();
         }
 
-        val objectManager = super.getObjectManager();
+        var objectManager = super.getObjectManager();
 
         return Stream.of(array)
                 .map(objectManager::adapt);
@@ -84,6 +82,5 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
                 ? (Object[]) null
                 : (Object[]) arrayAdapter.getPojo();
     }
-
 
 }

@@ -18,21 +18,36 @@
  */
 package org.apache.causeway.commons.collections;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.util.StringUtils;
 
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
 class CanTest {
 
@@ -136,9 +151,9 @@ class CanTest {
 
         final Can<String> all = Can.<String>of("a", "b", "c");
 
-        val iterator = all.reverseIterator();
+        var iterator = all.reverseIterator();
 
-        val partialSums = Stream.iterate(
+        var partialSums = Stream.iterate(
                 Can.<String>empty(),
                 parts->parts.add(0, iterator.next()))
         .limit(4)
@@ -158,8 +173,8 @@ class CanTest {
 
     @Test
     void multiCan_toSet_should_find_duplicates() {
-        val expectedSet = _Sets.of("a", "b", "c");
-        val duplicates = _Sets.<String>newHashSet();
+        var expectedSet = _Sets.of("a", "b", "c");
+        var duplicates = new HashSet<String>();
 
         assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet());
         assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet(duplicates::add));
@@ -388,6 +403,165 @@ class CanTest {
         assertEquals(Can.empty(), origin.subCan(4, 4));
     }
 
+    // -- TO MAP
+
+    static record Customer(String name) {
+    }
+
+    @RequiredArgsConstructor
+    enum CustomerScenario {
+        EMPTY(Can.empty()),
+        ONE(Can.of(new Customer("Jeff"))),
+        MANY( Can.of(new Customer("Jeff"), new Customer("Jane"))),
+        ONE_UNNAMED(Can.of(new Customer(null))),
+        MANY_WITH_UNNAMED( Can.of(new Customer(null), new Customer("Jeff"), new Customer("Jane"), new Customer(null)));
+        ;
+        final Can<Customer> customers;
+        int cardinality() {
+            return customers.size();
+        }
+        // simulates a zip-function with nullable result
+        @Nullable static String format(final Customer customer, final int ordinal) {
+            return StringUtils.hasLength(customer.name)
+                    ? String.format(Locale.US, "%d->%s", ordinal, customer.name)
+                    : null;
+        }
+    }
+
+    @RequiredArgsConstructor
+    enum MapScenario {
+        HASH_MAP(customers->customers.toMap(Customer::name)),
+        TREE_MAP(customers->customers.toMap(Customer::name, (a, b)->a, TreeMap::new));
+        final Function<Can<Customer>, Map<String, Customer>> toMapConverterUnderTest;
+        void assertUnmodifiable(final Map<String, Customer> map) {
+            assertThrows(Exception.class, ()->{
+                map.put("John", new Customer("John"));
+            });
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(MapScenario.class)
+    void toMap_emptyCan(final MapScenario scenario) {
+        final Can<Customer> origin = Can.empty();
+        var map = scenario.toMapConverterUnderTest.apply(origin);
+        assertNotNull(map);
+        assertEquals(0, map.size());
+        scenario.assertUnmodifiable(map);
+    }
+    @ParameterizedTest
+    @EnumSource(MapScenario.class)
+    void toMap_singleCan(final MapScenario scenario) {
+        final Can<Customer> origin = Can.of(new Customer("Jeff"));
+        var map = scenario.toMapConverterUnderTest.apply(origin);
+        assertNotNull(map);
+        assertEquals(1, map.size());
+        assertEquals(new Customer("Jeff"), map.get("Jeff"));
+        scenario.assertUnmodifiable(map);
+    }
+    @ParameterizedTest
+    @EnumSource(MapScenario.class)
+    void toMap_multiCan(final MapScenario scenario) {
+        final Can<Customer> origin = Can.of(new Customer("Jeff"), new Customer("Jane"));
+        var map = scenario.toMapConverterUnderTest.apply(origin);
+        assertNotNull(map);
+        assertEquals(2, map.size());
+        assertEquals(new Customer("Jeff"), map.get("Jeff"));
+        assertEquals(new Customer("Jane"), map.get("Jane"));
+        scenario.assertUnmodifiable(map);
+    }
+
+    // -- ZIP
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#zip(Iterable, java.util.function.BiConsumer) zip},
+     *  {@link Can#zipMap(Iterable, java.util.function.BiFunction) zipMap} and
+     *  {@link Can#zipStream(Iterable, java.util.function.BiFunction) zipStream}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void zip(final CustomerScenario scenario) {
+        var ordinals = IntStream.range(0, scenario.cardinality())
+            .mapToObj(Integer::valueOf)
+            .collect(Collectors.toList());
+        var expectedZipped = new ArrayList<String>();
+        for (int i = 0; i < scenario.cardinality(); i++) {
+            var next = CustomerScenario.format(scenario.customers.getElseFail(i), i);
+            if(next!=null) {
+				expectedZipped.add(next); // exclude nulls
+			}
+        }
+        { // zip
+            var list = new ArrayList<String>();
+            scenario.customers
+                .zip(
+                        ordinals,
+                        (customer, ordinal)->list.add(CustomerScenario.format(customer, ordinal)));
+            assertIterableEquals(
+                    expectedZipped,
+                    //remove nulls
+                    list.stream().filter(Objects::nonNull).collect(Collectors.toList()));
+        }
+        { // zipMap
+            var actualZipped = scenario.customers
+                .zipMap(ordinals, CustomerScenario::format);
+            assertIterableEquals(expectedZipped, actualZipped);
+        }
+        { // zipStream
+            var actualZipped = scenario.customers
+                .zipStream(ordinals, CustomerScenario::format)
+                .collect(Collectors.toList());
+            assertIterableEquals(expectedZipped, actualZipped);
+        }
+
+    }
+
+    // -- COLLECT
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#collect(java.util.stream.Collector) collect}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void collect(final CustomerScenario scenario) {
+        assertIterableEquals(
+                scenario.customers.toList(),
+                scenario.customers.collect(Collectors.toList()));
+    }
+
+    // -- JOIN
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#join(String) join w/ implicit toString}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void join_withImplicit_toString(final CustomerScenario scenario) {
+        assertEquals(
+                scenario.customers.map(Object::toString)
+                    .stream()
+                    .collect(Collectors.joining(", ")),
+                scenario.customers
+                    .join(", "));
+    }
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#join(Function, String) join w/ explicit toString}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void join_withExplicit_toString(final CustomerScenario scenario) {
+        assertEquals(
+                scenario.customers.map(Customer::name)
+                    .stream()
+                    .collect(Collectors.joining(", ")),
+                scenario.customers
+                    .join(Customer::name, ", "));
+    }
 
     // -- HEPER
 
@@ -395,7 +569,5 @@ class CanTest {
         assertTrue(_Sets.minus(a, b).isEmpty());
         assertTrue(_Sets.minus(b, a).isEmpty());
     }
-
-
 
 }

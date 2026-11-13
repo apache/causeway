@@ -23,12 +23,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -36,18 +32,20 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.util.hmac.Memento;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.jspecify.annotations.NonNull;
 
-import lombok.NonNull;
-import lombok.val;
-
-public class ViewModelFacetForDomainObjectAnnotation
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForDomainObjectAnnotation
+extends SecureViewModelFacet {
 
     public static Optional<ViewModelFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
+            final MementoHmacContext mementoContext,
             final FacetHolder holder) {
 
-        return domainObjectIfAny
+        return mementoContext!=null
+            ? domainObjectIfAny
                 .map(DomainObject::nature)
                 .map(nature -> {
                     switch (nature) {
@@ -61,58 +59,62 @@ extends ViewModelFacetAbstract {
                         //[CAUSEWAY-3068] consider what the BeanTypeClassifier has come up with
                         final boolean isClassifiedAsViewModel =
                             _Casts.castTo(ObjectSpecification.class, holder)
-                            .map(ObjectSpecification::getBeanSort)
+                            .map(ObjectSpecification::beanSort)
                             .map(BeanSort::isViewModel)
                             .orElse(false);
 
-                        if(!isClassifiedAsViewModel) {
-                            // not a ViewModel, so no ViewModelFacet
+                        if(!isClassifiedAsViewModel)
+							// not a ViewModel, so no ViewModelFacet
                             return null;
-                        }
                         // else fall through
                     case VIEW_MODEL:
-                        return new ViewModelFacetForDomainObjectAnnotation(holder);
+                        return new ViewModelFacetForDomainObjectAnnotation(mementoContext, holder);
                     }
                     // shouldn't happen, the above switch should match all cases
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
                 })
-                .filter(Objects::nonNull);
+                .filter(Objects::nonNull)
+            : Optional.empty();
     }
 
-    private UrlEncodingService codec;
-    private SerializingAdapter serializer;
+    private final MementoHmacContext mementoContext;
 
     protected ViewModelFacetForDomainObjectAnnotation(
-            final FacetHolder holder) {
-        // is overruled by any other ViewModelFacet type
-        super(holder, Precedence.LOW);
+            final MementoHmacContext mementoContext, final FacetHolder holder) {
+        super(mementoContext.hmacUrlCodec(), holder);
+        this.mementoContext = mementoContext;
     }
 
     @Override
-    protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final Bookmark bookmark) {
+    public Precedence precedence() {
+    	// is overruled by any other ViewModelFacet type
+    	return Precedence.LOW;
+    }
 
-        val viewmodel = viewmodelSpec.createObject();
+    @Override
+    protected Object createViewmodelPojo(
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
 
-        val memento = parseMemento(bookmark);
-        val mementoKeys = memento.keySet();
+        // throws on de-marshalling failure
+        var memento = mementoContext.parseTrustedMemento(trustedBookmarkIdAsBytes);
 
-        if(mementoKeys.isEmpty()) {
-            return viewmodel;
-        }
+        var viewmodel = viewmodelSpec.createObject();
+        var mementoKeys = memento.keySet();
 
-        val objectManager = super.getObjectManager();
+        if(mementoKeys.isEmpty()) return viewmodel.getPojo();
+
+        var objectManager = super.getObjectManager();
 
         streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
 
             // we also explicitly set 'nulled' properties
 
-            val propertyId = property.getId();
-            val propertySpec = property.getElementType();
-            val propertyType = propertySpec.getCorrespondingClass();
-            val propertyPojo = memento.get(propertyId, propertyType);
+            var propertyId = property.getId();
+            var propertySpec = property.getElementType();
+            var propertyType = propertySpec.correspondingClass();
+            var propertyPojo = memento.get(propertyId, propertyType);
             final ManagedObject propertyValue = propertyPojo!=null
                     ? objectManager.adapt(propertyPojo)
                     : ManagedObject.empty(propertySpec);
@@ -120,15 +122,15 @@ extends ViewModelFacetAbstract {
             property.set(viewmodel, propertyValue, InteractionInitiatedBy.PASS_THROUGH);
         });
 
-        return viewmodel;
+        return viewmodel.getPojo();
     }
 
     @Override
-    public String serialize(final ManagedObject viewModel) {
+    public byte[] encodeState(final ManagedObject viewModel) {
 
-        final _Mementos.Memento memento = newMemento();
+        final Memento memento = mementoContext.newMemento();
 
-        val viewmodelSpec = viewModel.getSpecification();
+        var viewmodelSpec = viewModel.objSpec();
 
         streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
@@ -142,7 +144,7 @@ extends ViewModelFacetAbstract {
             }
         });
 
-        return memento.asString();
+        return memento.stateAsBytes();
     }
 
     // -- HELPER
@@ -153,29 +155,7 @@ extends ViewModelFacetAbstract {
                 // ignore read-only
                 .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
                 // ignore those explicitly annotated as @Property(snapshot = Snapshot.EXCLUDED)
-                .filter(property->property.isIncludedWithSnapshots());
-    }
-
-    private void initDependencies() {
-        val serviceRegistry = getServiceRegistry();
-        this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
-        this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
-    }
-
-    private void ensureDependenciesInited() {
-        if(codec==null) {
-            initDependencies();
-        }
-    }
-
-    private _Mementos.Memento newMemento() {
-        ensureDependenciesInited();
-        return _Mementos.create(codec, serializer);
-    }
-
-    private _Mementos.Memento parseMemento(final Bookmark bookmark) {
-        ensureDependenciesInited();
-        return _Mementos.parse(codec, serializer, bookmark.getIdentifier());
+                .filter(OneToOneAssociation::isIncludedWithSnapshots);
     }
 
 }

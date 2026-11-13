@@ -34,5 +34,4 @@ implements ValueSemanticsSelectingFacet {
         super(type(), holder, value);
     }
 
-
 }

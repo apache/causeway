@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import org.springframework.core.annotation.MergedAnnotation;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
@@ -34,12 +34,10 @@ import org.springframework.util.ConcurrentReferenceHashMap;
  * with consistent ordering as well as a few useful utility methods.
  * <p>
  * Copy and pasted from (all credits to) Spring!
- *
  */
 final class _Annotations_AttributeMethods {
 
     static final _Annotations_AttributeMethods NONE = new _Annotations_AttributeMethods(null, new Method[0]);
-
 
     private static final Map<Class<? extends Annotation>, _Annotations_AttributeMethods> cache =
             new ConcurrentReferenceHashMap<>();
@@ -51,7 +49,6 @@ final class _Annotations_AttributeMethods {
         return m1 != null ? -1 : 1;
     };
 
-
     @Nullable
     private final Class<? extends Annotation> annotationType;
 
@@ -62,7 +59,6 @@ final class _Annotations_AttributeMethods {
     private final boolean hasDefaultValueMethod;
 
     private final boolean hasNestedAnnotation;
-
 
     private _Annotations_AttributeMethods(
             final @Nullable Class<? extends Annotation> annotationType,
@@ -93,7 +89,6 @@ final class _Annotations_AttributeMethods {
         this.hasNestedAnnotation = foundNestedAnnotation;
     }
 
-
     /**
      * Determine if this instance only contains a single attribute named
      * {@code value}.
@@ -104,7 +99,6 @@ final class _Annotations_AttributeMethods {
                 MergedAnnotation.VALUE.equals(this.attributeMethods[0].getName()));
     }
 
-
     /**
      * Determine if values from the given annotation can be safely accessed without
      * causing any {@link TypeNotPresentException TypeNotPresentExceptions}.
@@ -112,7 +106,7 @@ final class _Annotations_AttributeMethods {
      * @return {@code true} if all values are present
      * @see #validate(Annotation)
      */
-    boolean isValid(Annotation annotation) {
+    boolean isValid(final Annotation annotation) {
         assertAnnotation(annotation);
         for (int i = 0; i < size(); i++) {
             if (canThrowTypeNotPresentException(i)) {
@@ -130,14 +124,14 @@ final class _Annotations_AttributeMethods {
     /**
      * Check if values from the given annotation can be safely accessed without causing
      * any {@link TypeNotPresentException TypeNotPresentExceptions}. In particular,
-     * this method is designed to cover Google App Engine's late arrival of such
+     * this method is designed to cover Google App Engine's late arrivar of such
      * exceptions for {@code Class} values (instead of the more typical early
      * {@code Class.getAnnotations() failure}.
      * @param annotation the annotation to validate
      * @throws IllegalStateException if a declared {@code Class} attribute could not be read
      * @see #isValid(Annotation)
      */
-    void validate(Annotation annotation) {
+    void validate(final Annotation annotation) {
         assertAnnotation(annotation);
         for (int i = 0; i < size(); i++) {
             if (canThrowTypeNotPresentException(i)) {
@@ -152,7 +146,7 @@ final class _Annotations_AttributeMethods {
         }
     }
 
-    private void assertAnnotation(Annotation annotation) {
+    private void assertAnnotation(final Annotation annotation) {
         Assert.notNull(annotation, "Annotation must not be null");
         if (this.annotationType != null) {
             Assert.isInstanceOf(this.annotationType, annotation);
@@ -166,7 +160,7 @@ final class _Annotations_AttributeMethods {
      * @return the attribute method or {@code null}
      */
     @Nullable
-    Method get(String name) {
+    Method get(final String name) {
         int index = indexOf(name);
         return index != -1 ? this.attributeMethods[index] : null;
     }
@@ -178,7 +172,7 @@ final class _Annotations_AttributeMethods {
      * @throws IndexOutOfBoundsException if the index is out of range
      * (<tt>index &lt; 0 || index &gt;= size()</tt>)
      */
-    Method get(int index) {
+    Method get(final int index) {
         return this.attributeMethods[index];
     }
 
@@ -189,7 +183,7 @@ final class _Annotations_AttributeMethods {
      * @return {@code true} if the attribute can throw a
      * {@link TypeNotPresentException}
      */
-    boolean canThrowTypeNotPresentException(int index) {
+    boolean canThrowTypeNotPresentException(final int index) {
         return this.canThrowTypeNotPresentException[index];
     }
 
@@ -199,7 +193,7 @@ final class _Annotations_AttributeMethods {
      * @param name the name to find
      * @return the index of the attribute, or {@code -1}
      */
-    int indexOf(String name) {
+    int indexOf(final String name) {
         for (int i = 0; i < this.attributeMethods.length; i++) {
             if (this.attributeMethods[i].getName().equals(name)) {
                 return i;
@@ -214,7 +208,7 @@ final class _Annotations_AttributeMethods {
      * @param attribute the attribute to find
      * @return the index of the attribute, or {@code -1}
      */
-    int indexOf(Method attribute) {
+    int indexOf(final Method attribute) {
         for (int i = 0; i < this.attributeMethods.length; i++) {
             if (this.attributeMethods[i].equals(attribute)) {
                 return i;
@@ -248,20 +242,19 @@ final class _Annotations_AttributeMethods {
         return this.hasNestedAnnotation;
     }
 
-
     /**
      * Get the attribute methods for the given annotation type.
      * @param annotationType the annotation type
      * @return the attribute methods for the annotation type
      */
-    static _Annotations_AttributeMethods forAnnotationType(@Nullable Class<? extends Annotation> annotationType) {
+    static _Annotations_AttributeMethods forAnnotationType(@Nullable final Class<? extends Annotation> annotationType) {
         if (annotationType == null) {
             return NONE;
         }
         return cache.computeIfAbsent(annotationType, _Annotations_AttributeMethods::compute);
     }
 
-    private static _Annotations_AttributeMethods compute(Class<? extends Annotation> annotationType) {
+    private static _Annotations_AttributeMethods compute(final Class<? extends Annotation> annotationType) {
         Method[] methods = annotationType.getDeclaredMethods();
         int size = methods.length;
         for (int i = 0; i < methods.length; i++) {
@@ -278,7 +271,7 @@ final class _Annotations_AttributeMethods {
         return new _Annotations_AttributeMethods(annotationType, attributeMethods);
     }
 
-    private static boolean isAttributeMethod(Method method) {
+    private static boolean isAttributeMethod(final Method method) {
         return (method.getParameterCount() == 0 && method.getReturnType() != void.class);
     }
 
@@ -288,7 +281,7 @@ final class _Annotations_AttributeMethods {
      * @param attribute the attribute to describe
      * @return a description of the attribute
      */
-    static String describe(@Nullable Method attribute) {
+    static String describe(@Nullable final Method attribute) {
         if (attribute == null) {
             return "(none)";
         }
@@ -302,7 +295,7 @@ final class _Annotations_AttributeMethods {
      * @param attributeName the attribute name
      * @return a description of the attribute
      */
-    static String describe(@Nullable Class<?> annotationType, @Nullable String attributeName) {
+    static String describe(@Nullable final Class<?> annotationType, @Nullable final String attributeName) {
         if (attributeName == null) {
             return "(none)";
         }
@@ -311,4 +304,3 @@ final class _Annotations_AttributeMethods {
     }
 
 }
-

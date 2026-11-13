@@ -18,17 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
-import jakarta.inject.Inject;
+import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromPropertyLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeSequenceFacet;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+import org.springframework.util.StringUtils;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class PropertyLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -41,55 +48,85 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val propertyLayoutIfAny = processMethodContext
+        var facetHolder = processMethodContext.facetHolder();
+        var propertyLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         PropertyLayout.class,
                         () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), PropertyLayout.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), PropertyLayout.class));
 
-        addFacetIfPresent(
-                CssClassFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        CssClassFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                MemberDescribedFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        MemberDescribedFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                HiddenFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        HiddenFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                LabelAtFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        LabelAtFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                LayoutGroupFacetFromPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        LayoutGroupFacetFromPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                LayoutOrderFacetFromPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        LayoutOrderFacetFromPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                MultiLineFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        MultiLineFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                NamedFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        NamedFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                PromptStyleFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, getConfiguration(), facetHolder));
+        createPromptStyleFacetForPropertyLayoutAnnotation(propertyLayoutIfAny, getConfiguration(), facetHolder);
 
-        addFacetIfPresent(TypicalLengthFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        TypicalLengthFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(UnchangingFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
+        UnchangingFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
+        propertyLayoutIfAny
+            .map(PropertyLayout::navigableSubtree)
+            .filter(StringUtils::hasLength)
+            .flatMap(sequence->NavigableSubtreeSequenceFacet.create("PropertyLayout annotation",
+                processMethodContext.cls(), processMethodContext.methodFacade().asMethod(), sequence, facetHolder));
+    }
+
+    // -- HELPER
+
+    static Optional<PromptStyleFacet> createPromptStyleFacetForPropertyLayoutAnnotation(
+        final Optional<PropertyLayout> propertyLayoutIfAny,
+        final CausewayConfiguration configuration,
+        final FacetHolder holder) {
+
+        // guard against member not being a property
+        if(holder instanceof FacetedMethod facetedMethod
+                && facetedMethod.featureType() != FeatureType.PROPERTY)
+			return Optional.empty();
+
+        return Optional.ofNullable(
+
+            propertyLayoutIfAny
+                .map(PropertyLayout::promptStyle)
+                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+                .map(promptStyle -> switch (promptStyle) {
+                    case DIALOG, DIALOG_MODAL, DIALOG_SIDEBAR, INLINE->
+                        new PromptStyleFacet("PropertyLayoutAnnotation", promptStyle, holder);
+                    case INLINE_AS_IF_EDIT->
+                        new PromptStyleFacet("PropertyLayoutAnnotation", PromptStyle.INLINE, holder);
+                    case AS_CONFIGURED->
+                        holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                            ? null // do not replace
+                            : PromptStyleFacet.asConfgured(configuration, holder);
+                    case NOT_SPECIFIED -> null; // unexpected code reach
+                })
+                .orElseGet(() ->
+                    holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                        ? null // do not replace
+                        : PromptStyleFacet.asConfgured(configuration, holder))
+        );
     }
 
 }

@@ -27,8 +27,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
@@ -39,9 +40,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
-
-import lombok.NonNull;
-import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -64,34 +62,12 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     transient Can<UserRegistrationService> anyUserRegistrationService;
     transient Can<EmailNotificationService> anyEmailNotificationService;
 
-    private final boolean signUpLink;
-    private final boolean passwordResetLink;
-    private final boolean isClearOriginalDestination;
-
-    /**
-     * Constructor
-     *  @param id
-     *            the component id
-     * @param rememberMe
-     *            True if form should include a remember-me checkbox
-     * @param signUpLink
-     * @param passwordResetLink
-     *            True if form should include the password reset link
-     * @param continueToOriginalDestination
-     */
     public CausewaySignInPanel(
-            final String id,
-            final boolean rememberMe,
-            final boolean signUpLink,
-            final boolean passwordResetLink,
-            final boolean continueToOriginalDestination) {
-        super(id, rememberMe);
-        this.signUpLink = signUpLink;
-        this.passwordResetLink = passwordResetLink;
-        this.isClearOriginalDestination = !continueToOriginalDestination;
+            final String id) {
+        super(id);
     }
 
-    @Override
+	@Override
     protected void onInitialize() {
         super.onInitialize();
 
@@ -110,18 +86,10 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
 
     @Override
     protected void onSignInSucceeded() {
-        if(isClearOriginalDestination) {
+        if(getWicketViewerSettings().clearOriginalDestination()) {
             clearOriginalDestination();
         }
         super.onSignInSucceeded();
-    }
-
-    @Override
-    protected void onSignInRemembered() {
-        if(isClearOriginalDestination) {
-            clearOriginalDestination();
-        }
-        super.onSignInRemembered();
     }
 
     @Override
@@ -133,9 +101,9 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
 
         // amend authentication/context with time-zone,
         // also propagate user's Locale from current InteractionContext to Wicket's session
-        val session = AuthenticatedWebSession.get();
+        var session = AuthenticatedWebSession.get();
         ((HasAmendableInteractionContext)session).amendInteractionContext(interactionContext->{
-            Optional.ofNullable(interactionContext.getUser().getLanguageLocale())
+            Optional.ofNullable(interactionContext.getUser().languageLocale())
                 .ifPresent(session::setLocale);
             return interactionContext.withTimeZone(zoneId);
         });
@@ -149,11 +117,13 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     // -- HELPER
 
     private BookmarkablePageLink<Void> addPasswordResetLink() {
-        return addLink("passwdResetLink", PageType.PASSWORD_RESET, this.passwordResetLink);
+    	var signinConf = getConfiguration().viewer().common().signin();
+        return addLink("passwdResetLink", PageType.PASSWORD_RESET, !signinConf.suppressPasswordReset());
     }
 
     private BookmarkablePageLink<Void> addSignUpLink() {
-        return addLink("signUpLink", PageType.SIGN_UP, this.signUpLink);
+    	var signinConf = getConfiguration().viewer().common().signin();
+    	return addLink("signUpLink", PageType.SIGN_UP, !signinConf.suppressSignUp());
     }
 
     private BookmarkablePageLink<Void> addLink(
@@ -179,15 +149,15 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     }
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
-        val hasUserRegistrationService = anyUserRegistrationService.isNotEmpty();
-        val hasConfiguredEmailNotificationService = anyEmailNotificationService.stream()
+        var hasUserRegistrationService = anyUserRegistrationService.isNotEmpty();
+        var hasConfiguredEmailNotificationService = anyEmailNotificationService.stream()
                 .anyMatch(EmailNotificationService::isConfigured);
 
-        val visibilityAllowed =
+        var visibilityAllowed =
                 hasUserRegistrationService
                 && hasConfiguredEmailNotificationService;
 
-        for (val component: components) {
+        for (var component: components) {
             if(component.isVisibilityAllowed()) {
                 component.setVisibilityAllowed(visibilityAllowed);
             }

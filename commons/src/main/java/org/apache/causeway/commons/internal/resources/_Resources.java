@@ -27,16 +27,16 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -82,7 +82,7 @@ public final class _Resources {
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
-        val absoluteResourceName = resolveName(contextClass, resourceName);
+        var absoluteResourceName = resolveName(contextClass, resourceName);
 
         return Optional
                 .ofNullable(contextClass.getResourceAsStream(absoluteResourceName))
@@ -104,7 +104,7 @@ public final class _Resources {
             final @NonNull String resourceName,
             final @NonNull Charset charset) {
 
-        val inputStream = load(contextClass, resourceName);
+        var inputStream = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(inputStream), charset);
     }
 
@@ -142,7 +142,7 @@ public final class _Resources {
      * @param resourceName
      * @return The resource location as an URL, or null if the resource could not be found.
      */
-    public static @Nullable URL getResourceUrl(
+    public static Optional<URL> lookupResourceUrl(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
@@ -150,8 +150,19 @@ public final class _Resources {
 
         return Optional
                 .ofNullable(contextClass.getResource(absoluteResourceName))
-                .orElseGet(()->_Context.getDefaultClassLoader()
-                        .getResource(absoluteResourceName));
+                .or(()->Optional
+                        .ofNullable(_Context.getDefaultClassLoader()
+                                .getResource(absoluteResourceName)));
+    }
+
+    @SneakyThrows
+    public static Optional<URI> lookupResourceUri(
+            final @NonNull Class<?> contextClass,
+            final @NonNull String resourceName) {
+        return lookupResourceUrl(contextClass, resourceName)
+            .map(url->Try
+                    .call(url::toURI)
+                    .valueAsNonNullElseFail());
     }
 
     // -- LOCAL vs EXTERNAL resource path

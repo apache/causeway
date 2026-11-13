@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-
 /**
  * @since 2.0 {@index}
  */
 public interface HasCssClass {
-    @XmlAttribute(required = false)
+
     String getCssClass();
     void setCssClass(String cssClass);
 }

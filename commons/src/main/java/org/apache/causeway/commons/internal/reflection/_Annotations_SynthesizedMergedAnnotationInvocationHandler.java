@@ -28,21 +28,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+//import org.springframework.core.annotation.SynthesizedAnnotation;
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.annotation.AnnotationConfigurationException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
-//import org.springframework.core.annotation.SynthesizedAnnotation;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
-
-import org.apache.causeway.commons.internal.base._NullSafe;
-
-import lombok.NonNull;
-import lombok.val;
 
 /**
  * {@link InvocationHandler} for an {@link Annotation} that Spring has
@@ -68,7 +64,6 @@ implements InvocationHandler {
     @Nullable
     private volatile Integer hashCode;
 
-
     private _Annotations_SynthesizedMergedAnnotationInvocationHandler(
             final MergedAnnotations mergedAnnotations,
             final MergedAnnotations additionalAnnotations,
@@ -87,24 +82,18 @@ implements InvocationHandler {
 
     }
 
-
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) {
-        if (ReflectionUtils.isEqualsMethod(method)) {
-            return annotationEquals(args[0]);
-        }
-        if (ReflectionUtils.isHashCodeMethod(method)) {
-            return annotationHashCode();
-        }
-        if (ReflectionUtils.isToStringMethod(method)) {
-            return this.mergedAnnotations.toString();
-        }
-        if (isAnnotationTypeMethod(method)) {
-            return this.type;
-        }
-        if (this.attributes.indexOf(method.getName()) != -1) {
-            return getAttributeValue(method);
-        }
+        if (ReflectionUtils.isEqualsMethod(method))
+			return annotationEquals(args[0]);
+        if (ReflectionUtils.isHashCodeMethod(method))
+			return annotationHashCode();
+        if (ReflectionUtils.isToStringMethod(method))
+			return this.mergedAnnotations.toString();
+        if (isAnnotationTypeMethod(method))
+			return this.type;
+        if (this.attributes.indexOf(method.getName()) != -1)
+			return getAttributeValue(method);
         throw new AnnotationConfigurationException(String.format(
                 "Method [%s] is unsupported for synthesized annotation type [%s]", method, this.type));
     }
@@ -118,19 +107,16 @@ implements InvocationHandler {
      * @param other the other object to compare against
      */
     private boolean annotationEquals(final Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!this.type.isInstance(other)) {
-            return false;
-        }
+        if (this == other)
+			return true;
+        if (!this.type.isInstance(other))
+			return false;
         for (int i = 0; i < this.attributes.size(); i++) {
             Method attribute = this.attributes.get(i);
             Object thisValue = getAttributeValue(attribute);
             Object otherValue = ReflectionUtils.invokeMethod(attribute, other);
-            if (!ObjectUtils.nullSafeEquals(thisValue, otherValue)) {
-                return false;
-            }
+            if (!ObjectUtils.nullSafeEquals(thisValue, otherValue))
+				return false;
         }
         return true;
     }
@@ -158,38 +144,28 @@ implements InvocationHandler {
     }
 
     private int getValueHashCode(final @Nullable Object value) {
-        if(value==null) {
-            return 0;
-        }
+        if(value==null)
+			return 0;
         // Use Arrays.hashCode since ObjectUtils doesn't comply to to
         // Annotation#hashCode()
-        if (value instanceof boolean[]) {
-            return Arrays.hashCode((boolean[]) value);
-        }
-        if (value instanceof byte[]) {
-            return Arrays.hashCode((byte[]) value);
-        }
-        if (value instanceof char[]) {
-            return Arrays.hashCode((char[]) value);
-        }
-        if (value instanceof double[]) {
-            return Arrays.hashCode((double[]) value);
-        }
-        if (value instanceof float[]) {
-            return Arrays.hashCode((float[]) value);
-        }
-        if (value instanceof int[]) {
-            return Arrays.hashCode((int[]) value);
-        }
-        if (value instanceof long[]) {
-            return Arrays.hashCode((long[]) value);
-        }
-        if (value instanceof short[]) {
-            return Arrays.hashCode((short[]) value);
-        }
-        if (value instanceof Object[]) {
-            return Arrays.hashCode((Object[]) value);
-        }
+        if (value instanceof boolean[])
+			return Arrays.hashCode((boolean[]) value);
+        if (value instanceof byte[])
+			return Arrays.hashCode((byte[]) value);
+        if (value instanceof char[])
+			return Arrays.hashCode((char[]) value);
+        if (value instanceof double[])
+			return Arrays.hashCode((double[]) value);
+        if (value instanceof float[])
+			return Arrays.hashCode((float[]) value);
+        if (value instanceof int[])
+			return Arrays.hashCode((int[]) value);
+        if (value instanceof long[])
+			return Arrays.hashCode((long[]) value);
+        if (value instanceof short[])
+			return Arrays.hashCode((short[]) value);
+        if (value instanceof Object[])
+			return Arrays.hashCode((Object[]) value);
         return value.hashCode();
     }
 
@@ -198,12 +174,12 @@ implements InvocationHandler {
         String name = method.getName();
         Class<?> type = ClassUtils.resolvePrimitiveIfNecessary(method.getReturnType());
 
-        val defaultValue = method.getDefaultValue();
+        var defaultValue = method.getDefaultValue();
 
         // for all discovered annotations of this.type determine the effective (attribute) value
-        val attributeValue = streamAnnotations()
+        var attributeValue = streamAnnotations()
         .map(mergedAnnotation->(Object)mergedAnnotation.getValue(name, type).orElse(null))
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .filter(value->!value.equals(defaultValue))
         .findFirst()
         .orElse(defaultValue);
@@ -217,32 +193,31 @@ implements InvocationHandler {
             final @NonNull Optional<MergedAnnotations> additional,
             final @NonNull Class<A> annotationType) {
 
-        val hasCollected = collected
+        var hasCollected = collected
                 .isPresent(annotationType);
-        val hasAdditional = additional
+        var hasAdditional = additional
                 .map(mergedAnnotations->mergedAnnotations.isPresent(annotationType))
                 .orElse(false);
 
         if(!hasCollected
-                && !hasAdditional) {
-            // annotation is neither present on getter nor field
+                && !hasAdditional)
+			// annotation is neither present on getter nor field
             return Optional.empty();
-        }
 
-        val invocationHandler = hasCollected
+        var invocationHandler = hasCollected
                 ? new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(
                         collected, additional.orElse(null), annotationType)
                 : new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(
                         additional.get(), null, annotationType);
 
-        val classLoader = annotationType.getClassLoader();
+        var classLoader = annotationType.getClassLoader();
         /* removal of SynthesizedAnnotation in Spring 6
          * https://github.com/spring-projects/spring-framework/commit/69f23095b810615862336d35d878dda63f7b4fca */
-        val interfaces = //isVisible(classLoader, SynthesizedAnnotation.class)
+        var interfaces = //isVisible(classLoader, SynthesizedAnnotation.class)
                 //? new Class<?>[] {annotationType, SynthesizedAnnotation.class}
                 //:
                     new Class<?>[] {annotationType};
-        val proxy = (A) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+        var proxy = (A) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
         return Optional.of(proxy);
     }
 
@@ -267,4 +242,3 @@ implements InvocationHandler {
     }
 
 }
-

@@ -20,12 +20,13 @@ package org.apache.causeway.applib.services.factory;
 
 import java.util.NoSuchElementException;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Collects together methods for instantiating domain objects, also injecting
@@ -89,7 +90,8 @@ public interface FactoryService {
     /**
      * Creates a new detached entity instance, with injection points resolved.
      * <p>
-     * The entity will not yet be persisted, in other words: its not yet known to the persistence layer.
+     * The entity will not yet be persisted, in other words: it is not yet known to the persistence layer.
+     * </p>
      *
      * @param <T>
      * @param entity - most likely just new-ed up, without injection points resolved
@@ -106,7 +108,8 @@ public interface FactoryService {
      * @param mixinClass
      * @param mixedIn
      * @throws IllegalArgumentException if mixinClass is not a mixin type
-     * @apiNote forces the mixinClass to be added to the meta-model if not already
+     * @apiNote does not add the mixinClass to the meta-model's set of mixins
+     * 		that are mixed in to types.
      */
     <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn);
 
@@ -134,7 +137,7 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    default <T> T viewModel(@NonNull final Class<T> viewModelClass) {
+    default <T> T viewModel(final @NonNull Class<T> viewModelClass) {
         return viewModel(viewModelClass, (Bookmark)null);
     }
 
@@ -161,5 +164,13 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T create(@NonNull Class<T> domainClass);
+
+    /**
+     * In support of built-in tree semantics, as inferred from
+     * {@link PropertyLayout#navigableSubtree()} or
+     * {@link CollectionLayout#navigableSubtree()} annotations.
+     * @since 3.2
+     */
+    <T> TreeNode<T> treeNode(T root);
 
 }

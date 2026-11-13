@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.applib.util;
 
-
 interface Numbered {
     String getNumber();
 }

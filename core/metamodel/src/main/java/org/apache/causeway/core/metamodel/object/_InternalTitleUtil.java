@@ -24,9 +24,8 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -34,15 +33,13 @@ final class _InternalTitleUtil {
 
     // -- TITLE SUPPORT
 
-    String titleString(@NonNull final TitleRenderRequest titleRenderRequest) {
+    String titleString(final @NonNull TitleRenderRequest titleRenderRequest) {
 
-        val managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.object();
 
-        if(managedObject.getSpecialization().isUnspecified()) {
-            return managedObject.getTitle();
-        }
+        if(managedObject.specialization().isUnspecified()) return managedObject.getTitle();
 
-        val objSpec = managedObject.getSpecification();
+        var objSpec = managedObject.objSpec();
 
         return objSpec.isSingular()
             ? objectTitleString(titleRenderRequest)
@@ -58,29 +55,28 @@ final class _InternalTitleUtil {
                 : str.substring(0, maxLength - 3) + suffix;
     }
 
-    private String objectTitleString(@NonNull final TitleRenderRequest titleRenderRequest) {
-        val managedObject = titleRenderRequest.getObject();
+    private String objectTitleString(final @NonNull TitleRenderRequest titleRenderRequest) {
+        var managedObject = titleRenderRequest.object();
 
         //TODO we have value-semantics now, don't skip it for strings
-        if (managedObject.getPojo() instanceof String) {
-            return (String) managedObject.getPojo();
-        }
-        val spec = managedObject.getSpecification();
+        if (managedObject.getPojo() instanceof String) return (String) managedObject.getPojo();
+
+        var spec = managedObject.objSpec();
         return Optional.ofNullable(spec.getTitle(titleRenderRequest))
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
     private String getDefaultTitle(final ManagedObject managedObject) {
-        return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
+        return "A" + (" " + managedObject.objSpec().getSingularName()).toLowerCase();
     }
 
-    private String formatAnyCardinalityAsTitle(@NonNull final ObjectSpecification objSpec, @NonNull final ManagedObject managedObject) {
-        final int size = objSpec.getFacet(CollectionFacet.class).size(managedObject);
-        val elementSpec = objSpec.getElementSpecification().orElse(null);
-        objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.getCorrespondingClass()), null);
+    private String formatAnyCardinalityAsTitle(final @NonNull ObjectSpecification objSpec, final @NonNull ManagedObject managedObject) {
+        final int size = objSpec.lookupFacet(CollectionFacet.class).orElse(null).size(managedObject);
+        var elementSpec = objSpec.explicitElementSpec().orElse(null);
+        objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.correspondingClass()), null);
 
         final String noun = (elementSpec == null
-                || elementSpec.getFullIdentifier().equals(Object.class.getName()))
+                || elementSpec.fullIdentifier().equals(Object.class.getName()))
                     ? "object"
                     : elementSpec.getSingularName();
         return MmTitleUtils.formatAnyCardinalityAsTitle(size, noun, objSpec.getTranslationService());

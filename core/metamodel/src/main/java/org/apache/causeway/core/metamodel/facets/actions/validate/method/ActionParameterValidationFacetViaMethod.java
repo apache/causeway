@@ -33,8 +33,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterValidationFacetViaMethod
 extends ActionParameterValidationFacetAbstract
@@ -62,7 +61,7 @@ implements ImperativeFacet {
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object returnValue = MmInvokeUtils.invokeWithSingleArg(method.method(), owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;

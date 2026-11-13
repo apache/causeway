@@ -27,8 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.internal.debug.xray._CallStackMerger.IntTreeVisitor;
 
-import lombok.val;
-
 class CallStackMergerTest {
 
     private List<int[]> executionLanes;
@@ -60,10 +58,10 @@ class CallStackMergerTest {
      */
     @Test
     void test() {
-        val root = _CallStackMerger.merge(executionLanes);
+        var root = _CallStackMerger.merge(executionLanes);
         //System.err.printf("%s%n", root);
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         root.visitDepthFirst(new IntTreeVisitor() {
             @Override
             public void accept(final int level, final int value) {

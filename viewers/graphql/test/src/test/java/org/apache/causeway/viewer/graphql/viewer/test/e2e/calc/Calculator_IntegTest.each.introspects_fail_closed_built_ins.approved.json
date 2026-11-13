@@ -1,0 +1,89 @@
+{
+  "data" : {
+    "sqlTime" : {
+      "kind" : "SCALAR",
+      "name" : "SqlTime",
+      "description" : "An ISO-8601 time-only value at second precision used for java.sql.Time."
+    },
+    "locale" : {
+      "kind" : "SCALAR",
+      "name" : "Locale",
+      "description" : "An IETF BCP 47 language tag used for java.util.Locale."
+    },
+    "bookmark" : {
+      "kind" : "SCALAR",
+      "name" : "Bookmark",
+      "description" : "A Causeway bookmark in logical-type:identifier form."
+    },
+    "applicationFeatureId" : {
+      "kind" : "SCALAR",
+      "name" : "ApplicationFeatureId",
+      "description" : "A URL-safe encoded Causeway application feature identifier."
+    },
+    "password" : {
+      "kind" : "SCALAR",
+      "name" : "Password",
+      "description" : "A protected Causeway password value. Input constructs the value; output is always suppressed."
+    },
+    "markup" : {
+      "kind" : "SCALAR",
+      "name" : "Markup",
+      "description" : "Causeway markup HTML. This scalar is output-only and clients must treat the content as markup."
+    },
+    "localResourcePathInput" : {
+      "kind" : "INPUT_OBJECT",
+      "name" : "LocalResourcePathInput",
+      "inputFields" : [ {
+        "name" : "path",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "String"
+          }
+        }
+      }, {
+        "name" : "openUrlStrategy",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "ENUM",
+            "name" : "OpenUrlStrategy"
+          }
+        }
+      } ]
+    },
+    "localResourcePathValue" : {
+      "kind" : "OBJECT",
+      "name" : "LocalResourcePathValue",
+      "fields" : [ {
+        "name" : "path",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "String"
+          }
+        }
+      }, {
+        "name" : "openUrlStrategy",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "ENUM",
+            "name" : "OpenUrlStrategy"
+          }
+        }
+      } ]
+    },
+    "unsupported" : {
+      "kind" : "SCALAR",
+      "name" : "UnsupportedValue",
+      "description" : "Unsupported Causeway value. Strict output is redacted and input requires an explicit reversible ScalarMarshaller or TypeMapper."
+    }
+  }
+}

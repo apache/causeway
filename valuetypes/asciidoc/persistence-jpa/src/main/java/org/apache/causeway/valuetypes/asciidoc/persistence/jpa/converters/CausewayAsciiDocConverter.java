@@ -32,7 +32,7 @@ public class CausewayAsciiDocConverter implements AttributeConverter<AsciiDoc, S
     @Override
     public String convertToDatabaseColumn(final AsciiDoc memberValue) {
         return memberValue != null
-                ? memberValue.getAdoc()
+                ? memberValue.adoc()
                 : null;
     }
 

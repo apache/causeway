@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.EventObjectBase;
@@ -35,8 +35,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Superclass for all domain events that are raised by the framework when
@@ -128,15 +127,14 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this.mixee = mixee;
     }
 
-
     /**
      * The subject of the event, which will be either the
      * {@link #getSource() source} for a regular action, or the
      * {@link #getMixee() mixed-in} domain object for a mixin.
      */
     public <T> T getSubject() {
-        val mixee = getMixee();
-        val mixedInElseSource = mixee != null
+        var mixee = getMixee();
+        var mixedInElseSource = mixee != null
                 ? mixee
                 : getSource();
         return _Casts.uncheckedCast(mixedInElseSource);
@@ -487,6 +485,5 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.NullNode;
 
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -77,8 +77,9 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
         return this;
     }
 
-    public void using(final ObjectAdapterLinkTo adapterLinkTo) {
+    public ActionResultReprRenderer using(final ObjectAdapterLinkTo adapterLinkTo) {
         this.adapterLinkTo = adapterLinkTo.with(objectAdapter);
+        return this;
     }
 
     @Override
@@ -147,7 +148,7 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
                     new ListReprRenderer(resourceContext, null, representation).withElementRel(Rel.ELEMENT);
             listReprRenderer.with(collectionAdapters)
             .withReturnType(action.getReturnType())
-            .withElementType(returnedAdapter.getElementSpecification().orElse(null));
+            .withElementType(returnedAdapter.explicitElementSpec().orElse(null));
 
             return listReprRenderer;
 

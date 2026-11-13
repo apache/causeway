@@ -8,7 +8,7 @@ To upgrade from v2.0 to v3.0:
 
 * move up to Java 17 (minimum)
 * update namespaces from `javax` to `jakarta`
-* if you are using the xref:security:shiro:about.adoc[Shiro security] module, this will need to choose a different security implementation.
+* if you have been using the _Shiro security_ module, this will need to choose a different security implementation.
 
 This last point is discussed xref:#simple-security-replacement-for-shiro[below].
 

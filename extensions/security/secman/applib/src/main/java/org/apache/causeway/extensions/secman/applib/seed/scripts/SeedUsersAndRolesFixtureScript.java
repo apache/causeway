@@ -23,7 +23,9 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenceJpaMetaModelRoleAndPermissions;
+
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -33,8 +35,8 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayAppFeatureRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
@@ -48,7 +50,6 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutL
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanAdminRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanRegularUserRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSessionLogRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenceJdoMetaModelRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewaySudoImpersonateRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayViewerRestfulObjectsSwaggerRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.seed.SeedSecurityModuleService;
@@ -60,8 +61,7 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Sets up roles and permissions for both Secman itself and also for all other modules that expose UI features
@@ -75,7 +75,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     @Inject private CausewayConfiguration config;
@@ -85,16 +85,16 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
-        val secmanConfig = config.getExtensions().getSecman();
-        val persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
+        var secmanConfig = config.extensions().secman();
+        var persistenceStack = causewayBeanTypeRegistry.persistenceStack();
 
         // used as log message provider below - assuming file was found and is readable
-        final Supplier<String> yamlFilePath = ()->new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath();
+        final Supplier<String> yamlFilePath = ()->new File(secmanConfig.seed().yamlFile()).getAbsolutePath();
 
         // if a config option ..secman.seed.yamlFile is present,
         // try to use it as alternative seeding strategy,
         // then exit
-        final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.getSeed().getYamlFile())
+        final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.seed().yamlFile())
                 .map(File::new)
                 .filter(File::exists)
                 .filter(File::canRead)
@@ -116,9 +116,9 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         // modules
         executionContext.executeChildren(this,
                 new CausewayAppFeatureRoleAndPermissions(),
-                persistenceStack == PersistenceStack.JDO
-                    ? new CausewayPersistenceJdoMetaModelRoleAndPermissions()
-                    : null, // skip if non-JDO deployment
+                persistenceStack == PersistenceStack.JPA
+                    ? new CausewayPersistenceJpaMetaModelRoleAndPermissions()
+                    : null, // skip if non-JPA deployment
                 new CausewayExtAuditTrailRoleAndPermissions(),
                 new CausewayExtCommandLogRoleAndPermissions(),
                 new CausewayExtDocgenRoleAndPermissions(),
@@ -138,9 +138,9 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 new CausewayExtSecmanRegularUserRoleAndPermissions(secmanConfig),
                 new CausewayExtSecmanAdminUser(secmanConfig,
                         CausewayAppFeatureRoleAndPermissions.ROLE_NAME,
-                        persistenceStack == PersistenceStack.JDO
-                            ? CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME
-                            : null, // skip if non-JDO deployment
+                        persistenceStack == PersistenceStack.JPA
+                            ? CausewayPersistenceJpaMetaModelRoleAndPermissions.ROLE_NAME
+                            : null, // skip if non-JPA deployment
                         CausewayExtAuditTrailRoleAndPermissions.ROLE_NAME,
                         CausewayExtCommandLogRoleAndPermissions.ROLE_NAME,
                         CausewayExtDocgenRoleAndPermissions.ROLE_NAME,
@@ -175,8 +175,8 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                     return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
                 }
                 @Override
-                protected void execute(ExecutionContext executionContext) {
-                    create(tenancyDto.get__name(), tenancyDto.getPath(),
+                protected void execute(final ExecutionContext executionContext) {
+                    create(tenancyDto.getName(), tenancyDto.getPath(),
                             tenancyDto.getParentPath(), executionContext);
                 }
             });
@@ -188,13 +188,13 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         .forEach(roleDto->{
             executionContext.executeChildren(this,
                     new AbstractRoleAndPermissionsFixtureScript(
-                            roleDto.get__name(), roleDto.getDescription()) {
+                            roleDto.getName(), roleDto.getDescription()) {
                 @Override
                 public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
                     return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
                 }
                 @Override
-                protected void execute(ExecutionContext executionContext) {
+                protected void execute(final ExecutionContext executionContext) {
 
                     // PERMISSIONS
 
@@ -220,7 +220,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         .forEach(userDto->{
             executionContext.executeChildren(this,
                     new AbstractUserAndRolesFixtureScript(
-                            userDto.get__username(),
+                            userDto.getUsername(),
                             "pass", // to be overwritten below
                             userDto.getAccountType(),
                             Can.ofCollection(userDto.getRoleNames())) {
@@ -251,8 +251,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     // -- HELPER
 
-    @Nullable
-    private java.util.Locale parseLocale(final @Nullable String input) {
+    private java.util.@Nullable Locale parseLocale(final @Nullable String input) {
         return localeSemantics.getParser().parseTextRepresentation(null, input);
     }
 

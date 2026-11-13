@@ -27,8 +27,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
-
 /**
  * @param <T> value-type
  * @param <D> delegate value-type
@@ -76,13 +74,13 @@ implements
 
     @Override
     public ValueDecomposition decompose(final T value) {
-        val delegateValue = toDelegateValue(value);
+        var delegateValue = toDelegateValue(value);
         return getDelegate().decompose(delegateValue);
     }
 
     @Override
     public T compose(final ValueDecomposition decomposition) {
-        val delegateValue = getDelegate().compose(decomposition);
+        var delegateValue = getDelegate().compose(decomposition);
         return fromDelegateValue(delegateValue);
     }
 
@@ -90,7 +88,7 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final T value) {
-        val delegateValue = value!=null
+        var delegateValue = value!=null
                 ? toDelegateValue(value)
                 : null;
         return delegateRenderer().titlePresentation(context, delegateValue);
@@ -98,7 +96,7 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final T value) {
-        val delegateValue = value!=null
+        var delegateValue = value!=null
                 ? toDelegateValue(value)
                 : null;
         return delegateRenderer().htmlPresentation(context, delegateValue);
@@ -108,7 +106,7 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final T value) {
-        val delegateValue = value!=null
+        var delegateValue = value!=null
                 ? toDelegateValue(value)
                 : null;
         return delegateParser().parseableTextRepresentation(context, delegateValue);
@@ -116,7 +114,7 @@ implements
 
     @Override
     public T parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val delegateValue = delegateParser().parseTextRepresentation(context, text);
+        var delegateValue = delegateParser().parseTextRepresentation(context, text);
         return delegateValue!=null
                 ? fromDelegateValue(delegateValue)
                 : null;

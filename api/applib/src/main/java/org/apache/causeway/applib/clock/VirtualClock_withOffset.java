@@ -19,52 +19,22 @@
 package org.apache.causeway.applib.clock;
 
 import java.time.Instant;
-import java.util.Objects;
 
-import lombok.RequiredArgsConstructor;
+record VirtualClock_withOffset(
+        /**
+         * Amount of time (milli seconds) this clock is offset into the future
+         * with respect to the actual (system) time.
+         */
+        long millisOffset) implements VirtualClock {
 
-@RequiredArgsConstructor
-final class VirtualClock_withOffset implements VirtualClock {
-
-    private static final long serialVersionUID = -2589204298085221985L;
-    
-    /**
-     * Amount of time (milli seconds) this clock is offset into the future 
-     * with respect to the actual (system) time.
-     */
-    private final long millisOffset;
-    
     @Override
     public Instant nowAsInstant() {
         return Instant.now().plusMillis(millisOffset);
     }
-    
-    // -- TO STRING, EQUALS, HASHCODE
-    
+
     @Override
     public String toString() {
         return String.format("%s: %s", this.getClass().getSimpleName(), nowAsXmlGregorianCalendar());
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if(obj==null) {
-            return false;
-        }
-        // equal if same class and same millisOffset
-        if(!Objects.equals(this.getClass(), obj.getClass())) {
-            return false;
-        }
-        if(!Objects.equals(this.millisOffset, ((VirtualClock_withOffset)obj).millisOffset)) {
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public int hashCode() {
-        // equal if same class and same millisOffset
-        return Objects.hash(this.getClass(), millisOffset);
     }
 
 }

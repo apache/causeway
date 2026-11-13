@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.title.annotation;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -32,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacet
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class TitleAnnotationFacetFactory
 extends FacetFactoryAbstract
@@ -49,10 +47,10 @@ implements MetaModelRefiner {
      */
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
-        addFacetIfPresent(TitleFacetViaTitleAnnotation.create(cls, facetHolder));
+        TitleFacetViaTitleAnnotation.create(cls, facetHolder);
     }
 
     /**
@@ -70,9 +68,9 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
-            val titleFacetTopRank =
+            var titleFacetTopRank =
                 objectSpec
-                .getFacetRanking(TitleFacet.class)
+                .lookupFacetRanking(TitleFacet.class)
                 .map(facetRanking->facetRanking.getTopRank(TitleFacet.class))
                 .orElse(Can.empty())
                 .distinct(TitleFacet::semanticEquals);
@@ -80,7 +78,7 @@ implements MetaModelRefiner {
             // top-rank if present must not be ambiguous
             if(titleFacetTopRank.isCardinalityMultiple()) {
 
-                val conflictingFeatures =
+                var conflictingFeatures =
                         titleFacetTopRank
                         .map(TitleFacet::getClass)
                         .map(Class::getSimpleName)
@@ -90,7 +88,7 @@ implements MetaModelRefiner {
                         objectSpec,
                         "%s: conflict for determining a strategy for retrieval of title for class, "
                         + "conflicting title facets %s",
-                        objectSpec.getFeatureIdentifier().getClassName(),
+                        objectSpec.getFeatureIdentifier().className(),
                         conflictingFeatures.toString());
             }
 

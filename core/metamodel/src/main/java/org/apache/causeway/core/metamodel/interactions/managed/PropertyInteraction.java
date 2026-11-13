@@ -21,22 +21,22 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
-import lombok.val;
-
-public final class PropertyInteraction
-extends MemberInteraction<ManagedProperty, PropertyInteraction> {
+public record PropertyInteraction(
+        @NonNull InteractionRailway<ManagedProperty> railway)
+implements MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public static final PropertyInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
+        var managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
 
         final InteractionRailway<ManagedProperty> railway = managedProperty.isPresent()
                 ? InteractionRailway.success(managedProperty.get())
@@ -49,10 +49,6 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
         return new PropertyInteraction(InteractionRailway.success(managedProperty));
     }
 
-    PropertyInteraction(@NonNull final InteractionRailway<ManagedProperty> railway) {
-        super(railway);
-    }
-
     public Optional<PropertyNegotiationModel> startPropertyNegotiation() {
         return getManagedProperty()
             .map(ManagedProperty::startNegotiation);
@@ -60,12 +56,8 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public PropertyInteraction modifyProperty(
             final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
-
-        railway = railway.chain(property->
-            property.modifyProperty(newProperyValueProvider.apply(property))
-            .map(super::vetoRailway)
-            .orElse(railway));
-
+        railway.update(property->
+            property.modifyProperty(newProperyValueProvider.apply(property)));
         return this;
     }
 
@@ -74,16 +66,16 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedProperty> getManagedProperty() {
-        return super.getManagedMember().getSuccess();
+        return railway.getSuccess();
     }
 
     /**
      * @return this Interaction's ManagedProperty
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable>
-    ManagedProperty getManagedPropertyElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return super.getManagedMemberElseThrow(onFailure);
+    public <X extends Throwable> ManagedProperty getManagedPropertyElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return getManagedMemberElseThrow(onFailure);
     }
 
 }

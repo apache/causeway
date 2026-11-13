@@ -14,10 +14,6 @@ class ObjectContracts {
   Hashing<T> hashing(Function<T, ?> getter)
   ObjectContract<T> contract(Class<T> objectClass)
   ObjectContract<T> parse(Class<T> target, String propertyNames)
-  String toString(T obj, String propertyNames)
-  boolean equals(T obj, Object other, String propertyNames)
-  int hashCode(Object obj, String propertyNames)
-  int compare(T obj, T other, String propertyNames)
 }
 ----
 

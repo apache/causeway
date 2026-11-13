@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -66,7 +67,6 @@ public interface ObjectActionContainer {
         return getAction(id, ActionScope.ANY, MixedIn.INCLUDED); }
     default ObjectAction getActionElseFail(final String id) {
         return getActionElseFail(id, ActionScope.ANY, MixedIn.INCLUDED); }
-
 
     // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITANCE CONSIDERED)
 
@@ -141,16 +141,22 @@ public interface ObjectActionContainer {
      */
     Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn);
 
+    /**
+     * Actions visible in dedicated actions-column, honoring order and visibility.
+     * @param where either {@link Where#STANDALONE_TABLES} or {@link Where#PARENTED_TABLES}
+     */
+    Stream<ObjectAction> streamActionsForColumnRendering(Where where);
+
     // -- ACTION STREAM (NO INHERITANCE)
 
     /**
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionScope> actionTypes, MixedIn mixedIn);
+    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionScope> actionScopes, MixedIn mixedIn);
 
-    default Stream<ObjectAction> streamDeclaredActions(final ActionScope type, final MixedIn mixedIn) {
-        return streamDeclaredActions(ImmutableEnumSet.of(type), mixedIn);
+    default Stream<ObjectAction> streamDeclaredActions(final ActionScope actionScope, final MixedIn mixedIn) {
+        return streamDeclaredActions(ImmutableEnumSet.of(actionScope), mixedIn);
     }
 
     default Stream<ObjectAction> streamDeclaredActions(final MixedIn mixedIn) {

@@ -18,17 +18,26 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLTypeReference.typeRef;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
+
+import graphql.Scalars;
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLTypeReference;
+
+import static graphql.schema.GraphQLNonNull.nonNull;
+import static graphql.schema.GraphQLTypeReference.typeRef;
+import static graphql.schema.GraphQLUnionType.newUnionType;
+
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
 
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -36,14 +45,9 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneFeature;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import graphql.Scalars;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLTypeReference;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
@@ -61,31 +65,41 @@ public class TypeMapperDefault implements TypeMapper {
     private final ScalarMapper scalarMapper;
     private final Provider<Context> contextProvider;
 
-
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
-        if (clazz.isEnum()) {
-            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
-        }
+        if (clazz.isEnum())
+			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent((Class<? extends Enum<?>>) clazz, SchemaType.RICH);
+        if (ResourceValueTypes.isResourceType(clazz))
+            return ResourceValueTypes.outputTypeFor(clazz, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(clazz))
+            return ResourceValueTypes.localResourcePathOutputType(contextProvider.get());
         return scalarMapper.scalarTypeFor(clazz);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public GraphQLInputType inputTypeFor(final Class<?> clazz){
-        if (clazz.isEnum()) {
-            return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
-        }
-        return scalarMapper.scalarTypeFor(clazz);
+        if (clazz.isEnum())
+			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent((Class<? extends Enum<?>>) clazz, SchemaType.RICH);
+        if (ResourceValueTypes.isResourceType(clazz))
+            return ResourceValueTypes.inputTypeFor(clazz, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(clazz))
+            return ResourceValueTypes.localResourcePathInputType(contextProvider.get());
+        return scalarMapper.inputScalarTypeFor(clazz);
     }
 
     @Override
     public Object unmarshal(
             final Object gqlValue,
             final ObjectSpecification targetObjectSpec) {
-        val correspondingClass = targetObjectSpec.getCorrespondingClass();
-        if (correspondingClass.isEnum()) {
-            return gqlValue;
-        }
+        var correspondingClass = targetObjectSpec.correspondingClass();
+        if (correspondingClass.isEnum())
+			return gqlValue;
+        if (ResourceValueTypes.isResourceType(correspondingClass))
+            return ResourceValueTypes.unmarshal(correspondingClass, gqlValue, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(correspondingClass))
+            return ResourceValueTypes.unmarshalLocalResourcePath(gqlValue);
         return scalarMapper.unmarshal(gqlValue, correspondingClass);
     }
 
@@ -95,34 +109,29 @@ public class TypeMapperDefault implements TypeMapper {
             final SchemaType schemaType) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
 
-        switch (otoaObjectSpec.getBeanSort()) {
-
-            case VIEW_MODEL:
-                return typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
-
-            case ENTITY:
-                return typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
-
-            case VALUE:
-                return scalarTypePossiblyOptional(oneToOneFeature, otoaObjectSpec);
-        }
-        return null;
+        return switch (otoaObjectSpec.beanSort()) {
+            case ABSTRACT, VIEW_MODEL, ENTITY -> domainObjectTypePossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
+            case VALUE-> scalarTypePossiblyOptional(oneToOneFeature, otoaObjectSpec);
+            default -> null;
+        };
     }
 
-    private static GraphQLOutputType typeRefPossiblyOptional(OneToOneFeature oneToOneFeature, SchemaType schemaType, ObjectSpecification otoaObjectSpec) {
-        GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, schemaType));
+    private GraphQLOutputType domainObjectTypePossiblyOptional(
+            final OneToOneFeature oneToOneFeature,
+            final SchemaType schemaType,
+            final ObjectSpecification objectSpecification) {
+        var outputType = outputTypeFor(objectSpecification, schemaType);
         return oneToOneFeature.isOptional()
-                ? fieldTypeRef
-                : nonNull(fieldTypeRef);
+                ? outputType
+                : nonNull(outputType);
     }
 
-    private GraphQLOutputType scalarTypePossiblyOptional(OneToOneFeature oneToOneFeature, ObjectSpecification otoaObjectSpec) {
-        GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.getCorrespondingClass());
+    private GraphQLOutputType scalarTypePossiblyOptional(final OneToOneFeature oneToOneFeature, final ObjectSpecification otoaObjectSpec) {
+        GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.correspondingClass());
         return oneToOneFeature.isOptional()
                 ? scalarType
                 : nonNull(scalarType);
     }
-
 
     @Override
     @Nullable
@@ -130,31 +139,22 @@ public class TypeMapperDefault implements TypeMapper {
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType){
 
-        switch (objectSpecification.getBeanSort()){
-            case ABSTRACT:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
-            case ENTITY:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
-
-            case VALUE:
-                return outputTypeFor(objectSpecification.getCorrespondingClass());
-
-            case COLLECTION:
-                // should be noop
-                return null;
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
+        return switch (objectSpecification.beanSort()){
+            case ABSTRACT -> schemaType == SchemaType.RICH
+                    ? polymorphicOutputTypeFor(objectSpecification, schemaType)
+                    : typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
+            case VIEW_MODEL, ENTITY -> typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
+            case VALUE -> outputTypeFor(objectSpecification.correspondingClass());
+            case COLLECTION -> null; // should be noop
+            default -> Scalars.GraphQLString; // for now
+        };
     }
 
     @Override
     @Nullable public GraphQLList listTypeForElementTypeOf(
             final OneToManyAssociation oneToManyAssociation,
             final SchemaType schemaType) {
-        val elementType = oneToManyAssociation.getElementType();
+        var elementType = oneToManyAssociation.getElementType();
         return listTypeFor(elementType, schemaType);
     }
 
@@ -162,14 +162,54 @@ public class TypeMapperDefault implements TypeMapper {
     @Nullable public GraphQLList listTypeFor(
             final ObjectSpecification elementType,
             final SchemaType schemaType) {
-        switch (elementType.getBeanSort()) {
-            case VIEW_MODEL:
-            case ENTITY:
-                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, schemaType)));
-            case VALUE:
-                return GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
-        }
-        return null;
+        return switch (elementType.beanSort()) {
+            case ABSTRACT, VIEW_MODEL, ENTITY ->
+                GraphQLList.list(outputTypeFor(elementType, schemaType));
+            case VALUE ->
+                GraphQLList.list(outputTypeFor(elementType.correspondingClass()));
+            default -> null;
+        };
+    }
+
+    private GraphQLOutputType polymorphicOutputTypeFor(
+            final ObjectSpecification declaredType,
+            final SchemaType schemaType) {
+        var context = contextProvider.get();
+        var possibleTypes = context.concreteSpecificationsAssignableTo(declaredType);
+        if (possibleTypes.isEmpty())
+			return typeRef(TypeNames.objectTypeNameFor(declaredType, schemaType));
+
+        var unionTypeName = TypeNames.polymorphicTypeNameFor(declaredType, schemaType);
+        var unionBuilder = newUnionType()
+                .name(unionTypeName)
+                .description("Concrete rich object types assignable to " + declaredType.logicalTypeName());
+        possibleTypes.stream()
+                .map(specification -> TypeNames.objectTypeNameFor(specification, schemaType))
+                .distinct()
+                .map(GraphQLTypeReference::typeRef)
+                .forEach(unionBuilder::possibleType);
+        var unionType = context.graphQLTypeRegistry.addUnionTypeIfNotAlreadyPresent(unionBuilder.build());
+        context.codeRegistryBuilder.typeResolver(unionType, environment -> {
+            var pojo = environment.getObject();
+            if (pojo instanceof BookmarkedPojo bookmarkedPojo) {
+                pojo = bookmarkedPojo.getTargetPojo();
+            }
+            if (pojo instanceof ManagedObject managedObject) {
+                pojo = managedObject.getPojo();
+            }
+            if (pojo == null)
+				return null;
+            var runtimeSpecification = context.specificationLoader.loadSpecification(pojo.getClass());
+            if (runtimeSpecification == null)
+				return null;
+            var runtimeTypeName = TypeNames.objectTypeNameFor(runtimeSpecification, schemaType);
+            var isAdvertised = unionType.getTypes().stream()
+                    .anyMatch(possibleType -> possibleType.getName().equals(runtimeTypeName));
+            return isAdvertised
+                    ? environment.getSchema().getObjectType(runtimeTypeName)
+                    : null;
+        });
+        return typeRef(unionTypeName);
     }
 
     @Override
@@ -177,6 +217,7 @@ public class TypeMapperDefault implements TypeMapper {
             final OneToOneFeature oneToOneFeature,
             final InputContext inputContext,
             final SchemaType schemaType) {
+
         return oneToOneFeature.isOptional() || inputContext.isOptionalAlwaysAllowed()
                 ? inputTypeFor_(oneToOneFeature, schemaType)
                 : nonNull(inputTypeFor_(oneToOneFeature, schemaType));
@@ -185,30 +226,28 @@ public class TypeMapperDefault implements TypeMapper {
     private GraphQLInputType inputTypeFor_(
             final OneToOneFeature oneToOneFeature,
             final SchemaType schemaType){
-        val elementObjectSpec = oneToOneFeature.getElementType();
-        switch (elementObjectSpec.getBeanSort()) {
-            case ABSTRACT:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
-            case ENTITY:
-                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
+        var elementObjectSpec = oneToOneFeature.getElementType();
 
-            case VALUE:
-                return inputTypeFor(elementObjectSpec.getCorrespondingClass());
-
-            case COLLECTION:
-                throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
-            default:
-                // for now
-                return Scalars.GraphQLString;
+        {   // guard introduced to intercept interfaces, which otherwise seem to break schema creation
+            // due to missing type reference for given name
+            var elementClass = elementObjectSpec.correspondingClass();
+            if(elementClass.isInterface()) return inputTypeFor(elementClass);
         }
+
+        return switch (elementObjectSpec.beanSort()) {
+            case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
+            case VALUE -> inputTypeFor(elementObjectSpec.correspondingClass());
+            case COLLECTION ->
+                throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
+            default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
+        };
     }
 
     @Override
     public GraphQLList inputTypeFor(
             final OneToManyActionParameter oneToManyActionParameter,
             final SchemaType schemaType){
-        val elementObjectSpec = oneToManyActionParameter.getElementType();
+        var elementObjectSpec = oneToManyActionParameter.getElementType();
         return GraphQLList.list(inputTypeFor(elementObjectSpec, schemaType));
     }
 
@@ -216,23 +255,13 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLInputType inputTypeFor(
             final ObjectSpecification elementType,
             final SchemaType schemaType){
-        switch (elementType.getBeanSort()) {
-            case ABSTRACT:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
-            case ENTITY:
-                return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
-
-            case VALUE:
-                return inputTypeFor(elementType.getCorrespondingClass());
-
-            case COLLECTION:
-                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
+        return switch (elementType.beanSort()) {
+            case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
+            case VALUE -> inputTypeFor(elementType.correspondingClass());
+            case COLLECTION ->
+                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.fullIdentifier()));
+            default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
+        };
     }
 
 }

@@ -24,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import jakarta.persistence.Column;
+
 import org.springframework.core.annotation.AliasFor;
 
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -37,6 +39,9 @@ import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Collects together all the domain semantics for the property of a domain
@@ -53,9 +58,9 @@ import org.apache.causeway.applib.value.Clob;
 @Target({
         ElementType.METHOD,
         ElementType.FIELD,
+        ElementType.RECORD_COMPONENT,
         ElementType.TYPE,
-        ElementType.ANNOTATION_TYPE
-})
+        ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation
@@ -196,9 +201,9 @@ public @interface Property {
      * </p>
      *
      * <p>
-     *     NOTE: this will usually be supplemented by a JDO or JPA-specific
-     *     annotation to indicate length of the column in the table to whic
-     *     the entity is mapped.
+     *     NOTE: if using the JPA object store, the field will usually also be annotated using
+     *     {@link Column#length()} to specify the length of the column in the table to which the
+     *     entity is mapped.
      * </p>
      *
      * @see Parameter#maxLength()
@@ -210,8 +215,8 @@ public @interface Property {
      * Indicates whether the property should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation
-     *     <code>javax.jdo.annotations.NotPersistent</code>
+     *     To ensure that the property is actually not persisted in the JPA object store, also annotate with
+     *     {@link jakarta.persistence.Transient}.
      * </p>
      */
     Snapshot snapshot()
@@ -233,8 +238,8 @@ public @interface Property {
      * Whether this property is optional or is mandatory (ie required).
      *
      * <p>
-     *     NOTE: this will usually be supplmented by a JDO or JPA-specific
-     *     annotation to specify the nullability of the corresponding column in
+     *     NOTE: if using the JPA object store, the field will usually also be annotated using
+     *     {@link Column#nullable()} to specify the nullability of the corresponding column in
      *     the table to which the owning entity is mapped.
      * </p>
      *
@@ -289,4 +294,75 @@ public @interface Property {
      */
     String regexPatternReplacement()
             default "Doesn't match pattern";
+
+    @RequiredArgsConstructor
+    enum QueryDslAutoCompletePolicy {
+        /**
+         * Use the (case-insensitive) value of this property for autocomplete.
+         *
+         * <p>
+         *     The property is expected to be a string or characters, otherwise it will be ignored.
+         * </p>
+         */
+        INCLUDE("case insensitive"),
+        /**
+         * Use the case-sensitive value of this property for autocomplete.
+         *
+         * <p>
+         *     The property is expected to be a string or characters, otherwise it will be ignored.
+         * </p>
+         */
+        INCLUDE_CASE_SENSITIVE("case sensitive"),
+        /**
+         * Do not use the value of this property for autocomplete.
+         */
+        EXCLUDE("excluded"),
+        ;
+
+        @Getter
+        private final String description;
+
+        public boolean isExcluded() {
+            return !isIncluded();
+        }
+
+        public boolean isIncluded() {
+            return this == INCLUDE || this == INCLUDE_CASE_SENSITIVE;
+        }
+        public boolean isIgnoreCase() {
+            return this == INCLUDE;
+        }
+
+    }
+
+    /**
+     * Whether to use the value of this property for autocompletes.
+     *
+     * <p>
+     *     The minimum number of characters can be specified by annotating the the containing entity with
+     *     {@link DomainObject#queryDslAutoCompleteMinLength()}.  The number of returned rows can also be limited using
+     *     {@link DomainObject#queryDslAutoCompleteLimitResults()}.
+     * </p>
+     *
+     * <p>
+     *     Moreover, additional criteria (predicates) can be specified for the auto-complete query, by annotating
+     *     the containing entity with {@link DomainObject#queryDslAutoCompleteAdditionalPredicateRepository()} and
+     *     (if required) {@link DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()}.
+     * </p>
+     *
+     * <p>
+     *     NOTE: if {@link DomainObject#autoCompleteRepository()} (and {@link DomainObject#autoCompleteMethod()}) have
+     *     been specified, then these take precedence of the query DSL auto-complete.
+     * </p>
+     *
+     * <p>
+     *     NOTE: this feature requires that the <code>querydsl-jpa</code> module is included as part of the
+     *     application manifest.  Otherwise, no autocomplete will be generated.
+     * </p>
+     *
+     * <p>
+     *     NOTE: this feature only applies to entities, not to view models.  Only persisted properties should be annotated.
+     * </p>
+     */
+    QueryDslAutoCompletePolicy queryDslAutoComplete() default QueryDslAutoCompletePolicy.EXCLUDE;
 }

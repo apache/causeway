@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary;
 
-
 import jakarta.inject.Inject;
 
 import org.quartz.JobDetail;
@@ -45,8 +44,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.mixins.Object_open
 import org.apache.causeway.extensions.commandreplay.secondary.ui.CommandReplayOnSecondaryService;
 import org.apache.causeway.schema.CausewayModuleSchema;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-
-import lombok.val;
 
 /**
  * Activates with <i>Spring profile</i> 'commandreplay-secondary'.
@@ -95,7 +92,7 @@ public class CausewayModuleExtCommandReplaySecondary {
 
     @Bean(name = "ReplicateAndReplayJob")
     public JobDetailFactoryBean replicateAndReplayJobDetailFactory() {
-        val jobDetailFactory = new JobDetailFactoryBean();
+        var jobDetailFactory = new JobDetailFactoryBean();
         jobDetailFactory.setJobClass(ReplicateAndReplayJob.class);
         jobDetailFactory.setDescription("Replicate commands from primary and replay on secondary");
         jobDetailFactory.setDurability(true);
@@ -105,11 +102,11 @@ public class CausewayModuleExtCommandReplaySecondary {
     @Bean(name = "ReplicateAndReplayTrigger" )
     public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(
             final @Qualifier("ReplicateAndReplayJob") JobDetail job) {
-        val triggerFactory = new SimpleTriggerFactoryBean();
+        var triggerFactory = new SimpleTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
-        val config = causewayConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();
-        triggerFactory.setRepeatInterval(config.getRepeatInterval());
-        triggerFactory.setStartDelay(config.getStartDelay());
+        var config = causewayConfiguration.extensions().commandReplay().quartzReplicateAndReplayJob();
+        triggerFactory.setRepeatInterval(config.repeatInterval());
+        triggerFactory.setStartDelay(config.startDelay());
         triggerFactory.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
         return triggerFactory;
     }

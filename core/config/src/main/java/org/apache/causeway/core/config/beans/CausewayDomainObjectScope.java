@@ -27,16 +27,12 @@ import org.springframework.beans.factory.config.Scope;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
-@Log4j2
-class CausewayDomainObjectScope implements Scope {
-
-    private final BeanFactory beanFactory;
+@Slf4j
+record CausewayDomainObjectScope(BeanFactory beanFactory) implements Scope {
 
     @Override
     public Object get(final String name, final ObjectFactory<?> objectFactory) {

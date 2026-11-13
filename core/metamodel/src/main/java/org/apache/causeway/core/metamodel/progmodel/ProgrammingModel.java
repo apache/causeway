@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface ProgrammingModel
 extends HasMetaModelContext {
@@ -38,8 +38,9 @@ extends HasMetaModelContext {
     enum Marker {
         DEPRECATED,
         INCUBATING,
-        JDO,
+        JDBC,
         JPA,
+        JDO
     }
 
     /**
@@ -110,8 +111,17 @@ extends HasMetaModelContext {
 
     }
 
-
+    interface MixinNamingStrategy {
+        String memberId(Class<?> mixinClass);
+        String memberFriendlyName(Class<?> mixinClass);
+    }
+    
     // -- INTERFACE
+    
+    /**
+     * Naming strategy for mixed-in members. 
+     */
+    MixinNamingStrategy mixinNamingStrategy();
 
     <T extends FacetFactory> void addFactory(
             FacetProcessingOrder order,
@@ -127,7 +137,6 @@ extends HasMetaModelContext {
             PostProcessingOrder order,
             T instance,
             Marker ... markers);
-
 
     Stream<FacetFactory> streamFactories();
     Stream<MetaModelValidator> streamValidators();
@@ -166,6 +175,5 @@ extends HasMetaModelContext {
             }
         });
     }
-
 
 }

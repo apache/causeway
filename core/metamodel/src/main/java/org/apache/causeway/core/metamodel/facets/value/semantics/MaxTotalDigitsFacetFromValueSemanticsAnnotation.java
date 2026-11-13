@@ -21,24 +21,34 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetFromValueSemanticsAnnotation
-extends MaxTotalDigitsFacetAbstract {
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-    public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<ValueSemantics> valueSemanticsIfAny,
+final class  MaxTotalDigitsFacetFromValueSemanticsAnnotation
+extends FacetAbstract
+implements MaxTotalDigitsFacet {
+
+    static Optional<MaxTotalDigitsFacet> create(
+            final Optional<ValueSemantics> valueSemanticsOpt,
             final FacetHolder holder) {
+        return valueSemanticsOpt
+            .filter(valueSemantics->valueSemantics.maxTotalDigits()>0)
+            .map(valueSemantics->
+                new MaxTotalDigitsFacetFromValueSemanticsAnnotation(valueSemantics.maxTotalDigits(), holder));
+    }
 
-        return valueSemanticsIfAny
-                .map(digits-> new MaxTotalDigitsFacetFromValueSemanticsAnnotation(digits.maxTotalDigits(), holder));
-   }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int maxTotalDigits;
 
-   private MaxTotalDigitsFacetFromValueSemanticsAnnotation(
-           final int maxTotalDigits, final FacetHolder holder) {
-       super(maxTotalDigits, holder);
-   }
+    private MaxTotalDigitsFacetFromValueSemanticsAnnotation(
+            final int maxTotalDigits,
+            final FacetHolder facetHolder) {
+    	super(MaxTotalDigitsFacet.class, facetHolder);
+    	this.maxTotalDigits = maxTotalDigits;
+    }
 
 }

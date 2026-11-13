@@ -20,11 +20,8 @@ package org.apache.causeway.applib.services.wrapper.control;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.apache.causeway.commons.internal.base._NullSafe;
-
-import lombok.val;
 
 class SyncControl_Test {
 
@@ -32,61 +29,66 @@ class SyncControl_Test {
     public void defaults() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // then
-        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
+        assertFalse(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
     public void check_rules() throws Exception {
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
-        control.withCheckRules();
+        control = control.withCheckRules();
 
         // then
-        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
+        assertFalse(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
     public void skip_rules() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
-        control.withSkipRules();
+        control = control.withSkipRules();
 
         // then
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION));
+        assertFalse(control.isSkipExecute());
+        assertTrue(control.isSkipRules());
     }
 
     @Test
     public void execute() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
-        control.withExecute();
+        control = control.withExecute();
 
         // then
-        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
+        assertFalse(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
     public void no_execute() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
-        control.withNoExecute();
+        control = control.withNoExecute();
 
         // then
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION));
+        assertTrue(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
@@ -94,14 +96,13 @@ class SyncControl_Test {
 
         ExceptionHandler exceptionHandler = ex -> null;
 
-        val control = SyncControl.control()
+        var control = SyncControl.defaults()
                 .withNoExecute()
                 .withSkipRules()
-                .with(exceptionHandler);
+                .withExceptionHandler(exceptionHandler);
 
-        assertTrue(control.getExecutionModes().size()==2);
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION));
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION));
+        assertTrue(control.isSkipExecute());
+        assertTrue(control.isSkipRules());
     }
 
 }

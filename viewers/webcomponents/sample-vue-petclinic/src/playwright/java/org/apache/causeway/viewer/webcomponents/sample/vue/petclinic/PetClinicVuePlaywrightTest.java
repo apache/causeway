@@ -1,0 +1,704 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.causeway.viewer.webcomponents.sample.vue.petclinic;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(
+        classes = PetClinicVueApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class PetClinicVuePlaywrightTest {
+
+    @LocalServerPort
+    private int port;
+
+    private final List<String> browserFailures = new ArrayList<>();
+    private final List<String> graphQLRequests = new ArrayList<>();
+    private Playwright playwright;
+    private Browser browser;
+    private Page page;
+
+    @BeforeAll
+    void startBrowser() {
+        playwright = Playwright.create();
+        final var options = new BrowserType.LaunchOptions()
+                .setHeadless(Boolean.parseBoolean(System.getProperty("playwright.headless", "true")));
+        final var executable = System.getProperty("playwright.chromium.executable", "").trim();
+        if (!executable.isEmpty()) {
+            options.setExecutablePath(Path.of(executable));
+        }
+        browser = playwright.chromium().launch(options);
+    }
+
+    @AfterAll
+    void stopBrowser() {
+        if (browser != null) browser.close();
+        if (playwright != null) playwright.close();
+    }
+
+    @BeforeEach
+    void openPage() {
+        browserFailures.clear();
+        graphQLRequests.clear();
+        page = browser.newPage(new Browser.NewPageOptions().setViewportSize(1440, 900));
+        page.onPageError(error -> browserFailures.add(error));
+        page.onConsoleMessage(message -> {
+            if ("error".equals(message.type()) && !message.text().contains("favicon.ico")) {
+                browserFailures.add("console: " + message.text());
+            }
+        });
+        page.onRequest(request -> {
+            if (request.url().contains("/graphql") && request.postData() != null) {
+                graphQLRequests.add(request.postData());
+            }
+        });
+        page.onRequestFailed(request -> {
+            final var failure = request.failure();
+            if (!(request.url().contains("/graphql") && failure != null && failure.contains("ERR_ABORTED"))) {
+                browserFailures.add("request: " + request.method() + " " + request.url() + " " + failure);
+            }
+        });
+    }
+
+    @AfterEach
+    void closePage() {
+        assertThat(browserFailures).isEmpty();
+        page.close();
+    }
+
+    @Test
+    void customOwnerPageUsesOneStableShellAndDeclarativeRouteBoundary() {
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-causeway-route-page][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
+        page.locator("[data-causeway-route-page][data-route-state='ready']").waitFor();
+
+        assertThat(page.locator("[data-testid='petclinic-vue-application-shell']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-graphql-client[data-causeway-shell-client]").count()).isEqualTo(1);
+        assertThat(page.locator("[data-causeway-route-page][data-route-state='ready']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-object-context[data-causeway-route-context]").count()).isEqualTo(1);
+        assertThat(page.locator("cw-interaction-controller[data-causeway-route-interactions]").count()).isEqualTo(1);
+        assertThat(page.locator("body").innerText()).contains("Mary Smith (Mary)", "Pets currently registered");
+    }
+
+    @Test
+    void authoredPdfModesRemainFrameworkNeutralAndProgressive() {
+        open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementDocument')?.dataset.renderer === 'blob'");
+        final var linked = page.locator("cw-property#ownerAgreementDocument");
+        assertThat(linked.getAttribute("data-renderer")).isEqualTo("blob");
+        assertThat(linked.locator("[data-causeway-pdf-reader]").count()).isZero();
+        assertThat(linked.locator(".causeway-value-lob-link").innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        final var linkedHref = linked.locator(".causeway-value-lob-link").getAttribute("href");
+        assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", linkedHref)).isFalse();
+        assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
+
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementPreview [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'inactive'");
+        final var manual = page.locator("cw-property#ownerAgreementPreview [data-causeway-pdf-reader]");
+        assertThat(manual.getAttribute("data-causeway-pdf-state")).isEqualTo("inactive");
+        assertThat(manual.locator(".causeway-pdf-toolbar .causeway-value-lob-link").innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        assertThat(manual.locator(".causeway-pdf-accessibility-note").count()).isZero();
+        final var manualHref = manual.locator(".causeway-value-lob-link").getAttribute("href");
+        assertThat((Boolean) page.evaluate("href => performance.getEntriesByType('resource').some(entry => entry.name === new URL(href, document.baseURI).href)", manualHref)).isFalse();
+        assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/'))")).isFalse();
+        manual.locator("[data-causeway-pdf-activate]").click();
+        page.waitForFunction("() => document.querySelector('cw-property#ownerAgreementPreview [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        assertThat(manual.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
+        assertThat((Boolean) page.evaluate("() => performance.getEntriesByType('resource').some(entry => entry.name.includes('/pdfjs/pdf.min.mjs'))")).isTrue();
+
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.waitForFunction("() => document.querySelector('cw-collection#pets')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector('cw-property#agreement [data-causeway-pdf-reader]')?.dataset.causewayPdfState === 'ready'");
+        final var agreementProperty = page.locator("cw-property#agreement");
+        final var automatic = agreementProperty.locator("[data-causeway-pdf-reader]");
+        assertThat(agreementProperty.getAttribute("label-position")).isEqualTo("NONE");
+        final var agreementCard = page.locator("[data-testid='petclinic-owner-collections'] > .petclinic-agreement-card");
+        assertThat(agreementCard.locator("cw-property#agreement").count()).isEqualTo(1);
+        assertThat(agreementProperty.locator(".causeway-property-label").isVisible()).isFalse();
+        assertThat(((Number) automatic.evaluate("(reader) => reader.getBoundingClientRect().width / reader.closest('.petclinic-agreement-card').getBoundingClientRect().width")).doubleValue()).isGreaterThan(0.9);
+        assertThat(automatic.locator("[data-causeway-pdf-page]").count()).isEqualTo(3);
+        automatic.locator(".causeway-pdf-page-canvas").first().waitFor();
+        final var download = automatic.locator(".causeway-pdf-toolbar .causeway-value-lob-link");
+        assertThat(download.innerText()).isEqualTo("owner-mary-clinic-agreement.pdf");
+        assertThat(automatic.locator(".causeway-pdf-accessibility-note").count()).isZero();
+
+        assertContainedPdfNavigation(automatic, 1800);
+        assertContainedPdfNavigation(automatic, 720);
+        page.setViewportSize(1440, 900);
+
+        automatic.locator("[data-causeway-pdf-next]").click();
+        automatic.locator("[data-causeway-pdf-next]").click();
+        automatic.locator("[data-causeway-pdf-page='3'] canvas").waitFor();
+    }
+
+    private void assertContainedPdfNavigation(final Locator reader, final int width) {
+        page.setViewportSize(width, 900);
+        final var toolbar = reader.locator(".causeway-pdf-toolbar");
+        final var viewport = reader.locator("[data-causeway-pdf-viewport]");
+        final var next = reader.locator("[data-causeway-pdf-next]");
+        final var previous = reader.locator("[data-causeway-pdf-previous]");
+        toolbar.scrollIntoViewIfNeeded();
+        final var outerScrollBefore = ((Number) page.evaluate("() => window.scrollY")).doubleValue();
+
+        next.click();
+        page.waitForTimeout(350);
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).contains("Page 2 of 3");
+        assertThat(((Number) viewport.evaluate("element => element.scrollTop")).doubleValue()).isGreaterThan(0);
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
+        assertThat(toolbar.isVisible()).isTrue();
+        assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue()).isLessThanOrEqualTo(1.0);
+
+        previous.click();
+        page.waitForTimeout(350);
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).contains("Page 1 of 3");
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat((Boolean) next.evaluate("element => document.activeElement === element")).isTrue();
+        assertThat(toolbar.isVisible()).isTrue();
+        assertThat((Boolean) toolbar.evaluate("element => { const rect = element.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; }")).isTrue();
+        assertSelectablePdfZoom(reader, viewport, outerScrollBefore);
+    }
+
+    private void assertPreviewToggleIcon(final Locator toggle, final boolean expanded) {
+        assertThat(toggle.getAttribute("aria-expanded")).isEqualTo(Boolean.toString(expanded));
+        final var icon = toggle.locator("svg.causeway-collection-preview-icon");
+        assertThat(icon.count()).isEqualTo(1);
+        assertThat(icon.getAttribute("aria-hidden")).isEqualTo("true");
+        assertThat(icon.getAttribute("focusable")).isEqualTo("false");
+        assertThat((Boolean) toggle.evaluate("""
+                (button, expanded) => {
+                  const icon = button.querySelector('.causeway-collection-preview-icon');
+                  const iconRect = icon.getBoundingClientRect();
+                  const buttonRect = button.getBoundingClientRect();
+                  const matrix = new DOMMatrix(getComputedStyle(icon).transform);
+                  const directionIsCorrect = expanded
+                    ? Math.abs(matrix.a) < 0.01 && Math.abs(matrix.b - 1) < 0.01
+                    : Math.abs(matrix.a - 1) < 0.01 && Math.abs(matrix.b) < 0.01;
+                  return iconRect.width >= 17 && Math.abs(iconRect.width - iconRect.height) < 1
+                    && iconRect.width < buttonRect.width && directionIsCorrect;
+                }
+                """, expanded)).isTrue();
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue())
+                .isLessThanOrEqualTo(1.0);
+    }
+
+    private void assertSelectablePdfZoom(final Locator reader, final Locator viewport, final double outerScrollBefore) {
+        final var select = reader.locator("[data-causeway-pdf-zoom-select]");
+        assertThat(select.locator("option").allTextContents())
+                .containsSubsequence("Page width", "Page height", "Page fit", "Actual size", "50%", "100%", "200%");
+        final var pageStatus = reader.locator("[data-causeway-pdf-status]").innerText();
+
+        select.selectOption("150");
+        assertThat(select.inputValue()).isEqualTo("150");
+        select.selectOption("page-height");
+        reader.locator("[data-causeway-pdf-page='1'] canvas").waitFor();
+        assertThat(select.inputValue()).isEqualTo("page-height");
+        final var pageHeight = ((Number) reader.locator("[data-causeway-pdf-page='1'] canvas")
+                .evaluate("canvas => parseFloat(canvas.style.height)")).doubleValue();
+        final var availableHeight = ((Number) viewport.evaluate("element => element.clientHeight - 24")).doubleValue();
+        assertThat(Math.abs(pageHeight - availableHeight)).isLessThanOrEqualTo(1.0);
+
+        select.selectOption("page-fit");
+        assertThat(select.inputValue()).isEqualTo("page-fit");
+        select.selectOption("200");
+        reader.locator("[data-causeway-pdf-zoom-in]").click();
+        assertThat(select.inputValue()).isEqualTo("225");
+        assertThat(select.locator("option[value='225']").innerText()).isEqualTo("225%");
+        select.selectOption("page-width");
+        reader.locator("[data-causeway-pdf-page='1'] canvas").waitFor();
+        assertThat(select.inputValue()).isEqualTo("page-width");
+        final var pageWidth = ((Number) reader.locator("[data-causeway-pdf-page='1'] canvas")
+                .evaluate("canvas => parseFloat(canvas.style.width)")).doubleValue();
+        final var availableWidth = ((Number) viewport.evaluate("element => element.clientWidth - 24")).doubleValue();
+        assertThat(Math.abs(pageWidth - availableWidth)).isLessThanOrEqualTo(1.0);
+
+        assertThat(reader.locator("[data-causeway-pdf-status]").innerText()).isEqualTo(pageStatus);
+        assertThat(Math.abs(((Number) page.evaluate("() => window.scrollY")).doubleValue() - outerScrollBefore)).isLessThan(2.0);
+        assertThat(((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")).doubleValue()).isLessThanOrEqualTo(1.0);
+    }
+
+    @Test
+    void semanticNavigationUsesExactPagesGenericFallbackAndBrowserHistory() {
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        assertThat(page.locator("body").innerText()).contains("Basil");
+
+        navigateTo("petclinic.ViewerFallback", "s_viewer-fallback");
+        page.waitForURL("**/vue/object/petclinic.ViewerFallback/s_viewer-fallback");
+        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.body.innerText.includes('Generic viewer fallback')");
+        assertThat(page.locator("body").innerText()).contains("Generic viewer fallback", "Message");
+
+        page.goBack();
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        assertThat(page.url()).endsWith("/vue/object/petclinic.Pet/s_pet-basil");
+
+        page.goForward();
+        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        assertThat(page.url()).endsWith("/vue/object/petclinic.ViewerFallback/s_viewer-fallback");
+    }
+
+    @Test
+    void exactPetclinicPagesMatchTheHtmxSemanticComposition() {
+        open("/vue/");
+        page.locator("[data-page-kind='home'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.collectionState?.rows?.length === 5");
+        page.waitForFunction("() => document.querySelector('cw-collection#futureVisits')?.collectionState?.rows?.length === 10");
+        assertThat(page.locator(".petclinic-dashboard-grid > section > h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Pet owners,Upcoming visits");
+        assertThat(page.locator("cw-collection#petOwners").getAttribute("paged")).isEqualTo("5");
+        assertThat(page.locator("cw-collection#futureVisits").getAttribute("paged")).isEqualTo("10");
+        assertThat(page.locator("cw-collection#petOwners > cw-preview").count()).isEqualTo(1);
+        assertThat(page.locator("cw-collection#futureVisits > cw-preview").count()).isEqualTo(1);
+        final var ownerPreviewToggle = page.locator("cw-collection#petOwners [data-causeway-preview-toggle]").first();
+        assertPreviewToggleIcon(ownerPreviewToggle, false);
+        ownerPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.expandedPreviewKey != null");
+        assertPreviewToggleIcon(ownerPreviewToggle, true);
+        final var ownerPreview = page.locator("cw-collection#petOwners cw-preview[data-causeway-preview-live]");
+        assertThat(ownerPreview.locator("cw-object-header").count()).isZero();
+        ownerPreview.locator("cw-property#knownAs").waitFor();
+        ownerPreview.locator("cw-action#updateName").waitFor();
+        ownerPreview.locator("cw-collection#pets").waitFor();
+        ownerPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#petOwners')?.expandedPreviewKey == null");
+        assertPreviewToggleIcon(ownerPreviewToggle, false);
+        final var futureVisitPreviewToggle = page.locator("cw-collection#futureVisits [data-causeway-preview-toggle]").first();
+        futureVisitPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#futureVisits')?.expandedPreviewKey != null");
+        final var futureVisitPreview = page.locator("cw-collection#futureVisits cw-preview[data-causeway-preview-live]");
+        assertThat(futureVisitPreview.locator("cw-object-header").count()).isZero();
+        futureVisitPreview.locator("cw-property#reason").waitFor();
+        futureVisitPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#futureVisits')?.expandedPreviewKey == null");
+        assertThat(page.title()).endsWith(" · Pet Clinic");
+
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector('[data-testid=\"petclinic-owner-unreferenced-collections\"] cw-collection#visits')?.collectionState?.rows?.length === 2");
+        page.waitForFunction("() => document.querySelector(\"cw-metadata[data-causeway-metadata-state='ready']\") != null");
+        assertDeclarativeOwnerLayout();
+        assertThat(page.locator(".petclinic-owner-page h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Identity,Other,Contact,Details,Pets,Agreement,visits");
+        assertThat(page.locator(".petclinic-page-toolbar cw-action")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("allOwners,noOwners,bookVisit,relatedOwners");
+        assertThat(page.locator("cw-action#relatedOwners cw-standalone-collection > cw-collection-column")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("name,knownAs,notes");
+        assertThat(page.locator("[data-testid='petclinic-owner-details'] cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("name,knownAs,daysSinceLastVisit,id,version,telephoneNumber,emailAddress,notes,lastVisit");
+        assertThat(page.locator("[data-testid='petclinic-owner-collections'] > section").count()).isZero();
+        assertThat(page.locator("[data-testid='petclinic-owner-collections'] > cw-fieldset[name='Agreement'] cw-property#agreement").getAttribute("label-position")).isEqualTo("NONE");
+        assertThat(page.locator("cw-collection#visits > cw-collection-column").count()).isZero();
+        assertThat(((Number) page.locator("cw-collection#visits")
+                .evaluate("element => element.collectionState.rows.length")).intValue()).isEqualTo(2);
+        assertThat(page.locator("cw-collection#visits").getAttribute("paged")).isNull();
+        assertThat(page.locator("cw-collection#visits > cw-preview").count()).isZero();
+        final var petPreviewToggle = page.locator("cw-collection#pets [data-causeway-preview-toggle]").first();
+        assertPreviewToggleIcon(petPreviewToggle, false);
+        petPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey != null");
+        final var petPreview = page.locator("cw-collection#pets cw-preview[data-causeway-preview-live]");
+        assertThat(petPreview.locator("cw-object-header").count()).isZero();
+        petPreview.locator("cw-property#notes").waitFor();
+        petPreview.locator("cw-action#clearNotes").waitFor();
+        petPreview.locator("cw-collection#visits").waitFor();
+        petPreviewToggle.click();
+        page.waitForFunction("() => document.querySelector('cw-collection#pets')?.expandedPreviewKey == null");
+        final var noOwnersInvocationsBefore = graphQLRequests.stream()
+                .filter(body -> body.contains("noOwners") && body.contains("results"))
+                .count();
+        page.locator("[data-testid='petclinic-owner-unreferenced-actions'] cw-action#noOwners [data-causeway-action-control]").click();
+        page.waitForFunction("() => !document.querySelector('cw-action-results[data-causeway-page-result]')?.hidden");
+        assertThat(graphQLRequests.stream()
+                .filter(body -> body.contains("noOwners") && body.contains("results"))
+                .count()).isGreaterThan(noOwnersInvocationsBefore);
+        assertThat(page.locator("[data-page-kind='pet-owner'][data-route-state='ready']").count()).isEqualTo(1);
+
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        assertThat(page.locator(".petclinic-pet-page h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Identity,Details,Documents");
+        assertThat(page.locator(".petclinic-pet-page cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("petOwner,name,species,notes,ownerAgreementPreview");
+        assertThat(page.locator(".petclinic-pet-page cw-property#id, .petclinic-pet-page cw-property#version").count()).isZero();
+
+        open("/vue/object/petclinic.Visit/s_visit-basil-checkup");
+        page.locator("[data-page-kind='visit'][data-route-state='ready']").waitFor();
+        assertThat(page.locator(".petclinic-visit-page h2")
+                .evaluateAll("elements => elements.map(element => element.textContent.trim()).join(',')"))
+                .isEqualTo("Appointment,Details,Documents");
+        assertThat(page.locator(".petclinic-visit-page cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("pet,visitAt,reason,notes,ownerAgreementDocument");
+        assertThat(page.locator(".petclinic-visit-page cw-property#id, .petclinic-visit-page cw-property#version").count()).isZero();
+    }
+
+    @Test
+    void shellAndOwnerLayoutMatchTheWideAndNarrowReferenceInvariants() {
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-route-state='ready']").waitFor();
+        page.locator("cw-menubars[data-menu-state='ready']").waitFor();
+
+        final var wide = (List<Number>) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("""
+                shell => {
+                  const header = shell.querySelector('header').getBoundingClientRect();
+                  const main = shell.querySelector('main').getBoundingClientRect();
+                  const details = shell.querySelector('[data-testid="petclinic-owner-details"]').getBoundingClientRect();
+                  const collections = shell.querySelector('[data-testid="petclinic-owner-collections"]').getBoundingClientRect();
+                  return [header.height, main.left, details.left, details.right, collections.left, collections.top - details.top,
+                    document.documentElement.scrollWidth - document.documentElement.clientWidth];
+                }
+                """);
+        assertThat(wide.get(0).doubleValue()).isBetween(50.0, 54.0);
+        assertThat(wide.get(1).doubleValue()).isBetween(15.0, 17.0);
+        assertThat(wide.get(4).doubleValue()).isGreaterThanOrEqualTo(wide.get(3).doubleValue());
+        assertThat(Math.abs(wide.get(5).doubleValue())).isLessThan(1.0);
+        assertThat(wide.get(6).intValue()).isZero();
+        assertThat(page.locator("header.causeway-shell-header").evaluate("element => getComputedStyle(element).backgroundColor"))
+                .isEqualTo("rgb(23, 105, 170)");
+        assertThat(page.locator("body").evaluate("element => getComputedStyle(element).fontFamily"))
+                .asString().contains("Inter");
+        assertThat(page.locator("cw-menubars").innerText()).containsSubsequence("Pet Owners", "Visits", "Account");
+        assertThat(page.locator("cw-menubars").innerText()).doesNotContain("System");
+        assertThat(page.locator("cw-menubar-secondary").count()).isZero();
+        assertThat(page.locator("cw-menubar-tertiary").evaluate(
+                "element => element._projection.menus.map(menu => menu.label).join(',')")).isEqualTo("Account");
+        assertThat(page.locator("footer").innerText()).contains("Powered by Apache Causeway", "Vue viewer");
+        assertThat(page.locator(".causeway-object-identity").isVisible()).isFalse();
+        assertThat(page.locator("[data-causeway-route-page]").evaluate("element => getComputedStyle(element).outlineStyle"))
+                .isEqualTo("none");
+
+        page.setViewportSize(800, 900);
+        assertThat(page.locator("[data-testid='petclinic-owner-macro-layout']").evaluate("""
+                element => {
+                  const details = element.querySelector(':scope > [data-testid="petclinic-owner-details"]').getBoundingClientRect();
+                  const collections = element.querySelector(':scope > [data-testid="petclinic-owner-collections"]').getBoundingClientRect();
+                  return collections.left >= details.right && Math.abs(collections.top - details.top) < 1;
+                }
+                """)).isEqualTo(true);
+        page.setViewportSize(500, 900);
+        page.waitForFunction("() => getComputedStyle(document.querySelector('[data-testid=\"petclinic-owner-details\"]')).gridColumnEnd === '-1'");
+        final var narrow = (List<Number>) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("""
+                shell => {
+                  const details = shell.querySelector('[data-testid="petclinic-owner-details"]').getBoundingClientRect();
+                  const collections = shell.querySelector('[data-testid="petclinic-owner-collections"]').getBoundingClientRect();
+                  const footer = shell.querySelector('footer');
+                  return [collections.top - details.bottom,
+                    document.documentElement.scrollWidth - document.documentElement.clientWidth,
+                    getComputedStyle(footer).flexDirection === 'column' ? 1 : 0];
+                }
+                """);
+        assertThat(narrow.get(0).doubleValue()).isGreaterThanOrEqualTo(0.0);
+        assertThat(narrow.get(1).intValue()).isZero();
+        assertThat(narrow.get(2).intValue()).isEqualTo(1);
+    }
+
+    @Test
+    void scalarActionResultsUseTheActivePageOutlet() {
+        open("/vue/object/petclinic.PetOwner/s_owner-mary");
+        page.locator("[data-route-state='ready']").waitFor();
+        page.evaluate("""
+                const source = document.querySelector('cw-action#allOwners');
+                source.dispatchEvent(new CustomEvent('causeway-action-request', {
+                  bubbles: true, composed: true, detail: {actionId: 'allOwners'}
+                }));
+                source.dispatchEvent(new CustomEvent('causeway-action-result', {
+                  bubbles: true, composed: true,
+                  detail: {actionId: 'allOwners', result: {kind: 'scalar', value: 'Completed in Vue'}}
+                }))
+                """);
+        page.waitForFunction("document.body.innerText.includes('Completed in Vue')");
+        assertThat(page.locator("cw-action-results[data-causeway-page-result]").innerText())
+                .contains("allOwners result", "Completed in Vue");
+    }
+
+    @Test
+    void frameworkLogoutFailsClosedWhileApplicationActionsAndLocalResourcesRemainAvailable() {
+        open("/vue/object/petclinic.ViewerFallback/s_viewer-fallback");
+        page.locator("[data-page-kind='generic'][data-route-state='ready']").waitFor();
+        page.waitForFunction("() => document.querySelector('cw-object cw-action#openLocalResource')?.componentState?.status === 'ready'");
+        page.locator("cw-menubars[data-menu-state='ready']").waitFor();
+
+        final var accountMenu = page.locator("vaadin-menu-bar-button")
+                .filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Account")).first();
+        accountMenu.waitFor();
+        accountMenu.click();
+        final var accountOverlay = page.locator("vaadin-menu-bar-overlay[opened]");
+        accountOverlay.waitFor();
+        assertThat(accountOverlay.innerText()).doesNotContain("Logout");
+        page.keyboard().press("Escape");
+
+        final var logoutInvocationsBefore = graphQLRequests.stream()
+                .filter(body -> body.contains("CausewayInvokeServiceAction") && body.contains("LogoutMenu"))
+                .count();
+        final var logoutAnnouncement = (String) page.locator("[data-testid='petclinic-vue-application-shell']").evaluate("element => { element.dispatchEvent(new CustomEvent('causeway-action-request', { bubbles: true, composed: true, cancelable: true, detail: { serviceLogicalTypeName: 'causeway.security.LogoutMenu', actionId: 'logout', context: {} } })); return element.querySelector('[data-causeway-route-announcement]').textContent; }");
+        page.waitForTimeout(50);
+        assertThat(graphQLRequests.stream()
+                .filter(body -> body.contains("CausewayInvokeServiceAction") && body.contains("LogoutMenu"))
+                .count()).isEqualTo(logoutInvocationsBefore);
+        assertThat(logoutAnnouncement).contains("host authentication");
+
+        page.locator("cw-object cw-action#logout [data-causeway-action-control]").click();
+        page.waitForFunction("() => document.body.innerText.includes('Application action completed')");
+        assertThat(page.locator("cw-action-results:not([hidden])").innerText()).contains("Application action completed");
+
+        final var localResourcePopup = page.waitForPopup(() ->
+                page.locator("cw-object cw-action#openLocalResourceInNewWindow [data-causeway-action-control]").click());
+        localResourcePopup.locator("h1").waitFor();
+        assertThat(localResourcePopup.locator("h1").innerText()).isEqualTo("Pet Clinic local resource");
+        localResourcePopup.close();
+
+        page.locator("cw-object cw-action#openLocalResource [data-causeway-action-control]").click();
+        page.waitForURL("**/petclinic-local-resource.html");
+        assertThat(page.locator("h1").innerText()).isEqualTo("Pet Clinic local resource");
+    }
+
+    @Test
+    void directRefreshAndInvalidRoutesRemainWithinTheApplicationShell() {
+        open("/vue/object/petclinic.Pet/s_pet-basil");
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        page.reload();
+        page.locator("[data-page-kind='pet'][data-route-state='ready']").waitFor();
+        assertThat(page.locator("cw-graphql-client[data-causeway-shell-client]").count()).isEqualTo(1);
+
+        open("/vue/invalid-route");
+        page.locator("[data-route-state='invalid-route']").waitFor();
+        assertThat(page.locator("[data-route-state='invalid-route']").count()).isEqualTo(1);
+        assertThat(page.locator("body").innerText()).contains("Invalid route");
+
+        open("/vue/object/petclinic.Pet/s_pet-does-not-exist");
+        page.locator("[data-route-state='unavailable']").waitFor();
+        assertThat(page.locator("body").innerText()).doesNotContain("authorization", "stack trace");
+    }
+
+    @Test
+    void bothToolkitPoliciesPreserveAccessibleShellLandmarksAndMenus() {
+        for (final String toolkit : List.of("native", "vaadin")) {
+            open("/vue/?toolkit=" + toolkit);
+            assertThat(page.locator("html").getAttribute("data-causeway-component-toolkit")).isEqualTo(toolkit);
+            assertThat(page.locator("header.causeway-shell-header").count()).isEqualTo(1);
+            assertThat(page.locator("main#causeway-vue-route").count()).isEqualTo(1);
+            assertThat(page.locator("footer").count()).isEqualTo(1);
+            page.locator("cw-menubars[data-menu-state='ready']").waitFor();
+            assertThat(page.locator("cw-menubars[data-menu-state='ready']").count()).isEqualTo(1);
+            assertThat(page.locator("cw-menubar-secondary").count()).isZero();
+            assertThat(page.locator("cw-menubar-tertiary").evaluate(
+                    "element => element._projection.menus.map(menu => menu.label).join(',')")).isEqualTo("Account");
+            assertThat((Boolean) page.locator("cw-menubar-tertiary").evaluate("""
+                    element => {
+                      const actions = Object.values(element._projection?.actions ?? {});
+                      const has = (identity, label) => actions.some(action =>
+                        `${action.serviceLogicalTypeName}#${action.actionId}` === identity
+                          && action.label === label
+                          && action.role === 'tertiary');
+                      return has('causeway.applib.UserMenu#me', 'Me')
+                        && has('causeway.conf.ConfigurationMenu#configuration', 'Configuration')
+                        && !actions.some(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu')
+                        && !actions.some(action => action.serviceLogicalTypeName === 'causeway.ext.secman.MeService');
+                    }
+                    """))
+                    .as(page.locator("cw-menubar-tertiary").evaluate("element => Object.values(element._projection?.actions ?? {}).map(action => `${action.serviceLogicalTypeName}#${action.actionId}:${action.label}:${action.role}`)").toString())
+                    .isTrue();
+            final var skipLink = page.locator("a[href='#causeway-vue-route']");
+            assertThat(skipLink.innerText()).isEqualTo("Skip to main content");
+            skipLink.focus();
+            page.keyboard().press("Enter");
+            assertThat(page.evaluate("document.activeElement?.id")).isEqualTo("causeway-vue-route");
+        }
+    }
+
+    private void assertDeclarativeOwnerLayout() {
+        final var macro = page.locator("cw-row[data-testid='petclinic-owner-macro-layout']");
+        final var details = macro.locator(":scope > cw-column[data-testid='petclinic-owner-details']");
+        final var collections = macro.locator(":scope > cw-column[data-testid='petclinic-owner-collections']");
+        assertThat(macro.locator(":scope > cw-column").count()).isEqualTo(2);
+        assertThat(details.getAttribute("span")).isEqualTo("4");
+        assertThat(collections.getAttribute("span")).isEqualTo("8");
+        assertThat(details.locator(":scope > cw-tabgroup").count()).isEqualTo(1);
+        assertThat(details.locator(":scope > cw-fieldset").count()).isEqualTo(2);
+        assertThat(details.locator("cw-tab > cw-row > cw-column[span='12']").count()).isEqualTo(2);
+        assertThat(details.locator("cw-fieldset")
+                .evaluateAll("elements => elements.map(element => element.getAttribute('name')).join(',')"))
+                .isEqualTo("Identity,Other,Contact,Details");
+        assertThat(details.locator("cw-fieldset > cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("name,knownAs,daysSinceLastVisit,telephoneNumber,emailAddress,notes,lastVisit");
+        final var tabs = details.locator("cw-tabgroup[data-testid='petclinic-owner-layout-tabs']");
+        final var tabButtons = tabs.locator(":scope > [role='tablist'] > [role='tab']");
+        assertThat(tabButtons.count()).isEqualTo(3);
+        assertThat(tabButtons.evaluateAll("elements => elements.map(element => element.innerText).join(',')"))
+                .isEqualTo("Identity,Other,Metadata");
+        assertThat(details.getByText("Layout help", new Locator.GetByTextOptions().setExact(true)).count()).isZero();
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Identity");
+        assertThat(tabs.evaluate("element => getComputedStyle(element).backgroundColor === getComputedStyle(document.querySelector('.petclinic-card')).backgroundColor"))
+                .isEqualTo(true);
+        tabButtons.nth(1).click();
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Other");
+        assertThat(tabs.locator(":scope > cw-unreferenced-properties[role='tabpanel']:not([hidden])").count()).isEqualTo(1);
+        tabButtons.nth(1).press("ArrowLeft");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Identity");
+        assertThat(tabButtons.first().evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        tabButtons.first().press("ArrowRight");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Other");
+        tabButtons.nth(1).press("ArrowRight");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText())
+                .isEqualTo("Metadata");
+        assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden])")
+                .evaluate("element => getComputedStyle(element).backgroundColor === getComputedStyle(document.querySelector('.petclinic-card')).backgroundColor"))
+                .isEqualTo(true);
+        assertThat(tabs.locator(":scope > cw-tab[role='tabpanel']:not([hidden]), :scope > cw-unreferenced-properties[role='tabpanel']:not([hidden])").count()).isEqualTo(1);
+        final var metadata = tabs.locator("cw-metadata[data-testid='petclinic-owner-metadata']");
+        assertThat(metadata.locator("fieldset > cw-property")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("id,version");
+        final var actions = metadata.locator("details[data-causeway-metadata-actions]");
+        final var actionTrigger = actions.locator("summary");
+        assertThat(actions.getAttribute("open")).isNull();
+        assertThat(actionTrigger.getAttribute("aria-label")).isEqualTo("Metadata actions");
+        assertThat(actionTrigger.getAttribute("aria-expanded")).isEqualTo("false");
+        assertThat(actionTrigger.innerText()).isEqualTo("⋮");
+        @SuppressWarnings("unchecked")
+        final var metadataHeadingCenters = (List<Number>) metadata.evaluate("element => { const title = element.querySelector('legend > span').getBoundingClientRect(); const trigger = element.querySelector('[data-causeway-metadata-actions] > summary').getBoundingClientRect(); return [(title.top + title.bottom) / 2, (trigger.top + trigger.bottom) / 2]; }");
+        assertThat(Math.abs(metadataHeadingCenters.get(0).doubleValue() - metadataHeadingCenters.get(1).doubleValue()))
+                .isLessThanOrEqualTo(4);
+        actionTrigger.click();
+        assertThat(actions.getAttribute("open")).isNotNull();
+        page.waitForFunction("() => document.querySelector('[data-causeway-metadata-actions] > summary')?.getAttribute('aria-expanded') === 'true'");
+        assertThat(actions.locator("[role='menu'] cw-action#delete").count()).isEqualTo(1);
+        assertThat(actions.locator("[role='menu']").evaluate("element => { const rect = element.getBoundingClientRect(); return rect.left >= -0.5 && rect.right <= innerWidth + 0.5; }"))
+                .isEqualTo(true);
+        actionTrigger.press("Escape");
+        assertThat(actions.getAttribute("open")).isNull();
+        assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        page.waitForFunction("""
+                () => [...document.querySelectorAll('[data-testid^="petclinic-owner-unreferenced-"]')]
+                        .every(element => element.getAttribute('data-causeway-unreferenced-state') === 'ready')
+                """);
+        assertThat(page.locator("[data-testid^='petclinic-owner-unreferenced-']").count()).isEqualTo(3);
+        assertThat(macro.locator("[data-testid^='petclinic-owner-unreferenced-']").count()).isEqualTo(1);
+        final var remainingProperties = macro.locator("[data-testid='petclinic-owner-unreferenced-properties']");
+        final var remainingCollections = page.locator("[data-testid='petclinic-owner-unreferenced-collections']");
+        final var remainingActions = page.locator("[data-testid='petclinic-owner-unreferenced-actions']");
+        final var toolbar = page.locator(".petclinic-page-toolbar");
+        assertThat(toolbar.locator(":scope > cw-unreferenced-actions").count()).isEqualTo(1);
+        assertThat(remainingActions.evaluate("element => getComputedStyle(element).display")).isEqualTo("contents");
+        assertThat(remainingActions.locator(":scope > [role='group'].causeway-unreferenced-action-group").getAttribute("aria-label"))
+                .isEqualTo("Other actions");
+        assertThat(remainingActions.locator(":scope > [role='group'] > cw-action")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("noOwners");
+        assertThat(toolbar.locator("cw-action")
+                .evaluateAll("elements => elements.map(element => element.id).join(',')"))
+                .isEqualTo("allOwners,noOwners,bookVisit,relatedOwners");
+        @SuppressWarnings("unchecked")
+        final var actionGeometry = (List<Number>) toolbar.evaluate("element => { const groupElement = element.querySelector('.causeway-unreferenced-action-group'); const group = groupElement.getBoundingClientRect(); const actions = [...groupElement.querySelectorAll(':scope > cw-action')].map(action => action.getBoundingClientRect()); const gap = parseFloat(getComputedStyle(groupElement).columnGap) || 0; return [group.width, group.height, actions.reduce((sum, action) => sum + action.width, 0) + gap * Math.max(0, actions.length - 1), Math.max(...actions.map(action => action.height)), document.documentElement.scrollWidth - document.documentElement.clientWidth]; } ");
+        assertThat(actionGeometry.get(0).doubleValue()).as("compact action widths %s", actionGeometry)
+                .isLessThanOrEqualTo(actionGeometry.get(2).doubleValue() + 1);
+        assertThat(actionGeometry.get(1).doubleValue()).as("compact action heights %s", actionGeometry)
+                .isLessThanOrEqualTo(actionGeometry.get(3).doubleValue() + 1);
+        assertThat(actionGeometry.get(4).doubleValue()).as("horizontal document overflow %s", actionGeometry)
+                .isLessThanOrEqualTo(0);
+        assertThat((Boolean) toolbar.evaluate("async element => { const group = element.querySelector('.causeway-unreferenced-action-group'); const items = [group, ...element.querySelectorAll(':scope > cw-action')]; const width = Math.ceil(Math.max(...items.map(item => item.getBoundingClientRect().width)) + 1); element.style.inlineSize = `${width}px`; element.style.maxInlineSize = `${width}px`; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); const tops = new Set(items.map(item => Math.round(item.getBoundingClientRect().top))); element.style.removeProperty('inline-size'); element.style.removeProperty('max-inline-size'); return tops.size > 1; }"))
+                .as("generated action group wraps with toolbar peers in a narrow bounded toolbar")
+                .isTrue();
+        toolbar.evaluate("element => { const explicit = document.createElement('cw-action'); explicit.id = 'noOwners'; explicit.hidden = true; explicit.dataset.testid = 'petclinic-explicit-noOwners'; element.append(explicit); }");
+        page.waitForFunction("() => document.querySelector('[data-testid=petclinic-owner-unreferenced-actions]')?.getAttribute('data-causeway-unreferenced-state') === 'empty'");
+        assertThat(remainingActions.evaluate("element => getComputedStyle(element).display")).isEqualTo("none");
+        assertThat(remainingActions.locator(":scope > *").count()).isZero();
+        toolbar.locator("[data-testid^='petclinic-explicit-']").evaluateAll("elements => elements.forEach(element => element.remove())");
+        page.waitForFunction("() => document.querySelector('[data-testid=petclinic-owner-unreferenced-actions][data-causeway-unreferenced-state=ready] cw-action#noOwners') != null");
+        assertThat(remainingCollections.locator(":scope > cw-tabgroup cw-collection#visits").count()).isEqualTo(1);
+        assertThat(remainingProperties.locator(":scope > cw-fieldset[name='Other'] > cw-property#daysSinceLastVisit").count()).isEqualTo(1);
+        assertThat(remainingProperties.locator("cw-property#daysSinceLastVisit").getAttribute("editable")).isNull();
+        details.evaluate("""
+                element => {
+                  const explicit = document.createElement('cw-property');
+                  explicit.id = 'daysSinceLastVisit';
+                  explicit.hidden = true;
+                  explicit.dataset.testid = 'petclinic-parser-late-days-since-last-visit';
+                  element.insertBefore(explicit, element.querySelector('[data-testid="petclinic-owner-layout-tabs"]'));
+                }
+                """);
+        page.waitForFunction("() => document.querySelector('[data-testid=petclinic-owner-unreferenced-properties]')?.getAttribute('data-causeway-unreferenced-state') === 'empty'");
+        assertThat(remainingProperties.locator(":scope > *").count()).isZero();
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText()).isEqualTo("Metadata");
+        assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        details.locator("[data-testid='petclinic-parser-late-days-since-last-visit']").evaluate("element => element.remove()");
+        page.waitForFunction("() => !!document.querySelector('[data-testid=petclinic-owner-unreferenced-properties][data-causeway-unreferenced-state=ready] cw-property#daysSinceLastVisit')");
+        assertThat(tabs.locator(":scope > [role='tablist'] > [role='tab'][aria-selected='true']").innerText()).isEqualTo("Metadata");
+        assertThat(actionTrigger.evaluate("element => element.matches(':focus')")).isEqualTo(true);
+        assertThat(collections.locator(":scope > cw-collection").count()).isEqualTo(1);
+        assertThat(collections.locator(":scope > section").count()).isZero();
+        assertThat(collections.locator(":scope > cw-fieldset[name='Agreement'] > cw-property#agreement").count()).isEqualTo(1);
+        assertThat(macro.locator(":scope > div").count()).isZero();
+        assertThat(macro.locator("[data-causeway-layout-invalid]").count()).isZero();
+    }
+
+    private void navigateTo(final String logicalTypeName, final String id) {
+        page.evaluate("""
+                ([logicalTypeName, id]) => document.querySelector('[data-testid="petclinic-vue-application-shell"]').dispatchEvent(
+                  new CustomEvent('causeway-navigation-request', {
+                    bubbles: true,
+                    composed: true,
+                    cancelable: true,
+                    detail: {target: {logicalTypeName, id}}
+                  }))
+                """, List.of(logicalTypeName, id));
+    }
+
+    private void open(final String path) {
+        page.navigate("http://localhost:" + port + path);
+        page.locator("[data-testid='petclinic-vue-application-shell']").waitFor();
+    }
+}

@@ -18,8 +18,11 @@ The table below lists the UI hint methods that are recognized as part of default
 In conjunction with `static/css/application-css`, can therefore provide custom styling of an object instance wherever it is rendered.
 
 |xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()]
-|Provides the name of the image to render, usually alongside the title, to represent the object.
-If not provided, then the class name is used to locate an image.
+|If not provided, the class name is used to locate an image to represent the object. 
+Otherwise is interpreted as a name suffix of the image to render. 
+
+Since version `4.0.0`, when starting with 
+`data:` is interpreted as a Data URI and rendered as an embedded image.
 
 |xref:refguide:applib-methods:ui-hints.adoc#layout[layout()]
 |Provides an alternative layout to use, if available.

@@ -23,8 +23,6 @@ import java.util.function.Consumer;
 
 import org.apache.causeway.commons.internal.base._Refs;
 
-import lombok.val;
-
 /**
  * Similar to a {@link BiConsumer}, except that the first argument is an {@code int}.
  *
@@ -45,7 +43,7 @@ public interface IndexedConsumer<T> {
      * and incremented after each call.
      */
     static <T> Consumer<T> offset(final int offset, final IndexedConsumer<T> indexed){
-        val indexRef = _Refs.intRef(offset);
+        var indexRef = _Refs.intRef(offset);
         return t->indexed.accept(indexRef.getAndInc(), t);
     }
 

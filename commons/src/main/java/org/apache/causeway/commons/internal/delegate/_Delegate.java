@@ -29,8 +29,6 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -67,11 +65,9 @@ public class _Delegate {
                 new DelegatingInvocationHandler(delegate));
     }
 
-    @RequiredArgsConstructor
-    static class DelegatingInvocationHandler implements InvocationHandler {
-
-        final Object delegate;
-        final _ClassCache classCache = _ClassCache.getInstance();
+    record DelegatingInvocationHandler(
+        Object delegate)
+    implements InvocationHandler {
 
         @Override
         public Object invoke(final Object proxy, final Method method, final Object[] args)
@@ -90,8 +86,8 @@ public class _Delegate {
 
             // Invoke method with same signature on delegate ()
             try {
-                val delegateMethod =
-                        classCache.lookupResolvedMethodElseFail(delegate.getClass(),
+                var delegateMethod =
+                    _ClassCache.getInstance().lookupResolvedMethodElseFail(delegate.getClass(),
                                 method.getName(), method.getParameterTypes());
                 return delegateMethod.method().invoke(delegate, args);
             } catch (InvocationTargetException ex) {
@@ -99,6 +95,5 @@ public class _Delegate {
             }
         }
     }
-
 
 }

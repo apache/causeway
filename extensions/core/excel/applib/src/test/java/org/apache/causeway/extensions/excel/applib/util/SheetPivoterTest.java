@@ -34,8 +34,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.val;
-
 class SheetPivoterTest {
 
     XSSFWorkbook workbook;
@@ -471,9 +469,9 @@ class SheetPivoterTest {
                 assertThat(targetSheet.getRow(x).getCell(y).getStringCellValue()).isEqualTo(expectedValue);
             } else {
                 if (expectedValue.getClass() == Integer.class) {
-                    val cellValue = targetSheet.getRow(x).getCell(y);
+                    var cellValue = targetSheet.getRow(x).getCell(y);
                     if (cellValue != null){
-                        val expectedDouble = Double.valueOf(expectedValue.toString());
+                        var expectedDouble = Double.valueOf(expectedValue.toString());
                         assertThat(cellValue.getNumericCellValue()).isEqualTo(expectedDouble);
                     }
                 } else {

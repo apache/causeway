@@ -26,8 +26,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import lombok.val;
-
 /**
  * Produces render/response timing info when in prototyping mode.
  * <p>
@@ -35,9 +33,8 @@ import lombok.val;
  *
  * @since 2.0
  */
-public class TimeTakenModel
+public record TimeTakenModel()
 implements IModel<String> {
-    private static final long serialVersionUID = 1L;
 
     public static IModel<String> createForPrototypingElseBlank(final MetaModelContext mmc) {
         return mmc.getSystemEnvironment().isPrototyping()
@@ -45,13 +42,10 @@ implements IModel<String> {
             : Model.of("");
     }
 
-    protected TimeTakenModel() {
-    }
-
     @Override
     public String getObject() {
 
-        val requestCycle = RequestCycle.get();
+        var requestCycle = RequestCycle.get();
         if(requestCycle==null) return ""; // guard against no RequestCycle available on current Thread
 
         final long t0Millis = requestCycle.getStartTime();

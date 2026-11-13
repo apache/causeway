@@ -29,7 +29,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -37,7 +36,7 @@ import lombok.val;
 @Service
 @Named("causeway.ext.commandReplaySecondary.SecondaryConfig")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-//@Log4j2
+//@Slf4j
 public class SecondaryConfig {
 
     @Getter final String primaryUser;
@@ -50,17 +49,17 @@ public class SecondaryConfig {
     @Getter final List<String> quartzRoles;
 
     public SecondaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
-        val config = causewayConfiguration.getExtensions().getCommandReplay();
+        var config = causewayConfiguration.extensions().commandReplay();
 
-        val primaryAccess = config.getPrimaryAccess();
-        primaryUser = primaryAccess.getUser().orElse(null);
-        primaryPassword = primaryAccess.getPassword().orElse(null);
-        primaryBaseUrlRestful = primaryAccess.getBaseUrlRestful().orElse(null);
-        primaryBaseUrlWicket = primaryAccess.getBaseUrlWicket().orElse(null);
-        batchSize = config.getBatchSize();
+        var primaryAccess = config.primaryAccess();
+        primaryUser = primaryAccess.user().orElse(null);
+        primaryPassword = primaryAccess.password().orElse(null);
+        primaryBaseUrlRestful = primaryAccess.baseUrlRestful().orElse(null);
+        primaryBaseUrlWicket = primaryAccess.baseUrlWicket().orElse(null);
+        batchSize = config.batchSize();
 
-        quartzUser = config.getQuartzSession().getUser();
-        quartzRoles = config.getQuartzSession().getRoles();
+        quartzUser = config.quartzSession().user();
+        quartzRoles = config.quartzSession().roles();
     }
 
     public boolean isConfigured() {

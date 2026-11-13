@@ -24,5 +24,6 @@ module org.apache.causeway.valuetypes.asciidoc.persistence.jpa {
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.asciidoc.applib;
     requires spring.boot.autoconfigure;
+    requires spring.boot.persistence;
     requires spring.context;
 }

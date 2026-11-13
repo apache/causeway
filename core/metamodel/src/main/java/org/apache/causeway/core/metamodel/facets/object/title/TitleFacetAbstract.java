@@ -24,9 +24,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public abstract class TitleFacetAbstract
 extends FacetAbstract
@@ -36,12 +34,8 @@ implements TitleFacet {
         return TitleFacet.class;
     }
 
-    public TitleFacetAbstract(final FacetHolder holder) {
+    protected TitleFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
-    }
-
-    public TitleFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
     }
 
     @Override
@@ -49,23 +43,19 @@ implements TitleFacet {
 
         // equality by facet-type and java-methods
 
-        if(!this.facetType().equals(other.facetType())) {
-            return false;
-        }
+        if(!this.facetType().equals(other.facetType()))
+			return false;
 
-        val otherFacet = (TitleFacet)other;
+        var otherFacet = (TitleFacet)other;
 
-        if(Objects.equals(this, otherFacet)) {
-            return true;
-        }
+        if(Objects.equals(this, otherFacet))
+			return true;
 
         if(this instanceof ImperativeFacet
-                && otherFacet instanceof ImperativeFacet) {
-
-            return ((ImperativeFacet)this)
+                && otherFacet instanceof ImperativeFacet)
+			return ((ImperativeFacet)this)
                     .getMethods()
                     .equals(((ImperativeFacet)otherFacet).getMethods());
-        }
 
         return false;
     }

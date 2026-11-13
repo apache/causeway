@@ -20,9 +20,11 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -32,35 +34,34 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.consent.VetoUtil;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
-@Log4j2
+@Slf4j
 public final class InteractionUtils {
 
     public InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
 
-        val iaResult = new InteractionResult(context.createInteractionEvent());
+        var builder = InteractionResult.builder(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
-        val ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
+        var ifHiddenPolicy = context.renderPolicy().ifHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
                 .filter(advisor->compatible(advisor, context))
                 .forEach(advisor->{
-                    val hidingReasonString = advisor.hides(context);
-                    val hidingReason = Optional.ofNullable(hidingReasonString)
-                            .map(Consent.VetoReason::explicit)
-                            .orElse(null);
-
-                    iaResult.advise(hidingReason, advisor);
+                    _Strings.nonEmpty(advisor.hides(context))
+                        .map(Consent.VetoReason::explicit)
+                        .ifPresent(hidingReason->builder.addAdvise(hidingReason, advisor));
                 });
                 break;
             case SHOW_AS_DISABLED:
@@ -69,69 +70,65 @@ public final class InteractionUtils {
                 break;
         }
 
-        return iaResult;
+        return builder.build();
     }
 
     public InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
 
-        val isResult = new InteractionResult(context.createInteractionEvent());
+        var builder = InteractionResult.builder(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
-        val ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
+        var ifHiddenPolicy = context.renderPolicy().ifHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 break;
             case SHOW_AS_DISABLED:
             case SHOW_AS_DISABLED_WITH_DIAGNOSTICS:
-                val visibilityContext = context.asVisibilityContext();
+                var visibilityContext = context.asVisibilityContext();
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
-                        .filter(advisor->compatible(advisor, context))
-                        .forEach(advisor->{
-                            String hidingReasonString = advisor.hides(visibilityContext);
-                            Consent.VetoReason hidingReason = Optional.ofNullable(hidingReasonString)
-                                    .map(Consent.VetoReason::explicit)
-                                    .orElse(null);
-                            if(hidingReason != null
-                                    && ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
-                                hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
-                            }
-                            isResult.advise(hidingReason, advisor);
-                        });
+                    .filter(advisor->compatible(advisor, context))
+                    .forEach(advisor->{
+                        _Strings.nonEmpty(advisor.hides(visibilityContext))
+                            .map(Consent.VetoReason::explicit)
+                            .ifPresent(hidingReason->{
+                                if(ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
+                                    hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
+                                }
+                                builder.addAdvise(hidingReason, advisor);
+                            });
+                    });
                 break;
         }
 
-        val ifDisabledPolicy = context.getRenderPolicy().getIfDisabledPolicy();
+        var ifDisabledPolicy = context.renderPolicy().ifDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
-        .filter(advisor->compatible(advisor, context))
-        .forEach(advisor->{
-            Consent.VetoReason disablingReason = advisor.disables(context).orElse(null);
-            if(disablingReason != null
-                    && ifDisabledPolicy.isShowAsDisabledWithDiagnostics()) {
-                disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
-            }
-            isResult.advise(disablingReason, advisor);
-        });
+            .filter(advisor->compatible(advisor, context))
+            .forEach(advisor->{
+                advisor.disables(context)
+                    .ifPresent(disablingReason->{
+                        if(ifDisabledPolicy.isShowAsDisabledWithDiagnostics()) {
+                            disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
+                        }
+                        builder.addAdvise(disablingReason, advisor);
+                    });
+            });
 
-        return isResult;
+        return builder.build();
     }
 
     public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
 
-        val iaResult = new InteractionResult(context.createInteractionEvent());
+        var builder = InteractionResult.builder(context.createInteractionEvent());
 
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReasonString =
-                    guardAgainstEmptyReasonString(advisor.invalidates(context), context.getIdentifier());
-
-            val invalidatingReason = Optional.ofNullable(invalidatingReasonString)
-                    .map(Consent.VetoReason::explicit)
-                    .orElse(null);
-            iaResult.advise(invalidatingReason, advisor);
+            guardAgainstEmptyReasonString(advisor.invalidates(context), context.identifier())
+                .map(Consent.VetoReason::explicit)
+                .ifPresent(invalidatingReason->builder.addAdvise(invalidatingReason, advisor));
         });
 
-        return iaResult;
+        return builder.build();
     }
 
     public InteractionResultSet isValidResultSet(
@@ -155,31 +152,40 @@ public final class InteractionUtils {
      * we should generate a message,
      * explaining what was going wrong and hinting developers at a possible resolution
      */
-    private String guardAgainstEmptyReasonString(
+    private Optional<String> guardAgainstEmptyReasonString(
             final @Nullable String reason, final @NonNull Identifier identifier) {
         if("".equals(reason)) {
-            val msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
-                .addVariable("className", identifier.getClassName())
-                .addVariable("memberName", identifier.getMemberLogicalName())
+            var msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
+                .addVariable("className", identifier.className())
+                .addVariable("memberName", identifier.memberLogicalName())
                 .buildMessage();
             log.error(msg);
-            return msg;
+            return Optional.of(msg);
         }
-        return reason;
+        return Optional.ofNullable(reason);
     }
 
-    private boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
+    private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
+        if(ic.initiatedBy().isPassThrough()
+                && isDomainEventAdvisor(advisor)) {
+            //[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
+            return false;
+        }
         if(advisor instanceof ActionDomainEventFacet) {
             return ic instanceof ActionInteractionContext;
         }
         return true;
     }
 
+    private static boolean isDomainEventAdvisor(final InteractionAdvisor advisor) {
+        return advisor instanceof DomainEventFacetAbstract;
+    }
+
     private CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
+        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
-                return ownerAdapter.getConfiguration().getPrototyping().getIfHiddenPolicy();
+                return ownerAdapter.getConfiguration().prototyping().ifHiddenPolicy();
             case PRODUCTION:
             default:
                 return CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
@@ -187,10 +193,10 @@ public final class InteractionUtils {
     }
 
     private CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
+        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
-                return ownerAdapter.getConfiguration().getPrototyping().getIfDisabledPolicy();
+                return ownerAdapter.getConfiguration().prototyping().ifDisabledPolicy();
             case PRODUCTION:
             default:
                 return CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE;

@@ -1,0 +1,53 @@
+= HTMX: Getting Started
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Enable the viewer
+
+First configure the xref:prerequisites.adoc[rich GraphQL backend].
+Add this dependency using the same Causeway version as the application:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-webcomponents-htmx</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+----
+
+Import `org.apache.causeway.viewer.webcomponents.htmx.CausewayModuleViewerWebcomponentsHtmx` in the application bootstrap alongside the GraphQL and domain modules.
+The foundation alone does not install HTMX routes.
+The host packages HTMX 2.0.6 and its own bridge and shell stylesheet beneath `/causeway-htmx/`; do not add a second CDN copy.
+
+The default entry point is `/htmx`, and the GraphQL endpoint defaults to `/graphql`.
+An ordinary request receives a complete document; enhanced navigation replaces only the route fragment.
+Menus and the client context stay connected across route changes.
+
+== Run Petclinic
+
+From the repository root, with the xref:prerequisites.adoc[development prerequisites] installed:
+
+[source,shell]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run.sh
+----
+
+Open `http://localhost:8080/htmx`.
+The root URL redirects there, and the ordinary sample also offers Wicket comparison at `http://localhost:8080/wicket/`.
+Use the application menu to find an owner, open its object page, and navigate to a pet and visit.
+Observe the stable menu while the route changes, then use Back and Forward to check restoration.
+Try a supported property edit or action and observe server validation and result presentation.
+
+For direct comparison with Vue, Mary Smith's sample route is `/htmx/object/petclinic.PetOwner/s_owner-mary`.
+The sample supplies custom owner, pet, and visit pages; types without an exact registration use the generic object page.
+Treat the unprotected comparison application as a development sample, not a deployment security template.
+
+The launcher accepts `JAVA_HOME`, an optional `MVN` executable, and additional Maven arguments.
+Stop it before starting the secured sample or the Vue sample on the same port.
+
+== Next steps
+
+* xref:htmx/configuration.adoc[Configure routing, assets, and presentation]
+* xref:htmx/customisation.adoc[Author custom pages and an application shell]
+* xref:htmx/security.adoc[Enable local SecMan authentication]

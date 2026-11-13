@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import org.apache.wicket.protocol.http.WebApplication;
-
-import org.springframework.context.annotation.Configuration;
-
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.settings.DebugSettings.ClassOutputStrategy;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Activates visual debugging mode for the Wicket Viewer.
@@ -40,11 +39,11 @@ implements WicketApplicationInitializer {
     public void init(final WebApplication webApplication) {
         XrayWkt.setEnabled(true);
         webApplication.getDebugSettings()
-            .setOutputMarkupContainerClassName(true);
+        	.setOutputMarkupContainerClassNameStrategy(ClassOutputStrategy.HTML_COMMENT);
 
         //debug
         //replace the resource locator
-//        val defaultResourceStreamLocator = webApplication.getResourceSettings()
+//        var defaultResourceStreamLocator = webApplication.getResourceSettings()
 //            .getResourceStreamLocator();
 //        webApplication.getResourceSettings()
 //            .setResourceStreamLocator(new XrayResourceStreamLocator(defaultResourceStreamLocator));
@@ -66,7 +65,7 @@ implements WicketApplicationInitializer {
 //                final String style, final String variation, final Locale locale,
 //                final String extension, final boolean strict) {
 //            if(variation!=null) {
-//                val result = delegate.locate(clazz, path, style, variation, locale, extension, strict);
+//                var result = delegate.locate(clazz, path, style, variation, locale, extension, strict);
 //                System.err.printf("variation %s:%s->%b%n", clazz.getName(), variation, result!=null);
 //            }
 //

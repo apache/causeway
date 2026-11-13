@@ -25,7 +25,6 @@ import java.util.Objects;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -33,7 +32,6 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public final class FileUtils {
-
 
     public enum Recursion {
         DO_RECURSE, DONT_RECURSE
@@ -66,7 +64,7 @@ public final class FileUtils {
 
     public static void deleteFiles(final File directory, final FilenameFilter filter, Recursion recursion) {
         deleteFiles(directory, filter, recursion, file -> {
-            val success = file.delete();
+            var success = file.delete();
             if(!success) {
                 throw _Exceptions.assertionError("could not delete file " + file);
             }
@@ -96,7 +94,6 @@ public final class FileUtils {
             }
         }
     }
-
 
     public static FilenameFilter and(final FilenameFilter... filters) {
         return new FilenameFilter() {

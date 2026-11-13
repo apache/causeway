@@ -28,8 +28,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterChoicesFacetFromElementType
 extends ActionParameterChoicesFacetAbstract {
@@ -40,7 +39,7 @@ extends ActionParameterChoicesFacetAbstract {
         return param.getElementType()
                 .lookupNonFallbackFacet(ChoicesFacet.class)
                 .map(choicesFacet->
-                    new ActionParameterChoicesFacetFromElementType(choicesFacet, param.getFacetHolder()));
+                    new ActionParameterChoicesFacetFromElementType(choicesFacet, param.facetHolder()));
     }
 
     private final ChoicesFacet choicesFacet;
@@ -48,8 +47,13 @@ extends ActionParameterChoicesFacetAbstract {
     private ActionParameterChoicesFacetFromElementType(
             final ChoicesFacet choicesFacet,
             final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+        super(holder);
         this.choicesFacet = choicesFacet;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
     @Override
@@ -58,7 +62,7 @@ extends ActionParameterChoicesFacetAbstract {
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return choicesFacet.getChoices(head.getTarget(), interactionInitiatedBy);
+        return choicesFacet.getChoices(head.target(), interactionInitiatedBy);
     }
 
 }

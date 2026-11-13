@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.value;
 
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.UUID;
 
@@ -26,18 +27,16 @@ import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
- * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
+ * Panel for rendering value types readonly.
  */
-public class StandaloneValuePanel
+class StandaloneValuePanel
 extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;
@@ -46,12 +45,24 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     public StandaloneValuePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
 
-        //XXX StandaloneValuePanel has its limitations compared to the ScalarPanel infrastructure,
-        // which has far better rendering support
-        // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
-        if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
+        var pseudoAttrModel = UiAttributeWkt.pseudo(valueModel);
+        var component = getComponentFactoryRegistry()
+        	.streamComponentFactories(UiComponentType.ATTRIBUTE_NAME_AND_VALUE, pseudoAttrModel)
+        	.findFirst()
+        	.map(factory->factory.createComponent(ID_STANDALONE_VALUE, pseudoAttrModel))
+        	.orElse(null);
+
+        if(component!=null) {
+        	Wkt.add(this, component);
+			return;
+        }
+
+        // fallback (legacy)
+        if(isProbablySimpleInlineHtml(valueModel.elementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
-                MmValueUtils.htmlStringForValueType(getModel().getObjectMember(), getModel().getObject())
+                MmValueUtils.htmlStringForValueType(
+                    getModel().objectMember(),
+                    getModel().getObject())
             );
         } else {
             // resort to (textual) title rendering
@@ -63,13 +74,13 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     // -- HELPER
 
     private boolean isProbablySimpleInlineHtml(final ObjectSpecification valueSpec) {
-        val cls = valueSpec.getCorrespondingClass();
+        var cls = valueSpec.correspondingClass();
 
         return PredefinedSerializables.isPredefinedSerializable(cls)
+                || BufferedImage.class.equals(cls)
                 || UUID.class.equals(cls)
                 || URL.class.equals(cls)
                 || LocalResourcePath.class.equals(cls);
     }
-
 
 }

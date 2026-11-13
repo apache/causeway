@@ -41,8 +41,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -53,9 +54,8 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -71,7 +71,6 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public final class _Reflect {
-
 
     // -- PREDICATES
 
@@ -166,8 +165,8 @@ public final class _Reflect {
         if(c!=0) {
             return c;
         }
-        val paramsA = a.getParameters();
-        val paramsB = b.getParameters();
+        var paramsA = a.getParameters();
+        var paramsB = b.getParameters();
         for(int i=0; i<a.getParameterCount(); ++i) {
             c = typesCompare(paramsA[i].getType(), paramsB[i].getType());
             if(c!=0) {
@@ -449,7 +448,7 @@ public final class _Reflect {
 //        return methods
 //                .filter(m->same(method, m))
 //                .map(m->m.getAnnotation(annotationCls))
-//                .filter(_NullSafe::isPresent)
+//                .filter(Objects::nonNull)
 //                .findFirst()
 //                .orElse(null);
 
@@ -488,7 +487,6 @@ public final class _Reflect {
                 .collect(Collectors.toMap(PropertyDescriptor::getName, PropertyDescriptor::getReadMethod));
     }
 
-
     public Method getGetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
         for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
@@ -525,7 +523,6 @@ public final class _Reflect {
             final @NonNull Object value) {
         setter.invoke(target, value);
     }
-
 
     // -- MODIFIERS
 
@@ -565,7 +562,6 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
 
-
     public Try<Object> invokeMethodOn(
             final @NonNull Method method,
             final @NonNull Object target,
@@ -604,7 +600,6 @@ public final class _Reflect {
         });
         /*sonar-ignore-off*/
     }
-
 
     // -- COMMON CONSTRUCTOR IDIOMS
 
@@ -690,7 +685,7 @@ public final class _Reflect {
     // -- SPECIAL PREDICATES
 
     public boolean isNonFinalObjectMethod(final @NonNull Method method) {
-        for(val m : _Constants.nonFinalObjectMethods) {
+        for(var m : _Constants.nonFinalObjectMethods) {
             if(methodsSame(m, method)) return true;
         }
         return false;
@@ -708,7 +703,7 @@ public final class _Reflect {
     }
 
     public boolean isJavaApiClass(final @NonNull Class<?> cls) {
-        val className = cls.getName();
+        var className = cls.getName();
         return className.startsWith("java.")
                 || className.startsWith("sun.");
     }
@@ -731,7 +726,7 @@ public final class _Reflect {
 //    }
 //
 //    private Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
-//        val refSignature = ref.getParameterTypes();
+//        var refSignature = ref.getParameterTypes();
 //        return other->
 //            (!ref.getName().equals(other.getName()))
 //            ? false
@@ -816,6 +811,43 @@ public final class _Reflect {
         return a.isAssignableFrom(b)
                 ? b
                 : a;
+    }
+
+    // -- HELPER - FIELD FOR GETTER
+
+    Optional<Field> fieldForGetter(final Method getterCandidate) {
+        return Optional.ofNullable(findFieldForGetter(getterCandidate));
+    }
+
+    private Field findFieldForGetter(final Method getterCandidate) {
+        if(ReflectionUtils.isObjectMethod(getterCandidate)) {
+            return null;
+        }
+        var fieldNameCandidate = fieldNameForGetter(getterCandidate);
+        if(fieldNameCandidate==null) {
+            return null;
+        }
+        var declaringClass = getterCandidate.getDeclaringClass();
+        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
+    }
+
+    private static String fieldNameForGetter(final Method getter) {
+        if(getter.getParameterCount()>0) {
+            return null;
+        }
+        if(getter.getReturnType()==void.class) {
+            return null;
+        }
+        var methodName = getter.getName();
+        String fieldName = null;
+        if(methodName.startsWith("is") &&  methodName.length() > 2) {
+            fieldName = methodName.substring(2);
+        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
+            fieldName = methodName.substring(3);
+        } else {
+            return null;
+        }
+        return _Strings.decapitalize(fieldName);
     }
 
 }

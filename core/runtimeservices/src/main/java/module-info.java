@@ -27,20 +27,19 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.homepage;
     exports org.apache.causeway.core.runtimeservices.i18n.po;
     exports org.apache.causeway.core.runtimeservices.icons;
-    exports org.apache.causeway.core.runtimeservices.interaction;
+    exports org.apache.causeway.core.runtimeservices.ia.dto;
     exports org.apache.causeway.core.runtimeservices.jaxb;
     exports org.apache.causeway.core.runtimeservices.locale;
     exports org.apache.causeway.core.runtimeservices.menubars.bootstrap;
     exports org.apache.causeway.core.runtimeservices.message;
-    exports org.apache.causeway.core.runtimeservices.placeholder;
+    exports org.apache.causeway.core.runtimeservices.render;
     exports org.apache.causeway.core.runtimeservices.publish;
     exports org.apache.causeway.core.runtimeservices.recognizer;
     exports org.apache.causeway.core.runtimeservices.recognizer.dae;
-    exports org.apache.causeway.core.runtimeservices.routing;
     exports org.apache.causeway.core.runtimeservices.scratchpad;
-    exports org.apache.causeway.core.runtimeservices.serializing;
-    exports org.apache.causeway.core.runtimeservices.session;
+    exports org.apache.causeway.core.runtimeservices.ia;
     exports org.apache.causeway.core.runtimeservices.sitemap;
+    exports org.apache.causeway.core.runtimeservices.span;
     exports org.apache.causeway.core.runtimeservices.spring;
     exports org.apache.causeway.core.runtimeservices.transaction;
     exports org.apache.causeway.core.runtimeservices.urlencoding;
@@ -49,7 +48,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.wrapper;
     exports org.apache.causeway.core.runtimeservices.wrapper.dispatchers;
     exports org.apache.causeway.core.runtimeservices.wrapper.handlers;
-    exports org.apache.causeway.core.runtimeservices.wrapper.proxy;
     exports org.apache.causeway.core.runtimeservices.xml;
     exports org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
@@ -61,8 +59,8 @@ module org.apache.causeway.core.runtimeservices {
     requires java.xml;
     requires jakarta.xml.bind;
     requires jakarta.inject;
-    requires lombok;
-    requires org.apache.causeway.applib;
+    requires static lombok;
+    requires transitive org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.interaction;
@@ -71,7 +69,7 @@ module org.apache.causeway.core.runtimeservices {
     requires org.apache.causeway.core.transaction;
     requires org.apache.causeway.schema;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.context.support;
@@ -79,7 +77,10 @@ module org.apache.causeway.core.runtimeservices {
     requires spring.tx;
     requires org.apache.causeway.core.codegen.bytebuddy;
     requires spring.aop;
+    requires java.management;
+    requires spring.boot.autoconfigure;
 
+    opens org.apache.causeway.core.runtimeservices;
     opens org.apache.causeway.core.runtimeservices.wrapper;
-    opens org.apache.causeway.core.runtimeservices.wrapper.proxy; //to org.apache.causeway.core.codegen.bytebuddy
+    opens org.apache.causeway.core.runtimeservices.wrapper.handlers; //to org.apache.causeway.core.codegen.bytebuddy
 }

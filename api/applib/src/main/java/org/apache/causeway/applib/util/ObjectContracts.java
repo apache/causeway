@@ -19,19 +19,17 @@
 package org.apache.causeway.applib.util;
 
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.function.Function;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
  * @since 1.x revised for 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public final class ObjectContracts {
 
     private ObjectContracts() {}
@@ -141,50 +139,5 @@ public final class ObjectContracts {
             };
         }
     }
-
-    // -- BACKWARDS COMPATIBILITY
-
-    @Deprecated // uses reflection on each call
-    public static <T> String toString(final T obj, final String propertyNames) {
-        Objects.requireNonNull(obj, "obj required, otherwise undecidable");
-
-        return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
-                .toString(obj);
-    }
-
-    @Deprecated // uses reflection on each call
-    public static <T> boolean equals(final T obj, final Object other, final String propertyNames) {
-
-        if(obj==null && other==null) {
-            if(log.isWarnEnabled()) {
-                log.warn("potential misuse of <T> ObjectContracts::equals(T obj, Object other, "
-                        + "String propertyNames). First argument is not expected to be null!");
-            }
-            return true;
-        }
-
-        Objects.requireNonNull(obj, "obj required, otherwise undecidable");
-
-        return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
-                .equals(obj, other);
-    }
-
-    @Deprecated // uses reflection on each call
-    public static int hashCode(final Object obj, final String propertyNames) {
-        Objects.requireNonNull(obj, "obj required, otherwise undecidable");
-
-        return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
-                .hashCode(obj);
-    }
-
-    @Deprecated // uses reflection on each call
-    public static <T> int compare(final T obj, final T other, final String propertyNames) {
-        Objects.requireNonNull(obj, "obj required, otherwise undecidable");
-
-        return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
-                .compare(obj, other);
-    }
-
-
 
 }

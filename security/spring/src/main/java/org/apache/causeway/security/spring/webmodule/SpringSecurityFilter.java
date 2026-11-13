@@ -34,20 +34,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}
  */
-//@Log4j2
+//@Slf4j
 public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;
@@ -60,7 +59,7 @@ public class SpringSecurityFilter implements Filter {
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException, ServletException {
 
-        val userMemento = springAuthentication()
+        var userMemento = springAuthentication()
                 .flatMap(this::userMementoFromSpringAuthentication)
                 .orElse(null);
 
@@ -69,10 +68,10 @@ public class SpringSecurityFilter implements Filter {
             return; // either not authenticated or unknown principal type (not handled)
         }
 
-        val interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
+        var interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
                 .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder.getUserTimeZone());
 
-        val result = interactionService.runAndCatch(
+        var result = interactionService.runAndCatch(
                 interactionContext,
                 ()->filterChain.doFilter(servletRequest, servletResponse));
 
@@ -113,7 +112,7 @@ public class SpringSecurityFilter implements Filter {
 
         for (final AuthenticationConverter converter : converters) {
             try {
-                val userMemento = converter.convert(springAuthentication);
+                var userMemento = converter.convert(springAuthentication);
                 if(userMemento != null) {
                     return Optional.of(
                             // adds generic authorized user role to indicate 'authorized'

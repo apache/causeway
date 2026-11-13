@@ -21,7 +21,7 @@ package org.apache.causeway.security.spring.authconverters;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +29,8 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.AccessLevel;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Defines an SPI to attempt to convert a Spring {@link Authentication} into
@@ -92,7 +91,7 @@ public interface AuthenticationConverter {
 
         @Override
         public final UserMemento convert(final @NonNull Authentication authentication) {
-            val principal = authentication.getPrincipal();
+            var principal = authentication.getPrincipal();
             return _Casts.castTo(principalClass, principal)
                     .map(this::convertPrincipal)
                     .orElse(null);
@@ -101,6 +100,5 @@ public interface AuthenticationConverter {
         protected abstract UserMemento convertPrincipal(@NonNull T principal);
 
     }
-
 
 }

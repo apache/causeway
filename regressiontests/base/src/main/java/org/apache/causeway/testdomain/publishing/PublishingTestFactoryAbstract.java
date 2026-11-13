@@ -18,43 +18,38 @@
  */
 package org.apache.causeway.testdomain.publishing;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
-import org.junit.jupiter.api.DynamicTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.support.TransactionSynchronization;
-
 import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
+import org.jspecify.annotations.NonNull;
+import org.junit.jupiter.api.DynamicTest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
 
 public abstract class PublishingTestFactoryAbstract {
 
@@ -78,15 +73,29 @@ public abstract class PublishingTestFactoryAbstract {
         final boolean supportsProgrammatic;
     }
 
-    @Value(staticConstructor = "of")
-    public static class PublishingTestContext {
+    public record PublishingTestContext(
+            @NonNull String displayName,
+            @NonNull ChangeScenario scenario,
+            @NonNull Optional<Class<? extends Throwable>> expectedException,
+            @NonNull Runnable given,
+            @NonNull BiConsumer<ChangeScenario, VerificationStage> verifier,
+
+            TraceLog traceLog,
+            List<Throwable> verificationErrors) {
+
+        public static PublishingTestContext of(
+                final String displayName, final ChangeScenario scenario, final Optional<Class<? extends Throwable>> expectedException,
+                final Runnable given, final BiConsumer<ChangeScenario, VerificationStage> verifier) {
+            return new PublishingTestContext(displayName, scenario, expectedException, given, verifier,
+                    new TraceLog(), _Lists.newConcurrentList());
+        }
 
         public static class TraceLog {
             private final StringBuilder buffer = new StringBuilder();
-            @Getter private boolean debug = true;
+            @Getter private final boolean debug = true;
 
             public TraceLog log(final String format, final Object...args) {
-                val msg = String.format(format, args);
+                var msg = String.format(format, args);
                 buffer.append(msg).append("\n");
                 if(debug) {
                     System.err.println(msg);
@@ -102,15 +111,6 @@ public abstract class PublishingTestFactoryAbstract {
                 log("---------------------------------------------------------");
             }
         }
-
-        private final @NonNull String displayName;
-        private final @NonNull ChangeScenario scenario;
-        private final @NonNull Optional<Class<? extends Throwable>> expectedException;
-        private final @NonNull Runnable given;
-        private final @NonNull BiConsumer<ChangeScenario, VerificationStage> verifier;
-
-        private final TraceLog traceLog = new TraceLog();
-        private final List<Throwable> verificationErrors = _Lists.newConcurrentList();
 
         public void runGiven() {
             traceLog.log("2.1 about to run given");
@@ -172,9 +172,8 @@ public abstract class PublishingTestFactoryAbstract {
 
         @Override
         public void beforeCompletion() {
-            _Probe.errOut("=== TRANSACTION before completion");
             if(testContext!=null) {
-                testContext.getTraceLog().log("3.1 pre-commit event is occurring");
+                testContext.traceLog().log("3.1 pre-commit event is occurring");
                 testContext.runVerify(VerificationStage.PRE_COMMIT);
             }
         }
@@ -185,16 +184,14 @@ public abstract class PublishingTestFactoryAbstract {
 
         @Override
         public void afterCompletion(final int status) {
-
             TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
-            _Probe.errOut("=== TRANSACTION after completion");
             if(testContext!=null) {
                 try {
                     if(transactionCompletionStatus.isCommitted()) {
-                        testContext.getTraceLog().log("3.2 post-commit event is occurring");
+                        testContext.traceLog().log("3.2 post-commit event is occurring");
                         testContext.runVerify(VerificationStage.POST_COMMIT);
                     } else {
-                        testContext.getTraceLog().log("3.2 rollback event is occurring");
+                        testContext.traceLog().log("3.2 rollback event is occurring");
                         testContext.runVerify(VerificationStage.FAILURE_CASE);
                     }
 
@@ -212,7 +209,7 @@ public abstract class PublishingTestFactoryAbstract {
         public void unbind(final PublishingTestContext testContext) {
             _Assert.assertEquals(this.testContext, testContext, "PreCommitListener is not bound to the testContext, "
                     + "which it receives a request to unbind from.");
-            this.testContext.getTraceLog().log("4.? unbind from commit events");
+            this.testContext.traceLog().log("4.? unbind from commit events");
             this.testContext = null;
         }
 
@@ -316,23 +313,22 @@ public abstract class PublishingTestFactoryAbstract {
     /** a test - method is embedded in its own interaction and transaction */
     protected abstract void wrapperAsyncExecutionWithRules(PublishingTestContext context);
 
-
     // -- HELPER
 
     private final DynamicTest publishingTest(
             final PublishingTestContext testContext,
             final PublishingTestRunner testRunner) {
 
-        val displayName = String.format("%s (%s)",
-                testContext.getDisplayName(),
-                testContext.getScenario().getDisplayName());
+        var displayName = String.format("%s (%s)",
+                testContext.displayName(),
+                testContext.scenario().getDisplayName());
 
-        val onSuccess = VerificationStage.POST_INTERACTION;
-        val onFailure = VerificationStage.FAILURE_CASE;
+        var onSuccess = VerificationStage.POST_INTERACTION;
+        var onFailure = VerificationStage.FAILURE_CASE;
 
         return dynamicTest(displayName, ()->{
 
-            val traceLog = testContext.getTraceLog();
+            var traceLog = testContext.traceLog();
 
             xrayAddTest(displayName);
 
@@ -345,7 +341,7 @@ public abstract class PublishingTestFactoryAbstract {
                 assert_no_initial_tx_context();
 
                 getInteractionService().runAnonymous(()->{
-                    val currentInteraction = getInteractionService().currentInteraction();
+                    var currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
                     setupEntity(testContext);
                     xrayExitInteraction();
@@ -354,8 +350,8 @@ public abstract class PublishingTestFactoryAbstract {
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
-                val result = getInteractionService().runAnonymousAndCatch(()->{
-                    val currentInteraction = getInteractionService().currentInteraction();
+                var result = getInteractionService().runAnonymousAndCatch(()->{
+                    var currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
 
                     try {
@@ -371,9 +367,9 @@ public abstract class PublishingTestFactoryAbstract {
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
-                if(testContext.getExpectedException().isPresent()) {
-                    val expectedException = testContext.getExpectedException().get();
-                    val actualException = result.getFailure().map(Throwable::getClass).orElse(null);
+                if(testContext.expectedException().isPresent()) {
+                    var expectedException = testContext.expectedException().get();
+                    var actualException = result.getFailure().map(Throwable::getClass).orElse(null);
                     assertEquals(expectedException, actualException);
                     testContext.runVerify(onFailure);
                     failWhenContextHasErrors(testContext);
@@ -389,7 +385,6 @@ public abstract class PublishingTestFactoryAbstract {
                 testContext.runVerify(onSuccess);
                 failWhenContextHasErrors(testContext);
 
-
             } finally {
 
                 releaseContext(testContext);
@@ -401,22 +396,21 @@ public abstract class PublishingTestFactoryAbstract {
     }
 
     private final void assert_no_initial_tx_context() {
-        val txState = getTransactionService().currentTransactionState();
+        var txState = getTransactionService().currentTransactionState();
         assertEquals(TransactionState.NONE, txState);
     }
 
     private final void failWhenContextHasErrors(final PublishingTestContext testContext) {
-        if(!testContext.getVerificationErrors().isEmpty()) {
-            fail(testContext.getVerificationErrors().get(0));
+        if(!testContext.verificationErrors().isEmpty()) {
+            fail(testContext.verificationErrors().get(0));
         }
     }
-
 
     // -- XRAY
 
     private final void xrayAddTest(final String name) {
 
-        val threadId = ThreadMemento.fromCurrentThread();
+        var threadId = ThreadMemento.fromCurrentThread();
 
         XrayUi.updateModel(model->{
             model.addContainerNode(

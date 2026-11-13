@@ -20,30 +20,38 @@ package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
 import java.util.Optional;
 
-import jakarta.persistence.Column;
-
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetFromJpaColumnAnnotation
-extends MaxTotalDigitsFacetAbstract {
+import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+final class MaxTotalDigitsFacetFromJpaColumnAnnotation
+extends FacetAbstract
+implements MaxTotalDigitsFacet {
 
     public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> columnIfAny,
+            final Optional<Column> columnOpt,
             final FacetHolder holder) {
-
-        return columnIfAny
-                .filter(column->column.precision()>0)
-                .map(column->
-                    new MaxTotalDigitsFacetFromJpaColumnAnnotation(
-                            column.precision(), holder));
+        return columnOpt
+            .filter(column->column.precision()>0)
+            .map(column->
+                new MaxTotalDigitsFacetFromJpaColumnAnnotation(
+                        column.precision(), holder));
     }
+
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int maxTotalDigits;
 
     private MaxTotalDigitsFacetFromJpaColumnAnnotation(
-            final int precision, final FacetHolder holder) {
-        super(precision, holder);
+            final int maxTotalDigits,
+            final FacetHolder facetHolder) {
+    	super(MaxTotalDigitsFacet.class, facetHolder);
+    	this.maxTotalDigits = maxTotalDigits;
     }
 
+    @Override public Precedence precedence() { return Precedence.LOW; } // LOW so can be overridden via @ValueSemantics
 
 }

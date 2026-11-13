@@ -1,0 +1,15 @@
+{
+  metadataType: __type(name: "RichMemberMetadata") {
+    fields {
+      name
+      type {
+        kind
+        name
+        ofType {
+          kind
+          name
+        }
+      }
+    }
+  }
+}

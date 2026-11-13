@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -26,6 +26,9 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.jpa.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.jpa.dom.CommandLogEntryPK;
 import org.apache.causeway.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
+import org.apache.causeway.extensions.commandlog.jpa.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.jpa.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -45,12 +48,16 @@ import org.apache.causeway.testing.fixtures.applib.teardown.jpa.TeardownFixtureJ
         // @Service's
         CommandLogEntryRepository.class,
         CommandLogEntryPK.Semantics.class,
+        CommandReplayResultMappingRepository.class,
+        CommandReplayMappingListenerPersistent.BeanFactory.class,
 
         // entities
-        CommandLogEntry.class
+        CommandLogEntry.class,
+        CommandReplayResultMapping.class
 })
 @EntityScan(basePackageClasses = {
-    CommandLogEntry.class
+    CommandLogEntry.class,
+    CommandReplayResultMapping.class
 })
 public class CausewayModuleExtCommandLogPersistenceJpa {
 
@@ -65,10 +72,10 @@ public class CausewayModuleExtCommandLogPersistenceJpa {
         return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
+                deleteFrom(CommandReplayResultMapping.class);
                 deleteFrom(CommandLogEntry.class);
             }
         };
     }
-
 
 }

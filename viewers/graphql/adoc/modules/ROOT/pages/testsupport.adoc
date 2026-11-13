@@ -204,7 +204,7 @@ For example:
 ----
 
 
-For further examples, take a look at the link:https://github.com/apache/causeway/tree/master/viewers/graphql/test/src/test/java/org/apache/causeway/viewer/graphql/viewer/test/e2e[tests for the GraphQL viewer itself], which use this class extensively.
+For further examples, take a look at the link:https://github.com/apache/causeway/tree/main/viewers/graphql/test/src/test/java/org/apache/causeway/viewer/graphql/viewer/test/e2e[tests for the GraphQL viewer itself], which use this class extensively.
 
 
 

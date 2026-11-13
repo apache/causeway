@@ -34,7 +34,6 @@ public abstract class AbstractTenancyFixtureScript
 extends FixtureScript 
 implements FixtureScriptWithExecutionStrategy {
 
-
     protected ApplicationTenancy create(
             final String name,
             final String path,

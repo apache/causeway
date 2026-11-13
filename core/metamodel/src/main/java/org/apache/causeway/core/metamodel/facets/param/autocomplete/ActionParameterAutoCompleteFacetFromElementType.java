@@ -28,8 +28,7 @@ import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoComplet
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterAutoCompleteFacetFromElementType
 extends ActionParameterAutoCompleteFacetAbstract {
@@ -40,7 +39,7 @@ extends ActionParameterAutoCompleteFacetAbstract {
         return param.getElementType()
                 .lookupNonFallbackFacet(AutoCompleteFacet.class)
                 .map(autoCompleteFacet->
-                    new ActionParameterAutoCompleteFacetFromElementType(autoCompleteFacet, param.getFacetHolder()));
+                    new ActionParameterAutoCompleteFacetFromElementType(autoCompleteFacet, param.facetHolder()));
     }
 
     private final AutoCompleteFacet autoCompleteFacet;
@@ -48,8 +47,13 @@ extends ActionParameterAutoCompleteFacetAbstract {
     private ActionParameterAutoCompleteFacetFromElementType(
             final AutoCompleteFacet autoCompleteFacet,
             final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+        super(holder);
         this.autoCompleteFacet = autoCompleteFacet;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
     @Override

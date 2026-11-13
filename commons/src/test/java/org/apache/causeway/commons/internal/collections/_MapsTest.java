@@ -30,14 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.val;
-
 class _MapsTest {
     
     @Test
     void aliasMap_shouldAllowLookupByAliasKey() {
         
-        val aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
+        var aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
         
         aliasMap.put("key1", "value1");
         aliasMap.put("key2", Can.ofArray(new String[] {"alias2a", "alias2b"}), "value2");
@@ -54,13 +52,12 @@ class _MapsTest {
         assertTrue(aliasMap.containsKey("key3"));
         assertEquals("value3", aliasMap.get("key3"));
         
-        
     }
     
     @Test
     void aliasMap_shouldAlsoClearAliases() {
         
-        val aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
+        var aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
         
         aliasMap.put("key1", "value1");
         aliasMap.put("key2", Can.ofArray(new String[] {"alias2a", "alias2b"}), "value2");
@@ -84,7 +81,7 @@ class _MapsTest {
     @Test
     void aliasMap_shouldHonorRemoval() {
         
-        val aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
+        var aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
         
         aliasMap.put("key1", "value1");
         aliasMap.put("key2", Can.ofArray(new String[] {"alias2a", "alias2b"}), "value2");
@@ -113,7 +110,7 @@ class _MapsTest {
     @Test
     void aliasMap_shouldThrowOnAliasKeyCollision() {
         
-        val aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
+        var aliasMap = _Maps.<String, String>newAliasMap(HashMap::new);
         
         aliasMap.put("key1", Can.ofArray(new String[] {"alias1a", "alias1b"}), "value1");
         
@@ -123,5 +120,4 @@ class _MapsTest {
         
     }
     
-
 }

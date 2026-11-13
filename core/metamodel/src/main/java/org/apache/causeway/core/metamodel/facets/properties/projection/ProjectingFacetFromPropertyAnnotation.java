@@ -23,9 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Projecting;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 
 public class ProjectingFacetFromPropertyAnnotation
 extends ProjectingFacetAbstract {
@@ -38,7 +36,7 @@ extends ProjectingFacetAbstract {
             return Optional.empty();
         }
 
-        val projecting = propertyIfAny.get().projecting();
+        var projecting = propertyIfAny.get().projecting();
         switch (projecting) {
         case PROJECTED:
             return Optional.of(new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder));
@@ -48,7 +46,6 @@ extends ProjectingFacetAbstract {
         }
 
     }
-
 
     private final Projecting projecting;
 

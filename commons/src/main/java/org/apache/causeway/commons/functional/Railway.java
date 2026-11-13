@@ -22,14 +22,13 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * The {@link Railway} type represents a value of one of two possible types (a disjoint union)
@@ -43,7 +42,8 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-public interface Railway<F, S> {
+public sealed interface Railway<F, S>
+permits Railway.Failure, Railway.Success {
 
     // -- FACTORIES
 
@@ -70,7 +70,7 @@ public interface Railway<F, S> {
     default S getSuccessElseFail() { return getSuccess().orElseThrow(); }
     @SneakyThrows
     default S getSuccessElseFail(final Function<F, ? extends Throwable> toThrowable) {
-        val successIfAny = getSuccess();
+        var successIfAny = getSuccess();
         if(successIfAny.isPresent()) {
             return successIfAny.get();
         }
@@ -138,12 +138,7 @@ public interface Railway<F, S> {
 
     // -- SUCCESS
 
-    @lombok.Value
-    @RequiredArgsConstructor
-    final class Success<F, S> implements Railway<F, S>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final @NonNull S success;
+    final record Success<F, S>(@NonNull S success) implements Railway<F, S>, Serializable {
 
         @Override public boolean isSuccess() { return true; }
         @Override public boolean isFailure() { return false; }
@@ -188,12 +183,7 @@ public interface Railway<F, S> {
 
     // -- FAILURE
 
-    @lombok.Value
-    @RequiredArgsConstructor
-    final class Failure<F, S> implements Railway<F, S>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final @NonNull F failure;
+    final record Failure<F, S>(@NonNull F failure) implements Railway<F, S>, Serializable {
 
         @Override public boolean isSuccess() { return false; }
         @Override public boolean isFailure() { return true; }
@@ -235,40 +225,5 @@ public interface Railway<F, S> {
         }
 
     }
-
-    // -- TYPE COMPOSITION
-
-    @FunctionalInterface
-    public static interface HasRailway<F, S> extends Railway<F, S> {
-
-        Railway<F, S> getRailway();
-
-        @Override default boolean isSuccess() { return getRailway().isSuccess(); }
-        @Override default boolean isFailure() { return getRailway().isFailure(); }
-
-        @Override default Optional<S> getSuccess() { return getRailway().getSuccess(); }
-        @Override default Optional<F> getFailure() { return getRailway().getFailure(); }
-
-        @Override default Railway<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer) {
-            return getRailway().ifSuccess(successConsumer); }
-        @Override default Railway<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer) {
-            return getRailway().ifFailure(failureConsumer); }
-
-        @Override default <R> Railway<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper) {
-            return getRailway().mapSuccess(successMapper); }
-        @Override default <R> Railway<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper) {
-            return getRailway().mapFailure(failureMapper); }
-
-        @Override default <R> R fold(
-                final @NonNull ThrowingFunction<F, R> failureMapper,
-                final @NonNull ThrowingFunction<S, R> successMapper) {
-            return getRailway().fold(failureMapper, successMapper);
-        }
-
-        @Override default public Railway<F, S> chain(final @NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction){
-            return getRailway().chain(chainingFunction);
-        }
-    }
-
 
 }

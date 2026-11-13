@@ -23,7 +23,7 @@ import java.util.Locale;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -33,8 +33,7 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ConverterBasedOnValueSemantics<T>
 extends ValueSemanticsModelAbstract
@@ -51,7 +50,7 @@ implements IConverter<T> {
             final @NonNull ViewOrEditMode scalarRepresentation) {
         super(propOrParam, scalarRepresentation);
         this.type = type;
-        this.resolvedType = ClassUtils.resolvePrimitiveIfNecessary(propOrParam.getElementType().getCorrespondingClass());
+        this.resolvedType = ClassUtils.resolvePrimitiveIfNecessary(propOrParam.getElementType().correspondingClass());
         _Assert.assertTypeIsInstanceOf(resolvedType, type);
     }
 
@@ -75,14 +74,14 @@ implements IConverter<T> {
                         featureIdentifier);
         }
 
-        val feature = feature();
-        val valueFacet = valueFacet();
+        var feature = feature();
+        var valueFacet = valueFacet();
 
-        val context = valueFacet
+        var context = valueFacet
                 .createValueSemanticsContext(feature);
 
         try {
-            return valueFacet.selectParserForFeatureElseFallback(feature)
+            return valueFacet.selectParserForAttributeOrElseFallback(feature)
                     .parseTextRepresentation(context, text);
         } catch (Exception e) {
             if(e instanceof ConversionException) {
@@ -100,21 +99,21 @@ implements IConverter<T> {
     @Override
     public final String convertToString(final T value, final Locale locale) {
 
-        val feature = feature();
-        val valueFacet = valueFacet();
+        var feature = feature();
+        var valueFacet = valueFacet();
 
-        val context = valueFacet
+        var context = valueFacet
                 .createValueSemanticsContext(feature);
 
         switch(scalarRepresentation) {
         case EDITING:
-            return valueFacet.selectParserForFeatureElseFallback(feature)
+            return valueFacet.selectParserForAttributeOrElseFallback(feature)
                     .parseableTextRepresentation(context, value);
         case VIEWING:
             return propOrParam.fold(
-                    prop->valueFacet.selectRendererForPropertyElseFallback(prop)
+                    prop->valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(prop)
                             .titlePresentation(context, value),
-                    param->valueFacet.selectRendererForParameterElseFallback(param)
+                    param->valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(param)
                             .titlePresentation(context, value));
         }
 
@@ -122,11 +121,11 @@ implements IConverter<T> {
     }
 
     public String getEditingPattern() {
-        val feature = feature();
-        val valueFacet = valueFacet();
-        val context = valueFacet
+        var feature = feature();
+        var valueFacet = valueFacet();
+        var context = valueFacet
                 .createValueSemanticsContext(feature);
-        return valueFacet.selectParserForFeatureElseFallback(feature)
+        return valueFacet.selectParserForAttributeOrElseFallback(feature)
                 .getPattern(context);
     }
 

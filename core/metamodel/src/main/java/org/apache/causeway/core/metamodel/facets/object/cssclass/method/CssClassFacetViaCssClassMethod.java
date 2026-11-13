@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.cssclass.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetA
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class CssClassFacetViaCssClassMethod
 extends CssClassFacetAbstract

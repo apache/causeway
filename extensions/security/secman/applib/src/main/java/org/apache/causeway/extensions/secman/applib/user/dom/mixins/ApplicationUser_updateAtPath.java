@@ -64,5 +64,4 @@ public class ApplicationUser_updateAtPath {
         return target.getAtPath();
     }
 
-
 }

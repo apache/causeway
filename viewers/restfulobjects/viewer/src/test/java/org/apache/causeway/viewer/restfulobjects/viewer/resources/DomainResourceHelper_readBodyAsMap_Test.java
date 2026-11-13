@@ -28,13 +28,11 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-import lombok.val;
-
 class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void whenNull() throws Exception {
-        val representation = representationFor(null);
+        var representation = representationFor(null);
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -42,7 +40,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void whenEmptyString() throws Exception {
-        val representation = representationFor("");
+        var representation = representationFor("");
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -50,7 +48,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void whenWhitespaceOnlyString() throws Exception {
-        val representation = representationFor(" \t ");
+        var representation = representationFor(" \t ");
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -58,7 +56,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void emptyMap() throws Exception {
-        val representation = representationFor("{}");
+        var representation = representationFor("{}");
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -66,7 +64,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void map() throws Exception {
-        val representation = representationFor("{\"foo\":\"bar\"}");
+        var representation = representationFor("{\"foo\":\"bar\"}");
 
         assertTrue(representation.isMap());
         assertEquals(1, representation.size());
@@ -84,6 +82,5 @@ class DomainResourceHelper_readBodyAsMap_Test {
     private JsonRepresentation representationFor(final String input) {
         return RequestParams.ofQueryString(input).asMap();
     }
-
 
 }

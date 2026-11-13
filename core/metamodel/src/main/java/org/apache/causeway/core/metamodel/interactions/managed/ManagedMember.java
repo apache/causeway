@@ -20,26 +20,27 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor
-public abstract class ManagedMember
-implements ManagedFeature {
+public sealed abstract class ManagedMember
+implements ManagedFeature
+permits ManagedAction, ManagedCollection, ManagedProperty {
 
     /**
      * Some representations may vary according to whether the member is to be represented for read
@@ -73,7 +74,6 @@ implements ManagedFeature {
         this.owner = managedObject;
     }
 
-
     @Override
     public abstract ObjectMember getMetaModel();
 
@@ -106,14 +106,13 @@ implements ManagedFeature {
     @Getter @Setter @NonNull
     private RepresentationMode representationMode = RepresentationMode.AUTO;
 
-
     /**
      * @return non-empty if hidden
      */
     public Optional<InteractionVeto> checkVisibility() {
 
         try {
-            val visibilityConsent =
+            var visibilityConsent =
                     getMetaModel()
                     .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
 
@@ -137,7 +136,7 @@ implements ManagedFeature {
 
         try {
 
-            val usabilityConsent =
+            var usabilityConsent =
                     getMetaModel()
                     .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
 
@@ -155,18 +154,15 @@ implements ManagedFeature {
     }
 
     protected static <T extends ObjectMember> Optional<T> lookup(
-            final @NonNull ManagedObject owner,
-            final @NonNull Identifier.Type memberType,
+            final @NonNull ObjectSpecification ownerSpec,
+            final Identifier.@NonNull Type memberType,
             final @NonNull String memberId) {
-
-        val onwerSpec = owner.getSpecification();
-        switch (memberType) {
-        case ACTION:     return _Casts.uncheckedCast(onwerSpec.getAction(memberId));
-        case PROPERTY:   return _Casts.uncheckedCast(onwerSpec.getProperty(memberId));
-        case COLLECTION: return _Casts.uncheckedCast(onwerSpec.getCollection(memberId));
-        default:
-            return Optional.empty();
-        }
+        return switch (memberType) {
+            case ACTION -> _Casts.uncheckedCast(ownerSpec.getAction(memberId));
+            case PROPERTY -> _Casts.uncheckedCast(ownerSpec.getProperty(memberId));
+            case COLLECTION -> _Casts.uncheckedCast(ownerSpec.getCollection(memberId));
+            default -> Optional.empty();
+        };
     }
 
 }

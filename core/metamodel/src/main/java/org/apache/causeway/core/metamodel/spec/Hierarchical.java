@@ -18,56 +18,102 @@
  */
 package org.apache.causeway.core.metamodel.spec;
 
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.collections._Streams;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public interface Hierarchical {
 
-    /**
-     * Returns true if the <tt>subclasses()</tt> method will return an array of
-     * one or more elements (ie, not an empty array).
-     */
-    boolean hasSubclasses();
+    final static Hierarchical EMPTY = new Hierarchical() {
+		@Override public Optional<ObjectSpecification> superSpec() { return Optional.empty(); }
+		@Override public Can<ObjectSpecification> interfaceSpecs() { return Can.empty(); }
+	};
 
-    /**
+	record HierarchicalRecord(
+			Optional<ObjectSpecification> superSpec,
+			Can<ObjectSpecification> interfaceSpecs)
+	implements Hierarchical {
+		public HierarchicalRecord {
+			superSpec = superSpec!=null
+					? superSpec
+					: Optional.empty();
+			interfaceSpecs = interfaceSpecs!=null
+					? interfaceSpecs
+					: Can.empty();
+		}
+	}
+
+	/**
      * Get the set of specifications for all the interfaces that the class
      * represented by this specification implements.
      */
-    Can<ObjectSpecification> interfaces();
-
-    /**
-     * Whether <code>this</code> specification represents the same specification,
-     * or a subclass of the specified <code>other</code> specification.
-     * <p>
-     * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
-     * {@link Class#isAssignableFrom(Class) Java's}
-     * <tt>superType.isAssignableFrom(subType)</tt>.
-     * @return whether <code>this</code> is <b>instanceof</b> <code>other</code>
-     */
-    boolean isOfType(ObjectSpecification other);
-
-    /**
-     * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
-     */
-    boolean isOfTypeResolvePrimitive(ObjectSpecification other);
-
-    public static enum Depth {
-        DIRECT,
-        TRANSITIVE
-    }
-
-    /**
-     * Get the set of specifications for the subclasses of the class
-     * represented by this specification
-     */
-    Can<ObjectSpecification> subclasses(Depth depth);
+    Can<ObjectSpecification> interfaceSpecs();
 
     /**
      * Get the specification for this specification's class's superclass.
      */
-    ObjectSpecification superclass();
+    Optional<ObjectSpecification> superSpec();
 
     default boolean isTypeHierarchyRoot() {
-        return superclass()==null;
+        return superSpec().isEmpty();
     }
+
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with superSpec.
+     */
+    default Stream<ObjectSpecification> streamSuperTypeHierarchy() {
+        return superSpec()
+        		.map(superSpec->Stream.concat(Stream.of(superSpec), superSpec.streamSuperTypeHierarchy()))
+        		.orElseGet(Stream::empty);
+    }
+
+	static <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType,
+			final FacetHolder facetHolder,
+			final Hierarchical hierarchical) {
+        // lookup facet holder's facet
+		Stream<T> facets1 = facetHolder.lookupFacet(facetType).stream();
+
+        // lookup all interfaces
+		Stream<T> facets2 = hierarchical.interfaceSpecs().stream()
+                .filter(Objects::nonNull) // just in case
+                .flatMap(interfaceSpec->interfaceSpec.lookupFacet(facetType).stream());
+
+        // search up the inheritance hierarchy
+		Stream<T> facets3 = hierarchical.superSpec().stream()
+                .flatMap(superSpec->superSpec.lookupFacet(facetType).stream());
+
+		Stream<T> facetsCombined = _Streams.<T>concat(facets1, facets2, facets3);
+
+		// local class, declared inside this method body, so it is not publicly exposed via this interface
+		// while the test method is called, collects the first occurrence of a fallback facet
+		class FallbackFacetFilter<Q extends Facet> implements Predicate<Q> {
+	        Q fallback;
+
+	        @Override
+	        public boolean test(final Q facet) {
+	            if(facet==null)
+					return false;
+	            if(!facet.precedence().isFallback())
+					return true;
+	            if(fallback == null) {
+	                fallback = facet;
+	            }
+	            return false;
+	        }
+	    }
+
+        var filter = new FallbackFacetFilter<T>();
+
+        return Optional.ofNullable(facetsCombined
+                .filter(filter)
+                .findFirst()
+                .orElse(filter.fallback));
+	}
 
 }

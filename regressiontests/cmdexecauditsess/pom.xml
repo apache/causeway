@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
         <artifactId>causeway-regressiontests</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,39 +36,20 @@
     <properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-
-        <jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.cmdexecauditsess</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/regressiontests/cmdexecauditsess</git-plugin.propertiesDir>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.causeway.regressiontests</groupId>
                 <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
         <module>generic</module>
-        <module>persistence-jdo</module>
         <module>persistence-jpa</module>
     </modules>
 

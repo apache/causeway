@@ -27,7 +27,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -43,7 +43,6 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-
 
 /**
  * This service exposes a set of menu actions to search and list {@link AuditTrailEntry audit record}s,
@@ -66,10 +65,8 @@ public class AuditTrailMenu {
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
 
-
     final AuditTrailEntryRepository auditTrailEntryRepository;
     final ClockService clockService;
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -86,7 +83,6 @@ public class AuditTrailMenu {
             return auditTrailEntryRepository.findMostRecent();
         }
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -112,8 +108,6 @@ public class AuditTrailMenu {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findAll.DomainEvent.class,
@@ -130,9 +124,6 @@ public class AuditTrailMenu {
             return auditTrailEntryRepository.findAll();
         }
     }
-
-
-
 
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());

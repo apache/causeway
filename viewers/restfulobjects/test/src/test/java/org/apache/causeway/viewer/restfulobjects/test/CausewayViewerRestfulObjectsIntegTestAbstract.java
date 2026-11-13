@@ -18,50 +18,45 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test;
 
+import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
-import jakarta.inject.Inject;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.restfulobjects.applib.client.ConversationLogger;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.opentest4j.AssertionFailedError;
+import org.slf4j.Logger;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.lang.Nullable;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClient.Builder;
+import org.springframework.web.client.RestClient.ResponseSpec;
+import org.springframework.web.client.RestClient.ResponseSpec.ErrorHandler;
 
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
-
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
-
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
-import lombok.val;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Intended as a base class for integration testing.
@@ -80,10 +75,14 @@ import lombok.val;
  */
 @SpringBootTest(
         classes = {
-                CausewayViewerRestfulObjectsIntegTestAbstract.TestApp.class
+                CausewayViewerRestfulObjectsIntegTestManifest.class,
         },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "causeway.viewer.restfulobjects.base-path=/restful"
+        }
 )
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
@@ -91,43 +90,15 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
 
     private final Class<?> resourceBaseClazz;
 
-    protected CausewayViewerRestfulObjectsIntegTestAbstract(
-            final Class<?> resourceBaseClazz
-    ) {
+    protected CausewayViewerRestfulObjectsIntegTestAbstract(final Class<?> resourceBaseClazz) {
         this.resourceBaseClazz = resourceBaseClazz;
-    }
-
-    /**
-     * Compared to the production app manifest <code>domainapp.webapp.AppManifest</code>,
-     * here we in effect disable security checks, and we exclude any web/UI modules.
-     */
-    @SpringBootConfiguration
-    @EnableAutoConfiguration
-    @Import({
-            CausewayModuleCoreRuntimeServices.class,
-            CausewayModuleSecurityBypass.class,
-            CausewayModuleTestingFixturesApplib.class,
-            CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.UseLog4j2Test),
-            @PropertySource(CausewayPresets.SilenceMetaModel),
-            @PropertySource(CausewayPresets.SilenceProgrammingModel),
-//            @PropertySource("classpath:/H2InMemory_withUniqueSchema.properties"),
-//            @PropertySource("classpath:/SilenceMetaModel.properties"),
-//            @PropertySource("classpath:/SilenceProgrammingModel.properties"),
-//            @PropertySource("classpath:/UseLog4j2Test.properties"),
-    })
-    public static class TestApp {
     }
 
     @Inject protected CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject protected SpecificationLoader specificationLoader;
     @Inject protected TransactionService transactionService;
 
-    @LocalServerPort
-    protected int port;
+    @LocalServerPort protected int port;
 
     @BeforeEach
     void init(final TestInfo testInfo) {
@@ -137,30 +108,59 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
         assertNotNull(transactionService);
     }
 
-
     /**
      * Populated automatically by JUnit5
      */
     protected TestInfo testInfo;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    protected RestfulClient restfulClient() {
-        val clientConfig = RestfulClientConfig.builder()
-                .restfulBaseUrl(String.format("http://0.0.0.0:%d/restful/", port))
-                .authenticationMode(AuthenticationMode.BASIC)
-                .basicAuthUser("any")           // using bypass auth.
-                .basicAuthPassword("any")
-                .useRequestDebugLogging(true) // default = false
-                .build();
+    protected String baseUrl() {
+        return "http://0.0.0.0:%d/restful/".formatted(port);
+    }
 
-        return RestfulClient.ofConfig(clientConfig);
+    protected Builder restClient() {
+        return RestClient.builder()
+            .baseUrl(baseUrl())
+            .defaultHeaders(headers -> headers.setBasicAuth("usr", "pass"));
+    }
+    protected Builder restClient(final Logger logger) {
+        return restClient()
+            .bufferContent((uri, method)->true)
+            .requestInterceptor(new ConversationLogger(msg->logger.info(msg)));
+    }
+    protected ResponseSpec restGetJson(final String uri, final Logger logger) {
+        return restClient(logger).build()
+            .get()
+            .uri(uri)
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(_Predicates.alwaysTrue(), assertStatusOkResponseErrorHandler());
+    }
+
+    protected ErrorHandler assertStatusOkResponseErrorHandler() {
+        return new ErrorHandler() {
+			@Override
+			public void handle(final HttpRequest request, final ClientHttpResponse response) throws IOException {
+				if(!response.getStatusCode().equals(HttpStatus.OK))
+					throw new AssertionFailedError("StatusCode not OK: " + response.getStatusCode());
+			}
+        };
+    }
+
+    protected ErrorHandler assertStatusNotFoundResponseErrorHandler() {
+        return new ErrorHandler() {
+			@Override
+			public void handle(final HttpRequest request, final ClientHttpResponse response) throws IOException {
+				if(!response.getStatusCode().equals(HttpStatus.NOT_FOUND))
+					throw new AssertionFailedError("StatusCode NOT_FOUND expected, but got: " + response.getStatusCode());
+			}
+        };
     }
 
     public enum BookmarkOptions {
         SCRUB,
-        PRESERVE,
-        ;
+        PRESERVE
     }
 
     protected Options jsonOptions() {
@@ -180,30 +180,25 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
             options = new Options();
         }
         return options.withScrubber(s -> {
-                    try {
-                        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
-                        if (bookmarkOptions == BookmarkOptions.SCRUB) {
-                            prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
-                            prettyJson = prettyJson.replaceAll(":\\d+\"", ":NNN\"");    // "oid" : "university.dept.Department:33" ; "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:33",
-                            prettyJson = prettyJson.replaceAll("/\\d+/", "/NNN/");
-                            prettyJson = prettyJson.replaceAll("/\\d+\"", "/NNN\"");
-                            prettyJson = prettyJson.replaceAll(": \"\\d+\"", ": \"NNN\""); // "instanceId" : "33",
-                        }
-                        return prettyJson;
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .forFile().withExtension(".json");
+                String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                    prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
+                    prettyJson = prettyJson.replaceAll(":\\d+\"", ":NNN\"");    // "oid" : "university.dept.Department:33" ; "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:33",
+                    prettyJson = prettyJson.replaceAll("/\\d+/", "/NNN/");
+                    prettyJson = prettyJson.replaceAll("/\\d+\"", "/NNN\"");
+                    prettyJson = prettyJson.replaceAll(": \"\\d+\"", ": \"NNN\""); // "instanceId" : "33",
+                }
+                return prettyJson;
+            })
+            .forFile().withExtension(".json");
     }
 
     protected void beforeEach() {}
 
     protected void afterEach() {}
 
-
     protected Blob asPdfBlob(final String fileName) {
-        val bytes = toBytes(fileName);
+        var bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 

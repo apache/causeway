@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,23 +29,24 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 /**
  * @since 1.x {@index}
  */
-public class PathNode {
+public record PathNode(
+        String key,
+        Map<String, String> criteria
+    ) {
 
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final Pattern LIST_CRITERIA_SYNTAX = Pattern.compile("^([^=]+)=(.+)$");
 
-    public static final PathNode NULL = new PathNode("", Collections.<String, String> emptyMap());
+    public static final PathNode NULL = new PathNode("", Collections.emptyMap());
 
-    public static List<String> split(String path) {
-        List<String> parts = _Lists.newArrayList();
+    public static List<String> split(final String path) {
+        List<String> parts = new ArrayList<>();
         String curr = null;
 
         final List<String> chunks = _Strings.splitThenStream(path, ".")
@@ -75,15 +78,13 @@ public class PathNode {
 
     public static PathNode parse(final String path) {
         final Matcher nodeMatcher = NODE.matcher(path);
-        if (!nodeMatcher.matches()) {
-            return null;
-        }
+        if (!nodeMatcher.matches())
+			return null;
         final int groupCount = nodeMatcher.groupCount();
-        if (groupCount < 1) {
-            return null;
-        }
+        if (groupCount < 1)
+			return null;
         final String key = nodeMatcher.group(1);
-        final Map<String, String> criteria = _Maps.newHashMap();
+        final Map<String, String> criteria = new HashMap<>();
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
 
@@ -103,38 +104,25 @@ public class PathNode {
         return new PathNode(key, criteria);
     }
 
-    private final String key;
-    private final Map<String, String> criteria;
-
-    private PathNode(final String key, final Map<String, String> criteria) {
+    public PathNode(final String key, final Map<String, String> criteria) {
         this.key = key;
         this.criteria = Collections.unmodifiableMap(criteria);
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public Map<String, String> getCriteria() {
-        return criteria;
-    }
-
     public boolean hasCriteria() {
-        return !getCriteria().isEmpty();
+        return !criteria.isEmpty();
     }
 
     public boolean matches(final JsonRepresentation repr) {
-        if (!repr.isMap()) {
-            return false;
-        }
-        for (final Map.Entry<String, String> criterium : getCriteria().entrySet()) {
+        if (!repr.isMap())
+			return false;
+        for (final Map.Entry<String, String> criterium : criteria.entrySet()) {
             String requiredValue = criterium.getValue();
             if(requiredValue != null) {
                 // list syntax
                 String actualValue = repr.getString(criterium.getKey());
-                if(actualValue == null) {
-                    return false;
-                }
+                if(actualValue == null)
+					return false;
 
                 // determine if fuzzy match (ie without additional parameters)
                 // eg [rel=urn:org.restfulobjects:rel/details;action="list"] matches [rel=urn:org.restfulobjects:rel/details]
@@ -146,17 +134,14 @@ public class PathNode {
                 if(actualValueSemiIndex == -1 && requiredValueSemiIndex != -1) {
                     requiredValue = requiredValue.substring(0, requiredValueSemiIndex);
                 }
-                if (!Objects.equals(requiredValue, actualValue)) {
-                    return false;
-                }
-            } else {
-                // map syntax
+                if (!Objects.equals(requiredValue, actualValue))
+					return false;
+            } else
+				// map syntax
                 return repr.getRepresentation(criterium.getKey()) != null;
-            }
         }
         return true;
     }
-
 
     @Override
     public int hashCode() {
@@ -167,13 +152,10 @@ public class PathNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+    public boolean equals(final Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         PathNode other = (PathNode) obj;
         if (key == null) {
             if (other.key != null)
@@ -182,7 +164,6 @@ public class PathNode {
             return false;
         return true;
     }
-
 
     @Override
     public String toString() {

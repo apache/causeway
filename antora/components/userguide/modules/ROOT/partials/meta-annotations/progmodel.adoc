@@ -12,7 +12,7 @@ The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app illustrates the usa
 [source,java]
 .Name.java
 ----
-@Column(length = Name.MAX_LEN, allowsNull = "false")                // <.>
+@Column(length = Name.MAX_LEN, nullable = false)                    // <.>
 @Property(mustSatisfy = Name.Specification.class,                   // <.>
           maxLength = Name.MAX_LEN)
 @Parameter(mustSatisfy = Name.Specification.class,                  // <.>
@@ -93,16 +93,15 @@ The table below summarises the equivalence of some of the most common cases.
 |@Property(maxLength=50) +
 @Parameter(maxLength=50)
 |
-@javax.jdo.annotations.Column(length=50)
+@jakarta.persistence.Column(length=50)
 
 |big decimal (precision)
-|@javax.validation.constraints.Digits(fraction=2)
-|@javax.persistence.Column(scale=2)
-@javax.jdo.annotations.Column(scale=2)
+|@jakarta.validation.constraints.Digits(fraction=2)
+|@jakarta.persistence.Column(scale=2)
 
 |optionality
-|`@javax.annotation.Nullable` or `ParameterLayout(optionality=OPTIONAL`)
-|`@javax.persistence.Column(nullable=true)`
-`@javax.jdo.annotations.Column(allowsNull="true")`
+|`@jakarta.annotation.Nullable` or `ParameterLayout(optionality=OPTIONAL`)
+|`@jakarta.persistence.Column(nullable=true)`
+`@jakarta.persistence.Basic(optional=true)`
 |===
 

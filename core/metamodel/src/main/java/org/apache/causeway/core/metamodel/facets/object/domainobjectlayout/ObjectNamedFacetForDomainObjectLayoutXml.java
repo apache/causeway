@@ -21,47 +21,38 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
-
-import lombok.val;
+import org.jspecify.annotations.Nullable;
 
 public class ObjectNamedFacetForDomainObjectLayoutXml
-extends ObjectNamedFacetAbstract {
+extends ObjectNamedFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<ObjectNamedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Facet.Precedence precedence) {
-
-        if(domainObjectLayout == null) {
+            final Facet.Precedence precedence,
+            final @Nullable String qualifier) {
+        if(domainObjectLayout == null)
             return Optional.empty();
-        }
-
-        val singular = _Strings.emptyToNull(domainObjectLayout.getNamed());
-
-        val noun = Noun.singular(singular);
-
-        if(!noun.isLiteralPresent()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                new ObjectNamedFacetForDomainObjectLayoutXml(
-                        noun,
-                            holder,
-                            precedence));
+        var noun = new Noun(domainObjectLayout.getNamed());
+        return noun.isEmpty()
+            ? Optional.empty()
+            : Optional.of(new ObjectNamedFacetForDomainObjectLayoutXml(noun, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            });
     }
 
     private ObjectNamedFacetForDomainObjectLayoutXml(
             final Noun noun,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(noun, holder, precedence);
+            final FacetHolder holder) {
+        super(noun, holder);
     }
 
     @Override

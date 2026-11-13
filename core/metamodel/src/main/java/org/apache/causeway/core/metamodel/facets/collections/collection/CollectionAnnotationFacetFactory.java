@@ -20,42 +20,52 @@ package org.apache.causeway.core.metamodel.facets.collections.collection;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class CollectionAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
     public CollectionAnnotationFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.COLLECTIONS_AND_ACTIONS);
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        var collectionIfAny = collectionIfAny(processMethodContext);
 
-        val collectionIfAny = collectionIfAny(processMethodContext);
+        if(processMethodContext.featureType().isProperty()) {
+            if(collectionIfAny.isPresent()) {
+                // Collection annotation is not allowed on property feature
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Collection.class);
+            }
+            return; // skip further processing, since this is a property feature
+        }
 
-        if(processMethodContext.isMixinMain()) {
-            collectionIfAny.ifPresent(collection->{
-                inferMixinSort(collection, processMethodContext.getFacetHolder());
-            });
+        if(collectionIfAny.isPresent()) {
+            if(processMethodContext.isMixinMain()) {
+                inferMixinSort(processMethodContext.facetHolder());
+            } else if(processMethodContext.featureType().isAction()) {
+                // Collection annotation is not allowed on action feature (unless mixin main)
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Collection.class);
+            }
         }
 
         processDomainEvent(processMethodContext, collectionIfAny);
@@ -67,22 +77,21 @@ extends FacetFactoryAbstract {
             .synthesizeOnMethodOrMixinType(
                     Collection.class,
                     () -> ValidationFailureUtils
-                    .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Collection.class));
+                    .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Collection.class));
     }
 
-    void inferMixinSort(final Collection collection, final FacetedMethod facetedMethod) {
+    void inferMixinSort(final FacetedMethod facetedMethod) {
         /* if @Collection detected on method or type level infer:
          * @Action(semantics=SAFE) */
-        addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(ContributingFacetAbstract.createAsCollection(facetedMethod));
+        new ActionSemanticsFacet("InferSafeForMixedInCollection", SemanticsOf.SAFE, facetedMethod);
+        ContributingFacetAbstract.createAsCollection(facetedMethod);
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        val cls = processMethodContext.getCls();
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
-        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
+        var getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         final boolean isCollection = getterFacetIfAny.isPresent()
                 || (processMethodContext.isMixinMain()
@@ -95,32 +104,27 @@ extends FacetFactoryAbstract {
         //
 
         // search for @Collection(domainEvent=...)
-        addFacet(
-            CollectionDomainEventFacet
-                .create(collectionIfAny, cls, holder));
+        CollectionDomainEventFacet
+            .create(collectionIfAny, processMethodContext);
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val method = processMethodContext.getMethod();
+        var facetHolder = processMethodContext.facetHolder();
+        var method = processMethodContext.methodFacade();
 
-        val methodReturnType = method.getReturnType();
+        var methodReturnType = method.getReturnType();
         CollectionSemantics.valueOf(methodReturnType)
-        .ifPresent(collectionType->{
-            addFacetIfPresent(
-                    // check for @Collection(typeOf=...)
-                    TypeOfFacetForCollectionAnnotation
-                    .create(collectionIfAny, collectionType, facetHolder)
-                    .or(
-                        // else infer from return type
-                        ()-> TypeOfFacet.inferFromMethodReturnType(
-                                method,
-                                facetHolder))
-                );
-
+        	.ifPresent(collectionType->{
+                // check for @Collection(typeOf=...)
+                TypeOfFacetForCollectionAnnotation
+                .create(collectionIfAny, collectionType, facetHolder)
+                .or(
+                    // else infer from return type
+                    ()-> TypeOfFacet.inferFromMethodReturnType(
+                            method,
+                            facetHolder));
         });
     }
-
 
 }

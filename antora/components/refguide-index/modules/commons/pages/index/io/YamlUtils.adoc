@@ -11,8 +11,17 @@ Utilities to convert from and to YAML format.
 class YamlUtils {
   Try<T> tryRead(Class<T> mappedType, String stringUtf8, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<T> tryRead(Class<T> mappedType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<List<T>> tryReadAsList(Class<T> elementType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<T> tryReadCustomized(Class<T> mappedType, String stringUtf8, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<T> tryReadCustomized(Class<T> mappedType, DataSource source, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<List<T>> tryReadAsListCustomized(Class<T> elementType, DataSource source, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<Stream<String>> tryReadMultiDoc(DataSource source)     // <.>
   void write(Object pojo, DataSink sink, JsonUtils.JacksonCustomizer... customizers)     // <.>
   String toStringUtf8(Object pojo, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  void writeCustomized(Object pojo, DataSink sink, YamlDumpCustomizer dumpCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  String toStringUtf8Customized(Object pojo, YamlDumpCustomizer dumpCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  String writeMultiDoc(Iterable<String> yamlDocuments)     // <.>
+  String writeMultiDoc(Stream<String> yamlDocumentStream)     // <.>
   DumperOptions allowReadOnlyProperties(DumperOptions opts)     // <.>
 }
 ----
@@ -27,6 +36,31 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 --
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 --
+<.> xref:#tryReadAsList_Class_DataSource_JsonUtils_JacksonCustomizer[tryReadAsList(Class, DataSource, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
+--
+<.> xref:#tryReadCustomized_Class_String_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadCustomized(Class, String, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
+--
+<.> xref:#tryReadCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+--
+<.> xref:#tryReadAsListCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadAsListCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
+--
+<.> xref:#tryReadMultiDoc_DataSource[tryReadMultiDoc(DataSource)]
++
+--
+Returns a _Stream_ of (arbitrary) YAML Document junks from provided xref:refguide:commons:index/io/DataSource.adoc[DataSource] , where each junk typically needs further parsing individually.
+--
 <.> xref:#write_Object_DataSink_JsonUtils_JacksonCustomizer[write(Object, DataSink, JsonUtils_JacksonCustomizer)]
 +
 --
@@ -36,6 +70,26 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 +
 --
 Converts given _pojo_ to an UTF8 encoded _String_ .
+--
+<.> xref:#writeCustomized_Object_DataSink_YamlDumpCustomizer_JsonUtils_JacksonCustomizer[writeCustomized(Object, DataSink, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
+--
+<.> xref:#toStringUtf8Customized_Object_YamlDumpCustomizer_JsonUtils_JacksonCustomizer[toStringUtf8Customized(Object, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Converts given _pojo_ to an UTF8 encoded _String_ .
+--
+<.> xref:#writeMultiDoc_Iterable[writeMultiDoc(Iterable)]
++
+--
+Concatenates given _Iterable_ into a multi-doc YAML.
+--
+<.> xref:#writeMultiDoc_Stream[writeMultiDoc(Stream)]
++
+--
+Concatenates given _Stream_ into a multi-doc YAML.
 --
 <.> xref:#allowReadOnlyProperties_DumperOptions[allowReadOnlyProperties(DumperOptions)]
 +
@@ -55,6 +109,35 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 
+[#tryReadAsList_Class_DataSource_JsonUtils_JacksonCustomizer]
+=== tryReadAsList(Class, DataSource, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
+
+Either parses (regular) YAML-list format or multi-doc YAML format.
+
+[#tryReadCustomized_Class_String_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
+=== tryReadCustomized(Class, String, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
+
+[#tryReadCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
+=== tryReadCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+
+[#tryReadAsListCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
+=== tryReadAsListCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
+
+Either parses (regular) YAML-list format or multi-doc YAML format.
+
+[#tryReadMultiDoc_DataSource]
+=== tryReadMultiDoc(DataSource)
+
+Returns a _Stream_ of (arbitrary) YAML Document junks from provided xref:refguide:commons:index/io/DataSource.adoc[DataSource] , where each junk typically needs further parsing individually.
+
 [#write_Object_DataSink_JsonUtils_JacksonCustomizer]
 === write(Object, DataSink, JsonUtils_JacksonCustomizer)
 
@@ -64,6 +147,26 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 === toStringUtf8(Object, JsonUtils_JacksonCustomizer)
 
 Converts given _pojo_ to an UTF8 encoded _String_ .
+
+[#writeCustomized_Object_DataSink_YamlDumpCustomizer_JsonUtils_JacksonCustomizer]
+=== writeCustomized(Object, DataSink, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)
+
+Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
+
+[#toStringUtf8Customized_Object_YamlDumpCustomizer_JsonUtils_JacksonCustomizer]
+=== toStringUtf8Customized(Object, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)
+
+Converts given _pojo_ to an UTF8 encoded _String_ .
+
+[#writeMultiDoc_Iterable]
+=== writeMultiDoc(Iterable)
+
+Concatenates given _Iterable_ into a multi-doc YAML.
+
+[#writeMultiDoc_Stream]
+=== writeMultiDoc(Stream)
+
+Concatenates given _Stream_ into a multi-doc YAML.
 
 [#allowReadOnlyProperties_DumperOptions]
 === allowReadOnlyProperties(DumperOptions)

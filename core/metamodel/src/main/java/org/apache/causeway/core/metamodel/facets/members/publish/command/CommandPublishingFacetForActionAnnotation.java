@@ -27,9 +27,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
 
@@ -61,48 +59,57 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
-        val publishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+        var publishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+        var safeSemantics = Facets.hasSafeSemantics(holder);
 
         return actionsIfAny
-                .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
-                .map(action -> {
-                    Publishing publishing = action.commandPublishing();
+            .<CommandPublishingFacet>map(action -> {
+                Publishing publishing = action.commandPublishing();
 
-                    final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
-                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+                final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
+                final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
-                    if(processor != null) {
-                        publishing = Publishing.ENABLED;
-                    }
+                if(processor != null) {
+                    publishing = Publishing.ENABLED;
+                }
 
-                    switch (publishing) {
-                        case AS_CONFIGURED:
-                            switch (publishingPolicy) {
-                                case NONE:
-                                    return new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
-                                case IGNORE_QUERY_ONLY:
-                                case IGNORE_SAFE:
-                                    return hasSafeSemantics(holder)
-                                            ? new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder, servicesInjector)
-                                            : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
-                                case ALL:
-                                    return new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
-                                default:
-                                    throw new IllegalStateException(String.format("configured action.commandPublishing policy '%s' not recognised", publishingPolicy));
-                            }
-                        case DISABLED:
-                            return new CommandPublishingFacetForActionAnnotation.Disabled(processor, holder, servicesInjector);
-                        case ENABLED:
-                            return new CommandPublishingFacetForActionAnnotation.Enabled(processor, holder, servicesInjector);
-                        default:
-                            throw new IllegalStateException(String.format("@Action#commandPublishing '%s' not recognised", publishing));
-                    }
-                });
+                return switch (publishing) {
+                    case NOT_SPECIFIED -> safeSemantics
+                        ? safeActionFacet(publishingPolicy, configuration, holder, servicesInjector)
+                        : null;
+                    case AS_CONFIGURED -> switch (publishingPolicy) {
+                        case NONE -> safeSemantics
+                            ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport(
+                                holder, servicesInjector, configuration)
+                            : new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
+                        case IGNORE_QUERY_ONLY, IGNORE_SAFE -> safeSemantics
+                            ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport(
+                                holder, servicesInjector, configuration)
+                            : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
+                        case ALL -> new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
+                        default -> throw new IllegalStateException(
+                                String.format("configured action.commandPublishing policy '%s' not recognised", publishingPolicy));
+                    };
+                    case DISABLED -> new CommandPublishingFacetForActionAnnotation.Disabled(processor, holder, servicesInjector);
+                    case ENABLED, ENABLED_FOR_UPDATES_ONLY -> new CommandPublishingFacetForActionAnnotation.Enabled(processor, holder, servicesInjector);
+                    default -> throw new IllegalStateException(
+                            String.format("@Action#commandPublishing '%s' not recognised", publishing));
+                };
+            })
+            .or(() -> safeSemantics
+                ? Optional.of(safeActionFacet(publishingPolicy, configuration, holder, servicesInjector))
+                : Optional.empty());
     }
 
-    static boolean hasSafeSemantics(final FacetHolder holder) {
-        val actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
+    private static CommandPublishingFacet safeActionFacet(
+            final ActionConfigOptions.PublishingPolicy publishingPolicy,
+            final CausewayConfiguration configuration,
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
+        return publishingPolicy == ActionConfigOptions.PublishingPolicy.ALL
+            ? new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector)
+            : new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport(
+                holder, servicesInjector, configuration);
     }
 
     CommandPublishingFacetForActionAnnotation(

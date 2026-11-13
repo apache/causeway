@@ -19,15 +19,13 @@
 package org.apache.causeway.viewer.wicket.model.value;
 
 import java.util.Optional;
-
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class OptionsBasedOnValueSemantics
 extends ValueSemanticsModelAbstract {
@@ -41,14 +39,14 @@ extends ValueSemanticsModelAbstract {
     }
 
     public final Optional<Renderer<?>> lookupRenderer() {
-        val valueFacet = valueFacet();
+        var valueFacet = valueFacet();
         switch(scalarRepresentation) {
         case EDITING:
             return Optional.empty();
         case VIEWING:
-            return Optional.of(propOrParam.fold(
-                    prop->valueFacet.selectRendererForPropertyElseFallback(prop),
-                    param->valueFacet.selectRendererForParameterElseFallback(param)));
+            return Optional.of(
+                valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(propOrParam
+                    .fold(ObjectFeature.class::cast, ObjectFeature.class::cast)));
         }
         throw _Exceptions.unmatchedCase(scalarRepresentation);
     }

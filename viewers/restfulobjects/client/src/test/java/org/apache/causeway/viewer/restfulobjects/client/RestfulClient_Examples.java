@@ -107,6 +107,4 @@ class RestfulClient_Examples {
         );
     }
 
-
-
 }

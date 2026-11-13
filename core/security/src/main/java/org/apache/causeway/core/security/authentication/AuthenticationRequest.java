@@ -20,9 +20,9 @@ package org.apache.causeway.core.security.authentication;
 
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 
 /**

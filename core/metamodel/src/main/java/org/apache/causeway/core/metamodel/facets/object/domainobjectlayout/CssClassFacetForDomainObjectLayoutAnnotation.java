@@ -31,7 +31,7 @@ public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetS
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
-        CssClassFacet facet = holder.getFacet(CssClassFacet.class);
+        CssClassFacet facet = holder.lookupFacet(CssClassFacet.class).orElse(null);
         // this is a bit hacky, explicitly checking whether a different implementation is already added.
         // normally we would just re-order the list of facet factories in ProgrammingModelsFacetJava5, however in
         // this case @DomainObjectLayout is responsible for two different variations of CssClassFacet, either as

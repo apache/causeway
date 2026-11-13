@@ -25,8 +25,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.causeway.applib.services.sudo.SudoService;
 
-import lombok.val;
-
 /**
  * Use to execute integration tests with permission checking disabled, with a user that has
  * the {@link SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE} role.
@@ -47,14 +45,14 @@ public class NoPermissionChecks implements BeforeEachCallback {
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
         _Helper.getInteractionFactory(extensionContext)
-                .ifPresent(interactionService ->
-                        interactionService.currentInteractionContext().ifPresent(
-                                currentInteractionContext -> {
-                                    val sudoUser = currentInteractionContext.getUser().withRoleAdded(SudoService.ACCESS_ALL_ROLE.getName());
-                                    interactionService.openInteraction(currentInteractionContext.withUser(sudoUser));
-                                }
-                        )
-                );
+            .ifPresent(interactionService ->
+                interactionService.currentInteractionContext().ifPresent(
+                    currentInteractionContext -> {
+                        var sudoUser = currentInteractionContext.getUser().withRoleAdded(SudoService.ACCESS_ALL_ROLE.name());
+                        interactionService.openInteraction(currentInteractionContext.withUser(sudoUser));
+                    }
+                )
+            );
     }
 
 }

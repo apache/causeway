@@ -20,18 +20,15 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.UnaryOperator;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.jspecify.annotations.NonNull;
 
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -39,14 +36,13 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
-import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
@@ -62,18 +58,10 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.util.UrlParserUtils;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-/**
- * Implementation note: it seems to be necessary to annotate the implementation
- * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
- * and 1.1-RC2).
- */
-@Component
-@Path("/domain-types")
-@Log4j2
+@RestController
+@Slf4j
 public class DomainTypeResourceServerside
 extends ResourceAbstract
 implements DomainTypeResource {
@@ -84,106 +72,79 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
-    public Response domainTypes() {
+    public ResponseEntity<Object> domainTypes() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.TYPE_LIST, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val domainTypeSpecifications = getSpecificationLoader().snapshotSpecifications()
+        var domainTypeSpecifications = getSpecificationLoader().snapshotSpecifications()
                 .filter(spec->spec.isEntityOrViewModel()); // concrete types only, no abstract types
 
-        final TypeListReprRenderer renderer =
-                new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.with(domainTypeSpecifications).includesSelf();
+        final TypeListReprRenderer renderer = new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap())
+            .with(domainTypeSpecifications).includesSelf();
 
         return _EndpointLogging.response(log, "GET /domain-types/",
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     @Override
-    @GET
-    @Path("/{domainType}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
-    public Response domainType(
-            @PathParam("domainType") final String domainType) {
+    public ResponseEntity<Object> domainType(final String domainType) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val objectSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var objectSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if(objectSpec==null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}", domainType,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
-        val renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.with(objectSpec).includesSelf();
+        var renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap())
+            .with(objectSpec).includesSelf();
 
         return _EndpointLogging.response(log, "GET /domain-types/{}", domainType,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/layout")
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS
-    })
-    public Response layout(
-            @PathParam("domainType") final String domainType) {
+    public ResponseEntity<Object> layout(final String domainType) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val serializationStrategy = resourceContext.getSerializationStrategy();
+        var serializationStrategy = resourceContext.getSerializationStrategy();
 
-        val responseBuilder = getSpecificationLoader().specForLogicalTypeName(domainType)
-                .map(Facets::bootstrapGrid)
+        var response = getSpecificationLoader().specForLogicalTypeName(domainType)
+                .map(mo->Facets.bootstrapGrid(mo))
                 .map(grid ->
-                        Response.status(Response.Status.OK)
-                                .entity(serializationStrategy.entity(grid))
-                                .type(serializationStrategy.type(RepresentationType.LAYOUT)))
-                .orElse(Responses.ofNotFound());
+                    responseFactory.ok(serializationStrategy.entity(grid),
+                                serializationStrategy.type(RepresentationType.LAYOUT)))
+                .orElseGet(ResponseFactory::notFound);
 
         return _EndpointLogging.response(log, "GET({}) /domain-types/{}/layout", serializationStrategy.name(), domainType,
-                responseBuilder.build());
+                response);
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/properties/{propertyId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
-    public Response typeProperty(
-            @PathParam("domainType") final String domainType,
-            @PathParam("propertyId") final String propertyId) {
+    public ResponseEntity<Object> typeProperty(final String domainType, final String propertyId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.PROPERTY_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/properties/{}", domainType, propertyId,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
-        val objectMember = parentSpec.getAssociation(propertyId)
+        var objectMember = parentSpec.getAssociation(propertyId)
                 .orElseThrow(()->
                     _EndpointLogging.error(log, "GET /domain-types/{}/properties/{}", domainType, propertyId,
-                        RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)));
+                        RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND)));
 
         if (objectMember.isOneToManyAssociation()) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/properties/{}", domainType, propertyId,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
         final OneToOneAssociation property = (OneToOneAssociation) objectMember;
 
@@ -191,36 +152,29 @@ implements DomainTypeResource {
         renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
         return _EndpointLogging.response(log, "GET /domain-types/{}/properties/{}", domainType, propertyId,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/collections/{collectionId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
-    public Response typeCollection(
-            @PathParam("domainType") final String domainType,
-            @PathParam("collectionId") final String collectionId) {
+    public ResponseEntity<Object> typeCollection(final String domainType, final String collectionId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.COLLECTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/collections/{}", domainType, collectionId,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
-        val objectMember = parentSpec.getAssociation(collectionId)
+        var objectMember = parentSpec.getAssociation(collectionId)
                 .orElseThrow(()->
                     _EndpointLogging.error(log, "GET /domain-types/{}/collections/{}", domainType, collectionId,
-                            RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)));
+                            RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND)));
 
         if (objectMember.isOneToOneAssociation()) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/collections/{}", domainType, collectionId,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
         final OneToManyAssociation collection = (OneToManyAssociation) objectMember;
 
@@ -228,62 +182,47 @@ implements DomainTypeResource {
         renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
         return _EndpointLogging.response(log, "GET /domain-types/{}/collections/{}", domainType, collectionId,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/actions/{actionId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
-    public Response typeAction(
-            @PathParam("domainType") final String domainType,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> typeAction(final String domainType, final String actionId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.ACTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/actions/{}", domainType, actionId,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
-        val action = parentSpec.getAction(actionId)
+        var action = parentSpec.getAction(actionId)
                 .orElseThrow(()->_EndpointLogging.error(log, "GET /domain-types/{}/actions/{}", domainType, actionId,
-                        RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)));
+                        RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND)));
 
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
         return _EndpointLogging.response(log, "GET /domain-types/{}/actions/{}", domainType, actionId,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/actions/{actionId}/params/{paramId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
-    public Response typeActionParam(
-            @PathParam("domainType") final String domainType,
-            @PathParam("actionId") final String actionId,
-            @PathParam("paramId") final String paramId) {
+    public ResponseEntity<Object> typeActionParam(final String domainType, final String actionId, final String paramId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.ACTION_PARAMETER_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramId,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
-        val parentAction = parentSpec.getAction(actionId)
+        var parentAction = parentSpec.getAction(actionId)
                 .orElseThrow(()->_EndpointLogging.error(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramId,
-                        RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)));
+                        RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND)));
 
         final ObjectActionParameter actionParam = parentAction.getParameterById(paramId);
 
@@ -291,38 +230,31 @@ implements DomainTypeResource {
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam)).includesSelf();
 
         return _EndpointLogging.response(log, "GET /domain-types/{}/actions/{}/params/{}", domainType, actionId, paramId,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain type actions
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN TYPE ACTIONS
 
     @Override
-    @GET
-    @Path("/{domainType}/type-actions/isSubtypeOf/invoke")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
-        RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response domainTypeIsSubtypeOf(
-            @PathParam("domainType") final String domainType,
-            @QueryParam("supertype") final String superTypeStr, // simple style
-            @QueryParam("args") final String argsUrlEncoded // formal style
+    public ResponseEntity<Object> domainTypeIsSubtypeOf(
+            final String domainType,
+            final String superTypeStr, // simple style
+            final String argsUrlEncoded // formal style
             ) {
 
-        val resourceContext = createResourceContext(
-                ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.GENERIC, Where.ANYWHERE,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.NONE));
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype",
                 roEx->_EndpointLogging.error(log, "GET /domain-types/{}/type-actions/isSubtypeOf/invoke", domainType, roEx));
 
-        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
-        val supertypeSpec = getSpecificationLoader().specForLogicalTypeName(supertype).orElse(null);
+        var domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var supertypeSpec = getSpecificationLoader().specForLogicalTypeName(supertype).orElse(null);
         if (domainTypeSpec == null
                 || supertypeSpec == null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/type-actions/isSubtypeOf/invoke", domainType,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -336,35 +268,29 @@ implements DomainTypeResource {
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
 
         return _EndpointLogging.response(log, "GET /domain-types/{}/type-actions/isSubtypeOf/invoke", domainType,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
-
     @Override
-    @GET
-    @Path("/{domainType}/type-actions/isSupertypeOf/invoke")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
-        RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response domainTypeIsSupertypeOf(
-            @PathParam("domainType") final String domainType,
-            @QueryParam("subtype") final String subTypeStr, // simple style
-            @QueryParam("args") final String argsUrlEncoded // formal style
+    public ResponseEntity<Object> domainTypeIsSupertypeOf(
+            final String domainType,
+            final String subTypeStr, // simple style
+            final String argsUrlEncoded // formal style
             ) {
 
-        val resourceContext = createResourceContext(
-                ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+            RepresentationType.GENERIC, Where.ANYWHERE,
+            RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.NONE));
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype",
                 roEx->_EndpointLogging.error(log, "GET /domain-types/{}/type-actions/isSupertypeOf/invoke", domainType, roEx));
 
-        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
-        val subtypeSpec = getSpecificationLoader().specForLogicalTypeName(subtype).orElse(null);
+        var domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        var subtypeSpec = getSpecificationLoader().specForLogicalTypeName(subtype).orElse(null);
         if (domainTypeSpec == null
                 || subtypeSpec == null) {
             throw _EndpointLogging.error(log, "GET /domain-types/{}/type-actions/isSupertypeOf/invoke", domainType,
-                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                    RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND));
         }
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -378,7 +304,7 @@ implements DomainTypeResource {
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
 
         return _EndpointLogging.response(log, "GET /domain-types/{}/type-actions/isSupertypeOf/invoke", domainType,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+            responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     private static String domainTypeFor(
@@ -393,7 +319,7 @@ implements DomainTypeResource {
         }
 
         // formal style; must parse from args that has a link with an href to the domain type
-        val requestParams = RequestParams.ofQueryString(UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString));
+        var requestParams = RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(argsAsUrlEncodedQueryString));
         final String href = linkFromFormalArgs(requestParams, argsParamId, onRoException);
         return UrlParserUtils.domainTypeFrom(href);
     }
@@ -405,7 +331,7 @@ implements DomainTypeResource {
         final JsonRepresentation arguments = requestParams.asMap();
         if (!arguments.isLink(paramId)) {
             throw onRoException.apply(RestfulObjectsApplicationException
-                    .createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramId));
+                    .createWithMessage(HttpStatus.BAD_REQUEST, "Args should contain a link '%s'".formatted(paramId)));
         }
 
         return arguments.getLink(paramId).getHref();

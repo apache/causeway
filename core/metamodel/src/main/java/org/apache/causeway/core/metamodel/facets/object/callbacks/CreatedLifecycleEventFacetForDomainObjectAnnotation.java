@@ -41,5 +41,4 @@ public class CreatedLifecycleEventFacetForDomainObjectAnnotation extends SingleC
         return _Casts.uncheckedCast(value());
     }
 
-
 }

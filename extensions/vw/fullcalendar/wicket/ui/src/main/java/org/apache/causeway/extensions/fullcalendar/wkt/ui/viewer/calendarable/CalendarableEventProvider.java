@@ -26,14 +26,14 @@ import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.causeway.extensions.fullcalendar.applib.Calendarable;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.EventProviderAbstract;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 
 public class CalendarableEventProvider extends EventProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public CalendarableEventProvider(
-            final EntityCollectionModel collectionModel,
+            final CollectionModel collectionModel,
             final String calendarName) {
         super(collectionModel, calendarName);
     }
@@ -53,6 +53,5 @@ public class CalendarableEventProvider extends EventProviderAbstract {
         .map(Calendarable::getCalendarNames)
         .orElse(null);
     }
-
 
 }

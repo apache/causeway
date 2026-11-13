@@ -36,30 +36,28 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides a list of links for selecting other views that support
  * {@link org.apache.causeway.viewer.commons.model.components.UiComponentType#COLLECTION_CONTENTS} with a backing
- * {@link org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel}.
+ * {@link org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel}.
  */
 public class CollectionPresentationSelectorPanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,27 +72,28 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     private static final String ID_SECTION_SEPARATOR = "sectionSeparator";
     private static final String ID_SECTION_LABEL = "sectionLabel";
 
-
-    private final CollectionPresentationSelectorHelper selectorHelper;
+    private CollectionPresentationSelectorHelper selectorHelper;
+    private final Can<CollectionPresentationChoice> presentationChoices;
     private final ComponentHintKey componentHintKey;
 
-    private ComponentFactoryKey selectedComponentFactory;
+    private CollectionPresentationChoice selectedCollectionPresentationChoice;
 
     public CollectionPresentationSelectorPanel(
             final String id,
-            final EntityCollectionModel model) {
+            final CollectionModel model) {
         this(id, model, ComponentHintKey.noop());
     }
 
     public CollectionPresentationSelectorPanel(
             final String id,
-            final EntityCollectionModel model,
+            final CollectionModel model,
             final ComponentHintKey componentHintKey) {
         super(id, model);
         this.componentHintKey = componentHintKey;
 
-        selectorHelper = new CollectionPresentationSelectorHelper(
+        this.selectorHelper = new CollectionPresentationSelectorHelper(
                 model, getComponentFactoryRegistry(), componentHintKey);
+        this.presentationChoices = selectorHelper.collectionPresentationChoices();
     }
 
     /**
@@ -107,23 +106,19 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     }
 
     private void addDropdown() {
-        final Can<ComponentFactoryKey> componentFactories = selectorHelper.getComponentFactories();
+
         final String selected = selectorHelper.honourViewHintElseDefault(this);
 
         // selector
-        if (!componentFactories.isCardinalityMultiple()) {
+        if (!presentationChoices.isCardinalityMultiple()) {
             WktComponents.permanentlyHide(this, ID_VIEWS);
             return;
         }
 
-        this.selectedComponentFactory = selectorHelper.find(selected);
+        this.selectedCollectionPresentationChoice = selectorHelper.find(presentationChoices, selected);
 
         final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
         final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
-
-        //XXX UI glitch, tooltip has tendency to not disappear
-//        WktTooltips.addTooltip(UiPlacementDirection.TOP,
-//                views, translate("Click to change view or see export options."));
 
         views.addOrReplace(container);
         views.setOutputMarkupId(true);
@@ -132,9 +127,9 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
-        Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(componentFactories), item->{
-            val menuable = item.getModelObject();
-            val menuableKind = menuable.menuableKind();
+        Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(presentationChoices), item->{
+            var menuable = item.getModelObject();
+            var menuableKind = menuable.menuableKind();
 
             Wkt.cssAppend(item, menuableKind.getCssClassForLiElement());
 
@@ -147,7 +142,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
             case SECTION_LABEL:
                 WktComponents.permanentlyHide(item, ID_SECTION_SEPARATOR);
                 WktComponents.permanentlyHide(item, ID_VIEW_LINK);
-                Wkt.labelAdd(item, ID_SECTION_LABEL, ((Menuable.SectionLabel)menuable).getSectionLabel());
+                Wkt.labelAdd(item, ID_SECTION_LABEL, ((Menuable.SectionLabel)menuable).sectionLabel());
                 return;
             case LINK:
                 WktComponents.permanentlyHide(item, ID_SECTION_SEPARATOR);
@@ -157,14 +152,14 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
                 return;
             }
 
-            val linkEntry = (LinkEntry) menuable;
-            final ComponentFactoryKey componentFactory = linkEntry.getComponentFactoryKey();
+            var linkEntry = (LinkEntry) menuable;
+            var choice = linkEntry.choice;
 
             // add direct download link instead of a panel
-            if(componentFactory.componentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
+            if(choice.isExporter()) {
 
                 final DownloadLink downloadLink = (DownloadLink)
-                        componentFactory.resolve(this::getServiceRegistry).createComponent(ID_VIEW_LINK, getModel());
+                        choice.componentFactory().createComponent(ID_VIEW_LINK, getModel());
                 WktComponents.permanentlyHide(downloadLink, ID_VIEW_ITEM_CHECKMARK);
 
                 item.addOrReplace(downloadLink);
@@ -175,14 +170,14 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
             }
 
             // on click: make the clicked item the new selected item
-            val link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
+            var link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
                 final CollectionPresentationSelectorPanel linksSelectorPanel = CollectionPresentationSelectorPanel.this;
-                linksSelectorPanel.setViewHintAndBroadcast(componentFactory.id(), target);
+                linksSelectorPanel.setViewHintAndBroadcast(choice.id(), target);
 
-                linksSelectorPanel.selectedComponentFactory = componentFactory;
+                linksSelectorPanel.selectedCollectionPresentationChoice = choice;
 
                 CollectionPresentationSelectorPanel.this.getModel().parentedHintingBookmark()
-                    .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.id()));
+                    .ifPresent(bookmark->componentHintKey.set(bookmark, choice.id()));
 
                 /* [CAUSEWAY-3415] do a full page reload when required,
                  * to properly trigger all client side java-script, that decorates HTML (datatable.net, vega, ...) */
@@ -195,9 +190,9 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
             // add title and icon to the link
             addLinkWithIconAndTitle(item, link);
-            val checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
+            var checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
 
-            val isSelectedPresentation = linkEntry.isSelectedIn(this);
+            var isSelectedPresentation = linkEntry.isSelectedIn(this);
             checkmarkForSelectedPresentation.setVisible(isSelectedPresentation);
             if (isSelectedPresentation) {
                 linkEntry.markAsSelected(viewButtonIcon, link);
@@ -214,10 +209,10 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
      * @param filter
      * @see CollectionContentsAsFactory#orderOfAppearanceInUiDropdown()
      */
-    private List<Menuable> sorted(final Can<ComponentFactoryKey> componentFactories) {
-        val presentations = sorted(componentFactories, _Util.filterTablePresentations());
-        val exports = sorted(componentFactories, _Util.filterTableExports());
-        val sortedWithSeparators = new ArrayList<Menuable>(
+    private List<Menuable> sorted(final Can<CollectionPresentationChoice> presentationChoices) {
+        var presentations = sorted(presentationChoices, CollectionPresentationChoice::isPresenter);
+        var exports = sorted(presentationChoices, CollectionPresentationChoice::isExporter);
+        var sortedWithSeparators = new ArrayList<Menuable>(
                 presentations.size() + exports.size() + 2); // heap optimization, not strictly required
 
         boolean needsSpacer = false;
@@ -239,12 +234,12 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     }
 
     private List<LinkEntry> sorted(
-            final Can<ComponentFactoryKey> componentFactories,
-            final Predicate<? super ComponentFactoryKey> filter) {
-        final List<LinkEntry> sorted = componentFactories.stream()
+            final Can<CollectionPresentationChoice> presentationChoices,
+            final Predicate<? super CollectionPresentationChoice> filter) {
+        final List<LinkEntry> sorted = presentationChoices.stream()
             .filter(filter)
-            .sorted(_Util.orderByOrderOfAppearanceInUiDropdown())
-            .map((final ComponentFactoryKey factory)->LinkEntry.linkEntry(factory))
+            .sorted(CollectionPresentationChoice.orderByOrderOfAppearanceInUiDropdown())
+            .map(LinkEntry::linkEntry)
             .collect(Collectors.toList());
         return sorted;
     }
@@ -267,28 +262,35 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
                 LinkEntry::cssClassFor);
     }
 
-    @lombok.Value
-    static class LinkEntry implements Menuable {
-        private static final long serialVersionUID = 1L;
+    record LinkEntry(CollectionPresentationChoice choice) implements Menuable {
 
         // -- FACTORIES
 
-        public static LinkEntry linkEntry(final @NonNull ComponentFactoryKey componentFactoryKey) {
-            return new LinkEntry(componentFactoryKey);
+        public static LinkEntry linkEntry(final @NonNull CollectionPresentationChoice choice) {
+            return new LinkEntry(choice);
         }
 
-        // -- CONSTRUCTION
+        // --
 
-        final ComponentFactoryKey componentFactoryKey;
+        @Override
+        public Kind menuableKind() { return Kind.LINK; }
 
         // -- PREDICATES
 
         boolean isSelectedIn(final CollectionPresentationSelectorPanel panel) {
-           return Objects.equals(componentFactoryKey, panel.selectedComponentFactory);
+           return Objects.equals(this.choice.factoryKey(), panel.selectedCollectionPresentationChoice.factoryKey());
         }
         boolean isPageReloadRequiredOnTableViewActivation() {
-            return componentFactoryKey.isPageReloadRequiredOnTableViewActivation();
+            return choice.isPageReloadRequiredOnTableViewActivation();
         }
+        boolean isPresenter() {
+            return choice.isPresenter();
+        }
+        boolean isExporter() {
+            return choice.isExporter();
+        }
+
+        // -- MARK
 
         /**
          * Disables the selected presentation's link,
@@ -296,28 +298,37 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
          * that corresponds to the selected presentation.
          */
         void markAsSelected(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
-            final IModel<String> cssClass = Model.of(componentFactoryKey.cssClass());
-            _Util.initViewIcon(componentFactoryKey, viewButtonIcon);
-            Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
+            initViewIcon(this, viewButtonIcon);
+            Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + choice.cssClass());
             link.setEnabled(false);
         }
 
         // -- HELPER
 
         private static IModel<String> nameFor(final LinkEntry linkEntry) {
-            return Model.of(linkEntry.getComponentFactoryKey().label());
+            return Model.of(linkEntry.choice.label());
         }
         private static IModel<String> cssClassFor(final LinkEntry linkEntry, final Label viewIcon) {
-            final IModel<String> cssClass = Model.of(linkEntry.componentFactoryKey.cssClass());
-            _Util.initViewIcon(linkEntry.componentFactoryKey, viewIcon);
-            return cssClass;
+            initViewIcon(linkEntry, viewIcon);
+            return Model.of(linkEntry.choice.cssClass());
         }
 
-        @Override
-        public Kind menuableKind() { return Kind.LINK; }
+        private static void initViewIcon(final LinkEntry linkEntry, final Label viewIcon) {
+            if(CollectionContentsAsFactory.class.isAssignableFrom(componentFactoryClass(linkEntry))) {
+                viewIcon.setDefaultModelObject("");
+                viewIcon.setEscapeModelStrings(true);
+            } else {
+                // Small hack: if there is no specific CSS class then we assume that background-image is used
+                // the span.ViewItemLink should have some content to show it
+                // FIX: find a way to do this with CSS (width and height don't seems to help)
+                viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
+                viewIcon.setEscapeModelStrings(false);
+            }
+        }
+
+        private static Class<? extends ComponentFactory> componentFactoryClass(final LinkEntry linkEntry) {
+            return linkEntry.choice.factoryKey().factoryClass();
+        }
     }
 
 }
-
-
-

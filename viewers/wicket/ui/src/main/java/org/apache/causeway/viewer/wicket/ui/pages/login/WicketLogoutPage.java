@@ -35,7 +35,6 @@ public class WicketLogoutPage extends WebPage {
         setResponsePage(getSignInPage());
     }
 
-
     private Class<? extends Page> getSignInPage() {
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
     }

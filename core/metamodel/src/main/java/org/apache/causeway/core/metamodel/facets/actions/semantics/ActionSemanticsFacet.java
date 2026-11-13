@@ -18,15 +18,38 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.semantics;
 
+import java.util.function.BiConsumer;
+
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Represents the semantics of an action.
  *
- * <p>
- * Specifically, whether it is safe, idempotent or non-idempotent.
+ * <p> Specifically, whether it is safe, idempotent or non-idempotent.
  */
-public interface ActionSemanticsFacet extends SingleValueFacet<SemanticsOf> {
+public final class ActionSemanticsFacet extends FacetAbstract {
+
+	@Getter @Accessors(fluent = true)
+    private final String origin;
+	@Getter @Accessors(fluent = true)
+    private final SemanticsOf value;
+
+    public ActionSemanticsFacet(final String origin, final SemanticsOf of, final FacetHolder facetHolder) {
+    	super(ActionSemanticsFacet.class, facetHolder);
+        this.origin = origin;
+    	this.value = of;
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	super.visitAttributes(visitor);
+        visitor.accept("origin", origin);
+        visitor.accept("value", value);
+    }
 
 }

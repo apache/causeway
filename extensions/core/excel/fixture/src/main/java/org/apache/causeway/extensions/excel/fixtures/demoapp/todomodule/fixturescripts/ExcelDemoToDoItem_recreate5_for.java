@@ -43,7 +43,6 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         this.user = ownedBy;
     }
 
-
     @Override
     protected void execute(ExecutionContext executionContext) {
 
@@ -89,7 +88,6 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         transactionService.flushTransaction();
     }
 
-
     // //////////////////////////////////////
 
     private ExcelDemoToDoItem createToDoItemForUser(final String description, final Category category, Subcategory subcategory, String user, final LocalDate dueBy, final BigDecimal cost, ExecutionContext executionContext) {
@@ -102,7 +100,6 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         final LocalDate date = clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
         return date.plusDays(i);
     }
-
 
     @Inject private ExcelDemoToDoItemMenu demoToDoItemMenu;
     //@Inject private CausewayJdoSupport causewayJdoSupport;

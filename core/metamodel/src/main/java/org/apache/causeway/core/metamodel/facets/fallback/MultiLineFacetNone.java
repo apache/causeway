@@ -27,7 +27,12 @@ extends MultiLineFacetAbstract
 implements HasSemanticEqualityByClass {
 
     public MultiLineFacetNone(final FacetHolder holder) {
-        super(1, holder, Precedence.FALLBACK);
+        super(1, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
 }

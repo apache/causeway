@@ -23,8 +23,6 @@ import java.util.function.Function;
 
 import org.apache.causeway.commons.internal.base._Refs;
 
-import lombok.val;
-
 /**
  * Similar to a {@link BiFunction}, except that the first argument is an {@code int}.
  *
@@ -45,7 +43,7 @@ public interface IndexedFunction<T, R> {
      * and incremented after each call.
      */
     static <T, R> Function<T, R> offset(final int offset, final IndexedFunction<T, R> indexed){
-        val indexRef = _Refs.intRef(offset);
+        var indexRef = _Refs.intRef(offset);
         return t->indexed.apply(indexRef.getAndInc(), t);
     }
 

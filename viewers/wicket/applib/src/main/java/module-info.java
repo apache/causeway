@@ -21,7 +21,7 @@ module org.apache.causeway.viewer.wicket.applib {
     exports org.apache.causeway.viewer.wicket.applib.mixins;
 
     requires jakarta.inject;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires spring.beans;
     requires spring.context;

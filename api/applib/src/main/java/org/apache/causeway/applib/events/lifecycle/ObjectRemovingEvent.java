@@ -51,13 +51,11 @@ public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {
      */
     public static class Doop extends ObjectRemovingEvent<Object> {}
 
-
     public ObjectRemovingEvent() {
     }
 
     public ObjectRemovingEvent(final S source) {
         super(source);
     }
-
 
 }

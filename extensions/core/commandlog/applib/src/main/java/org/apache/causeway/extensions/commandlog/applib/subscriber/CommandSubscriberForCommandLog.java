@@ -33,14 +33,14 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of {@link CommandSubscriber} responsible for persisting the {@link Command} as a
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";
@@ -62,33 +62,33 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
     final ClockService clockService;
+    final CommandLogPauseState commandLogPauseState;
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getCommandLog().getPersist().isEnabled();
+        return causewayConfiguration.extensions().commandLog().persist().isEnabled();
     }
 
     @Override
     public void onReady(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled() || commandLogPauseState.isPaused())
             return;
-        }
 
-        val existingCommandLogEntryIfAny =
+        var existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandLogEntryIfAny.isPresent()) {
 
-            val commandLogEntry = existingCommandLogEntryIfAny.get();
+            var commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
                     // this isn't really expected to happen ... we just log the fact if it does and the value is different
                     if(log.isWarnEnabled()) {
-                        val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
+                        var existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
-                        val existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
+                        var existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
                                 .getValue().orElse("Dto to Xml failure");
-                        val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
+                        var commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
                                 .getValue().orElse("Dto to Xml failure");
 
                         if(!existingCommandDtoXml.equals(commandDtoXml)) {
@@ -105,7 +105,8 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             }
 
         } else {
-            val parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
+            guardAgainstPendingBackgroundCommands();
+            var parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
             commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
 
@@ -114,9 +115,8 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onStarted(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled() || commandLogPauseState.isPaused())
             return;
-        }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
             .ifPresent(commandLogEntry -> {
@@ -127,14 +127,26 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled() || commandLogPauseState.isPaused())
             return;
-        }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
             .ifPresent(commandLogEntry -> {
                 commandLogEntry.sync(command);
             });
+    }
+
+    private void guardAgainstPendingBackgroundCommands() {
+        if (causewayConfiguration.extensions().commandLog().recordingSupport() != RecordingSupport.ENABLED) {
+            return;
+        }
+        final var pendingBackgroundCommands = commandLogEntryRepository.findBackgroundAndNotYetStarted();
+        if (!pendingBackgroundCommands.isEmpty()) {
+            throw new IllegalStateException(String.format(
+                    "Cannot continue command-log recording while %,d background command(s) are pending execution. "
+                    + "Please wait until pending background commands have executed and committed before continuing.",
+                    pendingBackgroundCommands.size()));
+        }
     }
 
 }

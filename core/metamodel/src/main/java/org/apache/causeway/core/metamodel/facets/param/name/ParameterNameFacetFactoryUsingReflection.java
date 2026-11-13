@@ -20,15 +20,12 @@ package org.apache.causeway.core.metamodel.facets.param.name;
 
 import java.util.regex.Pattern;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Uses JDK8+ reflection API to derive the parameter name from the code.
@@ -54,20 +51,16 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-
-        val parameterName = processParameterContext.getParameterName();
+        var parameterName = processParameterContext.parameterName();
 
         // if not compiled with -parameters flag or synthetic, then ignore
-        val argXMatcher = argXPattern.matcher(parameterName);
-        if (argXMatcher.matches()){
-            return;
-        }
+        var argXMatcher = argXPattern.matcher(parameterName);
+        if (argXMatcher.matches())
+			return;
 
-        val naturalName = _Strings.asNaturalName.apply(parameterName);
-        val facetHolder = processParameterContext.getFacetHolder();
-
-        FacetUtil.addFacet(
-                new NamedFacetForParameterUsingReflection(naturalName, facetHolder));
+        var naturalName = _Strings.asNaturalName.apply(parameterName);
+        var facetHolder = processParameterContext.facetHolder();
+        new NamedFacetForParameterUsingReflection(naturalName, facetHolder);
     }
 
 }

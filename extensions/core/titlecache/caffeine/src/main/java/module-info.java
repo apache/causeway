@@ -17,12 +17,14 @@
  *  under the License.
  */
 module org.apache.causeway.extensions.titlecache.caffeine {
+
+    requires static lombok;
     requires spring.beans;
     requires spring.context;
     requires spring.context.support;
     requires spring.boot.autoconfigure;
 
-    requires cache.api;
+    requires cache.api; //unstable automatic module name
 
     requires jakarta.inject;
     requires jakarta.annotation;
@@ -31,4 +33,5 @@ module org.apache.causeway.extensions.titlecache.caffeine {
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.extensions.titlecache.applib;
     requires com.github.benmanes.caffeine;
+    requires org.slf4j;
 }

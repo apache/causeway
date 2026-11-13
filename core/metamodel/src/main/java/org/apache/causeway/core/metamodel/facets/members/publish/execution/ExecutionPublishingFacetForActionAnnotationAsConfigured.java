@@ -67,7 +67,6 @@ extends ExecutionPublishingFacetForActionAnnotation {
         }
     }
 
-
     public ExecutionPublishingFacetForActionAnnotationAsConfigured(final FacetHolder holder) {
         super(holder);
     }

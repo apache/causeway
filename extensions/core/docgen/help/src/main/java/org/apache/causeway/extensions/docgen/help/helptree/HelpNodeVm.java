@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.docgen.help.helptree;
 
-import java.util.Optional;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -43,15 +41,14 @@ import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".HelpNodeVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
         named = "Application Help")
-@Log4j2
+@Slf4j
 public class HelpNodeVm implements ViewModel {
 
     // no longer required to be URL-safe (but nicer if does not get encoded)
@@ -60,7 +57,7 @@ public class HelpNodeVm implements ViewModel {
     public static HelpNodeVm forRootTopic(final HelpTopic rootTopic) {
         return new HelpNodeVm(rootTopic, rootTopic);
     }
-    
+
     @Inject FactoryService factoryService;
 
     @Getter @Programmatic
@@ -93,7 +90,7 @@ public class HelpNodeVm implements ViewModel {
     }
 
     @ObjectSupport public String iconName() {
-        val type = helpNode.getHelpNodeType();
+        var type = helpNode.getHelpNodeType();
         return type!=null ? type.name() : "";
     }
 
@@ -113,7 +110,7 @@ public class HelpNodeVm implements ViewModel {
     @Property
     @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE, fieldSetId = "detail", sequence = "1")
     public HelpNodeVm getParent() {
-        return Optional.ofNullable(helpNode.getPath().getParentIfAny())
+        return helpNode.getPath().parent()
                 .map(parentPath->new HelpNodeVm(rootTopic, parentPath.toString()))
                 .orElse(null);
     }
@@ -122,7 +119,6 @@ public class HelpNodeVm implements ViewModel {
     @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "detail", sequence = "2")
     @Getter(lazy = true)
     private final AsciiDoc helpContent = helpNode.getContent();
-
 
     @Override
     public String viewModelMemento() {

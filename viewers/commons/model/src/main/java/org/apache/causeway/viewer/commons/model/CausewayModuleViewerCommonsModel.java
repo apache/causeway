@@ -24,7 +24,6 @@ import org.apache.causeway.viewer.commons.applib.CausewayModuleViewerCommonsAppl
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-
 @Configuration
 @Import({
         CausewayModuleViewerCommonsApplib.class,

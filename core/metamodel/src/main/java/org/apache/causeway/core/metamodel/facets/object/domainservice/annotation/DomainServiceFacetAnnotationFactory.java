@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -42,15 +40,12 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
-        if (!domainServiceIfAny.isPresent()) {
-            return;
-        }
-        val facetHolder = processClassContext.getFacetHolder();
-
-        addFacetIfPresent(
-                AliasedFacetForDomainServiceAnnotation
-                    .create(domainServiceIfAny, processClassContext.getCls(), facetHolder));
+        var domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        if (!domainServiceIfAny.isPresent())
+			return;
+        var facetHolder = processClassContext.facetHolder();
+        AliasedFacetForDomainServiceAnnotation
+            .create(domainServiceIfAny, processClassContext.cls(), facetHolder);
     }
 
     @Override
@@ -58,9 +53,8 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
-            if(!spec.isDomainService()) {
-                return;
-            }
+            if(!spec.isDomainService())
+				return;
 
             final String associationNames = spec
                     .streamAssociations(MixedIn.EXCLUDED)
@@ -69,21 +63,19 @@ implements MetaModelRefiner {
 //                    .filter(associationName->!"Id".equalsIgnoreCase(associationName))
                     .collect(Collectors.joining(", "));
 
-            if(associationNames.isEmpty()) {
-                return;
-            }
+            if(associationNames.isEmpty())
+				return;
 
             ValidationFailure.raiseFormatted(
                     spec,
                     "%s: services can only have actions ('%s' config property), "
                     + "not properties or collections; "
                     + "annotate with @Programmatic if required. Found: %s",
-                    spec.getFullIdentifier(),
+                    spec.fullIdentifier(),
                     "'causeway.core.meta-model.validator.serviceActionsOnly'",
                     associationNames);
         });
 
     }
-
 
 }

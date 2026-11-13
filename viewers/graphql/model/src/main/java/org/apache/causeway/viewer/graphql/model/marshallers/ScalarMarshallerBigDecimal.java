@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 import graphql.Scalars;
 
-
 /**
  * Maps to a string to avoid loss of precision.
  */
@@ -41,11 +40,15 @@ public class ScalarMarshallerBigDecimal extends ScalarMarshallerAbstract<BigDeci
 
     @Inject
     public ScalarMarshallerBigDecimal(final CausewayConfiguration causewayConfiguration) {
-        super(BigDecimal.class, Scalars.GraphQLString, causewayConfiguration);
+        super(BigDecimal.class, Scalars.GraphQLString, causewayConfiguration, true);
     }
 
     @Override
     public BigDecimal unmarshal(Object graphValue, Class<?> targetType) {
-        return new BigDecimal((String) graphValue);
+        try {
+            return new BigDecimal((String) graphValue);
+        } catch (RuntimeException ignored) {
+            throw new IllegalArgumentException("Invalid BigDecimal value");
+        }
     }
 }

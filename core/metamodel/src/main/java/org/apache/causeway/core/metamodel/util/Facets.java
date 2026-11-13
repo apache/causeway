@@ -18,18 +18,22 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
@@ -37,7 +41,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
@@ -47,6 +51,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -64,13 +69,17 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -79,8 +88,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -120,13 +129,14 @@ public final class Facets {
     }
 
     public Optional<BSGrid> bootstrapGrid(
-            final ObjectSpecification objectSpec, final @Nullable ManagedObject objectAdapter) {
+            final ObjectSpecification objectSpec, final @Nullable ManagedObject mo) {
         return objectSpec.lookupFacet(GridFacet.class)
-            .map(gridFacet->gridFacet.getGrid(objectAdapter))
+            .map(gridFacet->gridFacet.getGrid(mo))
             .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
-    public Optional<BSGrid> bootstrapGrid(final ObjectSpecification objectSpec) {
+    public Optional<BSGrid> bootstrapGrid(
+            final ObjectSpecification objectSpec) {
         return bootstrapGrid(objectSpec, null);
     }
 
@@ -165,7 +175,7 @@ public final class Facets {
 
     public boolean defaultViewIsTable(final ObjectFeature feature) {
         return defaultViewName(feature)
-            .map(viewName->"table".equals(viewName))
+            .map("table"::equals)
             .orElse(false);
     }
 
@@ -191,14 +201,21 @@ public final class Facets {
             .map(FileAcceptFacet::value);
     }
 
-    public void gridPreload(
+    public Optional<BSGrid> gridPreload(
             final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
-        objectSpec.lookupFacet(GridFacet.class)
-            .ifPresent(gridFacet->
+        return objectSpec.lookupFacet(GridFacet.class)
+            .map(gridFacet->
                 // the facet should always exist, in fact
                 // just enough to ask for the metadata.
                 // This will cause the current ObjectSpec to be updated as a side effect.
                 gridFacet.getGrid(objectAdapter));
+    }
+
+    public boolean hasSafeSemantics(final FacetHolder holder) {
+        return holder.lookupFacet(ActionSemanticsFacet.class)
+            .map(ActionSemanticsFacet::value)
+            .map(SemanticsOf::isSafeInNature)
+            .orElse(false);
     }
 
     public Optional<Where> hiddenWhere(final ObjectFeature feature) {
@@ -211,6 +228,16 @@ public final class Facets {
             .map(matcher::test)
             .orElse(false);
     }
+    public Predicate<ObjectFeature> hiddenWhereNotMatches(final Predicate<Where> matcher) {
+        return hiddenWhereMatches(matcher)
+            .negate();
+    }
+
+    public boolean isPermantenlyHiddenInForms(final OneToOneAssociation prop) {
+    	Objects.requireNonNull(prop, ()->"null case is undecidable");
+    	return hiddenWhereMatches(where -> where.isAlways() || where == Where.OBJECT_FORMS)
+    			.test(prop);
+    }
 
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(IconFacet.class);
@@ -222,19 +249,11 @@ public final class Facets {
     public LabelPosition labelAt(final ObjectFeature feature) {
         return feature.lookupFacet(LabelAtFacet.class)
             .map(LabelAtFacet::label)
-            .map(labelPos->{
-                switch (labelPos) {
-                case LEFT:
-                case RIGHT:
-                case NONE:
-                case TOP:
-                    return labelPos;
-                case DEFAULT:
-                case NOT_SPECIFIED:
-                default:
-                    return LabelPosition.LEFT;
-                }
-            })
+            .map(labelPos -> (switch (labelPos) {
+            case LEFT, RIGHT, NONE, TOP -> labelPos;
+            case DEFAULT, NOT_SPECIFIED -> LabelPosition.LEFT;
+            default -> LabelPosition.LEFT;
+            }))
             .orElse(LabelPosition.LEFT);
     }
 
@@ -242,49 +261,88 @@ public final class Facets {
         return "label-" + labelAt(feature).name().toLowerCase();
     }
 
+    // -- VALUE SEMANTICS
+
+    public OptionalInt maxIntegerDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MaxIntegerDigitsFacet.class)
+                .map(MaxIntegerDigitsFacet::maxIntegerDigits)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt minIntegerDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MinIntegerDigitsFacet.class)
+                .map(MinIntegerDigitsFacet::minIntegerDigits)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
+
+    /** expected empty for all integer types */
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
-            .map(MinFractionalDigitsFacet::getMinFractionalDigits)
+            .map(MinFractionalDigitsFacet::minFractionalDigits)
             .filter(digits->digits>-1)
             .map(OptionalInt::of)
             .orElseGet(OptionalInt::empty);
     }
 
+    /** expected empty for all integer types */
     public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
-            .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+            .map(MaxFractionalDigitsFacet::maxFractionalDigits)
             .filter(digits->digits>-1)
             .map(OptionalInt::of)
             .orElseGet(OptionalInt::empty);
     }
 
-    public OptionalInt maxFractionalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
-        return _NullSafe.stream(facetHolders)
-            .map(Facets::maxFractionalDigits)
-            .findFirst()
-            .orElseGet(OptionalInt::empty);
+    /**
+     * Does not consult the combination of maxIntegerDigits and maxFractionalDigits.
+     */
+    public OptionalInt maxTotalDigitsExplicit(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
+                .map(MaxTotalDigitsFacet::maxTotalDigits)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
     }
+
+    /**
+     * Consults all available constraints, in contrast to {@link #maxTotalDigitsExplicit(FacetHolder)}
+     */
+    public OptionalInt maxTotalDigitsInferred(final FacetHolder facetHolder) {
+        var maxInt = maxIntegerDigits(facetHolder);
+        if(!maxInt.isPresent())
+            return maxTotalDigitsExplicit(facetHolder);
+
+        var maxFrac = maxFractionalDigits(facetHolder);
+        if(!maxFrac.isPresent())
+            return maxTotalDigitsExplicit(facetHolder);
+
+        int inferredMaxTot = maxInt.getAsInt() + maxFrac.getAsInt();
+
+        var maxTot = maxTotalDigitsExplicit(facetHolder);
+        if(!maxTot.isPresent())
+            return OptionalInt.of(inferredMaxTot);
+
+        return OptionalInt.of(Math.min(maxTot.getAsInt(), inferredMaxTot));
+    }
+
+    // --
 
     public OptionalInt maxLength(final FacetHolder facetHolder) {
         return facetHolder
-            .lookupFacet(MaxLengthFacet.class)
-            .map(MaxLengthFacet::value)
-            .map(OptionalInt::of)
-            .orElseGet(OptionalInt::empty);
+                .lookupFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::value)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
     }
 
-    public OptionalInt maxTotalDigits(final FacetHolder facetHolder) {
-        return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
-            .map(MaxTotalDigitsFacet::getMaxTotalDigits)
-            .map(OptionalInt::of)
-            .orElseGet(OptionalInt::empty);
-    }
-
-    public OptionalInt maxTotalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
-        return _NullSafe.stream(facetHolders)
-            .map(Facets::maxTotalDigits)
-            .findFirst()
-            .orElseGet(OptionalInt::empty);
+    public OptionalInt maxLengthExplicit(final FacetHolder facetHolder) {
+        return facetHolder
+                .lookupNonFallbackFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::value)
+                .filter(value -> value > 0 && value < Integer.MAX_VALUE)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
     }
 
     public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
@@ -304,19 +362,43 @@ public final class Facets {
             .orElseGet(OptionalInt::empty);
     }
 
+    public OptionalInt multilineNumberOfLinesExplicit(final ObjectFeature feature) {
+        return feature
+            .lookupNonFallbackFacet(MultiLineFacet.class)
+            .map(MultiLineFacet::numberOfLines)
+            .filter(value -> value > 0)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
+    }
+
+    public Optional<String> regularExpressionPattern(final ObjectFeature feature) {
+        return feature.lookupNonFallbackFacet(RegExFacet.class)
+            .map(RegExFacet::regexp)
+            .filter(pattern -> !pattern.isBlank());
+    }
+
+    public OptionalInt regularExpressionPatternFlags(final ObjectFeature feature) {
+        return feature.lookupNonFallbackFacet(RegExFacet.class)
+            .filter(facet -> !facet.regexp().isBlank())
+            .map(RegExFacet::patternFlags)
+            .map(OptionalInt::of)
+            .orElseGet(OptionalInt::empty);
+    }
+
     //XXX could be moved to ManagedObject directly
     public ManagedObject projected(final ManagedObject objectAdapter) {
-        return objectAdapter.getSpecification().lookupFacet(ProjectionFacet.class)
+        return objectAdapter.objSpec().lookupFacet(ProjectionFacet.class)
             .map(projectionFacet->projectionFacet.projected(objectAdapter))
             .orElse(objectAdapter);
     }
 
-    public Optional<PromptStyle> promptStyle(final ObjectFeature feature) {
-        return feature.lookupFacet(PromptStyleFacet.class)
+    public Optional<PromptStyle> promptStyle(final @Nullable ObjectFeature feature) {
+        return Optional.ofNullable(feature)
+    		.flatMap(f->f.lookupFacet(PromptStyleFacet.class))
             .map(PromptStyleFacet::value);
     }
 
-    public PromptStyle promptStyleOrElse(final ObjectFeature feature, final PromptStyle fallback) {
+    public PromptStyle promptStyleOrElse(final @Nullable ObjectFeature feature, final PromptStyle fallback) {
         return Facets.promptStyle(feature)
             .map(promptStyle->
                 promptStyle == PromptStyle.AS_CONFIGURED
@@ -335,9 +417,17 @@ public final class Facets {
             .map(TypeOfFacet::value);
     }
 
+    public OptionalInt typicalLength(final ObjectFeature feature) {
+        return feature.lookupFacet(TypicalLengthFacet.class)
+                .map(TypicalLengthFacet::value)
+                .filter(value -> value > 0)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
+
     public OptionalInt typicalLength(
             final ObjectSpecification objectSpec, final OptionalInt maxLength) {
-        val typicalLength = objectSpec
+        var typicalLength = objectSpec
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)
                 .orElse(null);
@@ -359,7 +449,7 @@ public final class Facets {
                 .stream()
                 .map(TableDecoratorFacet::value)
                 .map(decoratorClass -> {
-                    val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass);
+                    var decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass);
                     return facetHolders[0].injectServicesInto(decorator);
                 })
                 .findFirst();
@@ -368,37 +458,33 @@ public final class Facets {
     // -- VALUE FACET
 
     public static Predicate<ObjectSpecification> valueTypeMatches(final Predicate<Class<?>> typeMatcher) {
-        return spec->
-            spec.valueFacet()
+        return spec->spec.valueFacet()
             .map(ValueFacet::getLogicalType)
-            .map(LogicalType::getCorrespondingClass)
+            .map(LogicalType::correspondingClass)
             .map(typeMatcher::test)
             .orElse(false);
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<ObjectAction> valueCompositeMixinForParameter(
             final ObjectFeature param,
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex) {
-        val objectSpec = param.getElementType();
+        var objectSpec = param.getElementType();
         return objectSpec.valueFacet()
             .<ObjectAction>flatMap(valueFacet->
                 valueFacet.selectCompositeValueMixinForParameter(
                         parameterNegotiationModel,paramIndex));
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<ObjectAction> valueCompositeMixinForProperty(
             final ObjectFeature prop,
             final ManagedProperty managedProperty) {
-        val objectSpec = prop.getElementType();
+        var objectSpec = prop.getElementType();
         return objectSpec.valueFacet()
             .<ObjectAction>flatMap(valueFacet->
                 valueFacet.selectCompositeValueMixinForProperty(managedProperty));
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Stream<X> valueStreamSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
         return objectSpec.valueFacet()
@@ -406,7 +492,6 @@ public final class Facets {
             .orElseGet(Stream::empty);
     }
 
-    @SuppressWarnings("unchecked")
     public <X> boolean valueHasSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
         return objectSpec.valueFacet()
@@ -416,7 +501,6 @@ public final class Facets {
             .orElse(false);
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Optional<ValueSemanticsProvider<X>> valueDefaultSemantics(
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
@@ -424,6 +508,15 @@ public final class Facets {
             .filter(typeGuard(requiredType))
             .flatMap(ValueFacet::selectDefaultSemantics)
             .map(_Casts::uncheckedCast);
+    }
+
+    /**
+     * Optionally the qualifier string, that selects for a (qualified) {@link ValueSemanticsProvider}.
+     */
+    public Optional<String> valueQualifier(@NonNull final ObjectFeature feature) {
+        return feature.lookupFacet(ValueSemanticsSelectingFacet.class)
+            .map(ValueSemanticsSelectingFacet::value)
+            .map(_Strings::emptyToNull);
     }
 
     @SuppressWarnings("unchecked")
@@ -441,7 +534,7 @@ public final class Facets {
         return valueSerializer(objectSpec, requiredType)
             .orElseThrow(()->_Exceptions.illegalArgument(
                     "ObjectSpec is expected to have a ValueFacet<%s>",
-                    objectSpec.getCorrespondingClass().getName()));
+                    objectSpec.correspondingClass().getName()));
     }
 
     // -- HELPER

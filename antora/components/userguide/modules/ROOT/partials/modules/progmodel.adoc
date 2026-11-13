@@ -58,7 +58,7 @@ We can therefore rely on Maven to ensure there are no cyclic dependencies: the a
 
 [NOTE]
 ====
-If the above convention is too officious, then you could choose to have multiple Spring modules per Maven module, but you will need to watch out for cycles.
+You could instead choose to have multiple Spring modules per Maven module, but if so you will need to watch out for cycles.
 
 In such cases (proprietary) tools such as link:https://structure101.com/[Structure 101] can be used to help detect and visualize such cycles.
 Or, (open source) libraries such as link:https://www.archunit.org/[ArchUnit] or https://jqassistant.org/[jQAssistant] can help enforce architectural layering to prevent the issue arising in the first place.
@@ -94,7 +94,7 @@ public class CausewayModuleExtExcelApplib {
 }
 ----
 <.> the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan] indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
-<.> recommended if using xref:pjpa::about.adoc[JPA/EclipseLink], skip if using JDO.
+<.> recommended if using xref:pjpa::about.adoc[JPA/EclipseLink].
 
 
 When there is a dependency, this is then expressed in two ways: first, as a "physical" `<dependency>` in Maven; and second, as a "logical" dependency using link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] in the `@Configuration` module.

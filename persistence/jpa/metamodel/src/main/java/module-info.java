@@ -24,7 +24,7 @@ module org.apache.causeway.persistence.jpa.metamodel {
 
     requires jakarta.inject;
     requires jakarta.persistence;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

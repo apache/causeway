@@ -9,39 +9,20 @@ Represents a tab group containing one or more xref:refguide:applib:index/layout/
 .BSTabGroup.java
 ----
 class BSTabGroup {
-  Boolean isUnreferencedCollections()     // <.>
-  void setUnreferencedCollections(Boolean unreferencedCollections)
-  Boolean isCollapseIfOne()     // <.>
-  void setCollapseIfOne(Boolean collapseIfOne)
-  List<BSTab> getTabs()
-  void setTabs(List<BSTab> tabs)
-  BSTabGroupOwner getOwner()     // <.>
-  void setOwner(BSTabGroupOwner owner)
-  String getMetadataError()     // <.>
-  void setMetadataError(String metadataError)
-  BSGrid getGrid()
+  boolean isUnreferencedCollections()     // <.>
+  boolean isCollapseIfOne(boolean _default)     // <.>
 }
 ----
 
 <.> xref:#isUnreferencedCollections_[isUnreferencedCollections()]
 +
 --
-Whether this tab group should be used to hold any unreferenced collections (contributed or "native").
+unwraps nullable Boolean
 --
-<.> xref:#isCollapseIfOne_[isCollapseIfOne()]
+<.> xref:#isCollapseIfOne_boolean[isCollapseIfOne(boolean)]
 +
 --
-If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
---
-<.> xref:#getOwner_[getOwner()]
-+
---
-Owner.
---
-<.> xref:#getMetadataError_[getMetadataError()]
-+
---
-For diagnostics; populated by the framework if and only if a metadata error.
+unwraps nullable Boolean
 --
 
 == Members
@@ -49,23 +30,9 @@ For diagnostics; populated by the framework if and only if a metadata error.
 [#isUnreferencedCollections_]
 === isUnreferencedCollections()
 
-Whether this tab group should be used to hold any unreferenced collections (contributed or "native").
+unwraps nullable Boolean
 
-Any layout must have precisely one tab group or xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol] that has this attribute set.
+[#isCollapseIfOne_boolean]
+=== isCollapseIfOne(boolean)
 
-[#isCollapseIfOne_]
-=== isCollapseIfOne()
-
-If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
-
-[#getOwner_]
-=== getOwner()
-
-Owner.
-
-Set programmatically by framework after reading in from XML.
-
-[#getMetadataError_]
-=== getMetadataError()
-
-For diagnostics; populated by the framework if and only if a metadata error.
+unwraps nullable Boolean

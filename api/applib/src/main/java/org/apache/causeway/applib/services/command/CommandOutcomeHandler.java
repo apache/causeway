@@ -69,5 +69,4 @@ public interface CommandOutcomeHandler {
      */
     void setResult(Try<Bookmark> result);
 
-
 }

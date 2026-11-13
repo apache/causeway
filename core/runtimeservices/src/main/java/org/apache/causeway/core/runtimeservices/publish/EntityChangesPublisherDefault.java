@@ -26,27 +26,28 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
+ * Default implementation of {@link EntityChangesPublisher}
  *
  * @since 2.0 {@index}
  */
@@ -73,15 +74,15 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     @Override
     public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
 
-        val payload = getPayload(hasEnlistedEntityChanges);
-        val handle = _Xray.enterEntityChangesPublishing(
+        var payload = getPayload(hasEnlistedEntityChanges);
+        var handle = _Xray.enterEntityChangesPublishing(
                 iaTracker,
                 payload,
                 enabledSubscribers,
                 ()->getCannotPublishReason(payload));
 
         payload.ifPresent(entityChanges->{
-            for (val subscriber : enabledSubscribers) {
+            for (var subscriber : enabledSubscribers) {
                 subscriber.onChanging(entityChanges);
             }
         });

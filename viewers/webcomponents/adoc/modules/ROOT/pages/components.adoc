@@ -1,0 +1,73 @@
+= Compose Objects and Interactions
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+== Context hierarchy
+
+A stable `<cw-graphql-client>` provides the endpoint and execution context to its descendants.
+An object page declares `<cw-object-context>` with the exact logical type and object identifier.
+Its descendants coordinate their projections and consume the resulting object state rather than independently recreating domain state in the host.
+Keep the client and global menus connected when replacing a route page.
+
+[source,html]
+----
+<cw-object-context logical-type="petclinic.PetOwner" object-id="s_owner-mary">
+  <cw-object-header></cw-object-header>
+  <cw-property id="name" editable></cw-property>
+  <cw-interaction-controller></cw-interaction-controller>
+</cw-object-context>
+----
+
+This is a component composition fragment inside an existing client, not a complete HTMX or Vue route page.
+The xref:htmx/customisation.adoc[HTMX] and xref:vue/customisation.adoc[Vue] guides add their required route bindings and landmarks.
+Property and action IDs must match the domain model exactly.
+
+== Generic and authored layouts
+
+`<cw-object>` renders the object's effective Causeway layout, with a safe fallback when a usable grid is unavailable.
+`<cw-object editable>` opts generated properties into supported editing.
+Custom pages can instead compose `<cw-row>`, `<cw-column>`, `<cw-fieldset>`, `<cw-tabgroup>`, and `<cw-tab>` around semantic members.
+These are shared elements, not HTMX macros or Vue wrappers.
+
+`<cw-metadata>` renders the exact `metadata` fieldset from the authorised effective layout.
+The unreferenced-member elements allocate remaining authorised members by exact kind and ID:
+
+* `<cw-unreferenced-properties>`
+* `<cw-unreferenced-collections>`
+* `<cw-unreferenced-actions>`
+
+Only one destination per kind is effective in document order, and connected hidden references still count as references.
+Generated properties need explicit editing opt-in.
+Empty destinations show no visible group; their state is exposed through `data-causeway-unreferenced-state` as `loading`, `ready`, `empty`, or `error`.
+Use these elements to avoid manually maintaining a second list of domain members in a custom page.
+
+== Properties and actions
+
+Properties are read-only unless editing is explicitly enabled.
+The component uses server-provided visibility, disabled reasons, choices, autocomplete, defaults, and validation rather than trusting browser presentation as authorization.
+An enabled editor is not permission to bypass server validation.
+
+Ordinary `<cw-action>` elements and coordinated `<cw-menubars>` use the established Causeway interaction path.
+Keep an interaction controller inside the page's object context for prompts, validation, invocation, and result handling.
+Do not implement a parallel GraphQL mutation merely to customise an action button's appearance.
+For backend semantics, see xref:gqlv:ROOT:rich-object-interactions.adoc[rich object interactions].
+
+== Collections and previews
+
+Collections load lazily and use the backend's advertised windowing and ordering contracts.
+A host must not infer complete collection contents from a displayed page or add client sorting that suggests backend ordering has changed.
+See xref:gqlv:ROOT:rich-collection-windowing.adoc[rich collection windowing].
+
+`<cw-preview>` provides collection row previews using hydrated row contexts.
+Use the current spelling; the former `<cw-peek>` name has no compatibility alias.
+Preview content is component-owned presentation, while navigation to a selected object's canonical route remains host policy.
+
+== Results and lifecycle
+
+Object-context state distinguishes loading, ready, partial-error, and terminal-error conditions.
+A partial error need not discard independently usable fields.
+Hosts dispose obsolete route contexts and prevent late results from repopulating a newer route.
+
+The default host bridge routes complete entity or view-model identities and presents other typed results through its result outlet.
+Application-claimed results remain application-owned.
+Typed local-resource results are safe same-origin full-document navigation, not an instruction to invoke authentication or reinterpret the path as an object route.

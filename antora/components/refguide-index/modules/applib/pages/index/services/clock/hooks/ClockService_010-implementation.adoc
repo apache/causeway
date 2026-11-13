@@ -4,4 +4,5 @@
 
 == Implementation
 
-Note that this domain service is also used by the framework itself to obtain the time, so it acts as an SPI as well.
+This service is concrete, so is its own implementation.
+

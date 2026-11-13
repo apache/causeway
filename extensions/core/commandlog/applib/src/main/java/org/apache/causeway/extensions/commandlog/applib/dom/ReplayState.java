@@ -18,20 +18,22 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import org.jspecify.annotations.Nullable;
+
 /**
- * Curently unused.
- *
- * <p>
- *     This enum to support the (incubating) <i>Command Replay</i> extension.
- * </p>
+ * Introduced in support of the Command Replay Feature.
  *
  * @since 2.x {@index}
  */
 public enum ReplayState {
     /**
-     * As used on primary system.
+     * As used on primary system, indicating an initial state.
      */
     UNDEFINED,
+    /**
+     * Marks a {@link CommandLogEntry} as exported, such that consecutive export actions will skip those.
+     */
+    EXPORTED,
     /**
      * For use on secondary system, indicates that the command has not yet been replayed.
      */
@@ -47,8 +49,66 @@ public enum ReplayState {
     /**
      * For use on secondary system, indicates that the command should not be replayed.
      */
-    EXCLUDED,
-    ;
+    EXCLUDED;
 
-    public boolean isFailed() { return this == FAILED;}
+    public boolean isExported() { return this == EXPORTED; }
+    public boolean isFailed() { return this == FAILED; }
+
+    public boolean isExportable() {
+        return this == ReplayState.UNDEFINED;
+    }
+
+    public boolean isPendingOrFailed() {
+        return this == ReplayState.PENDING
+                || this == ReplayState.FAILED;
+    }
+
+    public boolean isReplayable() {
+        return this == ReplayState.PENDING
+                || this == ReplayState.OK
+                || this == ReplayState.FAILED;
+    }
+
+    public boolean isOkOrExcluded() {
+        return this == ReplayState.OK
+                || this == ReplayState.EXCLUDED;
+    }
+
+    /**
+     * Whether the command is considered to have executed successfully: either a recorded-only command that was
+     * never replayed ({@link #UNDEFINED}), or one that replayed successfully ({@link #OK}). Used to decide when a
+     * participant's recorded bookmark may stand in as its actual bookmark.
+     */
+    public boolean isExecutedOk() {
+        return this == ReplayState.UNDEFINED
+                || this == ReplayState.OK;
+    }
+
+    // -- NULL SAFE
+
+    public static boolean isExportable(final @Nullable ReplayState replayState) {
+        return replayState == null
+                || replayState.isExportable();
+    }
+
+    public static boolean isExported(final @Nullable ReplayState replayState) {
+        return replayState != null
+                && replayState.isExported();
+    }
+
+    public static boolean isPendingOrFailed(final @Nullable ReplayState replayState) {
+        return replayState != null
+                && replayState.isPendingOrFailed();
+    }
+
+    public static boolean isReplayable(final @Nullable ReplayState replayState) {
+        return replayState != null
+                && replayState.isReplayable();
+    }
+
+    public static boolean isOkOrExcluded(final @Nullable ReplayState replayState) {
+        return replayState != null
+                && replayState.isOkOrExcluded();
+    }
+
 }

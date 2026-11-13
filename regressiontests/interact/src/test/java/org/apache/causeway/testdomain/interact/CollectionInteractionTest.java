@@ -29,15 +29,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -51,8 +48,6 @@ import lombok.val;
                 "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    //CausewayPresets.DebugMetaModel,
-    //CausewayPresets.DebugProgrammingModel,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
@@ -61,19 +56,19 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     @Test
     void multiSelect() {
 
-        val tester =
+        var tester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
 
-        val expectedElements = tester.streamCollectionElements()
+        var expectedElements = tester.streamCollectionElements()
                 .map(MmUnwrapUtils::single)
                 .collect(Collectors.toList());
         assertEquals(4, expectedElements.size());
 
         tester.assertCollectionElements(expectedElements);
 
-        val tableTester = tester.tableTester();
+        var tableTester = tester.tableTester();
 
         tableTester.assertUnfilteredDataElements(expectedElements);
 
@@ -87,72 +82,44 @@ class CollectionInteractionTest extends InteractionTestAbstract {
                 expectedElements.get(3)));
 
         // toggle all on
-        tableTester.getDataTable().getSelectAllToggle().setValue(true);
+        tableTester.getDataTable().selectAll(true);
         tableTester.assertDataRowSelectionIsAll();
 
         // toggle all off
-        tableTester.getDataTable().getSelectAllToggle().setValue(false);
+        tableTester.getDataTable().selectAll(false);
         tableTester.assertDataRowSelectionIsEmpty();
-
     }
-
-    @Test
-    void columns() {
-        testerFactory.getMetaModelContext().getConfiguration().getApplib().getAnnotation()
-            .getPropertyLayout().setSequencePolicyIfUnreferenced(
-                    AssociationLayoutConfigOptions.SequencePolicy.AS_PER_SEQUENCE);
-
-        val tableTester =
-                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
-                .tableTester();
-
-        tableTester.assertColumnNames(List.of("Name", "Date"));
-    }
-
-    //@Test cannot figure out how to reload the grid after was loaded in previous test
-    void columns2() {
-        testerFactory.getMetaModelContext().getConfiguration().getApplib().getAnnotation()
-            .getPropertyLayout().setSequencePolicyIfUnreferenced(
-                    AssociationLayoutConfigOptions.SequencePolicy.ALPHABETICALLY);
-
-        val tableTester =
-                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
-                .tableTester();
-
-        tableTester.assertColumnNames(List.of("Date", "Name"));
-    }
-
 
     @Test
     void choicesFromMultiselect() {
 
-        val collTester =
+        var collTester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
         collTester.assertVisibilityIsNotVetoed();
         collTester.assertUsabilityIsNotVetoed();
 
-        val choiceElements = ((InteractionDemo)(collTester.getManagedCollectionIfAny().orElseThrow()
+        var choiceElements = ((InteractionDemo)(collTester.getManagedCollectionIfAny().orElseThrow()
                 .getOwner()
                 .getPojo()))
                 .getItems();
         assertEquals(4, choiceElements.size());
 
-        val tableTester = collTester.tableTester();
+        var tableTester = collTester.tableTester();
         // toggle on 'second' and 'last' item for selection
         tableTester.assertDataRowSelectionWhenToggledOn(List.of(1, 3), List.of(
                 choiceElements.get(1),
                 choiceElements.get(3)));
 
-        val table = tableTester.getDataTable();
+        var table = tableTester.getDataTable();
 
-        val actionInteraction = table
+        var actionInteraction = table
                 .startAssociatedActionInteraction("doSomethingWithItems", Where.OBJECT_FORMS);
 
-        val actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
+        var actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
         actTester.assertVisibilityIsNotVetoed();
         actTester.assertUsabilityIsNotVetoed();
 
-        val expectedParamDefault = List.of(
+        var expectedParamDefault = List.of(
                 choiceElements.get(1),
                 choiceElements.get(3));
 

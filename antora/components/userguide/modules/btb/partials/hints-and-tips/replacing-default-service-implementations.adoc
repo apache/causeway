@@ -10,7 +10,7 @@ The framework provides default implementations for many of the xref:refguide:app
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider].
-The trick is to use the `@javax.annotation.Priority` annotation.
+The trick is to use the `@jakarta.annotation.Priority` annotation.
 
 Here's how:
 

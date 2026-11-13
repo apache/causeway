@@ -24,28 +24,27 @@ import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
-//@Log4j2
+//@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class RestEndpointService {
 
-    private final RestEasyConfiguration restEasyConfiguration;
+    private final RestfulPathProvider restfulPathProvider;
     private final WebAppContextPath webAppContextPath;
 
     public OutboxClient newClient(final int port, final String username, final String password) {
 
-        val restRootPath =
+        var restRootPath =
                 String.format("http://localhost:%d%s/",
                         port,
                         webAppContextPath
-                                .prependContextPath(this.restEasyConfiguration.getJaxrs().getDefaultPath())
+                                .prependContextPath(this.restfulPathProvider.getRestfulPath().orElse(""))
                 );
 
         return new OutboxClient(restRootPath, username, password);

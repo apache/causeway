@@ -18,35 +18,56 @@
  */
 package org.apache.causeway.viewer.commons.prism;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
-@RequiredArgsConstructor
-public enum PrismLanguage {
-    MARKUP("markup"),
-    CSS("css"),
-    CLIKE("clike"),
-    JAVA("java"),
-    JAVASCRIPT("javascript"),
-    ASCIIDOC("asciidoc"),
-    JAVADOCLIKE("javadoclike"),
-    JAVADOC("javadoc"),
-    JSON("json"),
-    PROPERTIES("properties"),
-    XML_DOC("xml-doc"),
-    YAML("yaml"),
-    ;
-    final String languageSuffix;
-    public String jsFile() {
-        return "prism/components/prism-" + languageSuffix + ".min.js";
+import org.springframework.util.StringUtils;
+
+public record PrismLanguage(String languageId) {
+
+    public String cssClass() {
+        return "language-" + languageId;
     }
 
+    public String jsFile() {
+        return "prism/components/prism-" + languageId + ".min.js";
+    }
+
+    /**
+     * eg. {@code class='language-ruby'} results in {@code languageId=ruby}
+     */
+    public static Optional<PrismLanguage> parseFromCssClass(final @Nullable String cssClass) {
+        if(!StringUtils.hasLength(cssClass)) return Optional.empty();
+        int start = cssClass.indexOf("language-");
+        if(start==-1) return Optional.empty();
+        var languageKey = cssClass.substring(start+9);
+        int w = languageKey.indexOf(" ");
+        if(w>-1) languageKey = languageKey.substring(0, w);
+        return Optional.of(new PrismLanguage(languageKey));
+    }
+    
+    @Deprecated
     public static List<PrismLanguage> mostCommon() {
         //XXX order matters, eg. JAVADOCLIKE must come before JAVADOC
         //XXX future extensions might want to make that a config option
-        return Arrays.asList(PrismLanguage.values());
+        return List.of(
+            "markup",
+            "css",
+            "clike",
+            "java",
+            "javascript",
+            "asciidoc",
+            "javadoclike",
+            "javadoc",
+            "json",
+            "properties",
+            "xml-doc",
+            "yaml")
+            .stream()
+            .map(PrismLanguage::new)
+            .toList();
     }
 
 }

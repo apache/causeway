@@ -22,15 +22,12 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrailPersistenceJpa;
 import org.apache.causeway.extensions.audittrail.jpa.dom.AuditTrailEntry;
@@ -52,7 +49,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
@@ -64,14 +60,10 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
             CausewayModuleExtAuditTrailPersistenceJpa.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
     })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, CmdExecAuditSessTestDomainModel.class})
     public static class AppManifest {
     }
-
 
     @Override
     protected org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter newCounter(final String name) {
@@ -85,6 +77,5 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
         assertEntityPublishingDisabledFor(ExecutionLogEntry.class);
         assertEntityPublishingDisabledFor(ExecutionOutboxEntry.class);
     }
-
 
 }

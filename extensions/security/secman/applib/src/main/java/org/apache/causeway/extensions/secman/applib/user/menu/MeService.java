@@ -69,11 +69,9 @@ public class MeService {
     final UserService userService;
     final Provider<QueryResultsCache> queryResultsCacheProvider;
 
-
     @ObjectSupport public String iconName() {
         return "applicationUser";
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -107,7 +105,6 @@ public class MeService {
 
     }
 
-
     @Component
     @RequiredArgsConstructor
     public static class UserMenuMeActionAdvisor {
@@ -116,7 +113,7 @@ public class MeService {
 
         @EventListener(UserMenu.me.ActionDomainEvent.class)
         public void on(final UserMenu.me.ActionDomainEvent event) {
-            switch (causewayConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
+            switch (causewayConfiguration.extensions().secman().userMenuMeActionPolicy()) {
                 case HIDE:
                     event.hide();
                     break;

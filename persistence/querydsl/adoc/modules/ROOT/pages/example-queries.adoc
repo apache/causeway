@@ -1,0 +1,119 @@
+= Example Queries
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+This page provides some examples of using QueryDSL, as passed into the various `findXxx()` methods of xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc[].
+
+The examples use the xref:docs:starters:simpleapp.adoc[]'s `SimpleObject` and `SimpleObjectRepository`.
+
+== Subclass QueryDslRepository
+
+First, note that `SimpleObjectRepository` inherits from and xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc[], parameterized by both the entity (`SimpleObject`) and its corresponding query class (`QSimpleObject`):
+
+[source,java]
+----
+@Service
+public class SimpleObjectRepository
+    extends QueryDslRepository<SimpleObject, QSimpleObject> {
+
+    @Override
+    protected Function<QSimpleObject, List<OrderSpecifier<? extends Comparable>>> getDefaultOrders() {
+        return entity -> Arrays.asList(entity.name.asc());
+    }
+
+}
+----
+
+As the example above shows, it's usually good practice to override `getDefaultOrders()` method, which specifies the order to apply for the various finders that require an ordering, eg xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#findUsingDefaultOrder_Function[findUsingDefaultOrder()].
+
+[IMPORTANT]
+====
+The default implementation of `getDefaultOrders()` assumes that there is a unique "id" property.
+If that isn't the case, then override the method to avoid potential runtime exceptions.
+====
+
+== find & findUsingDefaultOrder
+
+The xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#find_Function_Function[QueryDslRepository#find()] returns all matching entities, in the specified order:
+
+[source,java]
+----
+public List<SimpleObject> findByNameContaining(final String name) {
+    return find(
+                entity -> entity.name.contains(name),
+                entity -> entity.name.asc()
+            );
+}
+----
+
+To find matching instances use the default order, use xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#findUsingDefaultOrder_Function[QueryDslRepository#findUsingDefaultOrder()]:
+
+[source,java]
+----
+public List<SimpleObject> findByNameContaining(final String name) {
+    return findUsingDefaultOrder(
+                entity -> entity.name.contains(name)
+            );
+}
+----
+
+This slightly more complicated example combine predicates with an `AND`:
+
+[source,java]
+----
+    public List<SimpleObject> findByNameAndAmount(
+            final String name,
+            final int amount
+    ) {
+        return find(
+                entity -> entity.name.eq(name)
+                     .and(entity.amount.gt(ConstantImpl.create(amount))),
+                entity -> entity.name.asc()
+        );
+    }
+----
+
+=== findFirst
+
+The xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#findFirst_Function_Function[QueryDslRepository#findFirst()] will instead return only a single instance:
+
+[source,java]
+----
+public SimpleObject findFirstByName(final String name) {
+    return findFirst(
+            entity -> entity.name.eq(name),
+            entity -> entity.name.asc()
+    );
+}
+----
+
+=== findFieldsDistinct & findUniqueFields
+
+As well as returning entire entities, with QueryDSL we can also return custom projections.
+For example:
+
+[source,java]
+----
+public List<String> findUniqueNames(final String name) {
+    return findFieldsDistinct(
+            entity -> entity.name,
+            entity -> entity.name.eq(name),
+            entity -> entity.name.asc()
+    );
+}
+----
+
+and in a similar manner:
+
+[source,java]
+----
+public String findUniqueName(final String name) {
+    return findUniqueFields(
+            entity -> entity.name,
+            entity -> entity.name.eq(name)
+    ).orElse(null);
+}
+----
+
+

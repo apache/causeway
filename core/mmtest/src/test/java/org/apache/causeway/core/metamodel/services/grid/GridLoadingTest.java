@@ -1,0 +1,116 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.services.grid;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.environment.DeploymentType;
+import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
+
+final class GridLoadingTest
+extends MetaModelTestAbstract {
+
+    private GridServiceDefault gridService;
+
+    @Override
+    protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
+        var env = new CausewaySystemEnvironment(DeploymentType.PROTOTYPING);
+        mmcBuilder.systemEnvironment(env);
+        super.onSetUp(mmcBuilder);
+    }
+
+    @Override
+    protected void afterSetUp() {
+        this.gridService = ((GridServiceDefault) getServiceRegistry()
+                .lookupServiceElseFail(GridService.class));
+        assertTrue(gridService.supportsReloading());
+        assertTrue(getMetaModelContext().getSystemEnvironment().deploymentType().isPrototyping());
+    }
+
+    @Test
+    void customNamed() {
+
+        var customNamed = "Hello";
+
+        var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
+
+        var gridFacet = barSpec.lookupFacet(GridFacet.class).orElse(null);
+        assertNotNull(gridFacet);
+
+        // triggers grid to be loaded (if initial or reloading supported)
+        var grid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        assertNotNull(grid);
+
+        // verify object-action's member named facet was installed when loading Grid from XML
+        var objectAction = barSpec.getAction("createSimpleObject").orElse(null);
+        assertNotNull(objectAction);
+        assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
+
+        // trigger a layout.xml reload, which installs more facets while purging old ones
+        // verify however, that the number of facets stays constant
+
+        // triggers grid to be re-loaded
+        gridService.invalidate(Bar.class);
+
+        var grid2 = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        assertNotSame(grid, grid2); // verify that we actually got a new grid, indicative of a reload having taken place
+
+        assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
+
+        var facetRanking = objectAction.lookupFacetRanking(MemberNamedFacet.class).orElse(null);
+        assertNotNull(facetRanking);
+
+        // XML layout facets are installed at precedence HIGH
+        var xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
+
+        // verify rank did not grow with latest layout.xml reload
+        assertEquals(1, xmlFacetRank.size());
+
+        // verify winning facet is the same object as the last one added from latest layout.xml reload,
+        // to make sure we are not feed the winner from an outdated cache
+        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastElseFail());
+
+    }
+
+    @Test
+    void panelActionRemainsAssociatedWithVisibleProperty() {
+    	// FirstPropPermaHidden is setup with prop1 and prop2 where the first one is permanently hidden in Forms
+        var spec = getSpecificationLoader().specForTypeElseFail(FirstPropPermaHidden.class);
+        var gridFacet = spec.lookupFacet(GridFacet.class).orElseThrow();
+        gridFacet.getGrid(ManagedObject.adaptSingular(spec, new FirstPropPermaHidden()));
+        var visibleProperty = spec.getProperty("prop2").orElseThrow();
+        assertTrue(org.apache.causeway.core.metamodel.spec.feature.ObjectAction.Util
+                .findForAssociation(spec, visibleProperty)
+                .anyMatch(action -> action.getId().equals("someAction")));
+    }
+
+}

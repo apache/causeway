@@ -9,17 +9,13 @@ Represents an instance of some element of the meta-model recognized by the frame
 .ManagedObject.java
 ----
 interface ManagedObject {
-  Specialization getSpecialization()     // <.>
-  BookmarkPolicy getBookmarkPolicy()
-  ObjectSpecification getSpecification()     // <.>
+  Specialization specialization()     // <.>
+  Specialization.BookmarkPolicy getBookmarkPolicy()
+  ObjectSpecification objSpec()     // <.>
   Object getPojo()     // <.>
   EntityState getEntityState()
-  Supplier<ManagedObject> asSupplier()
-  T assertCompliance(T pojo)     // <.>
   String getTitle()     // <.>
-  String getIconName()     // <.>
-  ObjectIcon getIcon()
-  Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers()     // <.>
+  ObjectIcon getIcon(IconSize iconSize)     // <.>
   Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark()
   ManagedObject unspecified()     // <.>
   ManagedObject empty(ObjectSpecification spec)     // <.>
@@ -27,8 +23,8 @@ interface ManagedObject {
   ManagedObject service(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject viewmodel(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
   ManagedObject entity(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
-  ManagedObject entityHypridBookmarked(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)
-  ManagedObject entityHybirdTransient(ObjectSpecification spec, Object pojo)
+  ManagedObject entityBookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)
+  ManagedObject entityTransient(ObjectSpecification spec, Object pojo)
   ManagedObject mixin(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject other(ObjectSpecification spec, Object pojo)     // <.>
   PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
@@ -42,12 +38,12 @@ interface ManagedObject {
 }
 ----
 
-<.> xref:#getSpecialization_[getSpecialization()]
+<.> xref:#specialization_[specialization()]
 +
 --
 Returns the specific _Specialization_ this xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] implements, which governs this object's behavior.
 --
-<.> xref:#getSpecification_[getSpecification()]
+<.> xref:#objSpec_[objSpec()]
 +
 --
 Returns the specification that details the structure (meta-model) of this object.
@@ -57,22 +53,12 @@ Returns the specification that details the structure (meta-model) of this object
 --
 Returns the adapted domain object, the 'plain old java' object this managed object represents with the framework.
 --
-<.> xref:#assertCompliance_T[assertCompliance(T)]
-+
---
-Unary operator asserting that _pojo_ and _#getSpecification()_ are compliant with the policies from _#getSpecialization()_ .
---
 <.> xref:#getTitle_[getTitle()]
 +
 --
 The (untranslated) title of the wrapped pojo.
 --
-<.> xref:#getIconName_[getIconName()]
-+
---
-Returns the name of an icon to use for this object.
---
-<.> xref:#eitherIconOrFaLayers_[eitherIconOrFaLayers()]
+<.> xref:#getIcon_IconSize[getIcon(IconSize)]
 +
 --
 Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
@@ -140,13 +126,13 @@ spec and pojo don't need to be strictly in sync, we adapt if required
 
 == Members
 
-[#getSpecialization_]
-=== getSpecialization()
+[#specialization_]
+=== specialization()
 
 Returns the specific _Specialization_ this xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] implements, which governs this object's behavior.
 
-[#getSpecification_]
-=== getSpecification()
+[#objSpec_]
+=== objSpec()
 
 Returns the specification that details the structure (meta-model) of this object.
 
@@ -155,25 +141,13 @@ Returns the specification that details the structure (meta-model) of this object
 
 Returns the adapted domain object, the 'plain old java' object this managed object represents with the framework.
 
-[#assertCompliance_T]
-=== assertCompliance(T)
-
-Unary operator asserting that _pojo_ and _#getSpecification()_ are compliant with the policies from _#getSpecialization()_ .
-
 [#getTitle_]
 === getTitle()
 
 The (untranslated) title of the wrapped pojo.
 
-[#getIconName_]
-=== getIconName()
-
-Returns the name of an icon to use for this object.
-
-May return `null` if no icon is specified.
-
-[#eitherIconOrFaLayers_]
-=== eitherIconOrFaLayers()
+[#getIcon_IconSize]
+=== getIcon(IconSize)
 
 Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 

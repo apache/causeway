@@ -20,21 +20,18 @@ package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
 import java.util.List;
 import java.util.Map;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Component;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Aggregates all {@link ClassSubstitutor}s.
@@ -42,11 +39,11 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Log4j2
+@Slf4j
 public class ClassSubstitutorRegistry {
 
     private final List<ClassSubstitutor> classSubstitutors;
-    private final Map<Class<?>, Substitution> cache = _Maps.newConcurrentHashMap();
+    private final Map<Class<?>, Substitution> cache = new ConcurrentHashMap<>();
 
     @Inject
     public ClassSubstitutorRegistry(final List<ClassSubstitutor> classSubstitutors) {
@@ -58,9 +55,8 @@ public class ClassSubstitutorRegistry {
      * @return (non-null) the aggregated Substitution that applies to given originalClass
      */
     public Substitution getSubstitution(final @Nullable Class<?> originalClass) {
-        if(originalClass == null) {
-            return Substitution.neverReplaceClass();
-        }
+        if(originalClass == null)
+			return Substitution.neverReplaceClass();
         return cache.computeIfAbsent(originalClass, this::findSubstitutionFor);
     }
 
@@ -78,7 +74,7 @@ public class ClassSubstitutorRegistry {
 
     private Substitution getSubstitutionElseWarn(final ClassSubstitutor substitutor, final Class<?> originalClass) {
 
-        val substitution = substitutor.getSubstitution(originalClass);
+        var substitution = substitutor.getSubstitution(originalClass);
         if(substitution == null) {
             log.warn("ClassSubstitutor.getSubstitution(Class) must never return null! "
                     + "However, substitutor {} just did for class argument {}. "

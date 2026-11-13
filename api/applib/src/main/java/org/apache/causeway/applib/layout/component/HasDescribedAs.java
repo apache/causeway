@@ -18,14 +18,11 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import jakarta.xml.bind.annotation.XmlElement;
-
 /**
  * @since 2.0 {@index}
  */
 public interface HasDescribedAs {
 
-    @XmlElement(required = false)
     String getDescribedAs();
     void setDescribedAs(String describedAs);
 

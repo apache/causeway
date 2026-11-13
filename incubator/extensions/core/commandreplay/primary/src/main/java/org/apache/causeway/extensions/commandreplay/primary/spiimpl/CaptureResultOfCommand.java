@@ -33,8 +33,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-import lombok.val;
-
 /**
  * @since 2.0 {@index}
  */
@@ -56,7 +54,7 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
             return commandDto;
         }
 
-        val commandLog = (CommandLogEntry) domainObject;
+        var commandLog = (CommandLogEntry) domainObject;
         if(commandDto == null) {
             commandDto = commandLog.getCommandDto();
         }
@@ -71,7 +69,7 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
                 UserDataKeys.EXCEPTION,
                 commandLog.getException());
 
-        val timings = CommandDtoUtils.timingsFor(commandDto);
+        var timings = CommandDtoUtils.timingsFor(commandDto);
         timings.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandLog.getStartedAt()));
         timings.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandLog.getCompletedAt()));
 

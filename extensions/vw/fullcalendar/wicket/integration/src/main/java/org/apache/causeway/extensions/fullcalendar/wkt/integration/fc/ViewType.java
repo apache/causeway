@@ -22,15 +22,17 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ViewType {
-	MONTH("month"), BASIC_WEEK("basicWeek"), BASIC_DAY("basicDay"),
-	AGENDA_WEEK("agendaWeek"), AGENDA_DAY("agendaDay");
+	MONTH("month"),
+	BASIC_WEEK("basicWeek"),
+	BASIC_DAY("basicDay"),
+	AGENDA_WEEK("agendaWeek"),
+	AGENDA_DAY("agendaDay");
 
 	private final String code;
 
 	public static ViewType forCode(final String code) {
 		for (ViewType type : values()) {
-			if (type.code.equals(code))
-				return type;
+			if (type.code.equals(code)) return type;
 		}
 		throw new IllegalStateException("Invalid view type code: " + code);
 	}

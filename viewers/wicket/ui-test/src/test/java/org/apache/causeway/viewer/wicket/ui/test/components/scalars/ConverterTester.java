@@ -22,40 +22,43 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
+import org.jspecify.annotations.NonNull;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.Identifier;
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.clock.VirtualClock;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
-import org.apache.causeway.core.security._testing.InteractionService_forTesting;
+import org.apache.causeway.core.mmtestsupport.InteractionService_forTesting;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
 
 public class ConverterTester<T extends Serializable> {
 
@@ -71,36 +74,47 @@ public class ConverterTester<T extends Serializable> {
         ConverterBasedOnValueSemantics<T> converter;
     }
 
-    public ConverterTester(final Class<T> valueType, final ValueSemanticsAbstract<T> valueSemantics,
+    public ConverterTester(
+            final Class<T> valueType,
+            final TestPropertyValues testPropertyValues,
+            final ValueSemanticsAbstract<T> valueSemantics,
             final Object ...additionalSingletons) {
-        this(valueType, valueSemantics, VirtualClock.frozenTestClock(), additionalSingletons);
+        this(valueType, testPropertyValues, valueSemantics, VirtualClock.frozenTestClock(), additionalSingletons);
     }
 
     public ConverterTester(
             final @NonNull Class<T> valueType,
+            final @NonNull TestPropertyValues testPropertyValues,
             final @NonNull ValueSemanticsAbstract<T> valueSemantics,
             final @NonNull VirtualClock virtualClock,
             final Object ...additionalSingletons) {
 
         mmc = MetaModelContext_forTesting.builder()
-                .valueSemantic(valueSemantics)
-                .singleton(new ClockService(null) {
-                    @Override public VirtualClock getClock() {
-                        return virtualClock;
-                    }
-                })
-                .singletons(Arrays.asList(additionalSingletons))
-                .interactionService(interactionService = new InteractionService_forTesting())
-                .memberExecutor(Mockito.mock(MemberExecutorService.class))
-                .build();
+            .testPropertyValues(testPropertyValues)
+            .valueSemantics(Stream
+                .concat(
+                    Stream.<ValueSemanticsProvider<?>>of(valueSemantics),
+                    // from additional singletons, lookout for value semantics providers, to be registered here
+                    _NullSafe.stream(additionalSingletons))
+                        .filter(ValueSemanticsProvider.class::isInstance)
+                        .<ValueSemanticsProvider<?>>map(ValueSemanticsProvider.class::cast)
+                .toList())
+            .singleton(new ClockService(null) {
+                @Override public VirtualClock getClock() {
+                    return virtualClock;
+                }
+            })
+            .singletons(Arrays.asList(additionalSingletons))
+            .interactionService(interactionService = new InteractionService_forTesting())
+            .memberExecutor(Mockito.mock(MemberExecutorService.class))
+            .build();
 
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
 
         // pre-requisites for testing
-        val identifier = Identifier.classIdentifier(LogicalType.fqcn(valueType));
-        val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
-        assertNotNull(reg.selectValueSemantics(identifier, valueType));
-        assertTrue(reg.selectValueSemantics(identifier, valueType).isNotEmpty());
+        var resolver = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
+        var valSem = resolver.streamValueSemantics(valueType).toList();
+        assertFalse(valSem.isEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
         assertNotNull(mmc.getInteractionService());
     }
@@ -111,14 +125,15 @@ public class ConverterTester<T extends Serializable> {
         this.scenario = new Scenario(locale, converter);
     }
 
+    @SuppressWarnings("unchecked")
     public ConverterBasedOnValueSemantics<T> converterForProperty(
             final Class<?> type,
             final String propertyId,
             final ViewOrEditMode representation) {
-        val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
-        val prop = customerSpec.getPropertyElseFail("value");
-        var propType = (Class<T>) prop.getElementType().getCorrespondingClass();
-        return new ConverterBasedOnValueSemantics<T>(propType, prop, representation);
+        var customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
+        var prop = customerSpec.getPropertyElseFail("value");
+        var propType = (Class<T>) prop.getElementType().correspondingClass();
+        return new ConverterBasedOnValueSemantics<>(propType, prop, representation);
     }
 
     public void runWithInteraction(final @NonNull ThrowingRunnable runnable) {
@@ -137,7 +152,7 @@ public class ConverterTester<T extends Serializable> {
     }
 
     public CausewayConfiguration.ValueTypes.BigDecimal getConfigurationForBigDecimalValueType() {
-        return mmc.getConfiguration().getValueTypes().getBigDecimal();
+        return mmc.getConfiguration().valueTypes().bigDecimal();
     }
 
     /**
@@ -151,7 +166,7 @@ public class ConverterTester<T extends Serializable> {
             final @NonNull String expectedText) {
         runWithInteraction(()->{
 
-            val parsedValue = scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED);
+            var parsedValue = scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED);
 
             if(value instanceof BigDecimal) {
                 _Assert.assertNumberEquals(
@@ -160,12 +175,10 @@ public class ConverterTester<T extends Serializable> {
                 assertTemporalEquals(
                         (java.util.Date)value, (java.util.Date)parsedValue);
             } else {
-                assertEquals(
-                        value, parsedValue);
+                assertEquals(value, parsedValue);
             }
 
-            assertEquals(
-                    expectedText, scenario.converter.convertToString(value, LOCALE_NOT_USED));
+            assertEquals(expectedText, scenario.converter.convertToString(value, LOCALE_NOT_USED));
         });
     }
 
@@ -182,7 +195,7 @@ public class ConverterTester<T extends Serializable> {
             final @NonNull String expectedMessage) {
 
         runWithInteraction(()->{
-            val ex = assertThrows(ConversionException.class, //TODO find a more generic exception type
+            var ex = assertThrows(ConversionException.class, //TODO find a more generic exception type
                     ()->scenario.converter.convertToObject(valueAsInvalidText, LOCALE_NOT_USED));
             assertEquals(expectedMessage, ex.getMessage());
         });

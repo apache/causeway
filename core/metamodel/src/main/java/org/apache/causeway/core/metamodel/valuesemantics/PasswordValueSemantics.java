@@ -24,7 +24,7 @@ import jakarta.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -58,7 +58,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Password value) {
-        return decomposeAsNullable(value, Password::getPassword, ()->null);
+        return decomposeAsNullable(value, Password::password, ()->null);
     }
 
     @Override

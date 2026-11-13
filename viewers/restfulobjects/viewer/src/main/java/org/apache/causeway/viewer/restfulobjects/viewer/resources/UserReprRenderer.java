@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -36,7 +36,7 @@ extends ReprRendererAbstract<InteractionContext> {
 
     @Override
     public UserReprRenderer with(final InteractionContext authentication) {
-        representation.mapPutString("userName", authentication.getUser().getName());
+        representation.mapPutString("userName", authentication.getUser().name());
         final JsonRepresentation roles = JsonRepresentation.newArray();
 
         authentication.getUser().streamRoleNames()
@@ -86,6 +86,5 @@ extends ReprRendererAbstract<InteractionContext> {
 
         getLinks().arrayAdd(link);
     }
-
 
 }

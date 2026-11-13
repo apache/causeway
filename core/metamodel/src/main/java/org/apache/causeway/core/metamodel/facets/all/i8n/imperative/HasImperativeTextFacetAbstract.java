@@ -32,10 +32,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
 
 public class HasImperativeTextFacetAbstract
 extends FacetAbstract
@@ -52,15 +51,20 @@ implements
             final TranslationContext translationContext,
             final ResolvedMethod method,
             final FacetHolder holder) {
-        // imperative takes precedence over any other (except for events)
-        super(facetType, holder, Precedence.IMPERATIVE);
+        super(facetType, holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
         this.translationContext = translationContext;
     }
 
     @Override
+    public Precedence precedence() {
+    	// imperative takes precedence over any other (except for events)
+    	return Precedence.IMPERATIVE;
+    }
+
+    @Override
     public final Try<String> text(final ManagedObject object) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         return ManagedObjects.imperativeText(object, method, translationContext);
     }
 
@@ -81,11 +85,10 @@ implements
 
         // equality by facet-type, java-method and translation-context
 
-        if(!this.facetType().equals(other.facetType())) {
-            return false;
-        }
+        if(!this.facetType().equals(other.facetType()))
+			return false;
 
-        val otherFacet = (HasImperativeTextFacetAbstract)other;
+        var otherFacet = (HasImperativeTextFacetAbstract)other;
 
         return Objects.equals(this.methods, otherFacet.methods)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

@@ -11,7 +11,7 @@ include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[levelo
 
 == Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the module for the Wicket viewer:
 
 [source,java]
 .AppManifest.java
@@ -26,32 +26,39 @@ public class AppManifest {
 }
 ----
 
+Note that this transitively references the `CausewayModuleViewerCommonXxx` modules.
 
 == Configuration Properties
 
 The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/causeway.viewer.wicket.adoc[section] for the Wicket viewer.
+
+The Wicket Viewer also honours the config properties common to all viewers, in xref:refguide:config:sections/causeway.viewer.common.adoc[common section].
 
 
 === Application Identity
 
 Configuration properties that identify the application, in the sign-in page, welcome and about pages:
 
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.about[causeway.viewer.wicket.application.about]
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.brand-logo-header[causeway.viewer.wicket.application.brand-logo-header]
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.brand-logo-signin[causeway.viewer.wicket.application.brand-logo-signin]
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.css[causeway.viewer.wicket.application.css]
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.js[causeway.viewer.wicket.application.js]
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.name[causeway.viewer.wicket.application.name]
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.version[causeway.viewer.wicket.application.version]
+* xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.about[causeway.viewer.common.application.about]
+
+* xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.brand-logo-header[causeway.viewer.common.application.brand-logo-header]
+* xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.brand-logo-signin[causeway.viewer.common.application.brand-logo-signin]
+* xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.name[causeway.viewer.common.application.name]
+* xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.version[causeway.viewer.common.application.version]
 +
 This is discussed in more detail <<application-versioning,below>>.
+
+Customization:
+
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.css[causeway.viewer.wicket.css]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.js[causeway.viewer.wicket.js]
 * xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.welcome.text[causeway.viewer.wicket.welcome.text]
 
 
 [#application-versioning]
 ==== Application versioning
 
-If the xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.version[causeway.viewer.wicket.application.version] configuration property is present, then this will be shown in the footer on every page as well as on the about page.
+If the xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.version[causeway.viewer.common.application.version] configuration property is present, then this will be shown in the footer on every page as well as on the about page.
 
 Maintaining this configuration property manually could be error prone, so an alternative approach is to configure your build system to generate a version identifier automatically.
 
@@ -86,7 +93,7 @@ Suppose we now provide a file `application-version.properties` is in the same pa
 [source,ini]
 .application-version.properties
 ----
-causeway.viewer.wicket.application.version=$\{applicationVersion}
+causeway.viewer.common.application.version=$\{applicationVersion}
 ----
 
 then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.
@@ -130,7 +137,7 @@ Configuration properties that influence the behaviour and appearance of the sign
 
 Configuration properties that influence the appearance of the header and footer panels:
 
-* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.credit[causeway.viewer.wicket.credit]
+* xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.credit[causeway.viewer.common.credit]
 +
 For example:
 +
@@ -139,7 +146,7 @@ For example:
 ----
 causeway:
   viewer:
-    wicket:
+    common:
       credit:
         - url:  https://causeway.apache.org
           image: images/apache-causeway/causeway-logo-65x48.png

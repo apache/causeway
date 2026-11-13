@@ -24,14 +24,14 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
-import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
-import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.applib.services.wrapper.events.PropertyAccessEvent;
@@ -40,7 +40,7 @@ import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
 import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
-import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -51,13 +51,11 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
@@ -65,218 +63,141 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
+import org.apache.causeway.core.runtimeservices.wrapper.internal.CommandRecord;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
-/**
- *
- * @param <T>
- */
-@Log4j2
-public class DomainObjectInvocationHandler<T>
-extends DelegatingInvocationHandlerDefault<T> {
+@Slf4j
+final class DomainObjectInvocationHandler
+implements WrapperInvocationHandler {
 
-    private final ProxyContextHandler proxyContextHandler;
-    private final MetaModelContext mmContext;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
+    private final WrapperInvocationHandler.ClassMetaData classMetaData;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
+    private final String key;
 
-    /**
-     * The <tt>title()</tt> method; may be <tt>null</tt>.
-     */
-    protected Method titleMethod;
+    private final ObjectSpecification targetSpec;
+    private final ProxyGenerator proxyGenerator;
+    private final CommandRecord.Factory commandRecordFactory;
 
-    /**
-     * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
-     */
-    protected Method __causeway_saveMethod;
-
-    /**
-     * The <tt>__causeway_wrapped()</tt> method from {@link WrappingObject#__causeway_wrapped()}.
-     */
-    protected Method __causeway_wrappedMethod;
-
-    /**
-     * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
-     */
-    protected Method __causeway_executionModes;
-
-    private final EntityFacet entityFacet;
-    private final ManagedObject mixeeAdapter;
-
-    public DomainObjectInvocationHandler(
-            final T domainObject,
-            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
-            final ManagedObject targetAdapter,
-            final SyncControl syncControl,
-            final ProxyContextHandler proxyContextHandler) {
-        super(
-                targetAdapter.getSpecification().getMetaModelContext(),
-                domainObject,
-                syncControl);
-
-        this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
-        this.proxyContextHandler = proxyContextHandler;
-
-        try {
-            titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
-        } catch (final NoSuchMethodException e) {
-            // ignore
-        }
-        try {
-            __causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
-            __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
-            __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
-
-
-        } catch (final NoSuchMethodException nsme) {
-            throw new IllegalStateException(
-                    "Could not locate reserved declared methods in the WrappingObject interfaces",
-                    nsme);
-        }
-
-        entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
-
-        this.mixeeAdapter = mixeeAdapter;
+    DomainObjectInvocationHandler(
+            final ObjectSpecification targetSpec,
+            final ProxyGenerator proxyGenerator,
+            final CommandRecord.Factory commandRecordFactory) {
+        this.targetSpec = targetSpec;
+        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.correspondingClass());
+        this.proxyGenerator = proxyGenerator;
+        this.key = targetSpec.correspondingClass().getName();
+        this.commandRecordFactory = commandRecordFactory;
     }
 
-    /**
-     *
-     * @param proxyObjectUnused - not used.
-     * @param method - the method invoked on the proxy
-     * @param args - the args to the method invoked on the proxy
-     * @throws Throwable
-     */
     @Override
-    public Object invoke(final Object proxyObjectUnused, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final WrapperInvocation wrapperInvocation) throws Throwable {
 
-        if (isObjectMethod(method)) {
-            return delegate(method, args);
-        }
+        final Object target = wrapperInvocation.origin().pojo();
+        final Method method = wrapperInvocation.method();
 
-        if(isEnhancedEntityMethod(method)) {
-            return delegate(method, args);
-        }
+        if (classMetaData().isObjectMethod(method)
+                || isEnhancedEntityMethod(method))
+            return method.invoke(target, wrapperInvocation.args());
 
-        final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
+        final ManagedObject targetAdapter = mmc().getObjectManager().adapt(target);
 
-        if(!targetAdapter.getSpecialization().isMixin()) {
+        if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
         }
 
-        if (method.equals(titleMethod)) {
-            return handleTitleMethod(targetAdapter);
-        }
+        if (classMetaData.isTitleMethod(method) )
+            return handleTitleMethod(wrapperInvocation, targetAdapter);
 
-        final ObjectSpecification targetSpec = targetAdapter.getSpecification();
-        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+        var resolvedMethod = _GenericResolver.resolveMethod(method, targetAdapter.objSpec().correspondingClass())
                 .orElseThrow();
 
-        // save method, through the proxy
-        if (method.equals(__causeway_saveMethod)) {
-            return handleSaveMethod(targetAdapter, targetSpec);
+        if(!wrapperInvocation.origin().isFallback()) {
+            if (classMetaData.isOriginMethod(method))
+                return wrapperInvocation.origin();
+            // save method, through the proxy
+            if (classMetaData.isSaveMethod(method))
+                return handleSaveMethod(wrapperInvocation, targetAdapter, targetAdapter.objSpec());
         }
 
-        if (method.equals(__causeway_wrappedMethod)) {
-            return getDelegate();
+        var objectMember = targetAdapter.objSpec().getMemberElseFail(resolvedMethod);
+        var intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
+        if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED)
+            throw _Exceptions.unsupportedOperation("Cannot invoke supporting method '%s'", objectMember.getId());
+
+        if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE)
+            return method.invoke(target, wrapperInvocation.args());
+
+        if (objectMember instanceof OneToOneAssociation prop) {
+
+            if (intent == Intent.CHECK_IF_VALID || intent == Intent.MODIFY_PROPERTY_SUPPORTING)
+                throw _Exceptions.unsupportedOperation("Cannot invoke supporting method for '%s'; use only property accessor/mutator", objectMember.getId());
+
+            if (intent == Intent.ACCESSOR)
+                return handleGetterMethodOnProperty(wrapperInvocation, targetAdapter, prop);
+
+            if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION)
+                return handleSetterMethodOnProperty(wrapperInvocation, targetAdapter, prop);
+        }
+        if (objectMember instanceof OneToManyAssociation coll) {
+
+            if (intent == Intent.CHECK_IF_VALID)
+                throw _Exceptions.unsupportedOperation("Cannot invoke supporting method '%s'; use only collection accessor/mutator", objectMember.getId());
+
+            if (intent == Intent.ACCESSOR)
+                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, coll, objectMember.getId());
         }
 
-        if (method.equals(__causeway_executionModes)) {
-            return getSyncControl().getExecutionModes();
-        }
+        if (objectMember instanceof ObjectAction objectAction) {
 
-        val objectMember = targetSpec.getMemberElseFail(resolvedMethod);
-        val memberId = objectMember.getId();
+            if (intent == Intent.CHECK_IF_VALID)
+                throw _Exceptions.unsupportedOperation("Cannot invoke supporting method '%s'; use only the 'invoke' method", objectMember.getId());
 
-        val intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
-        if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
-            throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberId));
-        }
+            if(targetAdapter.objSpec().isMixin()) {
+                final ManagedObject managedMixee = wrapperInvocation.origin().managedMixee();
+                if (managedMixee == null)
+                    throw _Exceptions.illegalState("Missing the required managedMixee for action '%s'", objectAction.getId());
+                MmAssertionUtils.assertIsBookmarkSupported(managedMixee);
 
-        if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
-            return method.invoke(getDelegate(), args);
-        }
-
-        if (objectMember.isOneToOneAssociation()) {
-
-            if (intent == Intent.CHECK_IF_VALID || intent == Intent.MODIFY_PROPERTY_SUPPORTING) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", memberId));
-            }
-
-            final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
-
-            if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnProperty(targetAdapter, args, otoa);
-            }
-
-            if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION) {
-                return handleSetterMethodOnProperty(targetAdapter, args, otoa);
-            }
-        }
-        if (objectMember.isOneToManyAssociation()) {
-
-            if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", memberId));
-            }
-
-            final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
-            if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(targetAdapter, args, otma, memberId);
-            }
-        }
-
-        if (objectMember instanceof ObjectAction) {
-
-            if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberId));
-            }
-
-            val objectAction = (ObjectAction) objectMember;
-
-            if(Facets.mixinIsPresent(targetSpec)) {
-                if (mixeeAdapter == null) {
-                    throw _Exceptions.illegalState(
-                            "Missing the required mixeeAdapter for action '%s'",
-                            objectAction.getId());
-                }
-                MmAssertionUtils.assertIsBookmarkSupported(mixeeAdapter);
-
-                final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
+                final ObjectMember mixinMember = determineMixinMember(managedMixee, objectAction);
 
                 if (mixinMember != null) {
-                    if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(mixeeAdapter, args, (ObjectAction)mixinMember);
-                    }
+                    if(mixinMember instanceof ObjectAction)
+                        return handleActionMethod(wrapperInvocation, managedMixee, (ObjectAction)mixinMember);
                     if(mixinMember instanceof OneToOneAssociation) {
-                        return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
+                        _Assert.assertEquals(0, wrapperInvocation.args().length);
+                        return handleGetterMethodOnProperty(wrapperInvocation, managedMixee, (OneToOneAssociation)mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberId);
+                        _Assert.assertEquals(0, wrapperInvocation.args().length);
+                        return handleGetterMethodOnCollection(wrapperInvocation, managedMixee, (OneToManyAssociation)mixinMember, objectMember.getId());
                     }
-                } else {
-                    throw _Exceptions.illegalState(String.format(
-                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpec));
-                }
+                } else
+                    throw _Exceptions.illegalState("Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetAdapter.objSpec());
             }
 
             // this is just a regular non-mixin action.
-            return handleActionMethod(targetAdapter, args, objectAction);
+            return handleActionMethod(wrapperInvocation, targetAdapter, objectAction);
         }
 
-        throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
+        throw _Exceptions.unsupportedOperation("Unknown member type '%s'", objectMember);
     }
 
     private static ObjectMember determineMixinMember(
             final ManagedObject domainObjectAdapter,
             final ObjectAction objectAction) {
 
-        if(domainObjectAdapter == null) {
-            return null;
-        }
-        val specification = domainObjectAdapter.getSpecification();
-        val objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
-        val objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
+        if(domainObjectAdapter == null) return null;
+
+        var specification = domainObjectAdapter.objSpec();
+        var objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
+        var objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
 
         final Stream<ObjectMember> objectMembers = Stream.concat(objectActions, objectAssociations);
         return objectMembers
@@ -289,243 +210,217 @@ extends DelegatingInvocationHandlerDefault<T> {
         // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
     }
 
-    public InteractionInitiatedBy getInteractionInitiatedBy() {
-        return shouldEnforceRules()
-                ? InteractionInitiatedBy.USER
-                : InteractionInitiatedBy.FRAMEWORK;
+    private InteractionInitiatedBy getInteractionInitiatedBy(final WrapperInvocation wrapperInvocation) {
+        return wrapperInvocation.syncControl().isSkipRules()
+                ? InteractionInitiatedBy.FRAMEWORK
+                : InteractionInitiatedBy.USER;
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
-        return entityFacet!=null
-                ? entityFacet.isProxyEnhancement(method)
-                : false;
+        return targetSpec.entityFacet()
+            .map(entityFacet->entityFacet.isProxyEnhancement(method))
+            .orElse(false);
     }
 
+    private Object handleTitleMethod(
+            final WrapperInvocation wrapperInvocation,
+            final ManagedObject targetAdapter) {
 
-    private Object handleTitleMethod(final ManagedObject targetAdapter) {
-
-        resolveIfRequired(targetAdapter);
-
-        val targetNoSpec = targetAdapter.getSpecification();
-        val titleContext = targetNoSpec
+        var targetNoSpec = targetAdapter.objSpec();
+        var titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
-        val titleEvent = titleContext.createInteractionEvent();
-        notifyListeners(titleEvent);
+        var titleEvent = titleContext.createInteractionEvent();
+        mmc().getWrapperFactory().notifyListeners(titleEvent);
         return titleEvent.getTitle();
     }
 
-
     private Object handleSaveMethod(
-            final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
+            final WrapperInvocation wrapperInvocation,
+            final ManagedObject targetAdapter,
+            final ObjectSpecification targetNoSpec) {
 
-        runValidationTask(()->{
-            val interactionResult =
-                    targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
+        runValidationTask(wrapperInvocation, ()->{
+            var interactionResult =
+                    targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy(wrapperInvocation));
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
-
-        val spec = targetAdapter.getSpecification();
-        if(spec.isEntity()) {
-            return runExecutionTask(()->{
-                MmEntityUtils.persistInCurrentTransaction(targetAdapter);
-                return null;
-            });
-        }
+        var spec = targetAdapter.objSpec();
+        if(spec.isEntity())
+            return runExecutionTask(wrapperInvocation, ()->{
+                    MmEntityUtils.persistInCurrentTransaction(targetAdapter);
+                    return null;
+                },
+                ()->new ExceptionLogger("persist", targetAdapter));
         return null;
-
     }
-
 
     private Object handleGetterMethodOnProperty(
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final OneToOneAssociation property) {
 
-        zeroArgsElseThrow(args, "get");
+        zeroArgsElseThrow(wrapperInvocation.args(), "get");
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, property);
+        runValidationTask(wrapperInvocation, ()->{
+            checkVisibility(wrapperInvocation, targetAdapter, property);
         });
 
-        resolveIfRequired(targetAdapter);
+        return runExecutionTask(wrapperInvocation, ()->{
 
-        return runExecutionTask(()->{
+            var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
+            var currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val interactionInitiatedBy = getInteractionInitiatedBy();
-            val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
+            var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
-
-
-            val propertyAccessEvent = new PropertyAccessEvent(
-                    getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
-            notifyListeners(propertyAccessEvent);
+            mmc().getWrapperFactory().notifyListeners(new PropertyAccessEvent(
+                    targetAdapter.getPojo(),
+                    property.getFeatureIdentifier(),
+                    currentReferencedObj));
             return currentReferencedObj;
-
-        });
-
+        }, ()->new ExceptionLogger("getter " + property.getId(), targetAdapter));
     }
-
-
 
     private Object handleSetterMethodOnProperty(
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final OneToOneAssociation property) {
 
-        val singleArg = singleArgUnderlyingElseNull(args, "setter");
+        var singleArg = singleArgUnderlyingElseNull(wrapperInvocation.args(), "setter");
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, property);
-            checkUsability(targetAdapter, property);
+        runValidationTask(wrapperInvocation, ()->{
+            checkVisibility(wrapperInvocation, targetAdapter, property);
+            checkUsability(wrapperInvocation, targetAdapter, property);
         });
 
-        val argumentAdapter = getObjectManager().adapt(singleArg);
+        var argumentAdapter = property.getObjectManager().adapt(singleArg);
 
-        resolveIfRequired(targetAdapter);
-
-        runValidationTask(()->{
-            val interactionResult = property.isAssociationValid(
-                    targetAdapter, argumentAdapter, getInteractionInitiatedBy())
-                    .getInteractionResult();
-            notifyListenersAndVetoIfRequired(interactionResult);
+        runValidationTask(wrapperInvocation, ()->{
+            property.isAssociationValid(
+                    targetAdapter, argumentAdapter, getInteractionInitiatedBy(wrapperInvocation))
+                    .interactionResult()
+                    .ifPresent(this::notifyListenersAndVetoIfRequired);
         });
 
-        return runExecutionTask(()->{
-            property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
+        handleCommandListeners(wrapperInvocation, ()->commandRecordFactory
+                .forProperty(InteractionHead.regular(targetAdapter), property, argumentAdapter));
+
+        return runExecutionTask(wrapperInvocation, ()->{
+            property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy(wrapperInvocation));
             return null;
-        });
-
+        }, ()->new ExceptionLogger("setter " + property.getId(), targetAdapter));
     }
 
-
-
     private Object handleGetterMethodOnCollection(
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final OneToManyAssociation collection,
             final String memberId) {
 
-        zeroArgsElseThrow(args, "get");
+        zeroArgsElseThrow(wrapperInvocation.args(), "get");
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, collection);
+        runValidationTask(wrapperInvocation, ()->{
+            checkVisibility(wrapperInvocation, targetAdapter, collection);
         });
 
-        resolveIfRequired(targetAdapter);
+        return runExecutionTask(wrapperInvocation, ()->{
 
-        return runExecutionTask(()->{
+            var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
+            var currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val interactionInitiatedBy = getInteractionInitiatedBy();
-            val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
+            var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
-
-            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
+            var collectionAccessEvent = new CollectionAccessEvent(currentReferencedObj, collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
-                val collectionViewObject = lookupWrappingObject(
-                        (Collection<?>) currentReferencedObj, collection);
-                notifyListeners(collectionAccessEvent);
+                var collectionViewObject = wrapCollection(
+                        (Collection<?>) currentReferencedObj,
+                        collection);
+                mmc().getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                val mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
+                var mapViewObject = wrapMap(
+                        (Map<?, ?>) currentReferencedObj,
                         collection);
-                notifyListeners(collectionAccessEvent);
+                mmc().getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return mapViewObject;
             }
 
-            val msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
-            throw new IllegalArgumentException(msg);
-
-        });
-
+            throw _Exceptions.illegalArgument("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
+        }, ()->new ExceptionLogger("getter " + collection.getId(), targetAdapter));
     }
 
-    private Collection<?> lookupWrappingObject(
+    private Collection<?> wrapCollection(
             final Collection<?> collectionToLookup,
             final OneToManyAssociation otma) {
-        if (collectionToLookup instanceof WrappingObject) {
-            return collectionToLookup;
-        }
-        if(proxyContextHandler == null) {
+        if(proxyGenerator == null)
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
-        }
-        return proxyContextHandler.proxy(collectionToLookup, this, otma);
+        return proxyGenerator.collectionProxy(collectionToLookup, otma);
     }
 
-    private Map<?, ?> lookupWrappingObject(
+    private Map<?, ?> wrapMap(
             final Map<?, ?> mapToLookup,
             final OneToManyAssociation otma) {
-        if (mapToLookup instanceof WrappingObject) {
-            return mapToLookup;
-        }
-        if(proxyContextHandler == null) {
+        if(proxyGenerator == null)
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
-        }
-        return proxyContextHandler.proxy(mapToLookup, this, otma);
+        return proxyGenerator.mapProxy(mapToLookup, otma);
     }
 
-
-
     private Object handleActionMethod(
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final ObjectAction objectAction) {
 
-        val head = objectAction.interactionHead(targetAdapter);
-        val objectManager = getObjectManager();
+        var head = objectAction.interactionHead(targetAdapter);
+        var objectManager = objectAction.getObjectManager();
 
         // adapt argument pojos to managed objects
-        val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
+        var argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
             // guard against index out of bounds
-            val argPojo = _Arrays.get(args, paramIndex).orElse(null);
+            var argPojo = _Arrays.get(wrapperInvocation.args(), paramIndex).orElse(null);
             return argPojo!=null
                     ? objectManager.adapt(argPojo)
                     : ManagedObject.empty(paramSpec);
         }));
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, objectAction);
-            checkUsability(targetAdapter, objectAction);
-            checkValidity(head, objectAction, argAdapters);
+        runValidationTask(wrapperInvocation, ()->{
+            checkVisibility(wrapperInvocation, targetAdapter, objectAction);
+            checkUsability(wrapperInvocation, targetAdapter, objectAction);
+            checkValidity(wrapperInvocation, head, objectAction, argAdapters);
         });
 
-        return runExecutionTask(()->{
-            val interactionInitiatedBy = getInteractionInitiatedBy();
+        handleCommandListeners(wrapperInvocation, ()->commandRecordFactory
+                .forAction(head, objectAction, argAdapters));
 
-            val returnedAdapter = objectAction.execute(
+        return runExecutionTask(wrapperInvocation, ()->{
+            var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
+
+            var returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
             return MmUnwrapUtils.single(returnedAdapter);
-
-        });
-
+        }, ()->new ExceptionLogger("action " + objectAction.getId(), targetAdapter));
     }
 
     private void checkValidity(
-            final ActionInteractionHead head,
+            final WrapperInvocation wrapperInvocation,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
-
-        val interactionResult = objectAction
-                .isArgumentSetValid(head, argAdapters, getInteractionInitiatedBy())
-                .getInteractionResult();
-        notifyListenersAndVetoIfRequired(interactionResult);
+        objectAction
+            .isArgumentSetValid(head, argAdapters, getInteractionInitiatedBy(wrapperInvocation))
+            .interactionResult()
+            .ifPresent(this::notifyListenersAndVetoIfRequired);
     }
 
     private Object underlying(final Object arg) {
-        if (arg instanceof WrappingObject) {
-            val argViewObject = (WrappingObject) arg;
-            return argViewObject.__causeway_wrapped();
-        } else {
+        if (arg instanceof WrappingObject wrappingObject)
+            return wrappingObject.__causeway_origin().pojo();
+        else
             return arg;
-        }
     }
-
 
     /**
      * REVIEW: ideally should provide some way to allow to caller to indicate the 'where' context.  Having
@@ -534,34 +429,32 @@ extends DelegatingInvocationHandlerDefault<T> {
     private final Where where = Where.ANYWHERE;
 
     private void checkVisibility(
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
-
-        val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
-        val interactionResult = visibleConsent.getInteractionResult();
-        notifyListenersAndVetoIfRequired(interactionResult);
+        objectMember
+            .isVisible(targetObjectAdapter, getInteractionInitiatedBy(wrapperInvocation), where)
+            .interactionResult()
+            .ifPresent(this::notifyListenersAndVetoIfRequired);
     }
 
     private void checkUsability(
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
-
-        val interactionResult = objectMember.isUsable(
-                targetObjectAdapter,
-                getInteractionInitiatedBy(),
-                where)
-                .getInteractionResult();
-        notifyListenersAndVetoIfRequired(interactionResult);
+        objectMember.isUsable(targetObjectAdapter, getInteractionInitiatedBy(wrapperInvocation), where)
+            .interactionResult()
+            .ifPresent(this::notifyListenersAndVetoIfRequired);
     }
 
     // -- NOTIFY LISTENERS
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
-        val interactionEvent = interactionResult.getInteractionEvent();
-        notifyListeners(interactionEvent);
-        if (interactionEvent.isVeto()) {
+        var interactionEvent = interactionResult.interactionEvent();
+
+        mmc().getWrapperFactory().notifyListeners(interactionEvent);
+        if (interactionEvent.isVeto())
             throw toException(interactionEvent);
-        }
     }
 
     /**
@@ -570,90 +463,100 @@ extends DelegatingInvocationHandlerDefault<T> {
      * and returns it.
      */
     private InteractionException toException(final InteractionEvent interactionEvent) {
-        if (!interactionEvent.isVeto()) {
+        if (!interactionEvent.isVeto())
             throw new IllegalArgumentException("Provided interactionEvent must be a veto");
-        }
-        if (interactionEvent instanceof ValidityEvent) {
-            final ValidityEvent validityEvent = (ValidityEvent) interactionEvent;
+        if (interactionEvent instanceof final ValidityEvent validityEvent)
             return new InvalidException(validityEvent);
-        }
-        if (interactionEvent instanceof VisibilityEvent) {
-            final VisibilityEvent visibilityEvent = (VisibilityEvent) interactionEvent;
+        if (interactionEvent instanceof final VisibilityEvent visibilityEvent)
             return new HiddenException(visibilityEvent);
-        }
-        if (interactionEvent instanceof UsabilityEvent) {
-            final UsabilityEvent usabilityEvent = (UsabilityEvent) interactionEvent;
+        if (interactionEvent instanceof final UsabilityEvent usabilityEvent)
             return new DisabledException(usabilityEvent);
-        }
         throw new IllegalArgumentException("Provided interactionEvent must be a VisibilityEvent, UsabilityEvent or a ValidityEvent");
     }
 
     // -- HELPER
 
-    private boolean shouldEnforceRules() {
-        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+    private MetaModelContext mmc() {
+        return targetSpec.getMetaModelContext();
     }
 
-    private boolean shouldExecute() {
-        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
-    }
-
-    private void runValidationTask(final Runnable task) {
-        if(!shouldEnforceRules()) {
-            return;
-        }
+    private void runValidationTask(final WrapperInvocation wrapperInvocation, final Runnable task) {
+        if(wrapperInvocation.syncControl().isSkipRules()) return;
         try {
             task.run();
         } catch(Exception ex) {
-            handleException(ex);
+            handleException(wrapperInvocation, ex);
         }
     }
 
-    private <X> X runExecutionTask(final Supplier<X> task) {
-        if(!shouldExecute()) {
-            return null;
+    /**
+     * regardless of to be executed or not,
+     * we inform any listeners of the execution intent (e.g. BackgroundExecutionService)
+     */
+    private void handleCommandListeners(
+            final WrapperInvocation wrapperInvocation,
+            final @Nullable Supplier<CommandRecord> commandRecordSupplier) {
+        if(commandRecordSupplier!=null
+                && wrapperInvocation.syncControl().commandListeners().isNotEmpty()) {
+            var commandRecord = commandRecordSupplier.get();
+            if(commandRecord==null) return;
+            wrapperInvocation.syncControl().commandListeners()
+                .forEach(listener->listener
+                        .onCommand(
+                                commandRecord.parentInteractionId(),
+                                commandRecord.interactionContext(),
+                                commandRecord.commandDto()));
         }
+    }
+
+    private <X> X runExecutionTask(
+            final WrapperInvocation wrapperInvocation,
+            final Supplier<X> task,
+            final Supplier<ExceptionLogger> exceptionLoggerSupplier) {
+        if(wrapperInvocation.syncControl().isSkipExecute()) return null;
         try {
             return task.get();
         } catch(Exception ex) {
-            return _Casts.uncheckedCast(handleException(ex));
+            return _Casts.uncheckedCast(handleException(wrapperInvocation, ex, exceptionLoggerSupplier.get()));
         }
     }
 
     @SneakyThrows
-    private Object handleException(final Exception ex) {
-        val exceptionHandler = getSyncControl().getExceptionHandler()
-                .orElse(null);
+    private Object handleException(
+            final WrapperInvocation wrapperInvocation,
+            final Exception ex) {
+        var exceptionHandler = wrapperInvocation.origin().syncControl().exceptionHandler();
+        return exceptionHandler.handle(ex);
+    }
 
-        if(exceptionHandler==null) {
-            log.warn("No ExceptionHandler was setup to handle this Exception", ex);
-        }
-
-        return exceptionHandler!=null
-                ? exceptionHandler.handle(ex)
-                : null;
+    private Object handleException(
+            final WrapperInvocation wrapperInvocation,
+            final Exception ex,
+            final ExceptionLogger exceptionLogger) {
+        log.error(exceptionLogger.msg(ex), ex);
+        return handleException(wrapperInvocation, ex);
     }
 
     private Object singleArgUnderlyingElseNull(final Object[] args, final String name) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException(String.format(
-                    "Invoking '%s' should only have a single argument", name));
-        }
-        val argumentObj = underlying(args[0]);
+        if (args.length != 1)
+            throw _Exceptions.illegalArgument("Invoking '%s' should only have a single argument", name);
+        var argumentObj = underlying(args[0]);
         return argumentObj;
     }
 
     private void zeroArgsElseThrow(final Object[] args, final String name) {
-        if (!_NullSafe.isEmpty(args)) {
-            throw new IllegalArgumentException(String.format(
-                    "Invoking '%s' should have no arguments", name));
-        }
+        if (!_NullSafe.isEmpty(args))
+            throw _Exceptions.illegalArgument("Invoking '%s' should have no arguments", name);
     }
 
-    // -- DEPENDENCIES
-
-    private ObjectManager getObjectManager() {
-        return mmContext.getObjectManager();
+    record ExceptionLogger(String what, ManagedObject mo)  {
+        String msg(final Exception ex) {
+            LogicalType logicalType = mo.objSpec().logicalType();
+            String id = mo.isBookmarkMemoized()
+                    ? mo.getBookmarkElseFail().identifier()
+                    : "<bookmark not memoized>";
+            return "Failed to execute %s on '%s:%s'".formatted(what, logicalType.logicalName(), id);
+        }
     }
 
 }

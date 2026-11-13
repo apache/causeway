@@ -25,6 +25,21 @@ interface Either<L, R> {
   T fold(BiFunction<L, R, T> biMapper)
   T fold(Function<L, T> leftMapper, Function<R, T> rightMapper)
   void accept(Consumer<L> leftConsumer, Consumer<R> rightConsumer)
+  Stream<T> foldStream(Stream<Either<L, R>> inputStream, Function<L, T> leftMapper, Function<R, T> rightMapper)     // <.>
 }
 ----
 
+<.> xref:#foldStream_Stream_Function_Function[foldStream(Stream, Function, Function)]
++
+--
+Folds elements of a _Stream_ of xref:refguide:commons:index/functional/Either.adoc[Either] resulting in a new _Stream_ of type T. The resulting stream is guaranteed to not contain `null` elements, that is, if any of the mappers maps to null, the element is ignored.
+--
+
+== Members
+
+[#foldStream_Stream_Function_Function]
+=== foldStream(Stream, Function, Function)
+
+Folds elements of a _Stream_ of xref:refguide:commons:index/functional/Either.adoc[Either] resulting in a new _Stream_ of type T. The resulting stream is guaranteed to not contain `null` elements, that is, if any of the mappers maps to null, the element is ignored.
+
+Absence of the leftMapper results in LEFT elements being ignored and absence of the rightMapper results in RIGHT elements being ignored.

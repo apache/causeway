@@ -32,56 +32,55 @@ import org.springframework.web.filter.CorsFilter;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Qualifier("CORS")
-@Log4j2
+@Slf4j
 public class CausewayModuleExtCors {
 
     @Bean
     public FilterRegistrationBean<Filter> createCorsFilterRegistration(
-            final CausewayConfiguration causewayConfiguration,
-            final RestEasyConfiguration restEasyConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
 
-        String resteasyBase = restEasyConfiguration.getJaxrs().getDefaultPath();
-        if(!resteasyBase.endsWith("/*")) {
-            resteasyBase = resteasyBase + "/*";
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+
+        String restfulBase = restfulPathProvider.getRestfulPath().orElse("");
+        if(!restfulBase.endsWith("/*")) {
+            restfulBase = restfulBase + "/*";
         }
-        log.info("Setting up CORS to filter resteasy-base at '{}' with {}",
-                resteasyBase,
-                causewayConfiguration.getExtensions().getCors());
+        log.info("Setting up CORS to filter RO base path at '{}' with {}",
+                restfulBase,
+                causewayConfiguration.extensions().cors());
 
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(createCorsFilter(causewayConfiguration));
-        filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
+        filterRegistrationBean.setUrlPatterns(Collections.singletonList(restfulBase));
         filterRegistrationBean.setOrder(PriorityPrecedence.EARLY - 100);
 
         return filterRegistrationBean;
     }
 
-    private CorsFilter createCorsFilter(CausewayConfiguration configuration) {
+    private CorsFilter createCorsFilter(final CausewayConfiguration configuration) {
 
-        val causewayCorsConfig = configuration.getExtensions().getCors();
+        var causewayCorsConfig = configuration.extensions().cors();
 
-        val corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(causewayCorsConfig.isAllowCredentials());
-        corsConfiguration.setAllowedHeaders(causewayCorsConfig.getAllowedHeaders());
-        corsConfiguration.setAllowedMethods(causewayCorsConfig.getAllowedMethods());
-        corsConfiguration.setAllowedOrigins(causewayCorsConfig.getAllowedOrigins());
-        corsConfiguration.setExposedHeaders(causewayCorsConfig.getExposedHeaders());
+        var corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(causewayCorsConfig.allowCredentials());
+        corsConfiguration.setAllowedHeaders(causewayCorsConfig.allowedHeaders());
+        corsConfiguration.setAllowedMethods(causewayCorsConfig.allowedMethods());
+        corsConfiguration.setAllowedOrigins(causewayCorsConfig.allowedOrigins());
+        corsConfiguration.setExposedHeaders(causewayCorsConfig.exposedHeaders());
 
-        val source = new UrlBasedCorsConfigurationSource();
+        var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
 
         return new CorsFilter(source);
     }
-
 
 }

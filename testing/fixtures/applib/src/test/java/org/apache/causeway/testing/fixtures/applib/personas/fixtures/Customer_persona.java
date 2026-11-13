@@ -20,7 +20,6 @@
 
 package org.apache.causeway.testing.fixtures.applib.personas.fixtures;
 
-
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.testing.fixtures.applib.personas.Persona;
 import org.apache.causeway.testing.fixtures.applib.personas.dom.Customer;

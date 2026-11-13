@@ -31,6 +31,7 @@ import jakarta.inject.Named;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Nature;
@@ -46,7 +47,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Supports mixins to add and filter permissions of
@@ -86,7 +86,7 @@ public class ApplicationFeatureChoices {
             searchTerm = search.trim();
         }
 
-        val idsByName = featureRepository.getFeatureIdentifiersByName();
+        var idsByName = featureRepository.getFeatureIdentifiersByName();
 
         return idsByName.entrySet().stream()
         .filter(entry->searchRefine.test(entry.getValue()))
@@ -108,7 +108,6 @@ public class ApplicationFeatureChoices {
         return featureId.getSort().isMember();
     }
 
-
     // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE
 
     /**
@@ -123,7 +122,8 @@ public class ApplicationFeatureChoices {
     public static class AppFeat
     implements
         Comparable<AppFeat>,
-        ViewModel {
+        ViewModel,
+        RefData {
 
         public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".AppFeat";
 
@@ -137,8 +137,8 @@ public class ApplicationFeatureChoices {
 
         @Override
         public int compareTo(final AppFeat o) {
-            val thisId = this.getFeatureId();
-            val otherId = o!=null ? o.getFeatureId() : null;
+            var thisId = this.getFeatureId();
+            var otherId = o!=null ? o.getFeatureId() : null;
             if(Objects.equals(thisId, otherId)) {
                 return 0;
             }

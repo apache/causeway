@@ -78,9 +78,8 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
         final Blob exportedBlob = bulkUpdateManager.export();
 
         // then
-        final byte[] actualBytes = exportedBlob.getBytes();
+        final byte[] actualBytes = exportedBlob.bytes();
         // assertThat(actualBytes, lengthWithinPercentage(expectedBytes, 10));  /// ... too flaky
-
 
         // and given
         final byte[] updatedBytes = getBytes(getClass(), "toDoItems-updated.xlsx");
@@ -119,6 +118,5 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
             }
         };
     }
-
 
 }

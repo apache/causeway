@@ -43,21 +43,21 @@ implements BrandingUiService {
 
     @Inject
     public BrandingUiServiceDefault(final CausewayConfiguration causewayConfiguration) {
-        this.appConfig = causewayConfiguration.getViewer().getCommon().getApplication();
+        this.appConfig = causewayConfiguration.viewer().common().application();
     }
 
     @Override
     public BrandingUiModel getHeaderBranding() {
         return BrandingUiModel.of(
-                appConfig.getName(),
-                appConfig.getBrandLogoHeader().orElse(null));
+                appConfig.name(),
+                appConfig.brandLogoHeader().orElse(null));
     }
 
     @Override
     public BrandingUiModel getSignInBranding() {
         return BrandingUiModel.of(
-                appConfig.getName(),
-                appConfig.getBrandLogoSignin().orElse(null));
+                appConfig.name(),
+                appConfig.brandLogoSignin().orElse(null));
     }
 
 }

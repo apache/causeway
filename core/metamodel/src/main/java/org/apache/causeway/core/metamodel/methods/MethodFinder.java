@@ -24,8 +24,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -38,15 +36,17 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+public record MethodFinder(
+        @NonNull Class<?> correspondingClass,
+        @NonNull Can<String> methodNameCandidates,
+        @NonNull EncapsulationPolicy encapsulationPolicy,
+        @NonNull Predicate<ResolvedMethod> mustSatisfy) {
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class MethodFinder {
+    public static final Can<String> ANY_NAME = Can.of(""); // arbitrary marker
+    public static final Class<?>[] NO_ARG = new Class<?>[0];
 
     public static MethodFinder of(
             final @NonNull Class<?> correspondingClass,
@@ -55,21 +55,18 @@ public class MethodFinder {
             final @NonNull Predicate<ResolvedMethod> mustSatisfy) {
 
         final Predicate<ResolvedMethod> isNotStatic = MethodUtil::isNotStatic;
-        val methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
+        var methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
 
         return new MethodFinder(
                 correspondingClass,
+                methodNameCandidates,
                 encapsulationPolicy,
                 methodNameCandidates.equals(ANY_NAME)
                         ? isNotStatic.and(mustSatisfy)
                         : isNotStatic
                             .and(method->methodNameCandidates.contains(method.name()))
-                            .and(mustSatisfy),
-                methodNameCandidates);
+                            .and(mustSatisfy));
     }
-
-    public static final Can<String> ANY_NAME = Can.of(""); // arbitrary marker
-    public static final Class<?>[] NO_ARG = new Class<?>[0];
 
     public static MethodFinder notNecessarilyPublic(
             final Class<?> correspondingClass,
@@ -78,8 +75,7 @@ public class MethodFinder {
                 correspondingClass,
                 methodNameCandidates,
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
-                _Predicates.alwaysTrue()
-                );
+                _Predicates.alwaysTrue());
     }
 
     public static MethodFinder publicOnly(
@@ -89,8 +85,7 @@ public class MethodFinder {
                 correspondingClass,
                 methodNameCandidates,
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                _Predicates.alwaysTrue()
-                );
+                _Predicates.alwaysTrue());
     }
 
     public static MethodFinder accessor(
@@ -139,44 +134,37 @@ public class MethodFinder {
                 ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT);
     }
 
-    @Getter private final @NonNull Class<?> correspondingClass;
-    @Getter private final @NonNull EncapsulationPolicy encapsulationPolicy;
-    @Getter private final @NonNull Predicate<ResolvedMethod> mustSatisfy;
-    private final @NonNull Can<String> methodNameCandidates;
-
     public Stream<ResolvedMethod> streamMethodsMatchingSignature(
             final @Nullable Class<?>[] paramTypes) {
 
-        if(paramTypes==null) {
-            return streamMethodsIgnoringSignature();
-        }
+        if(paramTypes==null) return streamMethodsIgnoringSignature();
 
-        val type = getCorrespondingClass();
-        val classCache = _ClassCache.getInstance();
-        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        var type = correspondingClass();
+        var classCache = _ClassCache.getInstance();
+        var isEncapsulationSupported = encapsulationPolicy().isEncapsulatedMembersSupported();
 
-        if(methodNameCandidates.equals(ANY_NAME)) {
-            //stream all
+        if(methodNameCandidates.equals(ANY_NAME))
+			//stream all
             return (isEncapsulationSupported
                     ? classCache.streamResolvedMethods(type)
                     : classCache.streamPublicMethods(type))
-                        .filter(method->Arrays.equals(paramTypes, method.paramTypes()))
+                        .filter(method->
+                    		Arrays.equals(paramTypes, method.paramTypes()))
                         .filter(mustSatisfy);
-        }
 
         return methodNameCandidates.stream()
-        .map(name->isEncapsulationSupported
-                ? classCache.lookupResolvedMethod(type, name, paramTypes)
-                : classCache.lookupPublicMethod(type, name, paramTypes))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .filter(mustSatisfy);
+            .map(name->isEncapsulationSupported
+                    ? classCache.lookupResolvedMethod(type, name, paramTypes)
+                    : classCache.lookupPublicMethod(type, name, paramTypes))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(mustSatisfy);
     }
 
     public Stream<ResolvedMethod> streamMethodsIgnoringSignature() {
-        val type = getCorrespondingClass();
-        val classCache = _ClassCache.getInstance();
-        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        var type = correspondingClass();
+        var classCache = _ClassCache.getInstance();
+        var isEncapsulationSupported = encapsulationPolicy().isEncapsulatedMembersSupported();
         return (isEncapsulationSupported
                 ? classCache.streamResolvedMethods(type)
                 : classCache.streamPublicMethods(type))
@@ -188,19 +176,18 @@ public class MethodFinder {
     public MethodFinder withRequiredReturnType(final @NonNull Class<?> requiredReturnType) {
         return new MethodFinder(
                 correspondingClass,
+                methodNameCandidates,
                 encapsulationPolicy,
-                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeATypeOf(requiredReturnType)),
-                methodNameCandidates);
+                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeATypeOf(requiredReturnType)));
     }
 
     public MethodFinder withReturnTypeAnyOf(final @NonNull Can<Class<?>> anyOfReturnTypes) {
         return new MethodFinder(
                 correspondingClass,
+                methodNameCandidates,
                 encapsulationPolicy,
-                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeAnyTypeOf(anyOfReturnTypes)),
-                methodNameCandidates);
+                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeAnyTypeOf(anyOfReturnTypes)));
     }
-
 
     // -- HELPER
 
@@ -222,7 +209,7 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final ConflictingAnnotations conflictingAnnotations) {
 
-        val finder = of(
+        var finder = of(
                 correspondingClass,
                 methodNameCandidates,
                 // support methods are always allowed private
@@ -262,10 +249,10 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        val isMarkerAnnotationPresent = _Annotations.synthesize(method.method(), annotationType).isPresent();
+        var isMarkerAnnotationPresent = _Annotations.synthesize(method.method(), annotationType).isPresent();
         if(isMarkerAnnotationPresent) {
 
-            val isConflictingAnnotationPresent = conflictingAnnotations
+            var isConflictingAnnotationPresent = conflictingAnnotations
             .stream()
             .anyMatch(conflictingAnnotationType->
                     _Annotations.synthesize(method.method(), conflictingAnnotationType).isPresent());
@@ -275,6 +262,5 @@ public class MethodFinder {
         }
         return isMarkerAnnotationPresent;
     }
-
 
 }

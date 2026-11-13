@@ -35,7 +35,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
@@ -143,7 +143,7 @@ class SecuritySimpleAuthTest {
 
         // happy case
         assertValid(new AuthenticationRequestPassword(scenario.userName(), scenario.plainPass()), interactionContext->{
-            assertEquals(scenario.userName(), interactionContext.getUser().getName());
+            assertEquals(scenario.userName(), interactionContext.getUser().name());
         });
     }
 

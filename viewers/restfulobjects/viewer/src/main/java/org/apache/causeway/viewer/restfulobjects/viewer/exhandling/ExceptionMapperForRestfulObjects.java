@@ -1,0 +1,62 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+//import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+//import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionResponseFactory;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestHeaderUtil;
+
+import lombok.extern.slf4j.Slf4j;
+
+@RestControllerAdvice
+@Slf4j
+public class ExceptionMapperForRestfulObjects {
+
+    @Autowired protected ExceptionResponseFactory exceptionResponseFactory;
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    ResponseEntity<Object> objectNotFound(ObjectNotFoundException ex, HttpServletRequest httpServletRequest) {
+        return exceptionResponseFactory.buildResponse(ex, RequestHeaderUtil.httpHeadersFromServletRequest(httpServletRequest));
+    }
+
+    @ExceptionHandler(RestfulObjectsApplicationException.class)
+    ResponseEntity<Object> roException(RestfulObjectsApplicationException ex, HttpServletRequest httpServletRequest) {
+        return exceptionResponseFactory.buildResponse(ex, RequestHeaderUtil.httpHeadersFromServletRequest(httpServletRequest));
+    }
+
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<Object> fallback(Exception ex, HttpServletRequest httpServletRequest) {
+        log.error("not covered by any @ExceptionHandler", ex);
+        return exceptionResponseFactory.buildResponse(ex, RequestHeaderUtil.httpHeadersFromServletRequest(httpServletRequest));
+    }
+
+}

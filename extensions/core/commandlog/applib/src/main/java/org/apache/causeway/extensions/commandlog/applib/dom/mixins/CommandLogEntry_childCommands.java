@@ -31,7 +31,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Contributes the <code>childCommands</code> collection to {@link CommandLogEntry} entity.
  *

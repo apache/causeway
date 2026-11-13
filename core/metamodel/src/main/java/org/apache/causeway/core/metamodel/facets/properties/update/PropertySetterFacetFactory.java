@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.update;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
@@ -27,13 +25,12 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Retur
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
@@ -51,33 +48,32 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val getterMethod = processMethodContext.getMethod();
+        var getterMethod = processMethodContext.methodFacade();
         final String capitalizedName = _Strings.baseName(getterMethod.getName());
-        val methodNameCandidates = Can.ofSingleton(
+        var methodNameCandidates = Can.ofSingleton(
                 AccessorSemantics.SET.prefix(capitalizedName));
 
         final Class<?>[] signature = new Class[] { getterMethod.getReturnType() };
 
-        val setterMethods =
+        var setterMethods =
         MethodFinder
-        .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy())
+        .accessor(processMethodContext.cls(), methodNameCandidates, processMethodContext.introspectionPolicy())
         .withReturnTypeAnyOf(ReturnTypeCategory.VOID.getReturnTypes())
         .streamMethodsMatchingSignature(signature)
         .peek(processMethodContext::removeMethod)
         .collect(Can.toCan());
 
-        final FacetHolder property = processMethodContext.getFacetHolder();
+        final FacetHolder property = processMethodContext.facetHolder();
         if (setterMethods.isNotEmpty()) {
 
             setterMethods
             .forEach(setterMethod->{
-                addFacet(new PropertySetterFacetViaSetterMethod(setterMethod, property));
-                addFacet(new PropertyInitializationFacetViaSetterMethod(setterMethod, property));
-                addFacet(new PropertyClearFacetViaSetterMethod(setterMethod, property));
+                new PropertySetterFacetViaSetterMethod(setterMethod, property);
+                new PropertyInitializationFacetViaSetterMethod(setterMethod, property);
             });
 
         } else {
-            addFacet(new SnapshotExcludeFacetFromImmutableMember(property));
+            new SnapshotExcludeFacetFromImmutableMember(property);
 
             // previously we also added the DisabledFacetAlwaysEverywhere facet here.
             // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.

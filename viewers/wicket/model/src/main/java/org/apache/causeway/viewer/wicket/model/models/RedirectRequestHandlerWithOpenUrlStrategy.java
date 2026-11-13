@@ -23,7 +23,7 @@ import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class RedirectRequestHandlerWithOpenUrlStrategy
 extends RedirectRequestHandler {

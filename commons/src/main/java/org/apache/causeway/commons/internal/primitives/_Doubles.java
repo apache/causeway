@@ -22,8 +22,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -59,7 +58,7 @@ public class _Doubles {
      *      if {@code decimal} cannot be approximated by {@link Double}.
      */
     public double convertToDouble(final @NonNull BigDecimal decimal) {
-        val doubleValue = decimal.doubleValue();
+        var doubleValue = decimal.doubleValue();
         // overflow detection
         if(!Double.isFinite(doubleValue)) {
             throw new ArithmeticException("non finite BigDecimal to double conversion");

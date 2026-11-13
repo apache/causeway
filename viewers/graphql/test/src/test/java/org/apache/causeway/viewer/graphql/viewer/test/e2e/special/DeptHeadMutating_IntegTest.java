@@ -33,9 +33,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-import lombok.val;
-
-
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(120)
 @ActiveProfiles("test")
@@ -55,7 +52,7 @@ public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
                         }
                 ).valueAsNonNullElseFail();
 
-        val response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
+        var response = submit(_Maps.unmodifiable("$departmentId", bookmark.identifier()));
 
         // then payload
         Approvals.verify(response, jsonOptions());

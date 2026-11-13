@@ -31,10 +31,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionInvokeArgs
         extends ElementCustom {
 
@@ -53,7 +52,7 @@ public class RichActionInvokeArgs
             return;
         }
 
-        val idx = new AtomicInteger(0);
+        var idx = new AtomicInteger(0);
         actionInteractor.getObjectMember().getParameters().forEach(objectActionParameter -> {
             args.add(addChildFieldFor(new RichActionInvokeArgsArg(actionInteractor, objectActionParameter, this.context, idx.getAndIncrement())));
         });
@@ -65,14 +64,13 @@ public class RichActionInvokeArgs
         buildObjectTypeAndField("args", "Arguments used to invoke this action");
     }
 
-
     @Override
     protected void addDataFetchersForChildren() {
         args.forEach(param -> param.addDataFetcher(this));
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 

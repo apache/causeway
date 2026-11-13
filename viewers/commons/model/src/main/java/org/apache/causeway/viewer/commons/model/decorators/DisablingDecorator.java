@@ -17,17 +17,12 @@
  *  under the License.
  */
 package org.apache.causeway.viewer.commons.model.decorators;
-
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 
 @FunctionalInterface
 public interface DisablingDecorator<T> {
@@ -36,23 +31,16 @@ public interface DisablingDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter
-    @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-    public static class DisablingDecorationModel implements Serializable {
+    public record DisablingDecorationModel(@NonNull String reason) {
 
-        private static final long serialVersionUID = 1L;
-
-        final @NonNull String reason;
-
-        public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
+        public static Optional<DisablingDecorationModel> of(final @NonNull Optional<InteractionVeto> usabilityVeto) {
             return usabilityVeto
-                    .map(veto->of(veto.getReasonAsString().orElse(null)));
+                    .map(veto->new DisablingDecorationModel(veto.getReasonAsString().orElse(null)));
         }
 
-        public static Optional<DisablingDecorationModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
+        public static Optional<DisablingDecorationModel> of(final @NonNull MemberInteraction<?, ?> memberInteraction) {
             return of(memberInteraction.getInteractionVeto());
         }
-
 
     }
 

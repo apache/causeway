@@ -31,8 +31,7 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class PropertySetterFacetViaSetterMethod
 extends PropertySetterFacetAbstract
@@ -57,7 +56,7 @@ implements ImperativeFacet {
             final ManagedObject valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         MmInvokeUtils.invokeWithSingleArg(method.method(), targetAdapter, valueAdapter);
         return targetAdapter;
     }

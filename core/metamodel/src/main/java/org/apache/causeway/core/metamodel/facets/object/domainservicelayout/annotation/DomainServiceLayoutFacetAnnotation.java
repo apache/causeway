@@ -18,11 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservicelayout.annotation;
 
-
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetAbstract;
-
 
 public class DomainServiceLayoutFacetAnnotation extends DomainServiceLayoutFacetAbstract {
 

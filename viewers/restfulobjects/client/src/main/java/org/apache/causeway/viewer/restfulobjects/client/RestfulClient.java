@@ -40,8 +40,8 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.AuthFilter;
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import org.jspecify.annotations.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Setup the Restful Client with Basic-Auth:
@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  * <blockquote><pre>
-val clientConfig = RestfulClientConfig.builder();
+var clientConfig = RestfulClientConfig.builder();
     .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
         .authenticationMode(AuthenticationMode.BASIC)
         .basicAuthUser("sven")
@@ -87,7 +87,7 @@ if(digest.isSuccess()) {
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class RestfulClient implements AutoCloseable {
 
     private final RestfulClientConfig clientConfig;

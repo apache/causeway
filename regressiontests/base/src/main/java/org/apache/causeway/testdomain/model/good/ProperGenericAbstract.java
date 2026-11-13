@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.model.good;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;

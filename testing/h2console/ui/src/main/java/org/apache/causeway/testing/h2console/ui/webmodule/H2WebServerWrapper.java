@@ -24,7 +24,7 @@ import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.H2WebServletForJakarta;
 import org.h2.server.web.WebServer;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**

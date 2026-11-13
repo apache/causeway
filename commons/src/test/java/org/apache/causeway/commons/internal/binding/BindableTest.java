@@ -29,18 +29,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.val;
-
 class BindableTest {
 
     @Test
     void unidirectionalBinding() {
 
-        val primaryChangeCounter = new LongAdder();
-        val secondaryChangeCounter = new LongAdder();
+        var primaryChangeCounter = new LongAdder();
+        var secondaryChangeCounter = new LongAdder();
 
-        val primary = _Bindables.forValue("hello");
-        val secondary = _Bindables.forValue("");
+        var primary = _Bindables.forValue("hello");
+        var secondary = _Bindables.forValue("");
 
         primary.addListener((e,o,n)->primaryChangeCounter.increment());
         secondary.addListener((e,o,n)->secondaryChangeCounter.increment());
@@ -86,11 +84,11 @@ class BindableTest {
     @Test
     void bidirectionalBinding() {
 
-        val primaryChangeCounter = new LongAdder();
-        val secondaryChangeCounter = new LongAdder();
+        var primaryChangeCounter = new LongAdder();
+        var secondaryChangeCounter = new LongAdder();
 
-        val primary = _Bindables.forValue("hello");
-        val secondary = _Bindables.forValue("");
+        var primary = _Bindables.forValue("hello");
+        var secondary = _Bindables.forValue("");
 
         primary.addListener((e,o,n)->primaryChangeCounter.increment());
         secondary.addListener((e,o,n)->secondaryChangeCounter.increment());
@@ -136,11 +134,11 @@ class BindableTest {
     @Test
     void unidirectionalBinding_onCan() {
 
-        val primaryChangeCounter = new LongAdder();
-        val secondaryChangeCounter = new LongAdder();
+        var primaryChangeCounter = new LongAdder();
+        var secondaryChangeCounter = new LongAdder();
 
-        val primary = _Bindables.forValue(Can.<String>of("hello"));
-        val secondary = _Bindables.forValue(Can.<String>empty());
+        var primary = _Bindables.forValue(Can.<String>of("hello"));
+        var secondary = _Bindables.forValue(Can.<String>empty());
 
         primary.addListener((e,o,n)->primaryChangeCounter.increment());
         secondary.addListener((e,o,n)->secondaryChangeCounter.increment());
@@ -186,11 +184,11 @@ class BindableTest {
     @Test
     void bidirectionalBinding_onCan() {
 
-        val primaryChangeCounter = new LongAdder();
-        val secondaryChangeCounter = new LongAdder();
+        var primaryChangeCounter = new LongAdder();
+        var secondaryChangeCounter = new LongAdder();
 
-        val primary = _Bindables.forValue(Can.<String>of("hello"));
-        val secondary = _Bindables.forValue(Can.<String>empty());
+        var primary = _Bindables.forValue(Can.<String>of("hello"));
+        var secondary = _Bindables.forValue(Can.<String>empty());
 
         primary.addListener((e,o,n)->primaryChangeCounter.increment());
         secondary.addListener((e,o,n)->secondaryChangeCounter.increment());
@@ -236,13 +234,13 @@ class BindableTest {
     @Test
     void bidirectionalBinding_withSynchronizedView() {
 
-        val primaryChangeCounter = new LongAdder();
-        val secondaryChangeCounter = new LongAdder();
+        var primaryChangeCounter = new LongAdder();
+        var secondaryChangeCounter = new LongAdder();
 
-        val primary = _Bindables.forValue(Integer.valueOf(3));
-        val secondary = _Bindables.forValue(Integer.valueOf(0));
+        var primary = _Bindables.forValue(Integer.valueOf(3));
+        var secondary = _Bindables.forValue(Integer.valueOf(0));
 
-        val view = primary.<String>mapToBindable(i->""+i, Integer::valueOf);
+        var view = primary.<String>mapToBindable(i->""+i, Integer::valueOf);
 
         primary.addListener((e,o,n)->primaryChangeCounter.increment());
         secondary.addListener((e,o,n)->secondaryChangeCounter.increment());

@@ -22,34 +22,37 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class BookmarkPolicyFacetForDomainObjectLayoutXml
-extends BookmarkPolicyFacetAbstract {
+extends BookmarkPolicyFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<BookmarkPolicyFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if (domainObjectLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if (domainObjectLayout == null)
             return Optional.empty();
-        }
         final BookmarkPolicy bookmarkPolicy = domainObjectLayout.getBookmarking();
         return bookmarkPolicy != null
                 && bookmarkPolicy != BookmarkPolicy.NEVER
-                        ? Optional.of(new BookmarkPolicyFacetForDomainObjectLayoutXml(
-                                bookmarkPolicy, holder, precedence))
-                        : Optional.empty();
+            ? Optional.of(new BookmarkPolicyFacetForDomainObjectLayoutXml(bookmarkPolicy, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
     private BookmarkPolicyFacetForDomainObjectLayoutXml(
             final BookmarkPolicy bookmarkPolicy,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(bookmarkPolicy, holder, precedence);
+            final FacetHolder holder) {
+        super(bookmarkPolicy, holder);
     }
 
     @Override

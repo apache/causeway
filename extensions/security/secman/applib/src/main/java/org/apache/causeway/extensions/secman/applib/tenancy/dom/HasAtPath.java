@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.secman.applib.tenancy.dom;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -20,17 +20,14 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
-import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.primitives._Floats;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -41,13 +38,10 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  */
 @Component
 @Named("causeway.metamodel.value.FloatValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class FloatValueSemantics
-extends ValueSemanticsAbstract<Float>
-implements
-    DefaultsProvider<Float>,
-    Parser<Float>,
-    Renderer<Float> {
+extends NumericValueSemanticsAbstract<Float> {
 
     @Override
     public Class<Float> getCorrespondingClass() {
@@ -64,6 +58,11 @@ implements
         return 0.f;
     }
 
+    @Override
+    protected boolean isFloatingPoint() {
+        return true;
+    }
+
     // -- COMPOSER
 
     @Override
@@ -77,31 +76,11 @@ implements
                 decomposition, ValueWithTypeDto::getFloat, UnaryOperator.identity(), ()->null);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final Context context, final Float value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final Context context, final Float value) {
-        return renderHtml(value, getNumberFormat(context)::format);
-    }
-
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final Float value) {
-        return value==null
-                ? null
-                : getNumberFormat(context)
-                    .format(value);
-    }
-
-    @Override
     public Float parseTextRepresentation(final Context context, final String text) {
-        return _Floats.convertToFloat(super.parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
+        return _Floats.convertToFloat(parseDecimal(context, text))
                 .orElse(null);
     }
 
@@ -122,5 +101,30 @@ implements
         return Can.of(Float.MIN_VALUE, Float.MAX_VALUE);
     }
 
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public static class NoGrouping extends FloatValueSemantics {
+        @Override public GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends FloatValueSemantics {
+        @Override public GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends FloatValueSemantics {
+        @Override public GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
+        }
+    }
 
 }

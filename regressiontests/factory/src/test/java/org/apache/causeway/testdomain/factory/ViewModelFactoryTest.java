@@ -28,28 +28,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
         }
 )
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
 
     // -- VIEW MODEL SAMPLES
@@ -96,7 +94,6 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
         }
     }
 
-
     @DomainObject(nature = Nature.VIEW_MODEL)
     @RequiredArgsConstructor
     public static class ViewModelWithInjectableConstructorArgs implements ViewModel {
@@ -127,15 +124,18 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
 
     // -- TESTS
 
+    @Inject HmacAuthority hmacAuthority;
+    @Inject UrlEncodingService urlEncodingService;
+
     @Test
     void sampleViewModel_shouldHave_injectionPointsResolved() {
-        val sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
+        var sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
         sampleViewModel.assertInitialized();
     }
 
     @Test
     void viewModel_shouldHave_injectionPointsResolved() {
-        val viewModel = factoryService.viewModel(new ViewModelWithInjectableFields("aName"));
+        var viewModel = factoryService.viewModel(new ViewModelWithInjectableFields("aName"));
         viewModel.assertInitialized();
     }
 
@@ -144,7 +144,8 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
         ViewModelWithInjectableConstructorArgs viewModel = factoryService.viewModel(ViewModelWithInjectableConstructorArgs.class,
                 Bookmark.forLogicalTypeNameAndIdentifier(
                         ViewModelWithInjectableConstructorArgs.class.getName(),
-                        "aName"));
+                        new HmacUrlCodec(hmacAuthority, urlEncodingService).encodeForUrlAsUtf8("aName")
+                        ));
         viewModel.assertInitialized();
     }
 

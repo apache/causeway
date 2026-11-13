@@ -23,16 +23,11 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
-
-import lombok.val;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 
 @SpringBootTest(
         classes = {
@@ -41,7 +36,6 @@ import lombok.val;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaJaxbTest",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 //@Transactional
 class JpaJaxbTest extends RegressionTestWithJpaFixtures {
 
@@ -51,8 +45,8 @@ class JpaJaxbTest extends RegressionTestWithJpaFixtures {
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
-        val xml = call(()->{
-            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
+        var xml = call(()->{
+            var inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             // assert initial reference is populated as expected
             testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
             // start round-trip
@@ -61,7 +55,7 @@ class JpaJaxbTest extends RegressionTestWithJpaFixtures {
 
         run(()->{
             //debug System.err.printf("%s%n", xml);
-            val recoveredVm =
+            var recoveredVm =
                     serviceInjector.injectServicesInto(
                             jaxbService.fromXml(JpaInventoryJaxbVm.class, xml));
             testFixtures.assertPopulatedWithDefaults(recoveredVm);

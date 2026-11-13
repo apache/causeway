@@ -35,7 +35,7 @@ public class ScalarMarshallerDoublePrimitive extends ScalarMarshallerAbstract<Do
 
     @Inject
     public ScalarMarshallerDoublePrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(double.class, Scalars.GraphQLFloat, causewayConfiguration);
+        super(double.class, Scalars.GraphQLFloat, causewayConfiguration, true);
     }
 
     @Override

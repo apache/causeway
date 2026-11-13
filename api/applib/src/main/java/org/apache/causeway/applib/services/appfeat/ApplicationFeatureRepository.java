@@ -52,4 +52,5 @@ public interface ApplicationFeatureRepository  {
     Collection<ApplicationFeature> allMembers();
 
     SortedSet<ApplicationFeatureId> propertyIdsFor(LogicalType logicalType);
+
 }

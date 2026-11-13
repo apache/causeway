@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.hidden.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -29,11 +29,11 @@ import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class HiddenObjectFacetViaMethod
 extends HiddenObjectFacetAbstract
@@ -57,7 +57,7 @@ implements HasImperativeAspect {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        final ManagedObject toValidate = ic.getTarget();
+        final ManagedObject toValidate = ic.target();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }
 
@@ -68,7 +68,7 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public HiddenObjectFacetViaMethod clone(final FacetHolder holder) {
+    public HiddenObjectFacetViaMethod copyTo(final FacetHolder holder) {
         return new HiddenObjectFacetViaMethod(imperativeAspect, holder);
     }
 

@@ -22,87 +22,92 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
-public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
-extends IconFacetAbstract {
+public final class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+extends FacetAbstract
+implements IconFacet {
 
-    public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
+	public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final FacetHolder facetHolder) {
 
         return domainObjectLayoutIfAny
-                .map(DomainObjectLayout::iconUiEvent)
-                .filter(iconUiEvent -> MmEventUtils.eventTypeIsPostable(
-                        iconUiEvent,
-                        IconUiEvent.Noop.class,
-                        IconUiEvent.Default.class,
-                        facetHolder.getConfiguration().getApplib().getAnnotation()
-                            .getDomainObjectLayout().getIconUiEvent().isPostForDefault()))
-                .map(iconUiEvent -> {
-                    return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-                            iconUiEvent, metamodelEventService, facetHolder);
-                });
+            .map(DomainObjectLayout::iconUiEvent)
+            .filter(iconUiEvent -> MmEventUtils.eventTypeIsPostable(
+                    iconUiEvent,
+                    IconUiEvent.Noop.class,
+                    IconUiEvent.Default.class,
+                    facetHolder.getConfiguration().applib().annotation()
+                        .domainObjectLayout().iconUiEvent().postForDefault()))
+            .map(iconUiEvent -> new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
+                _Casts.uncheckedCast(iconUiEvent), metamodelEventService, facetHolder));
     }
 
-    private final Class<? extends IconUiEvent<Object>> iconUiEventClass;
-    private final MetamodelEventService metamodelEventService;
+	private final Class<? extends IconUiEvent<Object>> iconUiEventClass;
+	private final MetamodelEventService metamodelEventService;
 
-    public IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-            final Class<? extends IconUiEvent<?>> iconUiEventClass,
-                    final MetamodelEventService metamodelEventService,
-                    final FacetHolder holder) {
-        super(holder, Precedence.EVENT);
-        this.iconUiEventClass = _Casts.uncheckedCast(iconUiEventClass);
-        this.metamodelEventService = metamodelEventService;
-    }
+	private IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
+			final Class<? extends IconUiEvent<Object>> iconUiEventClass,
+			final MetamodelEventService metamodelEventService,
+			final FacetHolder facetHolder) {
+		super(IconFacet.class, facetHolder);
+		this.iconUiEventClass = iconUiEventClass;
+    	this.metamodelEventService = metamodelEventService;
+	}
+
+    @Override public Precedence precedence() { return Precedence.EVENT; }
 
     @Override
-    public String iconName(final ManagedObject owningAdapter) {
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject domainObject, final ObjectSupport.IconSize iconSize) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
-            return null;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return Optional.empty();
 
-        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
+        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(domainObject, iconSize);
 
         metamodelEventService.fireIconUiEvent(iconUiEvent);
 
-        final String iconName = iconUiEvent.getIconName();
+        var icon = iconUiEvent.getIcon();
 
-        if(iconName == null) {
+        if(icon == null) {
             // ie no subscribers out there...
 
-            final IconFacet underlyingIconFacet = getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class))
-            .orElse(null);
-
-            if(underlyingIconFacet!=null) {
-                return underlyingIconFacet.iconName(owningAdapter);
-            }
+            icon = underlyingIconFacet()
+                .flatMap(underlyingIconFacet->underlyingIconFacet.icon(domainObject, iconSize))
+                .orElse(null);
         }
 
-        return iconName; // could be null
-    }
-
-    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter) {
-        return EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo).orElseThrow();
+        return Optional.ofNullable(icon);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	IconFacet.super.visitAttributes(visitor);
         visitor.accept("iconUiEventClass", iconUiEventClass);
+    }
+
+    // --HELPER
+
+    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, final ObjectSupport.IconSize iconSize) {
+        var iconUiEvent = EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo)
+            .orElseThrow();
+        return iconUiEvent.iconSize(iconSize);
+    }
+
+    private Optional<IconFacet> underlyingIconFacet() {
+        return getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class));
     }
 
 }

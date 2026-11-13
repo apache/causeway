@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -42,7 +42,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.util.Assert;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -52,8 +52,6 @@ import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.security.keycloak.handler.LogoutHandlerForKeycloak;
 import org.apache.causeway.security.keycloak.services.KeycloakOauth2UserService;
 import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
-
-import lombok.val;
 
 /**
  * Configuration Bean to support Causeway Security using Keycloak.
@@ -76,7 +74,6 @@ import lombok.val;
 @EnableWebSecurity
 public class CausewayModuleSecurityKeycloak {
 
-
     @Bean
     public SecurityFilterChain filterChain(
             final HttpSecurity http,
@@ -85,57 +82,76 @@ public class CausewayModuleSecurityKeycloak {
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers) throws Exception {
 
-
-        val successUrl = causewayConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
-        val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
-        val loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
+        var successUrl = causewayConfiguration.security().keycloak().loginSuccessUrl();
+        var realm = causewayConfiguration.security().keycloak().realm();
+        var loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
                 + "/" + realm;
 
-        val httpSecurityLogoutConfigurer =
-            http
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
-
-                .authorizeHttpRequests()
-                    .anyRequest().authenticated()
-                .and()
-
+        return http
+                .sessionManagement(t->t.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .authorizeHttpRequests(t->t.anyRequest().authenticated())
                 // responsibility to propagate logout to Keycloak is performed by
                 // LogoutHandlerForKeycloak (called by Causeway' LogoutMenu, not by Spring)
                 // this is to ensure that Causeway can invalidate the http session eagerly and not preserve it in
                 // the SecurityContextPersistenceFilter (which uses http session to do its work)
-                .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-
-        logoutHandlers.forEach(httpSecurityLogoutConfigurer::addLogoutHandler);
-
-        httpSecurityLogoutConfigurer
-                .and()
-
-                // This is the point where OAuth2 login of Spring 5 gets enabled
-                .oauth2Login()
+                .logout(t->{
+                    var x = t.logoutRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/logout"));
+                    logoutHandlers.forEach(x::addLogoutHandler);
+                })
+                // This is the point where OAuth2 login of Spring gets enabled
+                .oauth2Login(t->t
                     .defaultSuccessUrl(successUrl, true)
 //                        .successHandler(new AuthSuccessHandler(loginSuccessHandlers))
                     .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-                    .userInfoEndpoint()
-                        .oidcUserService(keycloakOidcUserService)
-                .and()
+                    .userInfoEndpoint(c->c.oidcUserService(keycloakOidcUserService))
+                    .loginPage(loginPage))
+                .build();
 
-                .loginPage(loginPage);
-
-        return http.build();
+// Spring 6 Legacy
+//        var httpSecurityLogoutConfigurer =
+//            http
+//                .sessionManagement()
+//                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .and()
+//
+//                .authorizeHttpRequests()
+//                    .anyRequest().authenticated()
+//                .and()
+//
+//                // responsibility to propagate logout to Keycloak is performed by
+//                // LogoutHandlerForKeycloak (called by Causeway' LogoutMenu, not by Spring)
+//                // this is to ensure that Causeway can invalidate the http session eagerly and not preserve it in
+//                // the SecurityContextPersistenceFilter (which uses http session to do its work)
+//                .logout()
+//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+//
+//        logoutHandlers.forEach(httpSecurityLogoutConfigurer::addLogoutHandler);
+//
+//        httpSecurityLogoutConfigurer
+//                .and()
+//
+//                // This is the point where OAuth2 login of Spring 5 gets enabled
+//                .oauth2Login()
+//                    .defaultSuccessUrl(successUrl, true)
+////                        .successHandler(new AuthSuccessHandler(loginSuccessHandlers))
+//                    .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+//                    .userInfoEndpoint()
+//                        .oidcUserService(keycloakOidcUserService)
+//                .and()
+//
+//                .loginPage(loginPage);
+//
+//        return http.build();
     }
-
 
     @Bean
     KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration causewayConfiguration) {
 
-        val jwtDecoder = createNimbusJwtDecoder(
+        var jwtDecoder = createNimbusJwtDecoder(
                 oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri(),
                 JwsAlgorithms.RS256);
 
-        val authoritiesMapper = new SimpleAuthorityMapper();
+        var authoritiesMapper = new SimpleAuthorityMapper();
         authoritiesMapper.setConvertToUpperCase(true);
 
         return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper, causewayConfiguration);
@@ -160,6 +176,4 @@ public class CausewayModuleSecurityKeycloak {
         return decoder;
     }
 
-
 }
-

@@ -19,15 +19,16 @@
 package org.apache.causeway.viewer.wicket.model.models.interaction.prop;
 
 import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.viewer.commons.model.attrib.UiProperty;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
-import org.apache.causeway.viewer.commons.model.scalar.UiProperty;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 /**
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
@@ -35,46 +36,55 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
  * @see PropertyInteractionWkt
  * @see ChainingModel
  */
-public final class UiPropertyWkt
-extends ChainingModel<PropertyInteraction>
+public record UiPropertyWkt(
+    PropertyInteractionWkt delegate)
 implements
-    HasCommonContext,
+    IModel<PropertyInteraction>,
+    HasMetaModelContext,
     HasUiParentObject<UiObject>,
     UiProperty {
 
-    private static final long serialVersionUID = 1L;
-
-    UiPropertyWkt(
-            final PropertyInteractionWkt model) {
-        super(model);
+    public PropertyInteraction propertyInteraction() {
+        return delegate.getObject();
     }
 
-    public final PropertyInteraction propertyInteraction() {
-        return getObject();
-    }
-
-    public final PropertyInteractionWkt propertyInteractionModel() {
-        return (PropertyInteractionWkt) getChainedModel();
+    public PropertyInteractionWkt propertyInteractionModel() {
+        return delegate;
     }
 
     @Override
-    public final UiObject getParentUiModel() {
+    public UiObject getParentUiModel() {
         return ()->getOwner();
     }
 
     @Override
-    public final ManagedObject getOwner() {
+    public ManagedObject getOwner() {
         return propertyInteraction().getManagedProperty().get().getOwner();
     }
 
     @Override
-    public final OneToOneAssociation getMetaModel() {
+    public OneToOneAssociation getMetaModel() {
         return propertyInteraction().getManagedProperty().get().getMetaModel();
     }
 
     @Override
-    public final PropertyNegotiationModel getPendingPropertyModel() {
+    public PropertyNegotiationModel getPendingPropertyModel() {
         return propertyInteractionModel().propertyNegotiationModel();
+    }
+
+    @Override
+    public void detach() {
+        delegate.detach();
+    }
+
+    @Override
+    public void setObject(final PropertyInteraction object) {
+        delegate.setObject(object);
+    }
+
+    @Override
+    public PropertyInteraction getObject() {
+        return propertyInteraction();
     }
 
 }

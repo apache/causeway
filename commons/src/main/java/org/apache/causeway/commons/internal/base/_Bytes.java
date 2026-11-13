@@ -21,6 +21,7 @@ package org.apache.causeway.commons.internal.base;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -28,10 +29,8 @@ import java.util.stream.IntStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import org.springframework.lang.Nullable;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -60,9 +59,8 @@ public final class _Bytes {
      * @throws IOException
      */
     public static byte[] of(final @Nullable InputStream input) throws IOException {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
 
         try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
             final byte[] buffer = new byte[BUFFER_SIZE];
@@ -85,9 +83,8 @@ public final class _Bytes {
      * @throws IOException
      */
     public static byte[] ofKeepOpen(final @Nullable InputStream input) throws IOException {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
 
         try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
             final byte[] buffer = new byte[BUFFER_SIZE];
@@ -111,9 +108,8 @@ public final class _Bytes {
      */
     public static IntStream streamAsInts(final @Nullable byte[] bytes) {
         if(bytes==null
-                || bytes.length==0) {
+                || bytes.length==0)
             return IntStream.empty();
-        }
         return IntStream.range(0, bytes.length)
                 .map(index->(bytes[index] & 0xff));
     }
@@ -127,13 +123,12 @@ public final class _Bytes {
      * @see #streamAsInts(byte[])
      */
     private static byte[] ofIntStream(final @Nullable IntStream intStream) {
-        if(intStream==null) {
+        if(intStream==null)
             return new byte[0];
-        }
-        val listOfInts = intStream
+        var listOfInts = intStream
                 .boxed()
                 .collect(Collectors.toList());
-        val bytes = new byte[listOfInts.size()];
+        var bytes = new byte[listOfInts.size()];
         IntStream.range(0, listOfInts.size())
         .forEach(index->bytes[index]=(byte)(int)listOfInts.get(index));
         return bytes;
@@ -149,9 +144,8 @@ public final class _Bytes {
      * @see #ofHexDump(String, String)
      */
     public static String hexDump(final @Nullable byte[] bytes, final @Nullable String delimiter) {
-        if(bytes==null) {
+        if(bytes==null)
             return "";
-        }
         return _Bytes.streamAsInts(bytes)
                 .mapToObj(Integer::toHexString)
                 .map(s->s.length()==1
@@ -173,9 +167,8 @@ public final class _Bytes {
      * @see #hexDump(byte[], String)
      */
     public static byte[] ofHexDump(final @Nullable String hexDump, final @Nullable String delimiter) {
-        if(hexDump==null) {
+        if(hexDump==null)
             return new byte[0];
-        }
         final int delimLen = _NullSafe.size(delimiter);
         final int stride = 2 + delimLen;
 
@@ -196,6 +189,12 @@ public final class _Bytes {
         return ofHexDump(hexDump, " ");
     }
 
+    // -- NULLABLE
+
+    public static byte[] nullToEmpty(final byte[] bytes) {
+        return bytes!=null ? bytes : new byte[0];
+    }
+
     // -- PREPEND/APPEND
 
     /**
@@ -206,14 +205,12 @@ public final class _Bytes {
      */
     public static final byte[] prepend(final @Nullable byte[] target, final @Nullable byte ... bytes) {
         if(target==null) {
-            if(bytes==null) {
+            if(bytes==null)
                 return null;
-            }
             return bytes.clone();
         }
-        if(bytes==null) {
+        if(bytes==null)
             return target.clone();
-        }
         final byte[] result = new byte[target.length + bytes.length];
         System.arraycopy(bytes, 0, result, 0, bytes.length);
         System.arraycopy(target, 0, result, bytes.length, target.length);
@@ -228,14 +225,12 @@ public final class _Bytes {
      */
     public static final byte[] append(final @Nullable byte[] target, final @Nullable byte ... bytes) {
         if(target==null) {
-            if(bytes==null) {
+            if(bytes==null)
                 return null;
-            }
             return bytes.clone();
         }
-        if(bytes==null) {
+        if(bytes==null)
             return target.clone();
-        }
         final byte[] result = new byte[target.length + bytes.length];
         System.arraycopy(target, 0, result, 0, target.length);
         System.arraycopy(bytes, 0, result, target.length, bytes.length);
@@ -251,7 +246,7 @@ public final class _Bytes {
      * @param input
      * @return null if {@code input} is null
      */
-    public static final byte[] encodeToBase64(final @NonNull Base64.Encoder encoder, final @Nullable byte[] input) {
+    public static final byte[] encodeToBase64(final Base64.@NonNull Encoder encoder, final @Nullable byte[] input) {
         return input!=null ? encoder.encode(input) : null;
     }
 
@@ -262,7 +257,7 @@ public final class _Bytes {
      * @param base64
      * @return null if {@code base64} is null
      */
-    public static final byte[] decodeBase64(final @NonNull Base64.Decoder decoder, final @Nullable byte[] base64) {
+    public static final byte[] decodeBase64(final Base64.@NonNull Decoder decoder, final @Nullable byte[] base64) {
         return base64!=null ? decoder.decode(base64) : null;
     }
 
@@ -276,12 +271,10 @@ public final class _Bytes {
      * @return null if {@code input} is null
      */
     public static final byte[] compress(final @Nullable byte[] input) {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
-        if(input.length==0) {
+        if(input.length==0)
             return input;
-        }
         try {
             return _Bytes_GZipCompressorSmart.compress(input);
         } catch (IOException e) {
@@ -297,19 +290,16 @@ public final class _Bytes {
      * @return null if {@code compressed} is null
      */
     public static final byte[] decompress(final @Nullable byte[] compressed) {
-        if(compressed==null) {
+        if(compressed==null)
             return null;
-        }
-        if(compressed.length==0) {
+        if(compressed.length==0)
             return compressed;
-        }
         try {
             return _Bytes_GZipCompressorSmart.decompress(compressed);
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
-
 
     /**
      * Compresses the given byte array, using {@link Deflater} algorithm.<br/>
@@ -319,12 +309,10 @@ public final class _Bytes {
      * @return null if {@code input} is null
      */
     public static final byte[] compressZlib(final @Nullable byte[] input) {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
-        if(input.length==0) {
+        if(input.length==0)
             return input;
-        }
         try {
             return _Bytes_ZLibCompressor.compress(input);
         } catch (IOException e) {
@@ -340,12 +328,10 @@ public final class _Bytes {
      * @return null if {@code compressed} is null
      */
     public static final byte[] decompressZlib(final @Nullable byte[] compressed) {
-        if(compressed==null) {
+        if(compressed==null)
             return null;
-        }
-        if(compressed.length==0) {
+        if(compressed.length==0)
             return compressed;
-        }
         try {
             return _Bytes_ZLibCompressor.decompress(compressed);
         } catch (IOException e) {
@@ -423,7 +409,25 @@ public final class _Bytes {
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
             .andThen(_Bytes::decompress);
 
-    // --
+    // -- EXTERNAL FORMAT
 
+    public static byte[] fromInts(final int[] ints) {
+        var bytes = new byte[ints.length];
+        IntStream.range(0, bytes.length)
+            .forEach(i->bytes[i] = (byte)ints[i]);
+        return bytes;
+    }
+
+    public static byte[] parseUtf8Base64(final @Nullable String asString) {
+        return asString == null
+            ? new byte[0]
+            : ofBase64.apply(asString.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String stringifyUtf8Base64(final @Nullable byte[] bytes) {
+        return bytes == null
+            ? ""
+            : new String(asBase64.apply(bytes), StandardCharsets.UTF_8);
+    }
 
 }

@@ -8,7 +8,7 @@
 ----
 class ApplicationFeatureMenu {
   public static final String LOGICAL_TYPE_NAME;
-  String iconName()
+  ObjectSupport.IconResource icon(ObjectSupport.IconSize iconSize)
   List<ApplicationNamespace> allNamespaces()
   List<ApplicationType> allTypes()
   List<ApplicationTypeAction> allActions()

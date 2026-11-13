@@ -32,24 +32,29 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Entity
@@ -63,7 +68,6 @@ import java.util.stream.Collectors;
 @DomainObjectLayout(describedAs = "University department specializing in a field of study")
 public class Department implements Comparable<Department> {
 
-
     public Department(String name, DeptHead deptHead) {
         this.name = name;
         this.deptHead = deptHead;
@@ -76,9 +80,25 @@ public class Department implements Comparable<Department> {
     @Getter @Setter
     private String name;
     @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(
+            named = "Rename department",
+            describedAs = "Changes the department display name",
+            cssClassFa = "pen-to-square",
+            cssClassFaPosition = CssClassFaPosition.RIGHT)
     public class changeName {
 
-        public Department act(final String newName){
+        public Department act(
+                @Parameter(
+                        maxLength = 50,
+                        regexPattern = "[A-Za-z !]+",
+                        regexPatternFlags = java.util.regex.Pattern.CASE_INSENSITIVE)
+                @ParameterLayout(
+                        named = "Replacement name",
+                        describedAs = "New name for the department",
+                        multiLine = 2,
+                        typicalLength = 30)
+                final String newName){
+
             setName(newName);
             return Department.this;
         }
@@ -95,8 +115,6 @@ public class Department implements Comparable<Department> {
         }
     }
 
-
-
     @Getter @Setter
     @Property(editing = Editing.ENABLED) // yes, I know: this duplicates the functionality of changeDeptHead action
     @OneToOne(optional = true)
@@ -110,7 +128,6 @@ public class Department implements Comparable<Department> {
                 .filter(x -> x != getDeptHead())
                 .collect(Collectors.toList());
     }
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "deptHead")
@@ -130,14 +147,68 @@ public class Department implements Comparable<Department> {
         }
     }
 
-
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
 
-    // because the ordering seems not to be deterministic?
+    private static final AtomicInteger INSTRUMENTED_MATERIALIZATION_COUNT = new AtomicInteger();
+
+    // Presentation paging remains independent from the bounded GraphQL transport window.
     @Collection
+    @CollectionLayout(
+            named = "Department staff",
+            describedAs = "Staff assigned to this department",
+            paged = 5)
     public List<StaffMember> getStaffMembers() {
         return staffMembers.stream().sorted().collect(Collectors.toList());
+    }
+
+    @Collection
+    @CollectionLayout(sortedBy = StaffMemberByNameDescending.class)
+    public List<StaffMember> getConfiguredStaffMembers() {
+        return new ArrayList<>(staffMembers);
+    }
+
+    public static class StaffMemberByNameDescending implements Comparator<StaffMember> {
+        @Override
+        public int compare(final StaffMember left, final StaffMember right) {
+            return Comparator.comparing(StaffMember::getName).reversed().compare(left, right);
+        }
+    }
+
+    @Collection
+    public List<StaffMember> getInstrumentedStaffMembers() {
+        var result = new ArrayList<StaffMember>();
+        staffMembers.forEach(staffMember -> {
+            INSTRUMENTED_MATERIALIZATION_COUNT.incrementAndGet();
+            result.add(staffMember);
+        });
+        return result;
+    }
+
+    public static void resetInstrumentedMaterializationCount() {
+        INSTRUMENTED_MATERIALIZATION_COUNT.set(0);
+    }
+
+    public static int instrumentedMaterializationCount() {
+        return INSTRUMENTED_MATERIALIZATION_COUNT.get();
+    }
+
+    @Collection
+    public List<StaffMember> getHiddenStaffMembers() {
+        return new ArrayList<>(staffMembers);
+    }
+
+    public boolean hideHiddenStaffMembers() {
+        return true;
+    }
+
+    @Collection
+    public List<StaffMember> getDisabledStaffMembers() {
+        return staffMembers.stream().sorted().collect(Collectors.toList());
+    }
+
+    public String disableDisabledStaffMembers() {
+        return "Collection interactions are disabled";
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -145,7 +216,7 @@ public class Department implements Comparable<Department> {
     public class addStaffMember {
 
         public Department act(StaffMember staffMember) {
-            val department = Department.this;
+            var department = Department.this;
 
             department.staffMembers.add(staffMember);
             staffMember.setDepartment(department);
@@ -158,7 +229,7 @@ public class Department implements Comparable<Department> {
     public class addStaffMembers {
 
         public Department act(List<StaffMember> staffMembers) {
-            val department = Department.this;
+            var department = Department.this;
 
             staffMembers.forEach(sm -> sm.setDepartment(department));
             department.staffMembers.addAll(staffMembers);
@@ -166,7 +237,7 @@ public class Department implements Comparable<Department> {
             return department;
         }
         public List<StaffMember> choices0Act() {
-            val choices = new ArrayList<>(staffMemberRepository.findAll());
+            var choices = new ArrayList<>(staffMemberRepository.findAll());
             choices.removeAll(getStaffMembers());
             return choices;
         }
@@ -174,6 +245,44 @@ public class Department implements Comparable<Department> {
         @Inject StaffMemberRepository staffMemberRepository;
     }
 
+    @Collection
+    public List<Person> getPeople() {
+        var people = new ArrayList<Person>();
+        if (deptHead != null) {
+            people.add(deptHead);
+        }
+        people.addAll(staffMembers);
+        people.sort(Comparator.comparing(Person::getName));
+        return people;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(associateWith = "people")
+    public class inspectPeople {
+
+        public String act(
+                @Parameter(optionality = Optionality.OPTIONAL)
+                final List<Person> people) {
+            return people.stream()
+                    .map(Person::getName)
+                    .sorted()
+                    .collect(Collectors.joining(", "));
+        }
+
+        public List<Person> choices0Act() {
+            return getPeople();
+        }
+
+        public String validate0Act(final List<Person> people) {
+            return people == null || people.isEmpty()
+                    ? "Select at least one person"
+                    : null;
+        }
+
+        public String validateAct(final List<Person> people) {
+            return validate0Act(people);
+        }
+    }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "staffMembers")
@@ -181,14 +290,14 @@ public class Department implements Comparable<Department> {
     public class removeStaffMember {
 
         public Department act(StaffMember staffMember) {
-            val department = Department.this;
+            var department = Department.this;
 
             department.getStaffMembers().add(staffMember);
             staffMember.setDepartment(department);
             return department;
         }
         public List<StaffMember> choices0Act() {
-            val department = Department.this;
+            var department = Department.this;
             return department.getStaffMembers()
                         .stream()
                         .sorted(Comparator.comparing(StaffMember::getName))

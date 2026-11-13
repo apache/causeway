@@ -28,16 +28,7 @@ public abstract class SingleValueFacetAbstract<T>
 extends FacetAbstract
 implements SingleValueFacet<T> {
 
-    private T value;
-
-    protected SingleValueFacetAbstract(
-            final Class<? extends Facet> facetType,
-            final T value,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(facetType, holder, precedence);
-        this.value = value;
-    }
+    private final T value;
 
     protected SingleValueFacetAbstract(
             final Class<? extends Facet> facetType,

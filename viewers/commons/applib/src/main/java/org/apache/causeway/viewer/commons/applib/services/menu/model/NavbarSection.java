@@ -18,19 +18,18 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
+import java.io.Serializable;
 import java.util.Locale;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 
-import lombok.val;
-
 public record NavbarSection(
         DomainServiceLayout.MenuBar menuBarSelect,
-        Can<MenuDropdown> topLevelEntries) {
+        Can<MenuDropdown> topLevelEntries) implements Serializable {
 
     public String cssClass() {
         return menuBarSelect.name().toLowerCase(Locale.ENGLISH);
@@ -46,9 +45,9 @@ public record NavbarSection(
         topLevelEntries.forEach(topLevel->{
             menuVisitor.onTopLevel(topLevel);
             topLevel.subEntries().forEach(subEntry->{
-                val asAction = subEntry.asAction();
+                var asAction = subEntry.asAction();
                 asAction.ifPresentOrElse(menuVisitor::onMenuAction, ()->{
-                    val asSpacer = subEntry.asSpacer();
+                    var asSpacer = subEntry.asSpacer();
                     asSpacer.ifPresent(spacer->{
                         if(spacer.isEmpty()) {
                             menuVisitor.onSectionSpacer();

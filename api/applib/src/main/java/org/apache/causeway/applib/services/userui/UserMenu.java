@@ -55,7 +55,9 @@ public class UserMenu {
 
     final UserService userService;
 
-
+    /**
+     * @since 2.0 {@index}
+     */
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = me.ActionDomainEvent.class,

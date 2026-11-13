@@ -5,7 +5,7 @@
 :page-partial:
 
 Most domain objects that the end-user interacts with are likely to be _domain entities_, such as `Customer`, `Order`, `Product` and so on.
-These are persistent objects and which are mapped to a relational database using either xref:pjpa::about.adoc[JPA/EclipseLink] or xref:pjdo::about.adoc[JDO/DataNucleus] ORM.
+These are persistent objects and which are mapped to a relational database using xref:pjpa::about.adoc[JPA/EclipseLink] ORM.
 
 Some domain entities are really aggregates, a combination of multiple objects.
 A commonly cited example of this is an `Order`, which really consists of both a root `Order` entity and a collection of ``OrderItem``s.

@@ -28,13 +28,12 @@ import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @TransactionScope
 public class CommitListener implements TransactionSynchronization {
-
 
     @Value
     @RequiredArgsConstructor

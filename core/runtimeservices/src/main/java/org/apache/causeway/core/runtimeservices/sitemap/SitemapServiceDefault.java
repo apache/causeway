@@ -34,9 +34,8 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.sitemap.SitemapService;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -48,9 +47,9 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
+ * Default implementation of {@link SitemapService}.
  *
  * @since 2.0 {@index}
  */
@@ -59,24 +58,23 @@ import lombok.val;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+//@Slf4j
 public class SitemapServiceDefault implements SitemapService {
 
     private final SpecificationLoader specificationLoader;
-    private final GridService gridService;
     private final MenuBarsService menuBarsService;
 
     @Override
     public String toSitemapAdoc(final String title) {
 
-        val adoc = new StringBuilder();
+        var adoc = new StringBuilder();
         adoc.append(String.format("= %s\n\n", title));
         adoc.append(":sectnums:\n\n");
 
-        val menuBars = menuBarsService.menuBars(MenuBarsService.Type.DEFAULT);
+        var menuBars = menuBarsService.menuBars(MenuBarsService.Type.DEFAULT);
 
         menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
-            val menuName = _Strings.isNotEmpty(menu.getNamed())
+            var menuName = _Strings.isNotEmpty(menu.getNamed())
                 ? menu.getNamed()
                 : "Unnamed Menu";
 
@@ -84,7 +82,7 @@ public class SitemapServiceDefault implements SitemapService {
 
             _NullSafe.stream(menu.getSections())
             .forEach(menuSection->{
-                val sectionName = _Strings.isNotEmpty(menuSection.getNamed())
+                var sectionName = _Strings.isNotEmpty(menuSection.getNamed())
                         ? menuSection.getNamed()
                         : "Unnamed Section";
                 adoc.append(String.format("=== %s\n\n", sectionName));
@@ -99,19 +97,19 @@ public class SitemapServiceDefault implements SitemapService {
                         adoc.append(String.format("_%s_\n\n", describedAs));
                     });
 
-                    val actionReturnType = menuAction.getReturnType();
-                    val actionElementType = menuAction.getElementType();
+                    var actionReturnType = menuAction.getReturnType();
+                    var actionElementType = menuAction.getElementType();
 
-                    if(actionElementType.getCorrespondingClass()==void.class) {
+                    if(actionElementType.correspondingClass()==void.class) {
                         adoc.append("WARNING: ");
                     }
                     if(actionReturnType.isPlural()) {
-                        adoc.append(String.format("Returns collection of: `%s`\n\n", actionElementType.getLogicalTypeName()));
+                        adoc.append(String.format("Returns collection of: `%s`\n\n", actionElementType.logicalTypeName()));
                     } else {
-                        adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.getLogicalTypeName()));
+                        adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.logicalTypeName()));
                     }
 
-                    val groupStack = new Stack<String>();
+                    var groupStack = new Stack<String>();
                     groupStack.push("Top-Bar");
                     final Runnable flushGroupStack = ()->{
                         if(!groupStack.isEmpty()){
@@ -119,15 +117,15 @@ public class SitemapServiceDefault implements SitemapService {
                         }
                     };
 
-                    val grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
-                                .flatMap(Facets::bootstrapGrid)
+                    var grid = specificationLoader.specForType(actionElementType.correspondingClass())
+                                .flatMap(mo->Facets.bootstrapGrid(mo))
                                 .orElse(null);
-                    grid.visit(new Grid.VisitorAdapter() {
+                    grid.visit(new BSElementVisitor() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
                             actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
                             .ifPresent(action->{
                                 flushGroupStack.run();
-                                val describedAs = action.getCanonicalDescription()
+                                var describedAs = action.getCanonicalDescription()
                                     .map(desc->String.format("_%s_", desc))
                                     .orElse("");
                                 adoc.append(String.format("* [ ] Action `%s` %s\n\n",
@@ -139,7 +137,7 @@ public class SitemapServiceDefault implements SitemapService {
                             actionElementType.getProperty(propertyLayoutData.getId())
                             .ifPresent(property->{
                                 flushGroupStack.run();
-                                val describedAs = property.getCanonicalDescription()
+                                var describedAs = property.getCanonicalDescription()
                                         .map(desc->String.format("_%s_", desc))
                                         .orElse("");
                                 adoc.append(String.format("* [ ] Property `%s` %s\n\n",

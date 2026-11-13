@@ -18,56 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Collection;
-import org.apache.causeway.schema.metamodel.v2.Member;
+import lombok.RequiredArgsConstructor;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
+@RequiredArgsConstructor
+final class CollectionNode extends MemberNode {
 
-@Named(CollectionNode.LOGICAL_TYPE_NAME)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED
-)
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class CollectionNode extends MemberNode {
-
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.CollectionNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Collection collection;
+    @Programmatic
+    private final OneToManyAssociation collection;
 
     @Override
-    public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->
-            String.format("%s: %s%s",
-                    collection.getId(),
-                    ""+collection.getType(),
-                    titleSuffix()));
-        return title;
+    public String title() {
+        return collection.getId();
     }
 
     @Override
-    protected Member member() {
+    public void putDetails(Details details) {
+        details.put("Id", collection.getId());
+        details.put("Friendly Name", collection.getCanonicalFriendlyName());
+        details.put("Mixed In", "" + isMixedIn());
+        details.put("Element Type", collection.getElementType().logicalTypeName());
+    }
+    
+    @Override
+    protected ObjectMember member() {
         return collection;
     }
 

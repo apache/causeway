@@ -19,8 +19,6 @@
 package org.apache.causeway.core.metamodel.commons;
 
 import lombok.experimental.UtilityClass;
-import lombok.val;
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -34,9 +32,9 @@ public class UtilStr {
     /**
      * String representation of bookmark for entities (otherwise empty string is returned).
      */
-    public static String entityAsStr(Bookmark bookmark, SpecificationLoader specificationLoader) {
-        val logicalTypeName = bookmark.getLogicalTypeName();
-        val isEntity = specificationLoader
+    public static String entityAsStr(final Bookmark bookmark, final SpecificationLoader specificationLoader) {
+        var logicalTypeName = bookmark.logicalTypeName();
+        var isEntity = specificationLoader
                             .lookupLogicalType(logicalTypeName)
                             .flatMap(specificationLoader::specForLogicalType)
                             .map(ObjectSpecification::isEntity)
@@ -55,21 +53,21 @@ public class UtilStr {
         if(managedObjectIfany.isEmpty()) {
             return "<none>";
         }
-        val managedObject = managedObjectIfany.get();
+        var managedObject = managedObjectIfany.get();
         return namedArgStr(paramName, managedObject);
     }
 
-    public static String namedArgStr(String paramName, ManagedObject managedObject) {
+    public static String namedArgStr(final String paramName, final ManagedObject managedObject) {
         if (isSensitiveName(paramName)) {
             return "********";
         }
-        if(managedObject.getSpecialization().isEmpty()) {
+        if(managedObject.specialization().isEmpty()) {
             return "<none>";
         }
         return managedObject.getTitle();
     }
 
-    private static boolean isSensitiveName(String name) {
+    private static boolean isSensitiveName(final String name) {
         return name.equalsIgnoreCase("password") ||
                 name.equalsIgnoreCase("secret") ||
                 name.equalsIgnoreCase("apikey") ||

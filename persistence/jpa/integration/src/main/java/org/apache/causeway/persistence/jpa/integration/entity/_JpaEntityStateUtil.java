@@ -28,7 +28,6 @@ import org.eclipse.persistence.sessions.UnitOfWork;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -42,7 +41,7 @@ class _JpaEntityStateUtil {
             final Object pojo) {
 
         if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            var primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.ATTACHED_NO_OID;
             }
@@ -64,7 +63,7 @@ class _JpaEntityStateUtil {
             (this was without any weaving) */
             final Throwable cause = ex.getCause();
             if (cause instanceof DescriptorException) {
-                val descriptorException = (DescriptorException) cause;
+                var descriptorException = (DescriptorException) cause;
                 final Throwable internalException = descriptorException.getInternalException();
                 if (internalException instanceof NullPointerException) {
                     return EntityState.TRANSIENT_OR_REMOVED;
@@ -87,51 +86,6 @@ class _JpaEntityStateUtil {
         return reference != null
                 ? EntityState.DETACHED
                 : EntityState.TRANSIENT_OR_REMOVED;
-    }
-
-    @Deprecated
-    EntityState getEntityStateLegacy(
-            final EntityManager entityManager,
-            final PersistenceUnitUtil persistenceUnitUtil,
-            final Class<?> entityClass,
-            final PrimaryKeyType<?> primaryKeyType,
-            final Object pojo) {
-        if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.ATTACHED_NO_OID;
-            }
-            return EntityState.ATTACHED;
-        }
-
-        try {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.TRANSIENT_OR_REMOVED;
-            } else {
-                // detect shallow primary key
-                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
-                return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.DETACHED
-                    : EntityState.TRANSIENT_OR_REMOVED;
-            }
-        } catch (PersistenceException ex) {
-            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
-                (this was without any weaving) */
-            Throwable cause = ex.getCause();
-            if (cause instanceof DescriptorException) {
-                DescriptorException descriptorException = (DescriptorException) cause;
-                Throwable internalException = descriptorException.getInternalException();
-                if (internalException instanceof NullPointerException) {
-                    return EntityState.TRANSIENT_OR_REMOVED;
-                }
-            }
-            if (cause instanceof NullPointerException) {
-                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.TRANSIENT_OR_REMOVED;
-            }
-            throw ex;
-        }
     }
 
 }

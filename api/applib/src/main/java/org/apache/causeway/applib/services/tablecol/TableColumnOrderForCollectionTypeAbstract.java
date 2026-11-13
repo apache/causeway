@@ -46,14 +46,13 @@ public abstract class TableColumnOrderForCollectionTypeAbstract<T>
      */
     @Override
     public final List<String> orderParented(
-            final Object parent,
+    		final Class<?> parentType,
             final String collectionId,
             final Class<?> elementType,
             final List<String> associationIds) {
-        if (! this.collectionType.isAssignableFrom(elementType)) {
-            return null;
-        }
-        return orderParented(parent, collectionId, associationIds);
+        if (! this.collectionType.isAssignableFrom(elementType))
+			return null;
+        return orderParented(parentType, collectionId, associationIds);
     }
 
     /**
@@ -64,7 +63,7 @@ public abstract class TableColumnOrderForCollectionTypeAbstract<T>
      * @return - the reordered propertyIds (or <code>null</code> if no opinion)
      */
     protected List<String> orderParented(
-            final Object parent,
+            final Class<?> parentType,
             final String collectionId,
             final List<String> propertyIds) {
         return propertyIds;
@@ -81,9 +80,8 @@ public abstract class TableColumnOrderForCollectionTypeAbstract<T>
     public final List<String> orderStandalone(
             final Class<?> domainType,
             final List<String> associationIds) {
-        if (! this.collectionType.isAssignableFrom(domainType)) {
-            return null;
-        }
+        if (! this.collectionType.isAssignableFrom(domainType))
+			return null;
         return orderStandalone(associationIds);
     }
 

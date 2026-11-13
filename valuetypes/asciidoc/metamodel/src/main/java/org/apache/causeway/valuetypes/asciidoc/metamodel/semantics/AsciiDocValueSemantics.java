@@ -54,7 +54,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final AsciiDoc value) {
-        return decomposeAsString(value, AsciiDoc::getAdoc, ()->null);
+        return decomposeAsString(value, AsciiDoc::adoc, ()->null);
     }
 
     @Override
@@ -83,7 +83,7 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
-        return adoc!=null ? adoc.getAdoc() : null;
+        return adoc!=null ? adoc.adoc() : null;
     }
 
     @Override

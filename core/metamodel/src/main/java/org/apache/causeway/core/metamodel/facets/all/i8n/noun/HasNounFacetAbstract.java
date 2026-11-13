@@ -27,9 +27,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public abstract class HasNounFacetAbstract
 extends FacetAbstract
@@ -45,16 +43,7 @@ implements HasNoun {
             final TranslationContext translationContext,
             final Noun noun,
             final FacetHolder holder) {
-        this(facetType, translationContext, noun, holder, Precedence.DEFAULT);
-    }
-
-    protected HasNounFacetAbstract(
-            final Class<? extends Facet> facetType,
-            final TranslationContext translationContext,
-            final Noun noun,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(facetType, holder, precedence);
+        super(facetType, holder);
         this.noun = noun;
         this.translationContext = translationContext;
         this.translatedNounForms = _Lazy.threadSafe(()->
@@ -63,7 +52,7 @@ implements HasNoun {
 
     @Override
     public boolean isNounPresent() {
-        return noun.isLiteralPresent();
+        return noun.isPresent();
     }
 
     @Override
@@ -80,7 +69,7 @@ implements HasNoun {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        if(noun.isLiteralPresent()) {
+        if(noun.isPresent()) {
             visitor.accept("hasNoun", "true");
             visitor.accept("originalText", text());
             visitor.accept("translated", translated()); // memoizes as a side-effect
@@ -94,11 +83,10 @@ implements HasNoun {
 
         // equality by facet-type, (original) text and translation-context
 
-        if(!this.facetType().equals(other.facetType())) {
-            return false;
-        }
+        if(!this.facetType().equals(other.facetType()))
+			return false;
 
-        val otherFacet =  (HasNounFacetAbstract)other;
+        var otherFacet =  (HasNounFacetAbstract)other;
 
         return Objects.equals(this.noun, otherFacet.noun)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

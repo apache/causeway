@@ -22,11 +22,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
+
+import tools.jackson.databind.JsonNode;
 
 /**
  * @since 1.x {@index}
@@ -97,15 +97,12 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
         return getLinkWithRel(Rel.PERSIST);
     }
 
-
     /**
      * Causeway extension.
      */
     public String getOid() {
         return getString("extensions.oid");
     }
-
-
 
     private DomainObjectMemberRepresentation getMember(final String id, String memberType) {
         // TODO: would be nice to use "members.%s[memberType=...]" instead
@@ -135,6 +132,5 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
             }
         };
     }
-
 
 }

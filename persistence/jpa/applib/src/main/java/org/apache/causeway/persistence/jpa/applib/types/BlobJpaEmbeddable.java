@@ -30,7 +30,6 @@ import org.apache.causeway.applib.value.Blob;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * A utility class to enable the persisting of {@link org.apache.causeway.applib.value.Blob}s.
@@ -55,6 +54,11 @@ import lombok.val;
  *    Example usage:
  *
  *     <pre>
+ *     &#064;AttributeOverrides({
+ *         &#064;AttributeOverride(name="name",    column=&#064;Column(name="attachment_name")),
+ *         &#064;AttributeOverride(name="mimeType",column=&#064;Column(name="attachment_mimeType")),
+ *         &#064;AttributeOverride(name="bytes",   column=&#064;Column(name="attachment_bytes"))
+ *     })
  *     &#064;Embedded
  *     private BlobJpaEmbeddable pdf;
  *
@@ -70,10 +74,9 @@ import lombok.val;
  * </p>
  *
  * <p>
- *     Lastly; note that {@link jakarta.persistence.AttributeOverrides} and {@link jakarta.persistence.AttributeOverride}
- *     provide a standardised way of fine-tuning the column definitions.
+ *     The {@link jakarta.persistence.AttributeOverrides} and {@link jakarta.persistence.AttributeOverride} attributes
+ *     allow the column definitions to be fine-tuned.
  * </p>
- *
  * @since 2.x {@index}
  */
 @Embeddable
@@ -89,10 +92,10 @@ public final class BlobJpaEmbeddable {
         if(blob == null) {
             return null;
         }
-        val blobJpaEmbeddable = new BlobJpaEmbeddable();
-        blobJpaEmbeddable.bytes = blob.getBytes();
-        blobJpaEmbeddable.mimeType = blob.getMimeType().toString();
-        blobJpaEmbeddable.name = blob.getName();
+        var blobJpaEmbeddable = new BlobJpaEmbeddable();
+        blobJpaEmbeddable.bytes = blob.bytes();
+        blobJpaEmbeddable.mimeType = blob.mimeType().toString();
+        blobJpaEmbeddable.name = blob.name();
         return blobJpaEmbeddable;
     }
 
@@ -121,7 +124,6 @@ public final class BlobJpaEmbeddable {
     public Blob asBlob() {
         return new Blob(name, mimeType, bytes);
     }
-
 
     @Override
     public String toString() {

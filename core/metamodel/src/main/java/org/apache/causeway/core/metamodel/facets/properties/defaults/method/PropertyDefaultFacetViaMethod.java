@@ -29,10 +29,9 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
 
 public class PropertyDefaultFacetViaMethod
 extends PropertyDefaultFacetAbstract
@@ -54,21 +53,19 @@ implements ImperativeFacet {
 
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object result = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
-        if (result == null) {
-            return null;
-        }
+        if (result == null)
+			return null;
         return createAdapter(method.returnType(), result);
     }
 
     private ManagedObject createAdapter(final Class<?> type, final Object object) {
-        val specification = getSpecificationLoader().loadSpecification(type);
-        if (specification.isSingular()) {
-            return getObjectManager().adapt(object);
-        } else {
-            throw new UnknownTypeException("not an object, is this a collection?");
-        }
+        var specification = getSpecificationLoader().loadSpecification(type);
+        if (specification.isSingular())
+			return getObjectManager().adapt(object);
+		else
+			throw new UnknownTypeException("not an object, is this a collection?");
     }
 
     @Override

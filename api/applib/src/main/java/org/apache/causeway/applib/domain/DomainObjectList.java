@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -70,8 +71,9 @@ import lombok.Getter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named(DomainObjectList.LOGICAL_TYPE_NAME)
 @DomainObject(
-        editing = Editing.DISABLED,
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_REQUIRED,
+        editing = Editing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = DomainObjectList.TitleUiEvent.class,
         iconUiEvent = DomainObjectList.IconUiEvent.class,
@@ -82,17 +84,15 @@ public class DomainObjectList {
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".DomainObjectList";
 
     // -- ui event classes
-    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<DomainObjectList>{  }
-    public static class IconUiEvent extends CausewayModuleApplib.IconUiEvent<DomainObjectList>{  }
-    public static class CssClassUiEvent extends CausewayModuleApplib.CssClassUiEvent<DomainObjectList>{  }
-    public static class LayoutUiEvent extends CausewayModuleApplib.LayoutUiEvent<DomainObjectList>{  }
-
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<DomainObjectList>{}
+    public static class IconUiEvent extends CausewayModuleApplib.IconUiEvent<DomainObjectList>{}
+    public static class CssClassUiEvent extends CausewayModuleApplib.CssClassUiEvent<DomainObjectList>{}
+    public static class LayoutUiEvent extends CausewayModuleApplib.LayoutUiEvent<DomainObjectList>{}
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends CausewayModuleApplib.PropertyDomainEvent<DomainObjectList, T> {  }
-    public static abstract class CollectionDomainEvent<T> extends CausewayModuleApplib.CollectionDomainEvent<DomainObjectList, T> {  }
-    public static abstract class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<DomainObjectList> {  }
-
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleApplib.PropertyDomainEvent<DomainObjectList, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleApplib.CollectionDomainEvent<DomainObjectList, T> {}
+    public static abstract class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<DomainObjectList> {}
 
     // -- constructors
     public DomainObjectList() {
@@ -110,14 +110,12 @@ public class DomainObjectList {
         this.actionArguments = actionArguments;
     }
 
-
     // -- title
     @Getter
     private String title;
     @ObjectSupport public String title() {
         return title;
     }
-
 
     // -- property: elementObjectType
     public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> {  }
@@ -129,11 +127,8 @@ public class DomainObjectList {
     @Getter
     private String elementTypeFqcn;
 
-
     // -- property: actionOwningType
     public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> {  }
-
-
 
     @Property(
             domainEvent = ActionOwningTypeDomainEvent.class,
@@ -157,7 +152,6 @@ public class DomainObjectList {
         return actionId;
     }
 
-
     // -- property: actionArguments
     public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> {  }
 
@@ -171,7 +165,6 @@ public class DomainObjectList {
     public String getActionArguments() {
         return actionArguments;
     }
-
 
     // -- collection: objects
     public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> {  }
@@ -189,6 +182,5 @@ public class DomainObjectList {
     public void setObjects(final List<Object> objects) {
         this.objects = objects;
     }
-
 
 }

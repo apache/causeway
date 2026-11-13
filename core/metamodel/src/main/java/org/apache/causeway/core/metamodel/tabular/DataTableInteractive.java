@@ -40,10 +40,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.internal.DataTableInternal;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 public interface DataTableInteractive extends MultiselectChoices {
 
     // -- FACTORIES
@@ -67,15 +63,13 @@ public interface DataTableInteractive extends MultiselectChoices {
     /**
      * Sorting helper class, that has the column index to be sorted by and the sort direction.
      */
-    @RequiredArgsConstructor
-    @EqualsAndHashCode
-    public static class ColumnSort implements Serializable {
-        private static final long serialVersionUID = 1L;
-        final int columnIndex;
-        final MmSortUtils.SortDirection sortDirection;
+    public record ColumnSort(
+        int columnIndex,
+        MmSortUtils.SortDirection sortDirection) implements Serializable {
+
         public Optional<Comparator<ManagedObject>> asComparator(final Can<? extends DataColumn> columns) {
-            val columnToSort = columns.get(columnIndex).orElse(null);
-            val sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
+            var columnToSort = columns.get(columnIndex).orElse(null);
+            var sortProperty = columnToSort.associationMetaModel().getSpecialization().leftIfAny();
             return Optional.ofNullable(sortProperty)
                     .map(prop->MmSortUtils.orderingBy(sortProperty, sortDirection));
         }
@@ -83,10 +77,10 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- TITLE, ROWS AND COLUMNS
 
-    Observable<String> getTitle();
-    Observable<Can<DataColumn>> getDataColumns();
-    Observable<Can<ManagedObject>> getDataElements();
-    Observable<Can<DataRow>> getDataRowsFilteredAndSorted();
+    Observable<String> titleObservable();
+    Observable<Can<DataColumn>> dataColumnsObservable();
+    Observable<Can<ManagedObject>> dataElementsObservable();
+    Observable<Can<DataRow>> dataRowsFilteredAndSortedObservable();
 
     // -- META DATA
 
@@ -100,7 +94,7 @@ public interface DataTableInteractive extends MultiselectChoices {
     // -- ROW COUNT
 
     /**
-     * Counts number of rows in {@link #getDataRowsFilteredAndSorted()}.
+     * Counts number of rows in {@link #dataRowsFilteredAndSortedObservable()}.
      */
     int getFilteredElementCount();
 
@@ -117,15 +111,16 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- SORTING
 
-    Bindable<ColumnSort> getColumnSort();
+    Bindable<ColumnSort> columnSortBindable();
 
     // -- SELECTION
 
-    Bindable<Boolean> getSelectAllToggle();
     void doProgrammaticToggle(Runnable runnable);
     Set<Integer> getSelectedRowIndexes();
-    Observable<Can<DataRow>> getDataRowsSelected();
+    Observable<Can<DataRow>> dataRowsSelectedObservable();
     void selectRangeOfRowsByIndex(IntStream range, boolean select);
+    void selectAllFiltered(boolean select);
+    void selectAll(boolean select);
 
     // -- EXPORTING
 
@@ -137,7 +132,7 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- FILTER SUPPORT
 
-    Bindable<String> getSearchArgument();
+    Bindable<String> searchArgumentBindable();
     boolean isSearchSupported();
     /**
      * @apiNote never called when not {@link #isSearchSupported()}

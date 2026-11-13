@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.internal.image;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.DirectColorModel;
@@ -30,15 +32,14 @@ import java.nio.charset.StandardCharsets;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.primitives._Ints;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 public class _Images {
 
@@ -46,7 +47,7 @@ public class _Images {
 
     @SneakyThrows
     public static byte[] toBytes(final @NonNull BufferedImage image){
-        try(val bos = new ByteArrayOutputStream(8 * 1024)) {
+        try(var bos = new ByteArrayOutputStream(8 * 1024)) {
             ImageIO.write(image, "png", bos); // png is lossless
             return bos.toByteArray();
         }
@@ -54,7 +55,7 @@ public class _Images {
 
     @SneakyThrows
     public static BufferedImage fromBytes(final @NonNull byte[] imageData){
-        try(val bis = new ByteArrayInputStream(imageData)){
+        try(var bis = new ByteArrayInputStream(imageData)){
             return ImageIO.read(bis);
         }
     }
@@ -69,7 +70,7 @@ public class _Images {
 
     @SneakyThrows
     public static BufferedImage fromBase64(final @NonNull String base64ImageData){
-        val imageData = _Bytes.ofUrlBase64.apply(base64ImageData.getBytes(StandardCharsets.UTF_8));
+        var imageData = _Bytes.ofUrlBase64.apply(base64ImageData.getBytes(StandardCharsets.UTF_8));
         return fromBytes(imageData);
     }
 
@@ -90,7 +91,7 @@ public class _Images {
 
         final int width = image.getWidth();
         final int height = image.getHeight();
-        val pixels = new int[height][width];
+        var pixels = new int[height][width];
         for(int lineIndex=0; lineIndex<height; ++lineIndex) {
             image.getRGB(0, lineIndex, width, 1, pixels[lineIndex], 0, width);
 
@@ -122,7 +123,7 @@ public class _Images {
 
         if(pixelCount>0) {
             // internally clones pixel data
-            val raster = createRasterARGB8888(pixels);
+            var raster = createRasterARGB8888(pixels);
             return createImageARGB8888(raster);
         } else {
             return null;
@@ -138,14 +139,14 @@ public class _Images {
     }
 
     private static WritableRaster createRasterARGB8888(final int width, final int height, final int[] dataArray){
-        val dataBuffer = new DataBufferInt(dataArray, width * height);
-        val sampleModel = new SinglePixelPackedSampleModel(
+        var dataBuffer = new DataBufferInt(dataArray, width * height);
+        var sampleModel = new SinglePixelPackedSampleModel(
                 dataBuffer.getDataType(), width, height, BitMask8888);
         return Raster.createWritableRaster(sampleModel, dataBuffer, null);
     }
 
     private static BufferedImage createImageARGB8888(final WritableRaster raster){
-        val directColorModel​ =
+        var directColorModel​ =
                 new DirectColorModel(32, BitMask8888[0], BitMask8888[1], BitMask8888[2], BitMask8888[3]);
         return new BufferedImage(directColorModel​, raster, false, null);
     }
@@ -177,10 +178,31 @@ public class _Images {
         return 0;
     }
 
-//    public static void draw(BufferedImage image, BufferedImage virtualImage) {
-//        Graphics2D g2d = virtualImage.createGraphics();
-//        g2d.drawImage(image, 0, 0, null);
-//        g2d.dispose();
-//    }
+    // -- RESIZE
+    
+    public static BufferedImage resizeToMaxHeight(BufferedImage originalImage, int maxHeight) {
+        if(originalImage.getHeight()<=maxHeight) return originalImage; 
+        
+        int targetHeight = maxHeight;
+        int targetWidth = (int)((long)(originalImage.getWidth() * targetHeight) / originalImage.getHeight());
+
+        // Scale the image
+        var scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        var virtualImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+        
+        return draw(scaledImage, virtualImage);
+    }
+    
+    // -- HELPER
+    
+    /**
+     * Draws given image onto given bufferedImage and returns the latter. 
+     */
+    private static BufferedImage draw(Image image, BufferedImage bufferedImage) {
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+        return bufferedImage;
+    }
 
 }

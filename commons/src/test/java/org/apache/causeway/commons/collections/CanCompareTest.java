@@ -20,6 +20,8 @@ package org.apache.causeway.commons.collections;
 
 import java.util.List;
 
+import java.util.Locale;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,7 +72,7 @@ class CanCompareTest {
                         c = -1;
                     }
                     assertEquals(expectationMatrix[row][col], c,
-                            String.format("failed in (row, col) (%d, %d) with (%s, %s)",
+                            String.format(Locale.US, "failed in (row, col) (%d, %d) with (%s, %s)",
                                     row, col, left, right));
                 }
                 ++col;

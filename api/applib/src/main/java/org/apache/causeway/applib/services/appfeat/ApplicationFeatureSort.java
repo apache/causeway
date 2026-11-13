@@ -65,5 +65,4 @@ public enum ApplicationFeatureSort {
         return name();
     }
 
-
 }

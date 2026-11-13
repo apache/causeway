@@ -25,7 +25,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.resources._Serializables;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * in-memory serialization round-tripping
@@ -36,7 +35,7 @@ public class _SerializationTester {
 
     @SneakyThrows
     public static <T extends Serializable> T roundtrip(final T object) {
-        val bytes = _Serializables.write(object);
+        var bytes = _Serializables.write(object);
         return _Casts.uncheckedCast(
                 _Serializables.read(object.getClass(), bytes));
     }

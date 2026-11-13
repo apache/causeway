@@ -32,26 +32,24 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator
 extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(final MetaModelContext mmc) {
-        super(mmc, spec->spec.getBeanSort() == BeanSort.UNKNOWN
+        super(mmc, spec->spec.beanSort() == BeanSort.UNKNOWN
                 && !spec.isAbstract());
     }
 
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
+        var actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
 
         final int numActions = actions.size();
         if (numActions > 0) {
 
-            val actionIds = actions.stream()
+            var actionIds = actions.stream()
             .map(ObjectAction::getFeatureIdentifier)
             .map(Identifier::toString)
             .collect(Collectors.joining(", "));
@@ -60,7 +58,7 @@ extends MetaModelValidatorAbstract {
                     spec,
                     ProgrammingModelConstants.MessageTemplate.UNKNONW_SORT_WITH_ACTION
                         .builder()
-                        .addVariable("type", spec.getCorrespondingClass().getName())
+                        .addVariable("type", spec.correspondingClass().getName())
                         .addVariable("actions", actionIds)
                         .addVariable("actionCount", numActions)
                         .buildMessage());

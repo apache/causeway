@@ -23,6 +23,8 @@ import java.util.UUID;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -35,9 +37,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
-
-import lombok.NonNull;
-import lombok.val;
 
 @Component
 @Named("causeway.metamodel.value.UUIDValueSemantics")
@@ -90,6 +89,11 @@ implements
         return value == null ? "" : value.toString();
     }
 
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final UUID value) {
+        return renderHtml(value, pipe(UUID::toString, super::toMonospace));
+    }
+
     // -- PARSER
 
     @Override
@@ -99,7 +103,7 @@ implements
 
     @Override
     public UUID parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? UUID.fromString(input)
                 : null;

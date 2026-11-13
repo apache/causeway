@@ -32,21 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaEntityGeneratedLongId;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -56,7 +52,6 @@ import lombok.val;
                 "spring.datasource.url=jdbc:h2:mem:JpaGeneratedLongIdEntityLifecycleTest",
         })
 @Transactional
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@DirtiesContext
 class JpaGeneratedLongIdEntityLifecycleTest {
@@ -74,10 +69,10 @@ class JpaGeneratedLongIdEntityLifecycleTest {
     @Test @Order(1) @Commit
     void detached_shouldBeProperlyDetected() {
 
-        val entity = objectManager.adapt(
+        var entity = objectManager.adapt(
                 repository.detachedEntity(new JpaEntityGeneratedLongId("test")));
 
-        assertTrue(entity.getSpecification().isEntity());
+        assertTrue(entity.objSpec().isEntity());
         assertEquals(
                 EntityState.TRANSIENT_OR_REMOVED,
                 MmEntityUtils.getEntityState(entity));
@@ -89,7 +84,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
     @Test @Order(2) @Commit
     void attached_shouldBeProperlyDetected() {
 
-        val entity = getEntityRef();
+        var entity = getEntityRef();
 
         repository.persist(entity.getPojo());
 
@@ -108,9 +103,9 @@ class JpaGeneratedLongIdEntityLifecycleTest {
                 EntityState.DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
-        val id = ((JpaEntityGeneratedLongId)getEntityRef().getPojo()).getId();
+        var id = ((JpaEntityGeneratedLongId)getEntityRef().getPojo()).getId();
 
-        val entity = objectManager.adapt(
+        var entity = objectManager.adapt(
                 repository.firstMatch(
                         JpaEntityGeneratedLongId.class,
                         entityPojo->Objects.equals(entityPojo.getId(), id))
@@ -134,7 +129,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
     @Test @Order(4) @Commit
     void postCondition_shouldBe_anEmptyRepository() {
 
-        val entity = getEntityRef();
+        var entity = getEntityRef();
 
         assertEquals(
                 EntityState.REMOVED,
@@ -155,7 +150,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
     }
 
     ManagedObject getEntityRef() {
-        val entity = (ManagedObject) kvStore.get(this, "entity").get();
+        var entity = (ManagedObject) kvStore.get(this, "entity").get();
         return entity;
     }
 

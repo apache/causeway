@@ -30,8 +30,8 @@ import java.util.Optional;
  * as a regular validation message.
  *
  * <p>
- * For example, a set of recognizers are provided for the JPA and JDO
- * persistence mechanisms in order to recognize and handle SQL constraint
+ * For example, a set of recognizers are provided for the JPA
+ * object store in order to recognize and handle SQL constraint
  * exceptions such as uniqueness violations. These can then be rendered back to
  * the user as expected errors, rather than fatal stacktraces.
  *

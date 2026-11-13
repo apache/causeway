@@ -37,7 +37,6 @@ import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 final class _Graphics {
 
@@ -54,7 +53,7 @@ final class _Graphics {
             2f);
 
     static Optional<Font> lookupFont(final String fontName, final float size) {
-        val ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        var ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         for (Font font : ge.getAllFonts()) {
             if(font.getFontName().equals(fontName)) {
                 return Optional.of(font.deriveFont(size));
@@ -71,7 +70,7 @@ final class _Graphics {
 
         final int dir = m1<m0 ? 1 : -1;
 
-        val origStroke = g.getStroke();
+        var origStroke = g.getStroke();
         g.setStroke(STROKE_DEFAULT);
         for(int i=0; i<7; ++i) {
             g.drawLine(m1 + i*dir, y, m1 + 8*dir, y - 3);
@@ -143,8 +142,8 @@ final class _Graphics {
                     || lines.isEmpty()) {
                 return;
             }
-            val textLeft = xLeft + hPadding;
-            val baseLine = _Refs.intRef(yTop + vPadding + lineAscent);
+            var textLeft = xLeft + hPadding;
+            var baseLine = _Refs.intRef(yTop + vPadding + lineAscent);
             lines.forEach(line->{
                 g.drawString(line, textLeft, baseLine.getValue());
                 baseLine.update(x->x + lineHeight + lineGap);

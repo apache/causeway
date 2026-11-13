@@ -31,10 +31,9 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionInvokeArgsArg
         extends Element {
 
@@ -53,15 +52,15 @@ public class RichActionInvokeArgsArg
         this.objectActionParameter = oap;
         this.paramNum = paramNum;
 
-        val elementType = oap.getElementType();;
+        var elementType = oap.getElementType();
 
-        val gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, actionInteractor.getSchemaType());
+        var gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, actionInteractor.getSchemaType());
         if (gqlObjectTypeForElementType != null) {
-            val gqlOutputType = oap.isPlural()
+            var gqlOutputType = oap.isPlural()
                     ? GraphQLList.list(gqlObjectTypeForElementType)
                     : gqlObjectTypeForElementType;
 
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name(oap.asciiId())
                     .type(gqlOutputType);
             setField(fieldBuilder.build());
@@ -70,13 +69,11 @@ public class RichActionInvokeArgsArg
         }
     }
 
-
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
-        val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
-        val managedObjects = actionInteractor.argumentManagedObjectsFor(environment, actionInteractor.getObjectMember(), context.bookmarkService);
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
+        var environment = new Environment.ForTunnelled(dataFetchingEnvironment);
+        var managedObjects = actionInteractor.argumentManagedObjectsFor(environment, actionInteractor.getObjectMember(), context.bookmarkService);
         return managedObjects.get(paramNum).map(ManagedObject::getPojo).orElse(null);
     }
-
 
 }

@@ -31,46 +31,46 @@ interface WrapperFactory {
   T wrap(T domainObject, SyncControl syncControl)     // <.>
   T wrap(T domainObject)     // <.>
   T wrapMixin(Class<T> mixinClass, Object mixee, SyncControl syncControl)     // <.>
-  T wrapMixinT(Class<T> mixinClass, MIXEE mixee, SyncControl syncControl)     // <.>
   T wrapMixin(Class<T> mixinClass, Object mixee)     // <.>
+  T wrapMixinT(Class<T> mixinClass, MIXEE mixee, SyncControl syncControl)     // <.>
   T wrapMixinT(Class<T> mixinClass, MIXEE mixee)     // <.>
   T unwrap(T possibleWrappedDomainObject)     // <.>
   boolean isWrapper(T possibleWrappedDomainObject)     // <.>
-  T asyncWrap(T domainObject, AsyncControl<R> asyncControl)     // <.>
-  T asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl<R> asyncControl)     // <.>
-  T asyncWrapMixinT(Class<T> mixinClass, MIXEE mixee, AsyncControl<R> asyncControl)     // <.>
+  AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl)     // <.>
+  AsyncProxy<T> asyncWrap(T domainObject)     // <.>
+  AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl asyncControl)     // <.>
+  AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee)     // <.>
   List<InteractionListener> getListeners()     // <.>
   boolean addInteractionListener(InteractionListener listener)     // <.>
   boolean removeInteractionListener(InteractionListener listener)     // <.>
   void notifyListeners(InteractionEvent ev)
-  R execute(AsyncCallable<R> asyncCallable)     // <.>
 }
 ----
 
 <.> xref:#wrap_T_SyncControl[wrap(T, SyncControl)]
 +
 --
-Provides the "wrapper" of a domain object against which to invoke the action.
+Provides the'wrapper' of a domain object against which to invoke the action.
 --
 <.> xref:#wrap_T[wrap(T)]
 +
 --
-A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
+A convenience overload for _#wrap(Object, SyncControl)_ with _SyncControl.defaults()_ .
 --
 <.> xref:#wrapMixin_Class_Object_SyncControl[wrapMixin(Class, Object, SyncControl)]
 +
 --
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 --
+<.> xref:#wrapMixin_Class_Object[wrapMixin(Class, Object)]
++
+--
+A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ with _SyncControl.defaults()_ .
+--
 <.> xref:#wrapMixinT_Class_MIXEE_SyncControl[wrapMixinT(Class, MIXEE, SyncControl)]
 +
 --
 Provides the wrapper for a _Mixin typesafe_ _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
---
-<.> xref:#wrapMixin_Class_Object[wrapMixin(Class, Object)]
-+
---
-A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 --
 <.> xref:#wrapMixinT_Class_MIXEE[wrapMixinT(Class, MIXEE)]
 +
@@ -90,17 +90,22 @@ Whether the supplied object is a wrapper around a domain object.
 <.> xref:#asyncWrap_T_AsyncControl[asyncWrap(T, AsyncControl)]
 +
 --
-Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously (in another thread).
+Returns a _CompletableFuture_ holding a proxy object for the provided _domainObject_ , through which one can execute the action asynchronously (in another thread).
+--
+<.> xref:#asyncWrap_T[asyncWrap(T)]
++
+--
+A convenience overload for _#asyncWrap(Object, AsyncControl)_ with _AsyncControl.defaults()_ .
 --
 <.> xref:#asyncWrapMixin_Class_Object_AsyncControl[asyncWrapMixin(Class, Object, AsyncControl)]
 +
 --
-Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
+Returns a _AsyncProxy_ holding a proxy object for the provided _mixinClass_ , through which one can execute the action asynchronously (in another thread).
 --
-<.> xref:#asyncWrapMixinT_Class_MIXEE_AsyncControl[asyncWrapMixinT(Class, MIXEE, AsyncControl)]
+<.> xref:#asyncWrapMixin_Class_Object[asyncWrapMixin(Class, Object)]
 +
 --
-Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
+A convenience overload for _#asyncWrapMixin(Class, Object, AsyncControl)_ with _AsyncControl.defaults()_ .
 --
 <.> xref:#getListeners_[getListeners()]
 +
@@ -117,18 +122,13 @@ Registers an xref:refguide:applib:index/services/wrapper/listeners/InteractionLi
 --
 Remove an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 --
-<.> xref:#execute_AsyncCallable[execute(AsyncCallable)]
-+
---
-Provides a mechanism for custom implementations of _java.util.concurrent.ExecutorService_ , as installed using _AsyncControl#with(ExecutorService)_ , to actually execute the xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable] that they are passed initially during _WrapperFactory#asyncWrap(Object, AsyncControl)_ and its brethren.
---
 
 == Members
 
 [#wrap_T_SyncControl]
 === wrap(T, SyncControl)
 
-Provides the "wrapper" of a domain object against which to invoke the action.
+Provides the'wrapper' of a domain object against which to invoke the action.
 
 The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. There are therefore three typical cases:
 
@@ -140,17 +140,26 @@ The last logical option (skip rules, skip action) is valid but doesn't make sens
 
 Otherwise, will do all the validations (raise exceptions as required etc.), but doesn't modify the model.
 
+Any exceptions will be propagated, not swallowed.
+
 [#wrap_T]
 === wrap(T)
 
-A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
+A convenience overload for _#wrap(Object, SyncControl)_ with _SyncControl.defaults()_ .
 
 [#wrapMixin_Class_Object_SyncControl]
 === wrapMixin(Class, Object, SyncControl)
 
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 
-The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
+The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed.
+
+Any exceptions will be propagated, not swallowed.
+
+[#wrapMixin_Class_Object]
+=== wrapMixin(Class, Object)
+
+A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ with _SyncControl.defaults()_ .
 
 [#wrapMixinT_Class_MIXEE_SyncControl]
 === wrapMixinT(Class, MIXEE, SyncControl)
@@ -158,11 +167,6 @@ The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.ado
 Provides the wrapper for a _Mixin typesafe_ _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 
 The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
-
-[#wrapMixin_Class_Object]
-=== wrapMixin(Class, Object)
-
-A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 
 [#wrapMixinT_Class_MIXEE]
 === wrapMixinT(Class, MIXEE)
@@ -184,17 +188,22 @@ Whether the supplied object is a wrapper around a domain object.
 [#asyncWrap_T_AsyncControl]
 === asyncWrap(T, AsyncControl)
 
-Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously (in another thread).
+Returns a _CompletableFuture_ holding a proxy object for the provided _domainObject_ , through which one can execute the action asynchronously (in another thread).
+
+[#asyncWrap_T]
+=== asyncWrap(T)
+
+A convenience overload for _#asyncWrap(Object, AsyncControl)_ with _AsyncControl.defaults()_ .
 
 [#asyncWrapMixin_Class_Object_AsyncControl]
 === asyncWrapMixin(Class, Object, AsyncControl)
 
-Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
+Returns a _AsyncProxy_ holding a proxy object for the provided _mixinClass_ , through which one can execute the action asynchronously (in another thread).
 
-[#asyncWrapMixinT_Class_MIXEE_AsyncControl]
-=== asyncWrapMixinT(Class, MIXEE, AsyncControl)
+[#asyncWrapMixin_Class_Object]
+=== asyncWrapMixin(Class, Object)
 
-Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
+A convenience overload for _#asyncWrapMixin(Class, Object, AsyncControl)_ with _AsyncControl.defaults()_ .
 
 [#getListeners_]
 === getListeners()
@@ -214,11 +223,6 @@ This is retrospective: the listener will be notified of interactions even on wra
 Remove an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 
 This is retrospective: the listener will no longer be notified of any interactions created on any wrappers, not just on those wrappers created subsequently. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
-
-[#execute_AsyncCallable]
-=== execute(AsyncCallable)
-
-Provides a mechanism for custom implementations of _java.util.concurrent.ExecutorService_ , as installed using _AsyncControl#with(ExecutorService)_ , to actually execute the xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable] that they are passed initially during _WrapperFactory#asyncWrap(Object, AsyncControl)_ and its brethren.
 
 include::hooks/WrapperFactory_010-implementation.adoc[]
 

@@ -26,12 +26,11 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Initializes the <i>Session Log</i> extension when the application is first bootstrapped.
@@ -54,12 +53,12 @@ public class SessionLogServiceInitializer implements MetamodelListener {
 
     @Override
     public void onMetamodelLoaded() {
-        if (!causewayConfiguration.getExtensions().getSessionLog().isAutoLogoutOnRestart()) {
+        if (!causewayConfiguration.extensions().sessionLog().autoLogoutOnRestart()) {
             return;
         }
 
         interactionService.runAnonymous(() -> {
-            val timestamp = clockService.getClock().nowAsJavaSqlTimestamp();
+            var timestamp = clockService.getClock().nowAsJavaSqlTimestamp();
             sessionLogEntryRepository.logoutAllSessions(timestamp);
         });
     }

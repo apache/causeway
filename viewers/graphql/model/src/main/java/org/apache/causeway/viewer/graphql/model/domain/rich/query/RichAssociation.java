@@ -34,5 +34,4 @@ public abstract class RichAssociation<T extends ObjectAssociation, H extends Obj
         super(holder, objectAssociation, typeName, context);
     }
 
-
 }

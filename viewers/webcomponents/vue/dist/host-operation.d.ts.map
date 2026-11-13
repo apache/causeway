@@ -1,0 +1,1 @@
+{"version":3,"file":"host-operation.d.ts","sourceRoot":"","sources":["../src/host-operation.ts"],"names":[],"mappings":"AAmBA,OAAO,KAAK,EAAC,qBAAqB,EAAC,MAAM,aAAa,CAAC;AAEvD,eAAO,MAAM,uBAAuB;;;EAGlC,CAAC;AAEH,wBAAgB,uBAAuB,CAAC,KAAK,EAAE,OAAO,CAAC,qBAAqB,CAAC,GAAG,SAAS,GAAG,OAAO,CAGlG;AAED,wBAAgB,gCAAgC,CAAC,IAAI,EAAE,UAAU,GAAG,MAAM,CAWzE"}

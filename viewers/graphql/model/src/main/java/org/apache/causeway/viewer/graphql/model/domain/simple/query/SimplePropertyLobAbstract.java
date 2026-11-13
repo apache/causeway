@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
-import lombok.val;
 
 public abstract class SimplePropertyLobAbstract extends Element {
 
@@ -51,24 +50,24 @@ public abstract class SimplePropertyLobAbstract extends Element {
                     .build());
     }
 
-    protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+    protected Object fetchDataFromLob(DataFetchingEnvironment environment, Function<NamedWithMimeType, ?> mapper) {
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        val association = memberInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
+        var association = memberInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var resultManagedObject = association.get(managedObject);
 
         return Optional.ofNullable(resultManagedObject)
                 .map(ManagedObject::getPojo)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
+                .filter(NamedWithMimeType.class::isInstance)
+                .map(NamedWithMimeType.class::cast)
                 .map(mapper)
                 .orElse(null);
     }

@@ -31,7 +31,7 @@ public abstract class CounterRepository<X extends Counter> {
 
     private final Class<X> counterClass;
 
-    public CounterRepository(Class<X> counterClass) {
+    public CounterRepository(final Class<X> counterClass) {
         this.counterClass = counterClass;
     }
 
@@ -39,7 +39,7 @@ public abstract class CounterRepository<X extends Counter> {
         return repositoryService.allInstances(counterClass);
     }
 
-    public X persist(X counter) {
+    public X persist(final X counter) {
         return repositoryService.persistAndFlush(counter);
     }
 
@@ -49,7 +49,7 @@ public abstract class CounterRepository<X extends Counter> {
 
     @Inject RepositoryService repositoryService;
 
-    public Counter findByName(String name) {
+    public X findByName(final String name) {
         List<X> xes = find();
         return xes.stream().filter(x -> Objects.equals(x.getName(), name)).findFirst().orElseThrow();
     }

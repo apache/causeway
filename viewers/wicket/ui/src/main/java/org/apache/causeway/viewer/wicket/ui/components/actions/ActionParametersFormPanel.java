@@ -20,27 +20,25 @@ package org.apache.causeway.viewer.wicket.ui.components.actions;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  * <p>
- * Corresponding panel for property edits is {@link PropertyEditFormPanel}.
+ * Corresponding panel for property edits is
+ * {@link org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanel}.
  */
-public class ActionParametersFormPanel
+class ActionParametersFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
     static final String ID_ACTION_PARAMETERS = "parameters";
     static final String ID_INPUT_FORM = "inputForm";
-    public static final String ID_SCALAR_NAME_AND_VALUE = "scalarNameAndValue";
+    public static final String ID_ATTRIBUTE_NAME_AND_VALUE = "attributeNameAndValue";
 
     public ActionParametersFormPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
@@ -53,7 +51,7 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
     }
 
     private void buildGui() {
-        val actionModel = getModel();
+        var actionModel = getModel();
         actionModel.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         final ActionParametersForm inputForm =
                 new ActionParametersForm(ID_INPUT_FORM, this, actionModel);

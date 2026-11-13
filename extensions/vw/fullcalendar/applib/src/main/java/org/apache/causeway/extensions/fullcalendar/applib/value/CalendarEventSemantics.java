@@ -29,16 +29,18 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -55,11 +57,7 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.experimental.Accessors;
 
 @Component
 @Import({
@@ -107,9 +105,9 @@ implements
     @Override
     public CalendarEvent compose(final ValueDecomposition decomposition) {
 
-        final TypedTupleDto dto = decomposition.rightIfAny();
+        final TypedTupleDto dto = decomposition.composite();
 
-        val elementMap = CommonDtoUtils.typedTupleAsMap(dto);
+        var elementMap = CommonDtoUtils.typedTupleAsMap(dto);
 
         final ZonedDateTime dateTime = ZonedDateTime.ofInstant(
                 Instant.ofEpochMilli((long)elementMap.get("epochMillis")),
@@ -129,7 +127,7 @@ implements
     @Override
     public String titlePresentation(final Context context, final CalendarEvent value) {
         return renderTitle(value, v->{
-            val title = new _StringInterpolation(toMap(context, value))
+            var title = new _StringInterpolation(toMap(context, value))
                     .applyTo(titleTemplate);
             return title;
         });
@@ -144,7 +142,7 @@ implements
     @Override
     public String htmlPresentation(final Context context, final CalendarEvent value) {
         return renderHtml(value, v->{
-            val html = new _StringInterpolation(toMapHtmlEscaped(context, value))
+            var html = new _StringInterpolation(toMapHtmlEscaped(context, value))
                     .applyTo(htmlTemplate)
                     .stream()
                     .collect(Collectors.joining());
@@ -160,7 +158,7 @@ implements
                 "calendar-name", v.getCalendarName(),
                 "timestamp", zonedDateTimeValueSemantics
                     .htmlPresentation(context,
-                            v.asDateTime(context.getInteractionContext().getTimeZone())),
+                            v.asDateTime(context.interactionContext().getTimeZone())),
                 "notes", _Strings.nullToEmpty(v.getNotes()));
     }
 
@@ -172,29 +170,28 @@ implements
                 "calendar-name", _Strings.htmlEscape(v.getCalendarName()),
                 "timestamp", zonedDateTimeValueSemantics
                     .htmlPresentation(context,
-                            v.asDateTime(context.getInteractionContext().getTimeZone())),
+                            v.asDateTime(context.interactionContext().getTimeZone())),
                 "notes", _Strings.htmlEscape(_Strings.nullToEmpty(v.getNotes())));
     }
-
 
     // -- EXAMPLES
 
     @Override
     public Can<CalendarEvent> getExamples() {
 
-        val a = CalendarEvent.of(
+        var a = CalendarEvent.of(
                 ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
                 "Business",
                 "Weekly Meetup",
                 "Calendar Notes: <a href=\"https://apache.org\">apache.org</a>"); // should be properly serialized to JSON
 
-        val b = CalendarEvent.of(
+        var b = CalendarEvent.of(
                 ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),
                 "Private",
                 "Dentist Appointment",
                 "Calendar Notes");
 
-        val c = CalendarEvent.of(
+        var c = CalendarEvent.of(
                 ZonedDateTime.of(2022, 07, 15, 19, 32, 17, 0, ZoneOffset.ofHours(5)),
                 "Family and Friends",
                 "Birthday Party");
@@ -205,15 +202,14 @@ implements
     // -- EMBEDDING
 
     // typed tuple of fundamental types
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        final LocalDateTime dateTime;
-        final String calendarName;
-        final String title;
-        final String notes;
+    public record Parameters(
+            LocalDateTime dateTime,
+            String calendarName,
+            String title,
+            String notes) {
 
         public CalendarEvent construct() {
-            val zoneId = //context.getInteractionContext().getTimeZone();
+            var zoneId = //context.getInteractionContext().getTimeZone();
                     ZoneId.systemDefault();
             return new CalendarEvent(
                     dateTime().atZone(zoneId).toInstant().toEpochMilli(),
@@ -225,7 +221,7 @@ implements
         public static Parameters deconstruct(
                 //final ValueSemanticsProvider.Context context,
                 final CalendarEvent value) {
-            val zoneId = //context.getInteractionContext().getTimeZone();
+            var zoneId = //context.getInteractionContext().getTimeZone();
                     ZoneId.systemDefault();
             return new Parameters(
                     value.asDateTime(zoneId).toLocalDateTime(),
@@ -266,7 +262,7 @@ implements
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 
-            val p = new Parameters(
+            var p = new Parameters(
                     dateTime,
                     calendarName,
                     title,
@@ -302,7 +298,5 @@ implements
         }
 
     }
-
-
 
 }

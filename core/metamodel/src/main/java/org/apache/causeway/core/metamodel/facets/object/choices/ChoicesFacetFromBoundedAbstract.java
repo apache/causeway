@@ -29,17 +29,16 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * A fixed number of choices because the number of instances of this class is bounded.
@@ -73,28 +72,23 @@ implements
         if (!(context instanceof ObjectValidityContext)) {
             return null;
         }
-        final ManagedObject target = context.getTarget();
-        if(target == null) {
-            return null;
-        }
+        final ManagedObject target = context.target();
+        if(target == null) return null;
 
-        // ensure that the target is of the correct type
-        if(!(getFacetHolder() instanceof ObjectSpecification)) {
-            // should never be the case
-            return null;
-        }
+        // ensure that the target is of the correct type (unexpected)
+        if(!(facetHolder() instanceof ObjectSpecification)) return null;
 
         final ObjectSpecification objectSpec = getObjectSpecification();
-        return objectSpec == target.getSpecification()? null: "Invalid type";
+        return objectSpec == target.objSpec()? null: "Invalid type";
     }
 
     private ObjectSpecification getObjectSpecification() {
-        return (ObjectSpecification) getFacetHolder();
+        return (ObjectSpecification) facetHolder();
     }
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext context) {
-        final ManagedObject target = context.getTarget();
+        final ManagedObject target = context.target();
         return disabledReason(target);
     }
 
@@ -111,12 +105,12 @@ implements
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val resulType = getObjectSpecification().getCorrespondingClass();
-        val query = Query.allInstances(resulType);
+        var resulType = getObjectSpecification().correspondingClass();
+        var query = Query.allInstances(resulType);
 
-        val resultTypeSpec = specForType(resulType).orElse(null);
-        val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = getObjectManager().queryObjects(queryRequest)
+        var resultTypeSpec = specForType(resulType).orElse(null);
+        var queryRequest = new BulkLoadRequest(resultTypeSpec, query);
+        var allMatching = getObjectManager().queryObjects(queryRequest)
                 .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy));
 
         return allMatching;

@@ -20,15 +20,12 @@ package org.apache.causeway.extensions.executionlog.jpa.integtests;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
@@ -49,14 +46,10 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionLogPersistenceJpa.class,
     })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, ExecutionLogTestDomainModel.class})
     public static class AppManifest {
     }
-
 
     @Override
     protected org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter newCounter(final String name) {

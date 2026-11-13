@@ -38,20 +38,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaInventoryDao;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -61,9 +56,6 @@ import lombok.val;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest_usingTransactional",
         })
-@TestPropertySources({
-    @TestPropertySource(CausewayPresets.UseLog4j2Test)
-})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaExceptionTranslationTest_usingTransactional
 extends RegressionTestWithJpaFixtures {
@@ -76,7 +68,6 @@ extends RegressionTestWithJpaFixtures {
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
     }
-
 
     @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
@@ -111,10 +102,10 @@ extends RegressionTestWithJpaFixtures {
 
         interactionService.runAnonymous(()->{
 
-            val inventories = repositoryService.allInstances(JpaInventory.class);
+            var inventories = repositoryService.allInstances(JpaInventory.class);
             assertEquals(1, inventories.size());
 
-            val inventory = inventories.get(0);
+            var inventory = inventories.get(0);
             assertNotNull(inventory);
 
             assertNotNull(inventory);
@@ -126,8 +117,5 @@ extends RegressionTestWithJpaFixtures {
         });
 
     }
-
-
-
 
 }

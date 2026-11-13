@@ -23,40 +23,37 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.confview.ConfigurationProperty;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
 import org.apache.causeway.core.webapp.modules.WebModule;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
-import lombok.NonNull;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0
@@ -65,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.webapp.ConfigurationViewServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ConfigurationViewServiceDefault
 implements
@@ -97,11 +94,11 @@ implements
      */
     public String toStringFormatted() {
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         String head = String.format("APACHE CAUSEWAY %s (%s) ",
-                configuration.getViewer().getCommon().getApplication().getVersion(),
-                systemEnvironment.getDeploymentType().name());
+                configuration.viewer().common().application().version(),
+                systemEnvironment.deploymentType().name());
 
         final Map<String, ConfigurationProperty> map = scopedConf.get().get(Scope.PRIMARY.ordinal());
 
@@ -125,20 +122,18 @@ implements
 
     // -- HELPER
 
-    private _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.threadSafe(()->loadConfiguration());
+    private final _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.threadSafe(this::loadConfiguration);
 
     private List<Map<String, ConfigurationProperty>> loadConfiguration() {
-        val configCategories =
+        var configCategories =
                 new ArrayList<Map<String, ConfigurationProperty>>();
 
-        val env = loadEnvironment();
-        val primary = loadPrimary(List.of(
+        var env = loadEnvironment();
+        var primary = loadPrimary(List.of(
                 "causeway.",
-                "resteasy.",
-                "datanucleus.",
                 "eclipselink."));
-        // we dont't want any duplicates to appear in secondary
-        val secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
+        // we don't want any duplicates to appear in secondary
+        var secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
                 .distinct()
                 .collect(Collectors.toSet()));
 
@@ -157,9 +152,9 @@ implements
     }
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
-        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-        add("Causeway Version", configuration.getViewer().getCommon().getApplication().getVersion(), map);
-        add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
+        final Map<String, ConfigurationProperty> map = new TreeMap<>();
+        add("Causeway Version", configuration.viewer().common().application().version(), map);
+        add("Deployment Type", systemEnvironment.deploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 
         addSystemProperty("java.version", map);
@@ -188,20 +183,22 @@ implements
     }
 
     private Map<String, ConfigurationProperty> loadPrimary(final List<String> primaryPrefixes) {
-        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        final Map<String, ConfigurationProperty> map = new TreeMap<>();
         if(isShowConfigurationProperties()) {
             configuration.streamConfigurationPropertyNames()
             .filter(propName->primaryPrefixes.stream().anyMatch(propName::startsWith))
             .forEach(propName -> {
-                String propertyValue = configuration.valueOf(propName).orElse(null);
+                String propertyValue = configuration
+                        .valueOf(propName, ex->logRetrievalFailure(propName, ex))
+                        .orElse(null);
                 add(propName, propertyValue, map);
             });
 
-            val dsInfos = datasourceInfoService.getDataSourceInfos();
+            var dsInfos = datasourceInfoService.getDataSourceInfos();
 
             dsInfos.forEach(IndexedConsumer.offset(1, (index,  dataSourceInfo)->{
                 add(String.format("Data Source (%d/%d)", index, dsInfos.size()),
-                        dataSourceInfo.getJdbcUrl(),
+                        dataSourceInfo.jdbcUrl(),
                         map);
             }));
 
@@ -214,12 +211,14 @@ implements
     }
 
     private Map<String, ConfigurationProperty> loadSecondary(final Set<String> toBeExcluded) {
-        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        final Map<String, ConfigurationProperty> map = new TreeMap<>();
         if(isShowConfigurationProperties()) {
             configuration.streamConfigurationPropertyNames()
             .filter(propName->!toBeExcluded.contains(propName))
             .forEach(propName -> {
-                String propertyValue = configuration.valueOf(propName).orElse(null);
+                String propertyValue = configuration
+                        .valueOf(propName, ex->logRetrievalFailure(propName, ex))
+                        .orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -229,6 +228,10 @@ implements
                     getConfigurationPropertyVisibilityPolicy().name(), map);
         }
         return map;
+    }
+
+    private static void logRetrievalFailure(final String propName, final Throwable error) {
+        log.warn("failed to load configuration property '{}'", propName, error);
     }
 
     private static void add(final String key, String value, final Map<String, ConfigurationProperty> map) {
@@ -241,23 +244,18 @@ implements
     }
 
     private boolean isShowConfigurationProperties() {
-        switch (getConfigurationPropertyVisibilityPolicy()) {
-        case NEVER_SHOW:
-            return false;
-        case SHOW_ONLY_IN_PROTOTYPE:
-            return systemEnvironment.getDeploymentType().isPrototyping();
-        case ALWAYS_SHOW:
-            return true;
-        default:
-            return false;
-        }
+        return switch (getConfigurationPropertyVisibilityPolicy()) {
+		case NEVER_SHOW -> false;
+		case SHOW_ONLY_IN_PROTOTYPE -> systemEnvironment.deploymentType().isPrototyping();
+		case ALWAYS_SHOW -> true;
+		default -> false;
+		};
     }
 
     private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {
-        return Optional.ofNullable(
-                configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
-                // fallback to configuration default policy
-                .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
+        var policy = configuration.core().config().configurationPropertyVisibilityPolicy();
+        _Assert.assertNotNull(policy);
+        return policy;
     }
 
 }

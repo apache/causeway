@@ -28,13 +28,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Automatically seeds the built-in roles (and permissions) for both Secman
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".SeedSecurityModuleService")
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject })
-@Log4j2
+@Slf4j
 public class SeedSecurityModuleService {
 
     private final FixtureScripts fixtureScripts;

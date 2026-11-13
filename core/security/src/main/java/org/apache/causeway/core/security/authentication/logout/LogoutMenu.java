@@ -33,15 +33,14 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named(LogoutMenu.LOGICAL_TYPE_NAME)
 @DomainService
@@ -78,10 +77,10 @@ public class LogoutMenu {
     }
 
     private Object getRedirect() {
-        val redirect =  interactionProvider.currentInteractionContext()
+        var redirect =  interactionProvider.currentInteractionContext()
         .map(InteractionContext::getUser)
         .map(userMemento->
-            userMemento.getAuthenticationSource().isExternal()
+            userMemento.authenticationSource().isExternal()
                 ? "logout"
                 : "login"
         )
@@ -101,7 +100,7 @@ public class LogoutMenu {
     }
 
     private LocalResourcePath createLogoutRedirect() {
-        val logoutRedirect = "/logout";
+        var logoutRedirect = "/logout";
 
         //TODO make this a config option (or use the spring option, if there is any)
         //configuration.getSecurity().getSpring().getLogoutRedirect();

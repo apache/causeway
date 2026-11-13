@@ -29,6 +29,7 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.commons.internal.base._Objects;
 
@@ -48,6 +49,7 @@ import lombok.Setter;
 )
 @Named(ConfigurationProperty.LOGICAL_TYPE_NAME)
 @DomainObject(
+        introspection = Introspection.ANNOTATION_OPTIONAL,
         editing = Editing.DISABLED)
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObjectLayout(paged = 999)

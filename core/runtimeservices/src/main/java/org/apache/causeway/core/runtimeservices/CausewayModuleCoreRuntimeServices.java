@@ -18,14 +18,22 @@
  */
 package org.apache.causeway.core.runtimeservices;
 
-import jakarta.inject.Singleton;
+import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.core.codegen.bytebuddy.CausewayModuleCoreCodegenByteBuddy;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -39,8 +47,9 @@ import org.apache.causeway.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.causeway.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePoMenu;
-import org.apache.causeway.core.runtimeservices.icons.ObjectIconServiceDefault;
-import org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
+import org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault;
+import org.apache.causeway.core.runtimeservices.ia.dto.InteractionDtoFactoryDefault;
+import org.apache.causeway.core.runtimeservices.ia.id.InteractionIdGeneratorDefault;
 import org.apache.causeway.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.causeway.core.runtimeservices.locale.LanguageProviderDefault;
 import org.apache.causeway.core.runtimeservices.locale.LocaleChoiceProviderDefault;
@@ -48,7 +57,6 @@ import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDe
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.message.MessageServiceDefault;
-import org.apache.causeway.core.runtimeservices.placeholder.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.causeway.core.runtimeservices.publish.EntityChangesPublisherDefault;
 import org.apache.causeway.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
@@ -57,12 +65,10 @@ import org.apache.causeway.core.runtimeservices.publish.LifecycleCallbackNotifie
 import org.apache.causeway.core.runtimeservices.publish.ObjectLifecyclePublisherDefault;
 import org.apache.causeway.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.causeway.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
-import org.apache.causeway.core.runtimeservices.routing.RoutingServiceDefault;
+import org.apache.causeway.core.runtimeservices.render.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
-import org.apache.causeway.core.runtimeservices.serializing.SerializingAdapterDefault;
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
-import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.sitemap.SitemapServiceDefault;
+import org.apache.causeway.core.runtimeservices.span.ApplicationSpanServiceDefault;
 import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
@@ -73,13 +79,16 @@ import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
 
-@Configuration
+import lombok.extern.slf4j.Slf4j;
+
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleCoreRuntime.class,
         CausewayModuleCoreCodegenByteBuddy.class,
 
         // @Service's
+        ApplicationSpanServiceDefault.class,
         BookmarkServiceDefault.class,
         CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,
@@ -105,13 +114,12 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         MenuBarsMarshallerServiceBootstrap.class,
         MenuBarsServiceBootstrap.class,
         MessageServiceDefault.class,
-        ObjectIconServiceDefault.class,
+//        ObjectIconServiceDefault.class, // no longer public, added to ComponentScan below
         ObjectLifecyclePublisherDefault.class,
         PlaceholderRenderServiceDefault.class,
         LifecycleCallbackNotifier.class,
         SchemaValueMarshallerDefault.class,
         ScratchpadDefault.class,
-        SerializingAdapterDefault.class,
         SitemapServiceDefault.class,
         SpringBeansService.class,
         TransactionServiceSpring.class,
@@ -122,23 +130,47 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
 
-        // @Controller
-        RoutingServiceDefault.class,
-
         // @DomainService's
         TranslationServicePoMenu.class,
 
         // Exception Recognizers
         ExceptionRecognizerForDataAccessException.class,
 
+        // auto configuration
+        CausewayModuleCoreRuntimeServices.HmacAuthorityAutoconfigure.class
+
 })
+@ComponentScan(basePackages = "org.apache.causeway.core.runtimeservices.icons")
+@Slf4j
 public class CausewayModuleCoreRuntimeServices {
 
     public static final String NAMESPACE = "causeway.runtimeservices";
 
-    @Bean @Singleton // also used by _Spring utility
+    @Bean // also used by _Spring utility
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();
+    }
+
+    @AutoConfigureOrder(PriorityPrecedence.LATE)
+    @Configuration
+    static class HmacAuthorityAutoconfigure {
+        @Bean(NAMESPACE + ".fallbackHmacAuthority")
+        @ConditionalOnMissingBean(HmacAuthority.class)
+        public HmacAuthority fallbackHmacAuthority() {
+
+            var secretFromEnv = Optional.ofNullable(System.getenv("causeway_hmac_sha256"))
+                .filter(StringUtils::hasText)
+                .map(_Bytes::parseUtf8Base64)
+                .filter(secret->{
+                    Assert.isTrue(secret.length>=16, ()->"Illegal Argument: "
+                            + "env. var. 'causeway_hmac_sha256' underflows required byte count of 16");
+                    log.info("using secret from env. var. 'causeway_hmac_sha256' having length {} bytes", secret.length);
+                    return true;
+                });
+
+            return secretFromEnv.map(HmacAuthority.HmacSHA256::new)
+                    .orElseGet(HmacAuthority.HmacSHA256::randomInstance);
+        }
     }
 
 }

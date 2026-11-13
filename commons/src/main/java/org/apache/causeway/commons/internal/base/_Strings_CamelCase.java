@@ -21,9 +21,8 @@ package org.apache.causeway.commons.internal.base;
 import java.util.StringTokenizer;
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -43,8 +42,8 @@ class _Strings_CamelCase {
         if(input==null) return null;
         if(input.length()==0) return input;
 
-        val sb = new StringBuffer(input.length());
-        val tokenizer = new StringTokenizer(input, " \t\n\r\f._,:;");
+        var sb = new StringBuffer(input.length());
+        var tokenizer = new StringTokenizer(input, " \t\n\r\f._,:;");
         int tokenCount = 0;
 
         while (tokenizer.hasMoreTokens()) {

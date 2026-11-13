@@ -63,5 +63,4 @@ public class ApplicationRole_updateDescription {
 
     @MemberSupport public String default0Act() { return target.getDescription(); }
 
-
 }

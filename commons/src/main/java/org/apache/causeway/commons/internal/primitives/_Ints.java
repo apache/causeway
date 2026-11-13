@@ -25,18 +25,12 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import lombok.AccessLevel;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -50,21 +44,31 @@ import lombok.experimental.UtilityClass;
  *
  * @since 2.0
  */
-@UtilityClass
-public class _Ints {
+public record _Ints() {
+
+    @FunctionalInterface
+    public interface BiIntConsumer {
+        void accept(int i, int j);
+    }
+
+    @FunctionalInterface
+    public interface BiIntFunction<R> {
+        R apply(int i, int j);
+    }
 
     // -- RANGE
 
-    @Value(staticConstructor = "of")
-    public static class Bound {
-        int value;
-        boolean inclusive;
-        public static @NonNull Bound inclusive(final int value) { return of(value, true); }
-        public static @NonNull Bound exclusive(final int value) { return of(value, true); }
+    public record Bound(
+            int value,
+            boolean isInclusive) {
+        public static @NonNull Bound inclusive(final int value) { return new Bound(value, true); }
+        public static @NonNull Bound exclusive(final int value) { return new Bound(value, true); }
     }
 
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Range {
+    public record Range(
+            Bound lowerBound,
+            Bound upperBound,
+            boolean isEmpty) {
 
         public static Range empty() {
             return new Range(null, null, true);
@@ -76,23 +80,18 @@ public class _Ints {
             return new Range(lowerBound, upperBound, false);
         }
 
-        private final Bound lowerBound;
-        private final Bound upperBound;
-        private final boolean empty;
         public boolean contains(final int value) {
-            if(empty) return false;
-            val isBelowLower = lowerBound.isInclusive()
-                    ? value < lowerBound.getValue()
-                    : value <= lowerBound.getValue();
-            if(isBelowLower) {
-                return false;
-            }
-            val isAboveUpper = upperBound.isInclusive()
-                    ? value > upperBound.getValue()
-                    : value >= upperBound.getValue();
-            if(isAboveUpper) {
-                return false;
-            }
+            if(isEmpty) return false;
+            var isBelowLower = lowerBound.isInclusive()
+                    ? value < lowerBound.value()
+                    : value <= lowerBound.value();
+            if(isBelowLower) return false;
+
+            var isAboveUpper = upperBound.isInclusive()
+                    ? value > upperBound.value()
+                    : value >= upperBound.value();
+            if(isAboveUpper) return false;
+
             return true;
         }
         /**
@@ -100,10 +99,9 @@ public class _Ints {
          * @return the value or if not within range, the nearest integer to the value, that is within range
          */
         public int bounded(final int value) {
-            if(empty) return value; // noop
-            if(contains(value)) {
-                return value;
-            }
+            if(isEmpty) return value; // noop
+            if(contains(value)) return value;
+
             final int nearestToLower = nearestToLower();
             final int nearestToUpper = nearestToUpper();
             final int distanceToLower = value - nearestToLower;
@@ -113,15 +111,15 @@ public class _Ints {
                     : nearestToUpper;
         }
         private int nearestToLower() {
-            if(empty) throw _Exceptions.unsupportedOperation();
-            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;
+            if(isEmpty) throw _Exceptions.unsupportedOperation();
+            return lowerBound.isInclusive() ? lowerBound.value() : lowerBound.value()+1;
         }
         private int nearestToUpper() {
-            if(empty) throw _Exceptions.unsupportedOperation();
-            return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
+            if(isEmpty) throw _Exceptions.unsupportedOperation();
+            return upperBound.isInclusive() ? upperBound.value() : upperBound.value()-1;
         }
         public @NonNull Optional<Range> intersect(final @NonNull Range other) {
-            if(empty) return Optional.empty();
+            if(isEmpty) return Optional.empty();
             final int s1 = this.nearestToLower();
             final int e1 = this.nearestToUpper();
             final int s2 = other.nearestToLower();
@@ -135,17 +133,17 @@ public class _Ints {
         }
         @Override
         public String toString() {
-            if(empty) return "[]";
+            if(isEmpty) return "[]";
             return String.format("%s%d,%d%S",
-                    lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
-                    upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
+                    lowerBound.isInclusive() ? '[' : '(', lowerBound.value(),
+                    upperBound.value(), upperBound.isInclusive() ? ']' : ')');
         }
         public IntStream stream() {
-            if(empty) return IntStream.empty();
+            if(isEmpty) return IntStream.empty();
             return IntStream.rangeClosed(nearestToLower(), nearestToUpper());
         }
         public PrimitiveIterator.OfInt iterator() {
-            if(empty) return IntStream.empty().iterator();
+            if(isEmpty) return IntStream.empty().iterator();
             return new PrimitiveIterator.OfInt() {
                 int next = nearestToLower();
                 final int upperIncluded = nearestToUpper();
@@ -227,7 +225,7 @@ public class _Ints {
      * @return optionally the integer represented by the string argument in the specified radix
      *
      */
-    public OptionalInt parseInt(final String s, final int radix, final Consumer<String> onFailure) {
+    public static OptionalInt parseInt(final String s, final int radix, final Consumer<String> onFailure) {
         final long parseResult = parseIntElseLongMaxValue(s, radix, onFailure);
         if(isParseSuccess(parseResult)) {
             return OptionalInt.of(Math.toIntExact(parseResult));
@@ -237,7 +235,7 @@ public class _Ints {
 
     // -- SHORTCUTS
 
-    public OptionalInt parseInt(final String s, final int radix) {
+    public static OptionalInt parseInt(final String s, final int radix) {
         return parseInt(s, radix, IGNORE_ERRORS);
     }
 
@@ -312,7 +310,7 @@ public class _Ints {
                 }
                 result -= digit;
             }
-            val value = negative ? result : -result;
+            var value = negative ? result : -result;
             return value;
         } else {
             onFailure.accept(s);
@@ -325,7 +323,7 @@ public class _Ints {
     public static int[] flatten(final @NonNull int[][] nested) {
         final int n = nested.length;
         final int stride = nested[0].length;
-        val flattened = new int[n*stride];
+        var flattened = new int[n*stride];
         for(int i=0; i<n; ++i) {
             System.arraycopy(nested[i], 0, flattened, i*stride, stride);
         }
@@ -337,7 +335,7 @@ public class _Ints {
     public static int[][] partition(final @NonNull int[] flattened, final int stride) {
         final int n = flattened.length/stride;
         _Assert.assertEquals(flattened.length, n*stride, ()->"flattened.length must be divisible by stride");
-        val nested = new int[n][stride];
+        var nested = new int[n][stride];
         for(int i=0; i<n; ++i) {
             System.arraycopy(flattened, i*stride, nested[i], 0, stride);
         }
@@ -357,12 +355,12 @@ public class _Ints {
             final @NonNull IntFunction<String> cellFormatter) {
 
         final int m = array.length;
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         for(int j=0; j<m; ++j) {
             final int cellValue = array[j];
-            val cellStringFull = cellFormatter.apply(cellValue);
-            val cellStringTrimmed = _Strings.ellipsifyAtEnd(cellStringFull, columnWidth, "..");
+            var cellStringFull = cellFormatter.apply(cellValue);
+            var cellStringTrimmed = _Strings.ellipsifyAtEnd(cellStringFull, columnWidth, "..");
 
             // right align, at column end marker
             final int spacesCount = columnWidth - cellStringTrimmed.length();
@@ -376,7 +374,6 @@ public class _Ints {
         return sb.toString();
     }
 
-
     public static String tableForm(
             final @NonNull int[][] nested) {
         return tableForm(nested, 8, Integer::toString);
@@ -388,7 +385,7 @@ public class _Ints {
             final @NonNull IntFunction<String> cellFormatter) {
 
         final int n = nested.length;
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         for(int i=0; i<n; ++i) {
             sb.append(rowForm(nested[i], columnWidth, cellFormatter));
         }
@@ -402,7 +399,7 @@ public class _Ints {
      * @return the value {@code 0} if {@code x == y};
      *         {@code -1} if {@code x < y}; and
      *         {@code 1} if {@code x > y}
-     * @apiNote copy of {@link Integer#compress(int, int)}
+     * @apiNote copy of {@link Integer#compare(int, int)}
      *      because their java-doc states that return values -1, +1 are not guaranteed.
      */
     public static int compare(final int x, final int y) {

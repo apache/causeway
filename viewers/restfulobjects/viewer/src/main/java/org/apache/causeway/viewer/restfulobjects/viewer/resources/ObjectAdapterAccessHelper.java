@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -45,7 +45,7 @@ public class ObjectAdapterAccessHelper {
             final ManagedObject managedObject) {
         return new ObjectAdapterAccessHelper(
                 managedObject,
-                resourceContext.getWhere());
+                resourceContext.where());
     }
 
     private final ManagedObject managedObject;
@@ -87,6 +87,5 @@ public class ObjectAdapterAccessHelper {
                 .getManagedCollectionElseThrow(InteractionFailureHandler::onFailure);
 
     }
-
 
 }

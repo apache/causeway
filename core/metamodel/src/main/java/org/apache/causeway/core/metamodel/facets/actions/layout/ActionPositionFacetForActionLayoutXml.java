@@ -22,29 +22,35 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
-public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAbstract {
+public class ActionPositionFacetForActionLayoutXml
+extends ActionPositionFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<ActionPositionFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(actionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(actionLayout == null)
             return Optional.empty();
-        }
-        final org.apache.causeway.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
 
+        final var position = actionLayout.getPosition();
         return Optional.ofNullable(position)
-        .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
+                .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder) {
+                	 @Override final public Precedence precedence() { return precedence; }
+                	 @Override final public @Nullable String qualifier() { return qualifier; }
+                });
     }
 
     private ActionPositionFacetForActionLayoutXml(
             final org.apache.causeway.applib.annotation.ActionLayout.Position position,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(position, holder, precedence);
+            final FacetHolder holder) {
+        super(position, holder);
     }
 
     @Override

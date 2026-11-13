@@ -19,12 +19,6 @@
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.Request;
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarResponse;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.ViewType;
 
@@ -52,19 +46,14 @@ implements CallbackWithHandler {
 
 	@Override
 	protected void respond(final AjaxRequestTarget target) {
-		Request r = target.getPage().getRequest();
-		ViewType type = ViewType.forCode(r.getRequestParameters().getParameterValue("view").toString());
-		DateTimeFormatter fmt = ISODateTimeFormat.dateTimeParser().withZone(DateTimeZone.UTC);
-		DateMidnight start = fmt.parseDateTime(r.getRequestParameters().getParameterValue("start").toString())
-			.toDateMidnight();
-		DateMidnight end = fmt.parseDateTime(r.getRequestParameters().getParameterValue("end").toString())
-			.toDateMidnight();
-		DateMidnight visibleStart = fmt.parseDateTime(
-			r.getRequestParameters().getParameterValue("visibleStart").toString()).toDateMidnight();
-		DateMidnight visibleEnd = fmt
-			.parseDateTime(r.getRequestParameters().getParameterValue("visibleEnd").toString()).toDateMidnight();
-		View view = new View(type, start, end, visibleStart, visibleEnd);
-		CalendarResponse response = new CalendarResponse(getCalendar(), target);
+		var request = target.getPage().getRequest();
+		var view = new View(
+		    ViewType.forCode(request.getRequestParameters().getParameterValue("view").toString()),
+		    request.getRequestParameters().getParameterValue("start").toString(),
+		    request.getRequestParameters().getParameterValue("end").toString(),
+		    request.getRequestParameters().getParameterValue("visibleStart").toString(),
+		    request.getRequestParameters().getParameterValue("visibleEnd").toString());
+		var response = new CalendarResponse(getCalendar(), target);
 		onViewDisplayed(view, response);
 	}
 

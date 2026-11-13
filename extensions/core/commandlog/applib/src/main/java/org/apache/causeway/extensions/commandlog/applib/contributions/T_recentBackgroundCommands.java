@@ -21,8 +21,6 @@ package org.apache.causeway.extensions.commandlog.applib.contributions;
 import java.util.Collections;
 import java.util.List;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -31,6 +29,7 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -48,7 +47,8 @@ public abstract class T_recentBackgroundCommands<T> {
 
     private final T domainObject;
 
-    public static class CollectionDomainEvent extends CausewayModuleExtCommandLogApplib.CollectionDomainEvent<T_recentBackgroundCommands, CommandLogEntry> { }
+    @SuppressWarnings("rawtypes")
+	public static class CollectionDomainEvent extends CausewayModuleExtCommandLogApplib.CollectionDomainEvent<T_recentBackgroundCommands, CommandLogEntry> { }
 
     @MemberSupport public List<? extends CommandLogEntry> coll() {
         return bookmarkService.bookmarkFor(domainObject)

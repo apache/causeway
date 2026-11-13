@@ -19,13 +19,11 @@
 package org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.util.OptionalInt;
+import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -37,7 +35,9 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender._JsonValueConverters.DefaultFormat;
 
 import lombok.Getter;
-import lombok.NonNull;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
 
 public interface JsonValueConverter {
 
@@ -91,29 +91,34 @@ public interface JsonValueConverter {
             };
         }
 
-        @Getter
-        @lombok.Value
-        static class InferredFromFacets implements Context {
-            final @NonNull ObjectFeature objectFeature;
-            final boolean suppressExtensions;
+        record InferredFromFacets(
+                @NonNull ObjectFeature objectFeature,
+                boolean isSuppressExtensions) implements Context {
+
+            @Override public ObjectFeature getObjectFeature() { return objectFeature(); }
 
             @Override
             public OptionalInt maxTotalDigits(final @Nullable ManagedObject value) {
-                return Facets.maxTotalDigits(facetHolders(value));
+                return streamFacetHolders(value)
+                    .map(Facets::maxTotalDigitsInferred)
+                    .findFirst()
+                    .orElseGet(OptionalInt::empty);
             }
 
             @Override
             public OptionalInt maxFractionalDigits(final @Nullable ManagedObject value) {
-                return Facets.maxFractionalDigits(facetHolders(value));
+                return streamFacetHolders(value)
+                    .map(Facets::maxFractionalDigits)
+                    .findFirst()
+                    .orElseGet(OptionalInt::empty);
             }
 
             // look for facet on feature, else on the value's spec
-            private Can<FacetHolder> facetHolders(final @Nullable ManagedObject value) {
+            private Stream<FacetHolder> streamFacetHolders(final @Nullable ManagedObject value) {
                 return ManagedObjects.isNullOrUnspecifiedOrEmpty(value)
-                    ? Can.of(objectFeature)
-                    : Can.of(objectFeature, value.getSpecification());
+                    ? Stream.of(objectFeature)
+                    : Stream.of(objectFeature, value.objSpec());
             }
-
         }
 
     }

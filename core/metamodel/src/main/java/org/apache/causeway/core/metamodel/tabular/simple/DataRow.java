@@ -24,8 +24,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
-import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a single domain object (typically an entity instance)
@@ -33,17 +32,8 @@ import lombok.NonNull;
  *
  * @since 2.0 {@index}
  */
-public class DataRow {
-
-    @Getter private final ManagedObject rowElement;
-    @Getter private final DataTable parentTable;
-
-    public DataRow(
-            final @NonNull DataTable parentTable,
-            final @NonNull ManagedObject rowElement) {
-        this.parentTable = parentTable;
-        this.rowElement = rowElement;
-    }
+public record DataRow(
+    @NonNull ManagedObject rowElement) {
 
     /**
      * Can be none, one or many per table cell.
@@ -51,16 +41,18 @@ public class DataRow {
     public Can<ManagedObject> getCellElements(
             final @NonNull DataColumn column,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        var assoc = column.getMetamodel();
+        var assoc = column.metamodel();
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
-                        property.isVisible(getRowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
-                                ? property.get(getRowElement(), interactionInitiatedBy)
+                    interactionInitiatedBy.isPassThrough()
+                        || property.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                                ? property.get(rowElement(), interactionInitiatedBy)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                        collection.isVisible(getRowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
-                                ? collection.get(getRowElement(), interactionInitiatedBy)
+                    interactionInitiatedBy.isPassThrough()
+                        || collection.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                                ? collection.get(rowElement(), interactionInitiatedBy)
                                 : null
                 ));
     }

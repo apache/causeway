@@ -7,7 +7,7 @@
 .InitialFixtureScriptsInstaller.java
 ----
 class InitialFixtureScriptsInstaller {
-  InitialFixtureScriptsInstaller(CausewayConfiguration causewayConfiguration, FixtureScripts fixtureScripts)
+  InitialFixtureScriptsInstaller(CausewayConfiguration causewayConfiguration, FixtureScripts fixtureScripts, EventBusService eventBusService)
   void onMetamodelEvent(MetamodelEvent event)
 }
 ----

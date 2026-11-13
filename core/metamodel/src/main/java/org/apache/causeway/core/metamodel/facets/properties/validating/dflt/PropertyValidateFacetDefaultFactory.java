@@ -18,23 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.validating.dflt;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet;
-import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Simply installs a {@link PropertyValidateFacet} onto all properties.
  *
  * <p>
  * The idea is that this {@link FacetFactory} is included early on in the
- * {@link FacetProcessor}, but other {@link PropertyValidateFacet}
+ * {@link ProgrammingModel}, but other {@link PropertyValidateFacet}
  * implementations will potentially replace these where the property is
  * annotated or otherwise provides a validation mechanism.
  */
@@ -48,16 +46,14 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        val facetHolder = processMethodContext.getFacetHolder();
-        addFacet(
-                new PropertyValidateFacetDefault(facetHolder));
+        var facetHolder = processMethodContext.facetHolder();
+        new PropertyValidateFacetDefault(facetHolder);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val facetHolder = processParameterContext.getFacetHolder();
-        addFacet(
-                new PropertyValidateFacetDefault(facetHolder));
+        var facetHolder = processParameterContext.facetHolder();
+        new PropertyValidateFacetDefault(facetHolder);
     }
 
 }

@@ -20,23 +20,23 @@ package org.apache.causeway.viewer.wicket.model.value;
 
 import java.io.Serializable;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
-import lombok.NonNull;
 import lombok.Synchronized;
-import lombok.val;
 
 abstract class ValueSemanticsModelAbstract
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,6 @@ implements
     protected final Identifier featureIdentifier;
     protected final ViewOrEditMode scalarRepresentation;
     protected transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
-
 
     protected ValueSemanticsModelAbstract(
             final @NonNull ObjectFeature propOrParam,
@@ -61,7 +60,7 @@ implements
     @Synchronized
     protected ObjectFeature feature() {
         if(propOrParam==null) {
-            val feature = getSpecificationLoader().loadFeature(featureIdentifier).orElse(null);
+            var feature = getSpecificationLoader().loadFeature(featureIdentifier).orElse(null);
             this.propOrParam = (feature instanceof OneToOneAssociation)
                     ? Either.left((OneToOneAssociation)feature)
                     : Either.right(((ObjectActionParameter)feature));
@@ -72,8 +71,8 @@ implements
     }
 
     protected ValueFacet<?> valueFacet() {
-        val feature = feature();
-        val valueFacet = feature.getElementType()
+        var feature = feature();
+        var valueFacet = feature.getElementType()
                 .valueFacet()
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",

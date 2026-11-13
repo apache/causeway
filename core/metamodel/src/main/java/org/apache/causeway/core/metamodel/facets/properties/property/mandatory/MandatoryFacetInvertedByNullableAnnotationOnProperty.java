@@ -20,14 +20,12 @@ package org.apache.causeway.core.metamodel.facets.properties.property.mandatory;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
-
-import lombok.val;
 
 /**
  * Derived by presence of an {@link Nullable} annotation.
@@ -48,7 +46,7 @@ extends MandatoryFacetAbstract {
             return Optional.empty();
         }
 
-        val returnType = method.getReturnType();
+        var returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return Optional.empty();
         }
@@ -58,6 +56,5 @@ extends MandatoryFacetAbstract {
     private MandatoryFacetInvertedByNullableAnnotationOnProperty(final FacetHolder holder) {
         super(Semantics.OPTIONAL, holder);
     }
-
 
 }

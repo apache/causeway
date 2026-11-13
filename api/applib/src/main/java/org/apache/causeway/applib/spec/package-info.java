@@ -25,7 +25,7 @@
  *
  * <p>
  * This is an implementation of the DDD &quot;Specification&quot;, allowing
- * validatation that might otherwise be repeated for both properties and
+ * validation that might otherwise be repeated for both properties and
  * parameters (in the <tt>validateXxx()</tt> methods to be factored out.
  *
  * <p>

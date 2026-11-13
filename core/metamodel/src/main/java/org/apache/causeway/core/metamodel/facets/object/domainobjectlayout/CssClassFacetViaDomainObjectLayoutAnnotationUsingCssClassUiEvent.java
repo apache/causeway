@@ -47,12 +47,10 @@ extends CssClassFacetAbstract {
                 cssClassUiEventClass,
                 CssClassUiEvent.Noop.class,
                 CssClassUiEvent.Default.class,
-                facetHolder.getConfiguration().getApplib().getAnnotation()
-                    .getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
-        .map(cssClassUiEventClass -> {
-            return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-                    cssClassUiEventClass, metamodelEventService, facetHolder);
-        });
+                facetHolder.getConfiguration().applib().annotation()
+                    .domainObjectLayout().cssClassUiEvent().postForDefault()))
+        .map(cssClassUiEventClass -> new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+                cssClassUiEventClass, metamodelEventService, facetHolder));
 
     }
 
@@ -63,18 +61,21 @@ extends CssClassFacetAbstract {
             final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
             final MetamodelEventService metamodelEventService,
             final FacetHolder holder) {
-
-        super(holder, Precedence.EVENT);
+        super(holder);
         this.cssClassUiEventClass = _Casts.uncheckedCast(cssClassUiEventClass);
         this.metamodelEventService = metamodelEventService;
     }
 
     @Override
+    public Precedence precedence() {
+    	return Precedence.EVENT;
+    }
+
+    @Override
     public String cssClass(final ManagedObject owningAdapter) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter))
             return null;
-        }
 
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
@@ -84,14 +85,12 @@ extends CssClassFacetAbstract {
 
         if(cssClass == null) {
             // ie no subscribers out there...
-
             final CssClassFacet underlyingCssClassFacet = getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
-            .orElse(null);
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
+                .orElse(null);
 
-            if(underlyingCssClassFacet!=null) {
+            if(underlyingCssClassFacet!=null)
                 return underlyingCssClassFacet.cssClass(owningAdapter);
-            }
         }
 
         return cssClass;

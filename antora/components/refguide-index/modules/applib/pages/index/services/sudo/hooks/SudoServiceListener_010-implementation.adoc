@@ -6,3 +6,4 @@
 == Implementation
 
 This is an SPI.
+The framework provides no default implementations.

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.i8n.imperative;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.functional.Try;

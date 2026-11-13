@@ -28,7 +28,7 @@ import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.H2WebServletForJakarta;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -45,8 +45,7 @@ import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -55,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.test.WebModuleH2Console")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("H2Console")
-@Log4j2
+@Slf4j
 public class WebModuleH2Console extends WebModuleAbstract {
 
     private static final String SERVLET_NAME = "H2Console";
@@ -86,8 +85,6 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
     @Getter
     private final String name = "H2Console";
-
-
 
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
@@ -129,23 +126,23 @@ public class WebModuleH2Console extends WebModuleAbstract {
                 return;
             }
 
-            val dataSourceProperties = new DataSourceProperties();
+            var dataSourceProperties = new DataSourceProperties();
             dataSourceProperties.setUsername("sa");
             dataSourceProperties.setUrl(jdbcUrl);
 
-            val connectionInfo = new ConnectionInfo(
+            var connectionInfo = new ConnectionInfo(
                     String.format("Generic Spring Datasource|%s|%s|%s",
                             dataSourceProperties.determineDriverClassName(),
                             dataSourceProperties.determineUrl(),
                             dataSourceProperties.determineUsername()));
 
-            val webServlet = this;
+            var webServlet = this;
 
             H2WebServerWrapper.withH2WebServerWrapperDo(webServlet, h2WebServerWrapper->{
                 h2WebServerWrapper.setConnectionInfo(connectionInfo);
                 h2WebServerWrapper.setAllowOthers(isWebAllowRemoteAccess());
                 if(isGenerateRandomWebAdminPassword()) {
-                    val webAdminPass = randomCodeGenerator.generateRandomCode(20); // h2 requires at least 12
+                    var webAdminPass = randomCodeGenerator.generateRandomCode(20); // h2 requires at least 12
                     log.info("webAdminPass: {}", webAdminPass);
                     h2WebServerWrapper.setAdminPassword(webAdminPass);
                 }
@@ -158,11 +155,11 @@ public class WebModuleH2Console extends WebModuleAbstract {
         }
 
         private boolean isWebAllowRemoteAccess() {
-            return causewayConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
+            return causewayConfiguration.prototyping().h2Console().webAllowRemoteAccess();
         }
 
         private boolean isGenerateRandomWebAdminPassword() {
-            return causewayConfiguration.getPrototyping().getH2Console().isGenerateRandomWebAdminPassword();
+            return causewayConfiguration.prototyping().h2Console().generateRandomWebAdminPassword();
         }
 
     }
@@ -170,14 +167,14 @@ public class WebModuleH2Console extends WebModuleAbstract {
     // -- HELPER
 
     private boolean isPrototyping() {
-        return causewaySystemEnvironment.getDeploymentType().isPrototyping();
+        return causewaySystemEnvironment.deploymentType().isPrototyping();
     }
 
     private boolean isH2MemConnectionUsed(final DataSourceIntrospectionService datasourceIntrospector) {
 
         return datasourceIntrospector.getDataSourceInfos()
         .stream()
-        .map(DataSourceInfo::getJdbcUrl)
+        .map(DataSourceInfo::jdbcUrl)
         .anyMatch(jdbcUrl->{
             if(jdbcUrl.contains(":h2:mem:")) {
                 log.info("found h2 in-memory data-source: {}", jdbcUrl);

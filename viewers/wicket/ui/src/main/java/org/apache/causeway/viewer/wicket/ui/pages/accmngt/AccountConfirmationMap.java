@@ -25,8 +25,6 @@ import java.util.Map;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.util.collections.MostRecentlyUsedMap;
 
-import lombok.val;
-
 /**
  * A map that contains the emails to be verified. It has a constraint on the maximum entries that it
  * can contain, and a constraint on the duration of time an entry is considered valid/non-expired
@@ -51,8 +49,8 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
         private Instant creationTime;
 
         public boolean isExpired(final Duration lifetime) {
-            val elapsedTime = Duration.between(creationTime, Instant.now());
-            val isExpired = lifetime.minus(elapsedTime).isNegative();
+            var elapsedTime = Duration.between(creationTime, Instant.now());
+            var isExpired = lifetime.minus(elapsedTime).isNegative();
             return isExpired;
         }
     }
@@ -79,7 +77,7 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     protected synchronized boolean removeEldestEntry(final java.util.Map.Entry<String, Object> eldest) {
         boolean removed = super.removeEldestEntry(eldest);
         if (removed == false) {
-            val value = (Value)eldest.getValue();
+            var value = (Value)eldest.getValue();
             if (value != null) {
                 if(value.isExpired(lifetime)) {
                     removedValue = value.email;
@@ -97,7 +95,7 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
                     " can store only instances of " + String.class.getSimpleName() + ": " + email);
         }
 
-        val value = new Value();
+        var value = new Value();
         value.creationTime = Instant.now();
         value.email = (String)email;
 

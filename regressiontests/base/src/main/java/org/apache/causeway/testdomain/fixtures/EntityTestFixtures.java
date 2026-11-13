@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.testdomain.fixtures;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
@@ -27,19 +31,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import jakarta.inject.Inject;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.springframework.beans.factory.DisposableBean;
-
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -52,14 +48,13 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.DisposableBean;
 
-import lombok.NonNull;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public abstract class EntityTestFixtures
 implements
     MetamodelListener,
@@ -95,9 +90,9 @@ implements
     public final <B extends IBook, T extends InventoryJaxbVm<B>> T createViewmodelWithCurrentBooks() {
         final T inventoryJaxbVm =
                 _Casts.uncheckedCast(factoryService.viewModel(vmClass()));
-        val books = inventoryJaxbVm.listBooks();
+        var books = inventoryJaxbVm.listBooks();
         if(_NullSafe.size(books)>0) {
-            val favoriteBook = books.get(0);
+            var favoriteBook = books.get(0);
             inventoryJaxbVm.setName("Bookstore");
             inventoryJaxbVm.setBooks(books);
             inventoryJaxbVm.setFavoriteBook(favoriteBook);
@@ -145,13 +140,13 @@ implements
                 .map(i->i-1)
                 .toArray();
 
-        val expectedBookNames = BookDto.samples().collect(Can.toCan())
+        var expectedBookNames = BookDto.samples().collect(Can.toCan())
         .pickByIndex(zeroBasedIndices)
         .map(BookDto::getName)
         .sorted(_Strings::compareNullsFirst)
         .toArray(new String[0]);
 
-        val actualBookNames = products.stream()
+        var actualBookNames = products.stream()
                 .map(IBook.class::cast)
                 .map(IBook::getName)
                 .sorted()
@@ -161,8 +156,8 @@ implements
     }
 
     public final void assertHasPersistenceId(final Object entity) {
-        val bookmark = bookmarkService.bookmarkForElseFail(entity);
-        final int id = Integer.parseInt(bookmark.getIdentifier());
+        var bookmark = bookmarkService.bookmarkForElseFail(entity);
+        final int id = Integer.parseInt(bookmark.identifier());
         assertTrue(id>=-1, ()->String.format("expected valid id; got %d", id));
     }
 
@@ -170,10 +165,10 @@ implements
             final InventoryJaxbVm<? extends IBook> inventoryJaxbVm) {
         assertEquals("*InventoryJaxbVm; Bookstore; 3 products", "*" + (inventoryJaxbVm.title().substring(3)));
         assertEquals("Bookstore", inventoryJaxbVm.getName());
-        val books = inventoryJaxbVm.listBooks();
+        var books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());
-        val favoriteBook = inventoryJaxbVm.getFavoriteBook();
-        val expectedBook = BookDto.sample();
+        var favoriteBook = inventoryJaxbVm.getFavoriteBook();
+        var expectedBook = BookDto.sample();
         assertEquals(expectedBook.getName(), favoriteBook.getName());
         assertHasPersistenceId(favoriteBook);
         inventoryJaxbVm.listBooks()
@@ -181,7 +176,7 @@ implements
     }
 
     public static Set<String> expectedBookTitles() {
-        val expectedTitles = Set.of("Dune", "The Foundation", "The Time Machine");
+        var expectedTitles = Set.of("Dune", "The Foundation", "The Time Machine");
         return expectedTitles;
     }
 
@@ -190,7 +185,8 @@ implements
     @RequiredArgsConstructor
     public static class Lock {
         private final _Oneshot release = new _Oneshot();
-        private final String dsUrl;
+        @SuppressWarnings("unused")
+		private final String dsUrl;
         private final EntityTestFixtures entityTestFixtures;
         public void install() {
             entityTestFixtures.install(this);
@@ -202,30 +198,21 @@ implements
 
     @SneakyThrows
     public final synchronized Lock aquireLock() {
-        val dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().getJdbcUrl();
+        var dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().jdbcUrl();
         this.lockQueue = lockQueueByDatasource.computeIfAbsent(dsUrl, __->new LinkedBlockingQueue<>(1));
-        log.info("waiting for lock {}", dsUrl);
         Lock lock;
         lockQueue.put(lock = new Lock(dsUrl, this)); // put next lock on the queue; blocks until space available
-        log.info("lock aquired for {}", dsUrl);
         initSchema();
         kvStoreForTesting.clearValues();
         return lock;
     }
 
-    /** XXX sporadically seeing errors like
-     * ----
-     * Error: (bad sql grammar exception): Column "INVENTORY_ID_EID" not found; SQL statement:
-     * INSERT INTO "testdomain"."JdoProduct"
-     * ("id","description","name","price","author","isbn","publisher","DISCRIMINATOR","INVENTORY_ID_EID")
-     * VALUES (?,?,?,?,?,?,?,?,?) [42122-214]
-     * ----
-     * This is an attempt to force the JDO schema to properly initialize. */
-    protected void initSchema() {};
+    /** To force the schema to properly initialize. */
+    protected void initSchema() {}
 
     @SneakyThrows
     public final Lock aquireLockAndClear() {
-        val lock = aquireLock();
+        var lock = aquireLock();
         clearRepositoryInTransaction();
         kvStoreForTesting.clearValues();
         return lock;
@@ -233,12 +220,10 @@ implements
 
     @SneakyThrows
     private void release(final Lock lock) {
-        log.info("about to release lock {}", lock.dsUrl);
         try {
             clearRepositoryInTransaction();
         } finally {
             lockQueue.take(); // remove lock from queue
-            log.info("lock released {}", lock.dsUrl);
         }
     }
 

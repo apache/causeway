@@ -18,17 +18,15 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-
-import lombok.NonNull;
-import lombok.val;
 
 /**
  * Converts value representing {@link ManagedObject}s to their corresponding JSON representation
@@ -40,7 +38,7 @@ public interface JsonValueEncoderService {
 
     /**
      * The value recovered from {@link JsonRepresentation}
-     * as {@link ManagedObject} honoring {@link Context},
+     * as {@link ManagedObject} honoring {@link JsonValueConverter.Context},
      * otherwise <tt>null</tt>.
      */
     public ManagedObject asAdapter(
@@ -50,7 +48,7 @@ public interface JsonValueEncoderService {
 
     /**
      * Appends given value type representing {@link ManagedObject} to given
-     * {@link JsonRepresentation} honoring {@link Context}.
+     * {@link JsonRepresentation} honoring {@link JsonValueConverter.Context}.
      */
     public void appendValueAndFormat(
             final ManagedObject valueAdapter,
@@ -59,7 +57,7 @@ public interface JsonValueEncoderService {
 
     /**
      * A {@link JsonNode} or otherwise natively supported simple type from given {@link ManagedObject},
-     * honoring {@link Context}.
+     * honoring {@link JsonValueConverter.Context}.
      */
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context);
@@ -67,7 +65,7 @@ public interface JsonValueEncoderService {
     // -- UTILITY
 
     default NullNode appendNullAndFormat(final JsonRepresentation repr, final boolean suppressExtensions) {
-        val value = NullNode.getInstance();
+        var value = NullNode.getInstance();
         repr.mapPutJsonNode("value", value);
         appendFormats(repr, "string", "string", suppressExtensions);
         return value;

@@ -30,16 +30,12 @@ import java.time.temporal.ChronoUnit;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-
-import lombok.NonNull;
-import lombok.val;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 
 /**
  * Works in connection with {@link InteractionService},
@@ -63,7 +59,6 @@ public interface VirtualClock extends Serializable {
      */
     Instant nowAsInstant();
 
-
     // -- FACTORIES
 
     /**
@@ -76,117 +71,67 @@ public interface VirtualClock extends Serializable {
     /**
      * Returns a ticking clock set to virtual time {@link Instant} {@code virtualNow}
      */
-    static VirtualClock nowAt(@NonNull final Instant virtualNow) {
+    static VirtualClock nowAt(final @NonNull Instant virtualNow) {
         // positive if the resulting clock is in the future
-        val offsetMillis = ChronoUnit.MILLIS.between(Instant.now(), virtualNow);
+        var offsetMillis = ChronoUnit.MILLIS.between(Instant.now(), virtualNow);
         return new VirtualClock_withOffset(offsetMillis);
     }
 
     /**
      * Returns a ticking clock set to virtual time.
      */
-    static VirtualClock nowAt(@NonNull final java.time.LocalDate virtualNow) {
+    static VirtualClock nowAt(final java.time.@NonNull LocalDate virtualNow) {
         return nowAt(Instant.from(virtualNow.atStartOfDay().atZone(localTimeZone())));
     }
 
-    static VirtualClock nowAt(@NonNull final java.time.LocalDateTime virtualNow) {
+    static VirtualClock nowAt(final java.time.@NonNull LocalDateTime virtualNow) {
         return nowAt(Instant.from(virtualNow.atZone(localTimeZone())));
     }
 
-    static VirtualClock nowAt(@NonNull final java.time.OffsetDateTime virtualNow) {
+    static VirtualClock nowAt(final java.time.@NonNull OffsetDateTime virtualNow) {
         return nowAt(Instant.from(virtualNow));
     }
 
-    static VirtualClock nowAt(@NonNull final java.time.ZonedDateTime virtualNow) {
+    static VirtualClock nowAt(final java.time.@NonNull ZonedDateTime virtualNow) {
         return nowAt(Instant.from(virtualNow));
     }
 
-    static VirtualClock nowAt(@NonNull final java.util.Date virtualNow) {
+    static VirtualClock nowAt(final java.util.@NonNull Date virtualNow) {
         return nowAt(virtualNow.toInstant());
     }
 
     /**
-     * @deprecated convert use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    static VirtualClock nowAt(@NonNull final org.joda.time.LocalDate virtualNow) {
-        return nowAt(virtualNow.toDate());
-    }
-
-    /**
-     * @deprecated convert use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    static VirtualClock nowAt(@NonNull final org.joda.time.LocalDateTime virtualNow) {
-        return nowAt(virtualNow.toDate());
-    }
-
-    /**
-     * @deprecated convert use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    static VirtualClock nowAt(@NonNull final org.joda.time.DateTime virtualNow) {
-        return nowAt(virtualNow.toDate());
-    }
-
-
-    /**
      * Always returns the time {@link Instant} as given by {@code frozenAt}
      */
-    static VirtualClock frozenAt(@NonNull final Instant frozenAt) {
+    static VirtualClock frozenAt(final @NonNull Instant frozenAt) {
         return new VirtualClock_frozen(frozenAt);
     }
 
-    static VirtualClock frozenAt(@NonNull final java.time.LocalDate frozenAt) {
+    static VirtualClock frozenAt(final java.time.@NonNull LocalDate frozenAt) {
         return frozenAt(Instant.from(frozenAt.atStartOfDay(localTimeZone())));
     }
 
-    static VirtualClock frozenAt(@NonNull final java.time.LocalDateTime frozenAt) {
+    static VirtualClock frozenAt(final java.time.@NonNull LocalDateTime frozenAt) {
         return frozenAt(Instant.from(frozenAt.atZone(localTimeZone())));
     }
 
-    static VirtualClock frozenAt(@NonNull final java.time.OffsetDateTime frozenAt) {
+    static VirtualClock frozenAt(final java.time.@NonNull OffsetDateTime frozenAt) {
         return frozenAt(Instant.from(frozenAt));
     }
 
-    static VirtualClock frozenAt(@NonNull final java.time.ZonedDateTime frozenAt) {
+    static VirtualClock frozenAt(final java.time.@NonNull ZonedDateTime frozenAt) {
         return frozenAt(Instant.from(frozenAt));
     }
 
-    static VirtualClock frozenAt(@NonNull final java.util.Date frozenAt) {
+    static VirtualClock frozenAt(final java.util.@NonNull Date frozenAt) {
         return frozenAt(frozenAt.toInstant());
     }
-
-    /**
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    static VirtualClock frozenAt(@NonNull final org.joda.time.LocalDate frozenAt) {
-        return frozenAt(frozenAt.toDate());
-    }
-
-    /**
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    static VirtualClock frozenAt(@NonNull final org.joda.time.LocalDateTime frozenAt) {
-        return frozenAt(frozenAt.toDate());
-    }
-
-    /**
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    static VirtualClock frozenAt(@NonNull final org.joda.time.DateTime frozenAt) {
-        return frozenAt(frozenAt.toDate());
-    }
-
 
     /**
      * Always returns the time {@link Instant} 2003/8/17 21:30:25 (UTC)
      */
     static VirtualClock frozenTestClock() {
-        val frozenAt = Instant.from(
+        var frozenAt = Instant.from(
                 ZonedDateTime.of(2003, 7, 17, 21, 30, 25, 0, ZoneId.from(ZoneOffset.UTC)));
         return frozenAt(frozenAt);
     }
@@ -295,87 +240,6 @@ public interface VirtualClock extends Serializable {
      */
     default XMLGregorianCalendar nowAsXmlGregorianCalendar() {
         return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(nowAsJavaSqlTimestamp());
-    }
-
-
-    /**
-     * Returns the time as a Joda {@link org.joda.time.DateTime}, using the specified {@link ZoneId} timezone.
-     *
-     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
-     *
-     * @see #nowAsJodaDateTime()
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    default org.joda.time.DateTime nowAsJodaDateTime(final @NonNull ZoneId zoneId) {
-        return new org.joda.time.DateTime(nowAsEpochMilli(), DateTimeZone.forID(zoneId.getId()));
-    }
-
-    /**
-     * Returns the time as a Joda {@link org.joda.time.DateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
-     *
-     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
-     *
-     * @see #nowAsJodaDateTime(ZoneId)
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    default org.joda.time.DateTime nowAsJodaDateTime() {
-        return nowAsJodaDateTime(localTimeZone());
-    }
-
-    /**
-     * Returns the time as a Joda {@link org.joda.time.LocalDateTime}, using the specified {@link ZoneId} timezone.
-     *
-     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
-     *
-     * @see #nowAsJodaDateTime()
-     *//**
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    default org.joda.time.LocalDateTime nowAsJodaLocalDateTime(final @NonNull ZoneId zoneId) {
-        return nowAsJodaDateTime(zoneId).toLocalDateTime();
-    }
-
-    /**
-     * Returns the time as a Joda {@link org.joda.time.LocalDateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
-     *
-     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
-     *
-     * @see #nowAsJodaDateTime(ZoneId)
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    default org.joda.time.LocalDateTime nowAsJodaLocalDateTime() {
-        return nowAsJodaDateTime().toLocalDateTime();
-    }
-
-    /**
-     * Returns the time as a Joda {@link DateTime}, using the specified {@link ZoneId} timezone.
-     *
-     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
-     *
-     * @see #nowAsJodaDateTime()
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    default org.joda.time.LocalDate nowAsJodaLocalDate(final @NonNull ZoneId zoneId) {
-        return new org.joda.time.LocalDate(nowAsEpochMilli(), DateTimeZone.forID(zoneId.getId()));
-    }
-
-    /**
-     * Returns the time as a Joda {@link DateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
-     *
-     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
-     *
-     * @see #nowAsJodaLocalDate(ZoneId)
-     * @deprecated use java.time variant instead (Joda Time is deprecated)
-     */
-    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
-    default org.joda.time.LocalDate nowAsJodaLocalDate() {
-        val zoneId = localTimeZone();
-        return nowAsJodaLocalDate(zoneId);
     }
 
 }

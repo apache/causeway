@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
@@ -31,13 +33,11 @@ import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
-@RequiredArgsConstructor
-public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
+public record ObjectGraphRendererD3js(
+        GraphRenderOptions graphRenderOptions
+        ) implements ObjectGraph.Renderer {
 
     @Builder
     public static class GraphRenderOptions {
@@ -57,41 +57,42 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
     /**
      * Graph model used as input to accompanied force-directed-graph JavaScript.
      */
-    @lombok.Value
-    private static class D3jsGraph {
-        @lombok.Value
-        public static class Node {
-            int id;
-            String label;
-            /** Governs node color. */
-            String group;
-            /** Shown as tooltip. */
-            String description;
+    private record D3jsGraph(
+            List<Node> nodes,
+            List<Link> links) {
+        public record Node(
+                int id,
+                String label,
+                /** Governs node color. */
+                String group,
+                /** Shown as tooltip. */
+                String description) {
         }
-        @lombok.Value
-        public static class Link {
-            int source;
-            int target;
-            String label;
-            float weight = 1.f;
+        public record Link(
+                int source,
+                int target,
+                String label,
+                float weight) {
+            public Link(
+                    final int source,
+                    final int target,
+                    final String label) {
+                this(source, target, label, 1.f);
+            }
         }
-        private final List<Node> nodes;
-        private final List<Link> links;
     }
-
-    private final GraphRenderOptions graphRenderOptions;
 
     @Override
     public void render(final StringBuilder sb, final ObjectGraph objGraph) {
 
         renderProlog(sb);
 
-        val d3jsGraph = new D3jsGraph(new ArrayList<>(), new ArrayList<>());
+        var d3jsGraph = new D3jsGraph(new ArrayList<>(), new ArrayList<>());
 
-        val objectLookup = new HashMap<ObjectGraph.Object, Integer>();
+        var objectLookup = new HashMap<ObjectGraph.Object, Integer>();
 
         objGraph.objects().forEach(obj->{
-            val counter = objectLookup.size();
+            var counter = objectLookup.size();
             d3jsGraph.nodes.add(new D3jsGraph.Node(counter,
                     obj.name(),
                     obj.packageName(), // node group -> auto color (max 20 colors)
@@ -100,8 +101,8 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
         });
 
         objGraph.relations().forEach(rel->{
-            val source = objectLookup.get(rel.from());
-            val target = objectLookup.get(rel.to());
+            var source = objectLookup.get(rel.from());
+            var target = objectLookup.get(rel.to());
             d3jsGraph.links.add(new D3jsGraph.Link(source, target, rel.descriptionFormatted()));
         });
 
@@ -109,7 +110,7 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
     }
 
     private String asTooltip(final ObjectGraph.Object obj) {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append(obj.packageName()).append('.').append(obj.name());
         obj.fields().forEach(field->{
             sb.append("\n").append(" * ").append(field.name()).append(": ");
@@ -122,7 +123,7 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
 
     protected void renderSvg(final StringBuilder sb, final D3jsGraph d3jsGraph) {
 
-        val noteText = "Note: Dragging nodes leaves them sticky. "
+        var noteText = "Note: Dragging nodes leaves them sticky. "
                 + "Double-click releases them. "
                 + "Single-click toggles node highlight (incoming edges are emphasized). ";
 

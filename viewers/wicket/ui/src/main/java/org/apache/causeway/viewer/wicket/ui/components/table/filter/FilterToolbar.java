@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
-import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
@@ -34,6 +33,8 @@ public class FilterToolbar extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
+    private static final String ID_TABLE_SEARCH_BUTTON = "table-search-button";
+    private static final String ID_TABLE_SEARCH_CLEAR = "table-search-clear";
 
     /**
      * DataTable this search bar is attached to.
@@ -47,36 +48,51 @@ public class FilterToolbar extends Panel {
     }
 
     /**
-     * Only shows this search bar when there are more than 1 rows.
+     * Only shows this search bar when there are more than 1 rows (unfiltered).
      */
     @Override
     protected void onConfigure() {
         super.onConfigure();
         buildGui();
-        setVisible(getTable().getRowCount() > 1);
+        setVisible(table.elementCount() > 1);
     }
 
     // -- HELPER
 
     private void buildGui() {
 
-        var dataTableInteractive = _TableUtils.interactive(table);
-        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
-        Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
+        var tableModel = table.tableModel();
+        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(tableModel.searchArgumentBindable().getValue()));
+        Wkt.attributeReplace(searchField, "placeholder", tableModel.getSearchPromptPlaceholderText());
+
+        Wkt.linkAdd(this, ID_TABLE_SEARCH_BUTTON, target->{
+            propagateUpdate(target, searchField.getValue());
+        });
+
+        Wkt.linkAdd(this, ID_TABLE_SEARCH_CLEAR, target->{
+            searchField.setModelObject(null);
+            target.add(searchField);
+            propagateUpdate(target, searchField.getValue());
+        });
 
         searchField.add(new OnChangeAjaxBehavior() {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-                // on searchArg update originating from end-user in UI
-                table.setSearchArg(searchField.getValue());
-                table.setSearchHintAndBroadcast(target);
-                // tells the table component to re-render
-                target.add(table);
+                // no-op; however, it seems we need to install this behavior,
+                // in order for the server side model to receive updates at all
             }
         });
 
         addOrReplace(searchField);
+    }
+
+    private void propagateUpdate(final AjaxRequestTarget target, final String searchArg) {
+        // on searchArg update originating from end-user in UI
+        table.setSearchArg(searchArg);
+        table.setSearchHintAndBroadcast(target);
+        // tells the table component to re-render
+        target.add(table);
     }
 
 }

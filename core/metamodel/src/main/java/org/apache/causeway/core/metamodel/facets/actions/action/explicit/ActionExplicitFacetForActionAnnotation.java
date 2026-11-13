@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 
 public class ActionExplicitFacetForActionAnnotation extends ActionExplicitFacetAbstract {
 

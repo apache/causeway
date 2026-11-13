@@ -22,16 +22,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import lombok.val;
-
 class RepresentationTypeSimplifiedV2Test {
 
     @Test
     void parseContentTypeHeaderString() {
 
-        val contentTypeHeaderString = "application/json;profile=\"urn:org.apache.causeway/v2\";repr-type=value";
+        var contentTypeHeaderString = "application/json;profile=\"urn:org.apache.causeway/v2\";repr-type=value";
 
-        val representationType =
+        var representationType =
                 RepresentationTypeSimplifiedV2
                 .parseContentTypeHeaderString(contentTypeHeaderString)
                 .orElse(null);

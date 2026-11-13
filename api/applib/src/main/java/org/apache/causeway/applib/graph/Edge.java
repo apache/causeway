@@ -26,6 +26,6 @@ package org.apache.causeway.applib.graph;
  * @param <T> type constraint for values contained by this edge's vertices
  */
 public interface Edge<T> {
-    Vertex<T> getFrom();
-    Vertex<T> getTo();
+    Vertex<T> from();
+    Vertex<T> to();
 }

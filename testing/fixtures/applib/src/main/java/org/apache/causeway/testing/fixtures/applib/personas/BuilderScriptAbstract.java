@@ -84,7 +84,6 @@ extends FixtureScript implements FixtureScriptWithExecutionStrategy {
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 
-
     // -- RUN FINDERS
 
     public <P extends PersonaWithFinder<X>, X> X findUsing(final P persona) {
@@ -95,4 +94,3 @@ extends FixtureScript implements FixtureScriptWithExecutionStrategy {
     }
 
 }
-

@@ -20,12 +20,9 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.Consumer;
 
-import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
@@ -34,17 +31,17 @@ import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-@Component
-public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
+@RestController
+@Slf4j
+public class MenuBarsResourceServerside extends ResourceAbstract
+implements MenuBarsResource {
 
     public static final String SERVICE_IDENTIFIER = "1";
 
@@ -53,27 +50,22 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     }
 
     @Override
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
-    })
-    public Response menuBars() {
+    public ResponseEntity<Object> menuBars() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val serializationStrategy = resourceContext.getSerializationStrategy();
-        val menuBarsService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        var serializationStrategy = resourceContext.getSerializationStrategy();
+        var menuBarsService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
 
-        final Response.ResponseBuilder builder;
         final MenuBars menuBars = menuBarsService.menuBars();
         addLinksForServiceActions(resourceContext, menuBars);
 
-        builder = Response.status(Response.Status.OK)
-                .entity(serializationStrategy.entity(menuBars))
-                .type(serializationStrategy.type(RepresentationType.MENUBARS));
+        var response = responseFactory.ok(
+                serializationStrategy.entity(menuBars),
+                serializationStrategy.type(RepresentationType.MENUBARS));
 
-        return builder.build();
+        return _EndpointLogging.response(log, "GET /menuBars", response);
     }
 
     void addLinksForServiceActions(final ResourceContext resourceContext, final MenuBars menuBars) {
@@ -88,9 +80,8 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
                         logicalTypeName, SERVICE_IDENTIFIER, actionLayoutData.getId());
-                Link link = new Link(
-                        Rel.ACTION.getName(),
-                        HttpMethod.GET,
+                Link link = newLink(
+                        Rel.ACTION,
                         resourceContext.restfulUrlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
@@ -98,20 +89,18 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     }
 
     @Override
-    public Response deleteMenuBarsNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the menuBars resource is not allowed.");
-
+    public ResponseEntity<Object> deleteMenuBarsNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.METHOD_NOT_ALLOWED, "Deleting the menuBars resource is not allowed.");
     }
 
     @Override
-    public Response putMenuBarsNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the menuBars resource is not allowed.");
-
+    public ResponseEntity<Object> putMenuBarsNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.METHOD_NOT_ALLOWED, "Putting to the menuBars resource is not allowed.");
     }
 
     @Override
-    public Response postMenuBarsNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the menuBars resource is not allowed.");
+    public ResponseEntity<Object> postMenuBarsNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.METHOD_NOT_ALLOWED, "Posting to the menuBars resource is not allowed.");
     }
 
 }

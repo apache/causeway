@@ -23,9 +23,9 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -48,7 +48,6 @@ public final class _Reduction<T> implements Consumer<T> {
     private final BinaryOperator<T> accumulator;
     private T result;
     private boolean initialized = false;
-
 
     /**
      * Inspired by {@link Stream#reduce(Object, BinaryOperator)}
@@ -93,6 +92,5 @@ public final class _Reduction<T> implements Consumer<T> {
         }
         return Optional.ofNullable(result);
     }
-
 
 }

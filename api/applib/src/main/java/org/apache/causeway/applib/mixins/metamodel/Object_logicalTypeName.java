@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
@@ -53,7 +52,8 @@ import lombok.val;
         domainEvent = Object_logicalTypeName.PropertyDomainEvent.class  // if this does not work, reopen CAUSEWAY-2235
 )
 @PropertyLayout(
-        describedAs = "The logical name of this domain class (as used in persistence, URLs etc).  Intended to be stable/unchanging across time",
+        describedAs = "The logical name of this domain class (as used in persistence, URLs etc). "
+            + "Intended to be stable/unchanging across time",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         hidden = Where.ALL_TABLES,
         sequence = "400.1"
@@ -71,13 +71,13 @@ public class Object_logicalTypeName {
     extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent<Object_logicalTypeName, String> {}
 
     @MemberSupport public String prop() {
-        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        return bookmark.getLogicalTypeName();
+        var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        return bookmark.logicalTypeName();
     }
 
     @MemberSupport public boolean hideProp() {
-        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        val beanSort = metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
+        var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        var beanSort = metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
         return !beanSort.isEntity() && !beanSort.isViewModel();
     }
 

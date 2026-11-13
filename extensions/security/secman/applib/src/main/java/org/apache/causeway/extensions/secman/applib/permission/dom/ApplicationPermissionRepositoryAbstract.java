@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.extensions.secman.applib.permission.dom;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
@@ -39,15 +37,15 @@ import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
+import org.jspecify.annotations.NonNull;
 
-import lombok.NonNull;
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 /**
  *
@@ -65,7 +63,7 @@ implements ApplicationPermissionRepository {
 
     private final Class<P> applicationPermissionClass;
 
-    protected ApplicationPermissionRepositoryAbstract(Class<P> applicationPermissionClass) {
+    protected ApplicationPermissionRepositoryAbstract(final Class<P> applicationPermissionClass) {
         this.applicationPermissionClass = applicationPermissionClass;
     }
 
@@ -80,7 +78,8 @@ implements ApplicationPermissionRepository {
                 ApplicationPermissionRepositoryAbstract.class, "findByRoleCached", role);
     }
 
-    public List<ApplicationPermission> findByRole(final @NonNull ApplicationRole role) {
+    @Override
+	public List<ApplicationPermission> findByRole(final @NonNull ApplicationRole role) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
                 Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE)
@@ -88,25 +87,27 @@ implements ApplicationPermissionRepository {
         );
     }
 
-
     // -- findByUser (programmatic)
     public List<ApplicationPermission> findByUserCached(final @NonNull ApplicationUser user) {
         return queryResultsCacheProvider.get().execute(this::findByUser,
                 ApplicationPermissionRepositoryAbstract.class, "findByUserCached", user);
     }
 
-    public List<ApplicationPermission> findByUser(final @NonNull ApplicationUser user) {
+    @Override
+	public List<ApplicationPermission> findByUser(final @NonNull ApplicationUser user) {
         return findByUser(user.getUsername());
     }
 
-    public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
-        val roleNames = userMemento.getRoles().stream()
-                .map(RoleMemento::getName)
+    @Override
+	public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
+        var roleNames = userMemento.roles().stream()
+                .map(RoleMemento::name)
                 .collect(Collectors.toList());
         return findByRoleNames(roleNames);
     }
 
-    public List<ApplicationPermission> findByRoleNames(final @NonNull List<String> roleNames) {
+    @Override
+	public List<ApplicationPermission> findByRoleNames(final @NonNull List<String> roleNames) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
                         Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE_NAMES)
@@ -122,7 +123,6 @@ implements ApplicationPermissionRepository {
         );
     }
 
-
     // -- findByUserAndPermissionValue (programmatic)
     /**
      * Uses the {@link QueryResultsCache} in order to support
@@ -133,7 +133,7 @@ implements ApplicationPermissionRepository {
 
         // obtain all permissions for this user, map by its value, and
         // put into query cache (so that this method can be safely called in a tight loop)
-        val permissions =
+        var permissions =
                 queryResultsCacheProvider.get().execute(
                         this::permissionsByPermissionValue,
                         ApplicationPermissionRepositoryAbstract.class, "findByUserAndPermissionValue",
@@ -152,14 +152,14 @@ implements ApplicationPermissionRepository {
         // only username (and not permissionValue) is the key
         // (we are obtaining all the perms for this user)
 
-        val permissionsByPermissionValue =
+        var permissionsByPermissionValue =
                 _Multimaps.<ApplicationPermissionValue, ApplicationPermission>newListMultimap();
 
-        val permissions = findByUser(username);
+        var permissions = findByUser(username);
 
         _NullSafe.stream(permissions)
         .forEach(permission->{
-            val newPermissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
+            var newPermissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
             permissionsByPermissionValue.putElement(newPermissionValue, permission);
         });
 
@@ -169,16 +169,16 @@ implements ApplicationPermissionRepository {
     // -- findByRoleAndRuleAndFeatureType (programmatic)
     @Override
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
-            org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
-            ApplicationPermissionRule rule,
-            ApplicationFeatureSort type) {
+            final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
+            final ApplicationPermissionRule rule,
+            final ApplicationFeatureSort type) {
         return queryResultsCacheProvider.get().execute(this::findByRoleAndRuleAndFeatureType,
                 ApplicationPermissionRepositoryAbstract.class, "findByRoleAndRuleAndFeatureTypeCached",
                 role, rule, type);
     }
 
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureType(
-            org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
+            final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
             final ApplicationPermissionRule rule,
             final ApplicationFeatureSort featureSort) {
         return repository.allMatches(Query.named(
@@ -189,7 +189,6 @@ implements ApplicationPermissionRepository {
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
 
     // -- findByRoleAndRuleAndFeature (programmatic)
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeatureCached(
@@ -221,7 +220,6 @@ implements ApplicationPermissionRepository {
         );
     }
 
-
     // -- findByFeature (programmatic)
 
     @Override
@@ -251,7 +249,7 @@ implements ApplicationPermissionRepository {
             final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        var role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
 
         final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureSort, featureFqn);
         final ApplicationFeature feature = featureRepository.findFeature(featureId);
@@ -272,9 +270,8 @@ implements ApplicationPermissionRepository {
 
         ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureSort, featureFqn)
                 .orElse(null);
-        if (permission != null) {
-            return permission;
-        }
+        if (permission != null)
+			return permission;
         permission = newApplicationPermission();
         permission.setRole(role);
         permission.setRule(rule);
@@ -294,7 +291,7 @@ implements ApplicationPermissionRepository {
             final String featureClassName,
             final String featureMemberName) {
 
-        val featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
+        var featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
         return newPermission(genericRole, rule, mode, featureId);
     }
 
@@ -305,17 +302,17 @@ implements ApplicationPermissionRepository {
             final ApplicationPermissionMode mode,
             final ApplicationFeatureId featureId) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        val featureSort = featureId.getSort();
-        val featureFqn = featureId.getFullyQualifiedName();
+        var role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        var featureSort = featureId.getSort();
+        var featureFqn = featureId.getFullyQualifiedName();
 
-        val feature = featureRepository.findFeature(featureId);
+        var feature = featureRepository.findFeature(featureId);
         if(feature == null) {
             messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
 
-        val permission = factory.detachedEntity(applicationPermissionClass);
+        var permission = factory.detachedEntity(applicationPermissionClass);
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
@@ -325,7 +322,6 @@ implements ApplicationPermissionRepository {
 
         return permission;
     }
-
 
     // -- allPermission (programmatic)
     @Override
@@ -340,14 +336,14 @@ implements ApplicationPermissionRepository {
     @Override
     public Collection<ApplicationPermission> findOrphaned() {
 
-        val featureNamesKnownToTheMetamodel =
+        var featureNamesKnownToTheMetamodel =
                 featureRepository.getFeatureIdentifiersByName().keySet();
 
-        val orphaned = _Lists.<ApplicationPermission>newArrayList();
+        var orphaned = new ArrayList<ApplicationPermission>();
 
-        for (val permission : allPermissions()) {
+        for (var permission : allPermissions()) {
 
-            val featId = permission.asFeatureId().orElse(null);
+            var featId = permission.asFeatureId().orElse(null);
             if(featId==null) {
                 orphaned.add(permission);
                 continue;
@@ -360,6 +356,5 @@ implements ApplicationPermissionRepository {
 
         return orphaned;
     }
-
 
 }

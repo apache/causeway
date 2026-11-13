@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.commons.collections.Can;
@@ -34,7 +34,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
 @Named("causeway.metamodel.value.OffsetTimeValueSemantics")
-//@Log4j2
+//@Slf4j
 public class OffsetTimeValueSemantics
 extends TemporalValueSemanticsProvider<OffsetTime> {
 

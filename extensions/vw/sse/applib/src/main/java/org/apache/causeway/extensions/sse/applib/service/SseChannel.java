@@ -32,8 +32,8 @@ import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
  */
 public interface SseChannel {
 
-    UUID getId();
-    Class<?> getSourceType();
+    UUID uuid();
+    Class<?> sourceType();
 
     void listenWhile(Predicate<SseSource> listener);
 
@@ -42,6 +42,5 @@ public interface SseChannel {
     void close();
 
     void awaitClose() throws InterruptedException;
-
 
 }

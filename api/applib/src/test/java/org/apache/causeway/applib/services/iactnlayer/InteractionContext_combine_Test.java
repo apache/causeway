@@ -24,18 +24,18 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import lombok.val;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 
 class InteractionContext_combine_Test {
 
     @Test
     void happy_case() {
 
-        val mappers = Stream.<UnaryOperator<String>>of(
+        var mappers = Stream.<UnaryOperator<String>>of(
                 s -> s + "bar",
                 s -> "[" + s + "]",
                 s -> s + s);
-        val result = InteractionContext.combine(mappers).apply("foo");
+        var result = InteractionContext.combine(mappers).apply("foo");
 
         Assertions.assertThat(result).isEqualTo("[foobar][foobar]");
     }

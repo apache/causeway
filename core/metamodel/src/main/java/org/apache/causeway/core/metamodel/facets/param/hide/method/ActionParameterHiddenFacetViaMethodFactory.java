@@ -18,16 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.hide.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Sets up {@link ActionParameterHiddenFacet}.
@@ -44,12 +42,10 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val hideMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
-        addFacet(
-                new ActionParameterHiddenFacetViaMethod(
-                        hideMethod, patConstructor, paramAsHolder));
+        var hideMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
+		new ActionParameterHiddenFacetViaMethod(
+		        hideMethod, patConstructor, paramAsHolder);
     }
-
 
 }

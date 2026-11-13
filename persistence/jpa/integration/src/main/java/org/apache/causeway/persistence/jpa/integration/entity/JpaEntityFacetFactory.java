@@ -18,17 +18,16 @@
  */
 package org.apache.causeway.persistence.jpa.integration.entity;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.Entity;
-
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 
-//@Log4j2
+//@Slf4j
 public class JpaEntityFacetFactory
 extends FacetFactoryAbstract {
 
@@ -39,17 +38,19 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.cls();
 
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
-        val entityAnnotation = processClassContext.synthesizeOnType(Entity.class);
-        if(!entityAnnotation.isPresent()) {
-            return;
-        }
+        var entityIfAny = processClassContext.synthesizeOnType(Entity.class);
+        if(!entityIfAny.isPresent())
+        	return;
 
-        addFacet(
-                new JpaEntityFacet(facetHolder, cls));
+        var embeddableIfAny = processClassContext.synthesizeOnType(Embeddable.class);
+        if(embeddableIfAny.isPresent())
+        	return; // ignore when also has @Embeddable
+
+        new JpaEntityFacet(facetHolder, cls);
     }
 
 }

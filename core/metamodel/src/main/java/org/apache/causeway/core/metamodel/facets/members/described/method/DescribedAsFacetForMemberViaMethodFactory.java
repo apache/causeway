@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.described.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
+
+import jakarta.inject.Inject;
 
 public class DescribedAsFacetForMemberViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -38,15 +38,12 @@ extends MemberSupportFacetFactoryAbstract {
     protected void search(
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
-
         methodFinder
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processMethodContext::removeMethod)
-        .forEach(describedMethod->{
-            addFacet(
-                    new MemberDescribedFacetViaMethod(
-                            describedMethod, processMethodContext.getFacetHolder()));
-        });
+	        .streamMethodsMatchingSignature(NO_ARG)
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(describedMethod->
+	            new MemberDescribedFacetViaMethod(
+	                    describedMethod, processMethodContext.facetHolder()));
     }
 
 }

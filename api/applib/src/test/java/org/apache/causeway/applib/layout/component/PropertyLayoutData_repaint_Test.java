@@ -57,5 +57,4 @@ public class PropertyLayoutData_repaint_Test {
 
     }
 
-
 }

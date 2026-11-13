@@ -27,9 +27,13 @@ extends MemberNamedFacetForStaticMemberName {
 
     public NamedFacetFallbackFromMemberName(final FacetHolder holder) {
         super(
-                _Strings.asNaturalName.apply(holder.getFeatureIdentifier().getMemberLogicalName()),
-                holder,
-                Precedence.FALLBACK);
+                _Strings.asNaturalName.apply(holder.getFeatureIdentifier().memberLogicalName()),
+                holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
 }

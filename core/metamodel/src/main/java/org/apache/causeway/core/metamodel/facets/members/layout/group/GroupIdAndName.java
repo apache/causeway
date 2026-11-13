@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -31,34 +31,25 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
-@Value(staticConstructor = "of")
-public class GroupIdAndName
+public record GroupIdAndName(
+    /**
+     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
+     */
+    @NonNull String id,
+    /**
+     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
+     */
+    @NonNull String name)
 implements
     Comparable<GroupIdAndName>,
     Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
-     */
-    private final @NonNull String id;
-
-    /**
-     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
-     */
-    private final @NonNull String name;
-
     @Override
     public int compareTo(final GroupIdAndName other) {
-        if(other==null) {
-            return -1; // null last
-        }
-        return this.getId().compareTo(other.getId());
+        if(other==null) return -1; // null last
+        return this.id().compareTo(other.id());
     }
 
     // -- FACTORIES FOR ANNOTATIONS
@@ -74,13 +65,11 @@ implements
     public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
 
-        val explicit =  GroupIdAndName.inferIfOneMissing(
+        var explicit =  GroupIdAndName.inferIfOneMissing(
                 actionLayout.fieldSetId(),
                 actionLayout.fieldSetName());
 
-        if(explicit.isPresent()) {
-            return explicit;
-        }
+        if(explicit.isPresent()) return explicit;
 
         return GroupIdAndName.inferIfOneMissing(
                 actionLayout.associateWith(),
@@ -128,26 +117,26 @@ implements
             final @Nullable String _id,
             final @Nullable String _name) {
 
-        val id = nullToUnspecified(_id);
-        val name = nullToUnspecified(_name);
+        var id = nullToUnspecified(_id);
+        var name = nullToUnspecified(_name);
 
-        val isIdUnspecified = isUnspecified(id) || id.isEmpty();
-        val isNameUnspecified = isUnspecified(name);
+        var isIdUnspecified = isUnspecified(id) || id.isEmpty();
+        var isNameUnspecified = isUnspecified(name);
         if(isIdUnspecified
                 && isNameUnspecified) {
             return Optional.empty(); // fully unspecified, don't create a LayoutGroupFacet down the line
         }
         if(isIdUnspecified) {
-            val inferredId = inferIdFromName(name);
+            var inferredId = inferIdFromName(name);
             if(inferredId.isEmpty()) {
                 return Optional.empty(); // cannot infer a usable id, so don't create a LayoutGroupFacet down the line
             }
-            return Optional.of(GroupIdAndName.of(inferredId, name));
+            return Optional.of(new GroupIdAndName(inferredId, name));
         } else if(isNameUnspecified) {
-            val inferredName = inferNameFromId(id);
-            return Optional.of(GroupIdAndName.of(id, inferredName));
+            var inferredName = inferNameFromId(id);
+            return Optional.of(new GroupIdAndName(id, inferredName));
         }
-        return Optional.of(GroupIdAndName.of(id, name));
+        return Optional.of(new GroupIdAndName(id, name));
     }
 
     /**
@@ -184,7 +173,5 @@ implements
                     : idOrName;
 
     }
-
-
 
 }

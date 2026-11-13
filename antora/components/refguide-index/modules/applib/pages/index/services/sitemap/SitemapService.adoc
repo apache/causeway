@@ -13,3 +13,4 @@ interface SitemapService {
 }
 ----
 
+include::hooks/SitemapService_010-implementation.adoc[]

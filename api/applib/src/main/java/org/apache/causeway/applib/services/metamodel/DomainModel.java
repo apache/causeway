@@ -21,11 +21,9 @@ package org.apache.causeway.applib.services.metamodel;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Multimaps;
-
-import lombok.val;
 
 /**
  *
@@ -42,7 +40,7 @@ public interface DomainModel {
             return;
         }
 
-        val membersByLogicalType = _Multimaps.<String, DomainMember>newListMultimap();
+        var membersByLogicalType = _Multimaps.<String, DomainMember>newListMultimap();
 
         getDomainMembers().forEach(member->
             membersByLogicalType.putElement(member.getLogicalTypeName(), member));

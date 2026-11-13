@@ -21,13 +21,14 @@ package org.apache.causeway.applib.events;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 /**
  * @since 2.0 {@index}
@@ -39,8 +40,8 @@ public abstract class EventObjectBase<T> {
     /**
      * Optionally returns a new event instance,
      * based on whether the eventType has a public no-arg constructor.
-     * <p>
-     * Initializes the event's source with given {@code source}.
+     *
+     * <p>Initializes the event's source with given {@code source}.
      */
     public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSource(
             final Class<E> eventType, final @Nullable T source) {
@@ -50,14 +51,14 @@ public abstract class EventObjectBase<T> {
     /**
      * Optionally returns a new event instance,
      * based on whether the eventType has a public no-arg constructor.
-     * <p>
-     * Initializes the event's source lazily, that is using given {@code eventSourceSupplier}.
+     *
+     * <p>Initializes the event's source lazily, that is using given {@code eventSourceSupplier}.
      */
     public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSourceSupplier(
             final Class<E> eventType, final @Nullable Supplier<T> eventSourceSupplier) {
-        return _Reflect.getPublicConstructors(eventType)
-            .filter(paramCount(0))
-            .getFirst()
+        return _ClassCache.getInstance()
+            .lookupPublicConstructor(eventType, _Constants.emptyClasses)
+            .map(ResolvedConstructor::constructor)
             .map(_Reflect::invokeConstructor)
             .flatMap(Try::getValue)
             .map(evnt->{

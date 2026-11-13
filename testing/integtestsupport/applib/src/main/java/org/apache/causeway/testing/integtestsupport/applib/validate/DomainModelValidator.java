@@ -26,13 +26,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
-import org.junit.jupiter.api.Assertions;
-import org.opentest4j.AssertionFailedError;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -43,15 +36,18 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Assertions;
+import org.opentest4j.AssertionFailedError;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class DomainModelValidator {
 
     private final ValidationFailures validationFailures;
@@ -69,12 +65,12 @@ public class DomainModelValidator {
             final CausewayConfiguration configuration,
             final CausewaySystemEnvironment causewaySystemEnvironment) {
 
-        val recreateRequired = isRecreateRequired(configuration, causewaySystemEnvironment);
+        var recreateRequired = isRecreateRequired(configuration, causewaySystemEnvironment);
         if(recreateRequired) {
             specificationLoader.createMetaModel();
             if(log.isDebugEnabled()) {
                 specificationLoader.forEach(spec->{
-                    log.debug("loaded: " + spec.getFullIdentifier());
+                    log.debug("loaded: " + spec.fullIdentifier());
                 });
             }
         }
@@ -83,18 +79,14 @@ public class DomainModelValidator {
         this.validationFailures = specificationLoader.getOrAssessValidationResult();
     }
 
-
     private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment causewaySystemEnvironment) {
-        final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
-        switch (mode) {
-            case FULL:
-                return false;
-            case LAZY_UNLESS_PRODUCTION:
-                return causewaySystemEnvironment.isPrototyping();
-            case LAZY:
-            default:
-                return true;
-        }
+        final IntrospectionMode mode = configuration.core().metaModel().introspector().mode();
+        return switch (mode) {
+		case FULL -> false;
+		case LAZY_UNLESS_PRODUCTION -> causewaySystemEnvironment.isPrototyping();
+		case LAZY -> true;
+		default -> true;
+		};
     }
 
     /**
@@ -120,21 +112,17 @@ public class DomainModelValidator {
     }
 
     public Set<ValidationFailure> getFailures() {
-        if (validationFailures == null) {
-            return Collections.emptySet();
-        }
+        if (validationFailures == null) return Collections.emptySet();
+
         return validationFailures.getFailures(); // already wrapped unmodifiable
     }
 
-    public Stream<ValidationFailure> streamFailures(@Nullable final Predicate<Identifier> filter) {
-        if(validationFailures==null) {
-            return Stream.empty();
-        }
-        if(filter==null) {
-            return validationFailures.getFailures().stream();
-        }
+    public Stream<ValidationFailure> streamFailures(final @Nullable Predicate<Identifier> filter) {
+        if(validationFailures==null) return Stream.empty();
+        if(filter==null) return validationFailures.getFailures().stream();
+
         return validationFailures.getFailures().stream()
-                .filter(failure->filter.test(failure.getOrigin()));
+                .filter(failure->filter.test(failure.origin()));
     }
 
     public Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(
@@ -142,8 +130,25 @@ public class DomainModelValidator {
         return streamFailures(id->id.equals(identifier));
     }
 
-
     // -- JUNIT SUPPORT
+
+    /**
+     * JUnit support
+     */
+    public void assertValid(
+            final @NonNull Identifier identifier) {
+
+        long failureCount = streamFailuresMatchingOriginatingIdentifier(identifier)
+        		.count();
+
+        if(failureCount>0L) {
+            var msg = String.format("failure messages were not empty:\n%s",
+                    streamFailuresMatchingOriginatingIdentifier(identifier)
+                    .map(ValidationFailure::message)
+                    .collect(Collectors.joining("\n")));
+            throw new AssertionFailedError(msg);
+        }
+    }
 
     /**
      * JUnit support
@@ -154,13 +159,13 @@ public class DomainModelValidator {
 
         boolean matchFound = streamFailuresMatchingOriginatingIdentifier(identifier)
                 .anyMatch(failure->
-                    failure.getMessage().contains(messageSnippet));
+                    failure.message().contains(messageSnippet));
 
         if(!matchFound) {
-            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+            var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     streamFailuresMatchingOriginatingIdentifier(identifier)
-                    .map(ValidationFailure::getMessage)
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }
@@ -173,19 +178,19 @@ public class DomainModelValidator {
             final @NonNull Class<?> domainType,
             final @NonNull String messageSnippet) {
 
-        val logicalType = specificationLoader.specForTypeElseFail(domainType)
-            .getLogicalType();
-        final Predicate<Identifier> filterByLogicalType = id->id.getLogicalType().equals(logicalType);
+        var logicalType = specificationLoader.specForTypeElseFail(domainType)
+            .logicalType();
+        final Predicate<Identifier> filterByLogicalType = id->id.logicalType().equals(logicalType);
 
         boolean matchFound = streamFailures(filterByLogicalType)
                 .anyMatch(failure->
-                    failure.getMessage().contains(messageSnippet));
+                    failure.message().contains(messageSnippet));
 
         if(!matchFound) {
-            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+            var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     streamFailures(filterByLogicalType)
-                    .map(ValidationFailure::getMessage)
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }
@@ -199,22 +204,21 @@ public class DomainModelValidator {
             final String messageSnippet) {
 
         boolean matchFound = classIdentifiers
-                .stream()
-                .anyMatch(identifier->
-                        streamFailuresMatchingOriginatingIdentifier(identifier)
-                                .anyMatch(failure->
-                                failure.getMessage().contains(messageSnippet)));
+            .stream()
+            .anyMatch(identifier->
+                    streamFailuresMatchingOriginatingIdentifier(identifier)
+                            .anyMatch(failure->
+                            failure.message().contains(messageSnippet)));
 
         if(!matchFound) {
-            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+            var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     classIdentifiers.stream()
-                    .flatMap(identifier->streamFailuresMatchingOriginatingIdentifier(identifier))
-                    .map(ValidationFailure::getMessage)
+                    .flatMap(this::streamFailuresMatchingOriginatingIdentifier)
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }
-
 
     }
 
@@ -231,7 +235,5 @@ public class DomainModelValidator {
             log.error(logMessage);
         }
     }
-
-
 
 }

@@ -40,7 +40,6 @@ import org.apache.causeway.persistence.jpa.eclipselink.inject.BeanManagerForEnti
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -69,11 +68,10 @@ public class ElSettings {
     private final _Lazy<Map<String, Object>> map = _Lazy.threadSafe(this::createMap);
 
     protected Map<String, Object> createMap() {
-        val jpaProps = new HashMap<String, Object>();
+        var jpaProps = new HashMap<String, Object>();
 
         // setup defaults
         jpaProps.put(PersistenceUnitProperties.WEAVING, "false");
-        //jpaProps.put(PersistenceUnitProperties.LOGGING_LEVEL, SessionLog.FINER_LABEL); //debug logging
         jpaProps.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
         jpaProps.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
 

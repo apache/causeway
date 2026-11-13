@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-
 import org.apache.causeway.applib.annotation.Where;
 
 /**
@@ -27,7 +25,6 @@ import org.apache.causeway.applib.annotation.Where;
  */
 public interface HasHidden {
 
-    @XmlAttribute(required = false)
     Where getHidden();
     void setHidden(Where hidden);
 

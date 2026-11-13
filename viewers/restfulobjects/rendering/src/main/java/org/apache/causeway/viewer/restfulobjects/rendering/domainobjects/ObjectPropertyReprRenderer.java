@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -38,7 +36,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
-import lombok.val;
+import tools.jackson.databind.node.NullNode;
 
 public class ObjectPropertyReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
@@ -75,19 +73,17 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         return representation;
     }
 
-    // ///////////////////////////////////////////////////
-    // value
-    // ///////////////////////////////////////////////////
+    // -- VALUE
 
     private void addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        var valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, otherwise fallback to the compile time type of the member
-        val valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny)
+        var valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny)
                 ? valueAdapterIfAny
                 : ManagedObject.empty(objectMember.getElementType());
 
-        val spec = valueAdapter.getSpecification();
+        var spec = valueAdapter.objSpec();
 
         if (spec.isValue()) {
             jsonValueEncoder
@@ -96,7 +92,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                             representation,
                             JsonValueConverter.Context.of(
                                     objectMember,
-                                    resourceContext.config().isSuppressMemberExtensions()));
+                                    resourceContext.config().suppressMemberExtensions()));
             return;
         }
 
@@ -132,9 +128,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
     }
 
-    // ///////////////////////////////////////////////////
-    // details link
-    // ///////////////////////////////////////////////////
+    // -- DETAILS LINK
 
     /**
      * Mandatory hook method to support x-ro-follow-links
@@ -147,23 +141,18 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
-    // ///////////////////////////////////////////////////
-    // mutators
-    // ///////////////////////////////////////////////////
+    // -- MUTATORS
 
     @Override
     protected void addMutatorLinksIfEnabled() {
-        if (usability().isVetoed()) {
-            return;
-        }
+        if (usability().isVetoed())
+			return;
         objectMemberType.getMutators()
             .values()
             .forEach(this::addLinkFor);
     }
 
-    // ///////////////////////////////////////////////////
-    // choices
-    // ///////////////////////////////////////////////////
+    // -- CHOICES
 
     private ObjectPropertyReprRenderer addChoices() {
         final Object propertyChoices = propertyChoices();
@@ -174,14 +163,13 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     }
 
     private Object propertyChoices() {
-        val choiceAdapters = objectMember
+        var choiceAdapters = objectMember
                 .getChoices(objectAdapter, getInteractionInitiatedBy());
 
-        if (choiceAdapters == null || choiceAdapters.isEmpty()) {
-            return null;
-        }
-        final List<Object> list = _Lists.newArrayList();
-        for (val choiceAdapter : choiceAdapters) {
+        if (choiceAdapters == null || choiceAdapters.isEmpty())
+			return null;
+        final List<Object> list = new ArrayList<>();
+        for (var choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 
@@ -191,16 +179,13 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         return list;
     }
 
-    // ///////////////////////////////////////////////////
-    // extensions and links
-    // ///////////////////////////////////////////////////
+    // -- EXTENSIONS AND LINKS
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().isSuppressDescribedByLinks()) {
-            return;
-        }
-        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
+        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 
@@ -208,6 +193,5 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     protected void putExtensionsCausewayProprietary() {
         // none
     }
-
 
 }

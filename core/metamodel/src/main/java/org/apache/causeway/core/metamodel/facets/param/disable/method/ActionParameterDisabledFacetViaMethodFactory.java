@@ -18,16 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.disable.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Sets up {@link ActionParameterDisabledFacet}.
@@ -44,11 +42,10 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val disableMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
-        addFacet(
-                new ActionParameterDisabledFacetViaMethod(
-                        disableMethod, patConstructor, paramAsHolder));
+        var disableMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
+        new ActionParameterDisabledFacetViaMethod(
+                disableMethod, patConstructor, paramAsHolder);
     }
 
 }

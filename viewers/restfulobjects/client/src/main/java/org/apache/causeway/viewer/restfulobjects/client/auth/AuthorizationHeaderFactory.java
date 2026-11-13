@@ -22,13 +22,11 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.auth.basic.AuthorizationHeaderFactoryBasic;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure.AuthorizationHeaderFactoryOauth2Azure;
 
-import lombok.val;
-
 public interface AuthorizationHeaderFactory {
 
     static AuthorizationHeaderFactory factoryFor(
             final RestfulClientConfig restfulClientConfig) {
-        val authenticationMode = restfulClientConfig.getAuthenticationMode();
+        var authenticationMode = restfulClientConfig.getAuthenticationMode();
         if (authenticationMode == null) {
             throw new IllegalArgumentException("config.authenticationMode must be set");
         }
@@ -42,7 +40,6 @@ public interface AuthorizationHeaderFactory {
                 throw new IllegalArgumentException(String.format("unknown authenticationMode '%s'", authenticationMode));
         }
     }
-
 
     String create();
 }

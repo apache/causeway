@@ -32,19 +32,13 @@ import java.util.stream.Collector;
 import org.apache.causeway.commons.internal.base._Casts;
 
 /**
- *
- * package private mixin for utility class {@link _Arrays}
+ * package private helper for utility class {@link _Arrays}
  *
  * Collector for Arrays.
- *
  */
-class _Arrays_CollectorUnknownSize<T> implements Collector<T, List<T>, T[]> {
-
-    private final Class<T> componentType;
-
-    _Arrays_CollectorUnknownSize(Class<T> componentType) {
-        this.componentType = componentType;
-    }
+record _Arrays_CollectorUnknownSize<T>(
+    Class<T> componentType)
+implements Collector<T, List<T>, T[]> {
 
     @Override
     public Supplier<List<T>> supplier() {
@@ -72,10 +66,4 @@ class _Arrays_CollectorUnknownSize<T> implements Collector<T, List<T>, T[]> {
         return Collections.emptySet();
     }
 
-
 }
-
-
-
-
-

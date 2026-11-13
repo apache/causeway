@@ -20,16 +20,15 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import jakarta.ws.rs.core.Response;
+import org.jspecify.annotations.NonNull;
 
-import org.springframework.lang.Nullable;
+import org.springframework.http.ResponseEntity;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.Railway;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.Result;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
@@ -38,68 +37,60 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
-import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import lombok.NonNull;
-import lombok.val;
+record _DomainResourceHelper(
+    ResourceContext resourceContext,
+    RepresentationService representationService,
+    TransactionService transactionService,
+    ManagedObject objectAdapter) {
 
-class _DomainResourceHelper {
-
-    private final IResourceContext resourceContext;
-    private final RepresentationService representationService;
-    private final TransactionService transactionService;
+    // -- FACTORIES
 
     public static _DomainResourceHelper ofObjectResource(
-            final IResourceContext resourceContext,
+            final ResourceContext resourceContext,
             final ManagedObject objectAdapter) {
-        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
+        _Assert.assertTrue(resourceContext.objectAdapterLinkTo() instanceof DomainObjectLinkTo);
+        return new _DomainResourceHelper(resourceContext, objectAdapter);
     }
 
     public static _DomainResourceHelper ofServiceResource(
-            final IResourceContext resourceContext,
+            final ResourceContext resourceContext,
             final String serviceIdOrAlias) {
+        _Assert.assertTrue(resourceContext.objectAdapterLinkTo() instanceof DomainServiceLinkTo);
         return new _DomainResourceHelper(resourceContext,
-                getServiceAdapter(resourceContext, serviceIdOrAlias), new DomainServiceLinkTo());
+            resourceContext.lookupServiceAdapterElseFail(serviceIdOrAlias));
     }
+
+    // -- NON CANONICAL CONSTRUCTOR
 
     private _DomainResourceHelper(
-            final IResourceContext resourceContext,
-            final ManagedObject objectAdapter,
-            final ObjectAdapterLinkTo adapterLinkTo) {
+            final ResourceContext resourceContext,
+            final ManagedObject objectAdapter) {
 
-        ((ResourceContext)resourceContext).setObjectAdapterLinkTo(adapterLinkTo);
+        this(
+            resourceContext,
+            resourceContext.lookupServiceElseFail(RepresentationService.class),
+            resourceContext.lookupServiceElseFail(TransactionService.class),
+            objectAdapter);
 
-        this.resourceContext = resourceContext;
-        this.objectAdapter = objectAdapter;
-
-        adapterLinkTo.usingUrlBase(this.resourceContext)
-        .with(this.objectAdapter);
-
-        representationService = lookupService(RepresentationService.class);
-        transactionService = lookupService(TransactionService.class);
+        resourceContext.objectAdapterLinkTo()
+            .usingUrlBase(this.resourceContext)
+            .with(this.objectAdapter);
     }
 
-    private final ManagedObject objectAdapter;
-
-
-    // //////////////////////////////////////
-    // Helpers (resource delegate here)
-    // //////////////////////////////////////
+    // resource delegate here ...
 
     /**
      * Simply delegates to the {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to
      * render a representation of the object.
      */
-    public Response objectRepresentation() {
+    public ResponseEntity<Object> objectRepresentation() {
         transactionService.flushTransaction();
         return representationService
                 .objectRepresentation(resourceContext, objectAdapter);
@@ -110,11 +101,11 @@ class _DomainResourceHelper {
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of that property.
      */
-    public Response propertyDetails(
+    public ResponseEntity<Object> propertyDetails(
             final String propertyId,
             final ManagedMember.RepresentationMode representationMode) {
 
-        val property = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+        var property = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getPropertyThatIsVisibleForIntent(propertyId, AccessIntent.ACCESS);
         property.setRepresentationMode(representationMode);
 
@@ -122,17 +113,16 @@ class _DomainResourceHelper {
         return representationService.propertyDetails(resourceContext, property);
     }
 
-
     /**
      * Obtains the collection (checking it is visible) of the object and then delegates to the
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of that collection.
      */
-    public Response collectionDetails(
+    public ResponseEntity<Object> collectionDetails(
             final String collectionId,
             final ManagedMember.RepresentationMode representationMode) {
 
-        val collection = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+        var collection = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getCollectionThatIsVisibleForIntent(collectionId, AccessIntent.ACCESS);
         collection.setRepresentationMode(representationMode);
 
@@ -140,15 +130,14 @@ class _DomainResourceHelper {
         return representationService.collectionDetails(resourceContext, collection);
     }
 
-
     /**
      * Obtains the action details (arguments etc), checking it is visible, of the object and then delegates to the
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of that object's action (arguments).
      */
-    public Response actionPrompt(final String actionId) {
+    public ResponseEntity<Object> actionPrompt(final String actionId) {
 
-        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+        var action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
                         actionId, AccessIntent.ACCESS, SemanticConstraint.NONE);
 
@@ -166,7 +155,7 @@ class _DomainResourceHelper {
      *     otherwise an error response is thrown.
      * </p>
      */
-    public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
+    public ResponseEntity<Object> invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
         return invokeAction(
                 actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE,
@@ -183,7 +172,7 @@ class _DomainResourceHelper {
      *     semantics otherwise an error response is thrown.
      * </p>
      */
-    public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
+    public ResponseEntity<Object> invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
         return invokeAction(
                 actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT,
@@ -195,29 +184,31 @@ class _DomainResourceHelper {
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of the result of that action.
      */
-    public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
+    public ResponseEntity<Object> invokeAction(final String actionId, final JsonRepresentation arguments) {
 
         return invokeAction(
                 actionId, AccessIntent.MUTATE, SemanticConstraint.NONE,
                 arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
-    private Response invokeAction(
+    // -- HELPER
+
+    private ResponseEntity<Object> invokeAction(
             final @NonNull String actionId,
             final @NonNull AccessIntent intent,
             final @NonNull SemanticConstraint semanticConstraint,
             final @NonNull JsonRepresentation arguments,
-            final @NonNull ActionResultReprRenderer.SelfLink selfLink) {
+            final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
 
-        val where = resourceContext.getWhere();
+        var where = resourceContext.where();
 
         // lombok issue, needs explicit cast here
-        val actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
+        var actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
         .checkVisibility()
         .checkUsability(intent)
         .checkSemanticConstraint(semanticConstraint);
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);
+        var pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);
 
         if(pendingArgs==null) {
             // no such action or not visible or not usable
@@ -226,18 +217,16 @@ class _DomainResourceHelper {
                     .orElseGet(()->InteractionVeto.notFound(Identifier.Type.ACTION, actionId))); // unexpected code reach
         }
 
-        val hasParams = pendingArgs.getParamCount()>0;
-
+        var hasParams = pendingArgs.getParamCount()>0;
 
         if(hasParams) {
 
             // parse parameters ...
 
-            val action = pendingArgs.getHead().getMetaModel();
-            val vetoCount = new LongAdder();
+            var vetoCount = new LongAdder();
 
-            val paramsOrVetos = ObjectActionArgHelper
-                    .parseArguments(resourceContext, action, arguments);
+            var paramsOrVetos = ObjectActionArgHelper
+                    .parseArguments(resourceContext, pendingArgs.act(), arguments);
 
             pendingArgs.getParamModels().zip(paramsOrVetos, (managedParam, paramOrVeto)->{
 
@@ -254,16 +243,16 @@ class _DomainResourceHelper {
                         InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
             }
 
-            val argAdapters = paramsOrVetos.map(Railway::getSuccessElseFail);
+            var argAdapters = paramsOrVetos.map(Railway::getSuccessElseFail);
             pendingArgs.setParamValues(argAdapters);
 
             // validate parameters ...
 
-            val individualParamConsents = pendingArgs.validateParameterSetForParameters();
+            var individualParamConsents = pendingArgs.validateParameterSetForParameters();
 
             pendingArgs.getParamModels().zip(individualParamConsents, (managedParam, consent)->{
                 if(consent.isVetoed()) {
-                    val veto = InteractionVeto.actionParamInvalid(consent);
+                    var veto = InteractionVeto.actionParamInvalid(consent);
                     InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
                     vetoCount.increment();
                 }
@@ -278,7 +267,7 @@ class _DomainResourceHelper {
 
         }
 
-        val actionConsent = pendingArgs.validateParameterSetForAction();
+        var actionConsent = pendingArgs.validateParameterSetForAction();
         if(actionConsent.isVetoed()) {
             throw InteractionFailureHandler.onParameterListInvalid(
                     InteractionVeto.invalid(actionConsent),
@@ -286,59 +275,25 @@ class _DomainResourceHelper {
         }
 
         if(resourceContext.isValidateOnly()) {
-            return Response.noContent().build(); // do not progress any further
+            return ResponseEntity.noContent().build(); // do not progress any further
         }
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
 
         resultOrVeto.ifFailure(veto->{
             throw InteractionFailureHandler.onFailure(veto);
         });
 
-        val actionInteractionResult = Result.of(
+        var actionInteractionResult = new Result(
                 actionInteraction.getManagedAction().orElse(null),
                 pendingArgs.getParamValues(),
                 resultOrVeto.getSuccessElseFail());
 
-        val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
+        var objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 
         // response
         transactionService.flushTransaction();
         return representationService.actionResult(resourceContext, objectAndActionInvocation);
     }
 
-
-    // //////////////////////////////////////
-    // dependencies (from context)
-    // //////////////////////////////////////
-
-    //TODO pretty low level stuff; maybe move the logic to metamodel module
-    static ManagedObject getServiceAdapter(
-            final IResourceContext resourceContext,
-            final @Nullable String serviceIdOrAlias) {
-
-        val mmc = resourceContext.getMetaModelContext();
-
-        final ManagedObject serviceAdapter = mmc.getSpecificationLoader()
-                .lookupLogicalType(serviceIdOrAlias)
-                .map(LogicalType::getLogicalTypeName)
-                .map(mmc::lookupServiceAdapterById)
-                .orElse(null);
-
-        if(serviceAdapter==null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
-                    "Could not locate service '%s'", serviceIdOrAlias);
-        }
-        return serviceAdapter;
-    }
-
-    private <T> T lookupService(final Class<T> serviceType) {
-        return getServiceRegistry().lookupServiceElseFail(serviceType);
-    }
-
-    private ServiceRegistry getServiceRegistry() {
-        return resourceContext.getMetaModelContext().getServiceRegistry();
-    }
-
 }
-

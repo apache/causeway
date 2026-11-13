@@ -34,13 +34,11 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
-
-import lombok.val;
 
 /**
  * Implementation integrates Causeway' own i18n support ({@link TranslationService}) with Wicket's equivalent i18n
@@ -48,7 +46,7 @@ import lombok.val;
  */
 public class LocalizerForCauseway extends Localizer {
 
-    @Inject private InteractionLayerTracker interactionLayerTracker;
+    @Inject private InteractionProvider interactionProvider;
     @Inject private InteractionService interactionService;
     @Inject private TranslationService translationService;
 
@@ -76,7 +74,7 @@ public class LocalizerForCauseway extends Localizer {
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, CausewayWicketApplication.class);
         final TranslationContext context = TranslationContext.forClassName(contextClass);
-        if(interactionLayerTracker.isInInteraction()) {
+        if(interactionProvider.isInInteraction()) {
             return translate(key, context);
         } else {
             return interactionService.callAnonymous(()->translate(key, context));
@@ -130,7 +128,7 @@ public class LocalizerForCauseway extends Localizer {
         if(component instanceof Form || component instanceof Panel) {
             return Optional.of(component);
         }
-        val parent = component.getParent();
+        var parent = component.getParent();
         if(parent != null) {
             return parentFormOrPanelOf(parent);
         }
@@ -145,6 +143,5 @@ public class LocalizerForCauseway extends Localizer {
     private String translate(final String key, final TranslationContext context) {
         return translationService.translate(context, key);
     }
-
 
 }

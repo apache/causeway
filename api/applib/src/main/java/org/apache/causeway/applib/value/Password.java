@@ -27,8 +27,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 
 /**
  * Represents a password that will not displayed to the UI but can be persisted.
@@ -38,26 +38,12 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.
 @Named(CausewayModuleApplib.NAMESPACE + ".value.Password")
 @Value
 @XmlAccessorType(XmlAccessType.FIELD)
-// @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.
-@lombok.Value
-public class Password implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final String password;
+//TODO: not automatically registered because not encrypted
+// @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class)
+public record Password(String password) implements Serializable {
 
     public static Password of(final String password) {
         return new Password(password);
-    }
-
-    // in support of XML un-marshaling
-    @SuppressWarnings("unused")
-    private Password() {
-        this("");
-    }
-
-    public Password(final String password) {
-        this.password = password;
     }
 
     public boolean checkPassword(final String password) {
@@ -81,7 +67,7 @@ public class Password implements Serializable {
         @Override
         public String marshal(final Password password) throws Exception {
             return password != null
-                    ? password.getPassword()
+                    ? password.password()
                     : null;
         }
     }

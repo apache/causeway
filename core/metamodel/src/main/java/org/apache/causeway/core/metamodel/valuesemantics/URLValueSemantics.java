@@ -81,19 +81,18 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return renderTitle(value, v->v.toString());
+        return renderTitle(value, URL::toString);
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return renderHtml(value, v->toHtmlLink(v));
+        return renderHtml(value, this::toHtmlLink);
     }
 
     private String toHtmlLink(final java.net.URL url) {
-        return String.format("<a "
-                + "target=\"_blank\" "
-                + "class=\"no-click-bubbling\" "
-                + "href=\"%s\">%s</a>", url.toString(), url.toString());
+        return """
+			<a target="_blank" class="no-click-bubbling" href="%s">%s</a>"""
+        		.formatted(url.toString(), url.toString());
     }
 
     // -- PARSER

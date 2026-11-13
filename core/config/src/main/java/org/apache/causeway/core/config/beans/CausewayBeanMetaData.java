@@ -18,109 +18,149 @@
  */
 package org.apache.causeway.core.config.beans;
 
-import java.util.Optional;
+import java.io.Serializable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.NonNull;
 
-import lombok.NonNull;
-import lombok.Value;
+public record CausewayBeanMetaData(
+        @NonNull LogicalType logicalType,
+        @NonNull BeanSort beanSort,
+        @NonNull DiscoveredBy discoveredBy,
+        @NonNull ManagedBy managedBy,
+        @NonNull PersistenceStack persistenceStack)
+implements Serializable {
 
-@Value(staticConstructor = "of")
-public class CausewayBeanMetaData {
+    public enum PersistenceStack {
+        NONE,
+        JDBC,
+        JPA,
+        JDO,
+        /**
+         * eg. abstract entity type
+         */
+        UNSPECIFIED;
+        public boolean isNone() { return this == NONE; }
+        public boolean isJdbc() { return this == JDBC; }
+        public boolean isJpa() { return this == JPA; }
+        public boolean isJdo() { return this == JDO; }
+        public boolean isUnspecified() { return this == UNSPECIFIED; }
+        public boolean isPresent() { return this == JDBC || this == JPA || this == JDO; }
+
+        public String titleCase() {
+            return _Strings.capitalize(_Strings.lower(name()));
+        }
+    }
+
+    public enum DiscoveredBy {
+        CAUSEWAY_UPFRONT,
+        CAUSEWAY_ONTHEFLY,
+        SPRING;
+        //boolean isCauseway() { return this == CAUSEWAY; }
+        //boolean isCausewayTest() { return this == CAUSEWAY_LAZY; }
+        boolean isSpring() { return this == SPRING; }
+    }
 
     public enum ManagedBy {
         NONE,
         CAUSEWAY,
         SPRING,
+        PERSISTENCE,
         /** other Spring managed component, or not managed at all */
-        INDIFFERENT,
-        ;
+        UNSPECIFIED;
         public boolean isNone() { return this == NONE; }
         public boolean isCauseway() { return this == CAUSEWAY; }
         public boolean isSpring() { return this == SPRING; }
-
-        /**
-         * Whether Spring should make that underlying bean injectable.
-         * @implNote if not managed by Causeway, let ultimately Spring decide
-         */
-        public boolean isVetoedForInjection() {
-            return isCauseway()
-                    || isNone();
-        }
-        /**
-         * Whether we interfere with Spring's naming strategy.
-         */
-        public boolean isBeanNameOverride() {
-            return this == CAUSEWAY;
-        }
+        public boolean isPersistence() { return this == PERSISTENCE; }
+        public boolean isUnspecified() { return this == UNSPECIFIED; }
     }
 
-    private final @NonNull BeanSort beanSort;
-    /**
-     * Optionally the {@link PersistenceStack},
-     * based on whether {@link #getBeanSort()} is {@link BeanSort#ENTITY}.
-     */
-    private final @NonNull Optional<PersistenceStack> persistenceStack;
-    private final @NonNull LogicalType logicalType;
-    private @NonNull ManagedBy managedBy;
-
-    public Class<?> getCorrespondingClass() {
-        return logicalType.getCorrespondingClass();
+    public Class<?> correspondingClass() {
+        return logicalType.correspondingClass();
     }
 
-    public String getBeanName() {
-        return logicalType.getLogicalTypeName();
+    public String beanName() {
+        return logicalType.logicalName();
+    }
+
+    public boolean isInjectable(final ServiceRegistry serviceRegistry) {
+    	// optimization
+    	final boolean isDefinitelyNotInjectible = switch (managedBy()) {
+    	case NONE, CAUSEWAY, PERSISTENCE -> true;
+    	case UNSPECIFIED, SPRING  -> beanSort.isAbstract()
+	        || beanSort.isValue()
+	        || beanSort.isEntity()
+	        || beanSort.isViewModel()
+	        || beanSort.isMixin();
+    	};
+    	return !isDefinitelyNotInjectible
+                && (beanSort.isManagedBeanAny()
+                        || serviceRegistry
+                            .lookupRegisteredBeanById(logicalType())
+                            .isPresent());
     }
 
     // -- FACTORIES
 
-    public static CausewayBeanMetaData notManaged(
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
-        return of(beanSort, Optional.empty(), logicalType, ManagedBy.NONE);
+    public static CausewayBeanMetaData vetoed(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.VETOED, discoveredBy, ManagedBy.NONE, PersistenceStack.NONE);
     }
-
-    public static CausewayBeanMetaData notManaged(
-            final @NonNull BeanSort beanSort,
-            final @NonNull Class<?> type) {
-        return notManaged(beanSort, LogicalType.infer(type));
+    public static CausewayBeanMetaData value(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.VALUE, discoveredBy, ManagedBy.NONE, PersistenceStack.NONE);
     }
-
-    public static CausewayBeanMetaData injectable(
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
-        return of(beanSort, Optional.empty(), logicalType, ManagedBy.SPRING);
+    public static CausewayBeanMetaData collection(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.COLLECTION, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
     }
-
-    /**
-     * Let <i>Spring</i> decide.
-     */
-    public static CausewayBeanMetaData indifferent(
-            final @NonNull BeanSort beanSort,
-            final @NonNull Class<?> type) {
-        return of(beanSort, Optional.empty(), LogicalType.infer(type),
-                ManagedBy.INDIFFERENT);
+    public static CausewayBeanMetaData interfaceOrAbstract(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.ABSTRACT, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
     }
-
+    public static CausewayBeanMetaData viewModel(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.VIEW_MODEL, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
+    }
     public static CausewayBeanMetaData entity(
-            final @NonNull PersistenceStack persistenceStack,
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy,
+            final @NonNull PersistenceStack persistenceStack) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.ENTITY, discoveredBy, ManagedBy.PERSISTENCE, persistenceStack);
+    }
+    public static CausewayBeanMetaData mixin(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.MIXIN, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData programmatic(
             final @NonNull LogicalType logicalType) {
-        return of(BeanSort.ENTITY, Optional.of(persistenceStack), logicalType, ManagedBy.CAUSEWAY);
+        return new CausewayBeanMetaData(logicalType, BeanSort.PROGRAMMATIC, DiscoveredBy.CAUSEWAY_ONTHEFLY, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
     }
-
-    public static CausewayBeanMetaData causewayManaged(
-            final @NonNull BeanSort beanSort,
+    public static CausewayBeanMetaData springContributing(
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, Optional.empty(), logicalType, ManagedBy.CAUSEWAY);
+        return new CausewayBeanMetaData(logicalType, BeanSort.MANAGED_BEAN_CONTRIBUTING, DiscoveredBy.SPRING, ManagedBy.SPRING, PersistenceStack.NONE);
     }
-
-    public static CausewayBeanMetaData causewayManaged(
-            final @NonNull BeanSort beanSort,
-            final @NonNull Class<?> type) {
-        return causewayManaged(beanSort, LogicalType.infer(type));
+    public static CausewayBeanMetaData springNotContributing(
+            final @NonNull LogicalType logicalType) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, DiscoveredBy.SPRING, ManagedBy.SPRING, PersistenceStack.NONE);
     }
-
-
+    /**
+     * If discovered by Spring, let Spring decide whether it wants to manage this type.
+     */
+    public static CausewayBeanMetaData unspecified(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy,
+            final @NonNull BeanSort beanSort) {
+        return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+    }
 
 }

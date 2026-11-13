@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of")
@@ -40,21 +40,21 @@ public class DataTableTester {
 
     public void assertUnfilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
-                dataTable.getDataElements().getValue()
+                dataTable.dataElementsObservable().getValue()
                 .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertFilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
-                dataTable.getDataRowsFilteredAndSorted().getValue()
-                .map(DataRow::getRowElement)
+                dataTable.dataRowsFilteredAndSortedObservable().getValue()
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertSelectedDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
-                dataTable.getDataRowsSelected().getValue()
-                .map(DataRow::getRowElement)
+                dataTable.dataRowsSelectedObservable().getValue()
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
@@ -62,7 +62,7 @@ public class DataTableTester {
             final List<Integer> toggleOnIndices,
             final List<Object> expectedPojoElements) {
         toggleOnIndices.forEach(index->
-            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).getSelectToggle().setValue(true));
+            dataTable.dataRowsFilteredAndSortedObservable().getValue().getElseFail(index).selectToggleBindable().setValue(true));
         assertSelectedDataElements(expectedPojoElements);
     }
 
@@ -70,28 +70,28 @@ public class DataTableTester {
             final List<Integer> toggleOffIndices,
             final List<Object> expectedPojoElements) {
         toggleOffIndices.forEach(index->
-            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).getSelectToggle().setValue(false));
+            dataTable.dataRowsFilteredAndSortedObservable().getValue().getElseFail(index).selectToggleBindable().setValue(false));
         assertSelectedDataElements(expectedPojoElements);
     }
 
     public void assertDataRowSelectionIsAll() {
         assertEquals(
-                dataTable.getDataRowsFilteredAndSorted().getValue()
-                .map(DataRow::getRowElement)
+                dataTable.dataRowsFilteredAndSortedObservable().getValue()
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList(),
-                dataTable.getDataRowsSelected().getValue()
-                .map(DataRow::getRowElement)
+                dataTable.dataRowsSelectedObservable().getValue()
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertDataRowSelectionIsEmpty() {
-        assertEquals(0, dataTable.getDataRowsSelected().getValue().size());
+        assertEquals(0, dataTable.dataRowsSelectedObservable().getValue().size());
     }
 
     public void assertColumnNames(final List<String> expectedColumnNames) {
         assertEquals(expectedColumnNames,
-                dataTable.getDataColumns().getValue().stream()
-                .map(DataColumn::getColumnFriendlyName)
+                dataTable.dataColumnsObservable().getValue().stream()
+                .map(DataColumn::columnFriendlyNameObservable)
                 .map(Observable::getValue)
                 .collect(Collectors.toList()));
     }

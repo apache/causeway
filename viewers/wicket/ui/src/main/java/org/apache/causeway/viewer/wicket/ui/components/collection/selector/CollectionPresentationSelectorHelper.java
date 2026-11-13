@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -33,59 +33,40 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.multiple.CollectionContentsMultipleViewsPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.unresolved.CollectionContentsHiddenPanelFactory;
 
-import lombok.Getter;
+public record CollectionPresentationSelectorHelper(
+        CollectionModel collectionModel,
+        Can<ComponentFactoryKey> factoryKeys,
+        ComponentHintKey componentHintKey
+    )
+implements Serializable {
 
-public class CollectionPresentationSelectorHelper implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    static final String UIHINT_EVENT_VIEW_KEY = EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM;
-
-    private final EntityCollectionModel collectionModel;
-
-    @Getter
-    private final Can<ComponentFactoryKey> componentFactories;
-    private final ComponentHintKey componentHintKey;
+    static final String UIHINT_EVENT_VIEW_KEY = CollectionModelParented.HINT_KEY_SELECTED_ITEM;
 
     public CollectionPresentationSelectorHelper(
-            final EntityCollectionModel collectionModel,
+            final CollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry) {
         this(collectionModel, componentFactoryRegistry, ComponentHintKey.noop());
     }
 
     public CollectionPresentationSelectorHelper(
-            final EntityCollectionModel collectionModel,
+            final CollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
-        this.collectionModel = collectionModel;
-        this.componentFactories = gatherComponentFactories(componentFactoryRegistry);
-        this.componentHintKey = componentHintKey != null
+        this(collectionModel,
+            gatherComponentFactories(componentFactoryRegistry, collectionModel),
+            componentHintKey != null
                 ? componentHintKey
-                : ComponentHintKey.noop();
-    }
-
-    private Can<ComponentFactoryKey> gatherComponentFactories(
-            final ComponentFactoryRegistry componentFactoryRegistry) {
-
-        return componentFactoryRegistry
-        .streamComponentFactories(ImmutableEnumSet.of(
-                UiComponentType.COLLECTION_CONTENTS,
-                UiComponentType.COLLECTION_CONTENTS_EXPORT),
-                collectionModel)
-        .filter(componentFactory ->
-            componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
-        .map(ComponentFactory::key)
-        .collect(Can.toCan());
+                : ComponentHintKey.noop());
     }
 
     public String honourViewHintElseDefault(final Component component) {
@@ -93,9 +74,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         final UiHintContainer hintContainer = getUiHintContainer(component);
         if (hintContainer != null) {
             String viewStr = hintContainer.getHint(component, UIHINT_EVENT_VIEW_KEY);
-            if (viewStr != null) {
-                return viewStr;
-            }
+            if (viewStr != null) return viewStr;
         }
 
         // ... else default
@@ -107,11 +86,32 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         return initialFactory;
     }
 
+    Can<CollectionPresentationChoice> collectionPresentationChoices() {
+        return factoryKeys
+            .map(k->CollectionPresentationChoice.of(k.componentFactory()));
+    }
+
+    CollectionPresentationChoice find(final Can<CollectionPresentationChoice> presentationChoices, final String selected) {
+        CollectionPresentationChoice componentFactory = doFind(presentationChoices, selected);
+        if (componentFactory != null) return componentFactory;
+
+        final String fallback = collectionModel.getVariant().isParented()
+                ? CollectionContentsHiddenPanelFactory.NAME
+                : CollectionContentsAsAjaxTablePanelFactory.NAME;
+        componentFactory = doFind(presentationChoices, fallback);
+        if(componentFactory == null) {
+            throw new IllegalStateException(String.format(
+                    "Could not locate '%s' (as the fallback collection panel)",
+                    fallback));
+        }
+        return componentFactory;
+    }
+
     // -- helpers
 
     /**
      * return the index of {@link CollectionContentsHiddenPanelFactory unresolved panel} if present and not eager loading;
-     * else the index of {@link org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
+     * else the index of {@link org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
      * otherwise first factory.
      */
     private String determineInitialFactory() {
@@ -119,13 +119,11 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         // try to load from session, if can
         final Bookmark bookmark = collectionModel.parentedHintingBookmark().orElse(null);
         final String sessionAttribute = componentHintKey.get(bookmark);
-        if(sessionAttribute != null) {
-            return sessionAttribute;
-        }
+        if(sessionAttribute != null) return sessionAttribute;
 
         // else grid layout hint
         final CollectionLayoutData layoutData = toParentedEntityCollectionModel(collectionModel)
-                .map(EntityCollectionModelParented::getLayoutData)
+                .map(CollectionModelParented::getLayoutData)
                 .orElse(null);
 
         if(layoutData != null) {
@@ -141,7 +139,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final String viewName = Facets.defaultViewName(collectionModel.getMetaModel())
                     .orElseThrow(); // null case guarded by if clause
 
-            for (ComponentFactoryKey componentFactory : componentFactories) {
+            for (ComponentFactoryKey componentFactory : factoryKeys) {
                 final String componentName = componentFactory.id();
                 if (componentName.equalsIgnoreCase(viewName)) {
                     return componentName;
@@ -158,53 +156,33 @@ public class CollectionPresentationSelectorHelper implements Serializable {
     }
 
     private static UiHintContainer getUiHintContainer(final Component component) {
-        return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModelParented.class);
+        return UiHintContainer.Util.hintContainerOf(component, CollectionModelParented.class);
     }
 
     private static boolean hasRenderEagerlySemantics(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
-        .map(EntityCollectionModelParented::getMetaModel)
+        .map(CollectionModelParented::getMetaModel)
         .map(Facets::defaultViewIsTable)
         .orElse(false);
     }
 
     private static boolean hasDefaultViewFacet(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
-        .map(EntityCollectionModelParented::getMetaModel)
+        .map(CollectionModelParented::getMetaModel)
         .map(Facets::defaultViewIsPresent)
         .orElse(false);
     }
 
-    public ComponentFactoryKey find(final String selected) {
-        ComponentFactoryKey componentFactory = doFind(selected);
-        if (componentFactory != null) {
-            return componentFactory;
-        }
-
-        final String fallback = collectionModel.getVariant().isParented()
-                ? CollectionContentsHiddenPanelFactory.NAME
-                : CollectionContentsAsAjaxTablePanelFactory.NAME;
-        componentFactory = doFind(fallback);
-        if(componentFactory == null) {
-            throw new IllegalStateException(String.format(
-                    "Could not locate '%s' (as the fallback collection panel)",
-                    fallback));
-        }
-        return componentFactory;
-    }
-
-    private ComponentFactoryKey doFind(final String selected) {
-        for (ComponentFactoryKey componentFactory : componentFactories) {
-            if(selected.equals(componentFactory.id())) {
-                return componentFactory;
-            }
+    private CollectionPresentationChoice doFind(final Can<CollectionPresentationChoice> presentationChoices, final String selected) {
+        for (CollectionPresentationChoice componentFactory : presentationChoices) {
+            if(selected.equals(componentFactory.id())) return componentFactory;
         }
         return null;
     }
 
     public int lookup(final String view) {
         int i=0;
-        for (ComponentFactoryKey componentFactory : componentFactories) {
+        for (ComponentFactoryKey componentFactory : factoryKeys) {
             if(view.equals(componentFactory.id())) {
                 return i;
             }
@@ -215,13 +193,26 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
     // -- HELPER
 
-    private static Optional<EntityCollectionModelParented> toParentedEntityCollectionModel(
+    private static Optional<CollectionModelParented> toParentedEntityCollectionModel(
             final @Nullable IModel<?> model) {
-        if (model instanceof EntityCollectionModelParented) {
-            return Optional.of((EntityCollectionModelParented) model);
+        if (model instanceof CollectionModelParented) {
+            return Optional.of((CollectionModelParented) model);
         }
         return Optional.empty();
     }
 
+    private static Can<ComponentFactoryKey> gatherComponentFactories(
+        final ComponentFactoryRegistry componentFactoryRegistry,
+        final CollectionModel collectionModel) {
+    return componentFactoryRegistry
+        .streamComponentFactories(ImmutableEnumSet.of(
+                UiComponentType.COLLECTION_CONTENTS,
+                UiComponentType.COLLECTION_CONTENTS_EXPORT),
+                collectionModel)
+        .filter(componentFactory ->
+            componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
+        .map(ComponentFactory::key)
+        .collect(Can.toCan());
+}
 
 }

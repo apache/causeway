@@ -29,10 +29,9 @@ import java.util.stream.Stream;
  */
 public interface Vertex<T> {
 
-    public T getValue();
-
-    int getIncomingCount();
-    int getOutgoingCount();
+    T value();
+    int incomingCount();
+    int outgoingCount();
 
     Stream<Edge<T>> streamIncoming();
     Stream<Edge<T>> streamOutgoing();

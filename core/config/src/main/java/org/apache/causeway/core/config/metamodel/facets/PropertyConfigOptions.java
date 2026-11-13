@@ -20,18 +20,18 @@ package org.apache.causeway.core.config.metamodel.facets;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class PropertyConfigOptions {
 
     public static PublishingPolicy propertyCommandPublishingPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getProperty().getCommandPublishing();
+        return configuration.applib().annotation().property().commandPublishing();
     }
 
     public static PublishingPolicy propertyExecutionPublishingPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getProperty().getExecutionPublishing();
+        return configuration.applib().annotation().property().executionPublishing();
     }
 
     public enum PublishingPolicy {

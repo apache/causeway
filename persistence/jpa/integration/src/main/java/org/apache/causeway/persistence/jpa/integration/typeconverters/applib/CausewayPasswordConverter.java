@@ -33,7 +33,7 @@ implements AttributeConverter<Password, String> {
     @Override
     public String convertToDatabaseColumn(final Password memberValue) {
         return memberValue != null
-                ? memberValue.getPassword()
+                ? memberValue.password()
                 : null;
     }
 

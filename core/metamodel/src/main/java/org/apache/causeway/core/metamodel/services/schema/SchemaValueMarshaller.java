@@ -31,7 +31,7 @@ import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides the runtime context for converting values

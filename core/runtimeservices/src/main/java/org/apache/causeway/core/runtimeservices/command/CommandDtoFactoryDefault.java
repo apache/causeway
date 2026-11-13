@@ -20,13 +20,6 @@ package org.apache.causeway.core.runtimeservices.command;
 
 import java.util.UUID;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
@@ -35,7 +28,6 @@ import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -50,16 +42,24 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidsDto;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
+ * Default implementation of {@link CommandDtoFactory}.
+ *
+ * <p>
  * The design of this service is similar to
- * {@link org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault}.
+ * {@link org.apache.causeway.core.runtimeservices.ia.dto.InteractionDtoFactoryDefault}.
+ * </p>
  *
- * @see org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault
+ * @see org.apache.causeway.core.runtimeservices.ia.dto.InteractionDtoFactoryDefault
  *
- * @since 2.0 {@index}
+ * @since 2.0
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandDtoFactoryDefault")
@@ -79,9 +79,9 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        val commandDto = asCommandDto(interactionId, targetHead);
+        var commandDto = asCommandDto(interactionId, targetHead);
 
-        val actionDto = new ActionDto();
+        var actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
         commandDto.setMember(actionDto);
 
@@ -115,15 +115,15 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
 
-        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(head, objectAction));
+        actionDto.setLogicalMemberIdentifier(head.logicalMemberIdentifierFor(objectAction));
 
-        val actionParameters = objectAction.getParameters();
+        var actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
             final ObjectActionParameter actionParameter = actionParameters.getElseFail(paramNum);
 
-            val argAdapter = argAdapters.getElseFail(paramNum);
+            var argAdapter = argAdapters.getElseFail(paramNum);
 
-            val paramDto = CommonDtoUtils.paramDto(
+            var paramDto = CommonDtoUtils.paramDto(
                                             isParamIdentifierStrategySetToUseId()
                                                 ? actionParameter.getId()
                                                 : actionParameter.getCanonicalFriendlyName()
@@ -131,12 +131,12 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             actionParameter.getFeatureIdentifier();
 
-            if(actionParameter.getFeatureType() != FeatureType.ACTION_PARAMETER_PLURAL) {
+            if(actionParameter.featureType() != FeatureType.ACTION_PARAMETER_PLURAL) {
                 //scalar
                 valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {
                 //non-scalar
-                val values = ManagedObjects.unpack(argAdapter);
+                var values = ManagedObjects.unpack(argAdapter);
                 valueMarshaller.recordParamNonScalar(paramDto, actionParameter, values);
             }
 
@@ -148,12 +148,12 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public void addPropertyValue(
-            final InteractionHead interactionHead,
+            final InteractionHead head,
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(interactionHead, property));
+        propertyDto.setLogicalMemberIdentifier(head.logicalMemberIdentifierFor(property));
 
         valueMarshaller.recordPropertyValue(propertyDto, property, valueAdapter);
     }
@@ -162,7 +162,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     private CommandDto asCommandDto(final UUID interactionId, final InteractionHead targetHead) {
 
-        val dto = new CommandDto();
+        var dto = new CommandDto();
         dto.setMajorVersion("2");
         dto.setMinorVersion("0");
 
@@ -171,7 +171,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
         // transient/detached entities have no bookmark, fail early
-        val bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+        var bookmark = ManagedObjects.bookmarkElseFail(targetHead.owner());
         final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
         targetOids.getOid().add(bookmark.toOidDto());
 
@@ -179,8 +179,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     }
 
     private boolean isParamIdentifierStrategySetToUseId() {
-        return causewayConfiguration.getSchema().getCommand().getParamIdentifierStrategy() == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
+        return causewayConfiguration.schema().command().paramIdentifierStrategy()
+            == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
     }
-
 
 }

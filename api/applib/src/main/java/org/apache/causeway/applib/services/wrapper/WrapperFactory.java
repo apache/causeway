@@ -19,131 +19,143 @@
 package org.apache.causeway.applib.services.wrapper;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.causeway.commons.functional.TryFuture;
 
 /**
- *
  * Provides the ability to 'wrap' a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implied by
  * the Apache Causeway programming model.
  *
- * <p>
- * This capability goes beyond enforcing the (imperative) constraints within
+ * <p> This capability goes beyond enforcing the (imperative) constraints within
  * the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it
  * also enforces (declarative) constraints such as those represented by
  * annotations, eg `@Parameter(maxLength=...)` or `@Property(mustSatisfy=...)`.
- * </p>
  *
- * <p>
- * The wrapper can alternatively also be used to execute the action
+ * <p> The wrapper can alternatively also be used to execute the action
  * asynchronously, through an {@link java.util.concurrent.ExecutorService}.
  * Any business rules will be invoked synchronously beforehand, however.
- * </p>
  *
- * <p>
- * The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain
+ * <p> The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain
  * object. The wrapper can then be interacted with as follows:
  * <ul>
- * <li>a <tt>get</tt> method for properties or collections</li>
- * <li>a <tt>set</tt> method for properties</li>
- * <li>any action</li>
+ *   <li>a <tt>get</tt> method for properties or collections</li>
+ *   <li>a <tt>set</tt> method for properties</li>
+ *   <li>any action</li>
  * </ul>
- * </p>
  *
- * <p>
- * Calling any of the above methods may result in a (subclass of)
+ * <p> Calling any of the above methods may result in a (subclass of)
  * {@link InteractionException} if the object disallows it. For example, if a
  * property is annotated as hidden then a {@link HiddenException} will
  * be thrown. Similarly if an action has a <tt>validate</tt> method and the
  * supplied arguments are invalid then a {@link InvalidException} will be
  * thrown.
- * </p>
  *
- * <p>
- * In addition, the following methods may also be called:
+ * <p> In addition, the following methods may also be called:
  * <ul>
- * <li>the <tt>title</tt> method</li>
- * <li>any <tt>defaultXxx</tt> or <tt>choicesXxx</tt> method</li>
+ *   <li>the <tt>title</tt> method</li>
+ *   <li>any <tt>defaultXxx</tt> or <tt>choicesXxx</tt> method</li>
  * </ul>
- * </p>
  *
- * <p>
- * If the object has (see {@link #isWrapper(Object)} already been wrapped),
+ * <p> If the object has (see {@link #isWrapper(Object)} already been wrapped),
  * then should just return the object back unchanged.
- * </p>
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 3.4 {@index}
  */
 public interface WrapperFactory {
 
     /**
-     * Provides the &quot;wrapper&quot; of a domain object against which to invoke the action.
+     * The result of an async proxy instantiation,
+     * that allows to submit an async invocation on the wrapped domain object.
      *
-     * <p>
-     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
-     *     whether the action is executed.  There are therefore three typical cases:
-     *     <ul>
-     *         <li>check rules, execute action</li>
-     *         <li>skip rules, execute action</li>
-     *         <li>check rules, skip action</li>
-     *     </ul>
-     *     <p>
-     *         The last logical option (skip rules, skip action) is valid but doesn't make sense, as it's basically a no-op.
-     *     </p>
-     * </p>
+     * <p>The framework takes care, that an async invocation is scoped within both an interaction-context and a transaction.
+     * Further more, {@link TryFuture}'s success values are unwrapped and detached.
      *
-     * <p>
-     * Otherwise, will do all the validations (raise exceptions as required
-     * etc.), but doesn't modify the model.
+     * <p>Terminology:
+     * <ul>
+     *   <li>interaction-context: who/how/when {@link InteractionContext}</li>
+     *   <li>unwrapped: plain object, not proxied {@link WrapperFactory#unwrap}</li>
+     *   <li>detached: object not attached to a persistence session (applicable to entities only)
+     *      {@link RepositoryService#detach(Object)}</li>
+     * </ul>
+     *
+     * @since 3.4 {@index}
+     * @see TryFuture
      */
-    <T> T wrap(T domainObject,
-               SyncControl syncControl);
+    interface AsyncProxy<T> {
+        TryFuture<Void> acceptAsync(ThrowingConsumer<? super T> action);
+        <U> TryFuture<U> applyAsync(ThrowingFunction<? super T, ? extends U> fn);
+    }
 
     /**
-     * A convenience overload for {@link #wrap(Object, SyncControl)},
-     * returning a wrapper to invoke the action synchronously, enforcing business rules.
-     * Any exceptions will be propagated, not swallowed.
+     * Provides the'wrapper' of a domain object against which to invoke the action.
+     *
+     * <p>The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     * whether the action is executed.  There are therefore three typical cases:
+     * <ul>
+     *   <li>check rules, execute action</li>
+     *   <li>skip rules, execute action</li>
+     *   <li>check rules, skip action</li>
+     * </ul>
+     *
+     * <p>The last logical option (skip rules, skip action) is valid but doesn't make sense, as it's basically a no-op.
+     *
+     * <p>Otherwise, will do all the validations (raise exceptions as required
+     * etc.), but doesn't modify the model.
+     *
+     * <p>Any exceptions will be propagated, not swallowed.
      */
-    <T> T wrap(T domainObject);
+    <T> T wrap(T domainObject, SyncControl syncControl);
+
+    /**
+     * A convenience overload for {@link #wrap(Object, SyncControl)} with {@code SyncControl.defaults()}.
+     * @see #wrap(Object, SyncControl)
+     */
+    default <T> T wrap(T domainObject) {
+        return wrap(domainObject, SyncControl.defaults());
+    }
 
     /**
      * Provides the wrapper for a {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
      *
-     * <p>
-     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
-     *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
-     * </p>
+     * <p>The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     * whether the action is executed.
+     *
+     * <p>Any exceptions will be propagated, not swallowed.
+     * @see #wrap(Object, SyncControl)
      */
-    <T> T wrapMixin(Class<T> mixinClass, Object mixee,
-                    SyncControl syncControl);
+    <T> T wrapMixin(Class<T> mixinClass, Object mixee, SyncControl syncControl);
+
+    /**
+     * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)} with {@code SyncControl.defaults()}.
+     * @see #wrapMixin(Class, Object, SyncControl)
+     */
+    default <T> T wrapMixin(Class<T> mixinClass, Object mixee) {
+        return wrapMixin(mixinClass, mixee, SyncControl.defaults());
+    }
 
     /**
      * Provides the wrapper for a {@link Mixin typesafe} {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
      *
-     * <p>
-     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     * <p>The provided {@link SyncControl} determines whether business rules are checked first, and conversely
      *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
-     * </p>
      */
     default <T extends Mixin<MIXEE>, MIXEE> T wrapMixinT(Class<T> mixinClass, MIXEE mixee,
                     SyncControl syncControl) {
         return wrapMixin(mixinClass, mixee, syncControl);
     }
-
-    /**
-     * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)},
-     * returning a wrapper to invoke the action synchronously, enforcing business rules.
-     * Any exceptions will be propagated, not swallowed.
-     */
-    <T> T wrapMixin(Class<T> mixinClass, Object mixee);
 
     /**
      * A convenience overload for {@link #wrapMixinT(Class, Object, SyncControl)},
@@ -157,8 +169,7 @@ public interface WrapperFactory {
     /**
      * Obtains the underlying domain object, if wrapped.
      *
-     * <p>
-     * If the object {@link #isWrapper(Object) is not wrapped}, then
+     * <p>If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
      */
     <T> T unwrap(T possibleWrappedDomainObject);
@@ -166,85 +177,66 @@ public interface WrapperFactory {
     /**
      * Whether the supplied object is a wrapper around a domain object.
      *
-     * @param <T>
      * @param possibleWrappedDomainObject
      *            - object that might or might not be a wrapper.
      */
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
-
-
-    //
     // -- ASYNC WRAPPING
-    //
-
 
     /**
-     * Returns a proxy object for the provided {@code domainObject},
-     * through which can execute the action asynchronously (in another thread).
+     * Returns a {@link CompletableFuture} holding a proxy object for the provided {@code domainObject},
+     * through which one can execute the action asynchronously (in another thread).
      *
      * @param <T> - the type of the domain object
-     * @param <R> - the type of the return of the action
-     * @param domainObject
-     * @param asyncControl
      *
-     * @since 2.0
+     * @since 3.4
      */
-    <T,R> T asyncWrap(T domainObject,
-                      AsyncControl<R> asyncControl);
+    <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl);
 
     /**
-     * Returns a proxy object for the provided {@code mixinClass},
-     * through which can execute the action asynchronously (in another thread).
+     * A convenience overload for {@link #asyncWrap(Object, AsyncControl)} with {@code AsyncControl.defaults()}.
+     * @see #asyncWrap(Object, AsyncControl)
      *
-     * @param <T>
-     * @param mixinClass
-     * @param mixee
-     * @param asyncControl
-     *
-     * @since 2.0
+     * @since 3.4
      */
-    <T,R> T asyncWrapMixin(
-                   Class<T> mixinClass, Object mixee,
-                   AsyncControl<R> asyncControl);
-
-
-    /**
-     * Returns a proxy object for the provided {@code mixinClass},
-     * through which can execute the action asynchronously (in another thread).
-     *
-     * @param <T>
-     * @param mixinClass
-     * @param mixee
-     * @param asyncControl
-     *
-     * @since 2.0
-     */
-    default <T extends MIXEE,MIXEE, R> T asyncWrapMixinT(
-                   Class<T> mixinClass, MIXEE mixee,
-                   AsyncControl<R> asyncControl) {
-        return asyncWrapMixin(mixinClass, mixee, asyncControl);
+    default <T> AsyncProxy<T> asyncWrap(T domainObject) {
+        return asyncWrap(domainObject, AsyncControl.defaults());
     }
 
+    /**
+     * Returns a {@link AsyncProxy} holding a proxy object for the provided {@code mixinClass},
+     * through which one can execute the action asynchronously (in another thread).
+     *
+     * @param <T> - the type of the mixin
+     *
+     * @since 3.4
+     */
+    <T> AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl asyncControl);
 
+    /**
+     * A convenience overload for {@link #asyncWrapMixin(Class, Object, AsyncControl)} with {@code AsyncControl.defaults()}.
+     * @see #asyncWrapMixin(Class, Object, AsyncControl)
+     *
+     * @since 3.4
+     */
+    default <T> AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee) {
+        return asyncWrapMixin(mixinClass, mixee, AsyncControl.defaults());
+    }
 
-    //
     // -- INTERACTION EVENT HANDLING
-    //
 
     /**
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
      */
-    // ...
     List<InteractionListener> getListeners();
 
     /**
      * Registers an {@link InteractionListener}, to be notified of interactions
      * on all wrappers.
      *
-     * <p>
-     * This is retrospective: the listener will be notified of interactions even
+     * <p> This is retrospective: the listener will be notified of interactions even
      * on wrappers created before the listener was installed. (From an
      * implementation perspective this is because the wrappers delegate back to
      * the container to fire the events).
@@ -257,8 +249,7 @@ public interface WrapperFactory {
      * Remove an {@link InteractionListener}, to no longer be notified of
      * interactions on wrappers.
      *
-     * <p>
-     * This is retrospective: the listener will no longer be notified of any
+     * <p>This is retrospective: the listener will no longer be notified of any
      * interactions created on any wrappers, not just on those wrappers created
      * subsequently. (From an implementation perspective this is because the
      * wrappers delegate back to the container to fire the events).
@@ -270,16 +261,4 @@ public interface WrapperFactory {
 
     void notifyListeners(InteractionEvent ev);
 
-
-    //
-    // -- SPI for ExecutorServices
-    //
-
-
-    /**
-     * Provides a mechanism for custom implementations of {@link java.util.concurrent.ExecutorService}, as installed
-     * using {@link AsyncControl#with(ExecutorService)}, to actually execute the {@link AsyncCallable} that they
-     * are passed initially during {@link WrapperFactory#asyncWrap(Object, AsyncControl)} and its brethren.
-     */
-    <R> R execute(AsyncCallable<R> asyncCallable);
 }

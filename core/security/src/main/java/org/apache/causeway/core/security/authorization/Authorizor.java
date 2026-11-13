@@ -19,7 +19,7 @@
 package org.apache.causeway.core.security.authorization;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 
 /**
  * Represents a mechanism to evaluate whether the current user (as represented

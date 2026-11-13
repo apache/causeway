@@ -33,8 +33,7 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyAutoCompleteFacetMethod
 extends PropertyAutoCompleteFacetAbstract
@@ -70,15 +69,15 @@ implements ImperativeFacet {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object collectionOrArray = MmInvokeUtils.invokeWithSingleArgPojo(method.method(), owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
         }
 
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
+        var collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
-        val visiblePojos = MmVisibilityUtils
+        var visiblePojos = MmVisibilityUtils
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
 
         return visiblePojos;

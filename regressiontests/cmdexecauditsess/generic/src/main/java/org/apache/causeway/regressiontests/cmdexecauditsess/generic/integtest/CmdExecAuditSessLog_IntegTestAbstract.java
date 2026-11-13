@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -51,8 +51,6 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
-
 public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @BeforeAll
@@ -70,7 +68,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
         assertThat(counterRepository.find()).isEmpty();
 
-        val counter1 = counterRepository.persist(newCounter("counter-1"));
+        var counter1 = counterRepository.persist(newCounter("counter-1"));
         target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
 
         assertThat(counterRepository.find()).hasSize(1);
@@ -93,11 +91,9 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
     @Inject SpecificationLoader specificationLoader;
 
-
-
     protected void assertEntityPublishingDisabledFor(final Class<?> entityClass) {
-        val objectSpecification = specificationLoader.loadSpecification(entityClass);
-        EntityChangePublishingFacet facet = objectSpecification.getFacet(EntityChangePublishingFacet.class);
+        var objectSpecification = specificationLoader.loadSpecification(entityClass);
+        EntityChangePublishingFacet facet = objectSpecification.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
         Assertions.assertThat(facet)
                         .satisfies(f -> assertThat(f).isNotNull())
                         .satisfies(f -> assertThat(f.isEnabled()).isFalse())
@@ -108,8 +104,8 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     void invoke_mixin() {
 
         // given
-        val counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
-        val interaction = interactionService.currentInteraction().orElseThrow();
+        var counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        var interaction = interactionService.currentInteraction().orElseThrow();
 
         // when
         wrapperFactory.wrapMixinT(Counter_bumpUsingMixin.class, counter1).act();
@@ -119,7 +115,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         var executionLogEntries = executionLogEntryRepository.findMostRecent();
         assertThat(executionLogEntries).hasSize(1);
 
-        val executionLogEntry = executionLogEntries.get(0);
+        var executionLogEntry = executionLogEntries.get(0);
 
         assertThat(executionLogEntry)
                 .satisfies(e -> assertThat(e.getInteractionId()).isEqualTo(interaction.getInteractionId()))
@@ -143,7 +139,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         var executionOutboxEntries = executionOutboxEntryRepository.findAll();
         assertThat(executionOutboxEntries).hasSize(1);
 
-        val executionOutboxEntry = executionOutboxEntries.get(0);
+        var executionOutboxEntry = executionOutboxEntries.get(0);
 
         assertThat(executionOutboxEntry)
                 .satisfies(e -> assertThat(e.getInteractionId()).isEqualTo(interaction.getInteractionId()))
@@ -165,7 +161,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... and command is also already persisted, not yet marked as completed
         var commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-        val commandLogEntry = commandLogEntries.get(0);
+        var commandLogEntry = commandLogEntries.get(0);
         assertThat(commandLogEntry)
                 .satisfies(e -> assertThat(e.getInteractionId()).isEqualTo(interaction.getInteractionId()))
                 .satisfies(e -> assertThat(e.getStartedAt()).isNotNull())
@@ -189,7 +185,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
                 .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo(""))
         ;
 
-
         assertThat(commandLogEntry.getCompletedAt()).isNull();
 
         // ... and audit entries not yet generated
@@ -203,7 +198,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... command entry now marked as complete
         commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-        val commandLogEntryAfter = commandLogEntries.get(0);
+        var commandLogEntryAfter = commandLogEntries.get(0);
         assertThat(commandLogEntryAfter)
                 .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
                 .satisfies(e -> assertThat(e.getDuration()).isNotNull())
@@ -237,7 +232,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     void invoke_direct() {
 
         // given
-        val counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        var counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
@@ -250,7 +245,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... and command is also already persisted, not yet marked as completed
         var commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-        val commandLogEntry = commandLogEntries.get(0);
+        var commandLogEntry = commandLogEntries.get(0);
         assertThat(commandLogEntry)
                 .satisfies(e -> assertThat(e.getStartedAt()).isNotNull())
                 .satisfies(e -> assertThat(e.getCompletedAt()).isNull())
@@ -272,13 +267,12 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... command entry now marked as complete
         commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-        val commandLogEntryAfter = commandLogEntries.get(0);
+        var commandLogEntryAfter = commandLogEntries.get(0);
         assertThat(commandLogEntryAfter)
                 .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
                 .satisfies(e -> assertThat(e.getDuration()).isNotNull())
                 .satisfies(e -> assertThat(e.getResult()).isNotNull())
                 .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
-
 
         if(!isJpa()) {
             // and then
@@ -289,12 +283,11 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
     }
 
-
     @Test
     void edit() {
 
         // given
-        val counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        var counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
 
         // when
         wrapperFactory.wrap(counter1).setNum(99L);
@@ -307,7 +300,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... and command is also already persisted, not yet marked as completed
         var commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-        val commandLogEntry = commandLogEntries.get(0);
+        var commandLogEntry = commandLogEntries.get(0);
         assertThat(commandLogEntry)
                 .satisfies(e -> assertThat(e.getStartedAt()).isNotNull())
                 .satisfies(e -> assertThat(e.getCompletedAt()).isNull())
@@ -326,7 +319,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... command entry now marked as complete
         commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-        val commandLogEntryAfter = commandLogEntries.get(0);
+        var commandLogEntryAfter = commandLogEntries.get(0);
         assertThat(commandLogEntryAfter)
                 .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
                 .satisfies(e -> assertThat(e.getDuration()).isNotNull())
@@ -343,9 +336,8 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
     boolean isJpa() {
-        return causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJpa();
+        return causewayBeanTypeRegistry.persistenceStack().isJpa();
     }
-
 
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
     @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;

@@ -27,13 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.validation.constraints.Digits;
-
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -49,7 +42,6 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.HasInteractionDto;
@@ -62,10 +54,11 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
+import org.springframework.stereotype.Service;
 
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.val;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+import jakarta.validation.constraints.Digits;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -80,17 +73,14 @@ import lombok.experimental.UtilityClass;
 @Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
-        entityChangePublishing = Publishing.DISABLED
-)
+        entityChangePublishing = Publishing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = ExecutionLogEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionLogEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionLogEntry.CssClassUiEvent.class,
-        layoutUiEvent = ExecutionLogEntry.LayoutUiEvent.class
-)
-@NoArgsConstructor
-public abstract class ExecutionLogEntry
-implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
+        layoutUiEvent = ExecutionLogEntry.LayoutUiEvent.class)
+public interface ExecutionLogEntry
+extends Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogEntry";
     public static final String SCHEMA = CausewayModuleExtExecutionLogApplib.SCHEMA;
@@ -123,27 +113,21 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     }
 
     @UtilityClass
-    protected static class Util {
+    static class Util {
         public static String abbreviated(final String str, final int maxLength) {
             return str != null ? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...") : null;
         }
     }
 
-    @Inject BookmarkService bookmarkService;
-
-    public ExecutionLogEntry(@NonNull final Execution<? extends MemberExecutionDto,?> execution) {
-        init(execution);
-    }
-
     @Programmatic
-    public void init(final Execution<? extends MemberExecutionDto, ?> execution) {
-        val interactionId = execution.getInteraction().getInteractionId();
+    default void init(final Execution<? extends MemberExecutionDto, ?> execution) {
+        var interactionId = execution.getInteraction().getInteractionId();
         setInteractionId(interactionId);
 
-        val memberExecutionDto = execution.getDto();
+        var memberExecutionDto = execution.getDto();
         setSequence(memberExecutionDto.getSequence());
 
-        val interactionDto = new InteractionDto();
+        var interactionDto = new InteractionDto();
         interactionDto.setInteractionId(interactionId.toString());
         interactionDto.setExecution(memberExecutionDto);
         setInteractionDto(interactionDto);
@@ -161,31 +145,27 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
             setExecutionType(ExecutionLogEntryType.PROPERTY_EDIT);
         } else if(execution instanceof ActionInvocation) {
             setExecutionType(ExecutionLogEntryType.ACTION_INVOCATION);
-        } else {
+        } else
             // shouldn't happen, there are no other subtypes
             throw new IllegalArgumentException(String.format("Execution subtype unknown: %s", execution.getClass().getName()));
-        }
     }
 
-
-    private static final DateTimeFormatter formatter =
+    static final DateTimeFormatter DATETIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return new TitleBuffer()
-                .append(formatter.format(getTimestamp().toLocalDateTime()))
+                .append(DATETIME_FORMATTER.format(getTimestamp().toLocalDateTime()))
                 .append(" ")
                 .append(getLogicalMemberIdentifier())
                 .toString();
     }
 
-
     @DomainChangeRecord.Type
     @Override
-    public ChangeType getType() {
+    default ChangeType getType() {
         return ChangeType.EXECUTION;
     }
-
 
     /**
      * The unique identifier (a GUID) of the {@link org.apache.causeway.applib.services.iactn.Interaction} in which this execution occurred.
@@ -213,8 +193,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public abstract UUID getInteractionId();
     public abstract void setInteractionId(UUID interactionId);
 
-
-
     /**
      * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
      *
@@ -240,8 +218,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public abstract int getSequence();
     public abstract void setSequence(int sequence);
 
-
-
     @Property(
             domainEvent = ExecutionType.DomainEvent.class
     )
@@ -256,8 +232,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @ExecutionType
     public abstract ExecutionLogEntryType getExecutionType();
     public abstract void setExecutionType(ExecutionLogEntryType executionType);
-
-
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -276,8 +250,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public abstract String getUsername();
     public abstract void setUsername(String userName);
 
-
-
     @Property(
             domainEvent = Timestamp.DomainEvent.class
     )
@@ -293,8 +265,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @Override
     public abstract java.sql.Timestamp getTimestamp();
     public abstract void setTimestamp(java.sql.Timestamp timestamp);
-
-
 
     @Property(
             domainEvent = Target.DomainEvent.class
@@ -312,8 +282,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @Target
     public abstract Bookmark getTarget();
     public abstract void setTarget(Bookmark target);
-
-
 
     /**
      * String representation of the invoked action or edited property.
@@ -340,8 +308,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
-
-
     @Property(
             domainEvent = InteractionDtoAnnot.DomainEvent.class
     )
@@ -358,8 +324,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @Override
     public abstract InteractionDto getInteractionDto();
     public abstract void setInteractionDto(InteractionDto commandDto);
-
-
 
     @Property(
             domainEvent = StartedAt.DomainEvent.class,
@@ -380,8 +344,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public abstract java.sql.Timestamp getStartedAt();
     public abstract void setStartedAt(java.sql.Timestamp startedAt);
 
-
-
     @Property(
             domainEvent = CompletedAt.DomainEvent.class,
             editing = Editing.DISABLED,
@@ -401,8 +363,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public abstract java.sql.Timestamp getCompletedAt();
     public abstract void setCompletedAt(java.sql.Timestamp completedAt);
 
-
-
     @Property(
             domainEvent = Duration.DomainEvent.class,
             editing = Editing.DISABLED
@@ -420,19 +380,17 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
      * {@link #getStartedAt()} and {@link #getCompletedAt()}.
      */
     @Duration
-    public BigDecimal getDuration() {
+    default BigDecimal getDuration() {
         return _Temporals.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
                 .orElse(null);
     }
 
-
     @Override
-    public int compareTo(final ExecutionLogEntry other) {
+    default int compareTo(final ExecutionLogEntry other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
 
-
-    static final ToString<ExecutionLogEntry> stringifier = ObjectContracts
+    static final ToString<ExecutionLogEntry> TOSTRING = ObjectContracts
             .toString("interactionId", ExecutionLogEntry::getInteractionId)
             .thenToString("sequence", ExecutionLogEntry::getSequence)
             .thenToString("username", ExecutionLogEntry::getUsername)
@@ -443,11 +401,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
             .thenToStringOmitIfAbsent("startedAt", ExecutionLogEntry::getStartedAt)
             .thenToStringOmitIfAbsent("completedAt", ExecutionLogEntry::getCompletedAt);
 
-    @Override
-    public String toString() {
-        return stringifier.toString(this);
-    }
-
     @Service
     @Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.
     public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<ExecutionLogEntry> {
@@ -455,7 +408,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         public TableColumnOrderDefault() { super(ExecutionLogEntry.class); }
 
         @Override
-        protected List<String> orderParented(final Object parent, final String collectionId, final List<String> propertyIds) {
+        protected List<String> orderParented(final Class<?> parentType, final String collectionId, final List<String> propertyIds) {
             return ordered(propertyIds);
         }
 

@@ -10,7 +10,7 @@ Provides methods to programmatically obtain the title and icon of a domain objec
 ----
 interface TitleService {
   String titleOf(Object domainObject)     // <.>
-  String iconNameOf(Object domainObject)     // <.>
+  IconResource iconOf(Object domainObject, IconSize iconSize)     // <.>
 }
 ----
 
@@ -19,10 +19,10 @@ interface TitleService {
 --
 Returns the title of the object (as rendered in the UI by the framework's viewers).
 --
-<.> xref:#iconNameOf_Object[iconNameOf(Object)]
+<.> xref:#iconOf_Object_IconSize[iconOf(Object, IconSize)]
 +
 --
-Returns the icon name of the object (as rendered in the UI by the framework's viewers).
+Returns the icon of the object (as rendered in the UI by the framework's viewers).
 --
 
 == Members
@@ -32,10 +32,10 @@ Returns the icon name of the object (as rendered in the UI by the framework's vi
 
 Returns the title of the object (as rendered in the UI by the framework's viewers).
 
-[#iconNameOf_Object]
-=== iconNameOf(Object)
+[#iconOf_Object_IconSize]
+=== iconOf(Object, IconSize)
 
-Returns the icon name of the object (as rendered in the UI by the framework's viewers).
+Returns the icon of the object (as rendered in the UI by the framework's viewers).
 
 include::hooks/TitleService_010-implementation.adoc[]
 

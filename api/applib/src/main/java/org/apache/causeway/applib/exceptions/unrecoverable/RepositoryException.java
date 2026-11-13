@@ -26,7 +26,7 @@ import org.apache.causeway.applib.exceptions.UnrecoverableException;
  *
  * <p>
  * This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some
- * JDOQL query syntax or similar), and so is a subclass of {@link UnrecoverableException}.
+ * named query syntax, or similar), and so is a subclass of {@link UnrecoverableException}.
  * Throwing this exception will therefore result in (some sort of) error page being displayed
  * to the user.
  *

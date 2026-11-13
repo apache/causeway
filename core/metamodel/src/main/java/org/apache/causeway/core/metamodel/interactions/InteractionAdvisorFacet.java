@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.Allow;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
-import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**
@@ -39,6 +39,5 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  *
  */
 public interface InteractionAdvisorFacet extends InteractionAdvisor, Facet {
-
 
 }

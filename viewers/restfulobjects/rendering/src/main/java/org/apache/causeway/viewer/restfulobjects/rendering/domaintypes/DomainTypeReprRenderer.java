@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -31,14 +29,14 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-import lombok.val;
+import tools.jackson.databind.node.NullNode;
 
 public class DomainTypeReprRenderer
 extends ReprRendererAbstract<ObjectSpecification> {
 
     public static LinkBuilder newLinkToBuilder(
             final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
-        final String typeFullName = objectSpec.getLogicalTypeName();
+        final String typeFullName = objectSpec.logicalTypeName();
         final String url = String.format("domain-types/%s", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
     }
@@ -47,7 +45,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
             final IResourceContext resourceContext,
             final ObjectSpecification objectSpec) {
         final Rel rel = Rel.LAYOUT;
-        final String typeFullName = objectSpec.getLogicalTypeName();
+        final String typeFullName = objectSpec.logicalTypeName();
         final String url = String.format("domain-types/%s/layout", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.LAYOUT, url);
     }
@@ -70,9 +68,8 @@ extends ReprRendererAbstract<ObjectSpecification> {
     @Override
     public JsonRepresentation render() {
 
-        if (objectSpecification == null) {
-            throw new IllegalStateException("ObjectSpecification not specified");
-        }
+        if (objectSpecification == null)
+			throw new IllegalStateException("ObjectSpecification not specified");
 
         // self
         if (includesSelf) {
@@ -83,7 +80,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
             getLinks().arrayAdd(layoutLink);
         }
 
-        representation.mapPutString("canonicalName", objectSpecification.getFullIdentifier());
+        representation.mapPutString("canonicalName", objectSpecification.fullIdentifier());
         addMembers();
 
         addTypeActions();
@@ -138,13 +135,13 @@ extends ReprRendererAbstract<ObjectSpecification> {
     }
 
     private void addTypeActions() {
-        val typeActions = getTypeActions();
+        var typeActions = getTypeActions();
         typeActions.mapPutJsonRepresentation("isSubtypeOf", linkToIsSubtypeOf());
         typeActions.mapPutJsonRepresentation("isSupertypeOf", linkToIsSupertypeOf());
     }
 
     private JsonRepresentation linkToIsSubtypeOf() {
-        final String url = "domain-types/" + objectSpecification.getLogicalTypeName() + "/type-actions/isSubtypeOf/invoke";
+        final String url = "domain-types/" + objectSpecification.logicalTypeName() + "/type-actions/isSubtypeOf/invoke";
 
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.INVOKE.andParam("typeaction", "isSubtypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = argumentsTo(getResourceContext(), "supertype", null);
@@ -153,7 +150,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
     }
 
     private JsonRepresentation linkToIsSupertypeOf() {
-        final String url = "domain-types/" + objectSpecification.getLogicalTypeName() + "/type-actions/isSupertypeOf/invoke";
+        final String url = "domain-types/" + objectSpecification.logicalTypeName() + "/type-actions/isSupertypeOf/invoke";
 
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.INVOKE.andParam("typeaction", "isSupertypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = argumentsTo(getResourceContext(), "subtype", null);
@@ -166,7 +163,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
         final JsonRepresentation link = JsonRepresentation.newMap();
         arguments.mapPutJsonRepresentation(paramId, link);
         if (objectSpec != null) {
-            link.mapPutString("href", resourceContext.restfulUrlFor("domain-types/" + objectSpec.getLogicalTypeName()));
+            link.mapPutString("href", resourceContext.restfulUrlFor("domain-types/" + objectSpec.logicalTypeName()));
         } else {
             link.mapPutJsonNode("href", NullNode.instance);
         }

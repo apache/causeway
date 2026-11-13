@@ -21,27 +21,34 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-public class MinFractionalDigitsFacetFromValueSemanticsAnnotation
-extends MinFractionalDigitsFacetAbstract {
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-    public static Optional<MinFractionalDigitsFacet> create(
-            final Optional<ValueSemantics> digitsIfAny,
+final class MinFractionalDigitsFacetFromValueSemanticsAnnotation
+extends FacetAbstract
+implements MinFractionalDigitsFacet {
+
+    static Optional<MinFractionalDigitsFacet> create(
+            final Optional<ValueSemantics> valueSemanticsOpt,
             final FacetHolder holder) {
+        return valueSemanticsOpt
+            .filter(valueSemantics->valueSemantics.minFractionalDigits()>0)
+            .map(valueSemantics->new MinFractionalDigitsFacetFromValueSemanticsAnnotation(
+                    valueSemantics.minFractionalDigits(), holder));
+    }
 
-        return digitsIfAny
-        .map(digits->{
-            return new MinFractionalDigitsFacetFromValueSemanticsAnnotation(
-                    digits.minFractionalDigits(), holder);
-        });
-   }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int minFractionalDigits;
 
-   private MinFractionalDigitsFacetFromValueSemanticsAnnotation(
-           final int minFractionalDigits, final FacetHolder holder) {
-       super(minFractionalDigits, holder);
-   }
+    private MinFractionalDigitsFacetFromValueSemanticsAnnotation(
+            final int minFractionalDigits,
+            final FacetHolder facetHolder) {
+    	super(MinFractionalDigitsFacet.class, facetHolder);
+    	this.minFractionalDigits = minFractionalDigits;
+    }
 
 }

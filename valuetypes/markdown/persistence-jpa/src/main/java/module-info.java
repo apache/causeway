@@ -24,5 +24,6 @@ module org.apache.causeway.valuetypes.markdown.persistence.jpa {
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.markdown.applib;
     requires spring.boot.autoconfigure;
+    requires spring.boot.persistence;
     requires spring.context;
 }

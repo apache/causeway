@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.viewer</groupId>
         <artifactId>causeway-viewer-wicket</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <name>Apache Causeway Viewer - Wicket (Viewer)</name>
@@ -34,28 +34,7 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.viewer</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/viewer</git-plugin.propertiesDir>
-		<!-- override surefire defaults from bom, as this is not a Java module yet -->
-		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
     </properties>
-
-    <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-    </build>
 
     <dependencies>
         <dependency>
@@ -134,6 +113,10 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-web-server</artifactId>
+        </dependency>
 
         <!-- as required by wicket -->
         <dependency>
@@ -145,7 +128,7 @@
 
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-internaltestsupport</artifactId>
+			<artifactId>causeway-core-mmtestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 

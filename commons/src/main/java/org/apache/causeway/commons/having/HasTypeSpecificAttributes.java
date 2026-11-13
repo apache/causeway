@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.having;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public interface HasTypeSpecificAttributes {
@@ -30,6 +31,10 @@ public interface HasTypeSpecificAttributes {
 
     /** get type specific attribute */
     <T> T getAttribute(Class<T> type);
+
+    default <T> Optional<T> lookupAttribute(final Class<T> type) {
+        return Optional.ofNullable(getAttribute(type));
+    }
 
     /** remove type specific attribute */
     void removeAttribute(Class<?> type);

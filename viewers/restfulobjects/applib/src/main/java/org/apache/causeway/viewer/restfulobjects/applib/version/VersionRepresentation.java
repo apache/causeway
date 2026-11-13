@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.version;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
 import org.apache.causeway.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
+
+import tools.jackson.databind.JsonNode;
 
 /**
  * @since 1.x {@index}

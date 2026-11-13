@@ -21,51 +21,51 @@ package org.apache.causeway.core.metamodel.facets.object.icon.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.NonNull;
-
-public class IconFacetViaIconNameMethod
-extends IconFacetAbstract
-implements HasImperativeAspect {
-
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+public final class IconFacetViaIconNameMethod
+extends FacetAbstract
+implements IconFacet, HasImperativeAspect {
 
     public static Optional<IconFacet> create(
             final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
-
         return Optional.ofNullable(methodIfAny)
-        .map(method->
-            new IconFacetViaIconNameMethod(
-                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
-                    holder));
+            .map(method->
+                new IconFacetViaIconNameMethod(
+                        ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
+                        holder));
     }
 
-    private IconFacetViaIconNameMethod(
-            final ImperativeAspect imperativeAspect,
-            final FacetHolder holder) {
-        super(holder);
-        this.imperativeAspect = imperativeAspect;
+    private IconFacetViaIconNameMethod(final ImperativeAspect imperativeAspect, final FacetHolder facetHolder) {
+    	super(IconFacet.class, facetHolder);
+    	this.imperativeAspect = imperativeAspect;
     }
+
+    private final ImperativeAspect imperativeAspect;
+
+    @Override public Precedence precedence() { return Precedence.LOW; }
+    @Override public ImperativeAspect getImperativeAspect() { return imperativeAspect; }
 
     @Override
-    public String iconName(final ManagedObject domainObject) {
-        return imperativeAspect.eval(domainObject, (String)null);
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject domainObject, final IconSize iconSize) {
+        return Optional.of(new ObjectSupport.ClassPathIconResource(
+            _Strings.nullToEmpty(imperativeAspect.eval(domainObject, (String)null))));
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	IconFacet.super.visitAttributes(visitor);
         imperativeAspect.visitAttributes(visitor);
     }
 

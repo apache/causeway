@@ -24,14 +24,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import com.fasterxml.jackson.databind.node.POJONode;
+import tools.jackson.databind.node.POJONode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -52,12 +52,11 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 1.x {@index}
@@ -84,14 +83,11 @@ extends ContentNegotiationServiceAbstract {
      * within that map.
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
 
-        boolean canAccept = canAccept(resourceContext);
-        if(!canAccept) {
-            return null;
-        }
+        if(!canAccept(resourceContext)) return null;
 
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
@@ -107,21 +103,16 @@ extends ContentNegotiationServiceAbstract {
         } else {
             $$roRepresentation = null;
         }
-        final Response.ResponseBuilder responseBuilder =
-                restfulObjectsV1_0.buildResponseTo(
-                        resourceContext, objectAdapter, $$roRepresentation, rootRepresentation);
-
-        responseBuilder.type(
-                RepresentationTypeSimplifiedV2.OBJECT.getContentTypeHeaderValue(ACCEPT_PROFILE));
-
-        return responseBuilder(responseBuilder);
+        return restfulObjectsV1_0.buildResponseTo(
+            resourceContext, objectAdapter, $$roRepresentation, rootRepresentation,
+            RepresentationTypeSimplifiedV2.OBJECT.getResponseContentType(ACCEPT_PROFILE));
     }
 
     /**
      * Individual property of an object is not supported.
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty)  {
 
@@ -133,13 +124,12 @@ extends ContentNegotiationServiceAbstract {
      * as an object in the list with a single property named '$$ro'
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedCollection managedCollection) {
 
-        if(!canAccept(resourceContext)) {
-            return null;
-        }
+        if(!canAccept(resourceContext)) return null;
+
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
@@ -158,22 +148,16 @@ extends ContentNegotiationServiceAbstract {
         } else {
             $$roRepresentation = null;
         }
-
-        final Response.ResponseBuilder responseBuilder =
-                restfulObjectsV1_0.buildResponseTo(
-                        resourceContext, managedCollection, $$roRepresentation, rootRepresentation);
-
-        responseBuilder.type(
-                RepresentationTypeSimplifiedV2.OBJECT_COLLECTION.getContentTypeHeaderValue(ACCEPT_PROFILE));
-
-        return responseBuilder(responseBuilder);
+        return restfulObjectsV1_0.buildResponseTo(
+            resourceContext, managedCollection, $$roRepresentation, rootRepresentation,
+            RepresentationTypeSimplifiedV2.OBJECT_COLLECTION.getResponseContentType(ACCEPT_PROFILE));
     }
 
     /**
      * Action prompt is not supported.
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedAction objectAndAction)  {
         return null;
@@ -189,13 +173,12 @@ extends ContentNegotiationServiceAbstract {
      * with a single '$$ro' property (similar to {@link #buildResponse(IResourceContext, ManagedCollection)})
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        if(!canAccept(resourceContext)) {
-            return null;
-        }
+        if(!canAccept(resourceContext)) return null;
+
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
@@ -217,7 +200,7 @@ extends ContentNegotiationServiceAbstract {
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
 
             } else {
                 rootRepresentation = JsonRepresentation.newMap();
@@ -232,7 +215,7 @@ extends ContentNegotiationServiceAbstract {
 
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
 
             }
 
@@ -257,7 +240,7 @@ extends ContentNegotiationServiceAbstract {
 
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
 
             }
 
@@ -265,8 +248,8 @@ extends ContentNegotiationServiceAbstract {
 
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
-                val dto = dtoForValue(returnedAdapter)
-                        .orElseGet(()->elementAdapter.getSpecification().getCorrespondingClass());
+                var dto = dtoForValue(returnedAdapter)
+                        .orElseGet(()->elementAdapter.objSpec().correspondingClass());
                 return dto;
             })
             .forEach(rootRepresentation::arrayAdd);
@@ -276,13 +259,13 @@ extends ContentNegotiationServiceAbstract {
             break;
 
         case SCALAR_VALUE:
-            val dto = dtoForValue(returnedAdapter).orElse(null);
+            var dto = dtoForValue(returnedAdapter).orElse(null);
             if(dto==null) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
             }
 
-            val jsonNode = new POJONode(dto);
+            var jsonNode = new POJONode(dto);
             rootRepresentation = new JsonRepresentation(jsonNode);
             headerContentType = RepresentationTypeSimplifiedV2.VALUE;
 
@@ -296,21 +279,18 @@ extends ContentNegotiationServiceAbstract {
         default:
             throw _Exceptions.unmatchedCase(resultType);
         }
-
-        val responseBuilder = restfulObjectsV1_0
-                .buildResponseTo(resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation)
-                .type(headerContentType.getContentTypeHeaderValue(ACCEPT_PROFILE));  // set appropriate Content-Type
-
-        return responseBuilder(responseBuilder);
+        return restfulObjectsV1_0.buildResponseTo(
+            resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation,
+            headerContentType.getResponseContentType(ACCEPT_PROFILE));  // set appropriate Content-Type
     }
 
     private Optional<Object> dtoForValue(final @Nullable ManagedObject valueObject) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject)
-                || !valueObject.getSpecification().isValue()) {
+                || !valueObject.objSpec().isValue()) {
             return Optional.empty();
         }
-        val valSpec = valueObject.getSpecification();
-        val dto = valSpec.isCompositeValue()
+        var valSpec = valueObject.objSpec();
+        var dto = valSpec.isCompositeValue()
                 ? ScalarValueDtoV2.forValue(valueObject.getPojo(),
                         //XXX honor value semantics context?
                         _Casts.uncheckedCast(valSpec.valueFacetElseFail().selectDefaultSemantics().orElseThrow()))
@@ -318,21 +298,14 @@ extends ContentNegotiationServiceAbstract {
         return Optional.of(dto);
     }
 
-    /**
-     * For easy subclassing to further customize, eg additional headers
-     */
-    protected Response.ResponseBuilder responseBuilder(final Response.ResponseBuilder responseBuilder) {
-        return responseBuilder;
-    }
-
     boolean canAccept(final IResourceContext resourceContext) {
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
 
     protected EnumSet<SuppressionType> suppress(
             final IResourceContext resourceContext) {
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
         return SuppressionType.ParseUtil.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
     }
 
@@ -344,22 +317,22 @@ extends ContentNegotiationServiceAbstract {
 
         appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
-        val where = resourceContext.getWhere();
+        var where = resourceContext.where();
 
-        owner.getSpecification()
+        owner.objSpec()
         .streamCollections(MixedIn.INCLUDED)
         .forEach(collection->{
 
-            val collectionRepresentation = JsonRepresentation.newArray();
+            var collectionRepresentation = JsonRepresentation.newArray();
             rootRepresentation.mapPutJsonRepresentation(collection.getId(), collectionRepresentation);
 
-            val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
-            val visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
+            var interactionInitiatedBy = resourceContext.interactionInitiatedBy();
+            var visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
             if (!visibilityConsent.isAllowed()) {
                 return;
             }
 
-            val managedCollection = ManagedCollection.of(owner, collection, where);
+            var managedCollection = ManagedCollection.of(owner, collection, where);
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
         });
@@ -372,9 +345,9 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
-        val where = resourceContext.getWhere();
-        final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
+        var interactionInitiatedBy = resourceContext.interactionInitiatedBy();
+        var where = resourceContext.where();
+        final Stream<OneToOneAssociation> properties = objectAdapter.objSpec()
                 .streamProperties(MixedIn.INCLUDED);
 
         properties.forEach(property->{
@@ -384,7 +357,7 @@ extends ContentNegotiationServiceAbstract {
             }
 
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
-            val renderer =
+            var renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
                     .asStandalone()
                     .with(ManagedProperty.of(objectAdapter, property, where));
@@ -428,7 +401,7 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation representation,
             final EnumSet<SuppressionType> suppression) {
 
-        managedCollection.streamElements(resourceContext.getInteractionInitiatedBy())
+        managedCollection.streamElements(resourceContext.interactionInitiatedBy())
         .forEach(element->
             appendElementTo(resourceContext, element, representation, suppression));
     }
@@ -439,10 +412,9 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation collectionRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        val elementRepresentation = JsonRepresentation.newMap();
+        var elementRepresentation = JsonRepresentation.newMap();
         appendPropertiesTo(resourceContext, elementAdapter, elementRepresentation, suppression);
         collectionRepresentation.arrayAdd(elementRepresentation);
     }
-
 
 }

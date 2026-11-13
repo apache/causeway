@@ -28,8 +28,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
 
-import lombok.val;
-
 class SectionsTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -72,16 +70,16 @@ class SectionsTest extends AbstractAsciiDocWriterTest {
         AsciiDocFactory.block(doc, "Text of the first block.");
         AsciiDocFactory.block(doc, "Text of the second block.");
 
-        val section1 = AsciiDocFactory.section(doc, "Section 1");
+        var section1 = AsciiDocFactory.section(doc, "Section 1");
         AsciiDocFactory.block(section1, "Text of the first block under section 1.");
 
-        val section2 = AsciiDocFactory.section(doc, "Section 2");
+        var section2 = AsciiDocFactory.section(doc, "Section 2");
         AsciiDocFactory.block(section2, "Text of the first block under section 2.");
 
-        val section21 = AsciiDocFactory.section(section2, "Sub Section 2.1");
+        var section21 = AsciiDocFactory.section(section2, "Sub Section 2.1");
         AsciiDocFactory.block(section21, "Text of the first block under section 2.1.");
 
-        val section3 = AsciiDocFactory.section(doc, "Section 3");
+        var section3 = AsciiDocFactory.section(doc, "Section 3");
         AsciiDocFactory.block(section3, "Text of the first block under section 3.");
 
         assertDocumentIsCorrectlyWritten(doc);

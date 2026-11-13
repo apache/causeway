@@ -20,27 +20,25 @@ package org.apache.causeway.viewer.wicket.ui.components.propertyheader;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 public class PropertyEditPromptHeaderPanel
-extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
+extends PanelAbstract<ManagedObject, PropertyModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_PROPERTY_NAME = "propertyName";
 
-    public PropertyEditPromptHeaderPanel(final String id, final ScalarPropertyModel model) {
+    public PropertyEditPromptHeaderPanel(final String id, final PropertyModel model) {
         super(id, model);
 
-        val targetAdapter = model.getParentUiModel().getManagedObject();
+        var targetAdapter = model.getParentUiModel().getManagedObject();
 
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this,
-                UiComponentType.ENTITY_ICON_AND_TITLE,
+                UiComponentType.OBJECT_ICON_AND_TITLE,
                 UiObjectWkt.ofAdapter(targetAdapter));
 
         Wkt.labelAdd(this, ID_PROPERTY_NAME, model::getFriendlyName)

@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
-
 /**
  * Provides the ability for components to inform/alter/adjust/refine the meta-model
  * the {@link ProgrammingModel}).

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Publishing;
@@ -29,8 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacetAbstract;
 
-import lombok.val;
-
 public class EntityChangePublishingFacetForDomainObjectAnnotation
 extends EntityChangePublishingFacetAbstract {
 
@@ -39,35 +36,29 @@ extends EntityChangePublishingFacetAbstract {
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);
+        var publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);
 
-        switch (publish) {
-        case NOT_SPECIFIED:
-        case AS_CONFIGURED:
-
-            val publishingPolicy = DomainObjectConfigOptions.entityChangePublishingPolicy(configuration);
-            switch (publishingPolicy) {
-            case NONE:
-                return Optional.of(entityChangePublishingIfAny.isPresent()
+        return switch (publish) {
+            case NOT_SPECIFIED, AS_CONFIGURED -> {
+                var publishingPolicy = DomainObjectConfigOptions.entityChangePublishingPolicy(configuration);
+                yield switch (publishingPolicy) {
+                    case NONE -> Optional.of(entityChangePublishingIfAny.isPresent()
                         ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder, false)
                         : new EntityChangePublishingFacetFromConfiguration(holder, false));
-            default:
-                return Optional.of(entityChangePublishingIfAny.isPresent()
+                    default -> Optional.of(entityChangePublishingIfAny.isPresent()
                         ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder, true)
                         : new EntityChangePublishingFacetFromConfiguration(holder, true));
+                };
             }
-        case DISABLED:
-            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, false));
-        case ENABLED:
-            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true));
-
-        default:
-            throw _Exceptions.unmatchedCase(publish);
-        }
+            case DISABLED -> Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, false, false, false, false));
+            case ENABLED -> Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true, true, true, true));
+            case ENABLED_FOR_UPDATES_ONLY -> Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true, false, true, false));
+            default -> throw _Exceptions.unmatchedCase(publish);
+        };
     }
 
-    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder, boolean enabled) {
-        super(holder, enabled);
+    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder, final boolean enabled,
+            final boolean enabledForCreate, final boolean enabledForUpdate, final boolean enabledForDelete) {
+        super(holder, enabled, enabledForCreate, enabledForUpdate, enabledForDelete);
     }
 }
-

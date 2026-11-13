@@ -34,17 +34,14 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -84,27 +81,27 @@ class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstr
 
     @Test
     void assert_prereq() {
-        val config = super.objectManager.getConfiguration();
-        assertTrue(config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission());
+        var config = super.objectManager.getConfiguration();
+        assertTrue(config.security().actionsWithSafeSemanticsRequireOnlyViewingPermission());
     }
 
     @Test
     void whenSafeAction_shouldAllowUse() {
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "actSafely", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "actSafely", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val actionMeta = managedAction.getAction();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var actionMeta = managedAction.getAction();
         assertEquals(SemanticsOf.SAFE, actionMeta.getSemantics());
     }
 
     @Test
     void whenNonSafeAction_shouldDenyUse() {
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "actUnsafely", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "actUnsafely", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
-        val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
-        val actionId = actionInteraction.getMetamodel().map(ObjectAction::getFeatureIdentifier).orElse(null);
+        var veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
+        var actionId = actionInteraction.getFeatureIdentifier().orElse(null);
         assertEquals(
                 AuthorizationFacet.formatNotAuthorizedToEdit(actionId, objectManager.getMetaModelContext()),
                 veto.getReasonAsString().orElse(null));

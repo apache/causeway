@@ -42,5 +42,4 @@ import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaMo
         })
 public class Configuration_usingValueTypes {
 
-
 }

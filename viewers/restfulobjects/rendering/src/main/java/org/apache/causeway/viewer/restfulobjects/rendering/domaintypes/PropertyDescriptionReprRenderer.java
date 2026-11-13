@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-import lombok.val;
-
 public class PropertyDescriptionReprRenderer
 extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
 
@@ -38,7 +36,7 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation property) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final String propertyId = property.getId();
         final String url = "domain-types/" + domainType + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);
@@ -63,7 +61,6 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
             .ifPresent(maxLength->representation.mapPutInt("maxLength", maxLength));
     }
 
-
     @Override
     protected void putExtensionsSpecificToFeature() {
         putExtensionsName();
@@ -73,7 +70,7 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
     // -- HELPER
 
     private void addLinkToReturnTypeIfAny() {
-        val returnTypeSpec = getObjectFeature().getElementType();
+        var returnTypeSpec = getObjectFeature().getElementType();
         if (returnTypeSpec == null) {
             return;
         }
@@ -82,6 +79,5 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
                 .newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnTypeSpec)
                 .build());
     }
-
 
 }

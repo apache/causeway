@@ -22,16 +22,16 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 public abstract class RegExFacetAbstract
@@ -68,17 +68,13 @@ implements RegExFacet {
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) context;
-        final ManagedObject proposedArgument = proposedHolder.getProposed();
-        if (proposedArgument == null) {
-            return null;
-        }
-        if (proposedArgument.getPojo() == null) {
-            return null;
-        }
+        final ManagedObject proposedArgument = proposedHolder.proposed();
+        if (proposedArgument == null) return null;
+
+        if (proposedArgument.getPojo() == null) return null;
+
         final String titleString = proposedArgument.getTitle();
-        if (!doesNotMatch(titleString)) {
-            return null;
-        }
+        if (!doesNotMatch(titleString)) return null;
 
         return message();
     }
@@ -97,21 +93,19 @@ implements RegExFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet otherFacet) {
-        if(!(otherFacet instanceof RegExFacetAbstract)) {
-            return false;
-        }
-        val other = (RegExFacetAbstract)otherFacet;
+        if(!(otherFacet instanceof RegExFacetAbstract)) return false;
+
+        var other = (RegExFacetAbstract)otherFacet;
         return Objects.equals(this.regexp(), other.regexp())
                 && this.patternFlags() == other.patternFlags()
                 && Objects.equals(this.message(), other.message());
     }
 
-
     // -- UTILITY
 
     protected static int asMask(final jakarta.validation.constraints.Pattern.Flag[] flags) {
         int mask = 0;
-        for (val flag : flags) {
+        for (var flag : flags) {
             mask |= flag.getValue();
         }
         return mask;

@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostVal
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Named(CausewayModulePersistenceCommons.NAMESPACE + ".PreAndPostValueEvaluatorServiceDefault")
@@ -40,11 +40,11 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("default")
 @InteractionScope   // see note above regarding this
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class PreAndPostValueEvaluatorServiceDefault implements PreAndPostValueEvaluatorService {
 
     @Override
-    public boolean differ(PreAndPostValue preAndPostValue) {
+    public boolean differ(final PreAndPostValue preAndPostValue) {
         return preAndPostValue.shouldPublish();
     }
 }

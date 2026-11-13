@@ -22,6 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 
+/**
+ * Allows the framework to raise messages, wrnings and errors, to bring to the end-user's attention.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 public interface MessageBroker {
 
     void reset();

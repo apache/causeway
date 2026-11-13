@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Represents the members within the {@link DomainObjectRepresentation}'s <tt>members</tt>

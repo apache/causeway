@@ -1,0 +1,346 @@
+referenceApplication:
+  repository: https://github.com/apache/causeway-app-referenceapp.git
+  revision: 04cff95802de44d0ff5ac0802857f3bb2ffe8c3a
+  frameworkVersion: 4.0.0-SNAPSHOT
+  javaRelease: 25
+schema:
+  style: RICH_AND_SIMPLE
+  queryType: SimpleAndRich
+  mutationType: Mutation
+  richLookupFields: 430
+  mutationFields: 3154
+  logicalTypeEnumValues: 277
+  totalTypes: 21142
+classifications:
+  supported: The current public rich GraphQL contract satisfies the representative case.
+  partial: A useful contract exists, but a confirmed limitation prevents complete generic use.
+  gap: The expected framework-neutral contract is unavailable or incorrect.
+  web-component: The protocol evidence is sufficient, but the reusable semantic component does not yet exist.
+  viewer-specific: The behavior belongs to a host viewer or optional presentation policy.
+  wicket-specific: The behavior is an implementation detail of the Wicket viewer and is not a framework-neutral requirement.
+  server-only: The behavior is an execution or publishing concern and is not client metadata.
+equivalenceClasses:
+  scalarNative:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/types/primitive
+      - domain/src/main/java/demoapp/dom/types/javalang
+    includes: [boolean, byte, char, double, float, int, long, short, wrappers, String, enum, void]
+  explicitScalarTransform:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/types/javamath
+      - domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldate
+      - domain/src/main/java/demoapp/dom/types/javatime/javatimelocaltime
+      - domain/src/main/java/demoapp/dom/types/javatime/javatimeoffsetdatetime
+      - domain/src/main/java/demoapp/dom/types/javatime/javatimeoffsettime
+      - domain/src/main/java/demoapp/dom/types/javatime/javatimezoneddatetime
+      - domain/src/main/java/demoapp/dom/types/javautil/uuids
+    includes: [BigDecimal, BigInteger, LocalDate, LocalTime, OffsetDateTime, OffsetTime, ZonedDateTime, UUID]
+  missingStandardTransform:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldatetime
+      - domain/src/main/java/demoapp/dom/types/javanet/urls
+      - domain/src/main/java/demoapp/dom/types/javautil/javautildate
+      - domain/src/main/java/demoapp/dom/types/javasql/javasqldate
+      - domain/src/main/java/demoapp/dom/types/javasql/javasqltimestamp
+    includes: [LocalDateTime, URL, java.util.Date, java.sql.Date, java.sql.Timestamp]
+  resourceValue:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/types/causeway/blobs
+      - domain/src/main/java/demoapp/dom/types/causeway/clobs
+      - domain/src/main/java/demoapp/dom/domain/properties/Property/fileAccept
+    includes: [Blob, Clob, fileAccept]
+  applicationValueExtension:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/progmodel/customvaluetypes/compositevalues
+      - domain/src/main/java/demoapp/dom/types/causewayval
+    includes: [ComplexNumber, AsciiDoc, Markdown, Vega]
+  memberNegotiation:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/progmodel/actions/choices
+      - domain/src/main/java/demoapp/dom/progmodel/actions/autocomplete
+      - domain/src/main/java/demoapp/dom/progmodel/actions/defaults
+      - domain/src/main/java/demoapp/dom/progmodel/actions/validate
+      - domain/src/main/java/demoapp/dom/progmodel/actions/veto
+    includes: [choices, autocomplete, defaults, validation, hidden, disabled]
+  collectionPresentation:
+    representativeSources:
+      - domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/paged
+      - domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/sortedBy
+      - domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/named
+      - domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/describedAs
+    includes: [paging, sorting, friendly name, description]
+  applicationStructure:
+    representativeSources:
+      - domain/src/main/resources/menubars.layout.xml
+      - domain/src/main/java/demoapp/dom/homepage/ReferenceHomePage.java
+      - domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidatePage.layout.xml
+    includes: [menu bars, home page, effective grid]
+entries:
+  - id: REF-SCHEMA-01
+    feature: Domain services and service actions
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidateMenu.java
+    expected: Visible domain services and their actions are discoverable and executable.
+    evidence: [E03, E04, E06]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-OBJECT-01
+    feature: Concrete view-model identity and lookup
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidatePage.java
+    expected: An action result supplies reusable logical type, identifier, title, and member state.
+    evidence: [E04, E06]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-OBJECT-02
+    feature: Abstract entity identity with a shared concrete logical type
+    source: domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldatetime/persistence/LocalDateTimeEntity.java
+    relatedSource: domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldatetime/jpa/LocalDateTimeJpa.java
+    expected: A client can address the concrete entity through the declared public logical type.
+    evidence: [E07]
+    classification: gap
+    owner: fix-rich-graphql-object-interaction-correctness
+    priority: P0
+  - id: REF-MIXIN-01
+    feature: Mixin properties and actions
+    source: domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldatetime/holder/LocalDateTimeHolder_mixinProperty.java
+    expected: Contributed members appear on the target rich object type.
+    evidence: [E04]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-STATE-01
+    feature: Dynamic hidden and disabled state
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/veto/ActionVetoPage.java
+    expected: Runtime visibility and usability are enforced without revealing values or policy rules.
+    evidence: [E05]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-PROP-01
+    feature: Scalar property read and validation
+    source: domain/src/main/java/demoapp/dom/domain/properties/Property/mustSatisfy/PropertyMustSatisfyPage.java
+    expected: The rich wrapper exposes value, datatype, visibility, usability, and authoritative validation.
+    evidence: [E06]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-PROP-02
+    feature: Property mutation on memento view models
+    source: domain/src/main/java/demoapp/dom/domain/properties/Property/mustSatisfy/PropertyMustSatisfyPage.java
+    expected: A valid mutation changes the returned view-model state and produces its updated identifier.
+    evidence: [E07]
+    classification: gap
+    owner: fix-rich-graphql-object-interaction-correctness
+    priority: P0
+  - id: REF-ACTION-01
+    feature: Action choices and autocomplete
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidatePage_selectTvCharacters.java
+    relatedSource: domain/src/main/java/demoapp/dom/progmodel/actions/autocomplete/ActionAutoCompletePage_selectTvCharacter.java
+    expected: Choice and autocomplete candidates are queryable as typed object references.
+    evidence: [E06]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-ACTION-02
+    feature: Safe and mutating action invocation
+    source: domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/CollectionLayoutMenu.java
+    relatedSource: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidateMenu.java
+    expected: Safe actions remain query fields and state-changing actions remain mutation fields.
+    evidence: [E04, E06]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-ACTION-03
+    feature: Collection-valued action validation
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidatePage_selectTvCharacters.java
+    expected: Object-list arguments are unmarshalled before all-arguments validation executes.
+    evidence: [E07]
+    classification: gap
+    owner: fix-rich-graphql-object-interaction-correctness
+    priority: P0
+  - id: REF-ACTION-04
+    feature: Bulk-action collection parameter choices
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/bulk/BulkActionPage_addToAmericanFavourites.java
+    expected: Choices for the collection-valued parameter are queryable and invokable as typed references.
+    evidence: [E07]
+    classification: gap
+    owner: fix-rich-graphql-object-interaction-correctness
+    priority: P0
+  - id: REF-VALUE-01
+    feature: Explicit standard scalar marshallers
+    source: domain/src/main/java/demoapp/dom/types/javalang
+    relatedSource: viewers/graphql/model/src/main/java/org/apache/causeway/viewer/graphql/model/marshallers
+    expected: Registered primitive, wrapper, string, big-number, selected java-time, enum, UUID, and void shapes round-trip canonically.
+    evidence: [E03, E08]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-VALUE-02
+    feature: Missing standard scalar round trips
+    source: domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldatetime
+    relatedSource: domain/src/main/java/demoapp/dom/types/javanet/urls
+    expected: LocalDateTime, URL, java.util.Date, java.sql.Date, and Timestamp inputs reconstruct their declared Java types.
+    evidence: [E08]
+    classification: gap
+    owner: add-rich-graphql-value-and-resource-semantics
+    priority: P1
+  - id: REF-VALUE-03
+    feature: Custom composite value round trip
+    source: domain/src/main/java/demoapp/dom/progmodel/customvaluetypes/compositevalues/ComplexNumber.java
+    expected: A registered custom representation reconstructs the declared composite value.
+    evidence: [E08]
+    classification: gap
+    owner: add-rich-graphql-value-and-resource-semantics
+    priority: P1
+  - id: REF-RESOURCE-01
+    feature: Blob and Clob action inputs
+    source: domain/src/main/java/demoapp/dom/types/causeway/blobs/CausewayBlobs.java
+    relatedSource: domain/src/main/java/demoapp/dom/types/causeway/clobs/CausewayClobs.java
+    expected: An advertised resource input reconstructs Blob or Clob rather than passing a descriptive string.
+    evidence: [E08]
+    classification: gap
+    owner: add-rich-graphql-value-and-resource-semantics
+    priority: P1
+  - id: REF-RESOURCE-02
+    feature: Forbidden resource-link schema
+    source: domain/src/main/java/demoapp/dom/domain/properties/Property/fileAccept/PropertyFileAcceptPage.java
+    expected: FORBIDDEN policy omits downloadable Blob and Clob link fields while resource endpoints reject access.
+    evidence: [E12]
+    classification: gap
+    owner: fix-rich-graphql-resource-link-safety
+    priority: P0
+  - id: REF-RESOURCE-03
+    feature: Same-origin resource URLs
+    source: viewers/graphql/model/src/main/java/org/apache/causeway/viewer/graphql/model/domain/common/query/meta/CommonMetaFetcher.java
+    expected: Generated Blob, Clob, grid, and icon references resolve against the application's origin and GraphQL path.
+    evidence: [E11, E12]
+    classification: gap
+    owner: fix-rich-graphql-resource-link-safety
+    priority: P0
+  - id: REF-COLLECTION-01
+    feature: Concrete view-model collection read
+    source: domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/paged/CollectionLayoutPagedPage.java
+    expected: A concrete element collection exposes typed rows.
+    evidence: [E10]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-COLLECTION-02
+    feature: Bounded collection reads
+    source: domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/paged/CollectionLayoutPagedPage.java
+    expected: A client can request a bounded deterministic window and continuation information.
+    evidence: [E10]
+    classification: gap
+    owner: add-rich-graphql-collection-windowing
+    priority: P1
+  - id: REF-COLLECTION-03
+    feature: Collection whose declared element type is abstract
+    source: domain/src/main/java/demoapp/dom/types/javatime/javatimelocaldatetime/LocalDateTimes.java
+    expected: The collection exposes concrete rows through a polymorphic public output contract.
+    evidence: [E07]
+    classification: gap
+    owner: fix-rich-graphql-object-interaction-correctness
+    priority: P0
+  - id: REF-METADATA-01
+    feature: Independent friendly name and description
+    source: domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/named/CollectionLayoutNamedPage.java
+    relatedSource: domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/describedAs/CollectionLayoutDescribedAsPage.java
+    expected: A known member exposes friendly name and description independently.
+    evidence: [E11]
+    classification: gap
+    owner: add-rich-graphql-member-metadata
+    priority: P2
+  - id: REF-METADATA-02
+    feature: Property, action, and collection hints
+    source: domain/src/main/java/demoapp/dom/domain/properties/Property/fileAccept/PropertyFileAcceptPage.java
+    relatedSource: domain/src/main/java/demoapp/dom/domain/collections/CollectionLayout/paged/CollectionLayoutPagedPage.java
+    expected: Generic clients can obtain required constraints and optional hints without metamodel access.
+    evidence: [E10, E11]
+    classification: partial
+    owner: add-rich-graphql-member-metadata
+    priority: P2
+    note: Effective grid XML already carries most layout hints when grid resources are enabled; wrapper metadata should be limited to standalone and fallback requirements.
+  - id: REF-LAYOUT-01
+    feature: Effective Causeway grid
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidatePage.layout.xml
+    relatedSource: core/metamodel/src/main/java/org/apache/causeway/core/metamodel/services/grid/GridFallbackLayout.xml
+    expected: An authorized generic client can retrieve rows, columns, field sets, actions, properties, collections, and unreferenced placement.
+    evidence: [E11]
+    classification: partial
+    owner: add-composite-object-web-component
+    priority: P1
+    note: The grid is complete when resource response is DIRECT, but resource policy and malformed URL defects must be resolved first.
+  - id: REF-MENU-01
+    feature: Effective primary, secondary, and tertiary menu bars
+    source: domain/src/main/resources/menubars.layout.xml
+    expected: A client can discover ordered visible menu, section, and service-action placement.
+    evidence: [E01, E13]
+    classification: gap
+    owner: add-rich-graphql-application-entry-points
+    priority: P1
+  - id: REF-HOME-01
+    feature: Configured home page
+    source: domain/src/main/java/demoapp/dom/homepage/ReferenceHomePage.java
+    expected: A client can discover and resolve the configured home-page object or action.
+    evidence: [E13]
+    classification: gap
+    owner: add-rich-graphql-application-entry-points
+    priority: P1
+  - id: REF-SECURITY-01
+    feature: Authorization-sensitive hidden and disabled state
+    source: domain/src/main/java/demoapp/dom/progmodel/actions/veto/ActionVetoPage.java
+    expected: Unauthorized members cannot be invoked and no domain value is disclosed.
+    evidence: [E05]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-SECURITY-02
+    feature: Password representation
+    source: domain/src/main/java/demoapp/dom/types/causeway/passwords
+    expected: Password defaults and values are suppressed rather than serialized through generic fallback.
+    evidence: [E14]
+    classification: supported
+    owner: existing-rich-schema
+    priority: none
+  - id: REF-COMPONENT-01
+    feature: Composite object rendering
+    source: core/metamodel/src/main/java/org/apache/causeway/core/metamodel/services/grid/GridFallbackLayout.xml
+    relatedSource: domain/src/main/java/demoapp/dom/progmodel/actions/validate/ActionValidatePage.layout.xml
+    expected: A framework-neutral object component composes existing semantic children from an effective or fallback grid.
+    evidence: [E11]
+    classification: web-component
+    owner: add-composite-object-web-component
+    priority: P1
+  - id: REF-COMPONENT-02
+    feature: Primary, secondary, and tertiary menu-bar rendering
+    source: domain/src/main/resources/menubars.layout.xml
+    expected: Framework-neutral menu components render the application-entry contract and reuse service-action interactions.
+    evidence: [E13]
+    classification: web-component
+    owner: add-menubar-web-components
+    priority: P1
+  - id: REF-VIEWER-01
+    feature: Browser routes, history, fragment lifecycle, and result navigation
+    source: wicket/jpa/src/main/java/demoapp/webapp/wicket/jpa/ReferenceAppWicketJpa.java
+    expected: A host viewer defines navigation policy above semantic components.
+    evidence: [E01]
+    classification: viewer-specific
+    owner: add-generic-htmx-web-component-viewer
+    priority: P2
+  - id: REF-WICKET-01
+    feature: Wicket table decorators, repainting, redirects, and CSS implementation details
+    source: domain/src/main/java/demoapp/dom
+    expected: No framework-neutral GraphQL parity requirement is inferred from Wicket-only behavior.
+    evidence: [E01]
+    classification: wicket-specific
+    owner: explicit-non-goal
+    priority: none
+  - id: REF-SERVER-01
+    feature: Domain events, command publishing, execution publishing, and lifecycle events
+    source: domain/src/main/java/demoapp/dom/domain
+    expected: Server execution behavior remains server-side and is not exposed as client rendering metadata.
+    evidence: [E01]
+    classification: server-only
+    owner: explicit-non-goal
+    priority: none

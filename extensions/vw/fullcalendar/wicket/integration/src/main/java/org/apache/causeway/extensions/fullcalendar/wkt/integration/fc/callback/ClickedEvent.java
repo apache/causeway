@@ -21,11 +21,11 @@ package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSource;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ClickedEvent extends AbstractEventParam {
 
-	public ClickedEvent(@NonNull final EventSource source, @NonNull final Event event) {
+	public ClickedEvent(final @NonNull EventSource source, final @NonNull Event event) {
 		super(source, event);
 	}
 

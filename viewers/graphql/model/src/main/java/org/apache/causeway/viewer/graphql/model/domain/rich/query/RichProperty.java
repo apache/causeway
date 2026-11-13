@@ -37,8 +37,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-
 public class RichProperty
         extends RichAssociation<OneToOneAssociation, ObjectInteractor>
         implements
@@ -57,6 +55,7 @@ public class RichProperty
      * Populated iff there is an autoComplete
      */
     private final RichPropertyAutoComplete autoComplete;
+    private final RichPropertyAutoCompleteWindow autoCompleteWindow;
     private final RichPropertyValidate validate;
     /**
      * Populated iff the API variant allows for it.
@@ -76,6 +75,7 @@ public class RichProperty
             this.disabled = null;
             this.choices = null;
             this.autoComplete = null;
+            this.autoCompleteWindow = null;
             this.validate = null;
             this.set = null;
             this.datatype = null;
@@ -96,6 +96,9 @@ public class RichProperty
         addChildFieldFor(this.validate = new RichPropertyValidate(this, context));
         addChildFieldFor(this.choices = new RichPropertyChoices(this, context));
         addChildFieldFor(this.autoComplete = new RichPropertyAutoComplete(this, context));
+        addChildFieldFor(this.autoCompleteWindow = otoa.hasAutoComplete()
+                ? new RichPropertyAutoCompleteWindow(this, context)
+                : null);
         addChildFieldFor(this.set = isSetterAllowed() ? new RichPropertySet(this, context) : null);
         addChildFieldFor(this.datatype = new RichPropertyDatatype(this, context));
 
@@ -103,7 +106,7 @@ public class RichProperty
     }
 
     private boolean isSetterAllowed() {
-        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
         switch (apiVariant) {
             case QUERY_ONLY:
             case QUERY_AND_MUTATIONS:
@@ -116,16 +119,15 @@ public class RichProperty
         }
     }
 
-
-
     private boolean isBlob() {
-        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Blob.class;
+        return getOneToOneAssociation().getElementType().correspondingClass() == Blob.class;
     }
 
     private boolean isClob() {
-        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Clob.class;
+        return getOneToOneAssociation().getElementType().correspondingClass() == Clob.class;
     }
 
+    @Override
     public void addGqlArgument(
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLFieldDefinition.Builder builder,
@@ -142,7 +144,6 @@ public class RichProperty
                 .build();
     }
 
-
     @Override
     public ObjectSpecification getObjectSpecification() {
         return interactor.getObjectSpecification();
@@ -154,6 +155,7 @@ public class RichProperty
 
     @Override
     protected void addDataFetchersForChildren() {
+        addMemberMetadataDataFetchers();
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
 
@@ -165,6 +167,9 @@ public class RichProperty
 
         if(autoComplete != null) {
             autoComplete.addDataFetcher(this);
+        }
+        if (autoCompleteWindow != null) {
+            autoCompleteWindow.addDataFetcher(this);
         }
         validate.addDataFetcher(this);
 

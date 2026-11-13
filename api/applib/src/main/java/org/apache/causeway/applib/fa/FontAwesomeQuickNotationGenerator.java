@@ -29,8 +29,8 @@ import lombok.experimental.UtilityClass;
 class FontAwesomeQuickNotationGenerator {
 
     String generate(final FontAwesomeLayers model) {
-        return _NullSafe.stream(model.getIconEntries())
-            .map(iconEntry->processPrefixes(iconEntry.getCssClasses()))
+        return _NullSafe.stream(model.iconEntries())
+            .map(iconEntry->processPrefixes(iconEntry.cssClasses()))
             .collect(Collectors.joining(", "));
     }
 

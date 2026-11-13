@@ -20,9 +20,6 @@ package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 
 import java.util.Set;
 
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.markup.head.IHeaderResponse;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
@@ -31,21 +28,21 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvi
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSource;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.selector.EventSourceSelector;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.markup.head.IHeaderResponse;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * {@link PanelAbstract Panel} that represents a {@link CollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public abstract class CalendaredCollectionAbstract
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,7 +54,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
         "#63BA68", "#B1ADAC", "#E6CC7F"
     };
 
-    public CalendaredCollectionAbstract(final String id, final EntityCollectionModel model) {
+    public CalendaredCollectionAbstract(final String id, final CollectionModel model) {
         super(id, model);
         buildGui();
     }
@@ -69,27 +66,28 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private void buildGui() {
 
-        final EntityCollectionModel model = getModel();
+        var collectionModel = getModel();
+        if(collectionModel.isHidden()) return;
 
-        final NotificationPanel feedback = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
-        addOrReplace(feedback);
+        var feedbackPanel = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
+        addOrReplace(feedbackPanel);
 
-        val config = new CalendarConfig();
+        var config = new CalendarConfig();
         config.getHeaderToolbar().setLeft("prevYear,prev,next,nextYear, today");
         config.getHeaderToolbar().setCenter("title");
         config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
         config.setSelectable(true);
         config.setAllDaySlot(true);
 
-        final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFilteredAndSorted().getValue()
-                .map(DataRow::getRowElement);
+        final Iterable<ManagedObject> entityList = collectionModel.getDataTableModel().dataRowsFilteredAndSortedObservable().getValue()
+                .map(DataRow::rowElement);
         final Iterable<String> calendarNames = getCalendarNames(entityList);
 
         int i=0;
         for (final String calendarName: calendarNames) {
             final EventSource namedCalendar = new EventSource();
             namedCalendar.setTitle(calendarName);
-            namedCalendar.setEventProvider(newEventProvider(model, calendarName));
+            namedCalendar.setEventProvider(newEventProvider(collectionModel, calendarName));
             namedCalendar.setEditable(true);
             String color = COLORS[i++ % COLORS.length];
             namedCalendar.setBackgroundColor(color);
@@ -97,13 +95,13 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
             config.addEventSource(namedCalendar);
         }
 
-        final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedback);
+        final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedbackPanel);
         addOrReplace(calendar);
-        addOrReplace(new EventSourceSelector(ID_SELECTOR, calendar));
+        addOrReplace(new EventSourceSelector(ID_SELECTOR));
     }
 
     protected abstract EventProvider newEventProvider(
-            final EntityCollectionModel model, final String calendarName);
+            final CollectionModel model, final String calendarName);
 
     protected abstract Set<String> getCalendarNames(final Iterable<ManagedObject> entityList);
 

@@ -18,16 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.autocomplete.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory
 extends ActionParameterSupportFacetFactoryAbstract {
@@ -43,12 +41,11 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val autoCompleteMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
-        val paramSupportReturnType = searchResult.getParamSupportReturnType();
-        addFacet(
-                new ActionParameterAutoCompleteFacetViaMethod(
-                        autoCompleteMethod, paramSupportReturnType, patConstructor, paramAsHolder));
+        var autoCompleteMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
+        var paramSupportReturnType = searchResult.paramSupportReturnType();
+        new ActionParameterAutoCompleteFacetViaMethod(
+                autoCompleteMethod, paramSupportReturnType, patConstructor, paramAsHolder);
     }
 
 }

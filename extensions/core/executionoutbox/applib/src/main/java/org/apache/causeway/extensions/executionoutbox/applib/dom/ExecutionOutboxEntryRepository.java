@@ -51,7 +51,8 @@ public interface ExecutionOutboxEntryRepository {
         }
     }
 
-    ExecutionOutboxEntry createEntryAndPersist(final Execution execution);
+    @SuppressWarnings("rawtypes")
+	ExecutionOutboxEntry createEntryAndPersist(final Execution execution);
 
     Optional<ExecutionOutboxEntry> findByInteractionIdAndSequence(final UUID interactionId, final int sequence);
 

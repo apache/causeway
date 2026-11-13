@@ -20,19 +20,19 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -40,10 +40,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents an instance of some element of the meta-model recognized by the framework,
@@ -53,18 +51,28 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}}
  *
  */
-public interface ManagedObject
+public sealed interface ManagedObject
 extends
     Bookmarkable,
     HasMetaModelContext,
-    HasObjectSpecification {
+    HasObjectSpecification
+permits
+    ManagedObjectEmpty,
+    ManagedObjectUnspecified,
+    ManagedObjectMixin,
+    ManagedObjectOther,
+    ManagedObjectValue,
+    ManagedObjectService,
+    ManagedObjectViewmodel,
+    ManagedObjectEntity,
+    PackedManagedObject {
 
     /**
      * ManagedObject specializations have varying contract/behavior.
      */
     @Getter
     @RequiredArgsConstructor
-    @Log4j2
+    @Slf4j
     enum Specialization {
         /**
          * <h1>Contract</h1><ul>
@@ -311,22 +319,47 @@ extends
             log.warn("failed specialization attempt for {}", spec);
             return UNSPECIFIED;
         }
+
+        <T> T assertCompliance(
+                final ObjectSpecification objSpec,
+                final @NonNull T pojo) {
+            final Specialization specialization = this;
+            MmAssertionUtils.assertPojoNotWrapped(pojo);
+            if(objSpec.isAbstract()) {
+                _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired(),
+                        ()->String.format("Specialization %s does not allow abstract type %s",
+                                specialization,
+                                objSpec));
+            }
+            if(specialization.getTypePolicy().isExactTypeRequired()) {
+                MmAssertionUtils.assertExactType(objSpec, pojo);
+            }
+            if(specialization.getInjectionPolicy().isAlwaysInject()) {
+                var isInjectionPointsResolved = objSpec.entityFacet()
+                    .map(entityFacet->entityFacet.isInjectionPointsResolved(pojo))
+                    .orElse(false);
+                if(!isInjectionPointsResolved) {
+                    objSpec.getServiceInjector().injectServicesInto(pojo); // might be redundant
+                }
+            }
+            return pojo;
+        }
     }
 
     /**
      * Returns the specific {@link Specialization} this {@link ManagedObject} implements,
      * which governs this object's behavior.
      */
-    Specialization getSpecialization();
-    @Override default BookmarkPolicy getBookmarkPolicy() {
-        return getSpecialization().getBookmarkPolicy();
+    Specialization specialization();
+
+    @Override default Specialization.BookmarkPolicy getBookmarkPolicy() {
+        return specialization().getBookmarkPolicy();
     }
 
     /**
      * Returns the specification that details the structure (meta-model) of this object.
      */
-    @Override
-    ObjectSpecification getSpecification();
+    @Override ObjectSpecification objSpec();
 
     /**
      * Returns the adapted domain object, the 'plain old java' object this managed object
@@ -339,14 +372,6 @@ extends
         return EntityState.NOT_PERSISTABLE;
     }
 
-    Supplier<ManagedObject> asSupplier();
-
-    /**
-     * Unary operator asserting that {@code pojo} and {@link #getSpecification()} are
-     * compliant with the policies from {@link #getSpecialization()}.
-     */
-    <T> T assertCompliance(@NonNull T pojo);
-
     // -- TITLE
 
     /**
@@ -357,31 +382,12 @@ extends
     // -- SHORTCUT - ICON
 
     /**
-     * Returns the name of an icon to use for this object.
-     * <p>
-     * May return <code>null</code> if no icon is specified.
-     */
-    default String getIconName() {
-        return getSpecification().getIconName(this);
-    }
-
-    default ObjectIcon getIcon() {
-        return getSpecification().getIcon(this);
-    }
-
-    /**
      * Domain Objects may either have an icon corresponding to an icon resource,
      * or they use a font awesome icon.
+     * @param iconSize
      */
-    default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
-        val iconName = getIconName();
-        val faLayers = getSpecification().getFaLayers(this).orElse(null);
-        if (iconName != null
-                || faLayers == null) {
-            return Either.left(getIcon());
-        } else {
-            return Either.right(faLayers);
-        }
+    default ObjectIcon getIcon(IconSize iconSize) {
+        return getObjectIconService().getObjectIcon(this, iconSize);
     }
 
     default Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark() {
@@ -399,7 +405,7 @@ extends
      * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
      */
     static ManagedObject unspecified() {
-        return _ManagedObjectUnspecified.INSTANCE;
+        return ManagedObjectUnspecified.INSTANCE;
     }
     /**
      * EMPTY
@@ -409,7 +415,7 @@ extends
      * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
      */
     static ManagedObject empty(final @NonNull ObjectSpecification spec) {
-        return new _ManagedObjectEmpty(spec);
+        return new ManagedObjectEmpty(spec);
     }
     /**
      * VALUE
@@ -423,7 +429,7 @@ extends
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectValue(spec, pojo)
+                ? new ManagedObjectValue(spec, pojo)
                 : empty(spec);
     }
     /**
@@ -437,7 +443,7 @@ extends
     static ManagedObject service(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo) {
-        return new _ManagedObjectService(spec, pojo);
+        return new ManagedObjectService(spec, pojo);
     }
     /**
      * VIEWMODEL
@@ -452,7 +458,7 @@ extends
             final @Nullable Object pojo,
             final Optional<Bookmark> bookmarkIfKnown) {
         return pojo != null
-                ? new _ManagedObjectViewmodel(spec, pojo, bookmarkIfKnown)
+                ? new ManagedObjectViewmodel(spec, pojo, bookmarkIfKnown)
                 : empty(spec);
     }
     /**
@@ -468,30 +474,27 @@ extends
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        if(pojo == null) {
-            return empty(spec);
-        }
-        val bookmarkIfAny = bookmarkIfKnown
+        if(pojo == null) return empty(spec);
+
+        var bookmarkIfAny = bookmarkIfKnown
                 .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
         return bookmarkIfAny
-            .map(bookmark->entityHypridBookmarked(spec, pojo, bookmarkIfAny))
-            .orElseGet(()->entityHybirdTransient(spec, pojo));
+            .map(bookmark->entityBookmarked(spec, pojo, bookmark))
+            .orElseGet(()->entityTransient(spec, pojo));
     }
-    // bookmarked hybrid in its final state (cannot transition)
-    private static ManagedObject entityHypridBookmarked(
+    private static ManagedObject entityBookmarked(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
-            final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        return new _ManagedObjectEntityHybrid(
-                        new _ManagedObjectEntityBookmarked(spec, pojo, bookmarkIfKnown));
+            final @NonNull Bookmark bookmark) {
+        return new ManagedObjectEntity(
+                        new EntityPhaseBookmarked(spec, pojo, bookmark));
     }
-    // initially detached hybrid that can transition to bookmarked anytime on reassessment
-    private static ManagedObject entityHybirdTransient(
+    private static ManagedObject entityTransient(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectEntityHybrid(
-                        new _ManagedObjectEntityTransient(spec, pojo))
+                ? new ManagedObjectEntity(
+                        new EntityPhaseTransient(spec, pojo))
                 : empty(spec);
     }
     /**
@@ -505,21 +508,25 @@ extends
     static ManagedObject mixin(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo) {
-        return new _ManagedObjectMixin(spec, pojo);
+        return new ManagedObjectMixin(spec, pojo);
     }
     /**
      * OTHER
+     * @apiNote potential use case: allows to work with detached entity pojos
+     *      in a light weight fashion,
+     *      treating them as data snapshots, not considering state changes
+     *      (e.g. reuse of ORM metadata while accessing a secondary data store)
      * @param spec - required
      * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
      */
-    private static ManagedObject other(
+    public static ManagedObject other(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectOther(spec, pojo)
+                ? new ManagedObjectOther(spec, pojo)
                 : empty(spec);
     }
     /**
@@ -533,7 +540,7 @@ extends
     static PackedManagedObject packed(
             final @NonNull ObjectSpecification elementSpec,
             final @Nullable Can<ManagedObject> nonScalar) {
-        return new _ManagedObjectPacked(elementSpec, nonScalar);
+        return new PackedManagedObject(elementSpec, nonScalar);
     }
 
     /**
@@ -546,7 +553,7 @@ extends
     static ManagedObject adaptSingular(
             final @NonNull SpecificationLoader specLoader,
             final @NonNull Object pojo) {
-        val spec = specLoader.specForType(pojo.getClass()).orElse(null);
+        var spec = specLoader.specForType(pojo.getClass()).orElse(null);
         return adaptSingularInternal(spec, pojo, Optional.empty());
     }
 
@@ -601,12 +608,12 @@ extends
 
         MmAssertionUtils.assertPojoNotWrapped(pojo);
         MmAssertionUtils.assertPojoIsScalar(pojo);
-        val spec = pojo!=null
+        var spec = pojo!=null
                 && guess!=null
                     ? MmSpecUtils.quicklyResolveObjectSpecification(guess, pojo.getClass())
                     : guess;
 
-        val specialization = spec!=null
+        var specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
                 : Specialization.UNSPECIFIED;
 
@@ -632,6 +639,5 @@ extends
         }
         throw _Exceptions.unmatchedCase(specialization);
     }
-
 
 }

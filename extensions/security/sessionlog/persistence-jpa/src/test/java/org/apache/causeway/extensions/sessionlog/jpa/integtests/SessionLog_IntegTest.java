@@ -22,11 +22,8 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.sessionlog.applib.integtests.SessionLogIntegTestAbstract;
 import org.apache.causeway.extensions.sessionlog.jpa.CausewayModuleExtSessionLogPersistenceJpa;
@@ -38,7 +35,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
@@ -46,11 +42,7 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
     })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test),
-    })
     public static class AppManifest {
     }
-
 
 }

@@ -1,9 +1,9 @@
 {
   "errors" : [ {
-    "message" : "Exception while fetching data (/rich/Scenario/When/university_dept_People/nameOf/invoke/results) : 'Person' is mandatory",
+    "message" : "Exception while fetching data (/rich/Scenario/When/university_dept_People/nameOf/invoke/results) : Domain object input is unavailable or incompatible with required type 'university.dept.Person'",
     "locations" : [ {
-      "line" : 9,
-      "column" : 15
+      "column" : 15,
+      "line" : 9
     } ],
     "path" : [ "rich", "Scenario", "When", "university_dept_People", "nameOf", "invoke", "results" ],
     "extensions" : {

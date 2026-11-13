@@ -20,9 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.table;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -37,12 +39,14 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.tableoption.PageActionChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
-import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
+import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoice;
+import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoiceKey;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsSortableDataProvider;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 
 public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> {
@@ -105,6 +109,25 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         honorPageNumberHint();
     }
 
+    public DataTableInteractive tableModel() {
+        var dataTableInteractive =  (this.getDataProvider() instanceof CollectionContentsSortableDataProvider dataProvider)
+            ? dataProvider.getDataTableModel()
+            : null;
+        Objects.requireNonNull(dataTableInteractive, ()->
+            "could not resolve the underlying model for this table component due to an unexpected DataProvider type %s"
+            .formatted(Optional.ofNullable(this.getDataProvider()).map(Object::getClass).map(Class::getName).orElse("null"))
+            );
+        return dataTableInteractive;
+    }
+
+    /**
+     * Gets the number of table rows (unfiltered) directly from the underlying model.
+     * While {@link #getRowCount()} might return zero, when the component was no yet populated.
+     */
+    public int elementCount() {
+        return tableModel().dataElementsObservable().getValue().size();
+    }
+
     // -- SELECTABLE
 
     /**
@@ -124,7 +147,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         if(_Strings.nullToEmpty(this.searchArg).equals(_Strings.nullToEmpty(value))) return;
         this.searchArg = value;
         // update the interactive model
-        _TableUtils.interactive(this).getSearchArgument().setValue(searchArg);
+        tableModel().searchArgumentBindable().setValue(searchArg);
     }
 
     // -- PAGESIZE
@@ -143,7 +166,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      */
     public List<PagesizeChoice> getPagesizeChoices() {
         var choices = List.of(
-                new PagesizeChoice("All", Long.MAX_VALUE),
+                new PagesizeChoice(translate("All"), Long.MAX_VALUE),
                 new PagesizeChoice("1000", 1000L),
                 new PagesizeChoice("100", 100L),
                 new PagesizeChoice("25", 25L), // in line with standalone table default size
@@ -156,35 +179,33 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
 
     /**
      * Provides the page actions as presented in the table view's footer bar (drop-down menu).
-     * @see #executePageAction(PageActionChoice)
+     * @see #executeSelectOperation(SelectOperationChoice)
      */
-    public List<PageActionChoice> getPageActionChoices() {
+    public List<SelectOperationChoice> getSelectOperationChoices() {
         return isRowSelectionEnabled()
-                ? List.of(
-                    new PageActionChoice("PAGE_SEL", translate("select all rows of this page")),
-                    new PageActionChoice("PAGE_UNSEL", translate("unselect all rows of this page")))
+                ? Stream.of(SelectOperationChoiceKey.values())
+                    .filter(SelectOperationChoiceKey.isAvailableWhen(isPaged()))
+                    .map(key->new SelectOperationChoice(key, translate(key.englishTitle)))
+                    .toList()
                 : Collections.emptyList();
     }
 
     /**
      * Executes a page action from the table view's footer bar (drop-down menu).
      * <p>
-     * @return whether the action was executed.
-     * @see #getPageActionChoices
+     * @see #getSelectOperationChoices()
      */
-    public boolean executePageAction(final PageActionChoice pageActionChoice) {
-        switch(pageActionChoice.getKey()) {
-        case "PAGE_SEL": {
-            _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
-            return true;
+    public void executeSelectOperation(final SelectOperationChoice selectOperationChoice) {
+        switch(selectOperationChoice.key()) {
+            case SEL_ALL -> tableModel().selectAllFiltered(true);
+            case CLEAR -> tableModel().selectAll(false);
+            case PAGE_SEL -> tableModel().selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
+            case PAGE_UNSEL -> tableModel().selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
         }
-        case "PAGE_UNSEL": {
-            _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
-            return true;
-        }
-        default:
-            return false; // ignore, bale out
-        }
+    }
+
+    public boolean isPaged() {
+        return getPageCount() > 1;
     }
 
     public IntStream getCurrentPageRowIndexes() {
@@ -201,7 +222,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      */
     public final Optional<PagesizeChoice> getCurrentPagesizeChoice() {
         return getPagesizeChoices().stream()
-                .filter(c->c.getItemsPerPage() == getItemsPerPage())
+                .filter(c->c.itemsPerPage() == getItemsPerPage())
                 .findFirst();
     }
 

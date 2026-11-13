@@ -23,10 +23,10 @@ import java.util.List;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -38,10 +38,9 @@ import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-import lombok.val;
-
 /**
- *
+ * An implementation of {@link ContentMappingService}.
+ * 
  * @since 2.0 {@index}
  */
 @Service
@@ -64,7 +63,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
 
     @Nullable
     CommandDto asProcessedDto(final Object object) {
-        val commandDto = asCommandDto(object);
+        var commandDto = asCommandDto(object);
         return asProcessedDto(object, commandDto);
     }
 
@@ -87,7 +86,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         }
 
         // global processors
-        for (val commandDtoProcessorService : commandDtoProcessorServices) {
+        for (var commandDtoProcessorService : commandDtoProcessorServices) {
             commandDto = commandDtoProcessorService.process(domainObject, commandDto);
             if(commandDto == null) {
                 // any processor could return null, effectively breaking the chain.
@@ -96,7 +95,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         }
 
         // specific processor for this specific member (action or property)
-        val logicalMemberId = commandDto.getMember().getLogicalMemberIdentifier();
+        var logicalMemberId = commandDto.getMember().getLogicalMemberIdentifier();
         final CommandDtoProcessor commandDtoProcessor =
                 metaModelService.commandDtoProcessorFor(logicalMemberId);
         if (commandDtoProcessor == null) {
@@ -104,7 +103,6 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         }
         return commandDtoProcessor.process(commandDto);
     }
-
 
     @Inject MetaModelService metaModelService;
     @Inject List<CommandDtoProcessorService> commandDtoProcessorServices;

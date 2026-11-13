@@ -24,14 +24,13 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public abstract class AuthorizationFacetAbstract
 extends FacetAbstract
 implements AuthorizationFacet {
@@ -51,19 +50,19 @@ implements AuthorizationFacet {
     @Override
     public String hides(final VisibilityContext ic) {
 
-        if(ic.getHead().getOwner().getSpecification().isValue()) {
+        if(ic.head().owner().objSpec().isValue()) {
             return null; // never hide value-types
         }
 
-        val hides = authorizationManager
+        var hides = authorizationManager
                 .isVisible(
                         getInteractionService().currentInteractionContextElseFail(),
-                        ic.getIdentifier())
+                        ic.identifier())
                 ? null
                 : "Not authorized to view";
 
         if(hides!=null && log.isDebugEnabled()) {
-            log.debug("hides[{}] -> {}", ic.getIdentifier(), hides);
+            log.debug("hides[{}] -> {}", ic.identifier(), hides);
         }
 
         return hides;
@@ -72,19 +71,19 @@ implements AuthorizationFacet {
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
 
-        if(ic.getHead().getOwner().getSpecification().isValue()) {
+        if(ic.head().owner().objSpec().isValue()) {
             return Optional.empty(); // never disable value-types
         }
 
-        val disables = authorizationManager
+        var disables = authorizationManager
                 .isUsable(
                         getInteractionService().currentInteractionContextElseFail(),
-                        ic.getIdentifier())
+                        ic.identifier())
                 ? null
-                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.getIdentifier(), getMetaModelContext());
+                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.identifier(), getMetaModelContext());
 
         if(disables!=null && log.isDebugEnabled()) {
-            log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
+            log.debug("disables[{}] -> {}", ic.identifier(), disables);
         }
 
         return Optional.ofNullable(disables).map(VetoReason::unauthorized);

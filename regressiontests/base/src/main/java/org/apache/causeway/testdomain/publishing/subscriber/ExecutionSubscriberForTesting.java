@@ -37,14 +37,13 @@ import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Testing")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class ExecutionSubscriberForTesting
 implements ExecutionSubscriber {
 
@@ -59,16 +58,16 @@ implements ExecutionSubscriber {
     public void onExecution(final Execution<?, ?> execution) {
 
         @SuppressWarnings("unchecked")
-        val publishedEntries =
+        var publishedEntries =
         (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
 
         publishedEntries.add(execution);
 
         kvStore.put(this, "publishedExecutions", publishedEntries);
-        log.debug("publish execution {}", ()->{
+        if(log.isDebugEnabled()) {
             final MemberExecutionDto dto = execution.getDto();
-            return MemberExecutionDtoUtils.dtoMapper(dto.getClass()).toString(dto);
-        });
+            log.debug("publish execution {}", MemberExecutionDtoUtils.dtoMapper(dto.getClass()).toString(dto));
+        }
     }
 
     // -- UTILITIES

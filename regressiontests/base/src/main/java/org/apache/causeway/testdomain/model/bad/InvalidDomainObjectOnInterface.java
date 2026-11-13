@@ -21,8 +21,45 @@ package org.apache.causeway.testdomain.model.bad;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 
-// not allowed, should fail MM validation CAUSEWAY-2938
-@DomainObject(nature = Nature.VIEW_MODEL)
-public interface InvalidDomainObjectOnInterface {
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class InvalidDomainObjectOnInterface {
+	
+	// -- ABSTRACT TYPES
+	
+	@DomainObject(nature = Nature.VIEW_MODEL)
+	public interface Interface1 {
+		
+	}
+	
+	@DomainObject(nature = Nature.VIEW_MODEL)
+	public interface Interface2 {
+		
+	}
+	
+	@DomainObject(nature = Nature.VIEW_MODEL)
+	public abstract class Abstract {
+		
+	}
+	
+	// -- CONCRETE TYPES
+	
+	@DomainObject(nature = Nature.VIEW_MODEL)
+	public class Good implements Interface1 {
+		
+	}
+	
+	// not allowed, should fail MM validation CAUSEWAY-3965
+	@DomainObject(nature = Nature.VIEW_MODEL)
+	public class BadlyInterfaced implements Interface1, Interface2 {
+		
+	}
+	
+	// not allowed, should fail MM validation CAUSEWAY-3965
+	@DomainObject(nature = Nature.VIEW_MODEL)
+	public class BadlyMixed extends Abstract implements Interface1 {
+		
+	}
 
 }

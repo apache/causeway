@@ -19,36 +19,47 @@
 package org.apache.causeway.core.config.validators;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
+import jakarta.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatternOptionalStringConstraintValidator
-        implements ConstraintValidator<jakarta.validation.constraints.Pattern, Optional<String>> {
+        implements ConstraintValidator<Pattern, Optional<String>> {
 
+    private java.util.regex.Pattern regex;
+    private String regexp;
+    private int flags;
 
-    private final PatternValidator patternValidator = new PatternValidator();
-
-    public PatternOptionalStringConstraintValidator(){
+    @Override
+    public void initialize(final Pattern annotation) {
+        this.regexp = annotation.regexp();
+        this.flags = mapFlags(annotation.flags());
+        this.regex = java.util.regex.Pattern.compile(this.regexp, this.flags);
     }
 
     @Override
-    public void initialize(final jakarta.validation.constraints.Pattern constraintAnnotation) {
-        patternValidator.initialize(constraintAnnotation);
+    public boolean isValid(final Optional<String> value, final ConstraintValidatorContext context) {
+        if (value == null || value.isEmpty())
+			return true;
+
+        String s = value.get();
+
+        // Match semantics for Bean Validation @Pattern is "find a match", not "full match"
+        // If you want full match, use matcher.matches() and/or add ^...$ in regexp.
+        Matcher m = regex.matcher(s);
+        return m.find();
     }
 
-    @Override
-    public boolean isValid(
-            final Optional<String> value,
-            final ConstraintValidatorContext context) {
-        if(!value.isPresent()) {
-            return true;
+    private static int mapFlags(final jakarta.validation.constraints.Pattern.Flag[] flags) {
+        int out = 0;
+        for (jakarta.validation.constraints.Pattern.Flag f : flags) {
+            out |= f.getValue();
         }
-        return patternValidator.isValid(value.get(), context);
+        return out;
     }
 }

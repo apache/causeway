@@ -25,7 +25,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -65,10 +65,8 @@ public class ExecutionLogMenu {
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtExecutionLogApplib.ActionDomainEvent<T> { }
 
-
     final ExecutionLogEntryRepository executionLogEntryRepository;
     final ClockService clockService;
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -85,7 +83,6 @@ public class ExecutionLogMenu {
             return executionLogEntryRepository.findMostRecent();
         }
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -111,8 +108,6 @@ public class ExecutionLogMenu {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findAll.DomainEvent.class,
@@ -129,9 +124,6 @@ public class ExecutionLogMenu {
             return executionLogEntryRepository.findAll();
         }
     }
-
-
-
 
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());

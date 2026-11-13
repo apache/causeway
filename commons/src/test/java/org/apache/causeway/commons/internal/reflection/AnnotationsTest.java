@@ -32,7 +32,6 @@ import org.apache.causeway.commons.internal._Constants;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 class AnnotationsTest {
 
@@ -73,7 +72,7 @@ class AnnotationsTest {
                 .filter(m->m.getName().equals("action"))
                 // using filter over peek here, because peek is unreliable with 'count()' terminal
                 .filter(m->{
-                    val syn = _Annotations.synthesize(m, DisplayName.class);
+                    var syn = _Annotations.synthesize(m, DisplayName.class);
                     assertNotNull(syn);
                     assertTrue(syn.isPresent());
                     assertEquals("hi", syn.get().value());
@@ -93,7 +92,7 @@ class AnnotationsTest {
                 .filter(m->m.getName().equals("action"))
                 // using filter over peek here, because peek is unreliable with 'count()' terminal
                 .filter(m->{
-                    val syn = _Annotations.synthesize(m, DisplayName.class);
+                    var syn = _Annotations.synthesize(m, DisplayName.class);
                     assertNotNull(syn);
                     assertTrue(syn.isPresent());
                     assertEquals("hi", syn.get().value());
@@ -107,7 +106,7 @@ class AnnotationsTest {
 
     @Test
     void inhertitedAnnotationWhenOverrideOnBooleanProperty() {
-        val getter = ClassUtils
+        var getter = ClassUtils
                 .getMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty", _Constants.emptyClasses);
 
         assertEquals(43, _Annotations.synthesize(getter, Order.class).get().value());

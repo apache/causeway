@@ -30,8 +30,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.val;
-
 class IdentifierTests {
 
     private Identifier identifier;
@@ -44,27 +42,26 @@ class IdentifierTests {
 
     @Test
     void classIdentifierClassNameIsSet() {
-        val domainClass = SomeDomainClass.class;
+        var domainClass = SomeDomainClass.class;
         final String domainClassFullyQualifiedName = domainClass.getCanonicalName();
         identifier = Identifier.classIdentifier(LogicalType.fqcn(domainClass));
-        assertThat(identifier.getClassName(), is(domainClassFullyQualifiedName));
+        assertThat(identifier.className(), is(domainClassFullyQualifiedName));
     }
 
     @Test
     void memberParameterNames() {
-        val domainClass = SomeDomainClass.class;
+        var domainClass = SomeDomainClass.class;
         identifier = Identifier.actionIdentifier(LogicalType.fqcn(domainClass), "placeOrder", int.class, String.class);
-        assertThat(identifier.getMemberParameterClassNames(), is(Can.of("int", "java.lang.String")));
+        assertThat(identifier.memberParameterClassNames(), is(Can.of("int", "java.lang.String")));
     }
 
     @Test
     void paramsIdentityString() {
-        val domainClass = SomeDomainClass.class;
+        var domainClass = SomeDomainClass.class;
         identifier = Identifier.actionIdentifier(LogicalType.fqcn(domainClass), "placeOrder", int.class, String.class, BigDecimal.class);
         assertThat(
                 identifier.getFullIdentityString(),
                 is("org.apache.causeway.applib.SomeDomainClass#placeOrder(int,java.lang.String,java.math.BigDecimal)"));
     }
-
 
 }

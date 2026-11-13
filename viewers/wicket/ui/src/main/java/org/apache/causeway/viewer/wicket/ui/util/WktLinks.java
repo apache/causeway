@@ -32,19 +32,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.springframework.lang.Nullable;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
-import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
-import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
-
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -56,62 +51,21 @@ public final class WktLinks {
     }
 
     /**
-     * For rendering {@link LinkAndLabel} within additional-link panels or drop-downs.
+     * For rendering action links within a button panel or drop-down panel.
      */
-    public AbstractLink asAdditionalLink(
+    public AbstractLink asActionLink(
             final Component tooltipReceiver,
             final String titleId,
-            final LinkAndLabel linkAndLabel,
-            final boolean isForceAlignmentWithBlankIcon) {
+            final ActionLink link,
+            final ActionStyle actionStyle) {
 
-        val link = linkAndLabel.getUiComponent();
-        val action = linkAndLabel.getManagedAction().getAction();
+        var actionLabel = Wkt.labelAdd(link, titleId,
+                link::getFriendlyName);
 
-        val hasDisabledReason = link instanceof ActionLink && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny());
+        WktDecorators.decorateActionLink(
+                link, tooltipReceiver, actionLabel,
+                ActionDecorationModel.of(link, actionStyle));
 
-        WktTooltips.addTooltip(tooltipReceiver, hasDisabledReason
-                ? ((ActionLink) link).getReasonDisabledIfAny()
-                : linkAndLabel.getDescription().orElse(null));
-
-        if(ObjectAction.Util.returnsBlobOrClob(action)) {
-            Wkt.cssAppend(link, "noVeil");
-        }
-        if(action.isPrototype()) {
-            Wkt.cssAppend(link, "prototype");
-        }
-        Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
-
-        if (action.getSemantics().isAreYouSure()) {
-            if(action.getParameterCount()==0) {
-                if (!hasDisabledReason) {
-                    val translationService = linkAndLabel.getAction().getMetaModelContext()
-                            .getTranslationService();
-                    val confirmUiModel = ConfirmDecorationModel
-                            .areYouSure(translationService, UiPlacementDirection.BOTTOM);
-                    WktDecorators.getConfirm().decorate(link, confirmUiModel);
-                }
-            }
-            // ensure links receive the danger style
-            // don't care if expressed twice
-            WktDecorators.getDanger().decorate(link);
-        } else {
-            Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
-                    || action.isPrototype()
-                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
-                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
-        }
-
-        linkAndLabel
-        .getAdditionalCssClass()
-        .ifPresent(cssClass->Wkt.cssAppend(link, cssClass));
-
-        val viewTitleLabel = Wkt.labelAdd(link, titleId,
-                linkAndLabel::getFriendlyName);
-
-        val faLayers = linkAndLabel.lookupFontAwesomeLayers(isForceAlignmentWithBlankIcon);
-
-        WktDecorators.getIcon().decorate(viewTitleLabel, faLayers);
-        WktDecorators.getMissingIcon().decorate(viewTitleLabel, faLayers);
         return link;
     }
 
@@ -119,23 +73,40 @@ public final class WktLinks {
             final @NonNull ListItem<T> item,
             final @NonNull R container,
             final @NonNull String titleId, final @NonNull Function<T, IModel<String>> titleProvider,
-            final @NonNull String iconId, final @Nullable Function<T, IModel<String>> iconProvider,
-            final @Nullable BiFunction<T, Label, IModel<String>> cssFactory) {
+            final @NonNull String faIconId, final @Nullable Function<T, FontAwesomeLayers> faIconCssProvider) {
 
-        val t = item.getModelObject();
+        var t = item.getModelObject();
+
+        // add title and icon to the link
+        Wkt.labelAdd(container, titleId, titleProvider.apply(t));
+        Wkt.faIconLayersAdd(container, faIconId, Optional.ofNullable(faIconCssProvider)
+            .map(iconProv->iconProv.apply(t))
+            .orElseGet(FontAwesomeLayers::empty));
+
+        return container;
+    }
+
+    public static <T, R extends MarkupContainer> R listItemAsDropdownLink(
+        final @NonNull ListItem<T> item,
+        final @NonNull R container,
+        final @NonNull String titleId, final @NonNull Function<T, IModel<String>> titleProvider,
+        final @NonNull String iconId, final @Nullable Function<T, IModel<String>> iconProvider,
+        final @Nullable BiFunction<T, Label, IModel<String>> cssFactory) {
+
+        var t = item.getModelObject();
 
         // add title and icon to the link
 
         Wkt.labelAdd(container, titleId, titleProvider.apply(t));
 
         final Label viewItemIcon = Wkt.labelAdd(container, iconId, Optional.ofNullable(iconProvider)
-                .map(iconProv->iconProv.apply(t))
-                .orElseGet(()->Model.of("")));
+            .map(iconProv->iconProv.apply(t))
+            .orElseGet(()->Model.of("")));
 
         Optional.ofNullable(cssFactory)
-        .map(cssFact->cssFact.apply(t, viewItemIcon))
-        .ifPresent(cssModel->Wkt.cssAppend(viewItemIcon, cssModel));
+            .map(cssFact->cssFact.apply(t, viewItemIcon))
+            .ifPresent(cssModel->Wkt.cssAppend(viewItemIcon, cssModel));
 
         return container;
-
-    }}
+    }
+}

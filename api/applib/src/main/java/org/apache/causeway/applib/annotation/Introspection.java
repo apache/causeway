@@ -185,7 +185,6 @@ public enum Introspection {
 
     }
 
-
     /**
      * Effectively applies on a per class basis, when introspecting
      * meta-model members and member-support methods.

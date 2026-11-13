@@ -7,8 +7,7 @@
 .MenuUiService.java
 ----
 interface MenuUiService {
-  MenuUiModel getMenu(DomainServiceLayout.MenuBar menuBarSelect)
-  void buildMenuItems(MenuUiModel menuUiModel, MenuVisitor menuBuilder)
+  NavbarUiModel getMenu()
 }
 ----
 

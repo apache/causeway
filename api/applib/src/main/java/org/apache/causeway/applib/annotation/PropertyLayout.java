@@ -36,7 +36,12 @@ import java.lang.annotation.Target;
  * @see org.apache.causeway.applib.annotation.ParameterLayout
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+    ElementType.METHOD,
+    ElementType.FIELD,
+    ElementType.RECORD_COMPONENT,
+    ElementType.TYPE,
+    ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation
@@ -64,7 +69,6 @@ public @interface PropertyLayout {
      */
     String describedAs()
             default "";
-
 
     /**
      * Specifies the <b>id</b> of associated <i>FieldSet</i>.
@@ -198,6 +202,17 @@ public @interface PropertyLayout {
             default Navigable.NOT_SPECIFIED;
 
     /**
+     * When set, identifies a logical child, that is navigable via the UI.
+     * <p>
+     * The order of appearance of this tree branch in the UI relative to other branches of the same tree node,
+     * is given in <i>Dewey-decimal</i> notation.
+     *
+     * @see CollectionLayout#navigableSubtree()
+     */
+    String navigableSubtree()
+        default "";
+
+    /**
      * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
     PromptStyle promptStyle()
@@ -227,7 +242,6 @@ public @interface PropertyLayout {
      */
     Repainting repainting()
             default Repainting.NOT_SPECIFIED;
-
 
     /**
      * The order of this member relative to other members in the same (layout) group,
@@ -260,4 +274,3 @@ public @interface PropertyLayout {
             default -1;
 
 }
-

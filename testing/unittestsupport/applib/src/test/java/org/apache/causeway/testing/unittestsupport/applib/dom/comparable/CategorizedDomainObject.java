@@ -57,5 +57,4 @@ public class CategorizedDomainObject implements Comparable<CategorizedDomainObje
         return compareNullsFirst(this.getSubcategory(), other.getSubcategory());        
     }
 
-
 }

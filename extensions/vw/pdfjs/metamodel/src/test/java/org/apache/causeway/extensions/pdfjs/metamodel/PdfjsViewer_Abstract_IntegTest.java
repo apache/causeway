@@ -27,8 +27,6 @@ import org.approvaltests.Approvals;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
@@ -38,14 +36,11 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
-import lombok.val;
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 
@@ -56,9 +51,6 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
             CausewayModuleSecurityBypass.class,
             CausewayModuleCoreRuntimeServices.class,
             CausewayModulePersistenceCommons.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     public static class AppManifestBase {
 
@@ -90,12 +82,12 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
     }
 
     void dump_facets() {
-        val metamodelDto = metaModelService.exportMetaModel(
+        var metamodelDto = metaModelService.exportMetaModel(
                 Config.builder()
                         .namespacePrefixes(Collections.singleton(getDomainModuleClass().getPackageName()))
                         .ignoreMixins(false)
                         .build());
-        val xml = jaxbService.toXml(metamodelDto);
+        var xml = jaxbService.toXml(metamodelDto);
 
         Approvals.verifyXml(xml, ApprovalsOptions.xmlOptions());
     }

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSource;
@@ -36,19 +36,15 @@ class AbstractShiftedEventParam extends AbstractEventParam {
 		this.minutesDelta = minutesDelta;
 	}
 
-	public DateTime getNewStartTime() {
+	public ZonedDateTime getNewStartTime() {
 		return shift(getEvent().getStart());
 	}
 
-	public DateTime getNewEndTime() {
+	public ZonedDateTime getNewEndTime() {
 		return shift(getEvent().getEnd());
 	}
 
-//	public Period getDelta() {
-//		return Period.days(daysDelta).plusMinutes(minutesDelta);
-//	}
-
-	private DateTime shift(final DateTime start) {
+	private ZonedDateTime shift(final ZonedDateTime start) {
 		return start.plusDays(daysDelta).plusMinutes(minutesDelta);
 	}
 

@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.inspect;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -29,21 +26,12 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.graph.tree.TreeNode;
-import org.apache.causeway.applib.graph.tree.TreePath;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.services.metamodel.Config;
-import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.inspect.model.MMNode;
-import org.apache.causeway.core.metamodel.inspect.model.MMNodeFactory;
-import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
+import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectView;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action(
         commandPublishing = Publishing.DISABLED,
@@ -53,18 +41,18 @@ import lombok.val;
         semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
-        cssClassFa = "fa-sitemap",
-        describedAs = "Open up a view of the metamodel of this object's domain class",
+        cssClassFa = "solid shapes",
+        describedAs = "Opens a meta-model inspection view for this object's domain class",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.2.1"
 )
-//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
-    @Inject FactoryService factoryService;
-    
+    @Inject private MessageService messageService;
+    @Inject private SpecificationLoader specLoader;
+
     private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
@@ -72,50 +60,14 @@ public class Object_inspectMetamodel {
 
     @MemberSupport public Object act() {
 
-        final Optional<LogicalType> logicalTypeIfAny = metaModelService
-                .lookupLogicalTypeByClass(domainObject.getClass());
-        if(!logicalTypeIfAny.isPresent()) {
+        var objSpec = specLoader.specForType(domainObject.getClass())
+            .orElse(null);
+        if(objSpec==null) {
             messageService.warnUser("Unknown class, unable to export");
             return null;
         }
-        final String namespace = logicalTypeIfAny.get().getLogicalTypeName();
 
-        val config = Config.builder()
-                .ignoreFallbackFacets(true)
-                .ignoreAbstractClasses(true)
-                .ignoreInterfaces(true)
-                .ignoreBuiltInValueTypes(true)
-                .includeTitleAnnotations(true)
-                .includeShadowedFacets(true)
-                .build()
-                .withNamespacePrefix(namespace);
-
-        val metamodelDto = metaModelService.exportMetaModel(config);
-
-        val className = domainObject.getClass().getName();
-
-        val domainClassDto = metamodelDto.getDomainClassDto()
-            .stream()
-            .filter(classDto->Objects.equals(classDto.getId(), className))
-            .findFirst()
-            .orElseThrow(_Exceptions::noSuchElement);
-
-        val root = MMNodeFactory.type(domainClassDto, null);
-        
-        val tree = TreeNode.root(root, factoryService.getOrCreate(MMTreeAdapter.class));
-
-        // Initialize view-model nodes of the entire tree,
-        // because as it stands, all the type information gets cleared,
-        // after the jaxb model got de-serialized.
-        tree.streamDepthFirst()
-        .map(TreeNode::getValue)
-        .forEach(MMNode::title);
-
-        tree.expand(TreePath.of(0)); // expand the root node
-        return tree;
+        return MetamodelInspectView.root(objSpec);
     }
-
-    @Inject private MetaModelService metaModelService;
-    @Inject private MessageService messageService;
 
 }

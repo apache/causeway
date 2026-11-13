@@ -26,11 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -38,8 +33,10 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.jspecify.annotations.Nullable;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -48,7 +45,6 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLogEntry> implements ExecutionLogEntryRepository {
-
 
     private final Class<E> executionLogEntryClass;
 
@@ -64,7 +60,6 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         return executionLogEntryClass;
     }
 
-
     /**
      * for testing only.
      */
@@ -74,6 +69,8 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         this.factoryService = factoryService;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
     public E createEntryAndPersist(final Execution execution) {
         E e = factoryService.detachedEntity(executionLogEntryClass);
         e.init(execution);
@@ -105,8 +102,8 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
     public List<ExecutionLogEntry> findByFromAndTo(
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -142,6 +139,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -150,6 +148,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTargetAndTimestampAfter(final Bookmark target, final Timestamp timestamp) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -160,6 +159,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTargetAndTimestampBefore(final Bookmark target, final Timestamp timestamp) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -170,6 +170,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTargetAndTimestampBetween(final Bookmark target, final Timestamp timestampFrom, final Timestamp timestampTo) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -223,6 +224,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findRecentByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -241,30 +243,25 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         return repositoryServiceProvider.get();
     }
 
-
     /**
      * intended for testing purposes only
      */
     @Override
     public List<ExecutionLogEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'findAll' in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot call 'findAll' in production systems");
         return _Casts.uncheckedCast(repositoryService().allInstances(executionLogEntryClass));
     }
-
 
     /**
      * intended for testing purposes only
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         repositoryService().removeAll(executionLogEntryClass);
     }
-
 
     private static Timestamp toTimestampStartOfDayWithOffset(
             final @Nullable LocalDate dt,
@@ -276,6 +273,5 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
                         .toEpochMilli())
                 : null;
     }
-
 
 }

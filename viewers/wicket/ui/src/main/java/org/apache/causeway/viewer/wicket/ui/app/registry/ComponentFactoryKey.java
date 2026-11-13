@@ -19,79 +19,64 @@
 package org.apache.causeway.viewer.wicket.ui.app.registry;
 
 import java.io.Serializable;
-import java.util.function.Supplier;
+import java.util.Objects;
 
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.experimental.Accessors;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Serializable key into the {@link ServiceRegistry} to lookup {@link ComponentFactory}s,
  * in order for the latter not having to be {@link Serializable}.
  */
-public final class ComponentFactoryKey implements Serializable {
-    private static final long serialVersionUID = 1L;
+public record ComponentFactoryKey(
+    Class<? extends ComponentFactory> factoryClass,
+    String id,
+    UiComponentType componentType,
+    LoadableDetachableModel<ComponentFactory> componentFactoryLazy
+    ) implements Serializable {
 
-    @Getter @Accessors(fluent=true)
-    private final Class<? extends ComponentFactory> factoryClass;
-    @Getter @Accessors(fluent=true)
-    private final String id;
-    @Getter @Accessors(fluent=true)
-    private final String label;
-    @Getter @Accessors(fluent=true)
-    private final UiComponentType componentType;
-    @Getter @Accessors(fluent=true)
-    private int orderOfAppearanceInUiDropdown;
-    @Getter @Accessors(fluent=true)
-    private boolean isPageReloadRequiredOnTableViewActivation;
-    @Getter @Accessors(fluent=true)
-    private String cssClass;
-
-    // access only through resolve(...)
-    private transient ComponentFactory componentFactory;
+    public ComponentFactory componentFactory() {
+        return componentFactoryLazy.getObject();
+    }
 
     public ComponentFactoryKey(final @NonNull ComponentFactory componentFactory) {
-        this.factoryClass = componentFactory.getClass();
-        this.componentFactory = componentFactory;
-        this.id = componentFactory.getName();
-        this.label = _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
-                .map(CollectionContentsAsFactory::getTitleLabel)
-                .map(IModel::getObject)
-                .orElseGet(()->componentFactory.getName());
-        this.componentType = componentFactory.getComponentType();
-        this.orderOfAppearanceInUiDropdown =
-                componentFactory instanceof CollectionContentsAsFactory
-                    ? ((CollectionContentsAsFactory) componentFactory).orderOfAppearanceInUiDropdown()
-                    : Integer.MAX_VALUE;
-        this.isPageReloadRequiredOnTableViewActivation =
-                componentFactory instanceof CollectionContentsAsFactory
-                    ? ((CollectionContentsAsFactory) componentFactory).isPageReloadRequiredOnTableViewActivation()
-                    : false;
-
-        this.cssClass = _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
-                .map(CollectionContentsAsFactory::getCssClass)
-                .map(IModel::getObject)
-                .orElseGet(()->
-                    _Strings.asLowerDashed.apply(componentFactory.getName()));
+        this(componentFactory, componentFactory.getClass());
     }
 
-    public ComponentFactory resolve(final @NonNull Supplier<ServiceRegistry> serviceRegistrySupplier) {
-        return componentFactory != null
-                ? componentFactory
-                : (this.componentFactory = componentFactoryRegistry(serviceRegistrySupplier).lookupFactoryElseFail(factoryClass));
+    private ComponentFactoryKey(
+        final ComponentFactory componentFactory,
+        final Class<? extends ComponentFactory> factoryClass) {
+        this(
+            /*factoryClass*/
+            factoryClass,
+            /*id*/
+            componentFactory.getName(),
+            /*componentType*/
+            componentFactory.getComponentType(),
+            /*componentFactoryLazy*/
+            LoadableDetachableModel.of(()->MetaModelContext.instanceElseFail().getServiceRegistry()
+                .lookupServiceElseFail(ComponentFactoryRegistry.class)
+                .lookupFactoryElseFail(factoryClass)));
+
+        componentFactoryLazy.setObject(componentFactory); // memoize
     }
-    
-    ComponentFactoryRegistry componentFactoryRegistry(final @NonNull Supplier<ServiceRegistry> serviceRegistrySupplier) {
-        return serviceRegistrySupplier.get().lookupServiceElseFail(ComponentFactoryRegistry.class);
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return obj instanceof ComponentFactoryKey other
+            ? Objects.equals(this.factoryClass(), other.factoryClass())
+            : false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return factoryClass.hashCode();
     }
 
 }

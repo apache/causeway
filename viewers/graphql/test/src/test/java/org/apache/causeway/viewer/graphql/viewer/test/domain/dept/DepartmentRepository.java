@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -33,7 +33,7 @@ public class DepartmentRepository {
 
     @Inject private RepositoryService repositoryService;
 
-    public Department create(final String name, @Nullable final DeptHead deptHead) {
+    public Department create(final String name, final @Nullable DeptHead deptHead) {
         Department department = new Department(name, deptHead);
         repositoryService.persistAndFlush(department);
         return department;

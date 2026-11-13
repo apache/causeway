@@ -62,5 +62,4 @@ public interface SessionSubscriber {
             UUID sessionGuid,
             String httpSessionId);
 
-
 }

@@ -27,17 +27,17 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Log4j2
+@Slf4j
 public class CausewayTimeZoneInitializer {
 
     @Inject CausewayConfiguration configuration;
 
     @PostConstruct
     public void initTimeZone() {
-        final String timeZoneSpec = configuration.getCore().getRuntime().getTimezone();
+        final String timeZoneSpec = configuration.core().runtime().timezone();
         if (timeZoneSpec != null) {
             TimeZone timeZone;
             timeZone = TimeZone.getTimeZone(timeZoneSpec);

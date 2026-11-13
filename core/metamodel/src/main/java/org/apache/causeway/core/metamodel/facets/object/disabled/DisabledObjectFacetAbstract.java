@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public abstract class DisabledObjectFacetAbstract
@@ -41,7 +41,7 @@ implements DisabledObjectFacet {
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        final ManagedObject toDisable = ic.getTarget();
+        final ManagedObject toDisable = ic.target();
         return toDisable != null
                 ? disabledReason(toDisable)
                 : Optional.empty();

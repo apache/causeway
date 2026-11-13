@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.facets.all.i8n.HasMemoizableTranslation;
 
@@ -63,6 +63,5 @@ extends HasMemoizableTranslation {
     default @Nullable String singularTranslated() {
         return translated().orElse(null);
     }
-
 
 }

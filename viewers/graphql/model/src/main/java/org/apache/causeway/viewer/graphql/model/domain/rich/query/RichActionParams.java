@@ -31,10 +31,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionParams
         extends ElementCustom {
 
@@ -53,7 +52,7 @@ public class RichActionParams
             return;
         }
 
-        val idx = new AtomicInteger(0);
+        var idx = new AtomicInteger(0);
         actionInteractor.getObjectMember().getParameters()
                 .forEach(oap -> params.add(addChildFieldFor(new RichActionParamsParam(actionInteractor, oap, this.context, idx.getAndIncrement()))));
 
@@ -70,7 +69,7 @@ public class RichActionParams
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 

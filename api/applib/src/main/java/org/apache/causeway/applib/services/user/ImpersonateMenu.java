@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides the UI to allow a current user to be impersonated.
@@ -69,12 +68,10 @@ public class ImpersonateMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
-
     final UserService userService;
     final MessageService messageService;
     final FactoryService factoryService;
     final List<ImpersonateMenuAdvisor> impersonateMenuAdvisors;
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -111,7 +108,6 @@ public class ImpersonateMenu {
 
     }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = impersonateWithRoles.ActionDomainEvent.class,
@@ -144,7 +140,7 @@ public class ImpersonateMenu {
                 final String multiTenancyToken) {
 
             // adds generic authorized user role to indicate 'authorized' (as required by Wicket viewer)
-            val roleNamesCopy = new ArrayList<>(roleNames);
+            var roleNamesCopy = new ArrayList<>(roleNames);
             if(!roleNamesCopy.contains(UserMemento.AUTHORIZED_USER_ROLE)) {
                 roleNamesCopy.add(UserMemento.AUTHORIZED_USER_ROLE);
             }

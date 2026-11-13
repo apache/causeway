@@ -42,11 +42,9 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
-
-import lombok.val;
-
 
 /**
  * @since 1.x {@index}
@@ -64,18 +62,17 @@ public class SwaggerServiceMenu {
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;
-    private final RestEasyConfiguration restEasyConfiguration;
     private final String basePath;
 
     @Inject
     public SwaggerServiceMenu(
             final SwaggerService swaggerService,
             final ServiceRegistry serviceRegistry,
-            final RestEasyConfiguration restEasyConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
         this.swaggerService = swaggerService;
         this.serviceRegistry = serviceRegistry;
-        this.restEasyConfiguration = restEasyConfiguration;
-        this.basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+        this.basePath = restfulPathProvider.getRestfulPath().orElse("") + "/";
     }
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
@@ -101,9 +98,6 @@ public class SwaggerServiceMenu {
         @MemberSupport public String disableAct() { return disableReasonWhenRequiresROViewer(); }
     }
 
-
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = openRestApi.ActionDomainEvent.class,
@@ -127,8 +121,6 @@ public class SwaggerServiceMenu {
 
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = downloadSwaggerSchemaDefinition.ActionDomainEvent.class,
@@ -150,8 +142,8 @@ public class SwaggerServiceMenu {
                 final Visibility visibility,
                 final Format format) {
 
-            val fileName = buildFileName(fileNamePrefix, visibility, format);
-            val spec = swaggerService.generateSwaggerSpec(visibility, format);
+            var fileName = buildFileName(fileNamePrefix, visibility, format);
+            var spec = swaggerService.generateSwaggerSpec(visibility, format);
             return new Clob(fileName, format.mediaType(), spec);
         }
 
@@ -160,11 +152,10 @@ public class SwaggerServiceMenu {
         @MemberSupport public Format default2Act() { return Format.YAML; }
     }
 
-
     // -- HELPER
     @Programmatic String disableReasonWhenRequiresROViewer() {
         final Optional<?> moduleIfAny = serviceRegistry
-                .lookupBeanById("causeway.viewer.ro.WebModuleJaxrsRestEasy");
+                .lookupBeanById("causeway.viewer.ro.WebModuleRestfulObjects");
         return moduleIfAny.isPresent()
                 ? null
                 : "RestfulObjects viewer is not configured";

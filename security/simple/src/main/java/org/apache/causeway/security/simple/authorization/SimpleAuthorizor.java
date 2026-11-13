@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.security.simple.CausewayModuleSecuritySimple;
@@ -64,7 +64,7 @@ public class SimpleAuthorizor implements Authorizor {
     }
 
     protected List<SimpleRealm.Role> roles(final UserMemento userMemento){
-        var roles = realm.lookupUserByName(userMemento.getName())
+        var roles = realm.lookupUserByName(userMemento.name())
             .map(SimpleRealm.User::roles)
             .orElseGet(List::of);
         return roles;

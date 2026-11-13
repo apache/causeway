@@ -6,7 +6,7 @@
 
 The value of the `x-ro-domain-type` parameter corresponds to the DTO to be mapped into by the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService].
 
-If the DTO is annotated with JAXB, then also note that the runtime type must be annotated with the JAXB `javax.xml.bind.annotation.XmlRootElement` so that RestEasy is able to unambiguously serialize it.
+If the DTO is annotated with JAXB, then also note that the runtime type must be annotated with the JAXB `jakarta.xml.bind.annotation.XmlRootElement` so that it can unambiguously serialized.
 
 
 == Example

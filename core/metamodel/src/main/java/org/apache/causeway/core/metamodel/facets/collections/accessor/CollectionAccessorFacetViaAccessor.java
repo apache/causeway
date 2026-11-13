@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -33,8 +34,7 @@ import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class CollectionAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
@@ -56,33 +56,28 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getProperty(
+    public Object getAssociationValueAsPojo(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
-        if(collectionOrArray == null) {
-            return null;
-        }
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        final Object pojo = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
+        var iterableOrArray = CollectionSemantics.toIterable(pojo);
+        if(iterableOrArray == null) return null;
 
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
-
-        final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
-        if(filterForVisibility) {
-
-            val autofittedObjectContainer = MmVisibilityUtils
+        if(isConfiguredToFilterForVisibility()) {
+            var collectionAdapter = getObjectManager().adapt(iterableOrArray);
+            var autofittedObjectContainer = MmVisibilityUtils
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.returnType());
 
-            if (autofittedObjectContainer != null) {
-                return autofittedObjectContainer;
-            }
+            if (autofittedObjectContainer != null) return autofittedObjectContainer;
+
             // would be null if unable to take a copy (unrecognized return type)
             // fallback to returning the original adapter, without filtering for visibility
         }
 
         // either no filtering, or was unable to filter (unable to take copy due to unrecognized type)
-        return collectionOrArray;
+        return iterableOrArray;
     }
 
     @Override

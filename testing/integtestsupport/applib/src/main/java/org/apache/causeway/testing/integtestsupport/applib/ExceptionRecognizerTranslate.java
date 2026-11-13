@@ -23,8 +23,6 @@ import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 
-import lombok.val;
-
 /**
  * @since 2.0 {@index}
  */
@@ -35,12 +33,12 @@ public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandl
             final ExtensionContext extensionContext,
             final Throwable throwable) throws Throwable {
 
-        val translatedException = _Helper.getExceptionRecognizerService(extensionContext)
+        var translatedException = _Helper.getExceptionRecognizerService(extensionContext)
         .flatMap(recService->recService.recognize(throwable))
         .<Throwable>map(recognition->new RecoverableException(
                 String.format("%s: %s",
-                        recognition.getCategory().getFriendlyName(),
-                        recognition.getReason()
+                        recognition.category().getFriendlyName(),
+                        recognition.reason()
                 ),
                 throwable))
         .orElse(throwable);

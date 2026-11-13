@@ -136,7 +136,6 @@ class VirtualClock_Test {
                 Instant.ofEpochMilli(virtualNow.getTime()));
     }
 
-
     // -- QUERIES
 
     @Test
@@ -182,16 +181,6 @@ class VirtualClock_Test {
         assertThat(virtualClock.nowAsXmlGregorianCalendar().toString()).isEqualTo("2003-07-17T22:30:25.000+01:00");
     }
 
-    @Test
-    void nowAsJodaDateTime() {
-        assertThat(virtualClock.nowAsJodaDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25.000Z");
-    }
-
-    @Test
-    void nowAsJodaLocalDate() {
-        assertThat(virtualClock.nowAsJodaLocalDate(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17");
-    }
-
     // -- HELPER
 
     static void assertTimeEquals(final VirtualClock virtualClock, final Instant expectedInstant) {
@@ -205,7 +194,5 @@ class VirtualClock_Test {
                 - expectedInstant.getEpochSecond());
         assertTrue(deltaSeconds <= toleranceSeconds);
     }
-
-
 
 }

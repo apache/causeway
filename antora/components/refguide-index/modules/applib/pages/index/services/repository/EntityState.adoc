@@ -10,18 +10,18 @@ Enumerates the state of an entity.
 ----
 enum EntityState {
   NOT_PERSISTABLE     // <.>
+  SNAPSHOT     // <.>
+  SNAPSHOT_NO_OID     // <.>
   ATTACHED     // <.>
   ATTACHED_NO_OID     // <.>
   DETACHED     // <.>
-  HOLLOW     // <.>
   TRANSIENT_OR_REMOVED     // <.>
   REMOVED     // <.>
   boolean isPersistable()     // <.>
   boolean isAttached()     // <.>
   boolean isAttachedNoOid()     // <.>
   boolean isDetached()     // <.>
-  boolean isHollow()     // <.>
-  boolean isTransientOrRemoved()     // <.>
+  boolean isTransientOrRemoved()
   boolean isRemoved()     // <.>
   boolean isAttachedOrRemoved()
 }
@@ -31,6 +31,16 @@ enum EntityState {
 +
 --
 Object with this state is not an entity (for example it might be a view model, value type or a domain service).
+--
+<.> xref:#SNAPSHOT[SNAPSHOT]
++
+--
+Object with this state is an entity that has no session.
+--
+<.> xref:#SNAPSHOT_NO_OID[SNAPSHOT_NO_OID]
++
+--
+Object with this state is an entity that has no session and has no OID yet. On pre-store.
 --
 <.> xref:#ATTACHED[ATTACHED]
 +
@@ -47,11 +57,6 @@ Is attached, has no OID yet. On pre-store.
 --
 Is detached, hence (per definition) has an OID.
 --
-<.> xref:#HOLLOW[HOLLOW]
-+
---
-JDO specificObject with this state is an entity that no longer attached to a persistence session and cannot be re-attached. In other words: changes to the entity will _not_ be tracked nor flushed back to the database.
---
 <.> xref:#TRANSIENT_OR_REMOVED[TRANSIENT_OR_REMOVED]
 +
 --
@@ -60,7 +65,7 @@ Object with this state is an entity that is transient or has been removed from t
 <.> xref:#REMOVED[REMOVED]
 +
 --
-JDO specificNot supported by JPA. (Cannot distinguish between TRANSIENT and REMOVED.)
+Set by the framework after entity removal.
 --
 <.> xref:#isPersistable_[isPersistable()]
 +
@@ -70,8 +75,6 @@ Object is an entity, hence is persistable to the database.
 <.> xref:#isAttached_[isAttached()]
 <.> xref:#isAttachedNoOid_[isAttachedNoOid()]
 <.> xref:#isDetached_[isDetached()]
-<.> xref:#isHollow_[isHollow()]
-<.> xref:#isTransientOrRemoved_[isTransientOrRemoved()]
 <.> xref:#isRemoved_[isRemoved()]
 
 == Members
@@ -80,6 +83,16 @@ Object is an entity, hence is persistable to the database.
 === NOT_PERSISTABLE
 
 Object with this state is not an entity (for example it might be a view model, value type or a domain service).
+
+[#SNAPSHOT]
+=== SNAPSHOT
+
+Object with this state is an entity that has no session.
+
+[#SNAPSHOT_NO_OID]
+=== SNAPSHOT_NO_OID
+
+Object with this state is an entity that has no session and has no OID yet. On pre-store.
 
 [#ATTACHED]
 === ATTACHED
@@ -96,17 +109,6 @@ Is attached, has no OID yet. On pre-store.
 
 Is detached, hence (per definition) has an OID.
 
-Supported by both JDO and JPA. However, historically never used by the framework for JDO.
-
-[#HOLLOW]
-=== HOLLOW
-
-JDO specificObject with this state is an entity that no longer attached to a persistence session and cannot be re-attached. In other words: changes to the entity will _not_ be tracked nor flushed back to the database.
-
-JDO distinguishes between DETACHED and HOLLOW, by virtue of _javax.jdo.option.detachAllOnCommit=false_ .
-
-(Unfortunately, we have not found a way to recover _OIDs_ from _hollow_ entities, as used for serialization post commit. We have instead implemented a workaround using the `DnStateManagerForHollow` class).
-
 [#TRANSIENT_OR_REMOVED]
 === TRANSIENT_OR_REMOVED
 
@@ -115,7 +117,9 @@ Object with this state is an entity that is transient or has been removed from t
 [#REMOVED]
 === REMOVED
 
-JDO specificNot supported by JPA. (Cannot distinguish between TRANSIENT and REMOVED.)
+Set by the framework after entity removal.
+
+However, detecting an entity's state in the JPA context will never yield _#REMOVED_ .
 
 [#isPersistable_]
 === isPersistable()
@@ -130,12 +134,6 @@ Object is an entity, hence is persistable to the database.
 
 [#isDetached_]
 === isDetached()
-
-[#isHollow_]
-=== isHollow()
-
-[#isTransientOrRemoved_]
-=== isTransientOrRemoved()
 
 [#isRemoved_]
 === isRemoved()

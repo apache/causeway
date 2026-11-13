@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.exceptions.unrecoverable;
 
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 /**
  * Indicates that the persistence context was unable to get an instantiate
@@ -35,5 +36,13 @@ public class ObjectNotFoundException extends UnrecoverableException {
 
     public ObjectNotFoundException(final String oid, final Throwable cause) {
         super("Object not found in store with oid " + oid, cause);
+    }
+
+    public ObjectNotFoundException(final Bookmark bookmark) {
+        super("Object not found in store with bookmark " + bookmark);
+    }
+
+    public ObjectNotFoundException(final Bookmark bookmark, final Throwable cause) {
+        super("Object not found in store with bookmark " + bookmark, cause);
     }
 }

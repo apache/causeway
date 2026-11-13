@@ -18,11 +18,11 @@ And collections properties will also have a number of annotations:
 * Apache Causeway defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
 It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[.layout.xml] file)
 
-* the collections of domain entities are often annotated with ORM annotation(s).
-In the case of JDO/DataNucleus annotations this is most notably `javax.jdo.annotations.Persistent`.
-Other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
+* the collections of domain entities will typically be annotated with ORM annotation(s), such as
+ `jakarta.persistence.Entity`.
+The collection itself will likely have its own ORM-specific annotations, to specify for example if the association is bidirectional, supports cascading deletes, or whether to define a link table or not to hold foreign key columns.
 
-* for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[@javax.xml.bind.annotation.XmlElementWrapper] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[@javax.xml.bind.annotation.XmlElement] will be present
+* for the collections of view models, then JAXB annotations such as `@jakarta.xml.bind.annotation.XmlElementWrapper` and `@jakarta.xml.bind.annotation.XmlElement` will be present
 
 Apache Causeway may recognise some of these annotations from the persistence layer infers some domain semantics from them.
 
@@ -32,7 +32,6 @@ For example, a `placeOrder(...)` action will likely add an `Order` to the `Custo
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
 
-TIP: see the DataNucleus http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html[Mapping Guide] for more in-depth coverage of this topic.
 
 == Mapping bidir 1:m
 
@@ -53,51 +52,64 @@ In the parent object, the collection can be defined as:
 
 [source,java]
 ----
-import javax.jdo.annotations.Persistent;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
-import lombok.Setter;
 
 public class ParentObject
-        implements Comparable<ParentObject>{
+        implements Comparable<ParentObject> {
 
-    @Persistent(
-        mappedBy = "parent",                                               // <.>
-        dependentElement = "false"                                         // <.>
+    @Id                                                                 // <.>
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Getter
+    @OneToMany(
+            mappedBy = "parent",                                        // <.>
+            cascade = CascadeType.ALL,                                  // <.>
+            orphanRemoval = true
     )
-    @Collection                                                            // <.>
-    @Getter @Setter
-    private SortedSet<ChildObject> children = new TreeSet<ChildObject>();  // <.>
-
+    @Collection                                                         // <.>
+    private Set<ChildObject> children = new TreeSet<ChildObject>();     // <.>
 }
 ----
+<.> surrogate identifier for the entity.
 <.> indicates a bidirectional association; the foreign key pointing back to the `Parent` will be in the table for `ChildObject`
-<.> disables cascade delete
+<.> enables cascade delete
 <.> (not actually required in this case, because no attributes are set, but acts as a useful reminder that this collection will be rendered in the UI by Apache Causeway)
-<.> uses a `SortedSet` (as opposed to some other collection type; discussion below)
 
 while in the child object you will have:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 public class ChildObject
-        implements Comparable<ChildObject> {    // <.>
+        implements Comparable<ChildObject> {
 
-    @Column(allowsNull = "false")               // <.>
-    @Property(editing = Editing.DISABLED)       // <.>
+    @Id                                                 // <.>
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @ManyToOne(optional = false)                        // <.>
+    @JoinColumn(name = "parent_id")
+    @Property(editing = Editing.DISABLED)               // <.>
     @Getter @Setter
-    private ParentObject parent;
+    private PetOwner petOwner;
 }
 ----
-<.> implements `Comparable` because is mapped using a `SortedSet`
+<.> surrogate identifier for the entity.
 <.> mandatory; every child must reference its parent
 <.> cannot be edited directly
 
-Generally speaking you should use `SortedSet` for collection types (as opposed to `Set`, `List` or `Collection`).
-JDO/Datanucleus does support the mapping of these other types, but RDBMS are set-oriented, so using this type introduces the least friction.
+Generally speaking you should use `Set` for collection types (as opposed to `List` or `Collection`).
+You should also implement `equals()` and `hashCode()`, based upon the id.
+It's also common to implement `Comparable`, using the same ordering as the unique business key defined within the database and consistent with `equals()`.
 
 == Maps
 
@@ -107,7 +119,7 @@ If you do wish to use this collection type, then annotate the getter with xref:r
 
 == Value vs Reference Types
 
-While ORMs support collections/arrays of value types, such collections are not supported by Apache Causeway.
+While ORMs can persist collections/arrays of value types, such collections are not supported by Apache Causeway.
 Apache Causeway can (currently) only provide a UI for collections of references.
 
 If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Causeway framework.

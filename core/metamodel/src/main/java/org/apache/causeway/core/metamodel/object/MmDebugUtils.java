@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
@@ -28,21 +28,17 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 
 import lombok.Builder;
-import lombok.Value;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public final class MmDebugUtils {
+public record MmDebugUtils() {
 
     // -- PARAM
 
-    @Value @Builder
-    public static class ParamUpdateData {
-        final String action; // feature-id
-        final int index;
-        final String name;
-        final Can<? extends ManagedParameter> allParams;
+    @Builder
+    public record ParamUpdateData(
+            String action, // feature-id
+            int index,
+            String name,
+            Can<? extends ManagedParameter> allParams) {
         public String formatted() {
             return String.format("[actionId=%s,paramIndex=%d,paramName=%s]\n%s",
                     action, index, name,
@@ -51,7 +47,7 @@ public final class MmDebugUtils {
         }
         String formatted(final ManagedParameter managedParam) {
             return String.format("- param[index=%d,name=%s]: %s",
-                    managedParam.getParamNr(),
+                    managedParam.paramIndex(),
                     managedParam.getFriendlyName(),
                     formatPendingValue(managedParam.getValue().getValue()));
         }
@@ -60,10 +56,10 @@ public final class MmDebugUtils {
     public static ParamUpdateData paramUpdateDataFor(
             final int parameterIndex,
             final ParameterNegotiationModel parameterNegotiationModel) {
-        val param = parameterNegotiationModel.getParamModels().getElseFail(parameterIndex);
+        var param = parameterNegotiationModel.getParamModels().getElseFail(parameterIndex);
         return ParamUpdateData.builder()
                 .index(parameterIndex)
-                .action(parameterNegotiationModel.getHead().getMetaModel().getId())
+                .action(parameterNegotiationModel.act().getId())
                 .name(param.getFriendlyName())
                 .allParams(parameterNegotiationModel.getParamModels())
                 .build();
@@ -71,11 +67,12 @@ public final class MmDebugUtils {
 
     // -- PROP
 
-    @Value @Builder
-    public static class PropUpdateData {
-        final String property;  // feature-id
-        final String name;
-        final ManagedObject pendingValue;
+    @Builder
+    public record PropUpdateData(
+            String property,  // feature-id
+            String name,
+            ManagedObject pendingValue
+            ) {
         public String formatted() {
             return String.format("[propertyId=%s,propertyName=%s] -> %s)",
                     property, name, formatPendingValue(pendingValue));
@@ -92,10 +89,10 @@ public final class MmDebugUtils {
 
     // -- HELPER
 
-    private String formatPendingValue(final @Nullable ManagedObject managedObject) {
+    private static String formatPendingValue(final @Nullable ManagedObject managedObject) {
         return ManagedObjects.isSpecified(managedObject)
                 ? String.format("(%s,cls=%s) pojo=%s",
-                    managedObject.getSpecialization().name(),
+                    managedObject.specialization().name(),
                     managedObject.getCorrespondingClass().getName(),
                     ""+managedObject.getPojo())
                 : "(unspecified) pojo=null";

@@ -31,7 +31,7 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -48,8 +48,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleRow;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleSection;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleTable;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides convenient factory methods to build a (AsciiDoc) Document Model.
@@ -76,7 +75,7 @@ public class AsciiDocFactory {
      * syntactic sugar
      */
     public static Document doc(final Consumer<Document> documentBuilder) {
-        val doc = doc();
+        var doc = doc();
         documentBuilder.accept(doc);
         return doc;
     }
@@ -85,7 +84,7 @@ public class AsciiDocFactory {
      * syntactic sugar
      */
     public static String toString(final Consumer<Document> documentBuilder) {
-        val doc = doc();
+        var doc = doc();
         documentBuilder.accept(doc);
         return AsciiDocWriter.toString(doc);
     }
@@ -145,7 +144,7 @@ public class AsciiDocFactory {
     }
 
     public static Section section(final StructuralNode parent, final String title) {
-        val section = new SimpleSection();
+        var section = new SimpleSection();
         section.setTitle(title);
         section.setLevel(parent.getLevel() + 1);
         parent.getBlocks().add(section);
@@ -160,7 +159,7 @@ public class AsciiDocFactory {
     }
 
     public static Block block(final StructuralNode parent, final String source) {
-        val block = new SimpleBlock();
+        var block = new SimpleBlock();
         block.setSource(source);
         block.setLevel(parent.getLevel());
         parent.getBlocks().add(block);
@@ -169,19 +168,19 @@ public class AsciiDocFactory {
     }
 
     public static Block openBlock(final ListItem listItem) {
-        val openBlock = block(listItem);
+        var openBlock = block(listItem);
         openBlock.setStyle("open");
         return openBlock;
     }
 
-    public static Block listingBlock(final StructuralNode parent, @NonNull final String source) {
-        val listingBlock = block(parent, source);
+    public static Block listingBlock(final StructuralNode parent, final @NonNull String source) {
+        var listingBlock = block(parent, source);
         listingBlock.setStyle("listing");
         return listingBlock;
     }
 
-    public static Block sourceBlock(final StructuralNode parent, @Nullable final String language, @NonNull final String source) {
-        val sourceBlock = block(parent, source);
+    public static Block sourceBlock(final StructuralNode parent, final @Nullable String language, final @NonNull String source) {
+        var sourceBlock = block(parent, source);
         sourceBlock.setStyle("source");
         if(_Strings.isNotEmpty(language)) {
             sourceBlock.setAttribute("language", language, true);
@@ -189,25 +188,25 @@ public class AsciiDocFactory {
         return sourceBlock;
     }
 
-    public static Block htmlPassthroughBlock(final StructuralNode parent, @NonNull final String html) {
-        val block = block(parent, html);
+    public static Block htmlPassthroughBlock(final StructuralNode parent, final @NonNull String html) {
+        var block = block(parent, html);
         block.setStyle("passthrough");
         return block;
     }
 
     public static Block diagramBlock(
             final StructuralNode parent,
-            @NonNull final String diagramType,
-            @NonNull final Can<String> diagramOptions,
-            @NonNull final String source) {
+            final @NonNull String diagramType,
+            final @NonNull Can<String> diagramOptions,
+            final @NonNull String source) {
 
-        val diagramBlock = block(parent, source);
+        var diagramBlock = block(parent, source);
 
         _Strings.nonEmpty(diagramType)
             .ifPresent(diagramBlock::setStyle);
 
-        val attributes = diagramOptions.add(0, diagramType);
-        val attributeIndex = _Refs.intRef(1);
+        var attributes = diagramOptions.add(0, diagramType);
+        var attributeIndex = _Refs.intRef(1);
 
         // add options
         attributes.forEach(opt->{
@@ -221,19 +220,19 @@ public class AsciiDocFactory {
     // -- CALLOUTS
 
     public static org.asciidoctor.ast.List callouts(final StructuralNode parent) {
-        val calloutList = list(parent);
+        var calloutList = list(parent);
         calloutList.setStyle("arabic");
         return calloutList;
     }
 
-    public static ListItem callout(final org.asciidoctor.ast.List parent, @NonNull final String source) {
+    public static ListItem callout(final org.asciidoctor.ast.List parent, final @NonNull String source) {
         return listItem(parent, source);
     }
 
     // -- COLLAPSIBLE
 
-    public static Block collapsibleBlock(final StructuralNode parent, @NonNull final String source) {
-        val collapsibleBlock = block(parent, source);
+    public static Block collapsibleBlock(final StructuralNode parent, final @NonNull String source) {
+        var collapsibleBlock = block(parent, source);
         collapsibleBlock.setStyle("example");
         collapsibleBlock.setAttribute("collapsible-option", "1", true);
         return collapsibleBlock;
@@ -242,39 +241,39 @@ public class AsciiDocFactory {
     // -- TABLE
 
     public static Table table(final StructuralNode parent) {
-        val table = new SimpleTable();
+        var table = new SimpleTable();
         parent.getBlocks().add(table);
         table.setParent(parent);
         return table;
     }
 
     public static Column col(final Table table) {
-        val column = new SimpleColumn();
+        var column = new SimpleColumn();
         table.getColumns().add(column);
         column.setParent(table);
         return column;
     }
 
     public static Row row(final Table table) {
-        val row = new SimpleRow();
+        var row = new SimpleRow();
         table.getBody().add(row);
         return row;
     }
 
     public static Row headRow(final Table table) {
-        val row = new SimpleRow();
+        var row = new SimpleRow();
         table.getHeader().add(row);
         return row;
     }
 
     public static Row footRow(final Table table) {
-        val row = new SimpleRow();
+        var row = new SimpleRow();
         table.getFooter().add(row);
         return row;
     }
 
     public static Cell cell(final Row row, final Column column, final String source) {
-        val cell = new SimpleCell();
+        var cell = new SimpleCell();
         row.getCells().add(cell);
         cell.setParent(column);
         cell.setSource(source);
@@ -282,31 +281,31 @@ public class AsciiDocFactory {
     }
 
     public static Cell cell(final Table table, final Row row, final String source) {
-        val colIndex = row.getCells().size();
-        val column = getOrCreateColumn(table, colIndex);
+        var colIndex = row.getCells().size();
+        var column = getOrCreateColumn(table, colIndex);
         return cell(row, column, source);
     }
 
     public static Cell cell(final Table table, final int rowIndex, final int colIndex, final String source) {
-        val row = getOrCreateRow(table, rowIndex);
-        val col = getOrCreateColumn(table, colIndex);
+        var row = getOrCreateRow(table, rowIndex);
+        var col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
     }
 
     public static Cell headCell(final Table table, final int rowIndex, final int colIndex, final String source) {
-        val row = getOrCreateHeadRow(table, rowIndex);
-        val col = getOrCreateColumn(table, colIndex);
+        var row = getOrCreateHeadRow(table, rowIndex);
+        var col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
     }
 
     public static Cell footCell(final Table table, final int rowIndex, final int colIndex, final String source) {
-        val row = getOrCreateFootRow(table, rowIndex);
-        val col = getOrCreateColumn(table, colIndex);
+        var row = getOrCreateFootRow(table, rowIndex);
+        var col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
     }
 
     public static org.asciidoctor.ast.List list(final StructuralNode parent) {
-        val list = new SimpleList();
+        var list = new SimpleList();
         list.setLevel(parent.getLevel()+1);
         parent.getBlocks().add(list);
         list.setParent(parent);
@@ -318,7 +317,7 @@ public class AsciiDocFactory {
     }
 
     public static ListItem listItem(final org.asciidoctor.ast.List parent, final String source) {
-        val listItem = new SimpleListItem();
+        var listItem = new SimpleListItem();
         listItem.setLevel(parent.getLevel());
         parent.getItems().add(listItem);
         listItem.setParent(parent);
@@ -329,12 +328,12 @@ public class AsciiDocFactory {
     public static class SourceFactory {
 
         public static Block sourceBlock(
-                @NonNull final Document doc,
-                @NonNull final String languageAndOptions,
-                @NonNull final String source,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String languageAndOptions,
+                final @NonNull String source,
+                final @Nullable String title) {
 
-            val sourceBlock = AsciiDocFactory.sourceBlock(doc,
+            var sourceBlock = AsciiDocFactory.sourceBlock(doc,
                     languageAndOptions,
 
                     _Text.normalize(TextUtils.readLines(source))
@@ -349,7 +348,7 @@ public class AsciiDocFactory {
 
         public static String asAdocSource() {
 
-            val doc = AsciiDocFactory.doc();
+            var doc = AsciiDocFactory.doc();
             return AsciiDocWriter.toString(doc);
         }
 
@@ -361,30 +360,30 @@ public class AsciiDocFactory {
 //        }
 //        ----
         public static Block java(
-                @NonNull final Document doc,
-                @NonNull final String javaSource,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String javaSource,
+                final @Nullable String title) {
             return sourceBlock(doc, "java", javaSource, title);
         }
 
         public static Block json(
-                @NonNull final Document doc,
-                @NonNull final String jsonSource,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String jsonSource,
+                final @Nullable String title) {
             return sourceBlock(doc, "json", jsonSource, title);
         }
 
         public static Block xml(
-                @NonNull final Document doc,
-                @NonNull final String xmlSource,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String xmlSource,
+                final @Nullable String title) {
             return sourceBlock(doc, "xml", xmlSource, title);
         }
 
         public static Block yaml(
-                @NonNull final Document doc,
-                @NonNull final String yamlSource,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String yamlSource,
+                final @Nullable String title) {
             return sourceBlock(doc, "yaml", yamlSource, title);
         }
 
@@ -393,13 +392,13 @@ public class AsciiDocFactory {
     public static class DiagramFactory {
 
         public static Block diagramBlock(
-                @NonNull final Document doc,
-                @NonNull final String diagramType,
-                @NonNull final Can<String> diagramOptions,
-                @NonNull final String source,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String diagramType,
+                final @NonNull Can<String> diagramOptions,
+                final @NonNull String source,
+                final @Nullable String title) {
 
-            val sourceBlock = AsciiDocFactory.diagramBlock(doc,
+            var sourceBlock = AsciiDocFactory.diagramBlock(doc,
                     diagramType,
                     diagramOptions,
                     _Text.normalize(TextUtils.readLines(source))
@@ -419,23 +418,22 @@ public class AsciiDocFactory {
 //      @enduml
 //      ----
         public static Block plantumlPng(
-                @NonNull final Document doc,
-                @NonNull final String plantumlSource,
-                @NonNull final String diagramKey,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String plantumlSource,
+                final @NonNull String diagramKey,
+                final @Nullable String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "png"), plantumlSource, title);
         }
 
         public static Block plantumlSvg(
-                @NonNull final Document doc,
-                @NonNull final String plantumlSource,
-                @NonNull final String diagramKey,
-                @Nullable final String title) {
+                final @NonNull Document doc,
+                final @NonNull String plantumlSource,
+                final @NonNull String diagramKey,
+                final @Nullable String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "svg"), plantumlSource, title);
         }
 
     }
-
 
     // -- HELPER
 
@@ -476,7 +474,7 @@ public class AsciiDocFactory {
     }
 
     private static Block admonition(final String label, final StructuralNode parent, final String source) {
-        val admonition = block(parent, source);
+        var admonition = block(parent, source);
         admonition.setStyle(label.toUpperCase());
         admonition.setAttribute("textlabel", label, true);
         admonition.setAttribute("name", label.toLowerCase(), true);

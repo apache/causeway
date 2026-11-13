@@ -9,8 +9,8 @@ Fundamental building block for graph structures.
 .Edge.java
 ----
 interface Edge<T> {
-  Vertex<T> getFrom()
-  Vertex<T> getTo()
+  Vertex<T> from()
+  Vertex<T> to()
 }
 ----
 

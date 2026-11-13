@@ -22,17 +22,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
-import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
-import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
+import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryConfigWkt;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
 import org.apache.causeway.viewer.wicket.viewer.services.BookmarkUiServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.services.DeepLinkServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
-import org.apache.causeway.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
+import org.apache.causeway.viewer.wicket.viewer.services.IconResourceReferenceFactoryDefault;
+import org.apache.causeway.viewer.wicket.viewer.services.ObjectRenderServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.CausewaySupplementalCssInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DatatablesNetInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DebugInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.JQueryInitWkt;
@@ -43,7 +44,7 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleViewerWicketUi.class,
@@ -56,21 +57,23 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         WicketViewerCssBundleInit.class,
         DatatablesNetInitWkt.class,
         DebugInitWkt.class,
+        ComponentFactoryConfigWkt.class,
+        CausewaySupplementalCssInitWkt.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,
-        ComponentFactoryRegistrarDefault.class,
-        ComponentFactoryRegistryDefault.class,
         DeepLinkServiceWicket.class,
-        ImageResourceCacheClassPath.class,
-        HintStoreUsingWicketSession.class,
-        PageClassListDefault.class,
-        PageClassRegistryDefault.class,
-        PageNavigationServiceDefault.class,
+        ObjectRenderServiceWicket.class,
+        IconResourceReferenceFactoryDefault.class,
         WebModuleWicket.class,
 
+        PageClassListDefault.AutoConfiguration.class,
+        PageClassRegistryDefault.AutoConfiguration.class,
+        PageNavigationServiceDefault.AutoConfiguration.class,
+        HintStoreUsingWicketSession.AutoConfiguration.class,
 })
 public class CausewayModuleViewerWicketViewer {
 
     public static final String NAMESPACE = "causeway.viewer.wicket";
+
 }

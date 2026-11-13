@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
@@ -47,8 +48,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
-
-import lombok.val;
 
 public class DomainObjectReprRenderer
 extends ReprRendererAbstract<ManagedObject> {
@@ -152,10 +151,10 @@ extends ReprRendererAbstract<ManagedObject> {
                 .newLinkToBuilder(
                         getResourceContext(),
                         Rel.DOMAIN_TYPE,
-                        objectAdapter.getSpecification())
+                        objectAdapter.objSpec())
                 .build()
                 .getString("href");
-        addMediaTypeParams(X_RO_DOMAIN_TYPE, domainTypeHref);
+        addMediaTypeParams(X_RO_DOMAIN_TYPE, _Strings.asDoubleQuoted.apply(domainTypeHref));
         return this;
     }
 
@@ -166,11 +165,11 @@ extends ReprRendererAbstract<ManagedObject> {
             return null;
         }
 
-        final boolean isService = objectAdapter.getSpecification().isInjectable();
+        final boolean isService = objectAdapter.objSpec().isInjectable();
 
         if (!(mode.isArgs())) {
 
-            val oidIfAny = objectAdapter.getBookmark();
+            var oidIfAny = objectAdapter.getBookmark();
 
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {
@@ -178,7 +177,7 @@ extends ReprRendererAbstract<ManagedObject> {
                     addLinkToSelf();
                 }
                 oidIfAny.ifPresent(oid->{
-                    val oidStr = oid.stringify();
+                    var oidStr = oid.stringify();
                     getExtensions().mapPutString("oid", oidStr);
                 });
             }
@@ -189,13 +188,13 @@ extends ReprRendererAbstract<ManagedObject> {
 
             // serviceId or instance Id
             if (isService) {
-                representation.mapPutString("serviceId", objectAdapter.getSpecification().getLogicalTypeName());
+                representation.mapPutString("serviceId", objectAdapter.objSpec().logicalTypeName());
             } else {
                 oidIfAny.ifPresent(oid->{
-                    Optional.ofNullable(oid.getLogicalTypeName())
+                    Optional.ofNullable(oid.logicalTypeName())
                     .ifPresent(domainType->
                         representation.mapPutString("domainType", domainType));
-                    representation.mapPutString("instanceId", oid.getIdentifier());
+                    representation.mapPutString("instanceId", oid.identifier());
                 });
             }
         }
@@ -206,7 +205,7 @@ extends ReprRendererAbstract<ManagedObject> {
         }
 
         // described by
-        if (mode.includeDescribedBy() && !resourceContext.config().isSuppressDescribedByLinks()) {
+        if (mode.includeDescribedBy() && !resourceContext.config().suppressDescribedByLinks()) {
             addLinkToDescribedBy();
             addLinkToObjectLayout();
             addLinkToObjectIcon();
@@ -215,7 +214,7 @@ extends ReprRendererAbstract<ManagedObject> {
             addLinkToUp();
         }
 
-        if (!mode.isArgs() && !resourceContext.config().isObjectPropertyValuesOnly()) {
+        if (!mode.isArgs() && !resourceContext.config().objectPropertyValuesOnly()) {
             // update/persist
             addPersistLinkIfTransientAndPersistable();
             addUpdatePropertiesLinkIfRequired();
@@ -225,7 +224,7 @@ extends ReprRendererAbstract<ManagedObject> {
             getExtensions().mapPutBoolean("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
             if(isService) {
 
-                Facets.domainServiceLayoutMenuBar(objectAdapter.getSpecification())
+                Facets.domainServiceLayoutMenuBar(objectAdapter.objSpec())
                 .ifPresent(menuBar->
                         getExtensions().mapPut("menuBar", menuBar));
 
@@ -240,7 +239,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            val renderer =
+            var renderer =
                     new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectAdapter);
             link.mapPutJsonRepresentation("value", renderer.render());
@@ -250,12 +249,12 @@ extends ReprRendererAbstract<ManagedObject> {
     }
 
     private void addLinkToDescribedBy() {
-        final JsonRepresentation link = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build();
+        final JsonRepresentation link = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.objSpec()).build();
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(objectAdapter.getSpecification());
+            renderer.with(objectAdapter.objSpec());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
@@ -283,19 +282,19 @@ extends ReprRendererAbstract<ManagedObject> {
     private DomainObjectReprRenderer withMembers(final ManagedObject objectAdapter) {
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
-        final List<ObjectAssociation> associations = objectAdapter.getSpecification()
+        final List<ObjectAssociation> associations = objectAdapter.objSpec()
                 .streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         addProperties(objectAdapter, appendTo, associations);
 
-        if(!resourceContext.config().isObjectPropertyValuesOnly()) {
+        if(!resourceContext.config().objectPropertyValuesOnly()) {
             if (!mode.isArgs() ) {
                 addCollections(objectAdapter, appendTo, associations);
             }
 
             if (mode.isRegular()) {
-                final Stream<ObjectAction> actions = objectAdapter.getSpecification()
+                final Stream<ObjectAction> actions = objectAdapter.objSpec()
                         .streamAnyActions(MixedIn.INCLUDED);
 
                 addActions(objectAdapter, actions, appendTo);
@@ -311,7 +310,7 @@ extends ReprRendererAbstract<ManagedObject> {
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.getWhere());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -325,7 +324,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(getResourceContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
-            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.getWhere())).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.where())).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
                 renderer.asArguments();
@@ -335,7 +334,7 @@ extends ReprRendererAbstract<ManagedObject> {
             }
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
-            final JsonRepresentation propertyRepr = resourceContext.config().isObjectPropertyValuesOnly()
+            final JsonRepresentation propertyRepr = resourceContext.config().objectPropertyValuesOnly()
                     ? propertyValueRepresentation.getRepresentation("value")
                             : propertyValueRepresentation;
                     members.mapPutJsonRepresentation(assoc.getId(), propertyRepr);
@@ -346,7 +345,7 @@ extends ReprRendererAbstract<ManagedObject> {
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.getWhere());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -364,7 +363,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            val where = resourceContext.getWhere();
+            var where = resourceContext.where();
 
             renderer.with(ManagedCollection.of(objectAdapter, collection, where)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
@@ -382,7 +381,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         actions
         .filter(action->{
-            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.getWhere());
+            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
             return visibility.isAllowed();
         })
         .forEach(action->{
@@ -391,7 +390,7 @@ extends ReprRendererAbstract<ManagedObject> {
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(),
                             JsonRepresentation.newMap());
 
-            val where = resourceContext.getWhere();
+            var where = resourceContext.where();
 
             renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
             members.mapPutJsonRepresentation(action.getId(), renderer.render());
@@ -407,7 +406,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final String domainType = objectAdapter.getSpecification().getLogicalTypeName();
+        final String domainType = objectAdapter.objSpec().logicalTypeName();
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
@@ -428,7 +427,6 @@ extends ReprRendererAbstract<ManagedObject> {
         return this;
     }
 
-
     private void addUpdatePropertiesLinkIfRequired() {
         if(mode.isEventSerialization()) {
             return;
@@ -436,7 +434,7 @@ extends ReprRendererAbstract<ManagedObject> {
         if (!ManagedObjects.isIdentifiable(objectAdapter)) {
             return;
         }
-        final boolean isService = objectAdapter.getSpecification().isInjectable();
+        final boolean isService = objectAdapter.objSpec().isInjectable();
         if(isService) {
             return;
         }
@@ -445,13 +443,12 @@ extends ReprRendererAbstract<ManagedObject> {
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
-        if(!getResourceContext().config().isSuppressUpdateLink()) {
-            val objectRef = ManagedObjects.stringifyElseFail(objectAdapter);
-            val updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", objectRef).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
+        if(!getResourceContext().config().suppressUpdateLink()) {
+            var objectRef = ManagedObjects.stringifyElseFail(objectAdapter);
+            var updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", objectRef).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
             getLinks().arrayAdd(updateLinkBuilder.build());
         }
     }
-
 
     public static Object valueOrRef(
             final IResourceContext context,
@@ -459,9 +456,9 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonValueEncoderService jsonValueEncoder,
             final ManagedObject domainObject) {
 
-        val spec = domainObject.getSpecification();
+        var spec = domainObject.objSpec();
         if(spec.isValue()) {
-            val context2 = JsonValueConverter.Context.of(objectFeature, context.config().isSuppressMemberExtensions());
+            var context2 = JsonValueConverter.Context.of(objectFeature, context.config().suppressMemberExtensions());
             return jsonValueEncoder.asObject(domainObject, context2);
         }
 
@@ -472,6 +469,5 @@ extends ReprRendererAbstract<ManagedObject> {
                 .withTitle(domainObject.getTitle())
                 .build();
     }
-
 
 }

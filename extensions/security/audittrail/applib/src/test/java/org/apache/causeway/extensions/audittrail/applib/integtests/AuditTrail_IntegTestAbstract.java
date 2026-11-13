@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
@@ -39,8 +39,6 @@ import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.CounterRepository;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter_bumpUsingMixin;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
-import lombok.val;
 
 public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
@@ -67,16 +65,16 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
     void created() {
 
         // when
-        val counter1 = counterRepository.persist(newCounter("counter-1"));
-        val target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
+        var counter1 = counterRepository.persist(newCounter("counter-1"));
+        var target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
         interactionService.nextInteraction();
 
         // then
         var entries = auditTrailEntryRepository.findAll();
-        val propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
         assertThat(propertyIds).contains("name", "num", "num2");
 
-        val entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("name"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
@@ -102,7 +100,7 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
 
         // given
         var counter1 = counterRepository.persist(newCounter("counter-1"));
-        val target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
+        var target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
         interactionService.nextInteraction();
 
         auditTrailEntryRepository.removeAll();
@@ -174,10 +172,10 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
 
         // then
         var entries = auditTrailEntryRepository.findAll();
-        val propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
         assertThat(propertyIds).contains("name", "num", "num2");
 
-        val entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("name"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("counter-1"))
@@ -204,6 +202,5 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
-
 
 }

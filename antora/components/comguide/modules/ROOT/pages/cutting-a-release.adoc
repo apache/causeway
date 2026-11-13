@@ -10,7 +10,7 @@ The release process consists of:
 * Members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Causeway itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
+Apache Causeway itself is released in one go, everything is ultimately a child of `parent/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -24,15 +24,47 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Preparation
 
-[IMPORTANT]
-====
-The release process should be performed on Java 17.
-====
 
 [IMPORTANT]
 ====
 The deploy process has been tested only with `gpg` 2.0.x ; you may need to adjust if using a later version.
 ====
+
+=== Configure JDK Toolchain
+
+The release process should be performed on Java 21+ (eg. 25), but using Java 21 toolchain.
+
+For example, if using sdkman:
+
+:dot: .
+[source,xml]
+.{dot}m2/toolchains.xml
+----
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+  <toolchain>
+    <type>jdk</type>
+    <provides>
+      <version>25</version>
+      <vendor>openjdk</vendor>
+    </provides>
+    <configuration>
+      <jdkHome>/Users/YOUR_USERNAME/.sdkman/candidates/java/25.0.3.0+9-tem</jdkHome>
+    </configuration>
+  </toolchain>
+
+  <toolchain>
+    <type>jdk</type>
+    <provides>
+      <version>21</version>
+      <vendor>openjdk</vendor>
+    </provides>
+    <configuration>
+      <jdkHome>/Users/YOUR_USERNAME/.sdkman/candidates/java/21.0.2-tem</jdkHome>
+    </configuration>
+  </toolchain>
+</toolchains>
+----
 
 === Obtain Consensus
 
@@ -49,11 +81,11 @@ In most cases a JIRA ticket will have been created at the beginning of the previ
 === Pull down code to release
 
 Set the HEAD of your local git repo to the commit to be released.
-This will usually be the tip of the origin's `master` branch:
+This will usually be the tip of the origin's `main` branch:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout master
+git checkout main
 git pull --ff-only
 ----
 
@@ -72,24 +104,27 @@ To run the RAT tool, use:
 [source,bash,subs="attributes+"]
 .find unapproved/missing licenses
 ----
-pushd bom
 mvnd -Dapache-release clean
 mvnd -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
-popd
 
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
-for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
+/usr/bin/find . -name rat.xml -exec sh -c '
+  for f do
+    xmlstarlet sel -t \
+      -m "//resource[license-approval[@name=\"false\"]]" \
+      -v "@name" -n "$f"
+  done
+' sh {} + >/tmp/rat-errors.txt  # <.>
 
-cat /tmp/rat-qn.txt
-cat /tmp/rat-al.txt
+cat /tmp/rat-errors.txt
 ----
 
-<.> The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
+<.> The command writes out a `target\rat.xml` for each submodule.
+Invalida licenses are flagged.
 
 <.> Collates all the errors.
 
 
-Inspect the contents of the two `/tmp/rat-*.txt` files and fix any reported violations, typically by either:
+Inspect the contents of `/tmp/rat-errors.txt` files and fix any reported violations, typically by either:
 
 * adding genuinely missing license headers from Java (or other) source files, or
 * updating the `<excludes>` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
@@ -108,11 +143,11 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 
 [source,bash,subs="attributes+"]
 ----
-pushd bom
 mvnd -Dgithub clean install -T1C -DskipTests # <.>
-mvnd -Dgithub license:download-licenses      # <.>
-popd
-groovy scripts/checkmissinglicenses.groovy  # <.>
+mvnd -Dgithub license:download-licenses \
+     -Dlicense.connectTimeout=500            # <.>
+
+groovy scripts/checkmissinglicenses.groovy   # <.>
 ----
 <.> builds the framework.
 +
@@ -144,11 +179,10 @@ licenses to remove from supplemental-models.xml (are spurious):
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
 
-=== Reconcile causeway-bom pom
+=== Update top-level pom
 
-The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
-
-Check to see if there has been a new version of `org.apache:apache`; if so, merge in the changes.
+The top level `pom.xml` inherits from `org.apache:apache` pom.
+Update if there has been a new version of this parent.
 
 === Update and preview website
 
@@ -160,7 +194,7 @@ The next step is to generate the website, ensuring that the config, examples, pr
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+./preview.sh
 ----
 +
 NOTE: this now runs `mvnd clean install -pl core/config` automatically.
@@ -182,7 +216,7 @@ For example:
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-causewayrelv3}                             # <.>
+export CAUSEWAYREL={page-causewayreleaseversion}                             # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -197,7 +231,7 @@ env | grep CAUSEWAY | sort
 
 [IMPORTANT]
 ====
-The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayrelv3}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayreleaseversion}`).
 ====
 
 
@@ -207,15 +241,15 @@ Commit any changes from the preceding steps:
 
 [source,bash,subs="attributes+"]
 ----
-git add ..
-git commit -m "$CAUSEWAYJIRA: updates to pom.xml etc for release"
+git add .
+git commit -m "$CAUSEWAYJIRA: updates to docs, license etc for release"
 ----
 
 
 
 === Create a release branch
 
-The release is performed on a branch; if we are successful, this branch will be merged back into master.
+The release is performed on a branch; if we are successful, this branch will be merged back into `main`.
 We also recommend creating a separate git worktree to capture any documentation fixes that you might notice along the way.
 
 * create and checkout a release branch for the version number being released; eg:
@@ -236,24 +270,13 @@ git push origin $CAUSEWAYBRANCH -u
 
 For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
 
-Locate this property in `bom/pom.xml` and update to the current date/time.
+Locate this property in `parent/pom.xml` and update to the current date/time.
 
-
-=== Switch to the `bom` directory
-
-The remainder of the release process is performed from the context of the `bom` directory:
-
-[source,bash,subs="attributes+"]
-----
-cd bom
-----
 
 === Bump projects to `$CAUSEWAYREL`
 
 We use `mvnd versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
-
-(Still in the `bom` directory), the steps are:
 
 * First we bump the framework's `pom.xml` files:
 +
@@ -271,11 +294,11 @@ mvnd install -o -DskipTests -T1C -Dgithub
 +
 The `-Dgithub` property activates the "github" profile that references all modules to be released.
 
-* next we also update the starters (as used by applications built using the framework):
+* next we also update the bom (as used by applications built using the framework):
 +
 [source,bash,subs="attributes+"]
 ----
-pushd ../starters
+pushd bom
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 mvnd install -DskipTests -o
 popd
@@ -285,7 +308,7 @@ popd
 +
 [source,bash,subs="attributes+"]
 ----
-git add ..
+git add .
 git commit -m "$CAUSEWAYJIRA: bumps version to $CAUSEWAYREL"
 ----
 
@@ -296,13 +319,13 @@ git commit -m "$CAUSEWAYJIRA: bumps version to $CAUSEWAYREL"
 Perform one last sanity check on the codebase.
 Delete all Causeway artifacts from your local Maven repo, then build using the `-o` offline flag.
 
-Still in the `bom` directory:
+In the top-level directory:
 
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/causeway
 mvnd clean install -o -T1C -Dgithub
-git clean -dfx ..
+git clean -dfx .
 ----
 
 
@@ -425,7 +448,7 @@ gpg (GnuPG) 2.0.30 (Gpg4win 2.3.4)
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
 
-Still in the `bom` directory, we deploy (upload the artifacts) using:
+Deploy (upload the artifacts) using:
 
 [source,bash,subs="attributes+"]
 ----
@@ -495,21 +518,21 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 === Reset `revision` property
 
 At the <<bump-code-to-causewayrel,beginning>> of the release process we bumped the version to the release version, ie `$CAUSEWAYREL`.
-With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
+With the release now deployed we now need to reset the revision back down to the base snapshot, ie `{page-causewaysnapshotversion}`.
 
-Therefore, still in the `bom` directory:
+Therefore:
 
 [source,bash,subs="attributes+"]
 ----
-mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvnd install -DskipTests -o -T1C -Dgithub
+mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
+mvnd install -DskipTests -o -Dgithub
 
-pushd ../starters
-mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+pushd bom
+mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o
 popd
 
-git add ..
+git add .
 git commit -m "$CAUSEWAYJIRA: resetting version"
 ----
 
@@ -526,7 +549,7 @@ and also push tag:
 
 [source,bash,subs="attributes+"]
 ----
-git push origin refs/tags/causeway-$CAUSEWAYREL:refs/tags/causeway-$CAUSEWAYREL-$CAUSEWAYRC
+git push origin refs/tags/causeway-${CAUSEWAYREL}:refs/tags/causeway-${CAUSEWAYREL}-${CAUSEWAYRC}
 git fetch
 ----
 
@@ -538,47 +561,42 @@ The remote tags aren't visible locally but can be seen link:https://github.com/a
 [#update-starter-apps]
 == Update starter apps
 
-For each of the two starter apps, we maintain (currently) eight branches:
+For each of the two starter apps, we maintain two branches:
 
-* `v2-jpa` and `v2-jdo` ; and also `v3-jpa` and `v3-jdo`
+* `{page-causewaycurrmajorversion}-jpa`
 +
-These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
-These are the branches referenced from the home page and getting started pages of the website.
+Is are intended to reference the _most recently released_ version (demonstrating persistence using EclipseLink JPA).
+This branch is referenced from the home page and getting started pages of the website.
 
-* `v2-jpa-SNAPSHOT` and `v2-jdo-SNAPSHOT` ; and also `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT`
+* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`
 +
-These reference the most current snapshot nightly build.
+Reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `v{2,3}-jpa` to `v{2,3}-jpa-SNAPSHOT` and similarly moves `v{2,3}-jdo` up to `v{2,3}-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
-This is done for all current `vN` branches.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
+In order that we don't break the starter apps while a release is being voted on, we do the changes in a work branch, `$CAUSEWAYBRANCH-jpa`.
 
 === HelloWorld
 
 For _helloworld_, we create a release branch for both variants:
 
-* for `v3-jpa`:
-+
-** Checkout the branch, bump versions, and commit:
+* Checkout the branch, bump versions, and commit:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT    # or: git checkout v2-jpa-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly  # <.>
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
+find . -name pom.xml -exec sed -i '' "s/<version>${CAUSEWAYREL}-SNAPSHOT<\/version>/<version>${CAUSEWAYREL}<\/version>/g" {} +
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
 +
-<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
+The parent `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 
-** Test the app
+* Test the app
 +
 [source,bash,subs="attributes+"]
 ----
@@ -586,91 +604,38 @@ mvnd clean install
 mvnd spring-boot:run
 ----
 
-** Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
+* Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
 
-** Push the branch to origin:
+* Push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
 git push -u origin $CAUSEWAYBRANCH-jpa
 ----
 
-* for `jdo`:
-+
-** Checkout the branch, bump versions, and commit:
-+
-[source,bash,subs="attributes+"]
-----
-git checkout v3-jdo-SNAPSHOT    # or: git checkout v2-jdo-SNAPSHOT
-git pull --ff-only
-
-git checkout -b $CAUSEWAYBRANCH-jdo
-
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
-
-git add .
-git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
-----
-
-** Test the app
-+
-[source,bash,subs="attributes+"]
-----
-mvnd clean install
-mvnd spring-boot:run
-----
-
-** Make any additional changes that might be required, and re-test.
-+
-This might be easiest to just cherry-pick commits made on the `v3-jpa` branch.
-
-** Merge in the `v3-jpa` branch, discarding any conflicts.
-+
-[source,bash,subs="attributes+"]
-----
-git merge $CAUSEWAYBRANCH-jpa --no-commit
-----
-+
-The idea here is to show equivalence between the two branches.
-The merge commit should end up with no changes:
-+
-[source,bash,subs="attributes+"]
-----
-git commit -m "$CAUSEWAYJIRA - merge in jpa"
-----
-
-** Push the branch to origin:
-+
-[source,bash,subs="attributes+"]
-----
-git push -u origin $CAUSEWAYBRANCH-jdo
-----
 
 === SimpleApp
 
 For _simple app_, the steps are almost the same:
 
-* for `jpa`:
-
-** Checkout the branch, bump versions, and commit:
+* Checkout the branch, bump versions, and commit:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT    # or: git checkout v2-jpa-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly  # <.>
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
+find . -name pom.xml -exec sed -i '' "s/<version>${CAUSEWAYREL}-SNAPSHOT<\/version>/<version>${CAUSEWAYREL}<\/version>/g" {} +
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
-<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
++
+The parent `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 
-** Test the app
+* Test the app
 +
 [source,bash,subs="attributes+"]
 ----
@@ -678,66 +643,13 @@ mvnd clean install
 mvnd -pl webapp spring-boot:run
 ----
 
-** Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
+* Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
 
-** Push the branch to origin:
+* Push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
 git push -u origin $CAUSEWAYBRANCH-jpa
-----
-
-
-* for `jdo`:
-+
-** Checkout the branch, bump versions, and commit:
-+
-[source,bash,subs="attributes+"]
-----
-git checkout v3-jdo-SNAPSHOT    # or: git checkout v2-jdo-SNAPSHOT
-git pull --ff-only
-
-git checkout -b $CAUSEWAYBRANCH-jdo
-
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
-
-git add .
-git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
-----
-
-** Test the app
-+
-[source,bash,subs="attributes+"]
-----
-mvnd clean install
-mvnd -pl webapp spring-boot:run
-----
-
-** Make any additional changes that might be required, and re-test.
-+
-This might be easiest to just cherry-pick commits made on the `jpa` branch.
-
-** Merge in the `jpa` branch, discarding any conflicts.
-+
-[source,bash,subs="attributes+"]
-----
-git merge $CAUSEWAYBRANCH-jpa --no-commit
-----
-+
-The idea here is to show equivalence between the two branches.
-The merge commit should end up with no changes:
-+
-[source,bash,subs="attributes+"]
-----
-git commit -m "$CAUSEWAYJIRA - merge in jpa"
-----
-
-** Push the branch to origin:
-+
-[source,bash,subs="attributes+"]
-----
-git push -u origin $CAUSEWAYBRANCH-jdo
 ----
 
 
@@ -782,7 +694,7 @@ popd
 ----
 cd ../causeway
 
-sh preview.sh -AB
+./preview.sh -AB
 ----
 
 * Copy the generated Antora site to `causeway-site` repo's `contents` directory:
@@ -801,7 +713,7 @@ cd ../causeway-site
 git add .
 git commit -m "$CAUSEWAYJIRA : staging changes to website"
 
-sh preview.sh
+./preview.sh
 ----
 
 * If happy, then push the changes:
@@ -834,7 +746,7 @@ Use the following subject, eg:
 
 [source,subs="attributes+"]
 ----
-[VOTE] Apache Causeway Core release {page-causewayrelv3} RC1
+[VOTE] Apache Causeway Core release {page-causewayreleaseversion} RC1
 ----
 
 And use the following body:
@@ -846,15 +758,23 @@ I've just cut a new release of the Apache Causeway Framework.
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as causeway-{page-causewayrelv3}-RC1;
+In the source code repo the code has been tagged as causeway-{page-causewayreleaseversion}-RC1;
 see https://github.com/apache/causeway/tags
 
-To verify the source code itself, you can use the following commands
-(in an empty directory):
+To verify the source code itself, we recommend you start a docker container as
+a clean room:
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
+include::partial$verify-process-docker-container.adoc[]
+-------------------------------------------------------------------------------
+
+then use the following commands to install prereqs and verify:
+
+-------------------------------------------------------------------------------
+include::partial$verify-process-docker-container-prep.adoc[]
+
 include::partial$verify-process.adoc[]
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 You can then test the helloworld or simpleapp starter apps, see:
 https://causeway.staged.apache.org/comguide/latest/verifying-releases.html.
@@ -872,7 +792,7 @@ The vote will be open for a minimum of 72 hours.
 
 Remember to update:
 
-* the version number (`{page-causewayrelv3}` or whatever)
+* the version number (`{page-causewayreleaseversion}` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`11xx` or whatever)
 

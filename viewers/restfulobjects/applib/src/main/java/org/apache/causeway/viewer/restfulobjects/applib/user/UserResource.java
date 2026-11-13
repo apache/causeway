@@ -18,42 +18,38 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.user;
 
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/user")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/user")
 public interface UserResource {
 
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
-    public Response user();
+    @GetMapping(path = "/", produces = {MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_USER})
+    ResponseEntity<Object> user();
 
-    @DELETE
-    public Response deleteUserNotAllowed();
+    @DeleteMapping
+    ResponseEntity<Object> deleteUserNotAllowed();
 
-    @PUT
-    public Response putUserNotAllowed();
+    @PutMapping
+    ResponseEntity<Object> putUserNotAllowed();
 
-    @POST
-    public Response postUserNotAllowed();
+    @PostMapping
+    ResponseEntity<Object> postUserNotAllowed();
 
     /**
      * Not part of the Restful Objects spec.
      */
-    @GET
-    @Path("/logout")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    public Response logout();
+    @GetMapping(path = "/logout", produces = {MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE})
+    ResponseEntity<Object> logout();
 
 }

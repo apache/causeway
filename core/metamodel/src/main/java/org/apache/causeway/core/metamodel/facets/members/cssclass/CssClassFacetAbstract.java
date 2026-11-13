@@ -29,12 +29,8 @@ implements CssClassFacet {
         return CssClassFacet.class;
     }
 
-    public CssClassFacetAbstract(final FacetHolder holder) {
+    protected CssClassFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
-    }
-
-    public CssClassFacetAbstract(final FacetHolder holder, final Precedence precedence) {
-        super(type(), holder, precedence);
     }
 
 }

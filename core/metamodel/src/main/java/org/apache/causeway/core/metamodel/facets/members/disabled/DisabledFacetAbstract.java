@@ -26,11 +26,11 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 public abstract class DisabledFacetAbstract
 extends WhereValueFacetAbstract
@@ -53,16 +53,15 @@ implements DisabledFacet {
             final Where where,
             final VetoReason reason,
             final FacetHolder holder) {
-        this(where, reason, holder, Semantics.DISABLED, Precedence.DEFAULT);
+        this(where, reason, holder, Semantics.DISABLED);
     }
 
     protected DisabledFacetAbstract(
             final Where where,
             final VetoReason reason,
             final FacetHolder holder,
-            final Semantics semantics,
-            final Precedence precedence) {
-        super(type(), holder, where, precedence);
+            final Semantics semantics) {
+        super(type(), holder, where);
         this.reason = reason;
         this.semantics = semantics;
     }
@@ -77,10 +76,9 @@ implements DisabledFacet {
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        if(getSemantics().isEnabled()) {
-            return Optional.empty();
-        }
-        final ManagedObject target = ic.getTarget();
+        if(getSemantics().isEnabled())
+			return Optional.empty();
+        final ManagedObject target = ic.target();
         final Optional<VetoReason> disabledReason = disabledReason(target);
         return disabledReason;
     }

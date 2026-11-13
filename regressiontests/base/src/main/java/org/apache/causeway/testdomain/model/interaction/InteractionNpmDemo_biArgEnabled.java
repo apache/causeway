@@ -24,8 +24,6 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Action
 @RequiredArgsConstructor
@@ -34,19 +32,13 @@ public class InteractionNpmDemo_biArgEnabled {
     @SuppressWarnings("unused")
     private final InteractionNpmDemo holder;
 
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        int a;
-        int b;
-    }
+    public record Parameters(int a, int b) {}
 
     @MemberSupport public int act(
-
             @Parameter(maxLength = 2) // setup so we can test for this facet
             @ParameterLayout(describedAs = "first") // setup so we can test for this facet
-            int a,
-
-            int b) {
+            final int a,
+            final int b) {
 
         return a + b;
     }
@@ -54,14 +46,14 @@ public class InteractionNpmDemo_biArgEnabled {
     // -- PARAM 0
 
     // [CAUSEWAY-2362] parameter supporting methods, to be referenced by param name
-    @MemberSupport public int defaultA(Parameters params) {
+    @MemberSupport public int defaultA(final Parameters params) {
         return 5;
     }
 
     // -- PARAM 1
 
     // [CAUSEWAY-2362] parameter supporting methods, to be referenced by param name
-    @MemberSupport public int[] choicesB(Parameters params) {
+    @MemberSupport public int[] choicesB(final Parameters params) {
         return new int[] {1, 2, 3, 4};
     }
 }

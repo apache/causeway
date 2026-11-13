@@ -18,46 +18,71 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.layout.bs;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.commons.model.layout.UiGridLayout;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.components.object.ObjectComponentFactoryAbstract;
 
 /**
  * {@link ComponentFactory} for {@link BSGridPanel}.
  */
-public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
+public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
 
     public BSGridPanelFactory() {
-        super(UiComponentType.ENTITY, BSGridPanel.class);
+        super(UiComponentType.DOMAIN_OBJECT, BSGridPanel.class);
     }
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
+        var mo = objectModel.getObject();
 
-        val objectAdapter = entityModel.getObject();
-        val objectSpec = entityModel.getTypeOfSpecification();
-
-        return ApplicationAdvice.appliesIf(
-                Facets.bootstrapGrid(objectSpec, objectAdapter)
-                .isPresent());
+        return ApplicationAdvice.appliesIf(mo.objSpec().containsFacet(GridFacet.class));
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
+        var mo = objectModel.getObject();
 
-        val objectAdapter = entityModel.getObject();
-        val objectSpec = entityModel.getTypeOfSpecification();
+        return Facets.bootstrapGrid(mo.objSpec(), mo)
+            .map(UiGridLayout::new) // creates a deep copy of the underlying grid and applies rules
+            .map(UiGridLayout::bsGrid)
+            .map(bsGrid->new BSGridPanel(id, objectModel, bsGrid))
+            .orElseThrow(); // empty case guarded against by appliesTo(...) above
+    }
 
-        return Facets.bootstrapGrid(objectSpec, objectAdapter)
-                .map(grid->new BSGridPanel(id, entityModel, grid))
-                .orElseThrow(); // empty case guarded against by appliesTo(...) above
+    /**
+     * refactoring hint: this is legacy code, just kept for reference - perhaps resurrect as feature
+     */
+    public static Optional<Component> extraContentForMixin(final String id, final ActionModel actionModel) {
+
+        //[CAUSEWAY-3210] EntityModel.ofAdapter(commonContext, targetAdapterForMixin); not supported for mixins
+        return Optional.empty();
+
+//        var action = actionModel.getAction();
+//        if(action.isMixedIn()) {
+//
+//            var mixinSpec = ((MixedInMember)action).getMixinType();
+//            var targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
+//
+//            // if we can bootstrap a grid, use it
+//            return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
+//            .map(bsGrid->{
+//                var commonContext = actionModel.getMetaModelContext();
+//                var entityModelForMixin =
+//                        EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
+//                return new BSGridPanel(id, entityModelForMixin, bsGrid);
+//            });
+//        }
+//        return Optional.empty();
     }
 }

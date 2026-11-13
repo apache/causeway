@@ -25,11 +25,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -74,7 +74,6 @@ public final class _Hashes {
         .map(md->digest(md, new ByteArrayInputStream(bytes), Math.max(size, 4096)));
     }
 
-
     // -- HELPER
 
     @SneakyThrows
@@ -86,6 +85,5 @@ public final class _Hashes {
         }
         return md.digest();
     }
-
 
 }

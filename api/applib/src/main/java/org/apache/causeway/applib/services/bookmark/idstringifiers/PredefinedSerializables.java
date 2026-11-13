@@ -51,9 +51,6 @@ public class PredefinedSerializables {
         if(cls.getName().startsWith("java.time.")) {
             return true;
         }
-        if(cls.getName().startsWith("org.joda.time.")) {
-            return true;
-        }
         if(serializableFinalTypes.contains(cls)) {
             return true;
         }

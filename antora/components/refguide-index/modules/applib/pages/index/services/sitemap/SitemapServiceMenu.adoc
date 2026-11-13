@@ -14,3 +14,4 @@ class SitemapServiceMenu {
 }
 ----
 
+include::hooks/SitemapServiceMenu_010-implementation.adoc[]

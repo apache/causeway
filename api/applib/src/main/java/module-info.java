@@ -35,13 +35,13 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.graph;
     exports org.apache.causeway.applib.id;
     exports org.apache.causeway.applib.jaxb;
+    exports org.apache.causeway.applib.layout;
     exports org.apache.causeway.applib.layout.component;
     exports org.apache.causeway.applib.layout.grid.bootstrap;
-    exports org.apache.causeway.applib.layout.grid;
     exports org.apache.causeway.applib.layout.links;
     exports org.apache.causeway.applib.layout.menubars.bootstrap;
     exports org.apache.causeway.applib.layout.menubars;
-    exports org.apache.causeway.applib.layout;
+    exports org.apache.causeway.applib.layout.resource;
     exports org.apache.causeway.applib.locale;
     exports org.apache.causeway.applib.mixins.dto;
     exports org.apache.causeway.applib.mixins.layout;
@@ -77,29 +77,31 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.homepage;
     exports org.apache.causeway.applib.services.i18n;
     exports org.apache.causeway.applib.services.iactn;
-    exports org.apache.causeway.applib.services.iactnlayer;
     exports org.apache.causeway.applib.services.inject;
     exports org.apache.causeway.applib.services.jaxb;
     exports org.apache.causeway.applib.services.keyvaluestore;
     exports org.apache.causeway.applib.services.layout;
     exports org.apache.causeway.applib.services.linking;
     exports org.apache.causeway.applib.services.locale;
+    exports org.apache.causeway.applib.services.marshal;
     exports org.apache.causeway.applib.services.menu;
     exports org.apache.causeway.applib.services.message;
     exports org.apache.causeway.applib.services.metamodel;
     exports org.apache.causeway.applib.services.metamodel.objgraph;
     exports org.apache.causeway.applib.services.metrics;
-    exports org.apache.causeway.applib.services.placeholder;
     exports org.apache.causeway.applib.services.publishing.log;
     exports org.apache.causeway.applib.services.publishing.spi;
+    exports org.apache.causeway.applib.services.priming;
     exports org.apache.causeway.applib.services.queryresultscache;
     exports org.apache.causeway.applib.services.registry;
+    exports org.apache.causeway.applib.services.render;
     exports org.apache.causeway.applib.services.repository;
     exports org.apache.causeway.applib.services.routing;
     exports org.apache.causeway.applib.services.scratchpad;
     exports org.apache.causeway.applib.services.filter;
     exports org.apache.causeway.applib.services.session;
     exports org.apache.causeway.applib.services.sitemap;
+    exports org.apache.causeway.applib.services.span;
     exports org.apache.causeway.applib.services.sudo;
     exports org.apache.causeway.applib.services.swagger;
     exports org.apache.causeway.applib.services.tablecol;
@@ -109,7 +111,6 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.userreg.events;
     exports org.apache.causeway.applib.services.userreg;
     exports org.apache.causeway.applib.services.userui;
-    exports org.apache.causeway.applib.services.wrapper.callable;
     exports org.apache.causeway.applib.services.wrapper.control;
     exports org.apache.causeway.applib.services.wrapper.events;
     exports org.apache.causeway.applib.services.wrapper.listeners;
@@ -119,38 +120,40 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.xmlsnapshot;
     exports org.apache.causeway.applib.snapshot;
     exports org.apache.causeway.applib.spec;
+    exports org.apache.causeway.applib.tabular;
     exports org.apache.causeway.applib.types;
     exports org.apache.causeway.applib.util.schema;
     exports org.apache.causeway.applib.util;
     exports org.apache.causeway.applib.value;
     exports org.apache.causeway.applib.value.semantics;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
+    requires static lombok;
+
     requires transitive java.desktop;
     requires transitive java.instrument;
     requires transitive jakarta.activation;
     requires transitive jakarta.annotation;
     requires transitive jakarta.inject;
     requires transitive jakarta.persistence;
-    requires transitive jakarta.ws.rs;
     requires transitive jakarta.xml.bind;
-    requires lombok;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
+
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
-    requires org.apache.logging.log4j;
-    requires transitive org.joda.time;
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
+    requires transitive spring.web;
     requires spring.tx;
-    requires org.apache.logging.log4j.core;
-    
+    requires org.slf4j;
+	requires micrometer.observation;
+	requires com.fasterxml.jackson.annotation;
+
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;
     opens org.apache.causeway.applib.layout.component;
     opens org.apache.causeway.applib.layout.grid.bootstrap;
-    opens org.apache.causeway.applib.layout.grid;
     opens org.apache.causeway.applib.layout.links;
     opens org.apache.causeway.applib.layout.menubars.bootstrap;
     opens org.apache.causeway.applib.layout.menubars;

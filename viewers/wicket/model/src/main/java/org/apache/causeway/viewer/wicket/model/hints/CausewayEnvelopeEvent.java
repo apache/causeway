@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.hints;
 
-
 import org.apache.wicket.event.IEvent;
 
 /**
@@ -61,6 +60,4 @@ public class CausewayEnvelopeEvent extends CausewayEventAbstract {
         return letterEventClass.cast(letter);
     }
 
-
 }
-

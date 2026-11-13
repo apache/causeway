@@ -35,15 +35,13 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.applib.CausewayModuleApplibMixins;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -62,8 +60,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = Layout_SimpleObject_IntegTest.AppManifest.class
 )
@@ -79,12 +75,8 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
             CausewayModulePersistenceCommons.class,
             CausewayModuleSecurityBypass.class,
     })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
     @ComponentScan(basePackageClasses = {AppManifest.class, LayoutTestDomainModel.class})
     public static class AppManifest {
-
 
     }
 
@@ -98,23 +90,24 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
     void openRestApi() {
 
         // given
-        val action = lookupAction("openRestApi");
+        var action = lookupAction("openRestApi");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.lookupFacet(LayoutOrderFacet.class).orElse(null);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("750.1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.lookupFacet(LayoutGroupFacet.class).orElse(null);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(LayoutConstants.FieldSetId.METADATA))
         ;
@@ -125,32 +118,32 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
     void clearHints() {
 
         // given
-        val action = lookupAction("clearHints");
+        var action = lookupAction("clearHints");
 
         // when, then
         /* not used
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
         */
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.lookupFacet(LayoutOrderFacet.class).orElse(null);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("400.1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.lookupFacet(LayoutGroupFacet.class).orElse(null);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(LayoutConstants.FieldSetId.METADATA))
         ;
     }
 
     private ObjectAction lookupAction(final String id) {
-        val objectSpecification = specificationLoader.loadSpecification(SimpleObject.class);
+        var objectSpecification = specificationLoader.loadSpecification(SimpleObject.class);
         /* not used
         List<ObjectAction> objectActions = objectSpecification.streamAnyActions(MixedIn.INCLUDED).collect(Collectors.toList());
         */
@@ -169,7 +162,6 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         Map<String, String> facetAttrByName = facetById.get(LayoutGroupFacet.class.getCanonicalName()).getAttr().stream().collect(Collectors.toMap(FacetAttr::getName, FacetAttr::getValue));
         facetAttrByName.get("Name");
     } */
-
 
     @Inject InteractionService interactionService;
     @Inject MetaModelService metaModelService;

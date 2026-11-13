@@ -18,27 +18,34 @@
  */
 package org.apache.causeway.core.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
-import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.converters.PatternsConverter;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
+import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
 
+    // needs to happen early, at least before other auto configuration gets to run
+    CausewayObservationAutoConfiguration.class,
+
     // @Component
+    CausewayConfiguration.class,
     PatternsConverter.class,
-    CausewayBeanFactoryPostProcessorForSpring.class,
+    CausewayBeanFactoryPostProcessor.class,
     CausewayLocaleInitializer.class,
     CausewayTimeZoneInitializer.class,
     PatternOptionalStringConstraintValidator.class,
@@ -46,22 +53,47 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
     // @Service
     DataSourceIntrospectionService.class,
-    CausewayBeanTypeRegistryDefault.class,
     CausewaySystemEnvironment.class,
     WebAppContextPath.class,
 })
 @EnableConfigurationProperties({
-        CausewayConfiguration.class,
-        DatanucleusConfiguration.class,
+        CausewayConfiguration.Causeway.class,
         EclipselinkConfiguration.class,
         EclipselinkConfiguration.Weaving.class,
         EclipselinkConfiguration.DdlGeneration.class,
         EclipselinkConfiguration.Jdbc.BatchWriting.class,
         EclipselinkConfiguration.Jdbc.CacheStatements.class,
-        RestEasyConfiguration.class,
 })
 public class CausewayModuleCoreConfig {
 
     public static final String NAMESPACE = "causeway.config";
+
+    @Bean
+    EmailConfiguration emailConfiguration(
+        final CausewayConfiguration conf,
+        @Value("#{systemProperties['spring.mail.username']}") final String senderEmailUsername,
+        @Value("#{systemProperties['spring.mail.password']}") final String senderEmailPassword,
+        @Value("#{systemProperties['spring.mail.host']}") final String senderEmailHostName,
+        @Value("#{systemProperties['spring.mail.port']}") final Integer senderEmailPort,
+        @Value("#{systemProperties['spring.mail.javamail.properties.mail.smtp.starttls.enable']}") final Boolean senderEmailTlsEnabled,
+        @Value("#{systemProperties['spring.mail.properties.mail.smtp.timeout']}") final Integer smtpTimeout,
+        @Value("#{systemProperties['spring.mail.properties.mail.smtp.connectiontimeout']}") final Integer smtpConnectionTimeout) {
+
+        var emailConfiguration = conf.core().runtimeServices().email();
+
+        return new EmailConfiguration(
+            _Strings.emptyToNull(senderEmailUsername),
+            _Strings.emptyToNull(senderEmailPassword),
+            _Strings.emptyToNull(senderEmailHostName),
+            senderEmailPort!=null ? senderEmailPort : 587,
+            senderEmailTlsEnabled!=null ? senderEmailTlsEnabled : true,
+            smtpTimeout!=null ? smtpTimeout : 2000,
+            smtpConnectionTimeout!=null ? smtpConnectionTimeout : 2000,
+            emailConfiguration.throwExceptionOnFail(),
+            _Strings.emptyToNull(emailConfiguration.sender().address()),
+            _Strings.emptyToNull(emailConfiguration.override().to()),
+            _Strings.emptyToNull(emailConfiguration.override().cc()),
+            _Strings.emptyToNull(emailConfiguration.override().bcc()));
+    }
 
 }

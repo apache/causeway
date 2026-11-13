@@ -18,28 +18,18 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.integtest;
 
-import java.util.List;
-
-import jakarta.inject.Inject;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.quartz.JobExecutionContext;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.springframework.transaction.annotation.Propagation;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
@@ -52,41 +42,41 @@ import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterR
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.quartz.JobExecutionContext;
+import org.springframework.transaction.annotation.Propagation;
 
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
-import lombok.val;
 
-@ExtendWith(MockitoExtension.class)
 public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-    @Mock JobExecutionContext mockQuartzJobExecutionContext;
+    @Inject InteractionService interactionService;
+    @Inject BackgroundService backgroundService;
+    @Inject WrapperFactory wrapperFactory;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
+    @Inject TransactionService transactionService;
+    @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
+    @Inject BookmarkService bookmarkService;
+    @Inject CounterRepository<? extends Counter> counterRepository;
+    @Inject CausewaySystemEnvironment env;
+
+    JobExecutionContext mockQuartzJobExecutionContext = Mockito.mock(JobExecutionContext.class);
 
     Bookmark bookmark;
 
-
-    protected abstract Counter newCounter(String name);
-
-    private static boolean prototypingOrig;
-
-    @BeforeAll
-    static void setup_environment() {
-        prototypingOrig = new CausewaySystemEnvironment().isPrototyping();
-        new CausewaySystemEnvironment().setPrototyping(true);
-    }
-
-    @AfterAll
-    static void reset_environment() {
-        new CausewaySystemEnvironment().setPrototyping(prototypingOrig);
-    }
+    protected abstract <T extends Counter> T newCounter(String name);
 
     @BeforeEach
     void setup_counter() {
-
+    	assertTrue(env.deploymentType().isPrototyping()); // pre requisite check
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             counterRepository.removeAll();
 
             counterRepository.persist(newCounter("fred"));
-            List<Counter> counters = counterRepository.find();
+            List<? extends Counter> counters = counterRepository.find();
             assertThat(counters).hasSize(1);
 
             bookmark = bookmarkService.bookmarkForElseFail(counters.get(0));
@@ -95,79 +85,96 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         // given
         assertThat(bookmark).isNotNull();
 
-        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+        var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
         assertThat(counter.getNum()).isNull();
     }
 
     @Test
     void async_using_default_executor_service() {
 
-        // when
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
-
-            val control = AsyncControl.returning(Counter.class);
-            wrapperFactory.asyncWrap(counter, control).bumpUsingDeclaredAction();
-
-            // wait til done
-            control.getFuture().get();
-        }).ifFailureFail();
-
-        // then
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
-            assertThat(counter.getNum()).isEqualTo(1L);
-        }).ifFailureFail();
+        final AtomicReference<AsyncProxy<Counter>> asyncProxyUnderTest1 = new AtomicReference<>();
+        final AtomicReference<AsyncProxy<Counter_bumpUsingMixin>> asyncProxyUnderTest2 = new AtomicReference<>();
 
         // when
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
-            assertThat(counter.getNum()).isEqualTo(1L);
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            // when
-            val control = AsyncControl.returning(Counter.class);
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control).act();
+            asyncProxyUnderTest1.set(wrapperFactory.asyncWrap(counter));
 
-            // wait til done
-            control.getFuture().get();
         }).ifFailureFail();
+
+        // execute async and wait till done
+        {
+            asyncProxyUnderTest1.get()
+                .applyAsync(Counter::bumpUsingDeclaredAction)
+                .tryGet(5, TimeUnit.SECONDS); // wait till done
+        }
 
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            assertThat(counter.getNum()).isEqualTo(1L);
+
+            // store the async proxy for later use below
+            asyncProxyUnderTest2.set(wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter));
+
+        }).ifFailureFail();
+
+        // execute async and wait till done
+        {
+            // returns the detached counter entity, so we can immediately check whether the action was executed
+            var counter = asyncProxyUnderTest2.get()
+                    .applyAsync(Counter_bumpUsingMixin::act)
+                    // let's wait max 5 sec to allow executor to complete before continuing
+                    .tryGet(5, TimeUnit.SECONDS)
+                    .valueAsNonNullElseFail();
+            assertThat(counter.getNum()).isEqualTo(2L);
+        }
+
+        // then
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(2L);
         }).ifFailureFail();
 
     }
 
-
     @SneakyThrows
     @Test
     void using_background_service() {
+
+        final AtomicReference<AsyncProxy<Counter>> asyncProxyUnderTest = new AtomicReference<>();
 
         // given
         removeAllCommandLogEntriesAndCounters();
 
         // when
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isNull();
 
             // when
-            backgroundService.execute(counter).bumpUsingDeclaredAction();
+            asyncProxyUnderTest.set(backgroundService.execute(counter));
 
-            Thread.sleep(1_000);// horrid, but let's just wait 1 sec before testing
         }).ifFailureFail();
+
+        // execute async and wait till done
+        {
+            asyncProxyUnderTest.get()
+                .acceptAsync(Counter::bumpUsingDeclaredAction)
+                // let's wait max 5 sec to allow executor to complete before continuing
+                .tryGet(5, TimeUnit.SECONDS); // wait till done
+        }
 
         // then no change to the counter
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isNull();   // still null
         }).ifFailureFail();
 
         // but then instead a background command is persisted
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val all = commandLogEntryRepository.findAll();
+            var all = commandLogEntryRepository.findAll();
             assertThat(all).hasSize(1);
             CommandLogEntry commandLogEntry = all.get(0);
 
@@ -187,22 +194,19 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
                     .satisfies(x -> assertThat(x.getReplayStateFailureReason()).isNull());
         }).ifFailureFail();
 
-
-
         // when (simulate quartz running in the background)
         runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext);
         interactionService.nextInteraction();
 
-
         // then bumped
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
         }).ifFailureFail();
 
         // and marked as started and completed
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val after = commandLogEntryRepository.findAll();
+            var after = commandLogEntryRepository.findAll();
             assertThat(after).hasSize(1);
             CommandLogEntry commandLogEntryAfter = after.get(0);
 
@@ -214,7 +218,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
                     ;
         }).ifFailureFail();
 
-
     }
 
     private void removeAllCommandLogEntriesAndCounters() {
@@ -223,15 +226,5 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             assertThat(commandLogEntryRepository.findAll()).isEmpty();
         }).ifFailureFail();
     }
-
-    @Inject InteractionService interactionService;
-    @Inject BackgroundService backgroundService;
-    @Inject BackgroundService.PersistCommandExecutorService persistCommandExecutorService;
-    @Inject WrapperFactory wrapperFactory;
-    @Inject CommandLogEntryRepository commandLogEntryRepository;
-    @Inject TransactionService transactionService;
-    @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
-    @Inject BookmarkService bookmarkService;
-    @Inject CounterRepository counterRepository;
 
 }

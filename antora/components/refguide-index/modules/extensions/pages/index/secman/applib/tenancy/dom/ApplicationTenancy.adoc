@@ -6,16 +6,24 @@
 [source,java]
 .ApplicationTenancy.java
 ----
-class ApplicationTenancy {
+interface ApplicationTenancy {
   public static final String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
+  static final Equality<ApplicationTenancy> EQUALITY;
+  static final Hashing<ApplicationTenancy> HASHING;
+  static final ToString<ApplicationTenancy> TOSTRING;
+  static final Comparator<ApplicationTenancy> COMPARATOR;
   String title()
+  String getName()
+  void setName(String name)
+  String getPath()
+  void setPath(String path)
+  ApplicationTenancy getParent()
+  void setParent(ApplicationTenancy parent)
   boolean isRoot()
+  Collection<ApplicationTenancy> getChildren()
   int compareTo(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy other)
-  boolean equals(Object other)
-  int hashCode()
-  String toString()
 }
 ----
 

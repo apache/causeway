@@ -18,20 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.panels;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.model.IModel;
-
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -41,26 +32,32 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeListener;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeListener;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-
-import lombok.val;
+import org.apache.wicket.Component;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.model.IModel;
 
 public abstract class PromptFormAbstract<T extends
     FormExecutorContext
     & IModel<ManagedObject>>
 extends OkCancelForm<T>
-implements ScalarModelChangeListener {
+implements AttributeModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
-    protected final List<ScalarPanelAbstract> paramPanels = _Lists.newArrayList();
+    protected final List<AttributePanel> paramPanels = new ArrayList<>();
 
     private final Component parentPanel;
 
@@ -83,7 +80,7 @@ implements ScalarModelChangeListener {
     // -- SETUP
 
     protected abstract void addParameters();
-    protected abstract Either<ActionModel, ScalarPropertyModel> getMemberModel();
+    protected abstract Either<ActionModel, PropertyModel> getMemberModel();
 
     @Override
     public final void renderHead(final IHeaderResponse response) {
@@ -115,10 +112,10 @@ implements ScalarModelChangeListener {
 
         setLastFocusHint();
 
-        val form = okButton.getForm();
-        val formExecutor = FormExecutorDefault.forMember(getMemberModel());
+        var form = okButton.getForm();
+        var formExecutor = FormExecutorDefault.forMember(getMemberModel());
 
-        val outcome = formExecutor
+        var outcome = formExecutor
                 .executeAndProcessResults(target, form, formExecutorContext());
 
         if (outcome.isSuccess()) {
@@ -142,7 +139,7 @@ implements ScalarModelChangeListener {
     }
 
     @Override
-    public final void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+    public final void onError(final AjaxRequestTarget target, final AttributePanel scalarPanel) {
         if (scalarPanel != null) {
             // ensure that any feedback error associated with the providing component is shown.
             target.add(scalarPanel);
@@ -170,16 +167,13 @@ implements ScalarModelChangeListener {
     }
 
     private void setLastFocusHint() {
-        final UiHintContainer entityModel = pageUiHintContainerIfAny();
-        if (entityModel == null) {
-            return;
-        }
-        final MarkupContainer parentContainer = this.parentPanel.getParent();
-        if (parentContainer == null) {
-            return;
+        final UiHintContainer objectModel = pageUiHintContainerIfAny();
+        if (objectModel == null) return;
 
-        }
-        entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
+        var parentContainer = this.parentPanel.getParent();
+        if (parentContainer == null) return;
+
+        objectModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
     }
 
     private UiHintContainer pageUiHintContainerIfAny() {
@@ -189,10 +183,8 @@ implements ScalarModelChangeListener {
         } catch(org.apache.wicket.WicketRuntimeException ex) {
             return null;
         }
-        if (page instanceof EntityPage) {
-            EntityPage entityPage = (EntityPage) page;
-            return entityPage.getUiHintContainerIfAny();
-        }
+        if (page instanceof DomainObjectPage domainObjectPage)
+			return domainObjectPage.getUiHintContainerIfAny();
         return null;
     }
 
@@ -208,7 +200,7 @@ implements ScalarModelChangeListener {
         // change visibility of inline components
         formExecutorContext().getInlinePromptContext().onCancel(getMemberModel());
 
-        Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
+        Optional.ofNullable(formExecutorContext().getInlinePromptContext().scalarTypeContainer())
         .ifPresent(scalarTypeContainer->{
             Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId());
         });

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:,">
+  <title>Causeway Vaadin Web Component evaluation</title>
+  <link rel="stylesheet" href="./harness.css">
+  <script type="module" src="./fixture.mjs"></script>
+</head>
+<body>
+  <header class="analysis-header">
+    <div>
+      <p class="eyebrow">Analysis-only GraphQL viewer fixture</p>
+      <h1>Causeway domain workspace</h1>
+    </div>
+    <nav aria-label="Fixture page mode">
+      <button type="button" data-mode="generic" aria-pressed="true">Generic page</button>
+      <button type="button" data-mode="semantic">Custom semantic page</button>
+      <button type="button" data-mode="raw">Custom raw-widget page</button>
+    </nav>
+  </header>
+  <main id="analysis-route" tabindex="-1" aria-live="polite"></main>
+  <footer>Standalone Vaadin Web Components · GraphQL-shaped analysis adapter · no Flow runtime</footer>
+</body>
+</html>

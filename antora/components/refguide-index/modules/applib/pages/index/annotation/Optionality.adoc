@@ -30,7 +30,7 @@ Indicates that the property or parameter is not required.
 <.> xref:#MANDATORY[MANDATORY]
 +
 --
-Indicates that the property is required (even if the JDO `javax.jdo.annotations.Column` annotation says otherwise).
+Indicates that the property is required (even if the JPA _jakarta.persistence.Column_ annotation says otherwise).
 --
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
@@ -45,7 +45,7 @@ Ignore the value provided by this annotation (meaning that the framework will ke
 
 Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
 
-For properties, will be false unless JDO `javax.jdo.annotations.Column` has also specified with `javax.jdo.annotations.Column#allowsNull()` set to `true` .
+For properties, will be false unless JPA _Column_ has also specified with _Column#nullable()_ set to `true` .
 
 [#OPTIONAL]
 === OPTIONAL
@@ -55,9 +55,9 @@ Indicates that the property or parameter is not required.
 [#MANDATORY]
 === MANDATORY
 
-Indicates that the property is required (even if the JDO `javax.jdo.annotations.Column` annotation says otherwise).
+Indicates that the property is required (even if the JPA _jakarta.persistence.Column_ annotation says otherwise).
 
-When using the JDO/DataNucleus objectstore, it is sometimes necessary to annotate a property as optional (using `javax.jdo.annotations.Column#allowsNull()` set to `true` ), even if the property is logically mandatory. For example, this can occur when the property is in a subtype class that has been "rolled up" to the superclass table using `javax.jdo.annotations.Inheritance` > with the `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE` superclass strategy.
+When using the JPA/EclipseLink objectstore, it is sometimes necessary to annotate a property as optional (using _Column#nullable()_ set to `true` ), even if the property is logically mandatory. For example, this can occur when the property is in a subtype class that has been "rolled up" to the superclass table using _jakarta.persistence.Inheritance_ strategy of _jakarta.persistence.InheritanceType#SINGLE_TABLE_
 
 This annotation, therefore, is intended to override any objectstore-specific annotation, so that Causeway can apply the constraint even though the objectstore is unable to do so.
 

@@ -28,17 +28,17 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Log4j2
+@Slf4j
 public class CausewayLocaleInitializer {
 
     @Inject CausewayConfiguration configuration;
 
     @PostConstruct
     public void initLocale() {
-        final Optional<String> localeSpecOpt = configuration.getCore().getRuntime().getLocale();
+        final Optional<String> localeSpecOpt = configuration.core().runtime().locale();
         localeSpecOpt.map(CausewayLocaleInitializer::toLocale).ifPresent(CausewayLocaleInitializer::setLocaleDefault);
         log.debug("locale is {}", Locale.getDefault());
     }
@@ -49,11 +49,11 @@ public class CausewayLocaleInitializer {
         final int pos = localeSpec.indexOf('_');
         Locale locale;
         if (pos == -1) {
-            locale = new Locale(localeSpec, "");
+            locale = Locale.of(localeSpec, "");
         } else {
             final String language = localeSpec.substring(0, pos);
             final String country = localeSpec.substring(pos + 1);
-            locale = new Locale(language, country);
+            locale = Locale.of(language, country);
         }
         return locale;
     }

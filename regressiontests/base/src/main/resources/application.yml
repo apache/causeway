@@ -58,6 +58,10 @@ causeway:
         - url:  https://causeway.apache.org
           image: images/apache-causeway/causeway-logo-65x48.png
           name: Apache Causeway
+          
+    restfulobjects:
+      basePath: /restful
+          
     wicket:
       css: css/application.css
       js: scripts/application.js
@@ -68,9 +72,3 @@ causeway:
 
       maxTitleLengthInStandaloneTables: 0
       maxTitleLengthInParentedTables: 0
-
-resteasy:
-  jaxrs:
-    app:
-      registration: beans
-    defaultPath: "/restful"

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.metamodel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,16 +26,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
@@ -49,45 +43,62 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.ColumnOrderPatchingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelAnnotator.ExporterConfig;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.NonNull;
-import lombok.val;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
+/**
+ * Default implementation of {@link MetaModelService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class MetaModelServiceDefault implements MetaModelService {
+public record MetaModelServiceDefault(
+    Provider<SpecificationLoader> specificationLoaderProvider,
+    GridService gridService
+    ) implements MetaModelService {
 
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private GridService gridService;
+    private SpecificationLoader specificationLoader() {
+        return specificationLoaderProvider.get();
+    }
 
     @Override
     public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String logicalTypeName) {
-        return specificationLoader.specForLogicalTypeName(logicalTypeName)
-                .map(ObjectSpecification::getLogicalType);
+        return specificationLoader().specForLogicalTypeName(logicalTypeName)
+                .map(ObjectSpecification::logicalType);
     }
 
     @Override
     public Can<LogicalType> logicalTypeAndAliasesFor(final LogicalType logicalType) {
         Set<LogicalType> logicalTypes = new TreeSet<>();
-        specificationLoader.specForLogicalType(logicalType)
+        specificationLoader().specForLogicalType(logicalType)
                 .ifPresent(objectSpecification -> {
                     logicalTypes.add(logicalType);
-                    objectSpecification.getAliases().stream().forEach(logicalTypes::add);
+                    objectSpecification.aliases().stream().forEach(logicalTypes::add);
                 });
         return Can.ofCollection(logicalTypes);
     }
@@ -101,24 +112,22 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public Optional<LogicalType> lookupLogicalTypeByClass(final @Nullable Class<?> domainType) {
-        return specificationLoader.specForType(domainType)
-                .map(ObjectSpecification::getLogicalType);
+        return specificationLoader().specForType(domainType)
+                .map(ObjectSpecification::logicalType);
     }
 
     @Override
     public void rebuild(final Class<?> domainType) {
-
-        gridService.remove(domainType);
-        specificationLoader.reloadSpecification(domainType);
+        gridService.invalidate(domainType);
+        specificationLoader().reloadSpecification(domainType);
     }
-
 
     @Override
     public DomainModel getDomainModel() {
 
-        val specifications = specificationLoader.snapshotSpecifications();
+        var specifications = specificationLoader().snapshotSpecifications();
 
-        final List<DomainMember> rows = _Lists.newArrayList();
+        final List<DomainMember> rows = new ArrayList<>();
         for (final ObjectSpecification spec : specifications) {
             if (exclude(spec)) {
                 continue;
@@ -142,8 +151,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         return new DomainModelDefault(rows);
     }
 
-
-
     protected boolean exclude(final OneToOneAssociation property) {
         return false;
     }
@@ -161,61 +168,51 @@ public class MetaModelServiceDefault implements MetaModelService {
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
-        final String className = spec.getFullIdentifier();
-        return className.startsWith("java") || className.startsWith("org.joda");
+        final String className = spec.fullIdentifier();
+        return className.startsWith("java");
     }
-
-
 
     @Override
     public BeanSort sortOf(
             final @Nullable Class<?> domainType, final Mode mode) {
-        if(domainType == null) {
-            return null;
-        }
-        final ObjectSpecification objectSpec = specificationLoader.specForType(domainType).orElse(null);
-        if(objectSpec == null) {
-            return BeanSort.UNKNOWN;
-        }
+        if(domainType == null)
+			return null;
+        final ObjectSpecification objectSpec = specificationLoader().specForType(domainType).orElse(null);
+        if(objectSpec == null)
+			return BeanSort.UNKNOWN;
 
-        if(objectSpec.getBeanSort().isUnknown()
-                && !(mode == Mode.RELAXED)) {
-
-            throw new IllegalArgumentException(String.format(
+        if(objectSpec.beanSort().isUnknown()
+                && !(mode == Mode.RELAXED))
+			throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
-                    objectSpec.getFullIdentifier(),
+                    objectSpec.fullIdentifier(),
                     domainType.getName()
                     ));
-        }
 
-        return objectSpec.getBeanSort();
+        return objectSpec.beanSort();
 
     }
 
     @Override
     public BeanSort sortOf(final Bookmark bookmark, final Mode mode) {
-        if(bookmark == null) {
-            return null;
-        }
+        if(bookmark == null)
+			return null;
 
-        final Class<?> domainType;
-        switch (mode) {
-        case RELAXED:
-            domainType = specificationLoader.specForBookmark(bookmark)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElse(null);
-            break;
-
-        case STRICT:
-            // fall through to...
-        default:
-            domainType = specificationLoader.specForBookmark(bookmark)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElseThrow(()->_Exceptions
-                        .noSuchElement("Cannot resolve logical type name %s to a java class",
-                                bookmark.getLogicalTypeName()));
-            break;
-        }
+        final Class<?> domainType = switch (mode) {
+        case RELAXED -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::correspondingClass)
+                        .orElse(null);
+        case STRICT -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::correspondingClass)
+                        .orElseThrow(()->_Exceptions
+                                .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                        bookmark.logicalTypeName()));
+        default -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::correspondingClass)
+                        .orElseThrow(()->_Exceptions
+                                .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                        bookmark.logicalTypeName()));
+        };
         return sortOf(domainType, mode);
     }
 
@@ -225,22 +222,19 @@ public class MetaModelServiceDefault implements MetaModelService {
                 .newFeature(ApplicationFeatureSort.MEMBER, memberIdentifier);
 
         final String logicalTypeName = featureId.getLogicalTypeName();
-        if(_Strings.isNullOrEmpty(logicalTypeName)) {
-            return null;
-        }
+        if(_Strings.isNullOrEmpty(logicalTypeName))
+			return null;
 
-        final ObjectSpecification spec = specificationLoader.specForLogicalTypeName(logicalTypeName).orElse(null);
-        if(spec == null) {
-            return null;
-        }
-        final ObjectMember objectMemberIfAny = spec.getMember(featureId.getLogicalMemberName()).orElse(null);
-        if (objectMemberIfAny == null) {
-            return null;
-        }
-        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.getFacet(CommandPublishingFacet.class);
-        if(commandPublishingFacet == null) {
-            return null;
-        }
+        final ObjectSpecification spec = specificationLoader().specForLogicalTypeName(logicalTypeName).orElse(null);
+        if(spec == null)
+			return null;
+        final ObjectMember objectMemberIfAny = spec.lookupMember(featureId.getLogicalMemberName()).orElse(null);
+        if (objectMemberIfAny == null)
+			return null;
+        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.lookupFacet(CommandPublishingFacet.class)
+                .orElse(null);
+        if(commandPublishingFacet == null)
+			return null;
         return commandPublishingFacet.getProcessor();
     }
 
@@ -250,26 +244,126 @@ public class MetaModelServiceDefault implements MetaModelService {
         /*TODO[CAUSEWAY-3206] refactor: ideally config would provide the list, but unfortunately
          * MetaModelAnnotator type is not know to Config, which lives in applib.
          */
-        val metaModelAnnotators = _Lists.<MetaModelAnnotator>newArrayList();
+        var metaModelAnnotators = new ArrayList<MetaModelAnnotator>();
         if(config.isIncludeTitleAnnotations()) {
             metaModelAnnotators.add(new TitleAnnotator(new ExporterConfig(){}));
         }
         if(config.isIncludeShadowedFacets()) {
             metaModelAnnotators.add(new ShadowedFactetAttributeAnnotator(new ExporterConfig(){}));
         }
-        return new MetaModelExporter(specificationLoader, metaModelAnnotators)
+        return new MetaModelExporter(specificationLoader(), metaModelAnnotators)
                 .exportMetaModel(config);
     }
 
     @Override
     public ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter) {
-        val objectSpecs = specificationLoader
+        var objectSpecs = specificationLoader()
                 .snapshotSpecifications()
                 .stream()
-                .filter(spec->filter.test(spec.getBeanSort(), spec.getLogicalType()))
+                .filter(spec->filter.test(spec.beanSort(), spec.logicalType()))
                 .collect(Collectors.toList());
         return ObjectGraph
                 .create(new _ObjectGraphFactory(objectSpecs));
     }
+
+    @Override
+    public Stream<Identifier> streamActions(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED))
+            .map(ObjectAction::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamProperties(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamProperties(MixedIn.INCLUDED))
+            .map(OneToOneAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamCollections(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamCollections(MixedIn.INCLUDED))
+            .map(OneToManyAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamTypeHierarchy(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(ObjectSpecification::streamTypeHierarchyAndInterfaces)
+            .filter(spec->!spec.correspondingClass().equals(Object.class))
+            .map(ObjectSpecification::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> parentedAssociationsForColumnRendering(
+            final Object parentDomainObject,
+            final Identifier collectionId,
+            final AssociationsLookup columnQueryMode) {
+
+        if(parentDomainObject==null
+                || collectionId==null)
+			return Stream.empty();
+
+        var parentMo = ManagedObject.adaptSingular(specificationLoader(), parentDomainObject);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(parentMo))
+			return Stream.empty();
+
+        var elementType = parentMo.objSpec().getCollection(collectionId.memberLogicalName())
+            .map(OneToManyAssociation::getElementType)
+            .orElse(null);
+        if(elementType==null)
+			return Stream.empty();
+
+        return elementType
+            .streamAssociationsForColumnRendering(new ColumnQuery(collectionId, parentMo.objSpec().correspondingClass(), columnQueryMode))
+            .map(ObjectAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> standaloneAssociationsForColumnRendering(
+            final LogicalType logicalType,
+            final AssociationsLookup columnQueryMode) {
+
+        var elementType = specificationLoader()
+            .specForLogicalType(logicalType)
+            .orElse(null);
+
+        if(elementType == null)
+			return Stream.empty();
+
+        return elementType
+            .streamAssociationsForColumnRendering(ColumnQuery.forStandaloneTable(columnQueryMode))
+            .map(ObjectAssociation::getFeatureIdentifier);
+    }
+
+	@Override
+	public void patchColumnOrder(final Identifier identifier, final Can<String> columnsInOrder) {
+		final ObjectSpecification elementType = switch (identifier.type()) {
+			case CLASS -> specificationLoader()
+                .specForLogicalType(identifier.logicalType())
+                .orElseThrow();
+			case COLLECTION -> specificationLoader()
+                .specForLogicalType(identifier.logicalType())
+				.map(parentType->parentType.getCollectionElseFail(identifier.memberLogicalName()))
+				.map(OneToManyAssociation::getElementType)
+				.orElseThrow();
+			case ACTION, ACTION_PARAMETER, PROPERTY ->
+				throw new UnsupportedOperationException("Unimplemented case: " + identifier.type());
+		};
+
+		var columnOrderPatchingFacet = elementType.lookupFacet(ColumnOrderPatchingFacet.class)
+			.orElseGet(()->new ColumnOrderPatchingFacet(elementType));
+
+		columnOrderPatchingFacet.putColumnOrder(identifier, columnsInOrder);
+	}
 
 }

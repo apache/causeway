@@ -18,86 +18,88 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import org.apache.causeway.schema.metamodel.v2.Action;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Collection;
-import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
-import org.apache.causeway.schema.metamodel.v2.Facet;
-import org.apache.causeway.schema.metamodel.v2.FacetAttr;
-import org.apache.causeway.schema.metamodel.v2.FacetHolder.Facets;
-import org.apache.causeway.schema.metamodel.v2.Param;
-import org.apache.causeway.schema.metamodel.v2.Property;
+import java.util.stream.Stream;
 
-import lombok.val;
+import org.jspecify.annotations.Nullable;
 
-public class MMNodeFactory {
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.experimental.UtilityClass;
 
-    public static MMNode annotation(final Annotation annotation, final MMNode parentNode) {
-        val node = new AnnotationNode();
-        node.setAnnotation(annotation);
+@UtilityClass
+class MMNodeFactory {
+
+    TypeNode type(final ObjectSpecification objSpec) {
+        return new TypeNode(objSpec, false);
+    }
+
+    TypeNode superType(@Nullable ObjectSpecification superSpec, MMNode parentNodeNotUsed) {
+    	if(superSpec==null
+    			|| superSpec.correspondingClass().equals(Object.class))
+    		return null;
+		return new TypeNode(superSpec, true);
+	}
+
+	MMNode interfaceGroup(Can<ObjectSpecification> interfaces, TypeNode parentNode) {
+		if(interfaces.isEmpty())
+			return null;
+		var node = new InterfaceGroupNode(interfaces);
+        node.setParentNode(parentNode);
+        return node;
+	}
+
+    MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
+        var node = new FacetNode(facet);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode type(final DomainClassDto domainClassDto, final MMNode parentNode) {
-        val node = new TypeNode();
-        node.setDomainClassDto(domainClassDto);
-        node.setParentNode(parentNode);
-        return node;
-    }
-
-    public static MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
-        val node = new FacetNode();
-        node.setFacet(facet);
-        node.setParentNode(parentNode);
-        return node;
-    }
-
-    public static MMNode facetAttr(final FacetAttr facetAttr, final FacetNode parentNode) {
-        val node = new FacetAttrNode();
-        node.setFacetAttr(facetAttr);
-        node.setParentNode(parentNode);
-        return node;
-    }
-
-    public static MMNode action(final Action action, final TypeNode parentNode) {
-        val node = new ActionNode();
-        node.setAction(action);
+    MMNode action(final ObjectAction action, final TypeNode parentNode) {
+        var node = new ActionNode(action);
         node.setParentNode(parentNode);
         node.setMixedIn(action.isMixedIn());
         return node;
     }
 
-    public static MMNode property(final Property property, final TypeNode parentNode) {
-        val node = new PropertyNode();
-        node.setProperty(property);
+    MMNode property(final OneToOneAssociation prop, final TypeNode parentNode) {
+        var node = new PropertyNode(prop);
         node.setParentNode(parentNode);
-        node.setMixedIn(property.isMixedIn());
+        node.setMixedIn(prop.isMixedIn());
         return node;
     }
 
-    public static MMNode collection(final Collection collection, final TypeNode parentNode) {
-        val node = new CollectionNode();
-        node.setCollection(collection);
+    MMNode collection(final OneToManyAssociation coll, final TypeNode parentNode) {
+        var node = new CollectionNode(coll);
         node.setParentNode(parentNode);
-        node.setMixedIn(collection.isMixedIn());
+        node.setMixedIn(coll.isMixedIn());
         return node;
     }
 
-    public static MMNode param(final Param param, final ActionNode parentNode) {
-        val node = new ParameterNode();
-        node.setParameter(param);
+    MMNode param(final ObjectActionParameter param, final ActionNode parentNode) {
+        var node = new ParameterNode(param);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facetGroup(final Facets facets, final MMNode parentNode) {
-        val node = new FacetGroupNode();
-        node.setFacets(facets);
+    MMNode facetGroup(final Stream<Facet> stream, final MMNode parentNode) {
+        var node = new FacetGroupNode(Can.ofStream(stream));
         node.setParentNode(parentNode);
         return node;
     }
 
+    //--
+
+    String simpleName(final String name) {
+        return _Strings.splitThenStream(""+name, ".")
+            .reduce((first, second) -> second) // get the last
+            .orElse("null");
+    }
 
 }

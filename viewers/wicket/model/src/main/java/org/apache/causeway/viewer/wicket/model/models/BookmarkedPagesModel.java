@@ -18,29 +18,33 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.wicket.model.IModel;
 
-import lombok.val;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
+public record BookmarkedPagesModel(
+    List<BookmarkTreeNode> rootNodes,
+    /**
+     * Meant to be transient, hence cleared on detach.
+     */
+    List<BookmarkTreeNode> depthFirstGraph
+    ) implements IModel<List<BookmarkTreeNode>> {
 
-    private static final long serialVersionUID = 1L;
+    public BookmarkedPagesModel() {
+        this(new ArrayList<>(), new ArrayList<>());
+    }
 
-    private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
+    public void add(final BookmarkableModel bookmarkableModel) {
 
-    public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
+        var bookmark = bookmarkableModel.toBookmark().orElse(null);
+        if(bookmark == null) return; // ignore
 
-        val bookmark = bookmarkableModel.toBookmark().orElse(null);
-        if(bookmark == null) {
-            // ignore
-            return;
-        }
-
-        val matchingRootNode = matchRootNode(bookmarkableModel).orElse(null);
+        var matchingRootNode = matchRootNode(bookmarkableModel).orElse(null);
 
         // MRU/LRU algorithm
         if(matchingRootNode != null) {
@@ -56,10 +60,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     @Override
-    protected List<BookmarkTreeNode> load() {
-        List<BookmarkTreeNode> depthFirstGraph = _Lists.newArrayList();
+    public List<BookmarkTreeNode> getObject() {
+        if(rootNodes.isEmpty()) return List.of();
+        if(!depthFirstGraph.isEmpty()) return depthFirstGraph;
 
-        List<BookmarkTreeNode> sortedNodes = _Lists.newArrayList(rootNodes);
+        depthFirstGraph.clear();
+
+        var sortedNodes = new ArrayList<>(rootNodes);
         Collections.sort(sortedNodes);
 
         for (BookmarkTreeNode rootNode : sortedNodes) {
@@ -68,8 +75,14 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         return depthFirstGraph;
     }
 
+    @Override
+    public void detach() {
+        depthFirstGraph.clear();
+    }
+
     public void clear() {
         rootNodes.clear();
+        depthFirstGraph.clear();
     }
 
     public boolean isEmpty() {
@@ -78,17 +91,19 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void remove(final BookmarkTreeNode rootNode) {
         rootNodes.remove(rootNode);
+        depthFirstGraph.clear();
     }
 
-    public void remove(final UiObjectWkt entityModel) {
-        val bookmark = entityModel.getOwnerBookmark();
-        rootNodes.removeIf(node->node.getBookmark().equals(bookmark));
+    public void remove(final UiObjectWkt objectModel) {
+        var bookmark = objectModel.getOwnerBookmark();
+        rootNodes.removeIf(node->node.bookmark().equals(bookmark));
+        depthFirstGraph.clear();
     }
 
     // -- HELPER
 
     private Optional<BookmarkTreeNode> matchRootNode(final BookmarkableModel bookmarkableModel) {
-        for (val rootNode : rootNodes) {
+        for (var rootNode : rootNodes) {
             if(rootNode.matches(bookmarkableModel)) {
                 return Optional.of(rootNode);
             }
@@ -97,7 +112,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     private int getMaxSize() {
-        return getWicketViewerSettings().getBookmarkedPages().getMaxSize();
+        return MetaModelContext.instanceElseFail().getWicketViewerSettings().bookmarkedPages().maxSize();
     }
 
     private static void trim(final List<?> list, final int requiredSize) {

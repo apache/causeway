@@ -32,7 +32,7 @@ import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
@@ -44,8 +44,7 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * EntityListener class for listing with the {@link jakarta.persistence.EntityListeners} annotation, to
@@ -62,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class CausewayEntityListener {
 
     // injection points resolved via BeanManagerForEntityListeners ...
@@ -72,15 +71,15 @@ public class CausewayEntityListener {
 
     @PrePersist void onPrePersist(final Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);
-        val entity = objectManager.adapt(entityPojo);
+        var entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPrePersist(Either.left(entity));
     }
 
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
-        val entity = objectManager.adapt(entityPojo);
+        var entity = objectManager.adapt(entityPojo);
 
-        val entityState = entity.getEntityState();
+        var entityState = entity.getEntityState();
         if(!entityState.isAttached()) {
             // [CAUSEWAY-3265] seeing this with JPA
             // if we don't exit here will cause a nested loop repeatedly trying to refetch the pojo
@@ -93,25 +92,25 @@ public class CausewayEntityListener {
 
     @PreUpdate void onPreUpdate(final Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
-        val entity = objectManager.adapt(entityPojo);
+        var entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPreUpdate(entity, this::gatherPropertyChangeRecords);
     }
 
     @PreRemove void onPreRemove(final Object entityPojo) {
         log.debug("onAnyRemove: {}", entityPojo);
-        val entity = objectManager.adapt(entityPojo);
+        var entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPreRemove(entity);
     }
 
     @PostPersist void onPostPersist(final Object entityPojo) {
         log.debug("onPostPersist: {}", entityPojo);
-        val entity = objectManager.adapt(entityPojo);
+        var entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPostPersist(entity);
     }
 
     @PostUpdate void onPostUpdate(final Object entityPojo) {
         log.debug("onPostUpdate: {}", entityPojo);
-        val entity = objectManager.adapt(entityPojo);
+        var entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPostUpdate(entity);
     }
 
@@ -129,14 +128,14 @@ public class CausewayEntityListener {
         }
 
         final Object entityPojo = entity.getPojo();
-        val entityManagerIfAny = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass())
+        var entityManagerIfAny = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass())
                 .getValue();
 
         final Can<PropertyChangeRecord> propertyChangeRecords = entityManagerIfAny
             .map(em -> {
                 // https://wiki.eclipse.org/EclipseLink/FAQ/JPA#How_to_access_what_changed_in_an_object_or_transaction.3F
-                val unwrap = em.unwrap(UnitOfWork.class);
-                val changes = unwrap.getCurrentChanges();
+                var unwrap = em.unwrap(UnitOfWork.class);
+                var changes = unwrap.getCurrentChanges();
                 return changes.getObjectChangeSetForClone(entityPojo);
             })
             .map((final ObjectChangeSet objectChanges)->{

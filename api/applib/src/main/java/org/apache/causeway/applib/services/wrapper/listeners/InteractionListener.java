@@ -126,22 +126,6 @@ public interface InteractionListener {
      */
     void collectionAccessed(CollectionAccessEvent ev);
 
-//XXX[CAUSEWAY-3084] - removal of collection modification events
-//    /**
-//     * An object was added to the collection (or an attempt to add it was made).
-//     *
-//     * @param ev
-//     */
-//    void collectionAddedTo(CollectionAddToEvent ev);
-//
-//    /**
-//     * An object was removed from the collection (or an attempt to remove it was
-//     * made).
-//     *
-//     * @param ev
-//     */
-//    void collectionRemovedFrom(CollectionRemoveFromEvent ev);
-
     /**
      * A method of a collection (such as <tt>isEmpty()</tt> or <tt>size()</tt>) has been invoked.
      *

@@ -18,11 +18,15 @@
  */
 package org.apache.causeway.applib.annotation;
 
+import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.commons.net.DataUri;
 
 /**
  * Indicates that a method is a supporting-method that provides UI hints (title, iconName, layout, cssClass)
@@ -46,5 +50,47 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Domain.Include // meta annotation, in support of meta-model validation
 public @interface ObjectSupport {
+
+    /**
+     * Rendering context for object icons.
+     * An object's icon is rendered within the object detail page header along its title {@link IconSize#LARGE},
+     * within a table row {@link IconSize#MEDIUM}, as property {@link IconSize#MEDIUM}, as tree node {@link IconSize#MEDIUM}
+     * or as choice {@link IconSize#SMALL}.
+     * @since 4.0
+     */
+    public enum IconSize {
+        /**
+         * as used for the object detail page header (along the object's title)
+         */
+        LARGE,
+        /**
+         * as used for table data, properties and tree nodes
+         */
+        MEDIUM,
+        /**
+         * as used for choice drop downs (single- and multi-choice)
+         */
+        SMALL
+    }
+
+    public sealed interface IconResource extends Serializable
+    permits ClassPathIconResource, FontAwesomeIconResource, EmbeddedIconResource {
+
+    }
+
+    public record ClassPathIconResource(
+        String suffix) implements IconResource {
+        public static ClassPathIconResource emptySuffix() {
+            return new ClassPathIconResource("");
+        }
+    }
+
+    public record FontAwesomeIconResource(
+        FontAwesomeLayers faLayers) implements IconResource {
+    }
+
+    public record EmbeddedIconResource(
+        DataUri dataUri) implements IconResource {
+    }
 
 }

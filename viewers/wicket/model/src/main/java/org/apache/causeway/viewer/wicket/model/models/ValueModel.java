@@ -18,83 +18,65 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.io.Serializable;
+
+import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.ref.TransientObjectRef;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ObjectMemberMemento;
-
-import lombok.NonNull;
 
 /**
  * Represents a standalone value (used for standalone value page).
  */
-public class ValueModel
-extends ModelAbstract<ManagedObject> {
+public record ValueModel(
+        /**
+         * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
+         */
+        ObjectMember objectMember,
+        ObjectMemento objectMemento,
+        TransientObjectRef<ManagedObject> managedObjectRef)
+implements IModel<ManagedObject>, HasMetaModelContext {
 
-    private static final long serialVersionUID = 1L;
-
-    // -- FACTORIES
-
-    public static ValueModel of(
-            final @NonNull ObjectMember objectMember,
-            final @NonNull ManagedObject valueAdapter) {
-        return new ValueModel(objectMember, valueAdapter);
+    public ValueModel(@NonNull final ActionModel actionModel, final ManagedObject managedObject) {
+        this(actionModel.getAction(), managedObject);
     }
 
-    // --
-
-    private final ObjectMemento adapterMemento;
-
-    private ValueModel(
+    public ValueModel(
             final @NonNull ObjectMember objectMember,
-            final @NonNull ManagedObject valueAdapter) {
-        super();
-        this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
-        this.adapterMemento = valueAdapter.getMemento().orElseThrow();
+            final @NonNull ManagedObject managedObject) {
+        this(objectMember,
+            managedObject.getMemento(objectMember).orElseThrow(),
+            new TransientObjectRef<>(managedObject));
+    }
+
+    // canonical constructor
+    public ValueModel(
+            final ObjectMember objectMember,
+            final ObjectMemento objectMemento,
+            final TransientObjectRef<ManagedObject> managedObjectRef) {
+        this.objectMember = objectMember instanceof CompositeValueUpdater compositeValueUpdater
+            ? compositeValueUpdater.mixedInAction()
+            : objectMember;
+        this.objectMemento = objectMemento;
+        this.managedObjectRef = managedObjectRef;
+
+        _Assert.assertTrue(this.objectMember instanceof Serializable);
     }
 
     @Override
-    protected ManagedObject load() {
-        return getObjectManager().demementify(adapterMemento);
+    public ManagedObject getObject() {
+        return managedObjectRef.computeIfAbsent(()->getObjectManager().demementify(objectMemento));
     }
 
-    // -- META MODEL
-
-    private final ObjectMemberMemento objectMemberMemento;
-
-    /**
-     * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
-     */
-    public ObjectMember getObjectMember() {
-        return objectMemberMemento.getObjectMember(getMetaModelContext()::getSpecificationLoader);
-    }
-
-//    @SuppressWarnings("unchecked")
-//    public Optional<Renderer<?>> lookupRenderer() {
-//        return getObjectMember().getElementType().lookupFacet(ValueFacet.class)
-//                .flatMap(valueFacet->valueFacet.selectRendererForFeature(getObjectMember()));
-//    }
-
-    // -- HINTING SUPPORT
-
-    private ActionModel actionModelHint;
-    /**
-     * The {@link ActionModelImpl model} of the {@link ObjectAction action}
-     * that generated this {@link ValueModel}.
-     *
-     * @see #setActionHint(ActionModel)
-     */
-    public ActionModel getActionModelHint() {
-        return actionModelHint;
-    }
-    /**
-     * Called by action.
-     *
-     * @see #getActionModelHint()
-     */
-    public void setActionHint(final ActionModel actionModelHint) {
-        this.actionModelHint = actionModelHint;
+    public ObjectSpecification elementType() {
+        return getObject().objSpec();
     }
 
 }

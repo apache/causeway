@@ -11,16 +11,16 @@ Provides access to request-specific context (eg HTTP headers), session-specific 
 interface IResourceContext {
   String restfulUrlFor(String url)     // <.>
   String applicationUrlFor(String url)     // <.>
-  List<MediaType> getAcceptableMediaTypes()     // <.>
-  InteractionInitiatedBy getInteractionInitiatedBy()     // <.>
-  Where getWhere()
-  ObjectAdapterLinkTo getObjectAdapterLinkTo()
-  List<List<String>> getFollowLinks()
+  List<MediaType> acceptableMediaTypes()     // <.>
+  InteractionInitiatedBy interactionInitiatedBy()     // <.>
+  Where where()
+  ObjectAdapterLinkTo objectAdapterLinkTo()
+  List<List<String>> followLinks()
   boolean isValidateOnly()
   Restfulobjects config()
   boolean canEagerlyRender(ManagedObject objectAdapter)     // <.>
-  RepresentationService.Intent getIntent()     // <.>
-  Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref)
+  RepresentationService.Intent intent()     // <.>
+  Optional<ManagedObject> objectAdapterForOidFromHref(String oidFromHref)
 }
 ----
 
@@ -34,12 +34,12 @@ Prepends with the servlet's base URI
 --
 Prepends with the application's base URI.
 --
-<.> xref:#getAcceptableMediaTypes_[getAcceptableMediaTypes()]
+<.> xref:#acceptableMediaTypes_[acceptableMediaTypes()]
 +
 --
-Returns the _HttpHeaders#getAcceptableMediaTypes() acceptable media types_ as obtained from _HttpHeaders_ .
+Returns the _HttpHeaders#getAccept() acceptable media types_ as obtained from _HttpHeaders_ .
 --
-<.> xref:#getInteractionInitiatedBy_[getInteractionInitiatedBy()]
+<.> xref:#interactionInitiatedBy_[interactionInitiatedBy()]
 +
 --
 Whether this interaction was initiated directly by a _InteractionInitiatedBy#USER user_ (or indirectly by the _InteractionInitiatedBy#FRAMEWORK framework_ .
@@ -49,7 +49,7 @@ Whether this interaction was initiated directly by a _InteractionInitiatedBy#USE
 --
 To avoid infinite loops when eagerly rendering graphs of objects as _DomainObjectReprRenderer#asEventSerialization() events_ .
 --
-<.> xref:#getIntent_[getIntent()]
+<.> xref:#intent_[intent()]
 +
 --
 Applies only when rendering a domain object.
@@ -67,13 +67,13 @@ Prepends with the servlet's base URI
 
 Prepends with the application's base URI.
 
-[#getAcceptableMediaTypes_]
-=== getAcceptableMediaTypes()
+[#acceptableMediaTypes_]
+=== acceptableMediaTypes()
 
-Returns the _HttpHeaders#getAcceptableMediaTypes() acceptable media types_ as obtained from _HttpHeaders_ .
+Returns the _HttpHeaders#getAccept() acceptable media types_ as obtained from _HttpHeaders_ .
 
-[#getInteractionInitiatedBy_]
-=== getInteractionInitiatedBy()
+[#interactionInitiatedBy_]
+=== interactionInitiatedBy()
 
 Whether this interaction was initiated directly by a _InteractionInitiatedBy#USER user_ (or indirectly by the _InteractionInitiatedBy#FRAMEWORK framework_ .
 
@@ -82,7 +82,7 @@ Whether this interaction was initiated directly by a _InteractionInitiatedBy#USE
 
 To avoid infinite loops when eagerly rendering graphs of objects as _DomainObjectReprRenderer#asEventSerialization() events_ .
 
-[#getIntent_]
-=== getIntent()
+[#intent_]
+=== intent()
 
 Applies only when rendering a domain object.

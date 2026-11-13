@@ -18,22 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.homepage.annotation;
 
+import static org.apache.causeway.commons.internal.functions._Predicates.not;
+
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.HomePage;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -42,11 +40,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.jspecify.annotations.NonNull;
 
-import static org.apache.causeway.commons.internal.functions._Predicates.not;
-
-import lombok.NonNull;
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class HomePageFacetAnnotationFactory
 extends FacetFactoryAbstract
@@ -65,18 +61,17 @@ implements MetaModelRefiner {
 //        _Assert.assertEquals("expected same", homepageAnnot,
 //                Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class));
 
-        if (homepageAnnot == null) {
-            return;
-        }
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
+        if (homepageAnnot == null)
+			return;
+        var facetHolder = processMethodContext.facetHolder();
+        new HomePageFacetAnnotation(facetHolder);
     }
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidator(new MetaModelValidatorAbstract(getMetaModelContext(), MetaModelValidator.SKIP_MANAGED_BEANS) {
 
-            private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
+            private final Map<String, ObjectAction> actionsHavingHomePageFacet = new HashMap<>();
 
             @Override
             public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
@@ -106,9 +101,9 @@ implements MetaModelRefiner {
                             .map(Identifier::getFullIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
 
-                    for (val objectAction : actionsHavingHomePageFacet.values()) {
-                        val actionId = objectAction.getFeatureIdentifier().getFullIdentityString();
-                        val colission = homepageActionIdSet.stream()
+                    for (var objectAction : actionsHavingHomePageFacet.values()) {
+                        var actionId = objectAction.getFeatureIdentifier().getFullIdentityString();
+                        var colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 

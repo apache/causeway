@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.calc;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -135,20 +136,9 @@ public class CalculatorNameVariant {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalDate jodaLocalPlusDays(final org.joda.time.LocalDate date, final int numDays) {
-        return date.plusDays(numDays);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.DateTime jodaPlusDaysAndHoursAndMinutes(final org.joda.time.DateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
-        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalTime jodaLocalPlusHoursAndMinutes(final org.joda.time.LocalTime time, final int numHours, final int numMinutes) {
+    public LocalTime localTimePlusHoursAndMinutes(final LocalTime time, final int numHours, final int numMinutes) {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
-
 
     @Action(semantics = SemanticsOf.SAFE)
     public boolean and(final boolean x, final boolean y) {
@@ -183,7 +173,7 @@ public class CalculatorNameVariant {
     @SneakyThrows
     @Action(semantics = SemanticsOf.SAFE)
     public URL someUrl() {
-        return new URL("https://causeway.apache.org");
+        return new URI("https://causeway.apache.org").toURL();
     }
 
     @SneakyThrows

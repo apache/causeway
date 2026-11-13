@@ -14,6 +14,7 @@ Layout hints for collections.
   String describedAs() default "";     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
+  String navigableSubtree() default "";     // <.>
   int paged() default -1;     // <.>
   String sequence() default "";     // <.>
   @SuppressWarnings("rawtypes")
@@ -46,6 +47,11 @@ Indicates where in the UI the collection should _not_ not be visible.
 +
 --
 Name of this collection (overriding the name derived from its name in code).
+--
+<.> xref:#navigableSubtree[navigableSubtree]
++
+--
+When set, identifies logical children, that are navigable via the UI.
 --
 <.> xref:#paged[paged]
 +
@@ -94,14 +100,19 @@ Description of this collection, eg to be rendered in a tooltip.
 
 Indicates where in the UI the collection should _not_ not be visible.
 
-Only _Where#NOWHERE NOWHERE_ or _Where#EVERYWHERE EVERYWHERE_ / _Where#ANYWHERE ANYWHERE_ apply for collections.
-
 [#named]
 === named
 
 Name of this collection (overriding the name derived from its name in code).
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+[#navigableSubtree]
+=== navigableSubtree
+
+When set, identifies logical children, that are navigable via the UI.
+
+The order of appearance of this tree branch in the UI relative to other branches of the same tree node, is given in _Dewey-decimal_ notation.
 
 [#paged]
 === paged
@@ -126,7 +137,7 @@ An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain ob
 
 Indicates that the elements in a ( _java.util.SortedSet_ ) collection should be sorted according to a different order than the natural sort order, as defined by the specified _java.util.Comparator_ .
 
-Whenever there is a collection of type _java.util.SortedSet_ , the domain entity referenced is expected to implement _Comparable_ , ie to have a natural ordering. In effect tis means that all domain entities should provide a natural ordering.
+Whenever there is a collection of type _java.util.SortedSet_ , the domain entity referenced is expected to implement _Comparable_ , ie to have a natural ordering. In effect this means that all domain entities should provide a natural ordering.
 
 However, in some circumstances the ordering of collection may be different to the entity's natural ordering. For example, the entity may represent an interval of time sorted by its _startDate_ ascending, but the collection may wish to sort by _startDate_ .
 

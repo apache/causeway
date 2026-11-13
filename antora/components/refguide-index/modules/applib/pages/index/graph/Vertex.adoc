@@ -9,9 +9,9 @@ Fundamental building block for graph structures.
 .Vertex.java
 ----
 interface Vertex<T> {
-  T getValue()
-  int getIncomingCount()
-  int getOutgoingCount()
+  T value()
+  int incomingCount()
+  int outgoingCount()
   Stream<Edge<T>> streamIncoming()
   Stream<Edge<T>> streamOutgoing()
 }

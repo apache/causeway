@@ -9,8 +9,8 @@ Server-sent events.
 .SseChannel.java
 ----
 interface SseChannel {
-  UUID getId()
-  Class<?> getSourceType()
+  UUID uuid()
+  Class<?> sourceType()
   void listenWhile(Predicate<SseSource> listener)
   void fire(SseSource source)
   void close()

@@ -29,7 +29,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -45,13 +44,11 @@ import org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacet
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Processes the {@link Value} annotation.
@@ -74,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
-@Log4j2
+@Slf4j
 public class ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
 extends FacetFactoryAbstract {
 
@@ -86,12 +83,12 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val valueClass = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-        val valueIfAny = processClassContext.synthesizeOnType(Value.class);
+        var valueClass = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
+        var valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
-        val logicalType = LogicalType.infer(valueClass);
-        val identifier = Identifier.classIdentifier(logicalType);
+        var logicalType = LogicalType.fqcn(valueClass);
+        var identifier = Identifier.classIdentifier(logicalType);
 
         _Casts.castTo(ObjectSpecification.class, facetHolder)
         .ifPresent(valueSpec->
@@ -101,30 +98,29 @@ extends FacetFactoryAbstract {
     // -- HELPER
 
     private <T> Optional<ValueFacet<T>> addAllFacetsForValueSemantics(
-            final Identifier identifier,
+            final Identifier featureId,
             final Class<T> valueClass,
             final ObjectSpecification valueSpec,
             final Optional<Value> valueIfAny) {
 
-        val semanticsProviders = getValueSemanticsResolver().selectValueSemantics(identifier, valueClass);
+        var semanticsProviders = getValueSemanticsResolver().streamValueSemantics(valueClass)
+                .collect(Can.toCan());
         if(semanticsProviders.isEmpty()) {
             if(valueIfAny.isPresent()) {
                 log.warn("could not find a ValueSemanticsProvider for value type {}; "
                         + "the type was found to be annotated with @Value", valueClass);
                 // fall through, so gets a ValueFacet
-            } else {
+            } else
                 // don't install a ValueFacet
                 return Optional.empty();
-            }
         } else {
             log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
         }
 
-        val valueFacet = installValueFacet(valueClass, semanticsProviders, valueSpec);
+        var valueFacet = installValueFacet(valueClass, semanticsProviders, valueSpec);
         return Optional.of(valueFacet);
     }
 
-    // JUnit support
     public static <T> ValueFacet<T> installValueFacet(
             final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> valueSemanticsProviders,
@@ -133,19 +129,17 @@ extends FacetFactoryAbstract {
         final ValueFacet<T> valueFacet = ValueFacetUsingSemanticsProvider
                 .create(valueClass, valueSemanticsProviders, valueSpec);
 
-        valueSpec.addFacet(valueFacet);
-        valueSpec.addFacet(new ImmutableFacetViaValueSemantics(valueSpec));
-        valueSpec.addFacet(TitleFacetFromValueFacet.create(valueFacet, valueSpec));
+        new ImmutableFacetViaValueSemantics(valueSpec);
+        TitleFacetFromValueFacet.create(valueFacet, valueSpec);
+        TypicalLengthFacetFromValueFacet.create(valueFacet, valueSpec);
+        MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec);
+        DefaultedFacetFromValueFacet.create(valueFacet, valueSpec);
 
-        FacetUtil.addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, valueSpec));
-        FacetUtil.addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec));
-        FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
-
-        ((ObjectSpecificationAbstract)valueSpec).invalidateCachedFacets(); // optimization stuff
-
-        _Assert.assertTrue(valueSpec.valueFacet().isPresent());
+        _Assert.assertTrue(valueSpec.valueFacet().isPresent(), ()->"value facet not created for %s (provider-count=%d)"
+                    .formatted(valueSpec.correspondingClass().getName(),
+                            valueSemanticsProviders.size()));
         _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
-        _Assert.assertNotNull(Facets.valueSerializerElseFail(valueSpec, valueSpec.getCorrespondingClass()));
+        _Assert.assertNotNull(Facets.valueSerializerElseFail(valueSpec, valueSpec.correspondingClass()));
 
         return valueFacet;
     }

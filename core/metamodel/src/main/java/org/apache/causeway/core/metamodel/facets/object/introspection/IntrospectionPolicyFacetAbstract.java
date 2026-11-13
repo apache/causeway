@@ -21,12 +21,15 @@ package org.apache.causeway.core.metamodel.facets.object.introspection;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 public abstract class IntrospectionPolicyFacetAbstract
 extends FacetAbstract
@@ -36,21 +39,25 @@ implements IntrospectionPolicyFacet {
         return IntrospectionPolicyFacet.class;
     }
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull Introspection introspection;
 
     protected IntrospectionPolicyFacetAbstract(
             final Introspection introspection,
             final FacetHolder holder) {
-        this(introspection, holder, Precedence.DEFAULT);
+        super(IntrospectionPolicyFacetAbstract.type(), holder);
+        this.introspection = introspection;
     }
 
-    protected IntrospectionPolicyFacetAbstract(
-            final Introspection introspection,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(IntrospectionPolicyFacetAbstract.type(), holder, precedence);
-        this.introspection = introspection;
+    @Override
+    public final IntrospectionPolicy introspectionPolicy() {
+        return switch(introspection) {
+            case ENCAPSULATION_ENABLED -> IntrospectionPolicy.ENCAPSULATION_ENABLED;
+            case ANNOTATION_OPTIONAL -> IntrospectionPolicy.ANNOTATION_OPTIONAL;
+            case ANNOTATION_REQUIRED -> IntrospectionPolicy.ANNOTATION_REQUIRED;
+            case AS_CONFIGURED -> getConfiguration().core().metaModel().introspector().policy();
+            case NOT_SPECIFIED -> throw _Exceptions.unexpectedCodeReach(); // there must be no such a facet that returns such a case
+        };
     }
 
     @Override

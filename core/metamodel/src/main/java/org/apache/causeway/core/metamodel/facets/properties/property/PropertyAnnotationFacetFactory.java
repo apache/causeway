@@ -20,18 +20,15 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
-
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
@@ -45,35 +42,46 @@ import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.M
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 public class PropertyAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
     public PropertyAnnotationFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS);
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        var propertyIfAny = propertyIfAny(processMethodContext);
 
-        val propertyIfAny = propertyIfAny(processMethodContext);
+        if(processMethodContext.featureType().isCollection()) {
+            if(propertyIfAny.isPresent()) {
+                // Property annotation is not allowed on collection feature
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Property.class);
+            }
+            return; // skip further processing, since this is a collection feature
+        }
 
-        if(processMethodContext.isMixinMain()) {
-            propertyIfAny.ifPresent(property->{
-                inferMixinSort(property, processMethodContext.getFacetHolder());
-            });
+        if(propertyIfAny.isPresent()) {
+            if(processMethodContext.isMixinMain()) {
+                inferMixinSort(processMethodContext.facetHolder());
+            } else if(processMethodContext.featureType().isAction()) {
+                // Property annotation is not allowed on action feature (unless mixin main)
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Property.class);
+            }
         }
 
         processDomainEvent(processMethodContext, propertyIfAny);
@@ -95,20 +103,19 @@ extends FacetFactoryAbstract {
             .synthesizeOnMethodOrMixinType(
                     Property.class,
                     () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Property.class));
     }
 
-    void inferMixinSort(final Property property, final FacetedMethod facetedMethod) {
+    void inferMixinSort(final FacetedMethod facetedMethod) {
         /* if @Property detected on method or type level infer:
          * @Action(semantics=SAFE) */
-        addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(ContributingFacetAbstract.createAsProperty(facetedMethod));
+        new ActionSemanticsFacet("InferSafeForMixedInProperty", SemanticsOf.SAFE, facetedMethod);
+        ContributingFacetAbstract.createAsProperty(facetedMethod);
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val cls = processMethodContext.getCls();
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         /*
          * immutable properties as well as mixed-in ones have no setter, hence phases:
@@ -119,23 +126,22 @@ extends FacetFactoryAbstract {
          * EXECUTED n/a for events
          */
 
-        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
+        var getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         final boolean isProperty = getterFacetIfAny.isPresent()
                 || (processMethodContext.isMixinMain()
                         && propertyIfAny.isPresent());
 
-        if(!isProperty) return; // bale out if method is not representing a property (no matter mixed-in or not)
+        if(!isProperty)
+			return; // bale out if method is not representing a property (no matter mixed-in or not)
 
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
 
         // search for @Property(domainEvent=...), else use default event type
-        val propertyDomainEventFacet = PropertyDomainEventFacet
-                .create(propertyIfAny, cls, getterFacetIfAny, holder);
-
-        addFacet(propertyDomainEventFacet);
+        var propertyDomainEventFacet = PropertyDomainEventFacet
+                .create(propertyIfAny, processMethodContext, getterFacetIfAny);
 
         getterFacetIfAny.ifPresent(getterFacet->{
             /* if the property is mutable (never true for mixed-in props),
@@ -144,184 +150,155 @@ extends FacetFactoryAbstract {
 
             holder.lookupFacet(PropertySetterFacet.class)
             .ifPresent(setterFacet->
-                    /* lazily binds the event-type to the propertyDomainEventFacet,
+                    /* binds the event-type to the propertyDomainEventFacet,
                      * such that any changes to the latter during post processing
                      * are reflected here as well
                      */
-                    addFacet(new PropertyModifyFacetForSetting(
-                            propertyDomainEventFacet, getterFacet, setterFacet, holder)));
-
-            holder.lookupFacet(PropertyClearFacet.class)
-            .ifPresent(clearFacet->
-                    /* lazily binds the event-type to the propertyDomainEventFacet,
-                     * such that any changes to the latter during post processing
-                     * are reflected here as well
-                     */
-                    addFacet(new PropertyModifyFacetForClearing(
-                            propertyDomainEventFacet, getterFacet, clearFacet, holder)));
+                    new PropertyModifyFacet(
+                    		PropertySetterFacet.class,
+                            propertyDomainEventFacet, getterFacet, setterFacet, holder));
         });
 
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         // search for @Property(editing=...)
-        addFacetIfPresent(
-                DisabledFacetForPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
+        DisabledFacetForPropertyAnnotation
+            .create(propertyIfAny, facetHolder);
     }
 
     void processCommandPublishing(
             final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
         //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
-        if (facetHolder.containsNonFallbackFacet(CommandPublishingFacet.class)) {
-            return;
-        }
+        if (facetHolder.containsNonFallbackFacet(CommandPublishingFacet.class))
+			return;
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasInteractionId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.cls()))
+			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
-        }
 
         // check for @Property(commandPublishing=...)
-        addFacet(
-                CommandPublishingFacetForPropertyAnnotation
-                .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector()));
+
+        CommandPublishingFacetForPropertyAnnotation
+            .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector());
     }
 
     void processProjecting(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
-        addFacetIfPresent(
-                ProjectingFacetFromPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
-
+        ProjectingFacetFromPropertyAnnotation
+            .create(propertyIfAny, facetHolder);
     }
 
     void processExecutionPublishing(
             final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
         //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
-        if (holder.containsNonFallbackFacet(ExecutionPublishingFacet.class)) {
-            return;
-        }
+        if (holder.containsNonFallbackFacet(ExecutionPublishingFacet.class))
+			return;
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasInteractionId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.cls()))
+			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
-        }
 
         // check for @Property(executionPublishing=...)
-        addFacet(
-                ExecutionPublishingFacetForPropertyAnnotation
-                .create(propertyIfAny, getConfiguration(), holder));
+        ExecutionPublishingFacetForPropertyAnnotation
+            .create(propertyIfAny, getConfiguration(), holder);
     }
-
-
 
     void processMaxLength(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(maxLength=...)
-        addFacetIfPresent(
-                MaxLengthFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        MaxLengthFacetForPropertyAnnotation
+                .create(propertyIfAny, holder);
     }
 
     void processMustSatisfy(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(mustSatisfy=...)
-        addFacetIfPresent(
-                MustSatisfySpecificationFacetForPropertyAnnotation
-                .create(propertyIfAny, holder, getFactoryService()));
+        MustSatisfySpecificationFacetForPropertyAnnotation
+            .create(propertyIfAny, holder, getFactoryService());
     }
 
     void processEntityPropertyChangePublishing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(entityPropertyChangePublishing=...)
-        addFacetIfPresent(
-                EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation
+            .create(propertyIfAny, holder);
     }
 
     void processSnapshot(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(notPersisted=...)
-        addFacetIfPresent(
-                SnapshotExcludeFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        SnapshotExcludeFacetForPropertyAnnotation
+            .create(propertyIfAny, holder);
     }
 
     void processOptional(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val method = processMethodContext.getMethod();
-        val holder = processMethodContext.getFacetHolder();
+        var method = processMethodContext.methodFacade();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Nullable
-        val hasNullable = method.isAnnotatedAsNullable();
+        var hasNullable = method.isAnnotatedAsNullable();
 
-        addFacetIfPresent(
-                MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(hasNullable, method, holder));
+        MandatoryFacetInvertedByNullableAnnotationOnProperty
+            .create(hasNullable, method, holder);
 
         // search for @Property(optional=...)
-        addFacetIfPresent(
-                MandatoryFacetForPropertyAnnotation
-                .create(propertyIfAny, method, holder));
+        MandatoryFacetForPropertyAnnotation
+            .create(propertyIfAny, method, holder);
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-        val returnType = processMethodContext.getMethod().getReturnType();
+        var holder = processMethodContext.facetHolder();
+        var returnType = processMethodContext.methodFacade().getReturnType();
 
         // check for @Pattern first
-        val patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
-        if (addFacetIfPresent(
-                RegExFacetForPatternAnnotationOnProperty
-                .create(patternIfAny, returnType, holder))
-                .isPresent()) {
-            return;
-        }
+        var patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
+        if (RegExFacetForPatternAnnotationOnProperty
+            	.create(patternIfAny, returnType, holder)
+                .isPresent())
+			return;
 
         // else search for @Property(pattern=...)
-        addFacetIfPresent(
-                RegExFacetForPropertyAnnotation
-                .create(propertyIfAny, returnType, holder));
+        RegExFacetForPropertyAnnotation
+                .create(propertyIfAny, returnType, holder);
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Property(maxLength=...)
-        addFacetIfPresent(
-                FileAcceptFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        FileAcceptFacetForPropertyAnnotation
+            .create(propertyIfAny, holder);
     }
-
 
 }

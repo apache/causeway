@@ -32,16 +32,15 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+import lombok.SneakyThrows;
 
 public abstract class ExecutionPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -72,7 +71,7 @@ extends PublishingTestAbstract {
             break;
         case POST_COMMIT:
 
-            val bookClass = bookClass();
+            var bookClass = bookClass();
             final Interaction interaction = null;
             final Object target = null;
 
@@ -90,7 +89,7 @@ extends PublishingTestAbstract {
             case ACTION_INVOCATION: {
                 Identifier actionId = Identifier.actionIdentifier(
                         LogicalType.fqcn(bookClass), "doubleThePrice");
-                val args = Collections.<Object>emptyList();
+                var args = Collections.<Object>emptyList();
 
                 assertHasExecutionEntries(Can.of(
                         new ActionInvocation(interaction, actionId, target, args)
@@ -111,19 +110,18 @@ extends PublishingTestAbstract {
 
     // -- HELPER
 
+    @SneakyThrows
     private Class<?> bookClass() {
         switch(getPersistenceStandard()) {
-        case JDO:
-            return JdoBook.class;
         case JPA:
-            return JpaBook.class;
+            return _Context.loadClass("org.apache.causeway.testdomain.jpa.entities.JpaBook");
         default:
             throw _Exceptions.unmatchedCase(getPersistenceStandard());
         }
     }
 
     private void assertHasExecutionEntries(final Can<Execution<?, ?>> expectedExecutions) {
-        val actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
+        var actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
         CollectionAssertions.assertComponentWiseEquals(
                 expectedExecutions, actualExecutions, this::executionDifference);
     }
@@ -153,7 +151,6 @@ extends PublishingTestAbstract {
     private String actionInvocationDifference(final ActionInvocation a, final ActionInvocation b) {
         return null; // no difference
     }
-
 
     private String porpertyEditDifference(final PropertyEdit a, final PropertyEdit b) {
         if(!Objects.equals(a.getNewValue(), b.getNewValue())) {

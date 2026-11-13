@@ -39,7 +39,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * An implementation of {@link org.apache.causeway.applib.services.userreg.UserRegistrationService}
@@ -79,7 +78,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
             applicationUser.setEmailAddress(emailAddress);
         }
 
-        causewayConfiguration.getExtensions().getSecman().getUserRegistration().getInitialRoleNames().stream()
+        causewayConfiguration.extensions().secman().userRegistration().initialRoleNames().stream()
                 .map(applicationRoleRepository::findByName)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -95,7 +94,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
     public boolean updatePasswordByEmail(final String emailAddress, final String password) {
         return applicationUserRepository.findByEmailAddress(emailAddress)
                 .map(user -> {
-                    val passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
+                    var passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
                     return passwordWasUpdated;
                 })
                 .orElse(false);

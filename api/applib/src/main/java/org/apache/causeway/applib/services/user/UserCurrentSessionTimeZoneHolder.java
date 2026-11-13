@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.user;
 import java.time.ZoneId;
 import java.util.Optional;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Stores the user's current {@link ZoneId} with session scope.

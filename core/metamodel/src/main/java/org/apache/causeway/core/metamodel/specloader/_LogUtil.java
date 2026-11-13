@@ -20,13 +20,14 @@ package org.apache.causeway.core.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -34,23 +35,22 @@ final class _LogUtil {
 
     void logBefore(
             final Logger log,
-            final SpecificationCache<ObjectSpecification> cache,
+            final Supplier<Can<ObjectSpecification>> snapshot,
             final List<? extends ObjectSpecification> scanned) {
 
         if(!log.isDebugEnabled()) {
             return;
         }
 
-        val cached = cache.snapshotSpecs();
-
+        var cached = snapshot.get();
         log.debug(String.format(
                 "scanned.size = %d ; cached.size = %d",
                 scanned.size(), cached.size()));
 
-        val registryNotCached = scanned.stream()
+        var registryNotCached = scanned.stream()
                 .filter(spec -> !cached.contains(spec))
                 .collect(Collectors.toList());
-        val cachedNotRegistry = cached.stream()
+        var cachedNotRegistry = cached.stream()
                 .filter(spec -> !scanned.contains(spec))
                 .collect(Collectors.toList());
 
@@ -61,15 +61,15 @@ final class _LogUtil {
 
     void logAfter(
             final Logger log,
-            final SpecificationCache<ObjectSpecification> cache,
+            final Supplier<Can<ObjectSpecification>> snapshot,
             final Collection<? extends ObjectSpecification> scanned) {
 
         if(!log.isDebugEnabled()) {
             return;
         }
 
-        val cached = cache.snapshotSpecs();
-        val cachedAfterNotBefore = cached.stream()
+        var cached = snapshot.get();
+        var cachedAfterNotBefore = cached.stream()
                 .filter(spec -> !scanned.contains(spec))
                 .collect(Collectors.toList());
 

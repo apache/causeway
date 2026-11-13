@@ -41,11 +41,6 @@
 *** xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml]
 *** xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd]
 
-*** JDO
-**** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
-**** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong] (property)
-**** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp] (property)
-
 *** Command Log
 **** xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands]
 **** xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteraction_commandLogEntry]

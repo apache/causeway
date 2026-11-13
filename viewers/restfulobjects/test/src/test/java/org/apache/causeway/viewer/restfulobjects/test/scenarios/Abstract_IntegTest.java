@@ -19,13 +19,18 @@
 package org.apache.causeway.viewer.restfulobjects.test.scenarios;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -37,11 +42,14 @@ import org.apache.causeway.viewer.restfulobjects.test.domain.dom.DepartmentRepos
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.DeptHeadRepository;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.StaffMemberRepository;
 
-
 @Import({
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,
 })
+@TestPropertySource(properties = {
+        "logging.level.org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault=DEBUG",
+        "logging.level.org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside=DEBUG"})
+@DirtiesContext
 public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsIntegTestAbstract {
 
     @Inject protected DepartmentRepository departmentRepository;
@@ -49,9 +57,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
 
-    protected RestfulClient restfulClient;
-
-    protected Abstract_IntegTest(Class<?> resourceBaseClazz) {
+    protected Abstract_IntegTest(final Class<?> resourceBaseClazz) {
         super(resourceBaseClazz);
     }
 
@@ -87,22 +93,23 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
             staffMemberRepository.create("Margaret Randall", physics);
 
         });
-
-        restfulClient = restfulClient();
     }
 
     @Override
     @AfterEach
     protected void afterEach(){
-        restfulClient.close();
-
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             staffMemberRepository.removeAll();
             deptHeadRepository.findAll().forEach(x -> x.setDepartment(null));
             departmentRepository.findAll().forEach(x -> x.setDeptHead(null));
             deptHeadRepository.removeAll();
             departmentRepository.removeAll();
         });
+    }
+
+    protected void assertResponseOK(@Nullable final Response response) {
+        assertNotNull(response);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
 }

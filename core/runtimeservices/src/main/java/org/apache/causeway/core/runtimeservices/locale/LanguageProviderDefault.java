@@ -31,13 +31,14 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Default implementation of {@link LanguageProvider}.
  *
  * @since 2.0 {@index}
  */
@@ -57,7 +58,7 @@ implements LanguageProvider {
     public Optional<Locale> getPreferredLanguage() {
         return interactionProvider.currentInteractionContext()
         .map(InteractionContext::getLocale)
-        .map(UserLocale::getLanguageLocale);
+        .map(UserLocale::languageLocale);
     }
 
 }

@@ -33,21 +33,20 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
-
-import lombok.NonNull;
-import lombok.val;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyDomainEventFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
@@ -66,15 +65,16 @@ implements
 
     /**
      * Inspect {@link Property#domainEvent()} if present, else use the default event type.
-     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
+     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociation}.
      */
     public static PropertyDomainEventFacet create(
             final @NonNull Optional<Property> propertyIfAny,
-            final @NonNull Class<?> classBeingIntrospected,
-            final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet,
-            final @NonNull FacetHolder facetHolder) {
+            final @NonNull ProcessMethodContext processMethodContext,
+            final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet) {
 
-        val propertyDomainEventFacet = propertyIfAny
+    	final FacetHolder facetHolder = processMethodContext.facetHolder();
+
+        var propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
                 .map(domainEvent -> new PropertyDomainEventFacet(domainEvent,
@@ -82,8 +82,9 @@ implements
                 .orElseGet(()->{
 
                     /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
-                    val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
-                    val typeFromDomainObject = typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                    var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.cls());
+                    var typeFromDomainObject = typeSpec.lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                    		.orElse(null);
 
                     return typeFromDomainObject != null
                             ? new PropertyDomainEventFacet(
@@ -97,6 +98,38 @@ implements
         return propertyDomainEventFacet;
     }
 
+    /**
+     * Creates a mixee-specific (object-type-specific) overlay facet for a mixed-in property, honoring the
+     * mixee's {@code @DomainObject} property domain-event default. Returns empty when the mixee declares no
+     * such default. The overlay is {@link Facet#isObjectTypeSpecific() object-type-specific} so it is
+     * installed on the mixed-in member's local facet holder rather than the shared mixin facet holder.
+     */
+    public static Optional<PropertyDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        Optional.empty(),
+                        facetHolder));
+    }
+
+    private static class ObjectTypeSpecific extends PropertyDomainEventFacet {
+        protected ObjectTypeSpecific(
+                final Class<? extends PropertyDomainEvent<?, ?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final Optional<PropertyOrCollectionAccessorFacet> getterFacet,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, getterFacet, holder);
+        }
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     // -- CONSTRUCTION
 
     private final DomainEventHelper domainEventHelper;
@@ -106,7 +139,7 @@ implements
     private final TranslationContext translationContext;
 
     /**
-     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
+     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociation}.
      */
     protected PropertyDomainEventFacet(
             final @NonNull Class<? extends PropertyDomainEvent<?, ?>> eventType,
@@ -140,11 +173,10 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.getHead(),
+                        facetHolder(), ic.head(),
                         null, null);
-        if (event != null && event.isHidden()) {
-            return "Hidden by subscriber";
-        }
+        if (event != null && event.isHidden()) return "Hidden by subscriber";
+
         return null;
     }
 
@@ -156,7 +188,7 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.getHead(),
+                        facetHolder(), ic.head(),
                         null, null);
         if (event != null
                 && event.isDisabled()) {
@@ -174,33 +206,26 @@ implements
 
     @Override
     public String invalidates(final ValidityContext ic) {
+        if(getterFacetIfAny == null) return null;
         if(!isPostable()) return null; // bale out
 
-        if(getterFacetIfAny == null) {
-            return null;
-        }
-
         // if this is a mixin, then this ain't true.
-        if(!(ic instanceof ProposedHolder)) {
-            return null;
-        }
-        final ProposedHolder ph = (ProposedHolder) ic;
+        if(!(ic instanceof final ProposedHolder ph)) return null;
 
-        final Object oldValue = getterFacetIfAny.getProperty(ic.getTarget(), ic.getInitiatedBy());
-        final ManagedObject proposedAdapter = ph.getProposed();
+        final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.target(), ic.initiatedBy());
+        final ManagedObject proposedAdapter = ph.proposed();
         final Object proposedValue = proposedAdapter != null ? proposedAdapter.getPojo() : null;
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.getHead(),
+                        facetHolder(), ic.head(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
+            if(reasonTranslatable != null)
+				return reasonTranslatable.translate(translationService, translationContext);
             return event.getInvalidityReason();
         }
 

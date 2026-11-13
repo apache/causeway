@@ -33,10 +33,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionParamsParamHidden extends Element {
 
     private final ActionParamInteractor actionParamInteractor;
@@ -54,28 +53,27 @@ public class RichActionParamsParamHidden extends Element {
         setField(fieldBuilder.build());
     }
 
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             return true;
         }
 
-        val objectAction = actionParamInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val actionInteractionHead = objectAction.interactionHead(managedObject);
+        var objectAction = actionParamInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var actionInteractionHead = objectAction.interactionHead(managedObject);
 
         final ObjectFeature objectFeature = actionParamInteractor.getObjectActionParameter();
-        val objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
+        var objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
 
-        val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
+        var argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
-        val visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var visible = objectActionParameter.isVisible(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
         return visible.isVetoed();
     }
 

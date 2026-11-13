@@ -61,7 +61,7 @@ implements MetaModelRefiner {
                     objectSpec.streamCollections(MixedIn.EXCLUDED);
 
             objectCollections.forEach(objectCollection->{
-                final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
+                final SortedByFacet facet = objectCollection.lookupFacet(SortedByFacet.class).orElse(null);
                 if(facet != null) {
                     final Class<? extends Comparator<?>> cls = facet.value();
                     if(!Comparator.class.isAssignableFrom(cls)) {
@@ -71,7 +71,7 @@ implements MetaModelRefiner {
                                 String.format(
                                     "%s#%s: is annotated with @SortedBy, "
                                     + "but the class specified '%s' is not a Comparator",
-                                    objectSpec.getFeatureIdentifier().getClassName(),
+                                    objectSpec.getFeatureIdentifier().className(),
                                     objectCollection.getId(),
                                     facet.value().getName()));
                     }
@@ -79,6 +79,5 @@ implements MetaModelRefiner {
             });
         });
     }
-
 
 }

@@ -22,7 +22,7 @@ import org.apache.causeway.applib.annotation.TransactionScope;
 
 /**
  * This service, which does nothing in and of itself, exists in order to ensure that the {@link StackedTransactionScope}
- * is always initialized, findinag at least one {@link TransactionScope transaction-scope}d service.
+ * is always initialized, finding at least one {@link TransactionScope transaction-scope}d service.
  */
 @Service
 @TransactionScope

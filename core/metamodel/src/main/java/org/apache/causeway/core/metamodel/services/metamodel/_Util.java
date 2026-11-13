@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.metamodel;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
@@ -26,7 +27,6 @@ import java.util.regex.Pattern;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -38,9 +38,8 @@ class _Util {
 
     void visitNonNullAttributes(final Facet facet, final BiConsumer<String, String> visitor) {
         facet.visitAttributes((key, attributeObj)->{
-            if(attributeObj == null) {
-                return;
-            }
+            if(attributeObj == null)
+				return;
             String str = asStr(attributeObj);
             visitor.accept(key, str);
         });
@@ -91,7 +90,7 @@ class _Util {
     }
 
     private String asStr(final ObjectSpecification attributeObj) {
-        return attributeObj.getFullIdentifier();
+        return attributeObj.fullIdentifier();
     }
 
     private String asStr(final MetaModelExportSupport attributeObj) {
@@ -127,10 +126,9 @@ class _Util {
     }
 
     private String asStr(final Object[] list) {
-        if(list.length == 0) {
-            return null; // skip
-        }
-        List<String> strings = _Lists.newArrayList();
+        if(list.length == 0)
+			return null; // skip
+        List<String> strings = new ArrayList<>();
         for (final Object o : list) {
             String s = asStr(o);
             strings.add(s);
@@ -139,10 +137,9 @@ class _Util {
     }
 
     private String asStr(final List<?> list) {
-        if(list.isEmpty()) {
-            return null; // skip
-        }
-        List<String> strings = _Lists.newArrayList();
+        if(list.isEmpty())
+			return null; // skip
+        List<String> strings = new ArrayList<>();
         for (final Object o : list) {
             String s = asStr(o);
             strings.add(s);

@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -29,8 +29,7 @@ import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,10 +40,10 @@ public class MmAssertionUtils {
                 || ManagedObjects.isPacked(obj)) {
             return;
         }
-        val pojo = ManagedObjects.peekAtPojoOf(obj);
-        val requiredType = pojo.getClass();
-        val actualSpec = obj.getSpecification();
-        _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
+        var pojo = ManagedObjects.peekAtPojoOf(obj);
+        var requiredType = pojo.getClass();
+        var actualSpec = obj.objSpec();
+        _Assert.assertEquals(requiredType, actualSpec.correspondingClass());
     }
 
     public void assertExactType(
@@ -54,10 +53,10 @@ public class MmAssertionUtils {
                 || requiredSpec==null) {
             return;
         }
-        val actualType = requiredSpec.isPrimitive()
+        var actualType = requiredSpec.isPrimitive()
                 ? ClassUtil.unboxPrimitiveIfNecessary(pojo.getClass())
                 : pojo.getClass();
-        val actualSpec = requiredSpec.getSpecificationLoader().specForType(actualType).orElse(null);
+        var actualSpec = requiredSpec.getSpecificationLoader().specForType(actualType).orElse(null);
         _Assert.assertEquals(requiredSpec, actualSpec, ()->
             String.format("pojo's actual ObjectSpecification %s "
                     + "does not exaclty match %s%n", actualSpec, requiredSpec));
@@ -89,8 +88,8 @@ public class MmAssertionUtils {
             if(ManagedObjects.isInstanceOf(object, elementType)) {
                 return object;
             }
-            val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
-            val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+            var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.correspondingClass());
+            var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().correspondingClass());
             throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),
@@ -134,7 +133,7 @@ public class MmAssertionUtils {
     /** check is free of side-effects - also fails on non-attached entities */
     public void assertIsBookmarkSupported(final @Nullable ManagedObject adapter) {
         assertSpecifiedAndNotEmpty(adapter);
-        _Assert.assertFalse(adapter.getSpecialization().getBookmarkPolicy().isNoBookmark(),
+        _Assert.assertFalse(adapter.specialization().getBookmarkPolicy().isNoBookmark(),
                 ()->String.format("object %s does not provide a bookmark", adapter));
     }
 
@@ -144,6 +143,5 @@ public class MmAssertionUtils {
         _Assert.assertTrue(adapter.getBookmark().isPresent(),
                 ()->String.format("object %s does not provide a bookmark", adapter));
     }
-
 
 }

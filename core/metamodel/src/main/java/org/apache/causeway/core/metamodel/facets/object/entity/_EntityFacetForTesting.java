@@ -22,25 +22,24 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+record _EntityFacetForTesting(
+    PersistenceStack persistenceStack,
+    FacetHolder facetHolder) implements EntityFacet {
 
-@RequiredArgsConstructor
-class _EntityFacetForTesting implements EntityFacet {
-
-    @Getter private final PersistenceStack persistenceStack;
-    @Getter private final FacetHolder facetHolder;
+    @Override public PersistenceStack getPersistenceStack() { return persistenceStack(); }
 
     @Override
     public Class<? extends Facet> facetType() {
@@ -48,7 +47,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public Precedence getPrecedence() {
+    public Precedence precedence() {
         return Precedence.DEFAULT;
     }
 
@@ -62,7 +61,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public Bookmark validateBookmark(@NonNull final Bookmark bookmark) {
+    public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
         return bookmark;
     }
 
@@ -81,8 +80,8 @@ class _EntityFacetForTesting implements EntityFacet {
         throw _Exceptions.unsupportedOperation();
     }
 
-    @Override
-    public void refresh(final Object pojo) {
+    @Override @Nullable
+    public <T> T refresh(final @Nullable T pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 
@@ -97,7 +96,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public Object versionOf(Object pojo) {
+    public Object versionOf(final Object pojo) {
         return _Exceptions.unsupportedOperation();
     }
 

@@ -1,0 +1,20 @@
+= Petclinic source provenance
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This executable sample is a current-Apache-Causeway port of material from https://github.com/apache/causeway-app-petclinic[`apache/causeway-app-petclinic`].
+The pinned source revision is `16a10608129ca9ce8ae04d21df1462f4d69ac018`, dated 2026-05-17.
+Both the source application and this repository are licensed under the Apache License, Version 2.0.
+
+The port retains the recognizable Pet Owner, Pet, Visit, Pet Owners service, visit contribution, home-page dashboard, deterministic sample data, menu bars, and effective object-grid concepts.
+Class and member names, labels, validation examples, choices, defaults, collection relationships, and representative actions follow the source where current public contracts support them.
+
+The source targets Apache Causeway 2.0.0 and Java 11.
+This port uses the current reactor's Java, Jakarta Persistence, Causeway programming model, GraphQL application entry, structural resources, collection windows, and web-component contracts.
+Stable string identifiers replace generated numeric identifiers so executable browser routes remain deterministic.
+The custom email value, Blob/PDF attachment, full-calendar integration, starter SimpleObject module, SecMan administration, session/audit/command/execution extensions, Quartz, Flyway, REST examples, and historical deployment configuration are intentionally omitted because they do not contribute to the generic-viewer acceptance scope.
+
+The current Causeway Wicket viewer is enabled in the sample at `/wicket/` solely as a side-by-side visual and interaction reference.
+The reusable HTMX viewer and framework-neutral component modules do not depend on Wicket, Petclinic, or Bootstrap.

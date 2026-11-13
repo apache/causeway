@@ -18,8 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Digits;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -34,15 +39,15 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * <li><tt>12345</tt> has a total of 5 digits</li>
  * <li><tt>12345.0</tt> has a total of 6 digits</li>
  * </ul>
+ * </p>
  *
  * <p>
- * In JPA's {@link jakarta.persistence.Column}, this corresponds to {@link Column#precision()}.
- *
- * <p>
- * In JDO's <code>@Column</code> annotation, this corresponds to <code>@Column#length</code>.
+ * In JPA's {@link Column}, this corresponds to {@link Column#precision()}.
+ * </p>
  *
  * <p>
  * For {@link Digits}, corresponds to sum of {@link Digits#integer()} and {@link Digits#fraction()}.
+ * </p>
  */
 public interface MaxTotalDigitsFacet
 extends Facet {
@@ -51,6 +56,36 @@ extends Facet {
      * eg. as provided by {@link Digits#fraction()}
      * and {@link ValueSemantics#maxTotalDigits()}
      */
-    int getMaxTotalDigits();
+    int maxTotalDigits();
+
+    @Override
+    default boolean semanticEquals(final @NonNull Facet facet) {
+        return facet instanceof MaxTotalDigitsFacet other
+                ? this.maxTotalDigits() == other.maxTotalDigits()
+                : false;
+    }
+
+    @Override
+    default void visitAttributes(final BiConsumer<String, Object> visitor) {
+        Facet.super.visitAttributes(visitor);
+        visitor.accept("maxTotalDigits", maxTotalDigits() <0
+                ? "unlimited"
+                : String.valueOf(maxTotalDigits()));
+    }
+
+    /**
+     * The stronger constraint wins. If equal, first argument wins over second.
+     */
+    static Optional<MaxTotalDigitsFacet> strongestConstraint(
+            final Optional<MaxTotalDigitsFacet> a,
+            final Optional<MaxTotalDigitsFacet> b) {
+        if(b.isEmpty())
+            return a;
+        if(a.isEmpty())
+            return b;
+        return a.get().maxTotalDigits() <= b.get().maxTotalDigits()
+            ? a
+            : b;
+    }
 
 }

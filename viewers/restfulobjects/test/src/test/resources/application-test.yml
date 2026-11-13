@@ -17,9 +17,8 @@
 #  under the License.
 #
 
-resteasy:
-  jaxrs:
-    app:
-      registration: beans
-    defaultPath: "/restful"
-
+causeway:
+  viewer:
+    restfulobjects:
+      basePath: /restful
+      

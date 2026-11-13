@@ -23,28 +23,33 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class TableDecoratorFacetForCollectionLayoutXml
-extends TableDecoratorFacetAbstract {
+extends TableDecoratorFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<TableDecoratorFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(collectionLayout)
-        .map(CollectionLayoutData::getTableDecorator)
-        .map(tableDecorator->
-            new TableDecoratorFacetForCollectionLayoutXml(tableDecorator, holder, precedence));
+            .map(CollectionLayoutData::getTableDecorator)
+            .map(tableDecorator->
+                new TableDecoratorFacetForCollectionLayoutXml(tableDecorator, holder) {
+                	@Override final public Precedence precedence() { return precedence; }
+               	 	@Override final public @Nullable String qualifier() { return qualifier; }
+                });
     }
 
     private TableDecoratorFacetForCollectionLayoutXml(
             final Class<? extends TableDecorator> value,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(value, holder, precedence);
+            final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

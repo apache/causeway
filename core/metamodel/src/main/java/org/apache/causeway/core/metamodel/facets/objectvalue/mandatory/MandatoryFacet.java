@@ -23,8 +23,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Whether a property or a parameter is mandatory (not optional).
@@ -82,7 +81,7 @@ extends Facet, ValidatingInteractionAdvisor {
     // -- UTILITY
 
     static boolean isMandatory(final @NonNull FacetHolder facetHolder) {
-        val mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
+        var mandatoryFacet = facetHolder.lookupFacet(MandatoryFacet.class).orElse(null);
         if(mandatoryFacet == null) {
             // absence of the mandatory facet indicates OPTIONAL
             return false;

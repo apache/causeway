@@ -29,18 +29,18 @@ class RoleMemento_value_Test extends ValueTypeContractTestAbstract<RoleMemento> 
     @Override
     protected List<RoleMemento> getObjectsWithSameValue() {
         return Arrays.asList(SudoService.ACCESS_ALL_ROLE,
-                new RoleMemento(SudoService.ACCESS_ALL_ROLE.getName(), SudoService.ACCESS_ALL_ROLE.getDescription()),
-                new RoleMemento(SudoService.ACCESS_ALL_ROLE.getName(), SudoService.ACCESS_ALL_ROLE.getDescription()),
-                new RoleMemento(SudoService.ACCESS_ALL_ROLE.getName(), ""),
-                new RoleMemento(SudoService.ACCESS_ALL_ROLE.getName())
+                new RoleMemento(SudoService.ACCESS_ALL_ROLE.name(), SudoService.ACCESS_ALL_ROLE.description()),
+                new RoleMemento(SudoService.ACCESS_ALL_ROLE.name(), SudoService.ACCESS_ALL_ROLE.description()),
+                new RoleMemento(SudoService.ACCESS_ALL_ROLE.name(), ""),
+                new RoleMemento(SudoService.ACCESS_ALL_ROLE.name())
         );
     }
 
     @Override
     protected List<RoleMemento> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                new RoleMemento(SudoService.ACCESS_ALL_ROLE.getName() + "x"),
-                new RoleMemento(SudoService.ACCESS_ALL_ROLE.getName() + "y")
+                new RoleMemento(SudoService.ACCESS_ALL_ROLE.name() + "x"),
+                new RoleMemento(SudoService.ACCESS_ALL_ROLE.name() + "y")
         );
     }
 }

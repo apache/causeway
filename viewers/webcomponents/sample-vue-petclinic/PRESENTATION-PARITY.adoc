@@ -1,0 +1,65 @@
+= Petclinic presentation parity
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at https://www.apache.org/licenses/LICENSE-2.0 .
+// Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and limitations under the License.
+
+The HTMX Petclinic application is the presentation authority for the Vue Petclinic application.
+Parity means equivalent information architecture, declared semantic members, ordering, grouping, responsive relationships, and application theme; framework wrappers and exact rendered pixels need not match.
+
+== Shell baseline
+
+At a wide viewport the shell presents one 3.25rem navigation row with the `C` mark and `Pet Clinic` brand, followed by `Pet Owners`, `Visits`, and the utility grouping defined by the shared `menubars.layout.xml` resource.
+The route and footer use one-space-unit side insets, the main region uses the reference vertical spacing, and the footer places `Powered by Apache Causeway` opposite the viewer label.
+Document titles use the authoritative object title followed by ` · Pet Clinic`.
+Programmatic route focus does not draw a persistent frame around the whole page, while ordinary interactive controls and the skip-link target retain visible keyboard focus.
+At widths of 48rem or less shell navigation wraps vertically, and at widths of 60rem or less route grids collapse to one column without horizontal page overflow.
+
+== Route baseline
+
+[cols="1,2,2,2,2",options="header"]
+|===
+|Route
+|Ordered sections
+|Declared properties
+|Actions and results
+|Collections
+
+|`petclinic.HomePage`
+|Object header; Pet owners; Upcoming visits
+|None
+|None
+|`petOwners`: page 5, sortable, filterable, preview, Owner/Telephone/Email; `futureVisits`: page 10, filterable, preview, When/Reason/Notes
+
+|`petclinic.PetOwner`
+|Breadcrumbs; object heading; Identity; Contact; Details; Pets; Visits
+|Identity: name and knownAs; Contact: telephoneNumber and emailAddress; Details: notes, lastVisit, and daysSinceLastVisit
+|Page result; allOwners; noOwners; relatedOwners with Owner/Known as/Notes standalone result; delete; updateName inline; addPet sidebar; removePet; bookVisit modal
+|`pets`: page 5, sortable, filterable, preview, Name/Species/Notes; nested preview visits: page 10, When/Reason; owner `visits`: page 8, preview, When/Reason/Notes
+
+|`petclinic.Pet`
+|Page result; breadcrumbs; object header; Identity; Details
+|Identity: petOwner and name; Details: species and editable multiline notes
+|Sidebar result
+|None
+
+|`petclinic.Visit`
+|Page result; breadcrumbs; object header; Appointment; Details
+|Appointment: pet and visitAt; Details: editable reason and editable multiline notes
+|Dialog result
+|None
+|===
+
+Technical `id` and `version` properties and members not listed above are intentionally absent from the four exact-type pages.
+The unregistered `petclinic.ViewerFallback` fixture, with stable identifier `s_viewer-fallback`, demonstrates generic `<cw-object>` fallback independently of those routes.
+
+== Regression strategy
+
+Headless tests assert semantic structure, route boundaries, menu labels, title and footer content, and member declarations for every route.
+Computed-style checks use tolerant ranges and relationships for header height, shell inset, grid columns, responsive collapse, focus treatment, and overflow rather than screenshot equality.
+Native and Vaadin policies are exercised where toolkit rendering can alter presentation.

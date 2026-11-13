@@ -21,29 +21,28 @@ package org.apache.causeway.commons.internal.collections;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -92,20 +91,20 @@ public final class _Maps {
     // -- UNMODIFIABLE MAP
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         mapPreservingOrder.put(k3, v3);
@@ -113,7 +112,7 @@ public final class _Maps {
     }
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3, final K k4, final V v4) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         mapPreservingOrder.put(k3, v3);
@@ -122,12 +121,11 @@ public final class _Maps {
     }
 
     @SafeVarargs
-    public static <K, V> Map<K, V> unmodifiableEntries(final @NonNull Map.Entry<? extends K,? extends V>... entries) {
-        if(entries.length==0) {
+    public static <K, V> Map<K, V> unmodifiableEntries(final Map.@NonNull Entry<? extends K,? extends V>... entries) {
+        if(entries.length==0)
             return Collections.emptyMap();
-        }
 
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
 
         Stream.of(entries)
         .forEach(entry->mapPreservingOrder.put(entry.getKey(), entry.getValue()));
@@ -136,7 +134,7 @@ public final class _Maps {
     }
 
     public static <K, V> Map.Entry<K, V> entry(final K k, final V v){
-        return new AbstractMap.SimpleEntry<K, V>(k, v);
+        return new AbstractMap.SimpleEntry<>(k, v);
     }
 
     // -- TO STRING
@@ -171,7 +169,7 @@ public final class _Maps {
             final @NonNull K key,
             final @NonNull V value) {
 
-        val newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
+        var newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
         return newValue!=null;
     }
 
@@ -182,17 +180,15 @@ public final class _Maps {
             final @NonNull Supplier<Map<K, V1>> mapFactory,
             final @NonNull Function<V0, V1> valueMapper) {
 
-        val resultMap = mapFactory.get();
+        var resultMap = mapFactory.get();
 
         if(input==null
-                || input.isEmpty()) {
+                || input.isEmpty())
             return resultMap;
-        }
 
         input.forEach((k, v)->resultMap.put(k, valueMapper.apply(v)));
         return resultMap;
     }
-
 
     public static <K, V> Map<K, V> filterKeys(
             final @Nullable Map<K, V> input,
@@ -201,9 +197,8 @@ public final class _Maps {
 
         final Map<K, V> result = factory.get();
 
-        if(input==null) {
+        if(input==null)
             return result;
-        }
 
         input.forEach((k, v)->{
             if(keyFilter.test(k)) {
@@ -216,55 +211,23 @@ public final class _Maps {
 
     public static <K, V> ListMultimap<V, K> invertToListMultimap(final Map<K, V> input) {
         final ListMultimap<V, K> result = _Multimaps.newListMultimap();
-        if(input==null) {
+        if(input==null)
             return result;
-        }
         input.forEach((k, v)->result.putElement(v, k));
         return result;
     }
 
-    // -- FACTORIES ...
-
-    // -- HASH MAP
-
-    public static <K, V> HashMap<K, V> newHashMap() {
-        return new HashMap<K, V>();
-    }
-
-    // -- LINKED HASH MAP
-
-    public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
-        return new LinkedHashMap<K, V>();
-    }
-
-    // -- CONCURRENT HASH MAP
-
-    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-        return new ConcurrentHashMap<K, V>();
-    }
-
-    // -- TREE MAP
-
-    public static <K, V> TreeMap<K, V> newTreeMap() {
-        return new TreeMap<K, V>();
-    }
-
-    public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<? super K> comparator) {
-        return new TreeMap<K, V>(comparator);
-    }
-
     // -- ALIAS MAP
 
-    @Value(staticConstructor = "of")
-    private static final class KeyPair<K> {
-        K key;
-        Can<K> aliasKeys;
+    private record KeyPair<K>(
+            K key,
+            Can<K> aliasKeys) {
     }
 
     public static <K, V> AliasMap<K, V> newAliasMap(
             final @NonNull Supplier<Map<K, V>> mapFactory){
 
-        return new AliasMap<K, V>() {
+        return new AliasMap<>() {
 
             final Map<K, V> delegate = mapFactory.get();
 
@@ -283,7 +246,7 @@ public final class _Maps {
             @Override
             public void putAll(final Map<? extends K, ? extends V> other) {
                 if(!_NullSafe.isEmpty(other)) {
-                    other.forEach((k, v)->this.put(k, v));
+                    other.forEach(this::put);
                 }
             }
 
@@ -305,13 +268,11 @@ public final class _Maps {
                     containsAliasKey(keyOrAliasKey);
             }
 
-
             @Override
             public V get(final Object keyOrAliasKey) {
-                val v = delegate.get(keyOrAliasKey);
-                if(v!=null) {
+                var v = delegate.get(keyOrAliasKey);
+                if(v!=null)
                     return v;
-                }
                 return getByAliasKey(keyOrAliasKey);
             }
 
@@ -329,29 +290,26 @@ public final class _Maps {
 
             // -- HELPER
 
-            private final Map<K, KeyPair<K>> pairByAliasKey = _Maps.newHashMap();
+            private final Map<K, KeyPair<K>> pairByAliasKey = new HashMap<>();
 
             private void putAliasKeys(final K key, final Can<K> aliasKeys, final boolean remap) {
                 if(aliasKeys.isNotEmpty()) {
-                    val keyPair = KeyPair.of(key, aliasKeys);
-                    for(val aliasKey : aliasKeys) {
+                    var keyPair = new KeyPair<>(key, aliasKeys);
+                    for(var aliasKey : aliasKeys) {
 
-                        val existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
-                        if(existingKeyPair!=null && !remap) {
-
+                        var existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
+                        if(existingKeyPair!=null && !remap)
                             throw _Exceptions.illegalArgument(
                                     "alias key collision on alias %s: existing-key=%s, new-key=%s",
                                     aliasKey, existingKeyPair.key, keyPair.key);
-                        }
                     }
                 }
             }
 
             private V getByAliasKey(final Object aliasKey) {
-                val keyPair = pairByAliasKey.get(aliasKey);
-                if(keyPair!=null) {
-                    return delegate.get(keyPair.getKey());
-                }
+                var keyPair = pairByAliasKey.get(aliasKey);
+                if(keyPair!=null)
+                    return delegate.get(keyPair.key());
                 return null;
             }
 
@@ -363,8 +321,8 @@ public final class _Maps {
                 //XXX this implementation is slow for large alias maps, since we traverse the entire map
                 pairByAliasKey.entrySet()
                 .removeIf(entry->{
-                    val keyPair = entry.getValue();
-                    return keyPair.getKey().equals(key);
+                    var keyPair = entry.getValue();
+                    return keyPair.key().equals(key);
                 });
 
             }
@@ -373,10 +331,86 @@ public final class _Maps {
                 pairByAliasKey.clear();
             }
 
-
         };
     }
 
-    // --
+    // -- UTILITY
+
+    /**
+     * Provides a workaround when {@link ConcurrentHashMap#computeIfAbsent(Object, Function)}, is not applicable due
+     * to recursive update attempts, which are not allowed.
+     *
+     * <p>Applicable when the mapping-function is a {@literal pure} function.
+     */
+    public record ConcurrentMapWrapper<K, V>(ConcurrentHashMap<K, V> map) {
+
+        public ConcurrentMapWrapper() {
+            this(new ConcurrentHashMap<>());
+        }
+
+        /**
+         * Applicable when the mappingFunction is a {@literal pure} function. Particularly useful in caching scenarios,
+         * where the mappingFunction potentially modifies the {@link ConcurrentHashMap} of this wrapper.
+         *
+         * @implNote Implementation is same as the default implementation from the {@link Map} interface. But,
+         *      {@link ConcurrentHashMap} overrides this default, in order to detect when the mappingFunction
+         *      attempts a recursive update, then throws an {@link IllegalStateException}.
+         */
+        public V computeIfAbsent(final K key, final java.util.function.Function<? super K, ? extends V> mappingFunction) {
+            Objects.requireNonNull(mappingFunction);
+
+            var value = map.get(key);
+            if(value!=null)
+                return value;
+
+            var newValue = mappingFunction.apply(key);
+            if(newValue!=null) {
+                map.put(key, newValue);
+            }
+            return newValue;
+        }
+    }
+
+    /**
+     * Provides a heap friendly Map traversal in reverse order.
+     *
+     * <p>Useful for {@link EnumMap}(s) which are not navigable ({@link NavigableMap}).
+     *
+     * @param map not forced to be a {@link EnumMap} to allow (synchronized) wrapping
+     */
+    public static <E extends Enum<E>, V> void forEachDescending(
+            final E[] keyUniverse,
+            final Map<E, V> map,
+            final Consumer<V> consumer) {
+        for (int ord = keyUniverse.length - 1; ord >= 0; ord--) {
+            var key = keyUniverse[ord];
+            V value = map.get(key);
+            if(value!=null) {
+                consumer.accept(value);
+            }
+        }
+    }
+
+    /**
+     * Provides a heap friendly Map traversal in reverse order.
+     *
+     * <p>Useful for {@link EnumMap}(s) which are not navigable ({@link NavigableMap}).
+     *
+     * @param map not forced to be a {@link EnumMap} to allow (synchronized) wrapping
+     */
+    public static <E extends Enum<E>, V> Optional<V> findFirstDescending(
+            final E[] keyUniverse,
+            final Map<E, V> map,
+            final Predicate<V> filter) {
+        for (int ord = keyUniverse.length - 1; ord >= 0; ord--) {
+            var key = keyUniverse[ord];
+            V value = map.get(key);
+            if(value!=null) {
+                if(filter.test(value))
+                    return Optional.of(value);
+            }
+        }
+        return Optional.empty();
+    }
 
 }

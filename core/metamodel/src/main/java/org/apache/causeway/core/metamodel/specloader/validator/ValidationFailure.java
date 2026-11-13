@@ -28,19 +28,14 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.NonNull;
-import lombok.Value;
+import org.jspecify.annotations.NonNull;
 
 /**
- *
  * @since 2.0
- *
  */
-@Value(staticConstructor = "of")
-public final class ValidationFailure implements Comparable<ValidationFailure> {
-
-    @NonNull private Identifier origin;
-    @NonNull private String message;
+public record ValidationFailure(
+    @NonNull Identifier origin,
+    @NonNull String message) implements Comparable<ValidationFailure> {
 
     // -- FACTORIES
 
@@ -48,19 +43,19 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * Collects a new ValidationFailure with given origin and message.
      */
     public static void raise(
-            @NonNull SpecificationLoader specLoader,
-            @NonNull Identifier deficiencyOrigin,
-            @NonNull String deficiencyMessage) {
+            final @NonNull SpecificationLoader specLoader,
+            final @NonNull Identifier deficiencyOrigin,
+            final @NonNull String deficiencyMessage) {
 
-        specLoader.addValidationFailure(ValidationFailure.of(deficiencyOrigin, deficiencyMessage));
+        specLoader.addValidationFailure(new ValidationFailure(deficiencyOrigin, deficiencyMessage));
     }
 
     /**
      * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message.
      */
     public static void raise(
-            @NonNull FacetHolder facetHolder,
-            @NonNull String deficiencyMessage) {
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull String deficiencyMessage) {
         raise(facetHolder.getSpecificationLoader(), facetHolder.getFeatureIdentifier(), deficiencyMessage);
     }
 
@@ -69,22 +64,21 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * (assembled from format and args).
      */
     public static void raiseFormatted(
-            @NonNull FacetHolder facetHolder,
-            @NonNull String messageFormat,
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull String messageFormat,
             final Object ...args) {
         raise(facetHolder, String.format(messageFormat, args));
     }
 
-
     private static final Comparator<ValidationFailure> comparator = Comparator
-            .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
-            .<String>thenComparing(failure->failure.getOrigin().getMemberLogicalName(), nullsFirst(naturalOrder()))
-            .thenComparing(ValidationFailure::getMessage);
+            .<ValidationFailure, String>comparing(failure->failure.origin().className(), nullsFirst(naturalOrder()))
+            .<String>thenComparing(failure->failure.origin().memberLogicalName(), nullsFirst(naturalOrder()))
+            .thenComparing(ValidationFailure::message);
 
     // -- CONTRACT
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ValidationFailure that = (ValidationFailure) o;
@@ -97,16 +91,9 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
     }
 
     @Override
-    public int compareTo(ValidationFailure o) {
-
-        if(equals(o)) {
-            return 0; // for consistency with equals
-        }
-
-        if(o==null) {
-            return -1; // null last policy
-        }
-
+    public int compareTo(final ValidationFailure o) {
+        if(equals(o)) return 0; // for consistency with equals
+        if(o==null) return -1; // null last policy
         return comparator.compare(this, o);
     }
 

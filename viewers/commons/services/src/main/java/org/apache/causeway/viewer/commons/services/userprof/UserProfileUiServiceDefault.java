@@ -36,8 +36,12 @@ import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUi
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
+/**
+ * Default implementation of {@link UserProfileUiService}
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".UserProfileUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
@@ -63,9 +67,9 @@ public class UserProfileUiServiceDefault implements UserProfileUiService {
         if (user.isImpersonating()) {
             return user.nameFormatted();
         }
-        val realName = user.getRealName();
+        var realName = user.realName();
         return _Strings.isNullOrEmpty(realName)
-                ? user.getName()
+                ? user.name()
                 : realName;
     }
 

@@ -18,15 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.services.columnorder;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.columnorder.ColumnOrderTxtFileService;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -36,69 +30,73 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 /**
- * since 2.0 {@index}
+ * Default implementation of {@link ColumnOrderTxtFileService}.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ColumnOrderTxtFileServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileService {
+public record ColumnOrderTxtFileServiceDefault(
+        SpecificationLoader specificationLoader) implements ColumnOrderTxtFileService {
 
-    final SpecificationLoader specificationLoader;
-
+    @Override
     @Programmatic
     public byte[] toZip(final Object domainObject) {
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var objSpec = specificationLoader.loadSpecification(domainObject.getClass());
+        var zipBuilder = ZipUtils.zipEntryBuilder();
 
-        addStandaloneEntry(domainObject, zipBuilder);
-        addCollectionEntries(domainObject, zipBuilder);
+        addStandaloneEntry(objSpec, zipBuilder);
+        addCollectionEntries(objSpec, zipBuilder);
 
         return zipBuilder.toBytes();
     }
 
+    // -- HELPER
 
-    // HELPERS
+    private void addStandaloneEntry(final ObjectSpecification objSpec, final ZipUtils.EntryBuilder zipBuilder) {
+        var buf = new StringBuilder();
 
-    private void addStandaloneEntry(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
-        val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        val buf = new StringBuilder();
-
-        parentSpec.streamAssociations(MixedIn.INCLUDED)
+        objSpec.streamAssociations(MixedIn.INCLUDED)
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        val fileContents = buf.toString();
-        val fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
+        var fileContents = buf.toString();
+        var fileName = "%s.columnOrder.txt".formatted(objSpec.shortIdentifier());
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    private void addCollectionEntries(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
-        val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        parentSpec.streamCollections(MixedIn.INCLUDED)
-                .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
+    private void addCollectionEntries(final ObjectSpecification objSpec, final ZipUtils.EntryBuilder zipBuilder) {
+        objSpec.streamCollections(MixedIn.INCLUDED)
+                .forEach(collection -> addCollection(collection, objSpec, zipBuilder));
     }
 
-    private void addCollection(final OneToManyAssociation collection, final ObjectSpecification parentSpec, final ZipUtils.EntryBuilder zipBuilder) {
-        val buf = new StringBuilder();
+    private void addCollection(
+            final OneToManyAssociation collection,
+            final ObjectSpecification parentSpec,
+            final ZipUtils.EntryBuilder zipBuilder) {
 
-        val collectionIdentifier = collection.getFeatureIdentifier();
-        val elementType = collection.getElementType();
+        var buf = new StringBuilder();
 
-        elementType.streamAssociations(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(collectionIdentifier))
-                .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
-                .map(ObjectFeature::getId)
-                .forEach(assocId -> buf.append(assocId).append("\n"));
+        //TODO  this does not account for any SPI from _MembersAsColumns - problem?
+        collection.getElementType()
+            .streamAssociations(MixedIn.INCLUDED)
+            .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
+            .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
+            .map(ObjectFeature::getId)
+            .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        val fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
-        val fileContents = buf.toString();
+        var fileName = "%s#%s.columnOrder.txt".formatted(parentSpec.shortIdentifier(), collection.getId());
+        var fileContents = buf.toString();
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }

@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.metamodel;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.metamodel.v2.Collection;
@@ -30,14 +30,13 @@ import org.apache.causeway.schema.metamodel.v2.FacetHolder.Facets;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 import org.apache.causeway.schema.metamodel.v2.Property;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _AsciiExport {
 
     StringBuilder toAscii(MetamodelDto metamodelDto) {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         metamodelDto
             .getDomainClassDto()
@@ -70,7 +69,7 @@ class _AsciiExport {
 
     private void toAscii(final String prefix, @Nullable Facets facets, final StringBuilder sb) {
 
-        val attrPrefix = _Strings.of(prefix.length()-2, ' ') + "  | ";
+        var attrPrefix = _Strings.of(prefix.length()-2, ' ') + "  | ";
 
         Optional.ofNullable(facets)
         .map(fac->fac.getFacet())

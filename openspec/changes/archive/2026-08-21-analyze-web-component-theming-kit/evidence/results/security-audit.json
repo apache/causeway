@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-08-20",
+  "commands": [
+    "npm audit --omit=dev --json",
+    "npm audit --json"
+  ],
+  "production": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "completeHarness": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "note": "This point-in-time npm advisory result does not replace ASF dependency review or ongoing update monitoring."
+}

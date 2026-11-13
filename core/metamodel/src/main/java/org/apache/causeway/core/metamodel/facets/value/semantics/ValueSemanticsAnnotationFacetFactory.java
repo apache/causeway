@@ -20,20 +20,19 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Digits;
-
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facetapi.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.TypedHolderAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Digits;
 
 public class ValueSemanticsAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -45,115 +44,115 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        val valueSemanticsIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        ValueSemantics.class,
-                        () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
+        var valueSemanticsOpt = processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    ValueSemantics.class,
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), ValueSemantics.class));
 
         // support for @jakarta.validation.constraints.Digits
-        val digitsIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Digits.class,
-                        () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
+        var digitsOpt = processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    Digits.class,
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Digits.class));
 
-        processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
+        processAll(processMethodContext.facetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
-
+        var valueSemanticsOpt = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
         // support for @jakarta.validation.constraints.Digits
-        val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
+        var digitsOpt = processParameterContext.synthesizeOnParameter(Digits.class);
 
-        processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
+        processAll(processParameterContext.facetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     // -- HELPER
 
     private void processAll(
-            final TypedHolderAbstract facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny,
-            final Optional<Digits> digitsIfAny) {
-        processProvider(facetHolder, valueSemanticsIfAny);
-        processDigits(facetHolder, valueSemanticsIfAny, digitsIfAny);
-        processTemporalFormat(facetHolder, valueSemanticsIfAny);
+            final TypedFacetHolder facetHolder,
+            final Optional<ValueSemantics> valueSemanticsOpt,
+            final Optional<Digits> digitsOpt) {
+        processProvider(facetHolder, valueSemanticsOpt);
+        processDigits(facetHolder, valueSemanticsOpt, digitsOpt);
+        processTemporalFormat(facetHolder, valueSemanticsOpt);
     }
 
     private void processProvider(
-            final TypedHolderAbstract facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny) {
+            final TypedFacetHolder facetHolder,
+            final Optional<ValueSemantics> valueSemanticsOpt) {
 
         // check for @ValueSemantics(provider=...)
-        addFacetIfPresent(
-                ValueSemanticsSelectingFacetForAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        ValueSemanticsSelectingFacetForAnnotation
+            .create(valueSemanticsOpt, facetHolder);
     }
 
     private void processDigits(
-            final TypedHolderAbstract facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny,
-            final Optional<Digits> digitsIfAny){
+            final TypedFacetHolder facetHolder,
+            final Optional<ValueSemantics> valueSemanticsOpt,
+            final Optional<Digits> digitsOpt){
 
-        addFacetIfPresent(
-                MaxTotalDigitsFacetAbstract.minimum(
-                        MaxTotalDigitsFacetFromValueSemanticsAnnotation
-                        .create(valueSemanticsIfAny, facetHolder),
-                        // support for @jakarta.validation.constraints.Digits
-                        MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
-                        .create(digitsIfAny, facetHolder)
-                        ));
+        // max total digits
+        MaxTotalDigitsFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsOpt, facetHolder);
 
-        addFacetIfPresent(
-                MinIntegerDigitsFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        // max integer digits
+        MaxIntegerDigitsFacet.strongestConstraint(
+    		facetHolder,
+            fh->MaxIntegerDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, fh),
+            // support for @jakarta.validation.constraints.Digits
+            fh->MaxIntegerDigitsFacetFromJakartaDigitsAnnotation
+                .create(digitsOpt, fh));
 
-        addFacetIfPresent(
-                MaxFractionalDigitsFacetAbstract.minimum(
-                        MaxFractionalDigitsFacetFromValueSemanticsAnnotation
-                        .create(valueSemanticsIfAny, facetHolder),
-                        // support for @jakarta.validation.constraints.Digits
-                        MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-                        .create(digitsIfAny, facetHolder)
-                        ));
+        // min integer digits
+        MinIntegerDigitsFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsOpt, facetHolder);
 
-        addFacetIfPresent(
-                MinFractionalDigitsFacetAbstract.minimum(
-                        MinFractionalDigitsFacetFromValueSemanticsAnnotation
-                                .create(valueSemanticsIfAny, facetHolder),
-                        // support for @jakarta.validation.constraints.Digits (if supported)
-                        getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()
-                                ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-                                            .create(digitsIfAny, facetHolder)
-                                : Optional.empty()
-                ));
+        if(ClassUtil.isJavaBuiltInInteger(facetHolder.getFeatureIdentifier().logicalType().correspondingClass()))
+            return; // skip fractional facets
+
+        // max fractional digits
+        MaxFractionalDigitsFacet.strongestConstraint(
+    		facetHolder,
+            fh->MaxFractionalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, fh),
+            // support for @jakarta.validation.constraints.Digits
+            fh->MaxFractionalDigitsFacetFromJakartaDigitsAnnotation
+                .create(digitsOpt, fh));
+
+        // min fractional digits
+        MinFractionalDigitsFacet.strongestConstraint(
+    		facetHolder,
+            fh->MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, fh),
+            // support for @jakarta.validation.constraints.Digits (if enabled)
+            fh->getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
+                ? MinFractionalDigitsFacetFromJakartaDigitsAnnotation
+                    .create(digitsOpt, fh)
+                : Optional.empty());
     }
 
     private void processTemporalFormat(
-            final TypedHolderAbstract facetHolder,
+            final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny){
 
-        addFacetIfPresent(
-                DateFormatStyleFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+	    DateFormatStyleFacetFromValueSemanticsAnnotation
+	        .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-                TimeFormatStyleFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+	    TimeFormatStyleFacetFromValueSemanticsAnnotation
+	        .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-                TimeFormatPrecisionFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        TimeFormatPrecisionFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-                DateRenderAdjustFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        DateRenderAdjustFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-                TimeZoneTranslationFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        TimeZoneTranslationFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsIfAny, facetHolder);
     }
 
 }

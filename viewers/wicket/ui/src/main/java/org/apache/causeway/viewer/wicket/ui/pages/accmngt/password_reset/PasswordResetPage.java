@@ -18,20 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset;
 
-import java.util.concurrent.Callable;
-
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
-
-import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -48,13 +44,11 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    private PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    private PasswordResetPage(final PageParameters parameters, final ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
 
-        boolean suppressPasswordResetLink = getWicketViewerSettings().isSuppressPasswordReset();
-        if(suppressPasswordResetLink) {
-            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
-        }
+        if(getCommonViewerSettings().signin().suppressPasswordReset())
+			throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
     }
 
     @Override
@@ -75,14 +69,11 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                 error(getString("passwordResetExpiredOrInvalidToken"));
                 addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
             } else {
-                Boolean emailExists = getInteractionService().callAnonymous(new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() throws Exception {
-                        val serviceRegistry = getServiceRegistry();
-                        val userRegistrationService = serviceRegistry
-                                .lookupServiceElseFail(UserRegistrationService.class);
-                        return userRegistrationService.emailExists(email);
-                    }
+                Boolean emailExists = getInteractionService().callAnonymous(() -> {
+                    var serviceRegistry = getServiceRegistry();
+                    var userRegistrationService = serviceRegistry
+                            .lookupServiceElseFail(UserRegistrationService.class);
+                    return userRegistrationService.emailExists(email);
                 });
                 if (!emailExists) {
                     error(getString("noUserForAnEmailValidToken"));
@@ -101,7 +92,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
      * @param uuid A unique id used to identify the email of the user whose password will be reset
      * @return A panel with "password reset" form fields
      */
-    protected PasswordResetPanel addPasswordResetPanel(String id, String uuid) {
+    protected PasswordResetPanel addPasswordResetPanel(final String id, final String uuid) {
         final PasswordResetPanel passwordResetPanel = new PasswordResetPanel(id, uuid);
         addOrReplace(passwordResetPanel);
         return passwordResetPanel;
@@ -116,7 +107,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
      * @param id The component id
      * @return A panel with "send email for password reset" functionality
      */
-    protected PasswordResetEmailPanel addPasswordResetEmailPanel(String id) {
+    protected PasswordResetEmailPanel addPasswordResetEmailPanel(final String id) {
         final PasswordResetEmailPanel passwordResetEmailPanel = new PasswordResetEmailPanel(id);
         addOrReplace(passwordResetEmailPanel);
         return passwordResetEmailPanel;

@@ -31,17 +31,20 @@ public class RichTopLevelQuery
     private static final SchemaStrategy SCHEMA_STRATEGY = SchemaStrategy.RICH;
 
     private final Scenario scenario;
+    private final RichApplicationEntry applicationEntry;
 
     public RichTopLevelQuery(final Context context) {
         super(SCHEMA_STRATEGY, context);
 
-        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+        var graphqlConfiguration = context.causewayConfiguration.viewer().graphql();
 
-        if (graphqlConfiguration.getSchema().getRich().isEnableScenarioTesting()) {
+        if (graphqlConfiguration.schema().rich().enableScenarioTesting()) {
             addChildFieldFor(scenario = new Scenario(SCHEMA_STRATEGY, context));
         } else {
             scenario = null;
         }
+
+        addChildFieldFor(applicationEntry = new RichApplicationEntry(context));
 
         buildObjectType();
 
@@ -60,5 +63,6 @@ public class RichTopLevelQuery
         if (scenario != null) {
             scenario.addDataFetcher(this);
         }
+        applicationEntry.addDataFetcher(this);
     }
 }

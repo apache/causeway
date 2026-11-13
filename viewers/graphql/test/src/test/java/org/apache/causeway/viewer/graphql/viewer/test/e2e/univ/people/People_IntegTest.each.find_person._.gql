@@ -10,11 +10,14 @@
                 name
               }
               results {
-                name {
-                  get
-                }
-                _meta {
-                  saveAs(ref: "dept-head")
+                __typename
+                ... on rich__university_dept_DeptHead {
+                  name {
+                    get
+                  }
+                  _meta {
+                    saveAs(ref: "dept-head")
+                  }
                 }
               }
             }

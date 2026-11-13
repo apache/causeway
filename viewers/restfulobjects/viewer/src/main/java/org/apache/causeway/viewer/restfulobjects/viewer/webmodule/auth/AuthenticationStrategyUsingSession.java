@@ -22,9 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-
-import lombok.val;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 
 /**
  * Checks that an already-present {@link InteractionContext authentication} (obtained from the {@link HttpSession}) is
@@ -55,14 +53,14 @@ extends AuthenticationStrategyAbstract {
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
 
-        val authenticationManager = super.getAuthenticationManager(httpServletRequest);
-        val httpSession = getHttpSession(httpServletRequest);
+        var authenticationManager = super.getAuthenticationManager(httpServletRequest);
+        var httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
-        val authentication = (InteractionContext)
+        var authentication = (InteractionContext)
                 httpSession.getAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authentication != null) {
-            val sessionValid = authenticationManager.isSessionValid(authentication);
+            var sessionValid = authenticationManager.isSessionValid(authentication);
             if (sessionValid) {
                 return authentication;
             }
@@ -77,7 +75,7 @@ extends AuthenticationStrategyAbstract {
             final HttpServletResponse httpServletResponse,
             final InteractionContext authentication) {
 
-        val httpSession = getHttpSession(httpServletRequest);
+        var httpSession = getHttpSession(httpServletRequest);
         if(authentication != null) {
             httpSession.setAttribute(
                     HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authentication);

@@ -20,6 +20,8 @@ package org.apache.causeway.commons.internal.base;
 
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
@@ -71,6 +73,30 @@ class TextTest {
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeTrailingEmptyLines(Can.of("Hallo", "", "World")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeTrailingEmptyLines(Can.of("Hallo", "", "World", "")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeTrailingEmptyLines(Can.of("Hallo", "", "World", "", "")));
+    }
+
+    @Test
+    public void notTruncated() throws Exception {
+        assertThat(_Text.abbreviated("abcdef", 6), is("abcdef"));
+    }
+
+    @Test
+    public void truncated() throws Exception {
+        assertThat(_Text.abbreviated("abcdefg", 6), is("abc..."));
+    }
+
+    @Test
+    public void notTruncatedAtEllipsesLimit() throws Exception {
+        assertThat(_Text.abbreviated("abc", 3), is("abc"));
+        assertThat(_Text.abbreviated("ab", 2), is("ab"));
+        assertThat(_Text.abbreviated("a", 1), is("a"));
+    }
+
+    @Test
+    public void truncatedAtEllipsesLimit() throws Exception {
+        assertThat(_Text.abbreviated("abcd", 3), is(""));
+        assertThat(_Text.abbreviated("abc", 2), is(""));
+        assertThat(_Text.abbreviated("ab", 1), is(""));
     }
 
 }

@@ -25,7 +25,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -62,7 +62,7 @@ import lombok.RequiredArgsConstructor;
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class CommandReplayOnPrimaryService {
 
     @Inject final CommandLogEntryRepository commandLogEntryRepository;
@@ -72,7 +72,6 @@ public class CommandReplayOnPrimaryService {
 
     public static abstract class ActionDomainEvent<T>
     extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -156,8 +155,6 @@ public class CommandReplayOnPrimaryService {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = downloadCommandById.ActionDomainEvent.class,
@@ -206,6 +203,4 @@ public class CommandReplayOnPrimaryService {
         return uuid != null ? uuid.toString() : "00000000-0000-0000-0000-000000000000";
     }
 
-
 }
-

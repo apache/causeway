@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.facets.prop.transients;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.Transient;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.Transient;
 
 public class JpaTransientAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -37,19 +35,12 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        //val cls = processMethodContext.getCls();
-
         final Transient annotation = processMethodContext.synthesizeOnMethod(Transient.class)
                 .orElse(null);
+        if (annotation == null)
+			return;
 
-        if (annotation == null) {
-            return;
-        }
-
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new JpaTransientAnnotationFacet(holder));
+        new JpaTransientAnnotationFacet(processMethodContext.facetHolder());
     }
-
 
 }

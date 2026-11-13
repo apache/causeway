@@ -25,12 +25,9 @@ import java.util.UUID;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
-import lombok.Value;
-import lombok.val;
 
 public interface XrayModel {
 
@@ -41,13 +38,14 @@ public interface XrayModel {
         boolean isCanDeleteNode() { return this == CAN_DELETE_NODE; }
     }
 
-    MutableTreeNode getRootNode();
+    MutableTreeNode rootNode();
+
     default MutableTreeNode getThreadNode(final ThreadMemento threadMemento) {
-        return lookupNode(threadMemento.getId())
+        return lookupNode(threadMemento.id())
                 .orElseGet(()->addContainerNode(
-                        getRootNode(),
-                        threadMemento.getLabel(),
-                        threadMemento.getId(),
+                        rootNode(),
+                        threadMemento.label(),
+                        threadMemento.id(),
                         Stickiness.CAN_DELETE_NODE));
     }
 
@@ -94,18 +92,17 @@ public interface XrayModel {
 
     // -- THREAD UTIL
 
-    @Value(staticConstructor = "of")
-    public static class ThreadMemento {
-        private final String id;
-        private final String label;
-        private final String multilinelabel;
+    public record ThreadMemento(
+            String id,
+            String label,
+            String multilinelabel) {
 
         public static ThreadMemento fromCurrentThread() {
-            val ct = Thread.currentThread();
-            return ThreadMemento.of(
-                    String.format("thread-%d-%s", ct.getId(), ct.getName()),
-                    String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
-                    String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
+            var ct = Thread.currentThread();
+            return new ThreadMemento(
+                    String.format("thread-%d-%s", ct.threadId(), ct.getName()),
+                    String.format("Thread-%d [%s]", ct.threadId(), ct.getName()),
+                    String.format("Thread-%d\n%s", ct.threadId(), ct.getName()));
         }
 
     }

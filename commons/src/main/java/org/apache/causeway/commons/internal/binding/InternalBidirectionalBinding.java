@@ -26,16 +26,15 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
-//@Log4j2
+//@Slf4j
 abstract class InternalBidirectionalBinding<T>
 implements ChangeListener<T>, InternalUtil.WeakListener {
 
     public static <T> InternalBidirectionalBinding<T> bind(final Bindable<T> left, final Bindable<T> right) {
         checkParameters(left, right);
-        val binding = new GenericBidirectionalBinding<T>(left, right);
+        var binding = new GenericBidirectionalBinding<T>(left, right);
         left.setValue(right.getValue());
         left.addListener(binding);
         right.addListener(binding);
@@ -44,14 +43,14 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     public static <T> void unbind(final Bindable<T> left, final Bindable<T> right) {
         checkParameters(left, right);
-        val binding = new UntypedBidirectionalBinding(left, right);
+        var binding = new UntypedBidirectionalBinding(left, right);
         left.removeListener(binding);
         right.removeListener(binding);
     }
 
     public static void unbind(final Object left, final Object right) {
         checkParameters(left, right);
-        val binding = new UntypedBidirectionalBinding(left, right);
+        var binding = new UntypedBidirectionalBinding(left, right);
         if (left instanceof Observable) {
             ((Observable<?>) left).removeListener(binding);
         }
@@ -63,7 +62,6 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
     protected abstract Object getLeft();
 
     protected abstract Object getRight();
-
 
     @Override
     public int hashCode() {
@@ -107,7 +105,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     // -- HELPER
 
-    private static void checkParameters(@NonNull final Object left, @NonNull final Object right) {
+    private static void checkParameters(final @NonNull Object left, final @NonNull Object right) {
         if (left == right) {
             throw _Exceptions.illegalArgument("Cannot bind to self");
         }
@@ -118,7 +116,6 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
     private InternalBidirectionalBinding(final Object left, final Object right) {
         cachedHash = left.hashCode() * right.hashCode();
     }
-
 
     private static class GenericBidirectionalBinding<T> extends InternalBidirectionalBinding<T> {
         private final WeakReference<Bindable<T>> leftRef;
@@ -146,8 +143,8 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
             if (updating) {
                 return;
             }
-            val left = getLeft();
-            val right = getRight();
+            var left = getLeft();
+            var right = getRight();
 
             if ((left == null) || (right == null)) {
                 if (left != null) {
@@ -208,6 +205,5 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
             throw _Exceptions.unexpectedCodeReach();
         }
     }
-
 
 }

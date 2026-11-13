@@ -37,8 +37,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.val;
-
 /**
  * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
  *
@@ -69,10 +67,11 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     }
 
     @Override
-    public Can<AuditTrailEntry> createFor(Can<EntityPropertyChange> entityPropertyChanges) {
+    public Can<AuditTrailEntry> createFor(final Can<EntityPropertyChange> entityPropertyChanges) {
         return Can.ofCollection(repositoryService.execInBulk(() -> entityPropertyChanges.map(this::createFor).toList()));
     }
 
+    @Override
     public Optional<AuditTrailEntry> findFirstByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService.firstMatch(
@@ -83,6 +82,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         );
     }
 
+    @Override
     public List<AuditTrailEntry> findRecentByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -93,6 +93,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         );
     }
 
+    @Override
     public List<AuditTrailEntry> findRecentByTargetAndPropertyId(
             final Bookmark target,
             final String propertyId) {
@@ -116,12 +117,13 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         );
     }
 
+    @Override
     public List<AuditTrailEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -153,8 +155,8 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     public List<AuditTrailEntry> findByFromAndTo(
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -183,7 +185,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
                 :null;
     }
 
-
     @Override
     public List<AuditTrailEntry> findMostRecent() {
         return findMostRecent(100);
@@ -203,8 +204,8 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
             final String username,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -232,13 +233,14 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
+    @Override
     public List<AuditTrailEntry> findByUsernameAndTargetAndFromAndTo(
             final String username,
             final Bookmark target,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -270,7 +272,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
-
     @Override
     public List<AuditTrailEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
@@ -282,14 +283,12 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         );
     }
 
-
-
     /**
      * intended for testing only
      */
     @Override
     public List<AuditTrailEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return _Casts.uncheckedCast(
@@ -304,11 +303,10 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService.removeAll(auditTrailEntryClass);
     }
-
 
 }

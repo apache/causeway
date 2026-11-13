@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.model.util;
 
+import java.util.Optional;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -45,6 +48,13 @@ public class PageUtils {
         final RequestCycle requestCycle = RequestCycle.get();
         if(requestCycle==null) return;
         requestCycle.setResponsePage(page);
+    }
+    
+    public boolean isAjax() {
+	    return Optional.ofNullable(RequestCycle.get())
+			.map(rc->rc.find(AjaxRequestTarget.class))
+			.map(Optional::isPresent)
+			.orElse(false);
     }
 
 }

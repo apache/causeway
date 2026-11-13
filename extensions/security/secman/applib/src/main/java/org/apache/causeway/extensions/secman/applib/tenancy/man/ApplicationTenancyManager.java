@@ -53,7 +53,7 @@ public class ApplicationTenancyManager {
     @Property @PropertyLayout(fieldSetId = "metadata")
     public String getTenancyType() {
         return specLoader.specForLogicalTypeName(ApplicationTenancy.LOGICAL_TYPE_NAME)
-                .map(ObjectSpecification::getCorrespondingClass)
+                .map(ObjectSpecification::correspondingClass)
                 .map(Class::getName)
                 .orElse("not found");
     }

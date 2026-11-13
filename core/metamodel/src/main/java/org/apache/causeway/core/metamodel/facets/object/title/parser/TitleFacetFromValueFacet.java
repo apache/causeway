@@ -28,12 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public final class TitleFacetFromValueFacet
 extends FacetAbstract
@@ -46,56 +41,47 @@ implements TitleFacet {
     }
 
     private TitleFacetFromValueFacet(final ValueFacet<?> valueFacet, final FacetHolder holder) {
-        // facets from the title() method have higher precedence
-        super(TitleFacet.class, holder, Precedence.LOW);
+        super(TitleFacet.class, holder);
         this.valueFacet = valueFacet;
     }
 
     @Override
+    public Precedence precedence() {
+    	// facets from the title() method have higher precedence
+    	return Precedence.LOW;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public String title(final TitleRenderRequest renderRequest) {
-        if (renderRequest == null) {
-            return null;
-        }
-        final Object pojo = renderRequest.getObject().getPojo();
-        if (pojo == null) {
-            return null;
-        }
+        if (renderRequest == null) return null;
+
+        final Object pojo = renderRequest.object().getPojo();
+        if (pojo == null) return null;
 
         /* Enum values are treated special, that is, we honor @Title annotations
          * and alternatively object-support method 'title()',
          * by letting the SpecificationLoader introspect enum types and populate the meta-model
          * with TitleFacets (that have higher priority than this one). */
-        if(renderRequest.getObject().getSpecification().getCorrespondingClass().isEnum()) {
-            return Enums.getFriendlyNameOf((Enum<?>)pojo);
-        }
+        if(renderRequest.object().objSpec().correspondingClass().isEnum())
+			return Enums.getFriendlyNameOf((Enum<?>)pojo);
 
+        var featureId = facetHolder().getFeatureIdentifier();
+        var feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
 
         // support for qualified value semantics, requires a 'where' context, that is,
         // what property, collection, action return or action param this is to be rendered for ...
-        if(renderRequest.getFeature()!=null) {
-            switch(renderRequest.getFeature().getFeatureType()) {
-            case PROPERTY: {
-                val prop = (OneToOneAssociation)renderRequest.getFeature();
-                final Renderer renderer = valueFacet
-                        .selectRendererForPropertyElseFallback(prop);
-                return renderer
-                        .titlePresentation(valueFacet
-                                .createValueSemanticsContext(prop), pojo);
-            }
-            case COLLECTION: {
-                val coll = (OneToManyAssociation)renderRequest.getFeature();
-                final Renderer renderer = valueFacet
-                        .selectRendererForCollectionElseFallback(coll);
-                return renderer
-                        .titlePresentation(valueFacet
-                                .createValueSemanticsContext(coll), pojo);
-            }
+        if(feature!=null) {
+            switch(feature.featureType()) {
+            case PROPERTY:
+            case COLLECTION:
             case ACTION_PARAMETER_SINGULAR:
-            case ACTION_PARAMETER_PLURAL:{
-                val param = (ObjectActionParameter)renderRequest.getFeature();
-                final Renderer renderer = valueFacet
-                        .selectRendererForParameterElseFallback(param);
-                return renderer.titlePresentation(valueFacet.createValueSemanticsContext(param), pojo);
+            case ACTION_PARAMETER_PLURAL: {
+				final Renderer renderer = valueFacet
+                        .selectRendererForParamOrPropOrCollOrElseFallback(feature);
+                return renderer
+                        .titlePresentation(valueFacet
+                                .createValueSemanticsContext(feature), pojo);
             }
             default:
                 // fall through
@@ -104,14 +90,11 @@ implements TitleFacet {
 
         // fall back to default value semantics ...
 
-        val featureId = getFacetHolder().getFeatureIdentifier();
-        val feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
-
         return valueFacet.selectDefaultRenderer()
-        .map(renderer->(Renderer) renderer)
-        .map(renderer->renderer.titlePresentation(valueFacet.createValueSemanticsContext(feature), pojo))
-        .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
-                renderRequest.getObject().getSpecification().getCorrespondingClass()));
+            .map(renderer->(Renderer) renderer)
+            .map(renderer->renderer.titlePresentation(valueFacet.createValueSemanticsContext(feature), pojo))
+            .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
+                    renderRequest.object().objSpec().correspondingClass()));
 
     }
 
@@ -126,6 +109,5 @@ implements TitleFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         valueFacet.visitAttributes(visitor);
     }
-
 
 }

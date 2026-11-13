@@ -29,17 +29,15 @@ import lombok.experimental.UtilityClass;
 public class VegaStringifier {
 
     public Vega destring(final String data) {
-        if(data==null) {
-            return null;
-        }
+        if(data==null)
+			return null;
         return Vega.valueOf(data);
     }
 
     public String enstring(final Vega vega)  {
-        if(vega==null) {
-            return null;
-        }
-        return vega.getJson();
+        if(vega==null)
+			return null;
+        return vega.json();
     }
 
 }

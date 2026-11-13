@@ -157,9 +157,8 @@ Defaults to `NOT_SPECIFIED`.
 
 .1+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout[@ViewModelLayout]
 
-| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout_bookmarking[bookmarking]
-| adds new NOT_SPECIFIED value
-
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout_bookmarking[bookmarking] +
+adds new NOT_SPECIFIED value
 
 |===
 

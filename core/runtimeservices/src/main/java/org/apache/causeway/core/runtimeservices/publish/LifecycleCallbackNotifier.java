@@ -56,12 +56,12 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.causeway.core.transaction.changetracking.events.PreStoreEvent;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Calls lifecycle callbacks for entities, ensuring that any given entity is only ever called once.
+ *
  * @since 2.0 {@index}
  */
 @Component
@@ -69,7 +69,7 @@ import lombok.val;
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Qualifier("Default")
-//@Log4j2
+//@Slf4j
 public class LifecycleCallbackNotifier {
 
     final @NonNull EventBusService eventBusService;
@@ -87,25 +87,25 @@ public class LifecycleCallbackNotifier {
      *      otherwise adapted entity without OID <i>right</i>
      */
     public void prePersist(final Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid) {
-        val pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
-        if(pojo==null) {return;}
-        eventBusService.post(PreStoreEvent.of(pojo));
-        val entity = eitherWithOrWithoutOid.fold(UnaryOperator.identity(), UnaryOperator.identity());
+        var pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
+        if(pojo==null) return;
+        eventBusService.post(new PreStoreEvent(pojo));
+        var entity = eitherWithOrWithoutOid.fold(UnaryOperator.identity(), UnaryOperator.identity());
         dispatch(entity, PersistingCallbackFacet.class, PersistingLifecycleEventFacet.class);
     }
 
     public void postPersist(final ManagedObject entity) {
-        eventBusService.post(PostStoreEvent.of(entity.getPojo()));
+        eventBusService.post(new PostStoreEvent(entity.getPojo()));
         dispatch(entity, PersistedCallbackFacet.class, PersistedLifecycleEventFacet.class);
     }
 
     public void preUpdate(final ManagedObject entity) {
-        eventBusService.post(PreStoreEvent.of(entity.getPojo()));
+        eventBusService.post(new PreStoreEvent(entity.getPojo()));
         dispatch(entity, UpdatingCallbackFacet.class, UpdatingLifecycleEventFacet.class);
     }
 
     public void postUpdate(final ManagedObject entity) {
-        eventBusService.post(PostStoreEvent.of(entity.getPojo()));
+        eventBusService.post(new PostStoreEvent(entity.getPojo()));
         dispatch(entity, UpdatedCallbackFacet.class, UpdatedLifecycleEventFacet.class);
     }
 
@@ -121,9 +121,8 @@ public class LifecycleCallbackNotifier {
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
 
         ManagedObjects.asSpecified(entity)
-        .map(ManagedObject::getSpecification)
+        .map(ManagedObject::objSpec)
         .ifPresent(spec->{
-
             spec.lookupFacet(callbackFacetType)
             .ifPresent(callbackFacet->invokeCallback(callbackFacet, entity));
 

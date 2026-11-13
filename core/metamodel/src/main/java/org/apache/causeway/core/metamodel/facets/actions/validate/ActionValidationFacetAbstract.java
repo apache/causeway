@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.facets.actions.validate;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.ActionValidityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
 public abstract class ActionValidationFacetAbstract
 extends FacetAbstract
@@ -38,10 +38,9 @@ implements ActionValidationFacet {
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof ActionValidityContext)) {
-            return null;
-        }
+        if (!(context instanceof ActionValidityContext)) return null;
+
         final ActionValidityContext actionValidityContext = (ActionValidityContext) context;
-        return invalidReason(actionValidityContext.getTarget(), actionValidityContext.getArgs());
+        return invalidReason(actionValidityContext.target(), actionValidityContext.args());
     }
 }

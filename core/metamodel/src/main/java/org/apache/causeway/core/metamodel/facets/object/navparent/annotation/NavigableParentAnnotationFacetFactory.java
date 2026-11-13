@@ -22,8 +22,6 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.Objects;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._Annotations;
@@ -32,7 +30,6 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
@@ -43,7 +40,7 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.method.Navigab
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * For detailed behavioral specification see
@@ -52,7 +49,7 @@ import lombok.val;
  * @since 2.0
  *
  */
-//@Log4j2
+//@Slf4j
 public class NavigableParentAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -64,8 +61,7 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        final Class<?> cls = processClassContext.cls();
 
         // Starting from the current domain-object class, we search down the object
         // inheritance hierarchy (super class, super super class, ...), until we find
@@ -80,30 +76,27 @@ implements MetaModelRefiner {
                         InterfacePolicy.EXCLUDE)
                 .findFirst();
 
-        if (evaluators.isEmpty()) {
-            return; // no parent resolvable
-        }
+        if (evaluators.isEmpty())
+			return; // no parent resolvable
 
         final Evaluators.Evaluator parentEvaluator = evaluators.get();
 
         final ResolvedMethod method;
 
         // find method that provides the parent ...
-        if(parentEvaluator instanceof Evaluators.MethodEvaluator) {
+        if(parentEvaluator instanceof Evaluators.MethodEvaluator methodEvaluator) {
             // we have a 'parent' annotated method
-            method = ((Evaluators.MethodEvaluator) parentEvaluator).getMethod();
-        } else if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
+            method = methodEvaluator.getMethod();
+        } else if(parentEvaluator instanceof Evaluators.FieldEvaluator fieldEvaluator) {
             // we have a 'parent' annotated field (useful if one uses lombok's @Getter on a field)
-            method = ((Evaluators.FieldEvaluator) parentEvaluator).getCorrespondingGetter().orElse(null);
+            method = fieldEvaluator.getCorrespondingGetter().orElse(null);
             if(method==null)
                 return; // code should not be reached, since case should be handled by meta-data validation
 
-        } else {
-            return; // no parent resolvable
-        }
+        } else
+			return; // no parent resolvable
 
-        addFacetIfPresent(
-                NavigableParentFacetViaMethod.create(cls, method, facetHolder));
+        NavigableParentFacetViaMethod.create(processClassContext, method);
     }
 
     private static boolean isNavigableParentFlagSet(final AnnotatedElement annotatedElement){
@@ -122,13 +115,12 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
-            val cls = spec.getCorrespondingClass();
+            var cls = spec.correspondingClass();
 
-            if(!spec.lookupFacet(NavigableParentFacet.class).isPresent()) {
-                return; // skip check
-            }
+            if(!spec.lookupFacet(NavigableParentFacet.class).isPresent())
+				return; // skip check
 
-            val evaluators =
+            var evaluators =
                     Evaluators.streamEvaluators(cls,
                             NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet,
                             TypeHierarchyPolicy.EXCLUDE,
@@ -137,31 +129,28 @@ implements MetaModelRefiner {
                     // guard against inherited method having identical synthesized annotations as bas method,
                     // while not actually overriding
                     .distinct((a, b)->{
-                        if(!Objects.equals(a.getClass(), b.getClass())) {
-                            return false; // different
-                        }
-                        if(a instanceof MethodEvaluator) {
-                            val ma = (MethodEvaluator) a;
-                            val mb = (MethodEvaluator) b;
+                        if(!Objects.equals(a.getClass(), b.getClass()))
+							return false; // different
+                        if(a instanceof MethodEvaluator ma) {
+                            var mb = (MethodEvaluator) b;
                             return _Reflect.methodsSame(ma.getMethod().method(), mb.getMethod().method());
                         }
                         return true; // equal
                     });;
 
-            if (evaluators.isEmpty()) {
-                return; // no conflict, continue validation processing
-            }
+            if (evaluators.isEmpty())
+				return; // no conflict, continue validation processing
 
             if (evaluators.isCardinalityMultiple()) {
 
-                val conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toSet();
+                var conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toSet();
 
                 ValidationFailure.raiseFormatted(
                         spec,
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, "
                                 + "while at most one is allowed.\n\tConflicting members: %s",
-                                spec.getFeatureIdentifier().getClassName(),
+                                spec.getFeatureIdentifier().className(),
                                 PropertyLayout.class.getName(),
                                 conflictingEvaluatorNames.toString()
                                 );
@@ -171,11 +160,8 @@ implements MetaModelRefiner {
 
             final Evaluators.Evaluator parentEvaluator = evaluators.getSingletonOrFail();
 
-            if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
+            if(parentEvaluator instanceof final Evaluators.FieldEvaluator fieldEvaluator) {
                 // we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
-
-                final Evaluators.FieldEvaluator fieldEvaluator =
-                        (Evaluators.FieldEvaluator) parentEvaluator;
 
                 if(!fieldEvaluator.getCorrespondingGetter().isPresent()) {
 
@@ -183,7 +169,7 @@ implements MetaModelRefiner {
                             spec,
                             "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
-                                    spec.getFeatureIdentifier().getClassName(),
+                                    spec.getFeatureIdentifier().className(),
                                     fieldEvaluator.getField().getName(),
                                     PropertyLayout.class.getName());
                 }
@@ -193,6 +179,5 @@ implements MetaModelRefiner {
         });
 
     }
-
 
 }

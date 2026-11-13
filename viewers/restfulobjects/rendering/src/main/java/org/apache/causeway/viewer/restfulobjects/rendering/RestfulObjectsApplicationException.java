@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
+import org.springframework.http.HttpStatus;
+
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class RestfulObjectsApplicationException
 extends RuntimeException
@@ -27,61 +30,47 @@ implements ExceptionWithHttpStatusCode, ExceptionWithBody {
 
     private static final long serialVersionUID = 1L;
 
-    public static final RestfulObjectsApplicationException create(final HttpStatusCode httpStatusCode) {
-        return createWithCause(httpStatusCode, null);
+    public static final RestfulObjectsApplicationException create(final HttpStatus httpStatus) {
+        return createWithCause(httpStatus, null);
     }
 
     public static RestfulObjectsApplicationException createWithMessage(
-            final HttpStatusCode httpStatusCode,
-            final String message, final Object... args) {
-        return createWithCauseAndMessage(httpStatusCode, null, message, args);
+            final HttpStatus httpStatus,
+            final String message) {
+        return createWithCauseAndMessage(httpStatus, null, message);
     }
 
     public static RestfulObjectsApplicationException createWithCause(
-            final HttpStatusCode httpStatusCode,
+            final HttpStatus httpStatus,
             final Exception cause) {
-        return createWithCauseAndMessage(httpStatusCode, cause, null);
+        return createWithCauseAndMessage(httpStatus, cause, null);
     }
 
     public static RestfulObjectsApplicationException createWithCauseAndMessage(
-            final HttpStatusCode httpStatusCode,
+            final HttpStatus httpStatus,
             final Exception cause,
-            final String message, final Object... args) {
-        return new RestfulObjectsApplicationException(httpStatusCode, formatString(message, args), cause, null);
+            final String message) {
+        return new RestfulObjectsApplicationException(httpStatus, message, cause, null);
     }
 
     public static RestfulObjectsApplicationException createWithBody(
-            final HttpStatusCode httpStatusCode,
+            final HttpStatus httpStatus,
             final JsonRepresentation body,
-            final String message, final Object... args) {
-        return new RestfulObjectsApplicationException(httpStatusCode, formatString(message, args), null, body);
+            final String message) {
+        return new RestfulObjectsApplicationException(httpStatus, message, null, body);
     }
 
-    private static String formatString(final String formatStr, final Object... args) {
-        return formatStr != null ? String.format(formatStr, args) : null;
-    }
-
-    private final HttpStatusCode httpStatusCode;
-    private final JsonRepresentation body;
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true) private final HttpStatus httpStatus;
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true) private final JsonRepresentation body;
 
     protected RestfulObjectsApplicationException(
-            final HttpStatusCode httpStatusCode,
+            final HttpStatus httpStatus,
             final String message,
             final Throwable cause,
             final JsonRepresentation body) {
         super(message, cause);
-        this.httpStatusCode = httpStatusCode;
+        this.httpStatus = httpStatus;
         this.body = body;
-    }
-
-    @Override
-    public HttpStatusCode getHttpStatusCode() {
-        return httpStatusCode;
-    }
-
-    @Override
-    public JsonRepresentation getBody() {
-        return body;
     }
 
 }

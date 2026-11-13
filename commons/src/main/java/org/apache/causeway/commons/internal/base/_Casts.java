@@ -21,9 +21,9 @@ package org.apache.causeway.commons.internal.base;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -137,6 +137,5 @@ public final class _Casts {
         return onLeftCast.apply(left_casted, right);
 
     }
-
 
 }

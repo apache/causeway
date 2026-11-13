@@ -18,7 +18,6 @@
  */
 open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel;
-    exports org.apache.causeway.core.metamodel._testing;
     exports org.apache.causeway.core.metamodel.commons; //XXX eventually move to ~.util or replace by core-commons
     exports org.apache.causeway.core.metamodel.consent;
     exports org.apache.causeway.core.metamodel.context;
@@ -43,6 +42,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.members.layout.group;
     exports org.apache.causeway.core.metamodel.facets.members.publish.command;
     exports org.apache.causeway.core.metamodel.facets.members.publish.execution;
+    exports org.apache.causeway.core.metamodel.facets.object.locking;
     exports org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
     exports org.apache.causeway.core.metamodel.facets.object.callbacks;
     exports org.apache.causeway.core.metamodel.facets.object.domainobject;
@@ -50,7 +50,10 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.object.entity;
     exports org.apache.causeway.core.metamodel.facets.object.grid;
     exports org.apache.causeway.core.metamodel.facets.object.icon;
+    exports org.apache.causeway.core.metamodel.facets.object.immutable;
     exports org.apache.causeway.core.metamodel.facets.object.mixin;
+    exports org.apache.causeway.core.metamodel.facets.object.navchild
+        to org.apache.causeway.core.runtimeservices;
     exports org.apache.causeway.core.metamodel.facets.object.objectvalidprops;
     exports org.apache.causeway.core.metamodel.facets.object.publish.entitychange;
     exports org.apache.causeway.core.metamodel.facets.object.title;
@@ -60,6 +63,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.objectvalue.labelat;
     exports org.apache.causeway.core.metamodel.facets.objectvalue.mandatory;
     exports org.apache.causeway.core.metamodel.facets.objectvalue.maxlen;
+    exports org.apache.causeway.core.metamodel.facets.objectvalue.typicallen;
 
     exports org.apache.causeway.core.metamodel.facets.propcoll.accessor;
     exports org.apache.causeway.core.metamodel.facets.properties.defaults;
@@ -70,17 +74,15 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.properties.update.modify;
     exports org.apache.causeway.core.metamodel.facets.value.semantics;
 
-    exports org.apache.causeway.core.metamodel.facets.object.parented
-            to org.apache.causeway.persistence.jdo.metamodel;
-    exports org.apache.causeway.core.metamodel.facets.object.ignore.datanucleus
-            to org.apache.causeway.persistence.jdo.metamodel;
-    exports org.apache.causeway.core.metamodel.facets.object.ignore.jdo
-            to org.apache.causeway.persistence.jdo.metamodel;
-
     exports org.apache.causeway.core.metamodel.interactions;
+    exports org.apache.causeway.core.metamodel.interactions.acc;
     exports org.apache.causeway.core.metamodel.interactions.managed;
+    exports org.apache.causeway.core.metamodel.interactions.use;
+    exports org.apache.causeway.core.metamodel.interactions.val;
+    exports org.apache.causeway.core.metamodel.interactions.vis;
     exports org.apache.causeway.core.metamodel.tabular;
     exports org.apache.causeway.core.metamodel.tabular.simple;
+    exports org.apache.causeway.core.metamodel.tree;
 
     exports org.apache.causeway.core.metamodel.methods;
 
@@ -96,7 +98,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.devutils;
     exports org.apache.causeway.core.metamodel.services.events;
     exports org.apache.causeway.core.metamodel.services.exceprecog;
-    exports org.apache.causeway.core.metamodel.services.grid.bootstrap;
     exports org.apache.causeway.core.metamodel.services.grid;
     exports org.apache.causeway.core.metamodel.services.idstringifier;
     exports org.apache.causeway.core.metamodel.services.ixn;
@@ -104,6 +105,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.message;
     exports org.apache.causeway.core.metamodel.services.metamodel;
     exports org.apache.causeway.core.metamodel.services.objectlifecycle;
+    exports org.apache.causeway.core.metamodel.services.priming;
     exports org.apache.causeway.core.metamodel.services.publishing;
     exports org.apache.causeway.core.metamodel.services.registry;
     exports org.apache.causeway.core.metamodel.services.schema;
@@ -112,29 +114,25 @@ open module org.apache.causeway.core.metamodel {
 
     exports org.apache.causeway.core.metamodel.spec;
     exports org.apache.causeway.core.metamodel.spec.feature;
-    exports org.apache.causeway.core.metamodel.spec.feature.memento
-            //TODO don't expose impl. details
-            to org.apache.causeway.viewer.wicket.model;
 
     exports org.apache.causeway.core.metamodel.specloader
             to org.apache.causeway.core.runtimeservices,
             org.apache.causeway.persistence.commons,
-            //TODO probably don't expose SpecificationLoader to persistence
-            org.apache.causeway.persistence.jdo.metamodel,
             //TODO probably don't expose SpecificationLoader to viewers
             org.apache.causeway.viewer.restfulobjects.rendering,
             org.apache.causeway.viewer.restfulobjects.viewer,
             org.apache.causeway.viewer.wicket.model,
             org.apache.causeway.viewer.wicket.ui,
-            org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model, org.apache.causeway.extensions.titlecache.jcache, org.apache.causeway.extensions.titlecache.caffeine;
-
+            org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model, org.apache.causeway.extensions.titlecache.jcache, org.apache.causeway.extensions.titlecache.caffeine, org.apache.causeway.persistence.querydsl.integration;
 
     exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
     exports org.apache.causeway.core.metamodel.facets.object.layout;
     exports org.apache.causeway.core.metamodel.facets.all.hide;
+    exports org.apache.causeway.core.metamodel.postprocessors;
     exports org.apache.causeway.core.metamodel.services.grid.spi;
     exports org.apache.causeway.core.metamodel.specloader.validator;
     exports org.apache.causeway.core.metamodel.util;
+    exports org.apache.causeway.core.metamodel.util.hmac;
     exports org.apache.causeway.core.metamodel.util.pchain;
     exports org.apache.causeway.core.metamodel.util.snapshot;
     exports org.apache.causeway.core.metamodel.valuesemantics;
@@ -143,7 +141,9 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.valuetypes;
     exports org.apache.causeway.core.metamodel.spi;
     exports org.apache.causeway.core.metamodel.services.deadlock;
+    exports org.apache.causeway.core.metamodel.facets.object.autocomplete;
 
+    requires static lombok;
 
     requires jakarta.activation;
     requires jakarta.annotation;
@@ -153,22 +153,17 @@ open module org.apache.causeway.core.metamodel {
     requires java.xml;
     requires jakarta.xml.bind;
     requires jakarta.inject;
-    requires lombok;
+
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;
     requires transitive org.apache.causeway.schema;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
-    requires org.joda.time;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.core;
     requires spring.boot.autoconfigure;
+    requires org.jspecify;
 
-//JUnit testing stuff, not required as long this module is an 'open' one
-//    opens org.apache.causeway.core.metamodel.services to spring.core;
-//    opens org.apache.causeway.core.metamodel.services.registry to spring.core;
-//    opens org.apache.causeway.core.metamodel.services.grid to jakarta.xml.bind;
-//    opens org.apache.causeway.core.metamodel.services.metamodel to jakarta.xml.bind;
 }

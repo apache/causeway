@@ -20,17 +20,18 @@ package org.apache.causeway.testing.archtestsupport.applib.domain.dom;
 
 import java.io.Serializable;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 @Named("SerializableViewModel")
 @DomainObject(nature = Nature.VIEW_MODEL)
 @DomainObjectLayout()
 public class SerializableViewModel implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     @Inject transient SomeDomainService someDomainService;
 }

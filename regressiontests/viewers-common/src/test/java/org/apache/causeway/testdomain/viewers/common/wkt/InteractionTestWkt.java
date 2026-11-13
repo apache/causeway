@@ -19,6 +19,7 @@
 package org.apache.causeway.testdomain.viewers.common.wkt;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -42,24 +43,21 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
-import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 @SpringBootTest(
         classes = {
@@ -82,21 +80,20 @@ import lombok.val;
 @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class InteractionTestWkt extends InteractionTestAbstract {
 
-    @Inject private MetaModelContext commonContext;
-    @Inject private WicketTesterFactory wicketTesterFactory;
+    @Inject private Provider<WicketTesterFactory> wicketTesterFactoryProvider;
     private WicketTester wktTester;
 
     private ManagedObject domainObject;
     private PageParameters pageParameters;
 
     // optimization: reuse Wicket application across tests
-    private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
+    private static _Refs.ObjectReference<DomainObjectPageTester> wktTesterHolder =
             _Refs.objectRef(null);
 
     @BeforeEach
     void setUp() {
         wktTester = wktTesterHolder.computeIfAbsent(()->
-                wicketTesterFactory.createTester(dto->null));
+        	wicketTesterFactoryProvider.get().createTester(dto->null));
         domainObject = newViewmodel(InteractionDemo.class);
         pageParameters = PageParameterUtils.createPageParametersForObject(domainObject);
     }
@@ -104,14 +101,14 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @AfterAll
     static void cleanUp() {
         wktTesterHolder.getValue()
-            .ifPresent(EntityPageTester::destroy);
+            .ifPresent(DomainObjectPageTester::destroy);
     }
 
     @Test
     void shouldHaveARequestCycle() {
 
-        val entityPage = EntityPage.forPageParameters(pageParameters);
-        wktTester.startPage(entityPage);
+        var domainObjectPage = DomainObjectPage.forPageParameters(pageParameters);
+        wktTester.startPage(domainObjectPage);
 
         assertNotNull(RequestCycle.get());
 
@@ -124,37 +121,36 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
-        val objectSpec = domainObject.getSpecification();
-        val entityModel = UiObjectWkt.ofAdapter(domainObject);
+        var objectSpec = domainObject.objSpec();
+        var objectModel = UiObjectWkt.ofAdapter(domainObject);
 
-        assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
-        assertEquals(domainObject.getTitle(), entityModel.getTitle());
+        assertEquals(domainObject.getBookmark().get(), objectModel.getOwnerBookmark());
+        assertEquals(domainObject.getTitle(), objectModel.getTitle());
 
         // owner sharing (should be the same object)
-        assertTrue(domainObject == entityModel.getBookmarkedOwner());
+        assertTrue(domainObject == objectModel.getBookmarkedOwner());
 
         final long propertyCount =
         objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(prop->{
 
-            final ScalarPropertyModel scalarModel = (ScalarPropertyModel) entityModel
+            final PropertyModel propertyModel = (PropertyModel) objectModel
                     .getPropertyModel(
                             prop,
                             ViewOrEditMode.VIEWING,
                             RenderingHint.PARENTED_PROPERTY_COLUMN);
 
-
             // owner sharing (should be the same object)
-            assertTrue(domainObject == scalarModel.getOwner());
+            assertTrue(domainObject == propertyModel.getOwner());
 
             if(!prop.getId().equals("stringMultiline")) {
                 return true; // continue
             }
 
             // the scalar model should be in sync with the underlying interaction API
-            val pendingPropModel = scalarModel.getPendingPropertyModel();
-            val propBackendValue = pendingPropModel.getValue().getValue();
-            val propUIValue = scalarModel.getObject();
+            var pendingPropModel = propertyModel.getPendingPropertyModel();
+            var propBackendValue = pendingPropModel.getValue().getValue();
+            var propUIValue = propertyModel.getObject();
 
             assertEquals(
                     "initial",
@@ -180,7 +176,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
 
         assertEquals(3L, propertyCount);
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+        var managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw
 
         assertFalse(managedAction.checkVisibility().isPresent()); // is visible
@@ -190,22 +186,22 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val disablingUiModel = DisablingDecorationModel.of(actionInteraction);
+        var disablingUiModel = DisablingDecorationModel.of(actionInteraction);
         assertFalse(disablingUiModel.isPresent());
     }
 
     @Test
     void whenDisabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
-        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
+        var disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
+        assertEquals("Disabled for demonstration.", disablingUiModel.reason());
     }
 }

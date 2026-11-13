@@ -22,13 +22,12 @@ import java.util.function.Consumer;
 
 import org.apache.wicket.util.cookies.CookieUtils;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Functions;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -40,20 +39,20 @@ public class SuccessFeedbackCookieManager {
      */
     static final String FEEDBACK_COOKIE_NAME = "causeway.feedback.success";
 
-
     /**
      * Store a cookie with name {@value #FEEDBACK_COOKIE_NAME} that is
      * used as a temporary container for stateless session scoped success feedback
      * messages.
      */
     public static void storeSuccessFeedback(final @Nullable String successFeedback) {
-        val cookieUtils = new CookieUtils();
+        var cookieUtils = new CookieUtils();
         if (_Strings.isNotEmpty(successFeedback)) {
             cookieUtils.save(FEEDBACK_COOKIE_NAME, _Strings.base64UrlEncode(successFeedback));
         } else {
             // if successFeedback is empty we interpret that as a cookie remove request
             drainSuccessFeedback(_Functions.noopConsumer());
         }
+
     }
 
     /**
@@ -62,8 +61,7 @@ public class SuccessFeedbackCookieManager {
      * messages.
      */
     public static void drainSuccessFeedback(final @NonNull Consumer<String> onSuccessFeedback) {
-
-        val cookieUtils = new CookieUtils();
+        var cookieUtils = new CookieUtils();
         final String successFeedback = cookieUtils.load(FEEDBACK_COOKIE_NAME);
         if (_Strings.isNotEmpty(successFeedback)) {
             onSuccessFeedback.accept(_Strings.base64UrlDecode(successFeedback));

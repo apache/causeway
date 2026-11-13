@@ -21,49 +21,37 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
-import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
-
-import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
 
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
-extends ValueSemanticsAbstract<BigDecimal>
-implements
-    DefaultsProvider<BigDecimal>,
-    Parser<BigDecimal>,
-    Renderer<BigDecimal>,
-    IdStringifier.EntityAgnostic<BigDecimal> {
+extends NumericValueSemanticsAbstract<BigDecimal>
+implements IdStringifier.EntityAgnostic<BigDecimal> {
 
-    @Setter @Inject
-    private SpecificationLoader specificationLoader;
     @Setter @Inject
     private CausewayConfiguration causewayConfiguration;
 
@@ -80,6 +68,11 @@ implements
     @Override
     public BigDecimal getDefaultValue() {
         return BigDecimal.ZERO;
+    }
+
+    @Override
+    protected boolean isFloatingPoint() {
+        return true;
     }
 
     // -- COMPOSER
@@ -107,39 +100,15 @@ implements
         return new BigDecimal(stringified);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderHtml(value, getNumberFormat(context)::format);
-    }
-
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return value==null
-                ? null
-                : getNumberFormat(context, PARSING)
-                    .format(value);
-    }
-
-    @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.getValueTypes().getBigDecimal())
-                                ? GroupingSeparatorPolicy.ALLOW
-                                : GroupingSeparatorPolicy.DISALLOW;
-        return super.parseDecimal(context, text, parsePolicy)
-                .orElse(null);
-    }
-
-    private boolean isUseGroupingSeparatorFrom(CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return bigDecimalConfig.getEditing().isUseGroupingSeparator() || bigDecimalConfig.isUseGroupingSeparator();
+        var input = _Strings.blankToNullOrTrim(text);
+        if(input==null)
+            return null;
+        return parseDecimal(context, text)
+            .orElse(null);
     }
 
     @Override
@@ -149,49 +118,18 @@ implements
 
     @Override
     protected void configureDecimalFormat(
-            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
+            final ValueSemanticsProvider.Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
-        val bigDecimalConfig = causewayConfiguration.getValueTypes().getBigDecimal();
-        format.setGroupingUsed(
-                usedFor == PARSING
-                    ? bigDecimalConfig.getEditing().isUseGroupingSeparator()
-                    : bigDecimalConfig.getDisplay().isUseGroupingSeparator()
-        );
+        super.configureDecimalFormat(context, format, usedFor);
 
-        if(context==null) {
-            return;
-        }
-
-        val feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
-                .orElse(null);
-        if(feature==null) {
-            return;
-        }
-
-        // evaluate any facets that provide the MaximumFractionDigits
-        Facets.maxFractionalDigits(feature)
-                .ifPresent(newValue -> format.setMaximumFractionDigits(newValue));
-
-        // we skip this when PARSING,
-        // because we want to firstly parse any number value into a BigDecimal,
-        // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(usedFor.isRendering() || bigDecimalConfig.getEditing().isPreserveScale()) {
-
-            // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
-            OptionalInt optionalInt = Facets.minFractionalDigits(feature);
-            if (optionalInt.isPresent()) {
-                format.setMinimumFractionDigits(optionalInt.getAsInt());
-            } else {
-                // otherwise, apply a minScale if configured.
-                minScaleFrom(bigDecimalConfig)
-                        .ifPresent(format::setMinimumFractionDigits);
+        if(!usedFor.isParsing()) {
+            var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
+            // apply a minScale as fallback, if configured.
+            if(format.getMinimumFractionDigits()==0) {
+                Optional.ofNullable(bigDecimalConfig.display().minScale())
+                    .ifPresent(format::setMinimumFractionDigits);
             }
         }
-    }
-
-    private static Optional<Integer> minScaleFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return Optional.ofNullable(bigDecimalConfig.getDisplay().getMinScale())
-                       .or(() -> Optional.ofNullable(bigDecimalConfig.getMinScale()));
     }
 
     @Override
@@ -206,6 +144,32 @@ implements
                 BigDecimal.valueOf(123_456_789_012L),
                 BigDecimal.valueOf(1234567.8890f),
                 BigDecimal.valueOf(123_456_789_012L, 3));
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public static class NoGrouping extends BigDecimalValueSemantics {
+        @Override public GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends BigDecimalValueSemantics {
+        @Override public GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends BigDecimalValueSemantics {
+        @Override public GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
+        }
     }
 
 }

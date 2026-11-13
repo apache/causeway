@@ -80,5 +80,4 @@ public class ComparableContractTester<T extends Comparable<T>> {
         return _Lists.ofArray(elements);
     }
 
-
 }

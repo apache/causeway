@@ -34,6 +34,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
@@ -52,18 +53,22 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+//@Slf4j
 public class EntityPropertyChangeSubscriberForAuditTrail implements EntityPropertyChangeSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
 
+    static final String AUDIT_TRAIL_WRITE_OBSERVATION_NAME = "causeway.audittrail.write";
+    static final String AUDIT_TRAIL_WRITE_CONTEXTUAL_NAME = "write audit trail";
+
     final TransactionService transactionService;
     final AuditTrailEntryRepository auditTrailEntryRepository;
     final CausewayConfiguration causewayConfiguration;
+    final CausewayObservationIntegration observationIntegration;
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getAuditTrail().getPersist().isEnabled();
+        return causewayConfiguration.extensions().auditTrail().persist().isEnabled();
     }
 
     @Override
@@ -71,15 +76,23 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
         if (!isEnabled()) {
             return;
         }
-        auditTrailEntryRepository.createFor(entityPropertyChange);
+        observeAuditTrailWrite(() -> auditTrailEntryRepository.createFor(entityPropertyChange));
     }
 
     @Override
-    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+    public void onChanging(final Can<EntityPropertyChange> entityPropertyChanges) {
         if (!isEnabled()) {
             return;
         }
-        auditTrailEntryRepository.createFor(entityPropertyChanges);
+        observeAuditTrailWrite(() -> auditTrailEntryRepository.createFor(entityPropertyChanges));
+    }
+
+    private void observeAuditTrailWrite(final Runnable write) {
+        observationIntegration.provider(getClass(), CausewayObservationIntegration.withModuleName(
+                CausewayModuleExtAuditTrailApplib.NAMESPACE))
+                .get(AUDIT_TRAIL_WRITE_OBSERVATION_NAME)
+                .contextualName(AUDIT_TRAIL_WRITE_CONTEXTUAL_NAME)
+                .observe(write);
     }
 
 }

@@ -20,8 +20,7 @@
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc;
 
 import java.io.Serializable;
-
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,8 +36,8 @@ public class Event implements Serializable {
 	private String id;
 	private String title;
 	private boolean allDay = false;
-	private DateTime start;
-	private DateTime end;
+	private ZonedDateTime start;
+	private ZonedDateTime end;
 	private String url;
 	private String className;
 	private Boolean editable;

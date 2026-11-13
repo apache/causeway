@@ -23,29 +23,34 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class MemberDescribedFacetForPropertyLayoutXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+extends MemberDescribedFacetWithStaticTextAbstract
+implements QualifiedFacet {
 
     public static Optional<MemberDescribedFacet> create(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getDescribedAs)
-        .filter(_Strings::isNotEmpty)
-        .map(describedAs->new MemberDescribedFacetForPropertyLayoutXml(
-                describedAs, holder, precedence));
+            .map(PropertyLayoutData::getDescribedAs)
+            .filter(_Strings::isNotEmpty)
+            .map(describedAs->
+                new MemberDescribedFacetForPropertyLayoutXml(describedAs, holder) {
+                	@Override final public Precedence precedence() { return precedence; }
+                	@Override final public @Nullable String qualifier() { return qualifier; }
+                });
     }
 
     private MemberDescribedFacetForPropertyLayoutXml(
             final String described,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(described, holder, precedence);
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
     @Override

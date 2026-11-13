@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -79,13 +77,13 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
     @BeforeEach
     void setUpSimulatedUi() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "negotiate", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "negotiate", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
-        val managedAction = actionInteraction.getManagedAction().get();
+        var managedAction = actionInteraction.getManagedAction().get();
         pendingArgs = managedAction.startParameterNegotiation();
 
         // setting up and binding all the simulated UI components
@@ -152,7 +150,6 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         assertDoesIncrement(
                 uiParamC::getChoiceBoxUpdateEventCount,
                 ()->uiParamC.setSimulatedSearchArgument("-")); // select for all negative and odd numbers
-
 
         // verify that no additional changes are triggered
         assertDoesNotIncrement(
@@ -232,8 +229,5 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
                 uiParamA.getValidationMessage());
 
     }
-
-
-
 
 }

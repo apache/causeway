@@ -32,8 +32,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public final class ManagedCollection extends ManagedMember {
 
@@ -51,8 +50,8 @@ public final class ManagedCollection extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<OneToManyAssociation>lookup(owner, Identifier.Type.COLLECTION, memberId)
-        .map(objectAction -> of(owner, objectAction, where));
+        return ManagedMember.<OneToManyAssociation>lookup(owner.objSpec(), Identifier.Type.COLLECTION, memberId)
+            .map(objectAction -> of(owner, objectAction, where));
     }
 
     // -- IMPLEMENTATION
@@ -79,7 +78,7 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     public Can<ObjectAction> getAssociatedActions() {
-        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner(), getCollection()));
+        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner().objSpec(), getCollection()));
     }
 
     public ManagedObject getCollectionValue() {
@@ -95,7 +94,7 @@ public final class ManagedCollection extends ManagedMember {
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
     public Stream<ManagedObject> streamElements(final InteractionInitiatedBy interactionInitiatedBy) {
-        val valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
+        var valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(valueAdapter);
     }
 

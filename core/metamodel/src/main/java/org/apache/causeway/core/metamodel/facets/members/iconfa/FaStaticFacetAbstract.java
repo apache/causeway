@@ -29,7 +29,6 @@ import lombok.Getter;
 /**
  * One of two bases for the {@link FaFacet}.
  *
- * @see FaImperativeFacetAbstract
  * @since 2.0
  */
 public abstract class FaStaticFacetAbstract
@@ -47,19 +46,10 @@ implements FaStaticFacet {
     private final FontAwesomeLayers layers; // serializable
 
     protected FaStaticFacetAbstract(
-            final String value,
-            final CssClassFaPosition position,
-            final FacetHolder holder) {
-        this(value, position, holder, Precedence.DEFAULT);
-    }
-
-    protected FaStaticFacetAbstract(
             final String quickNotation,
             final CssClassFaPosition position,
-            final FacetHolder holder,
-            final Precedence precedence) {
-
-        super(type(), holder, precedence);
+            final FacetHolder holder) {
+        super(type(), holder);
         this.layers = position == null
                 ? FontAwesomeLayers.fromQuickNotation(quickNotation)
                 : FontAwesomeLayers.fromQuickNotation(quickNotation)
@@ -69,7 +59,7 @@ implements FaStaticFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("position", layers.getPosition());
+        visitor.accept("position", layers.position());
         visitor.accept("classes", layers.toQuickNotation());
     }
 

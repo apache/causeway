@@ -21,9 +21,9 @@ package org.apache.causeway.applib.locale;
 import java.io.Serializable;
 import java.util.Locale;
 
+import org.jspecify.annotations.NonNull;
+
 import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
 
 /**
  * User specific regional preferred settings.
@@ -32,12 +32,12 @@ import lombok.Value;
  * @since 2.0 {@index}
  */
 @org.apache.causeway.applib.annotation.Value
-@Value
 @Builder
-public class UserLocale
-implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public record UserLocale(
+    @NonNull Locale languageLocale,
+    @NonNull Locale numberFormatLocale,
+    @NonNull Locale timeFormatLocale
+    ) implements Serializable {
 
     public static UserLocale getDefault() {
         return valueOf(Locale.getDefault());
@@ -50,10 +50,6 @@ implements Serializable {
                 .timeFormatLocale(mainLocale)
                 .build();
     }
-
-    private final @NonNull Locale languageLocale;
-    private final @NonNull Locale numberFormatLocale;
-    private final @NonNull Locale timeFormatLocale;
 
     // -- UTILITY
 

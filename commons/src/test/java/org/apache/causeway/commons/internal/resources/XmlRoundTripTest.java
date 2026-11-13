@@ -32,14 +32,13 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
-import lombok.val;
 
 class XmlRoundTripTest {
 
     @Test @SneakyThrows
     void testFrameworkDefault() {
-        val dto = getSample();
-        val mapper = JaxbUtils
+        var dto = getSample();
+        var mapper = JaxbUtils
                 .mapperFor(SampleDto.class, opts->opts.allowMissingRootElement(true));
         assertEquals(dto, mapper.clone(dto));
     }
@@ -55,7 +54,7 @@ class XmlRoundTripTest {
     }
 
     private SampleDto getSample() {
-        val dto = new SampleDto();
+        var dto = new SampleDto();
         dto.setContent("Hallo World!");
         return dto;
     }

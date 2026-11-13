@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.typicallen;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleIntValueFacetAbstract;
 
@@ -34,13 +33,6 @@ implements TypicalLengthFacet {
             final int typicalLength,
             final FacetHolder holder) {
         super(type(), holder, typicalLength);
-    }
-
-    protected TypicalLengthFacetAbstract(
-            final int typicalLength,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, typicalLength, precedence);
     }
 
     // -- REPORTING

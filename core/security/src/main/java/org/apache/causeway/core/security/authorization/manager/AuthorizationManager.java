@@ -26,13 +26,13 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -65,7 +65,7 @@ public class AuthorizationManager {
             final Optional<AuthorizorChooser> authorizorChooserIfAny) {
 
         this.actionsWithSafeSemanticsRequireOnlyViewingPermission =
-                config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission();
+                config.security().actionsWithSafeSemanticsRequireOnlyViewingPermission();
         this.actionSemanticsResolver = actionSemanticsResolver;
 
         _Assert.assertTrue(_NullSafe.size(authorizors)>0, ()->
@@ -122,7 +122,7 @@ public class AuthorizationManager {
             return true;
         }
         // no-op if is visibility context check at object-level
-        if (identifier.getMemberLogicalName().equals("")) {
+        if (identifier.memberLogicalName().equals("")) {
             return true;
         }
         if(containsSudoSuperuserRole(authentication)) {
@@ -141,11 +141,11 @@ public class AuthorizationManager {
         if(session==null || session.getUser()==null) {
             return false;
         }
-        return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.getName());
+        return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.name());
     }
 
     private boolean isPerspectiveMember(final Identifier identifier) {
-        return (identifier.getClassName().equals(""));
+        return (identifier.className().equals(""));
     }
 
     private boolean isActionWithSafeSemantics(final Identifier identifier) {

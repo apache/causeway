@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-import lombok.val;
-
 public class ActionParameterDescriptionReprRenderer
 extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
 
@@ -39,7 +37,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final ObjectActionParameter objectActionParameter) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
         final String paramId = objectActionParameter.getId();
@@ -69,7 +67,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
     }
 
     private static String deriveId(final ObjectActionParameter objectActionParameter) {
-        val named = objectActionParameter.getCanonicalFriendlyName();
+        var named = objectActionParameter.getCanonicalFriendlyName();
         return objectActionParameter.getAction().getId() + "-" + named;
     }
 

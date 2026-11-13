@@ -28,12 +28,11 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0
@@ -44,11 +43,13 @@ extends NavigableParentFacetAbstract {
     private final MethodHandle methodHandle;
 
     public static Optional<NavigableParentFacet> create(
-            final @NonNull Class<?> processedClass,
-            final @NonNull ResolvedMethod method,
-            final @NonNull FacetHolder facetHolder) {
+            final @NonNull ProcessClassContext processClassContext,
+            final @NonNull ResolvedMethod method) {
 
-        return validateNavigableParentType(processedClass, method, facetHolder)
+    	final Class<?> processedClass = processClassContext.cls();
+        final FacetHolder facetHolder = processClassContext.facetHolder();
+
+        return validateNavigableParentType(processClassContext, method)
         .fold(
             // failure
             deficiency->{
@@ -62,10 +63,7 @@ extends NavigableParentFacetAbstract {
 
                 return Optional.empty();
             },
-            // success
-            methodHandle->{
-                return Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder));
-            });
+            methodHandle -> Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder)));
     }
 
     protected NavigableParentFacetViaMethod(
@@ -84,7 +82,6 @@ extends NavigableParentFacetAbstract {
         }
     }
 
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
@@ -95,23 +92,18 @@ extends NavigableParentFacetAbstract {
 
     /** Returns either the MethodHandle to use or a deficiency message. */
     private static Either<String, MethodHandle> validateNavigableParentType(
-            final @NonNull Class<?> processedClass,
-            final @NonNull ResolvedMethod method,
-            final @NonNull FacetHolder holder) {
+            final @NonNull ProcessClassContext processClassContext,
+            final @NonNull ResolvedMethod method) {
 
-        val navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.returnType());
-        if(navigableParentSpec==null) {
-            return Either.left("vetoed");
-        }
-        if(navigableParentSpec.isPlural()) {
-            return Either.left("plural");
-        }
-        if(navigableParentSpec.isVoid()) {
-            return Either.left("void");
-        }
-        if(navigableParentSpec.isValue()) {
-            return Either.left("value-type");
-        }
+        var navigableParentSpec = processClassContext.loadSpecificationTypeOnly(method.returnType());
+        if(navigableParentSpec==null)
+			return Either.left("vetoed");
+        if(navigableParentSpec.isPlural())
+			return Either.left("plural");
+        if(navigableParentSpec.isVoid())
+			return Either.left("void");
+        if(navigableParentSpec.isValue())
+			return Either.left("value-type");
         return Try.call(()->MethodHandles.lookup().unreflect(method.method()))
                 .mapToEither(
                         e->String.format("'reflection exception while trying to create a method handle for %s'\n"

@@ -27,12 +27,12 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
@@ -40,34 +40,27 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
- * delegates to the Causeway' configured {@link AuthenticationManager}, and which
- * also tracks thread usage (so that multiple concurrent requests are all
+ * delegates to the Causeway' configured {@link AuthenticationManager}, and
+ * which also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-@Log4j2
-public class AuthenticatedWebSessionForCauseway
-extends AuthenticatedWebSession
-implements
-    BreadcrumbModelProvider,
-    BookmarkedPagesModelProvider,
-    HasCommonContext,
-    HasAmendableInteractionContext {
+@Slf4j
+public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession implements BreadcrumbModelProvider,
+        BookmarkedPagesModelProvider, HasMetaModelContext, HasAmendableInteractionContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -79,22 +72,20 @@ implements
      * lazily populated in {@link #getBreadcrumbModel()}
      */
     private BreadcrumbModel breadcrumbModel;
+
     @Override
     public BreadcrumbModel getBreadcrumbModel() {
-        return breadcrumbModel != null
-                ? breadcrumbModel
-                : (breadcrumbModel = new BreadcrumbModel());
+        return breadcrumbModel != null ? breadcrumbModel : (breadcrumbModel = new BreadcrumbModel());
     }
-
 
     /**
      * lazily populated in {@link #getBookmarkedPagesModel()}
      */
     private BookmarkedPagesModel bookmarkedPagesModel;
+
     @Override
     public BookmarkedPagesModel getBookmarkedPagesModel() {
-        return bookmarkedPagesModel != null
-                ? bookmarkedPagesModel
+        return bookmarkedPagesModel != null ? bookmarkedPagesModel
                 : (bookmarkedPagesModel = new BookmarkedPagesModel());
     }
 
@@ -102,23 +93,23 @@ implements
      * As populated in {@link #signIn(String, String)}.
      */
     private InteractionContext interactionContext;
+
     private void setInteractionContext(final @Nullable InteractionContext interactionContext) {
-        _Assert.assertFalse(
-                interactionContext !=null
-                 && interactionContext.getUser().isImpersonating(), ()->
-                "framework bug: cannot signin with an impersonated user");
+        _Assert.assertFalse(interactionContext != null && interactionContext.getUser().isImpersonating(),
+                () -> "framework bug: cannot signin with an impersonated user");
         this.interactionContext = interactionContext;
     }
 
     /**
-     * If there is an {@link InteractionContext} already (primed)
-     * (as some authentication mechanisms setup in filters,
-     * eg SpringSecurityFilter), then just use it.
+     * If there is an {@link InteractionContext} already (primed) (as some
+     * authentication mechanisms setup in filters, eg SpringSecurityFilter), then
+     * just use it.
+     *
      * <p>
      * However, for authorization, the authentication still must pass
-     * {@link AuthenticationManager} checks,
-     * as done in {@link #getInteractionContext()},
-     * which on success also sets the signIn flag.
+     * {@link AuthenticationManager} checks, as done in
+     * {@link #getInteractionContext()}, which on success also sets the signIn flag.
+     *
      * <p>
      * Called by {@link WebRequestCycleForCauseway}.
      */
@@ -131,14 +122,14 @@ implements
     private String cachedSessionId;
 
     /**
-     * Optionally the current HttpSession's Id,
-     * based on whether such a session is available.
-     * @implNote side-effect free, that is,
-     * must not create a session if there is none yet
+     * Optionally the current HttpSession's Id, based on whether such a session is
+     * available.
+     *
+     * @implNote side-effect free, that is, must not create a session if there is
+     *           none yet
      */
     public Optional<String> getCachedSessionId() {
-        if (cachedSessionId == null
-                && Session.exists()) {
+        if (cachedSessionId == null && Session.exists()) {
             cachedSessionId = getId();
         }
         return Optional.ofNullable(cachedSessionId);
@@ -151,16 +142,15 @@ implements
 
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
-        val authenticationRequest = new AuthenticationRequestPassword(username, password);
+        var authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
         InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
         setInteractionContext(interactionContext);
         if (interactionContext != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
-        } else {
+        } else
             return false;
-        }
     }
 
     @Override
@@ -174,10 +164,8 @@ implements
         // principals for it to logout
         //
 
-        getAuthenticationManager().closeSession(
-                Optional.ofNullable(interactionContext)
-                .map(InteractionContext::getUser)
-                .orElse(null));
+        getAuthenticationManager()
+                .closeSession(Optional.ofNullable(interactionContext).map(InteractionContext::getUser).orElse(null));
 
         super.invalidateNow();
 
@@ -187,15 +175,14 @@ implements
     public synchronized void onInvalidate() {
 
         String userName = null;
-        val authentication = getInteractionContext();
+        var authentication = getInteractionContext();
         if (authentication != null) {
-            userName = authentication.getUser().getName();
+            userName = authentication.getUser().name();
         }
 
         super.onInvalidate();
 
-        val causedBy = RequestCycle.get() != null
-                ? SessionSubscriber.CausedBy.USER
+        var causedBy = RequestCycle.get() != null ? SessionSubscriber.CausedBy.USER
                 : SessionSubscriber.CausedBy.SESSION_EXPIRATION;
 
         log(SessionSubscriber.Type.LOGOUT, userName, causedBy);
@@ -207,23 +194,21 @@ implements
     }
 
     /**
-     * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
-     * or taking into account {@link UserService impersonation}.
+     * Returns an {@link InteractionContext} either as authenticated (and then
+     * cached on the session subsequently), or taking into account
+     * {@link UserService impersonation}.
+     *
      * <p>
-     * The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
-     * note that this will always be true for externally authenticated users.
+     * The session must still
+     * {@link AuthenticationManager#isSessionValid(InteractionContext) be valid},
+     * though note that this will always be true for externally authenticated users.
      */
-     synchronized InteractionContext getInteractionContext() {
-
-        if(interactionContext == null) {
+    synchronized InteractionContext getInteractionContext() {
+        if (interactionContext == null)
             return null;
-        }
-        if (Optional.ofNullable(getMetaModelContext())
-                .map(HasMetaModelContext::getAuthenticationManager)
-                .filter(x -> x.isSessionValid(interactionContext))
-                .isEmpty()) {
+        if (Optional.ofNullable(getMetaModelContext()).map(MetaModelContext::getAuthenticationManager)
+                .filter(x -> x.isSessionValid(interactionContext)).isEmpty())
             return null;
-        }
         signIn(true);
 
         return interactionContext;
@@ -231,50 +216,39 @@ implements
 
     @Override
     public AuthenticationManager getAuthenticationManager() {
-        return Optional.ofNullable(getMetaModelContext())
-                .map(HasMetaModelContext::getAuthenticationManager)
-                .orElse(null);
+        return Optional.ofNullable(getMetaModelContext()).map(MetaModelContext::getAuthenticationManager).orElse(null);
     }
 
     /**
-     * This is a no-op if the {@link #getInteractionContext() authentication session}'s
-     * {@link UserMemento#getAuthenticationSource() source} is
-     * {@link AuthenticationSource#EXTERNAL external}
-     * (eg as managed by keycloak).
+     * This is a no-op if the {@link #getInteractionContext() authentication
+     * session}'s {@link UserMemento#authenticationSource() source} is
+     * {@link AuthenticationSource#EXTERNAL external} (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
-        if(interactionContext !=null
-                && interactionContext.getUser().getAuthenticationSource().isExternal()) {
+        if (interactionContext != null && interactionContext.getUser().authenticationSource().isExternal())
             return;
-        }
         // otherwise
         super.invalidate();
     }
 
     @Override
     public synchronized Roles getRoles() {
-        if (!isSignedIn()) {
+        if (!isSignedIn())
             return null;
-        }
-        return getInteractionService()
-            .currentInteractionContext()
-            .map(InteractionContext::getUser)
-            .map(user->{
-                val roles = new Roles();
-                user.streamRoleNames()
-                .forEach(roles::add);
-                return roles;
-            })
-            .orElse(null);
+        return getInteractionService().currentInteractionContext().map(InteractionContext::getUser).map(user -> {
+            var roles = new Roles();
+            user.streamRoleNames().forEach(roles::add);
+            return roles;
+        }).orElse(null);
     }
 
     @Override
     public synchronized void detach() {
-        if(breadcrumbModel!=null) {
+        if (breadcrumbModel != null) {
             breadcrumbModel.detach();
         }
-        if(bookmarkedPagesModel!=null) {
+        if (bookmarkedPagesModel != null) {
             bookmarkedPagesModel.detach();
         }
         super.detach();
@@ -286,32 +260,28 @@ implements
         // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
     }
 
-    private void log(
-            final SessionSubscriber.Type type,
-            final String username,
+    private void log(final SessionSubscriber.Type type, final String username,
             final SessionSubscriber.CausedBy causedBy) {
 
-        if(getMetaModelContext()==null) {
+        if (getMetaModelContext() == null) {
             log.warn("Failed to callback SessionLoggingServices due to unavailable MetaModelContext.\n"
                     + "\tEvent Data: type={}, username={}, causedBy={}", type, username, causedBy);
             return;
         }
 
-        val interactionService = getInteractionService();
-        val sessionLoggingServices = getSessionLoggingServices();
+        var interactionService = getInteractionService();
+        var sessionLoggingServices = getSessionLoggingServices();
 
-        final Runnable loggingTask = ()->{
+        final Runnable loggingTask = () -> {
 
-            val now = virtualClock().nowAsJavaUtilDate();
-            val httpSessionId = AuthenticatedWebSessionForCauseway.this.getCachedSessionId()
-                    .orElse("(none)");
+            var now = virtualClock().nowAsJavaUtilDate();
+            var httpSessionId = AuthenticatedWebSessionForCauseway.this.getCachedSessionId().orElse("(none)");
 
-            sessionLoggingServices
-            .forEach(sessionLoggingService ->
-                sessionLoggingService.log(type, username, now, causedBy, getSessionGuid(), httpSessionId));
+            sessionLoggingServices.forEach(sessionLoggingService -> sessionLoggingService.log(type, username, now,
+                    causedBy, getSessionGuid(), httpSessionId));
         };
 
-        if(interactionService!=null) {
+        if (interactionService != null) {
             interactionService.runAnonymous(loggingTask::run);
         } else {
             loggingTask.run();
@@ -324,9 +294,7 @@ implements
 
     private VirtualClock virtualClock() {
         try {
-            return getServiceRegistry()
-                    .lookupService(ClockService.class)
-                    .map(ClockService::getClock)
+            return getServiceRegistry().lookupService(ClockService.class).map(ClockService::getClock)
                     .orElseGet(this::nowFallback);
         } catch (Exception e) {
             return nowFallback();

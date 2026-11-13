@@ -35,7 +35,7 @@ public class ScalarMarshallerString extends ScalarMarshallerAbstract<String> {
 
     @Inject
     public ScalarMarshallerString(final CausewayConfiguration causewayConfiguration) {
-        super(String.class, Scalars.GraphQLString, causewayConfiguration);
+        super(String.class, Scalars.GraphQLString, causewayConfiguration, true);
     }
 
     @Override

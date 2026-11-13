@@ -5,11 +5,11 @@
 
 == Implementation
 
-The core framework itself defines only an SPI for this service; there is no default implementation.
+This is an SPI only; there is no default implementation.
 Rather, the implementation will depend on the security mechanism being used.
 
 === SecMan
 
-If you have configured your app to use the xref:security:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an implementation (`UserRegistrationServiceForSecman`) of this `UserRegistrationService`.
+If you have configured your app to use the xref:security:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an implementation, xref:refguide:extensions:index/secman/integration/userreg/UserRegistrationServiceForSecman.adoc[].
 This can be configured to set up initial roles; see xref:security:secman:setting-up.adoc#user-registration-aka-sign-up[secman docs] for details.
 

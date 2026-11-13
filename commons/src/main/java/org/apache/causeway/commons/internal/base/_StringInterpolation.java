@@ -22,14 +22,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings.KeyValuePair;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -44,18 +44,12 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-public final class _StringInterpolation {
-
-    final Map<String, String> variables;
+public record _StringInterpolation(Map<String, String> variables) {
 
     public _StringInterpolation(final @NonNull KeyValuePair ... kvPairs) {
-        this.variables = new HashMap<>();
+        this(new HashMap<>());
         stream(kvPairs)
-        .forEach(kvPair->variables.put(kvPair.getKey(), kvPair.getValue()));
-    }
-
-    public _StringInterpolation(final @NonNull Map<String, String> variables) {
-        this.variables = variables;
+            .forEach(kvPair->variables.put(kvPair.key(), kvPair.value()));
     }
 
     /**

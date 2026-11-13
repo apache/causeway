@@ -1,0 +1,78 @@
+{
+  rich {
+    Scenario(name: "can read and negotiate abstract people") {
+      Given {
+        university_dept_Departments {
+          findDepartmentByName {
+            invoke(name: "Classics") {
+              results {
+                people {
+                  get {
+                    __typename
+                    ... on rich__university_dept_DeptHead {
+                      _meta {
+                        saveAs(ref: "person")
+                      }
+                      deptHeadName: name {
+                        get
+                      }
+                    }
+                    ... on rich__university_dept_StaffMember {
+                      _meta {
+                        saveAs(ref: "person")
+                      }
+                      staffMemberName: name {
+                        get
+                      }
+                    }
+                  }
+                }
+                inspectPeople {
+                  params {
+                    people {
+                      choices {
+                        __typename
+                        ... on rich__university_dept_DeptHead {
+                          deptHeadName: name {
+                            get
+                          }
+                        }
+                        ... on rich__university_dept_StaffMember {
+                          staffMemberName: name {
+                            get
+                          }
+                        }
+                      }
+                      validity(people: [])
+                    }
+                  }
+                  validateOmitted: validate
+                  validateNull: validate(people: null)
+                  validateSelected: validate(people: [{ref: "person"}, {ref: "person-2"}])
+                  invoke(people: [{ref: "person"}, {ref: "person-2"}]) {
+                    args {
+                      people {
+                        __typename
+                        ... on rich__university_dept_DeptHead {
+                          deptHeadName: name {
+                            get
+                          }
+                        }
+                        ... on rich__university_dept_StaffMember {
+                          staffMemberName: name {
+                            get
+                          }
+                        }
+                      }
+                    }
+                    results
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

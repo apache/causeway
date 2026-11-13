@@ -27,7 +27,7 @@ module org.apache.causeway.valuetypes.vega.applib {
 
     requires jakarta.inject;
     requires jakarta.xml.bind;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;

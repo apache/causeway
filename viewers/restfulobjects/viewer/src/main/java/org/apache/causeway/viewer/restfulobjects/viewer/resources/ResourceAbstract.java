@@ -19,21 +19,22 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.Request;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.UriInfo;
-import jakarta.ws.rs.ext.Providers;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
@@ -45,17 +46,19 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.UrlDecoderUtils;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import lombok.SneakyThrows;
 
 public abstract class ResourceAbstract
 implements HasMetaModelContext {
@@ -63,14 +66,11 @@ implements HasMetaModelContext {
     @Getter(onMethod_={@Override})
     @Autowired protected MetaModelContext metaModelContext;
     @Autowired protected WebAppContextPath webAppContextPath;
+    @Autowired protected ResponseFactory responseFactory;
 
-    @Context HttpHeaders httpHeaders;
-    @Context UriInfo uriInfo;
-    @Context Request request;
-    @Context HttpServletRequest httpServletRequest;
-    @Context HttpServletResponse httpServletResponse;
-    @Context SecurityContext securityContext;
-    @Context Providers providers;
+    @Autowired protected HttpServletRequest httpServletRequest;
+    @Autowired protected HttpServletResponse httpServletResponse;
+    @Value("${causeway.viewer.restfulobjects.base-path}") String restfulPath;
 
     protected ResourceAbstract() {
     }
@@ -81,11 +81,11 @@ implements HasMetaModelContext {
             final RepresentationType representationType,
             final Where where,
             final RepresentationService.Intent intent) {
-
-        return createResourceContext(ResourceDescriptor.of(representationType, where, intent));
+        return createResourceContext(new ResourceDescriptor(representationType, where, intent, ResourceLink.NONE));
     }
 
-    protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {
+    protected ResourceContext createResourceContext(
+            final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
         return createResourceContext(resourceDescriptor, RequestParams.ofQueryString(queryStringIfAny));
     }
@@ -93,8 +93,7 @@ implements HasMetaModelContext {
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
-
-        val urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
+        var urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
         return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
 
@@ -102,19 +101,20 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final RequestParams requestParams) {
 
-        if (!getInteractionService().isInInteraction()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
-        }
+        if (!getInteractionService().isInInteraction())
+            throw RestfulObjectsApplicationException.create(HttpStatus.UNAUTHORIZED);
+
+        var requestUrl = parseUrl(httpServletRequest.getRequestURL().toString());
 
         // eg. http://localhost:8080/ctx/restful/
-        final String restfulAbsoluteBase = getConfiguration().getViewer().getRestfulobjects().getBaseUri()
-                                    .orElseGet(()->uriInfo.getBaseUri().toString());
+        final String restfulAbsoluteBase = getConfiguration().viewer().restfulobjects().baseUri()
+            .orElseGet(()->restfulAbsoluteBase(requestUrl));
 
         // eg. /ctx/restful/
-        val restfulRelativeBase = uriInfo.getBaseUri().getRawPath();
+        var restfulRelativeBase = requestUrl.getPath();
 
         // eg. http://localhost:8080/
-        val serverAbsoluteBase =
+        var serverAbsoluteBase =
                 _Strings
                 .suffix(TextUtils.cutter(restfulAbsoluteBase)
                         .keepAfterLast(restfulRelativeBase)
@@ -122,7 +122,7 @@ implements HasMetaModelContext {
                 "/");
 
         // eg. http://localhost:8080/ctx/
-        val applicationAbsoluteBase = _Strings
+        var applicationAbsoluteBase = _Strings
                 .suffix(webAppContextPath.appendContextPath(serverAbsoluteBase), "/");
 
         return resourceContext(
@@ -149,18 +149,44 @@ implements HasMetaModelContext {
             final @NonNull UnaryOperator<RestfulObjectsApplicationException> onRoException) {
         final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
 
-        val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
+        var bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
         return metaModelContext.getObjectManager().loadObject(bookmark) // might return ManagedObject.EMPTY
                 .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                 .orElseThrow(()->onRoException.apply(
                         RestfulObjectsApplicationException
-                                .createWithMessage(HttpStatusCode.NOT_FOUND,
-                                        "Could not determine adapter for bookmark: '%s'",
-                                        bookmark)));
+                                .createWithMessage(HttpStatus.NOT_FOUND,
+                                        "Could not determine adapter for bookmark: '%s'".formatted(bookmark))));
     }
 
+    protected static Link newLink(
+            final Rel rel,
+            final String href,
+            final String type) {
+        return new Link(rel.getName(), "GET", href, type);
+    }
 
     // -- HELPER
+
+    @SneakyThrows
+    private URL parseUrl(final String url) {
+        return new URI(url).toURL();
+    }
+
+    /** if not configured can be re-constructed */
+    @SneakyThrows
+    private String restfulAbsoluteBase(final URL requestUrl) {
+        var base = webAppContextPath.prependContextPath(restfulPath);
+        var uri = new URI(
+                requestUrl.getProtocol(),
+                null, // userInfo (null for no user info)
+                requestUrl.getHost(),
+                requestUrl.getPort() == -1 ? 0 : requestUrl.getPort(),
+                base,
+                null, // query
+                null  // fragment
+            );
+        return uri.toURL().toExternalForm();
+    }
 
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();
@@ -175,16 +201,14 @@ implements HasMetaModelContext {
             final Map<String, String[]> requestParams) {
 
         return new ResourceContext(
-                resourceDescriptor,
-                httpHeaders, providers, request,
-                applicationAbsoluteBase,
-                restfulAbsoluteBase,
-                urlUnencodedQueryString,
-                httpServletRequest, httpServletResponse,
-                securityContext,
-                metaModelContext,
-                InteractionInitiatedBy.USER,
-                requestParams);
+            metaModelContext,
+            resourceDescriptor,
+            applicationAbsoluteBase,
+            restfulAbsoluteBase,
+            urlUnencodedQueryString,
+            httpServletRequest, httpServletResponse,
+            InteractionInitiatedBy.USER,
+            requestParams);
     }
 
 }

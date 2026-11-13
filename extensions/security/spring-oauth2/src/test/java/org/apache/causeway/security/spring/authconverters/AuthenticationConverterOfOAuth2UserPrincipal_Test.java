@@ -19,6 +19,8 @@
 package org.apache.causeway.security.spring.authconverters;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -37,8 +39,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import org.apache.causeway.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
-
-import lombok.val;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationConverterOfOAuth2UserPrincipal_Test {
@@ -73,12 +73,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getName()).isEqualTo("freddy");
-
+            Assertions.assertThat(userMemento.name()).isEqualTo("freddy");
         }
 
         @Test
@@ -99,12 +98,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fred");
-
+            Assertions.assertThat(userMemento.name()).isEqualTo("fred");
         }
     }
 
@@ -112,7 +110,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
     class avatarUrl {
 
         @Test
-        void given_avatarUrl_attr_exists_and_can_be_parsed_then_used() throws MalformedURLException {
+        void given_avatarUrl_attr_exists_and_can_be_parsed_then_used() throws MalformedURLException, URISyntaxException {
 
             // given
             final OAuth2User oAuth2User = new OAuth2User() {
@@ -129,12 +127,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-
+            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(new URI("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png").toURL());
         }
 
         @Test
@@ -155,11 +152,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
 
         @Test
@@ -180,11 +177,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
 
     }
@@ -210,11 +207,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento.realName()).isEqualTo("Fred Flintstone");
         }
 
         @Test
@@ -235,11 +232,11 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getRealName()).isNull();
+            Assertions.assertThat(userMemento.realName()).isNull();
         }
 
     }

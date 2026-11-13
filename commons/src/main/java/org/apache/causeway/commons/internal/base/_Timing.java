@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import lombok.Getter;
 
@@ -146,8 +146,5 @@ public final class _Timing {
         log.info(String.format(Locale.US, "Calling '%s' took %d ms", label, watch.getMillis()));
         return result;
     }
-
-
-
 
 }

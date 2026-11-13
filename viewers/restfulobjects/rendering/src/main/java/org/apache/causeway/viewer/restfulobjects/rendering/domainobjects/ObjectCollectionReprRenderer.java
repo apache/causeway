@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -34,8 +34,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
-
-import lombok.val;
 
 public class ObjectCollectionReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
@@ -57,15 +55,14 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     @Override
     public JsonRepresentation render() {
 
-        if(representation == null) {
-            return null;
-        }
+        if(representation == null)
+			return null;
 
         renderMemberContent();
 
         final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
         final boolean eagerlyRender = !followValue.isTerminated()
-                || (resourceContext.config().isHonorUiHints()
+                || (resourceContext.config().honorUiHints()
                         && Facets.defaultViewIsTable(objectMember));
 
         if ((mode.isInline() && eagerlyRender)
@@ -86,30 +83,27 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         return representation;
     }
 
-    // ///////////////////////////////////////////////////
-    // value
-    // ///////////////////////////////////////////////////
+    // VALUE
 
     private void addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
-        if (valueAdapter == null) {
-            return;
-        }
+        var valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        if (valueAdapter == null)
+			return;
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         final boolean eagerlyRender = !followHref.isTerminated()
-                || (resourceContext.config().isHonorUiHints()
+                || (resourceContext.config().honorUiHints()
                         && Facets.defaultViewIsTable(objectMember)
                         && resourceContext.canEagerlyRender(valueAdapter));
 
-        final List<JsonRepresentation> list = _Lists.newArrayList();
+        final List<JsonRepresentation> list = new ArrayList<>();
 
         CollectionFacet.streamAdapters(valueAdapter)
         .forEach(elementAdapter->{
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
                     .newLinkToBuilder(resourceContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
-                val domainObjectReprRenderer =
+                var domainObjectReprRenderer =
                         new DomainObjectReprRenderer(getResourceContext(), followHref, JsonRepresentation.newMap())
                         .with(elementAdapter);
                 if(mode.isEventSerialization()) {
@@ -125,46 +119,36 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         representation.mapPut("value", list);
     }
 
-
-    // ///////////////////////////////////////////////////
-    // details link
-    // ///////////////////////////////////////////////////
+    // DETAILS LINK
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        val where = resourceContext.getWhere();
-        val jsonRepresentation = JsonRepresentation.newMap();
-        val objectCollectionReprRenderer =
-                new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, jsonRepresentation)
-                .with(ManagedCollection.of(objectAdapter, objectMember, where))
+        var objectCollectionReprRenderer =
+            new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap())
+                .with(ManagedCollection.of(objectAdapter, objectMember, resourceContext.where()))
                 .asFollowed();
         detailsLink.mapPutJsonRepresentation("value", objectCollectionReprRenderer.render());
     }
 
-    // ///////////////////////////////////////////////////
-    // mutators
-    // ///////////////////////////////////////////////////
+    // MUTATORS
 
     @Override
     protected void addMutatorLinksIfEnabled() {
         // no-op
     }
 
-    // ///////////////////////////////////////////////////
-    // extensions and links
-    // ///////////////////////////////////////////////////
+    // EXTENSIONS AND LINKS
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().isSuppressDescribedByLinks()) {
-            return;
-        }
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
         final JsonRepresentation link =
                 CollectionDescriptionReprRenderer
-                .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+                .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 
@@ -173,6 +157,5 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         final CollectionSemantics semantics = CollectionSemantics.valueOf(objectMember);
         getExtensions().mapPutString("collectionSemantics", semantics.name().toLowerCase());
     }
-
 
 }

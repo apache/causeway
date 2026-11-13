@@ -889,7 +889,7 @@ mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles
 [source,java]
 .EmailAddress.java
 ----
-@javax.persistence.Embeddable                                           // <.>
+@jakarta.persistence.Embeddable                                         // <.>
 @org.apache.causeway.applib.annotation.Value                            // <.>
 @lombok.EqualsAndHashCode                                               // <.>
 public class EmailAddress implements Serializable {                     // <.>
@@ -1033,7 +1033,7 @@ The returned string would appear in URLs or bookmarks, for example.
 [source,java]
 .PetOwner.java
 ----
-@javax.persistence.Embedded                                                 // <.>
+@jakarta.persistence.Embedded                                               // <.>
 @Getter @Setter
 @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)    // <.>
 @PropertyLayout(fieldSetId = "contact", sequence = "1.2")

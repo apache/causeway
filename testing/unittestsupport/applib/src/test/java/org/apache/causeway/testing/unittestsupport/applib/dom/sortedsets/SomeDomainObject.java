@@ -21,11 +21,10 @@ package org.apache.causeway.testing.unittestsupport.applib.dom.sortedsets;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.jdo.annotations.PersistenceCapable;
+import jakarta.persistence.Entity;
 
-@PersistenceCapable
+@Entity
 public class SomeDomainObject {
-
 
     @SuppressWarnings("unused")
     private SortedSet<SomeDomainObject> someSortedSet = new TreeSet<SomeDomainObject>();
@@ -33,6 +32,5 @@ public class SomeDomainObject {
     //private Set<SomeDomainObject> someSet = new HashSet<SomeDomainObject>();
 
     //private List<SomeDomainObject> someList = new ArrayList<SomeDomainObject>();
-
 
 }

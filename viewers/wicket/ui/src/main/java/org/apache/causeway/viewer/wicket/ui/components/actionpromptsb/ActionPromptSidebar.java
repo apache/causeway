@@ -107,7 +107,6 @@ implements ActionPromptWithExtraContent {
 
         // addOrReplace(new WebMarkupContainer(getContentId()));
 
-
         addOrReplace(new WebMarkupContainer(getExtraContentId()));
 
         if (target != null) {

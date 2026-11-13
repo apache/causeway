@@ -23,27 +23,35 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class MemberNamedFacetForActionLayoutXml
-extends MemberNamedFacetWithStaticTextAbstract {
+extends MemberNamedFacetWithStaticTextAbstract
+implements QualifiedFacet {
 
     public static Optional<MemberNamedFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(actionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(actionLayout == null)
             return Optional.empty();
-        }
         final String named = _Strings.emptyToNull(actionLayout.getNamed());
         return named != null
-                ? Optional.of(new MemberNamedFacetForActionLayoutXml(named, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new MemberNamedFacetForActionLayoutXml(named, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
-    private MemberNamedFacetForActionLayoutXml(final String named, final FacetHolder holder, final Precedence precedence) {
-        super(named, holder, precedence);
+    private MemberNamedFacetForActionLayoutXml(
+            final String named,
+            final FacetHolder holder) {
+        super(named, holder);
     }
 
     @Override

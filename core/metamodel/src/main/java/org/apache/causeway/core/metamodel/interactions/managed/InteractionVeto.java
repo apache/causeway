@@ -21,24 +21,18 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.Veto;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
-import org.apache.causeway.core.metamodel.consent.Veto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
-@Getter
-@RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class InteractionVeto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public record InteractionVeto(
+    @NonNull VetoType vetoType,
+    @NonNull Consent vetoConsent
+    ) implements Serializable {
 
     public static enum VetoType {
         NOT_FOUND,
@@ -48,64 +42,62 @@ public class InteractionVeto implements Serializable {
 
         ACTION_NOT_SAFE,
         ACTION_NOT_IDEMPOTENT,
-        ACTION_PARAM_INVALID,
-        ;
-        public boolean isHidden() { return this == HIDDEN;};
-    }
+        ACTION_PARAM_INVALID;
 
-    @NonNull private final VetoType vetoType;
-    @NonNull private final Consent vetoConsent;
+        public boolean isHidden() { return this == HIDDEN;}
+    }
 
     public static InteractionVeto notFound(
-            @NonNull final Identifier.Type memberType,
-            @Nullable final String memberId) {
-        val reason = String.format("member '%s' in %s either does not exist, is disabled or is not visible",
+            final Identifier.@NonNull Type memberType,
+            final @Nullable String memberId) {
+        var reason = String.format("member '%s' in %s either does not exist, is disabled or is not visible",
                 "" + memberId,
                 memberType.name().toLowerCase());
-        return of(VetoType.NOT_FOUND, new Veto(reason));
+        return new InteractionVeto(VetoType.NOT_FOUND, new Veto(reason));
     }
 
-    public static InteractionVeto hidden(@NonNull final Consent vetoConsent) {
-        return of(VetoType.HIDDEN, vetoConsent);
+    public static InteractionVeto hidden(final @NonNull Consent vetoConsent) {
+        return new InteractionVeto(VetoType.HIDDEN, vetoConsent);
     }
 
-    public static InteractionVeto readonly(@NonNull final Consent vetoConsent) {
-        return of(VetoType.READONLY, vetoConsent);
+    public static InteractionVeto readonly(final @NonNull Consent vetoConsent) {
+        return new InteractionVeto(VetoType.READONLY, vetoConsent);
     }
 
-    public static InteractionVeto invalid(@NonNull final Consent vetoConsent) {
-        return of(VetoType.INVALID, vetoConsent);
+    public static InteractionVeto invalid(final @NonNull Consent vetoConsent) {
+        return new InteractionVeto(VetoType.INVALID, vetoConsent);
     }
 
-    public static InteractionVeto actionNotSafe(@NonNull final ManagedAction action) {
-        val reason = String.format("Method not allowed; action '%s' does not have safe semantics",
+    public static InteractionVeto invocationException(final Throwable e) {
+        var reason = e.toString();
+        return new InteractionVeto(VetoType.INVALID, new Veto(reason));
+    }
+
+    public static InteractionVeto actionNotSafe(final @NonNull ManagedAction action) {
+        var reason = String.format("Method not allowed; action '%s' does not have safe semantics",
                 action.getId());
-        return of(VetoType.ACTION_NOT_SAFE, new Veto(reason));
+        return new InteractionVeto(VetoType.ACTION_NOT_SAFE, new Veto(reason));
     }
 
-    public static InteractionVeto actionNotIdempotent(@NonNull final ManagedAction action) {
-        val reason = String.format("Method not allowed; action '%s' does not have idempotent semantics",
+    public static InteractionVeto actionNotIdempotent(final @NonNull ManagedAction action) {
+        var reason = String.format("Method not allowed; action '%s' does not have idempotent semantics",
                 action.getId());
-        return of(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
+        return new InteractionVeto(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
     }
 
-    public static InteractionVeto actionParamInvalid(@NonNull final Consent vetoConsent) {
-        return of(VetoType.ACTION_PARAM_INVALID, vetoConsent);
+    public static InteractionVeto actionParamInvalid(final @NonNull Consent vetoConsent) {
+        return new InteractionVeto(VetoType.ACTION_PARAM_INVALID, vetoConsent);
     }
 
-    public static InteractionVeto actionParamInvalid(@NonNull final String reason) {
-        return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
+    public static InteractionVeto actionParamInvalid(final @NonNull String reason) {
+        return new InteractionVeto(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
     }
 
     public Optional<VetoReason> getReason() {
-        return getVetoConsent().getReason();
+        return vetoConsent().reason();
     }
     public Optional<String> getReasonAsString() {
-        return getVetoConsent().getReasonAsString();
-    }
-
-    public String getDescription() {
-        return getVetoConsent().getDescription();
+        return vetoConsent().reasonAsString();
     }
 
     @Override

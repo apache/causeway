@@ -1,0 +1,19 @@
+{
+  __type(name: "BlobInput") {
+    kind
+    name
+    description
+    inputFields {
+      name
+      description
+      type {
+        kind
+        name
+        ofType {
+          kind
+          name
+        }
+      }
+    }
+  }
+}

@@ -9,20 +9,6 @@ Superclass for all layout classes, factoring out the common _#getCssClass()_ att
 .BSElementAbstract.java
 ----
 class BSElementAbstract {
-  String getCssClass()     // <.>
-  void setCssClass(String cssClass)
 }
 ----
 
-<.> xref:#getCssClass_[getCssClass()]
-+
---
-Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
---
-
-== Members
-
-[#getCssClass_]
-=== getCssClass()
-
-Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.excel.testing;
 
-
 import org.apache.causeway.extensions.excel.applib.RowHandler;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 

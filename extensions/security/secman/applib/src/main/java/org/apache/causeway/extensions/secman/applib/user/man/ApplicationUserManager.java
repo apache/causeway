@@ -53,7 +53,7 @@ public class ApplicationUserManager {
     @Property @PropertyLayout(fieldSetId = "metadata")
     public String getUserType() {
         return specLoader.specForLogicalTypeName(ApplicationUser.LOGICAL_TYPE_NAME)
-                .map(ObjectSpecification::getCorrespondingClass)
+                .map(ObjectSpecification::correspondingClass)
                 .map(Class::getName)
                 .orElse("not found");
     }

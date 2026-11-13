@@ -21,8 +21,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -56,26 +56,26 @@ public interface IResourceContext extends HasMetaModelContext {
     String applicationUrlFor(final String url);
 
     /**
-     * Returns the {@link HttpHeaders#getAcceptableMediaTypes() acceptable media types}
+     * Returns the {@link HttpHeaders#getAccept() acceptable media types}
      * as obtained from {@link HttpHeaders}.
      */
-    List<MediaType> getAcceptableMediaTypes();
+    List<MediaType> acceptableMediaTypes();
 
     /**
      * Whether this interaction was initiated directly by a
      * {@link InteractionInitiatedBy#USER user} (or indirectly by the
      * {@link InteractionInitiatedBy#FRAMEWORK framework}.
      */
-    InteractionInitiatedBy getInteractionInitiatedBy();
+    InteractionInitiatedBy interactionInitiatedBy();
 
-    Where getWhere();
+    Where where();
 
-    ObjectAdapterLinkTo getObjectAdapterLinkTo();
-    List<List<String>> getFollowLinks();
+    ObjectAdapterLinkTo objectAdapterLinkTo();
+    List<List<String>> followLinks();
     boolean isValidateOnly();
 
     default Restfulobjects config() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects();
+        return getMetaModelContext().getConfiguration().viewer().restfulobjects();
     }
 
     /**
@@ -91,11 +91,11 @@ public interface IResourceContext extends HasMetaModelContext {
     /**
      * Applies only when rendering a domain object.
      */
-    RepresentationService.Intent getIntent();
+    RepresentationService.Intent intent();
 
     // -- UTILITY
 
-    default Optional<ManagedObject> getObjectAdapterForOidFromHref(final String oidFromHref) {
+    default Optional<ManagedObject> objectAdapterForOidFromHref(final String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         return Bookmark.parse(oidStrUnencoded)
         .flatMap(getMetaModelContext().getObjectManager()::loadObject);

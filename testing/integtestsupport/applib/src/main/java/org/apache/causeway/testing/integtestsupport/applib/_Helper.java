@@ -25,8 +25,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAsUtils;

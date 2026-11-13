@@ -35,8 +35,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterDisabledFacetViaMethod
 extends ActionParameterDisabledFacetAbstract
@@ -67,7 +66,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs) {
 
-        val method = methods.getFirstElseFail();
+        var method = methods.getFirstElseFail();
         final Object returnValue = MmInvokeUtils.invokeAutofit(patConstructor, method, owningAdapter, pendingArgs);
         final String reasonString = returnValue instanceof String
                 ? (String) returnValue

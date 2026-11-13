@@ -1,0 +1,145 @@
+= Trees
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Developer Note
+****
+This article is a _Developer Note_.
+
+_Developer Notes_ don't claim to be complete or fully accurate, hence are not necessarily published at the project's main documentation site.
+Their purpose is rather to document diagrams and design decisions close to the relevant code. 
+And also for code authors to quickly get an overview or refresher on the topic.  
+****
+
+== TreeAdapter 
+
+A `TreeAdapter` provides the parent/child relationship information between pojos to derive a tree-structure.
+
+Given a 'root node value object' and a corresponding `TreeAdapter` 
+we can infer a model of `TreeNode`(s). Each `TreeNode` holds a reference to the root-node, 
+the shared `TreeState` and the location within the tree as `TreePath`.
+ 
+[NOTE]
+====
+The model deliberately does *not* reflect a doubly linked tree, that is, 
+we don't directly provide a link from a node to its parent node. 
+(To define a tree, parent references are not strictly required.) 
+
+For tree data structures in general, referencing parents would introduce circular references, 
+which don't play well with immutable data structures or serialization.
+==== 
+
+[plantuml,fig-TreeModel-1,svg]
+.Tree Model
+----
+@startuml
+
+interface TreeAdapter<T> {
+    childCountOf(T): int
+    childrenOf(T): Stream<T>
+    resolveRelative(T, TreePath): Optional<T>
+    convert(TreeConverter<T, R>): TreeAdapter<R>
+}
+
+interface TreeConverter<U, T> {
+    fromUnderlyingNode(U value, T parentNode, int siblingIndex): T
+    toUnderlyingNode(T value): U
+}
+
+class TreeAdapterWithConverter<U, T> << (R,#FF7700) internal >>{
+}
+
+class TreeNode<T> << (R,#FF7700) >> {
+    value: T
+}
+
+class TreePath << (R,#FF7700) >> {
+    canonicalPath: int[]
+}
+
+class TreeState << (R,#FF7700) >> {
+}
+
+TreeAdapter <|- TreeAdapterWithConverter: acts as facade
+TreeAdapterWithConverter --> TreeConverter: converter
+TreeAdapterWithConverter -> TreeAdapter: underlyingAdapter
+TreeNode --> TreeAdapter: treeAdapter
+TreeNode -> TreeNode: \nrootNode
+TreeNode -> TreePath: treePath
+TreePath <- TreeState: expandedNodePaths (Set)
+TreePath <- TreeState: selectedNodePaths (Set)
+TreeNode -> TreeState: \ntreeState
+
+@enduml
+----
+
+The internal `TreeAdapterWithConverter` acts as a `TreeAdapter` facade by wrapping an underlying `TreeAdapter` 
+and translating the node type back and forth using a `TreeConverter`.
+
+A `TreeNode<T>` has value semantics, while the wrapped type `T` can be an entity, viewmodel or value type
+(which are all bookmarkable and hence resolve to a new page rendered when clicked in the UI). 
+
+[cols='1a,1a',options="header"]
+.Tree model constituent semantics
+|===
+|Type |Bean Sort   
+//-------------
+|TreeNode<T>  |VALUE   
+|T            |ENTITY, VIEWMODEL or VALUE   
+|===
+
+== Built-in TreeAdapter based on Reflection (WIP)
+
+A built-in `TreeAdapter` is provided, that establishes 'parent to child' relationships 
+based on the `@CollectionLayout(navigableSubtree="..")` annotation. 
+
+== TreeProvider (Wicket Viewer)
+
+`TreeAdapterRecord` is Wicket's `ITreeProvider` implemented for a tree of `TreeNodeMemento`(s).
+
+[plantuml,fig-TreeModel-2,svg]
+.Tree Provider (Wicket Viewer)
+----
+@startuml
+
+class TreeNodeMemento << (R,#FF7700) serializable >>{
+    bookmark: Bookmark
+    treePath: TreePath
+}
+
+class TreeAdapterRecord<T> << (R,#FF7700) serializable>>{
+    treeAdapter: TreeAdapter
+}
+
+class TreeProvider << (R,#FF7700) serializable>>{
+}
+
+TreeProvider --> TreeNodeMemento: primaryValue
+TreeProvider --> TreeAdapterRecord: treeAdapterRecord
+
+@enduml
+----
+
+Only constraint for the tree node values is that those need to be _bookmarkable_. 
+The `TreeProvider` is then simply made of 2 parts:
+
+ . the root node (in its serializable form)
+ . the TreeAdapter (wrapped in a serializable container)
+ 
+The fact that `TreeProvider` also implements `TreeConverter` is just an implementation detail.
+
+[source,java]
+----
+record TreeProvider(
+    /** tree's single root */
+    TreeNodeMemento primaryValue,
+    TreeAdapterRecord<Object> treeAdapterRecord)
+implements
+    ITreeProvider<TreeNodeMemento>,
+    TreeConverter<Object, TreeNodeMemento> {
+    //..
+}
+----
+ 
+ 
+ 

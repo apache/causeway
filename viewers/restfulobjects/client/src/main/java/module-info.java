@@ -17,24 +17,25 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.restfulobjects.client {
-    exports org.apache.causeway.viewer.restfulobjects.client.log;
     exports org.apache.causeway.viewer.restfulobjects.client;
     exports org.apache.causeway.viewer.restfulobjects.client.auth;
     exports org.apache.causeway.viewer.restfulobjects.client.auth.basic;
     exports org.apache.causeway.viewer.restfulobjects.client.auth.oauth2;
     exports org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
+    exports org.apache.causeway.viewer.restfulobjects.client.log;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
+    requires static lombok;
+
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
     requires jakarta.annotation;
     requires jakarta.ws.rs;
     requires jakarta.xml.bind;
-    requires lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.viewer.restfulobjects.applib;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.core;
     requires org.apache.causeway.schema;
-    requires org.slf4j;
+
 }

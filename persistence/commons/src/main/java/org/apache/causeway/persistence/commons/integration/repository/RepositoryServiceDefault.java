@@ -31,7 +31,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -52,25 +52,32 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
+/**
+ * Default implementation of {@link RepositoryService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
-@Named(CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault")
+@Named(RepositoryServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class RepositoryServiceDefault
 implements RepositoryService, HasMetaModelContext {
+
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault";
 
     final FactoryService factoryService;
     final WrapperFactory wrapperFactory;
@@ -85,15 +92,14 @@ implements RepositoryService, HasMetaModelContext {
 
     @PostConstruct
     public void init() {
-        val disableAutoFlush =
-                causewayConfiguration.getPersistence().getCommons().getRepositoryService().isDisableAutoFlush() ||
-                causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
+        var disableAutoFlush =
+                causewayConfiguration.persistence().commons().repositoryService().disableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 
     @Override
     public EntityState getEntityState(final @Nullable Object object) {
-        val adapter = getObjectManager().adapt(unwrapped(object));
+        var adapter = getObjectManager().adapt(unwrapped(object));
         return MmEntityUtils.getEntityState(adapter);
     }
 
@@ -104,7 +110,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @SneakyThrows
     @Override
-    public <T> T execInBulk(Callable<T> callable) {
+    public <T> T execInBulk(final Callable<T> callable) {
         try {
             suppressFlushing();
             return callable.call();
@@ -125,12 +131,12 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T persist(final T domainObject) {
 
-        val adapter = getObjectManager().adapt(unwrapped(domainObject));
+        var adapter = getObjectManager().adapt(unwrapped(domainObject));
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         // only persist detached or new entities, otherwise skip
-        val entityState = MmEntityUtils.getEntityState(adapter);
+        var entityState = MmEntityUtils.getEntityState(adapter);
         if(!entityState.isPersistable()
                 || entityState.isAttached()) {
             return domainObject;
@@ -138,7 +144,6 @@ implements RepositoryService, HasMetaModelContext {
         MmEntityUtils.persistInCurrentTransaction(adapter);
         return domainObject;
     }
-
 
     @Override
     public <T> T persistAndFlush(final T object) {
@@ -154,7 +159,7 @@ implements RepositoryService, HasMetaModelContext {
         if (domainObject == null) {
             return; // noop
         }
-        val adapter = getObjectManager().adapt(unwrapped(domainObject));
+        var adapter = getObjectManager().adapt(unwrapped(domainObject));
         if(MmEntityUtils.getEntityState(adapter).hasOid()) {
             MmEntityUtils.deleteInCurrentTransaction(adapter);
         }
@@ -167,7 +172,6 @@ implements RepositoryService, HasMetaModelContext {
             transactionService.flushTransaction();
         }
     }
-
 
     // -- allInstances, allMatches, uniqueMatch, firstMatch
 
@@ -187,14 +191,12 @@ implements RepositoryService, HasMetaModelContext {
         return allMatches(ofType, predicate, 0L, Long.MAX_VALUE);
     }
 
-
     @Override
     public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, final long start, final long count) {
         return _NullSafe.stream(allInstances(ofType, start, count))
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
@@ -205,7 +207,7 @@ implements RepositoryService, HasMetaModelContext {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        val resultTypeSpec = getSpecificationLoader()
+        var resultTypeSpec = getSpecificationLoader()
                 .specForType(query.getResultType())
                 .orElse(null);
 
@@ -213,8 +215,8 @@ implements RepositoryService, HasMetaModelContext {
             return Collections.emptyList();
         }
 
-        val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = getObjectManager().queryObjects(queryRequest);
+        var queryRequest = new BulkLoadRequest(resultTypeSpec, query);
+        var allMatching = getObjectManager().queryObjects(queryRequest);
         final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtils.multipleAsList(allMatching));
         return resultList;
     }
@@ -227,7 +229,6 @@ implements RepositoryService, HasMetaModelContext {
         }
         return firstInstanceElseEmpty(instances);
     }
-
 
     @Override
     public <T> Optional<T> uniqueMatch(final Query<T> query) {
@@ -244,7 +245,6 @@ implements RepositoryService, HasMetaModelContext {
         return firstInstanceElseEmpty(instances);
     }
 
-
     @Override
     public <T> Optional<T> firstMatch(final Query<T> query) {
         final List<T> instances = allMatches(query);
@@ -255,12 +255,11 @@ implements RepositoryService, HasMetaModelContext {
     public <T> T refresh(final T entity) {
         if(entity==null) return null;
 
-        getSpecificationLoader()
-        .specForType(entity.getClass())
-        .flatMap(ObjectSpecification::entityFacet)
-        .ifPresent(entityFacet->entityFacet.refresh(entity));
-
-        return entity;
+        return getSpecificationLoader()
+            .specForType(entity.getClass())
+            .flatMap(ObjectSpecification::entityFacet)
+            .<T>map(entityFacet->entityFacet.refresh(entity))
+            .orElse(entity);
     }
 
     @Override
@@ -268,14 +267,14 @@ implements RepositoryService, HasMetaModelContext {
         if(entity==null) return null;
 
         return getSpecificationLoader()
-        .specForType(entity.getClass())
-        .flatMap(ObjectSpecification::entityFacet)
-        .map(entityFacet->entityFacet.detach(entity))
-        .map(detachedEntity->
-            detachedEntity==entity
-            ? detachedEntity
-            : getServiceInjector().injectServicesInto(detachedEntity))
-        .orElse(entity);
+            .specForType(entity.getClass())
+            .flatMap(ObjectSpecification::entityFacet)
+            .map(entityFacet->entityFacet.detach(entity))
+            .map(detachedEntity->
+                detachedEntity==entity
+                ? detachedEntity
+                : getServiceInjector().injectServicesInto(detachedEntity))
+            .orElse(entity);
     }
 
     @Override
@@ -295,6 +294,5 @@ implements RepositoryService, HasMetaModelContext {
     private Object unwrapped(final Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-
 
 }

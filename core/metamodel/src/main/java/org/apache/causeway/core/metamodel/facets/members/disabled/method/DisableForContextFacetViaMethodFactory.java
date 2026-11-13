@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.disabled.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
+
+import jakarta.inject.Inject;
 
 public class DisableForContextFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract  {
@@ -38,16 +38,12 @@ extends MemberSupportFacetFactoryAbstract  {
     protected void search(
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
-
          methodFinder
-         .streamMethodsMatchingSignature(NO_ARG)
-         .peek(processMethodContext::removeMethod)
-         .forEach(disableMethod->{
-             addFacet(
-                     new DisableForContextFacetViaMethod(
-                             disableMethod, processMethodContext.getFacetHolder()));
-         });
-
+	         .streamMethodsMatchingSignature(NO_ARG)
+	         .peek(processMethodContext::removeMethod)
+	         .forEach(disableMethod->
+	             new DisableForContextFacetViaMethod(
+	                     disableMethod, processMethodContext.facetHolder()));
     }
 
 }

@@ -1,0 +1,28 @@
+{
+  "name": "causeway-vaadin-menubar-widget",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audit": "npm audit --omit=dev",
+    "build": "node build.mjs",
+    "audit-browser": "node audit.mjs",
+    "update-policy": "node build.mjs --write-policy && node audit.mjs --write-policy && node build.mjs --write-policy",
+    "verify": "node verify.mjs && npm audit --omit=dev && node audit.mjs"
+  },
+  "dependencies": {
+    "@vaadin/a11y-base": "25.2.8",
+    "@vaadin/button": "25.2.8",
+    "@vaadin/component-base": "25.2.8",
+    "@vaadin/context-menu": "25.2.8",
+    "@vaadin/item": "25.2.8",
+    "@vaadin/list-box": "25.2.8",
+    "@vaadin/menu-bar": "25.2.8",
+    "@vaadin/overlay": "25.2.8",
+    "@vaadin/vaadin-themable-mixin": "25.2.8"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.3",
+    "esbuild": "0.27.4",
+    "playwright": "1.61.0"
+  }
+}

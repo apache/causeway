@@ -37,7 +37,6 @@ public class SizeSpan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     public static SizeSpan with(final Size size, final int span) {
         final SizeSpan ss = new SizeSpan();
         ss.setSize(size);
@@ -62,7 +61,6 @@ public class SizeSpan implements Serializable {
         this.size = size;
     }
 
-
     private int span;
 
     @XmlAttribute(required = true)
@@ -74,9 +72,7 @@ public class SizeSpan implements Serializable {
         this.span = span;
     }
 
-
     private Boolean offset;
-
 
     @XmlAttribute(required = false)
     public Boolean isOffset() {
@@ -86,7 +82,6 @@ public class SizeSpan implements Serializable {
     public void setOffset(final Boolean offset) {
         this.offset = offset;
     }
-
 
     public String toCssClassFragment() {
         return appendCssClassFragment(new StringBuilder()).toString();

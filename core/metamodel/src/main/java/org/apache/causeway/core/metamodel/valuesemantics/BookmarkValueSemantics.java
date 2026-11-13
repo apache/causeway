@@ -35,8 +35,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
-
 @Component
 @Named("causeway.metamodel.value.BookmarkValueSemantics")
 @Priority(PriorityPrecedence.LATE)
@@ -66,11 +64,11 @@ implements
 
     @Override
     public int compare(final Bookmark a, final Bookmark b, final Void epsilon) {
-        int c = _Strings.compareNullsFirst(a.getLogicalTypeName(), b.getLogicalTypeName());
+        int c = _Strings.compareNullsFirst(a.logicalTypeName(), b.logicalTypeName());
         if(c!=0) {
             return c;
         }
-        c = _Strings.compareNullsFirst(a.getIdentifier(), b.getIdentifier());
+        c = _Strings.compareNullsFirst(a.identifier(), b.identifier());
         if(c!=0) {
             return c;
         }
@@ -110,7 +108,7 @@ implements
 
     @Override
     public Bookmark parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? Bookmark.parseElseFail(input)
                 : null;

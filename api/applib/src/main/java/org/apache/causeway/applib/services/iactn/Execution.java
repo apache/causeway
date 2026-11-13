@@ -19,10 +19,9 @@
 package org.apache.causeway.applib.services.iactn;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
@@ -32,16 +31,15 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.util.schema.MemberExecutionDtoUtils;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.schema.common.v2.DifferenceDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Represents an action invocation/property edit as a node in a call-stack
@@ -55,7 +53,6 @@ import lombok.val;
  * @since 1.x {@index}
  */
 public abstract class Execution<T extends MemberExecutionDto, E extends AbstractDomainEvent<?>> {
-
 
     /**
      * The owning {@link Interaction}.
@@ -78,11 +75,11 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     private final Identifier logicalMemberIdentifier;
 
     /**
-     * The target of the action invocation.
+     * The object on which the action or property method is invoked.
      *
      * <p>
-     * If this interaction is for a mixin action, then will be the mixed-in
-     * target (not the transient mixin itself).
+     * For a mixin action this is the transient mixin instance, not the
+     * mixed-in domain object.
      * </p>
      */
     @Getter
@@ -109,10 +106,9 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
         this.target = target;
     }
 
-
     // -- parent, children
 
-    private final List<Execution<?, ?>> children = _Lists.newArrayList();
+    private final List<Execution<?, ?>> children = new ArrayList<>();
 
     /**
      * The action/property that invoked this action/property edit (if any).
@@ -129,7 +125,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
             parent.children.add(this);
         }
     }
-
 
     /**
      * The actions/property edits made in turn via the {@link WrapperFactory}.
@@ -180,7 +175,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
             final ClockService clockService,
             final MetricsService metricsService) {
 
-        val startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
+        var startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         syncMetrics(When.BEFORE, startedAt, metricsService);
         return startedAt;
 
@@ -238,7 +233,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
         this.threw = threw;
     }
 
-
     // -- dto (property)
 
     /**
@@ -260,7 +254,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     public void setDto(final T executionDto) {
         this.dto = executionDto;
     }
-
 
     // -- helpers (syncMetrics)
 
@@ -290,9 +283,8 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
 
                 execution.completedAt = timestamp;
 
-                if(execution.dto==null) {
+                if(execution.dto==null)
                     return;
-                }
                 final MetricsDto metricsDto = metricsFor(execution);
 
                 final PeriodDto periodDto = timingsFor(metricsDto);

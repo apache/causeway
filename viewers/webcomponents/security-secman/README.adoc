@@ -1,0 +1,44 @@
+= Shared SecMan Spring authentication bridge
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+The `causeway-viewer-webcomponents-security-secman` module is an optional presentation-neutral bridge from local SecMan users to Spring Security browser authentication.
+It is shared by the HTMX and Vue SecMan integrations and has no dependency on either viewer.
+
+== Ownership boundary
+
+The bridge owns controlled anonymous `ApplicationUser` lookup, encrypted-password delivery to a Spring `DaoAuthenticationProvider`, account lock state, a serializable credentials-erasing principal, and conversion to a Causeway `UserMemento`.
+The retained principal captures the effective username, role names, tenancy path, language locale, number locale, and time locale at authentication time.
+Conversion therefore requires no second unscoped SecMan repository lookup.
+
+The bridge deliberately owns no `SecurityFilterChain`, URL matcher, login or logout route, request cache, CSRF transport, cookie policy, session-expiry navigation, HTML, HTMX behavior, Vue behavior, or application redirect.
+A viewer or application integration must own those policies explicitly.
+
+== Installation
+
+Most applications consume the bridge transitively through either `causeway-viewer-webcomponents-htmx-security-secman` or `causeway-viewer-webcomponents-vue-security-secman`.
+A custom web-component host can depend on it directly:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-webcomponents-security-secman</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+----
+
+Import `CausewayModuleViewerWebcomponentsSecuritySecman` together with the application-selected SecMan persistence and password-encryption modules.
+The common JPA deployment imports `CausewayModuleExtSecmanPersistenceJpa` and `CausewayModuleExtSecmanEncryptionSpring`.
+The application remains responsible for schema provisioning and deterministic or production user, role, permission, tenancy, locale, and password data.
+
+== Failure and credential behavior
+
+Absent, locked, passwordless, and incorrect-password users fail closed through Spring Security without exposing which account condition occurred.
+Unexpected repository or interaction failures become a bounded authentication-service failure rather than exposing persistence details.
+Spring erases encrypted credentials from the authenticated principal, and plaintext credentials are never copied into it.
+
+Applications that do not import this module receive no authentication provider, user-details service, or principal converter from it.
+Existing bypass, bearer, pre-authentication, Wicket, or application-defined security therefore remains authoritative.

@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
@@ -35,58 +32,56 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
+import jakarta.inject.Inject;
+
 public class DescribedAsFromTypePostProcessor
 extends MetaModelPostProcessorAbstract {
 
     @Inject
     public DescribedAsFromTypePostProcessor(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->!spec.isMixin());
     }
 
     @Override
-    public void postProcessParameter(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
+    public void postProcessParameter(final ObjectSpecification objSpec, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         handleParam(parameter);
     }
 
     @Override
-    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public void postProcessAction(final ObjectSpecification objSpec, final ObjectAction objectAction) {
         handleMember(objectAction);
     }
 
     @Override
-    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {
         handleMember(prop);
     }
 
     @Override
-    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {
         handleMember(coll);
     }
 
     // -- HELPER
 
     private void handleMember(final ObjectMember member) {
-        if(member.containsNonFallbackFacet(MemberDescribedFacet.class)) {
-            return;
-        }
+        if(member.containsNonFallbackFacet(MemberDescribedFacet.class))
+			return;
         member.getElementType()
-        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(objectDescribedFacet ->
-            FacetUtil.addFacetIfPresent(
-                    MemberDescribedFacetFromType
-                    .create(objectDescribedFacet, facetedMethodFor(member))));
+	        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
+	        .ifPresent(objectDescribedFacet ->
+                MemberDescribedFacetFromType
+                	.create(objectDescribedFacet, facetedMethodFor(member)));
     }
 
     private void handleParam(final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
-            return;
-        }
+        if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class))
+			return;
         parameter.getElementType()
-        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(objectDescribedFacet->
-            FacetUtil.addFacetIfPresent(
-                    ParamDescribedFacetFromType
-                    .create(objectDescribedFacet, parameter.getFacetHolder())));
+	        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
+	        .ifPresent(objectDescribedFacet->
+                ParamDescribedFacetFromType
+                    .create(objectDescribedFacet, parameter.facetHolder()));
     }
 
 }

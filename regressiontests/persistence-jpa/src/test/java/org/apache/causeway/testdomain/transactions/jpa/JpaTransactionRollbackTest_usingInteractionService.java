@@ -30,23 +30,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
-
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -58,7 +53,6 @@ import lombok.val;
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
 //                "logging.level.org.springframework.orm.jpa.*=DEBUG",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ExtendWith({CausewayInteractionHandler.class})
 @DirtiesContext
 @DisabledIfRunningWithSurefire
@@ -128,7 +122,7 @@ class JpaTransactionRollbackTest_usingInteractionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = interactionService.runAnonymousAndCatch(()->{
+        var result = interactionService.runAnonymousAndCatch(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
@@ -163,11 +157,11 @@ class JpaTransactionRollbackTest_usingInteractionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = interactionService.runAnonymousAndCatch(()->{
+        var result = interactionService.runAnonymousAndCatch(()->{
 
             //_Probe.errOut("before tx that should trigger a rollback");
 
-            val innerResult = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+            var innerResult = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
                 fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 

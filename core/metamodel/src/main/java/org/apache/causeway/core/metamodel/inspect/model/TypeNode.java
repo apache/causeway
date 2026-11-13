@@ -18,91 +18,96 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Streams;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
-import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
+record TypeNode(
+    String logicalName,
+    boolean isSubnode)
+implements MMNode, Serializable {
 
-@Named(TypeNode.LOGICAL_TYPE_NAME)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED)
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class TypeNode extends MMNode {
-
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".TypeNode";
-
-    @Inject protected transient SpecificationLoader specificationLoader;
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private DomainClassDto domainClassDto;
+	TypeNode(final ObjectSpecification objSpec, final boolean isSubnode) {
+		// for security mapping, abstract spec's may share their logical type name with sub-types
+		// however, for proper mementos, we should used fully qualified class names instead (when abstract)
+		this(objSpec.isAbstract()
+	    		? objSpec.correspondingClass().getName()
+	    		: objSpec.logicalTypeName(), isSubnode);
+	}
 
     @Override
-    public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->domainClassDto.getId());
-        return title;
+    public String title() {
+        var spec = spec().orElse(null);
+        return spec!=null
+            ? spec.logicalType().logicalSimpleName()
+            : logicalName;
     }
 
     @Override
-    protected String iconSuffix() {
-        return "";
+    public String iconName() {
+        return isSubnode() ? "sub" : "";
     }
 
     @Override
-    protected MetamodelElement metamodelElement() {
-        return domainClassDto;
+    public void putDetails(final Details details) {
+        var spec = spec().orElse(null);
+        if(spec==null) return;
+        details.put("Bean Sort", spec.beanSort().name());
+        details.put("Simple Name", spec.logicalType().logicalSimpleName());
+        details.put("Namespace", spec.logicalType().namespace());
+        details.put("Corresponding Class", spec.correspondingClass().getName());
+        spec.superSpec()
+	        .ifPresent(superType->{
+	        	details.put("Super Type", superType.correspondingClass().getName());
+	        });
+        spec.interfaceSpecs()
+	        .forEach(interfc->details.put(
+	        		"Interface",
+	        		interfc.correspondingClass().getName()));
+        switch (spec.beanSort()) {
+            case ENTITY, ABSTRACT -> {
+                if(!spec.correspondingClass().isInterface()) {
+                    var classCache = _ClassCache.getInstance();
+                    details.put("Byte Code Enhanced", ""+classCache.isByteCodeEnhanced(spec.correspondingClass()));
+                }
+            }
+            default -> {}
+        }
     }
-
-    // -- TREE NODE STUFF
-
-    @Getter @Setter @XmlTransient
-    private MMNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
+        var spec = spec().orElse(null);
+        if(spec==null) return Stream.empty();
+
         return _Streams.<MMNode>concat(
-
-                Stream.of(
-                        MMNodeFactory.facetGroup(domainClassDto.getFacets(), this)),
-
-                domainClassDto.getActions().getAct()
-                .stream()
+            Stream.of(
+            		MMNodeFactory.superType(spec.superSpec().orElse(null), this),
+            		MMNodeFactory.interfaceGroup(spec.interfaceSpecs(), this),
+                    MMNodeFactory.facetGroup(spec.streamFacets(), this))
+            	.filter(Objects::nonNull),
+            spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED)
                 .map(action->MMNodeFactory.action(action, this)),
-
-                domainClassDto.getProperties().getProp()
-                .stream()
+            spec.streamProperties(MixedIn.INCLUDED)
                 .map(prop->MMNodeFactory.property(prop, this)),
-
-                domainClassDto.getCollections().getColl()
-                .stream()
+            spec.streamCollections(MixedIn.INCLUDED)
                 .map(coll->MMNodeFactory.collection(coll, this)));
+    }
 
+    // -- HELPER
+
+    private Optional<ObjectSpecification> spec() {
+        return MetaModelContext.instance()
+            .map(MetaModelContext::getSpecificationLoader)
+            .flatMap(specLoader->specLoader.specForLogicalTypeName(logicalName));
     }
 
 }

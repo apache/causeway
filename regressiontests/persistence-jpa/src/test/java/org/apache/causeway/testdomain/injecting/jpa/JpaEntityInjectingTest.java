@@ -30,17 +30,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.primitives._Longs.Bound;
 import org.apache.causeway.commons.internal.primitives._Longs.Range;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
@@ -48,8 +46,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(
         classes = {
@@ -58,10 +55,9 @@ import lombok.extern.log4j.Log4j2;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:XXX",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Log4j2
+@Slf4j
 @DisabledIfRunningWithSurefire
 class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
@@ -81,14 +77,13 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
         assertInjectCountRange(2, 9); //TODO either a bug or we fail to measure this accurately
     }
 
-
     @Test @Order(2)
     void sampleBook_shouldHave_injectionPointsResolved() {
         log.debug("TEST 1 ENTERING");
 
         //assertInjectCountRange(1, 2);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 3);
@@ -103,7 +98,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 2);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 3);
@@ -119,7 +114,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 3);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 4);
@@ -140,16 +135,16 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
     }
 
     private JpaBook getSampleBook() {
-        val books = repository.allInstances(JpaProduct.class);
+        var books = repository.allInstances(JpaProduct.class);
         assertEquals(3, books.size(), "book count");
-        val book = books.get(0);
+        var book = books.get(0);
         assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JpaBook)book;
     }
 
     private void assertInjectCountRange(final long lower, final long upper) {
         _Assert.assertRangeContains(
-                Range.of(Bound.inclusive(lower), Bound.inclusive(upper)),
+                new Range(Bound.inclusive(lower), Bound.inclusive(upper)),
                 getInjectCount(), "injection count");
     }
 

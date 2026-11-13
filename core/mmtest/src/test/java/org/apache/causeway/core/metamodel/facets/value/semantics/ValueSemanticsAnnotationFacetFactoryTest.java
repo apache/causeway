@@ -1,0 +1,469 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.facets.value.semantics;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.FormatStyle;
+
+import org.apache.causeway.applib.annotation.TimeZoneTranslation;
+import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
+import org.apache.causeway.core.metamodel.util.Facets;
+import org.junit.jupiter.api.Test;
+
+class ValueSemanticsAnnotationFacetFactoryTest
+extends FacetFactoryTestAbstract {
+
+    // -- MAX TOTAL DIGITS
+
+    @Test
+    void maxTotalPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(maxTotalDigits = 5)
+            public BigDecimal getCost() { return null; }
+        }
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertMaxTotalDigitsExplicit(facetedMethod, 5);
+            assertMaxTotalDigitsInferred(facetedMethod, 5);
+            assertDefaultMaxIntegerDigits(facetedMethod);
+            assertDefaultMinIntegerDigits(facetedMethod);
+            assertDefaultMaxFractionalDigits(facetedMethod);
+            assertDefaultMinFractionalDigits(facetedMethod);
+        });
+    }
+
+    @Test
+    void maxTotalPickedUpOnActionParameter() {
+        // given
+        @SuppressWarnings("unused")
+        class Order {
+            public void updateCost(
+                    @ValueSemantics(maxTotalDigits = 5)
+                    final BigDecimal cost) { }
+        }
+        parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            newFacetFactory().processParams(processParameterContext);
+            // then
+            assertMaxTotalDigitsExplicit(facetedMethodParameter, 5);
+            assertMaxTotalDigitsInferred(facetedMethodParameter, 5);
+            assertDefaultMaxIntegerDigits(facetedMethodParameter);
+            assertDefaultMinIntegerDigits(facetedMethodParameter);
+            assertDefaultMaxFractionalDigits(facetedMethodParameter);
+            assertDefaultMinFractionalDigits(facetedMethodParameter);
+        });
+    }
+
+    // -- MIN INTEGER DIGITS
+
+    @Test
+    void minIntegerPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(minIntegerDigits = 5, maxIntegerDigits = 6)
+            public BigDecimal getCost() { return null; }
+        }
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertDefaultMaxTotalDigits(facetedMethod);
+            assertMaxIntegerDigits(facetedMethod, 6);
+            assertMinIntegerDigits(facetedMethod, 5);
+            assertDefaultMaxFractionalDigits(facetedMethod);
+            assertDefaultMinFractionalDigits(facetedMethod);
+        });
+    }
+
+    @Test
+    void minIntegerPickedUpOnActionParameter() {
+        // given
+        @SuppressWarnings("unused")
+        class Order {
+            public void updateCost(
+                    @ValueSemantics(minIntegerDigits = 5, maxIntegerDigits = 6)
+                    final BigDecimal cost) { }
+        }
+        parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            newFacetFactory().processParams(processParameterContext);
+            // then
+            assertDefaultMaxTotalDigits(facetedMethodParameter);
+            assertMaxIntegerDigits(facetedMethodParameter, 6);
+            assertMinIntegerDigits(facetedMethodParameter, 5);
+            assertDefaultMaxFractionalDigits(facetedMethodParameter);
+            assertDefaultMinFractionalDigits(facetedMethodParameter);
+        });
+    }
+
+    // -- MAX FRACTIONAL DIGITS
+
+    @Test
+    void maxFracionalPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(maxFractionalDigits = 5)
+            public BigDecimal getCost() { return null; }
+        }
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertDefaultMaxTotalDigits(facetedMethod);
+            assertDefaultMaxIntegerDigits(facetedMethod);
+            assertDefaultMinIntegerDigits(facetedMethod);
+            assertMaxFractionalDigits(facetedMethod, 5);
+            assertDefaultMinFractionalDigits(facetedMethod);
+        });
+    }
+
+    @Test
+    void maxFracionalPickedUpOnActionParameter() {
+        // given
+        @SuppressWarnings("unused")
+        class Order {
+            public void updateCost(
+                    @ValueSemantics(maxFractionalDigits = 5)
+                    final BigDecimal cost) { }
+        }
+        parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            newFacetFactory().processParams(processParameterContext);
+            // then
+            assertDefaultMaxTotalDigits(facetedMethodParameter);
+            assertDefaultMaxIntegerDigits(facetedMethodParameter);
+            assertDefaultMinIntegerDigits(facetedMethodParameter);
+            assertMaxFractionalDigits(facetedMethodParameter, 5);
+            assertDefaultMinFractionalDigits(facetedMethodParameter);
+        });
+    }
+
+    // -- MIN FRACTIONAL DIGITS
+
+    @Test
+    void minFracionalPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(minFractionalDigits = 5)
+            public BigDecimal getCost() { return null; }
+        }
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertDefaultMaxTotalDigits(facetedMethod);
+            assertDefaultMinIntegerDigits(facetedMethod);
+            assertDefaultMaxFractionalDigits(facetedMethod);
+            assertMinFractionalDigits(facetedMethod, 5);
+        });
+    }
+
+    @Test
+    void minFracionalPickedUpOnActionParameter() {
+        // given
+        @SuppressWarnings("unused")
+        class Order {
+            public void updateCost(
+                    @ValueSemantics(minFractionalDigits = 5)
+                    final BigDecimal cost) { }
+        }
+        parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            newFacetFactory().processParams(processParameterContext);
+            // then
+            assertDefaultMaxTotalDigits(facetedMethodParameter);
+            assertDefaultMinIntegerDigits(facetedMethodParameter);
+            assertDefaultMaxFractionalDigits(facetedMethodParameter);
+            assertMinFractionalDigits(facetedMethodParameter, 5);
+        });
+    }
+
+    // -- DIGITS ANNOTATION
+
+    @Test
+    void digitsAnnotationPickedUpOnProperty() {
+        // given
+        class Order {
+            @jakarta.validation.constraints.Digits(integer=14, fraction=4)
+            public BigDecimal getCost() { return null; }
+        }
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertMaxIntegerDigits(facetedMethod, 14);
+            assertMaxFractionalDigits(facetedMethod, 4);
+        });
+    }
+
+    @Test
+    void digitsAnnotationPickedUpOnActionParameter() {
+        // given
+        @SuppressWarnings("unused")
+        class Order {
+            public void updateCost(
+                    @jakarta.validation.constraints.Digits(integer=14, fraction=4)
+                    final BigDecimal cost) { }
+        }
+        parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            newFacetFactory().processParams(processParameterContext);
+            // then
+            assertMaxIntegerDigits(facetedMethodParameter, 14);
+            assertMaxFractionalDigits(facetedMethodParameter, 4);
+        });
+    }
+
+    // -- CONSTRAINT MERGERS
+
+    @Test
+    void multipleAnnotationsMergedOnProperty() {
+        // given
+        class Order {
+
+            @jakarta.validation.constraints.Digits(integer=14, fraction=4)
+            @ValueSemantics(maxTotalDigits = 19)
+            public BigDecimal maxTotalA() { return null; }
+
+            @jakarta.validation.constraints.Digits(integer=14, fraction=5)
+            @ValueSemantics(maxTotalDigits = 17)
+            public BigDecimal maxTotalB() { return null; }
+
+            @jakarta.validation.constraints.Digits(integer=14, fraction=4)
+            @ValueSemantics(maxFractionalDigits = 5)
+            public BigDecimal maxFracA() { return null; }
+
+            @jakarta.validation.constraints.Digits(integer=14, fraction=5)
+            @ValueSemantics(maxFractionalDigits = 4)
+            public BigDecimal maxFracB() { return null; }
+
+        }
+
+        actionScenario(Order.class, "maxTotalA", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then - constraints apply individually
+            assertMaxTotalDigitsExplicit(facetedMethod, 19);
+            assertMaxTotalDigitsInferred(facetedMethod, 18);
+            assertMaxIntegerDigits(facetedMethod, 14);
+            assertMaxFractionalDigits(facetedMethod, 4);
+        });
+
+        actionScenario(Order.class, "maxTotalB", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then - lowest bound wins
+            assertMaxTotalDigitsExplicit(facetedMethod, 17);
+            assertMaxTotalDigitsInferred(facetedMethod, 17);
+        });
+
+        actionScenario(Order.class, "maxFracA", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then - lowest bound wins
+            assertMaxFractionalDigits(facetedMethod, 4);
+        });
+
+        actionScenario(Order.class, "maxFracB", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then - lowest bound wins
+            assertMaxFractionalDigits(facetedMethod, 4);
+        });
+    }
+
+    // -- TEMPORAL FORMAT STYLE
+
+    @Test
+    void dateAdjustPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
+            public LocalDateTime getDateTime() { return null; }
+        }
+        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertDateRenderAdjustDays(facetedMethod, -1);
+        });
+    }
+
+    @Test
+    void timeZoneTranslationPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(timeZoneTranslation = TimeZoneTranslation.NONE)
+            public LocalDateTime getDateTimeA() { return null; }
+
+            @ValueSemantics(timeZoneTranslation = TimeZoneTranslation.TO_LOCAL_TIMEZONE)
+            public LocalDateTime getDateTimeB() { return null; }
+
+        }
+        propertyScenario(Order.class, "dateTimeA", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertTimeZoneTranslation(facetedMethod, TimeZoneTranslation.NONE);
+        });
+        propertyScenario(Order.class, "dateTimeB", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertTimeZoneTranslation(facetedMethod, TimeZoneTranslation.TO_LOCAL_TIMEZONE);
+        });
+    }
+
+    @Test
+    void dateFormatStylePickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(dateFormatStyle = FormatStyle.FULL)
+            public LocalDateTime getDateTime() { return null; }
+        }
+        // when
+        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertDateFormatStyle(facetedMethod, FormatStyle.FULL);
+        });
+    }
+
+    @Test
+    void timeFormatStylePickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(timeFormatStyle = FormatStyle.FULL)
+            public LocalDateTime getDateTime() { return null; }
+        }
+        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod) -> {
+            // when
+            newFacetFactory().process(processMethodContext);
+            // then
+            assertTimeFormatStyle(facetedMethod, FormatStyle.FULL);
+        });
+    }
+
+    // -- HELPER
+
+    ValueSemanticsAnnotationFacetFactory newFacetFactory() {
+        return new ValueSemanticsAnnotationFacetFactory(getMetaModelContext());
+    }
+
+    private void assertDefaultMaxTotalDigits(final FacetHolder facetedMethod) {
+        assertMaxTotalDigitsExplicit(facetedMethod, 0);
+    }
+
+    private void assertDefaultMaxIntegerDigits(final FacetHolder facetedMethod) {
+        assertMaxIntegerDigits(facetedMethod, 0);
+    }
+
+    private void assertDefaultMinIntegerDigits(final FacetHolder facetedMethod) {
+        assertMinIntegerDigits(facetedMethod, 1);
+    }
+
+    private void assertDefaultMaxFractionalDigits(final FacetHolder facetedMethod) {
+        assertMaxFractionalDigits(facetedMethod, -1);
+    }
+
+    private void assertDefaultMinFractionalDigits(final FacetHolder facetedMethod) {
+        assertMinFractionalDigits(facetedMethod, 0);
+    }
+
+    private void assertMaxTotalDigitsExplicit(
+            final FacetHolder facetedMethod, final int maxTotalDigits) {
+        int unlimitted = 0;
+        assertThat(Facets.maxTotalDigitsExplicit(facetedMethod).orElse(unlimitted), is(maxTotalDigits));
+    }
+
+    private void assertMaxTotalDigitsInferred(
+            final FacetHolder facetedMethod, final int maxTotalDigits) {
+        int unlimitted = 0;
+        assertThat(Facets.maxTotalDigitsInferred(facetedMethod).orElse(unlimitted), is(maxTotalDigits));
+    }
+
+    private void assertMaxIntegerDigits(
+            final FacetHolder facetedMethod, final int maxIntegerDigits) {
+        int unlimitted = 0;
+        assertThat(Facets.maxIntegerDigits(facetedMethod).orElse(unlimitted), is(maxIntegerDigits));
+    }
+
+    private void assertMinIntegerDigits(
+            final FacetHolder facetedMethod, final int minIntegerDigits) {
+        int unlimitted = 1;
+        assertThat(Facets.minIntegerDigits(facetedMethod).orElse(unlimitted), is(minIntegerDigits));
+    }
+
+    private void assertMaxFractionalDigits(
+            final FacetHolder facetedMethod, final int maxFractionalDigits) {
+        int unlimitted = -1;
+        assertThat(Facets.maxFractionalDigits(facetedMethod).orElse(unlimitted), is(maxFractionalDigits));
+    }
+
+    private void assertMinFractionalDigits(
+            final FacetHolder facetedMethod, final int minFractionalDigits) {
+        int unlimitted = 0;
+        assertThat(Facets.minFractionalDigits(facetedMethod).orElse(unlimitted), is(minFractionalDigits));
+    }
+
+    private void assertDateRenderAdjustDays(
+            final FacetedMethod facetedMethod, final int adjustDays) {
+        final DateRenderAdjustFacet facet = facetedMethod.lookupFacet(DateRenderAdjustFacet.class).orElse(null);
+        assertNotNull(facet);
+        assertThat(facet.getDateRenderAdjustDays(), is(adjustDays));
+    }
+
+    private void assertDateFormatStyle(
+            final FacetedMethod facetedMethod, final FormatStyle formatStyle) {
+        final DateFormatStyleFacet facet = facetedMethod.lookupFacet(DateFormatStyleFacet.class).orElse(null);
+        assertNotNull(facet);
+        assertThat(facet.getDateFormatStyle(), is(formatStyle));
+    }
+
+    private void assertTimeFormatStyle(
+            final FacetedMethod facetedMethod, final FormatStyle formatStyle) {
+        final TimeFormatStyleFacet facet = facetedMethod.lookupFacet(TimeFormatStyleFacet.class).orElse(null);
+        assertNotNull(facet);
+        assertThat(facet.getTimeFormatStyle(), is(formatStyle));
+    }
+
+    private void assertTimeZoneTranslation(
+            final FacetedMethod facetedMethod, final TimeZoneTranslation timeZoneTranslation) {
+        final TimeZoneTranslationFacet facet = facetedMethod.lookupFacet(TimeZoneTranslationFacet.class).orElse(null);
+        assertNotNull(facet);
+        assertThat(facet.getTimeZoneTranslation(), is(timeZoneTranslation));
+    }
+
+}

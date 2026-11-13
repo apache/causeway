@@ -109,7 +109,6 @@ public class BookDto {
         return samples().findFirst().orElseThrow();
     }
 
-
     @Programmatic
     public String encode() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(BookDto.class);
@@ -133,6 +132,5 @@ public class BookDto {
 
         return bookDto;
     }
-
 
 }

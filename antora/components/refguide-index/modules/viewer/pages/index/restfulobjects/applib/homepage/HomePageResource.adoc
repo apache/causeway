@@ -7,11 +7,11 @@
 .HomePageResource.java
 ----
 interface HomePageResource {
-  Response homePage()
-  Response deleteHomePageNotAllowed()
-  Response putHomePageNotAllowed()
-  Response postHomePageNotAllowed()
-  Response notAuthenticated()     // <.>
+  ResponseEntity<Object> homePage()
+  ResponseEntity<Object> deleteHomePageNotAllowed()
+  ResponseEntity<Object> putHomePageNotAllowed()
+  ResponseEntity<Object> postHomePageNotAllowed()
+  ResponseEntity<Object> notAuthenticated()     // <.>
 }
 ----
 

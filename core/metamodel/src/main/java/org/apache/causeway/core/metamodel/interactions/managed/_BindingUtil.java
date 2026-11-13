@@ -18,23 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -53,60 +53,67 @@ class _BindingUtil {
         }
     }
 
+    /**
+     * For {@link TargetFormat#PARSABLE_TEXT} returns a {@link Bindable},
+     * otherwise just an {@link Observable}.
+     */
     @SuppressWarnings({ "rawtypes" })
     Observable<String> bindAsFormated(
             final @NonNull TargetFormat format,
             final @NonNull OneToOneAssociation prop,
             final @NonNull _BindableAbstract<ManagedObject> bindablePropertyValue) {
 
-        val spec = prop.getElementType();
+        var spec = prop.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
         return spec.valueFacet()
-        .map(valueFacet->{
-            val eitherRendererOrParser = format.requiresRenderer()
-                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
-                : Either.<Renderer, Parser>right(valueFacet.selectParserForPropertyElseFallback(prop));
-            val ctx = valueFacet.createValueSemanticsContext(prop);
+            .map(valueFacet->{
+                var eitherRendererOrParser = format.requiresRenderer()
+                    ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(prop))
+                    : Either.<Renderer, Parser>right(valueFacet.selectParserForAttributeOrElseFallback(prop));
+                var ctx = valueFacet.createValueSemanticsContext(prop);
 
-            return bindAsFormated(format, spec, bindablePropertyValue, eitherRendererOrParser, ctx);
-        })
-        .orElseGet(()->
-            // fallback Bindable that is floating free (unbound)
-            // writing to it has no effect on the domain
-            _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
-                    spec.getLogicalType()))
-        );
-
+                return bindAsFormated(format, spec, bindablePropertyValue, eitherRendererOrParser, ctx);
+            })
+            .orElseGet(()->
+                // fallback Bindable that is floating free (unbound)
+                // writing to it has no effect on the domain
+                _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
+                        spec.logicalType()))
+            );
     }
 
+    /**
+     * For {@link TargetFormat#PARSABLE_TEXT} returns a {@link Bindable},
+     * otherwise just an {@link Observable}.
+     */
     @SuppressWarnings({ "rawtypes" })
     Observable<String> bindAsFormated(
             final @NonNull TargetFormat format,
             final @NonNull ObjectActionParameter param,
             final @NonNull _BindableAbstract<ManagedObject> bindableParamValue) {
 
-        guardAgainstNonScalarParam(param);
+        // non-scalar action parameters are neither parseable nor renderable
+        if(param.isPlural()) return _Bindables.forValue("multiple parameters");
 
-        val spec = param.getElementType();
+        var spec = param.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
         return spec.valueFacet()
-        .map(valueFacet->{
-            val eitherRendererOrParser = format.requiresRenderer()
-                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
-                : Either.<Renderer, Parser>right(valueFacet.selectParserForParameterElseFallback(param));
-            val ctx = valueFacet.createValueSemanticsContext(param);
+            .map(valueFacet->{
+                var eitherRendererOrParser = format.requiresRenderer()
+                    ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(param))
+                    : Either.<Renderer, Parser>right(valueFacet.selectParserForAttributeOrElseFallback(param));
+                var ctx = valueFacet.createValueSemanticsContext(param);
 
-            return bindAsFormated(format, spec, bindableParamValue, eitherRendererOrParser, ctx);
-        })
-        .orElseGet(()->
-            // fallback Bindable that is floating free (unbound)
-            // writing to it has no effect on the domain
-            _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
-                    spec.getLogicalType()))
-        );
-
+                return bindAsFormated(format, spec, bindableParamValue, eitherRendererOrParser, ctx);
+            })
+            .orElseGet(()->
+                // fallback Bindable that is floating free (unbound)
+                // writing to it has no effect on the domain
+                _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
+                        spec.logicalType()))
+            );
     }
 
     // -- PREDICATES
@@ -114,69 +121,61 @@ class _BindingUtil {
     boolean hasParser(final @NonNull OneToOneAssociation prop) {
         return prop.getElementType()
                 .valueFacet()
-                .map(valueFacet->valueFacet.selectRendererForProperty(prop).isPresent())
+                .map(valueFacet->valueFacet.selectRendererForParamOrPropOrColl(prop).isPresent())
                 .orElse(false);
     }
 
     boolean hasParser(final @NonNull ObjectActionParameter param) {
-        return isNonScalarParam(param)
+        return param.isPlural()
                 ? false
                 : param.getElementType()
                     .valueFacet()
-                    .map(valueFacet->valueFacet.selectRendererForParameter(param).isPresent())
+                    .map(valueFacet->valueFacet.selectRendererForParamOrPropOrColl(param).isPresent())
                     .orElse(false);
     }
 
     // -- HELPER
 
-    private boolean isNonScalarParam(final @NonNull ObjectActionParameter param) {
-        return param.getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL;
-    }
-
-    private void guardAgainstNonScalarParam(final @NonNull ObjectActionParameter param) {
-        if(isNonScalarParam(param)) {
-            throw _Exceptions.illegalArgument(
-                    "Non-scalar action parameters are neither parseable nor renderable: %s",
-                    param.getFeatureIdentifier());
-        }
-    }
-
+    /**
+     * For {@link TargetFormat#PARSABLE_TEXT} returns a {@link Bindable},
+     * otherwise just an {@link Observable}.
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Observable<String> bindAsFormated(
             final @NonNull TargetFormat format,
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,
             final @NonNull Either<Renderer, Parser> eitherRendererOrParser,
-            final @NonNull ValueSemanticsProvider.Context context) {
+            final ValueSemanticsProvider.@NonNull Context context) {
 
         switch (format) {
         case TITLE: {
-            val renderer = eitherRendererOrParser.left().orElseThrow();
+            var renderer = eitherRendererOrParser.left().orElseThrow();
             return bindableValue.map(value->{
-                        val pojo = MmUnwrapUtils.single(value);
-                        val title = renderer.titlePresentation(context, pojo);
+                        var pojo = MmUnwrapUtils.single(value);
+                        var title = renderer.titlePresentation(context, pojo);
                         return title;
                     });
         }
         case HTML: {
-            val renderer = eitherRendererOrParser.left().orElseThrow();
+            var renderer = eitherRendererOrParser.left().orElseThrow();
             return bindableValue.map(value->{
-                        val pojo = MmUnwrapUtils.single(value);
-                        val html = renderer.htmlPresentation(context, pojo);
+                        var pojo = MmUnwrapUtils.single(value);
+                        var html = renderer.htmlPresentation(context, pojo);
                         return html;
                     });
         }
         case PARSABLE_TEXT:
-            val parser = eitherRendererOrParser.right().orElseThrow();
+            var parser = eitherRendererOrParser.right().orElseThrow();
             return bindableValue.mapToBindable(
                     value->{
-                        val pojo = MmUnwrapUtils.single(value);
-                        val text = parser.parseableTextRepresentation(context, pojo);
+                        var pojo = MmUnwrapUtils.single(value);
+                        var text = parser.parseableTextRepresentation(context, pojo);
                         //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
                         return text;
                     },
                     text->{
-                        val value = ManagedObject.value(spec, parser.parseTextRepresentation(context, text));
+                        var value = ManagedObject.value(spec, parser.parseTextRepresentation(context, text));
                         //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
                         return value;
                     });
@@ -184,6 +183,5 @@ class _BindingUtil {
             throw _Exceptions.unmatchedCase(format);
         }
     }
-
 
 }

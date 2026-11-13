@@ -24,25 +24,24 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class ClientConversationLogger implements ClientConversationFilter {
 
     @Override
-    public void onRequest(String endpoint, String method, String acceptHeaderParsing,
-            Map<String, List<String>> headers, String body) {
+    public void onRequest(final String endpoint, final String method, final String acceptHeaderParsing,
+            final Map<String, List<String>> headers, final String body) {
 
-        val headersAsText = headers.entrySet().stream()
+        var headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS REQUEST -------------\n")
         .append("uri: ").append(endpoint).append("\n")
@@ -57,13 +56,13 @@ public class ClientConversationLogger implements ClientConversationFilter {
     }
 
     @Override
-    public void onResponse(int httpReturnCode, Map<String, List<String>> headers, String body) {
-        val headersAsText = headers.entrySet().stream()
+    public void onResponse(final int httpReturnCode, final Map<String, List<String>> headers, final String body) {
+        var headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS RESPONSE -------------\n")
         .append("http-return-code: \n\t").append(httpReturnCode).append("\n")
@@ -79,11 +78,11 @@ public class ClientConversationLogger implements ClientConversationFilter {
 
     private final String basicAuthMagic = "Authorization: [Basic ";
 
-    private String toKeyValueString(Map.Entry<?, ?> entry) {
+    private String toKeyValueString(final Map.Entry<?, ?> entry) {
         return "" + entry.getKey() + ": " + entry.getValue();
     }
 
-    private String obscureAuthHeader(String keyValueLiteral) {
+    private String obscureAuthHeader(final String keyValueLiteral) {
         if(_Strings.isEmpty(keyValueLiteral)) {
             return keyValueLiteral;
         }
@@ -95,8 +94,5 @@ public class ClientConversationLogger implements ClientConversationFilter {
         }
         return keyValueLiteral;
     }
-
-
-
 
 }

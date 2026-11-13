@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.properties.update.modify;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -27,18 +28,24 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
  * @see PropertySetterFacet
  * @since 2.0
  */
-public interface PropertySettingAccessor {
+public interface PropertySettingAccessor extends PropertyClearingAccessor {
 
     /**
      * Sets the value of this property.
      *
-     * <p>
-     *     If this is a view model, then the target will be cloned and effectively replaced.
-     * </p>
+     * <p>If this is a view model, then the target will be cloned and effectively replaced.
      */
     ManagedObject setProperty(
             final OneToOneAssociation owningAssociation,
             final ManagedObject inObject,
             final ManagedObject value,
             final InteractionInitiatedBy interactionInitiatedBy);
+    
+    default ManagedObject clearProperty(
+            final OneToOneAssociation owningAssociation,
+            final ManagedObject inObject,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+    	var emptyValueAdapter = ManagedObject.empty(owningAssociation.getElementType());
+    	return setProperty(owningAssociation, inObject, emptyValueAdapter, interactionInitiatedBy);
+    }
 }

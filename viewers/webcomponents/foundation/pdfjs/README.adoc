@@ -1,0 +1,29 @@
+= PDF.js property-reader assets
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This directory owns the pinned, selective Mozilla PDF.js distribution used by the Causeway property document reader.
+The generated assets contain the minified display module, module worker, packed CMaps, standard fonts, ICC color profiles, and reviewed image-decoder support assets from the Apache-2.0 licensed `pdfjs-dist` package.
+No complete PDF.js viewer, sandbox module, remote dependency, or runtime npm installation is included.
+
+Normal Maven builds verify the checked-in assets, package lock, license metadata, checksums, source policy, and size budget without contacting npm.
+
+To reproduce after a clean checkout:
+
+[source,shell]
+----
+npm ci --ignore-scripts --no-audit --no-fund
+npm run build
+npm run verify
+----
+
+A dependency update deliberately refreshes policy only after package, license, security, CSP, and browser review:
+
+[source,shell]
+----
+npm ci --ignore-scripts --no-audit --no-fund
+npm run update-policy
+npm run verify
+----

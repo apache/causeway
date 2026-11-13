@@ -4,4 +4,4 @@
 
 == Implementation
 
-The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] provides an implementation of this service, `o.a.c.viewer.wicket.viewer.services.BookmarkUiServiceWicket`.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] provides an implementation of this service, xref:refguide:viewer:index/wicket/viewer/services/BookmarkUiServiceWicket.adoc[].

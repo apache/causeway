@@ -27,8 +27,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ChoicesFacetFromEnum
 extends ChoicesFacetAbstract {
@@ -40,7 +39,7 @@ extends ChoicesFacetAbstract {
 
         final Object[] choices = enumClass.getEnumConstants();
 
-        val elementSpec = specForTypeElseFail(enumClass);
+        var elementSpec = specForTypeElseFail(enumClass);
         this.choices = Can.ofArray(choices)
                 .map(choice->ManagedObject.value(elementSpec, choice));
     }

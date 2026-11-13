@@ -19,90 +19,159 @@
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.id.HasLogicalType;
+import org.springframework.util.StringUtils;
+
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.bookmark.BookmarkHolder;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.resources._Serializables;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
+import org.apache.causeway.core.metamodel.object.MmHintUtils;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
+import org.apache.causeway.core.metamodel.object.MmValueUtils;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * @since 2.0
  */
-public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializable {
+public sealed interface ObjectMemento
+extends Serializable
+permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
 
-    /** arbitrary/random string */
-    static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
+    LogicalType logicalType();
+    Bookmark bookmark();
 
     /**
-     * The object's title for rendering (before translation).
+     * The object's title for rendering.
      * Corresponds to {@link ManagedObject#getTitle()}.
-     * <p>
-     * Directly support choice rendering, without the need to (re-)fetch entire object graphs.
-     * (TODO translated or not?)
+     *
+     * <p>Directly support choice rendering, without the need to (re-)fetch entire object graphs.
+     * (pre-translated)
      */
-    String getTitle();
+    String title();
 
     // -- FACTORIES
 
-    static ObjectMemento pack(
-            final Collection<ObjectMemento> container,
-            final LogicalType logicalType) {
+    static ObjectMemento empty(final LogicalType logicalType) {
+        return new ObjectMementoEmpty(logicalType);
+    }
 
+    static Optional<ObjectMemento> singular(
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject mo) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
+            return Optional.empty();
+
+        var spec = mo.objSpec();
+
+        _Assert.assertTrue(spec.isIdentifiable()
+                || spec.isParented()
+                || spec.isValue(), ()->"Don't know how to create an ObjectMemento for a type "
+                        + "with ObjectSpecification %s. "
+                        + "All other strategies failed. Type is neither "
+                        + "identifiable (isManagedBean() || isViewModel() || isEntity()), "
+                        + "nor is a 'parented' Collection, "
+                        + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
+                        .formatted(spec));
+
+        var prerenderedTitle = spec.isValue()
+            // if value type, then support translation only for enums
+            ? spec.correspondingClass().isEnum()
+                ? mo.getTranslationService().translate(TranslationContext.empty(), MmValueUtils.titleStringForValueType(feature, mo))
+                : MmValueUtils.titleStringForValueType(feature, mo)
+            : mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));
+
+        var prerenderedHtml = spec.isValue()
+            ? "<span>%s</span>".formatted(
+                    MmValueUtils.htmlStringForValueType(feature, mo))
+            : "<span>%s %s</span>".formatted(
+                    mo.getObjectRenderService().iconToHtml(mo.getIcon(IconSize.SMALL), IconSize.SMALL),
+                    prerenderedTitle);
+
+        return Optional.of(new ObjectMementoSingular(
+                mo.logicalType(),
+                MmHintUtils.bookmarkElseFail(mo),
+                prerenderedTitle,
+                prerenderedHtml));
+    }
+    /**
+     * returns null for null
+     */
+    @Nullable static ObjectMemento singularOrEmpty(
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject mo) {
+        MmAssertionUtils.assertPojoIsScalar(mo);
+        return singular(feature, mo)
+            .orElseGet(()->ManagedObjects.isSpecified(mo)
+                    ? ObjectMemento.empty(mo.logicalType())
+                    : null);
+    }
+    static ObjectMemento packed(
+            final LogicalType logicalType,
+            final ArrayList<ObjectMemento> listOfMementos) {
+        return new ObjectMementoPacked(logicalType, listOfMementos);
+    }
+    static ObjectMemento packed(
+            final LogicalType logicalType,
+            final Collection<ObjectMemento> container) {
         // ArrayList is serializable
-        if(container instanceof ArrayList) {
-            return ObjectMementoCollection.of((ArrayList<ObjectMemento>)container, logicalType);
-        }
-        return ObjectMementoCollection.of(_Lists.newArrayList(container), logicalType);
+        @SuppressWarnings("unchecked")
+        final ArrayList<ObjectMemento> arrayList = container instanceof ArrayList orig
+                ? orig
+                : _Lists.newArrayList(container);
+        return new ObjectMementoPacked(logicalType, arrayList);
     }
 
-    // ArrayList is serializable
-    static Optional<ArrayList<ObjectMemento>> unpack(final ObjectMemento memento) {
-        if(memento==null) {
-            return Optional.empty();
-        }
-        if(!(memento instanceof ObjectMementoCollection)) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
+    // -- UTILITY
+
+    static ObjectMemento fromDto(final ObjectDisplayDto dto) {
+        var bookmark = Bookmark.parse(dto.bookmark()).orElseThrow();
+        var logicalType = new LogicalType(bookmark.logicalTypeName(), dto.correspondingClass());
+        return bookmark.isEmpty()
+            ? new ObjectMementoEmpty(logicalType)
+            : new ObjectMementoSingular(logicalType, bookmark, dto.title(), dto.html());
     }
 
-    @Nullable
-    static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
-        val base64UrlEncodedMemento = memento!=null
-                ? _Strings.ofBytes(
-                    _Bytes.asUrlBase64.apply(
-                            _Serializables.write(memento)),
-                    StandardCharsets.US_ASCII)
-                : null;
-        return base64UrlEncodedMemento;
+    static String enstringToBase64(final ObjectMemento memento) {
+        if(memento instanceof ObjectMementoEmpty objectMementoEmpty)
+            return objectMementoEmpty.toDto().toJsonBase64();
+        if(memento instanceof ObjectMementoSingular objectMementoSingular)
+            return objectMementoSingular.toDto().toJsonBase64();
+
+        throw _Exceptions.unexpectedCodeReach();
     }
 
-    @Nullable
-    static ObjectMemento destringFromUrlBase64(final @Nullable String base64UrlEncodedMemento) {
+    static ObjectMemento destringFromBase64(final String base64EncodedDto) {
+        if(!StringUtils.hasLength(base64EncodedDto))
+            throw _Exceptions.unexpectedCodeReach();
+
         try {
-            return _Strings.isNotEmpty(base64UrlEncodedMemento)
-                    && !NULL_ID.equals(base64UrlEncodedMemento)
-                    ? _Serializables.read(
-                            ObjectMemento.class,
-                            _Bytes.ofUrlBase64.apply(
-                                    base64UrlEncodedMemento.getBytes(StandardCharsets.US_ASCII)))
-                    : null;
+            return fromDto(ObjectDisplayDto.fromJsonBase64(base64EncodedDto));
         } catch (Exception e) {
+            e.printStackTrace();
             return null; // map to null if anything goes wrong
         }
+    }
 
+    default boolean isEmpty() {
+        return this instanceof ObjectMementoEmpty;
+    }
+    default boolean isScalar() {
+        return this instanceof ObjectMementoSingular;
+    }
+    default boolean isPacked() {
+        return this instanceof ObjectMementoPacked;
     }
 
 }

@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.disabled.fromimmutable;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class DisabledFacetOnPropertyFromImmutableFactory
 extends FacetFactoryAbstract {
@@ -38,23 +36,22 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        val declaringClass = processMethodContext.getMethod().getDeclaringClass();
-        val spec = getSpecificationLoader().loadSpecification(declaringClass);
+        var declaringClass = processMethodContext.methodFacade().getDeclaringClass();
+        var spec = processMethodContext.loadSpecificationTypeOnly(declaringClass);
 
         spec.lookupNonFallbackFacet(ImmutableFacet.class)
         .ifPresent(immutableFacet->{
-            val facetHolder = processMethodContext.getFacetHolder();
+            var facetHolder = processMethodContext.facetHolder();
 
-            val semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
-            .map(DisabledFacet::getSemantics)
-            .orElse(DisabledFacet.Semantics.ENABLED);
+            var semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
+	            .map(DisabledFacet::getSemantics)
+	            .orElse(DisabledFacet.Semantics.ENABLED);
 
-            if(semantics.isEnabled()) {
-                return;
-            }
-            addFacet(
-                    DisabledFacetOnPropertyFromImmutable
-                    .forImmutable(facetHolder, immutableFacet));
+            if(semantics.isEnabled())
+				return;
+
+            DisabledFacetOnPropertyFromImmutable
+            	.forImmutable(facetHolder, immutableFacet);
         });
     }
 

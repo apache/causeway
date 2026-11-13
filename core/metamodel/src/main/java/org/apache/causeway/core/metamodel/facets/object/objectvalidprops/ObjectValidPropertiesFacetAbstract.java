@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.facets.object.objectvalidprops;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
 public abstract class ObjectValidPropertiesFacetAbstract extends FacetAbstract implements ObjectValidPropertiesFacet {
 

@@ -1,0 +1,41 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "staffMembers" : {
+                "window" : {
+                  "offset" : 2,
+                  "requestedSize" : 3,
+                  "returnedCount" : 3,
+                  "totalCount" : 9,
+                  "hasPrevious" : true,
+                  "hasNext" : true,
+                  "ordering" : "REQUESTED",
+                  "sortableMembers" : [ "department", "name", "grade", "windowProbe", "photo", "profile" ],
+                  "searchSupported" : true,
+                  "searchPrompt" : "Search staff member",
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "Window 06"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 05"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 04"
+                    }
+                  } ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

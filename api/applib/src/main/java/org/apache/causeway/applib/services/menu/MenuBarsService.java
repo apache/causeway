@@ -50,7 +50,6 @@ public interface MenuBarsService {
         ANNOTATED
     }
 
-
     /**
      * Returns {@link #menuBars()} with a type of {@link Type#DEFAULT}.
      */

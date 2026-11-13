@@ -16,6 +16,8 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.spec.feature;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,15 +34,15 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
+import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -51,14 +53,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -82,7 +77,7 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Whether this {@link ObjectAction} instance represents a mixin main method,
-     * usually of type {@link ObjectActionDefault}, peered by an {@link ObjectActionMixedIn}.
+     * usually of type {@code ObjectActionDefault}, peered by an {@code ObjectActionMixedIn}.
      * <p>
      * Such instances are used for populating the meta-model.
      */
@@ -121,7 +116,6 @@ public interface ObjectAction extends ObjectMember {
             InteractionHead head,
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy);
-
 
     // -- isArgumentSetValid, isArgumentSetValidForParameters, isArgumentSetValidForAction
 
@@ -178,10 +172,12 @@ public interface ObjectAction extends ObjectMember {
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
-
     // -- INTERACTION HEAD
 
-    ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner);
+    InteractionHead interactionHead(@NonNull ManagedObject actionOwner);
+    default ActionInteractionHead actionInteractionHead(@NonNull final ManagedObject actionOwner) {
+        return new ActionInteractionHead(interactionHead(actionOwner), this);
+    }
 
     // -- Parameters (declarative)
 
@@ -241,7 +237,6 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectActionParameter getParameterByName(String paramName);
 
-
     /**
      * The actual target to invoke actions upon.
      *
@@ -262,49 +257,36 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(final String prefix) {
-        final String ownerId = getDeclaringType().getLogicalTypeName().replace(".", "-");
+        final String ownerId = getDeclaringType().logicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
 
-    /**
-     * Returns a serializable representation of this action.
-     */
-    default ActionMemento getMemento() {
-        return ActionMemento.forAction(this);
-    }
-
     default PromptStyle getPromptStyle() {
-        val promptStyle = lookupFacet(PromptStyleFacet.class)
+        var promptStyle = lookupFacet(PromptStyleFacet.class)
                 .map(PromptStyleFacet::value);
         if(getDeclaringType().isInjectable() // <-- menu actions
                 // no-arg DIALOG is correctly handled,
                 // whereas for INLINE it would render a form with no fields
                 || getParameterCount() == 0) {
             if (promptStyle.isPresent()) {
-                if (promptStyle.get().isDialogAny()) {
-                    // preserve dialog specialization
+                if (promptStyle.get().isDialogAny())
+					// preserve dialog specialization
                     return promptStyle.get();
-                }
             }
             // fallback to generic dialog
             return PromptStyle.DIALOG;
         }
 
-        val needsFallback = promptStyle.isEmpty()
+        var needsFallback = promptStyle.isEmpty()
                 || promptStyle.get() == PromptStyle.AS_CONFIGURED;
 
         if(needsFallback) {
             // modal vs side-bar
-            val dialogModeAsConfigured = Optional.ofNullable(
-                    getMetaModelContext().getConfiguration().getViewer().getWicket().getDialogMode())
-                    .orElseGet(()->new Wicket().getDialogMode());
-            switch (dialogModeAsConfigured) {
-            case SIDEBAR:
-                return PromptStyle.DIALOG_SIDEBAR;
-            case MODAL:
-            default:
-                return PromptStyle.DIALOG_MODAL;
-            }
+			return switch (getWicketViewerSettings().dialogMode()) {
+			case SIDEBAR -> PromptStyle.DIALOG_SIDEBAR;
+			case MODAL -> PromptStyle.DIALOG_MODAL;
+			default -> PromptStyle.DIALOG_MODAL;
+			};
         }
         return promptStyle.get();
     }
@@ -320,11 +302,10 @@ public interface ObjectAction extends ObjectMember {
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
-                Class<?> cls = returnType.getCorrespondingClass();
+                Class<?> cls = returnType.correspondingClass();
                 if (Blob.class.isAssignableFrom(cls)
-                        || Clob.class.isAssignableFrom(cls)) {
-                    return true;
-                }
+                        || Clob.class.isAssignableFrom(cls))
+					return true;
             }
             return false;
         }
@@ -332,19 +313,16 @@ public interface ObjectAction extends ObjectMember {
         public static boolean isDirectlyAssociatedWithAnyProperty(
                 final ObjectAction action) {
 
-            val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
-            if (layoutGroupFacet == null) {
-                return false;
-            }
-            val layoutGroupId = layoutGroupFacet.getGroupId();
-            if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                return false;
-            }
-            val prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
+            var layoutGroupFacet = action.lookupFacet(LayoutGroupFacet.class).orElse(null);
+            if (layoutGroupFacet == null)
+				return false;
+            var layoutGroupId = layoutGroupFacet.getGroupId();
+            if (_Strings.isNullOrEmpty(layoutGroupId))
+				return false;
+            var prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
                     .orElse(null);
-            if (prop == null) {
-                return false;
-            }
+            if (prop == null)
+				return false;
             return true;
         }
 
@@ -362,7 +340,7 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAction action,
                 final ManagedObject domainObject) {
 
-            return Optional.ofNullable(action.getFacet(FaFacet.class))
+            return Optional.ofNullable(action.lookupFacet(FaFacet.class).orElse(null))
                 .map(FaFacet::getSpecialization)
                 .map(specialization->specialization
                         .fold(
@@ -371,7 +349,7 @@ public interface ObjectAction extends ObjectMember {
                                     ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
                                         ? null
                                         : hasImperativeFaIcon.getFaLayersProvider(domainObject)))
-                .filter(_NullSafe::isPresent);
+                .filter(Objects::nonNull);
         }
 
         /**
@@ -380,7 +358,7 @@ public interface ObjectAction extends ObjectMember {
         public static Stream<ObjectAction> streamTopBarActions(
                 final ManagedObject adapter) {
 
-            val spec = adapter.getSpecification();
+            var spec = adapter.objSpec();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates
@@ -391,27 +369,23 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static Stream<ObjectAction> findForAssociation(
-                final ManagedObject adapter,
+                final ObjectSpecification objSpec,
                 final ObjectAssociation association) {
 
-            val spec = adapter.getSpecification();
-
-            return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(Predicates.isSameLayoutGroupAs(association))
-            .sorted(Comparators.byMemberOrderSequence(false));
+            return objSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                .filter(Predicates.isSameLayoutGroupAs(association))
+                .sorted(ObjectMember.byMemberOrderSequence(false));
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
-            PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
-            if(facet == null) {
-                // don't think this can occur, see PromptStyleFallback
+            PromptStyleFacet facet = objectAction.lookupFacet(PromptStyleFacet.class).orElse(null);
+            if(facet == null)
+				// don't think this can occur, see PromptStyleFallback
                 return PromptStyle.INLINE;
-            }
             final PromptStyle promptStyle = facet.value();
-            if(promptStyle == PromptStyle.AS_CONFIGURED) {
-                // don't think this can occur, see PromptStyleConfiguration
+            if(promptStyle == PromptStyle.AS_CONFIGURED)
+				// don't think this can occur, see PromptStyleConfiguration
                 return PromptStyle.INLINE;
-            }
             return promptStyle;
         }
 
@@ -419,19 +393,16 @@ public interface ObjectAction extends ObjectMember {
                 final @NonNull ObjectAction action,
                 final @NonNull InteractionHead head) {
 
-            val mixeeAdapter = head.getMixee().orElse(null);
-
-            if(mixeeAdapter != null) {
-                val mixinSpec = action.getDeclaringType();
-                val ownerSpec = mixeeAdapter.getSpecification();
-                return ownerSpec.lookupMixedInMember(mixinSpec)
-                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asSupplier()))
+            if(head.isMixin()) {
+                var mixinSpec = action.getDeclaringType();
+                var mixeeSpec = head.owner().objSpec();
+                return mixeeSpec.lookupMixedInMember(mixinSpec)
+                        .map(mixedInMember->mixedInMember.getFriendlyName(head.owner()))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);
             }
-            return action.getFriendlyName(head::getOwner);
+            return action.getFriendlyName(head::owner);
         }
     }
-
 
     // -- Predicates
 
@@ -453,14 +424,12 @@ public interface ObjectAction extends ObjectMember {
 
             return (final ObjectAction objectAction) -> {
 
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
-                val layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return false;
-                }
+                var layoutGroupFacet = objectAction.lookupFacet(LayoutGroupFacet.class).orElse(null);
+                if (layoutGroupFacet == null)
+					return false;
+                var layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId))
+					return false;
                 return layoutGroupId.equals(memberId);
             };
         }
@@ -474,14 +443,12 @@ public interface ObjectAction extends ObjectMember {
 
             return (final ObjectAction objectAction) -> {
 
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
-                val layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return false;
-                }
+                var layoutGroupFacet = objectAction.lookupFacet(LayoutGroupFacet.class).orElse(null);
+                if (layoutGroupFacet == null)
+					return false;
+                var layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId))
+					return false;
                 return associationIds.contains(layoutGroupId);
             };
         }
@@ -489,12 +456,33 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
                 final @NonNull OneToManyAssociation collection) {
 
-            val elementType = collection.getElementType();
+            var elementType = collection.getElementType();
 
             return new HasChoicesFrom(collection)
                     .and(new HasParameterMatching(
                             new ObjectActionParameter.Predicates.CollectionParameter(elementType)
                             ));
+        }
+
+        /**
+         * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+         * <p>
+         * However, whereHidden={@link Where#ALL_TABLES} is used as default
+         * when no {@link HiddenFacet} is found.
+         *
+         * @see ObjectAssociation.Predicates#visibleAccordingToHiddenFacet(Where)
+         *
+         * @apiNote an alternative would be to prime the meta-model with fallback facets,
+         *      however the current approach is more heap friendly
+         */
+        public static Predicate<ObjectAction> visibleAccordingToHiddenFacet(final Where whereContext) {
+            return (final ObjectAction act) -> act.lookupFacet(HiddenFacet.class)
+                    .map(WhereValueFacet.class::cast)
+                    .map(WhereValueFacet::where)
+                    // whereHidden=ALL_TABLES is the default when not specified otherwise
+                    .or(()->Optional.of(Where.ALL_TABLES))
+                    .stream()
+                    .noneMatch(whereHidden -> whereHidden.includes(whereContext));
         }
 
         // -- HELPER
@@ -508,15 +496,13 @@ public interface ObjectAction extends ObjectMember {
 
             @Override
             public boolean test(final ObjectAction objectAction) {
-                val choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
-                if(choicesFromFacet == null) {
-                    return false;
-                }
-                val choicesFromMemberName = choicesFromFacet.value();
-                if (choicesFromMemberName == null) {
-                    return false;
-                }
-                val memberNameLowerCase = choicesFromMemberName.toLowerCase();
+                var choicesFromFacet = objectAction.lookupFacet(ChoicesFromFacet.class).orElse(null);
+                if(choicesFromFacet == null)
+					return false;
+                var choicesFromMemberName = choicesFromFacet.value();
+                if (choicesFromMemberName == null)
+					return false;
+                var memberNameLowerCase = choicesFromMemberName.toLowerCase();
                 return Objects.equals(memberId, memberNameLowerCase);
             }
 

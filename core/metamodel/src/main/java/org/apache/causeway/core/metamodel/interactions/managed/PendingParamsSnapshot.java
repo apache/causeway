@@ -23,7 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * In the event of serialization memoizes all the current pending parameter values
@@ -144,8 +144,8 @@ public class PendingParamsSnapshot implements Serializable {
                         ()->String.format("Framework Bug: cardinality constraint mismatch on parameter %s",
                                 paramModel.getMetaModel().getFeatureIdentifier()));
                 if(isPlural) {
-                    cardinalityConstraints[paramModel.getParamNr()] =
-                            Objects.requireNonNull(((PackedManagedObject)paramValue).getLogicalType());
+                    cardinalityConstraints[paramModel.paramIndex()] =
+                            Objects.requireNonNull(paramValue.logicalType());
                 }
             }
             return isPlural

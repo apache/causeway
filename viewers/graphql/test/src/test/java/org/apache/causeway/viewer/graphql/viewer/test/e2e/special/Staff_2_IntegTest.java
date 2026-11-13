@@ -23,91 +23,128 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-import lombok.val;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
 @ActiveProfiles("test")
+@ExtendWith(OutputCaptureExtension.class)
 public class Staff_2_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    void find_staff_member_by_name_and_download_photo() throws Exception {
-
+    void findsStaffMemberAndSafelyDownloadsResources(final CapturedOutput output) throws Exception {
         String response = submit();
         Approvals.verify(response, jsonOptions());
 
-        val objectMapper = new ObjectMapper();
-        val jsonNodeRoot = objectMapper.readTree(response);
+        var objectMapper = new ObjectMapper();
+        var jsonNodeRoot = objectMapper.readTree(response);
+        var resultPath = "/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results";
+        var gridUrl = jsonNodeRoot.at(resultPath + "/_meta/grid").stringValue();
+        assertThat(gridUrl).matches("/graphql/object/university.dept.StaffMember:(\\d+)/_meta/grid");
+        var id = gridUrl.substring(
+                gridUrl.indexOf(':') + 1,
+                gridUrl.indexOf("/_meta/grid"));
+        var gridResponse = submitReturningBytes(gridUrl);
+        assertSuccessfulAttachment(gridResponse, "application/xml");
+        assertThat(new String(gridResponse.body(), StandardCharsets.UTF_8)).isNotBlank();
 
-        val gridUrl = jsonNodeRoot
-                .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/grid")
-                .asText();
+        var photoBytesUrl = jsonNodeRoot.at(resultPath + "/photo/get/bytes").stringValue();
+        assertThat(photoBytesUrl).matches("/graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
+        var photoBytesResponse = submitReturningBytes(photoBytesUrl);
+        assertSuccessfulAttachment(photoBytesResponse, "application/pdf");
+        assertThat(photoBytesResponse.body()).isNotEmpty();
 
-        assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/grid");
-        val gridHttpResponse = submitReturningString(gridUrl);
+        var profileCharsUrl = jsonNodeRoot.at(resultPath + "/profile/get/chars").stringValue();
+        assertThat(profileCharsUrl).matches("/graphql/object/university.dept.StaffMember:(\\d+)/profile/clobChars");
+        var profileCharsResponse = submitReturningBytes(profileCharsUrl);
+        assertSuccessfulAttachment(profileCharsResponse, "text/plain");
+        assertThat(new String(profileCharsResponse.body(), StandardCharsets.UTF_8))
+                .isEqualTo("Profile for Gerry Jones");
 
-        assertThat(gridHttpResponse.statusCode()).isEqualTo(200);
-        val gridChars = gridHttpResponse.body();
-        assertThat(gridChars).isNotEmpty();
+        var iconBytesUrl = jsonNodeRoot.at(resultPath + "/_meta/icon").stringValue();
+        assertThat(iconBytesUrl).matches("/graphql/object/university.dept.StaffMember:(\\d+)/_meta/icon");
+        var iconBytesResponse = submitReturningBytes(iconBytesUrl);
+        assertSuccessfulAttachment(iconBytesResponse, "image/png");
+        assertThat(iconBytesResponse.body()).isNotEmpty();
 
+        assertNotFoundWithoutDisclosure(String.format(
+                "/graphql/object/university.dept.StaffMember:%s/hiddenPhoto/blobBytes",
+                id));
+        assertNotFoundWithoutDisclosure(
+                "/graphql/object/university.dept.StaffMember:diagnostic-secret-id/photo/blobBytes");
+        assertNotFoundWithoutDisclosure(String.format(
+                "/graphql/object/university.dept.StaffMember:%s/not-meta/grid",
+                id));
 
-        val photoBytesUrl = jsonNodeRoot
-                .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/photo/get/bytes")
-                .asText();
-
-        assertThat(photoBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
-        val photoBytesResponse = submitReturningBytes(photoBytesUrl);
-        assertThat(photoBytesResponse.statusCode()).isEqualTo(200);
-        val photoBytes = photoBytesResponse.body();
-        assertThat(photoBytes).isNotEmpty();
-
-
-        val iconBytesUrl = jsonNodeRoot
-                .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/icon")
-                .asText();
-
-        assertThat(iconBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/icon");
-        val iconBytesResponse = submitReturningBytes(iconBytesUrl);
-        assertThat(iconBytesResponse.statusCode()).isEqualTo(200);
-        val iconBytes = iconBytesResponse.body();
-        assertThat(iconBytes).isNotEmpty();
+        assertThat(output.getAll())
+                .doesNotContain("CONFIDENTIAL_RESOURCE_CONTENT")
+                .doesNotContain("diagnostic-secret-id");
     }
 
-    private HttpResponse<byte[]> submitReturningBytes(String url) throws IOException, InterruptedException {
-        return submitReturningResponseHandledBy(url, HttpResponse.BodyHandlers.ofByteArray());
+    @Test
+    @UseReporter(DiffReporter.class)
+    void hiddenResourceValidationDoesNotProcessOrDiscloseContent(
+            final CapturedOutput output) throws Exception {
+        var response = submit();
+        Approvals.verify(response, jsonOptions());
+        assertThat(response).doesNotContain("PRIVATE_HIDDEN_RESOURCE_INPUT");
+        assertThat(output).doesNotContain("PRIVATE_HIDDEN_RESOURCE_INPUT");
     }
 
-    private HttpResponse<String> submitReturningString(String url) throws IOException, InterruptedException {
-        return submitReturningResponseHandledBy(url, HttpResponse.BodyHandlers.ofString());
+    private void assertNotFoundWithoutDisclosure(final String url) throws Exception {
+        var response = submitReturningBytes(url);
+        assertThat(response.statusCode()).isEqualTo(404);
+        assertThat(response.body()).isEmpty();
+        assertThat(response.headers().firstValue("Cache-Control").orElseThrow())
+                .isEqualTo("private, no-store");
     }
 
-    private <T> HttpResponse<T> submitReturningResponseHandledBy(String url, HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
-        val urlSuffix = url.substring(3); // strip off the '///' prefix
-        val uri = URI.create(String.format("http://0.0.0.0:%d/%s", port, urlSuffix));
-
-        HttpRequest httpRequest = HttpRequest.newBuilder().
-                uri(uri).
-                GET().
-                build();
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-        return httpClient.send(httpRequest, responseBodyHandler);
+    private static void assertSuccessfulAttachment(
+            final HttpResponse<byte[]> response,
+            final String expectedMediaType) {
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.headers().firstValue("Content-Type").orElseThrow())
+                .startsWith(expectedMediaType);
+        assertThat(response.headers().firstValue("Content-Length").orElseThrow())
+                .isEqualTo(Integer.toString(response.body().length));
+        assertThat(response.headers().firstValue("Cache-Control").orElseThrow())
+                .isEqualTo("private, no-store");
+        assertThat(response.headers().firstValue("Content-Disposition").orElseThrow())
+                .startsWith("attachment;");
+        assertThat(response.headers().firstValue("X-Content-Type-Options").orElseThrow())
+                .isEqualTo("nosniff");
     }
 
+    private HttpResponse<byte[]> submitReturningBytes(final String url)
+            throws IOException, InterruptedException {
+        var baseUri = URI.create(String.format("http://0.0.0.0:%d", port));
+        var uri = baseUri.resolve(url);
+        var httpRequest = HttpRequest.newBuilder()
+                .uri(uri)
+                .timeout(Duration.ofSeconds(30))
+                .GET()
+                .build();
+        return HttpClient.newHttpClient().send(
+                httpRequest,
+                HttpResponse.BodyHandlers.ofByteArray());
+    }
 }

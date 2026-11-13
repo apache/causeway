@@ -68,34 +68,13 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-        return renderTitle(value, Blob::getName);
+        return renderTitle(value, Blob::name);
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-        return renderHtml(value, Blob::getName);
+        return renderHtml(value, Blob::name);
     }
-
-    // -- ENCODER DECODER
-
-//    public String toEncodedString(final Blob blob) {
-//        return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
-//        _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
-//    }
-//
-//    public Blob fromEncodedString(final String data) {
-//        final int colonIdx = data.indexOf(':');
-//        final String name  = data.substring(0, colonIdx);
-//        final int colon2Idx  = data.indexOf(":", colonIdx+1);
-//        final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
-//        final String payload = data.substring(colon2Idx+1);
-//        final byte[] bytes = _Bytes.decodeBase64(Base64.getDecoder(), payload.getBytes(StandardCharsets.UTF_8));
-//        try {
-//            return new Blob(name, new MimeType(mimeTypeBase), bytes);
-//        } catch (MimeTypeParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     // -- EXAMPLES
 

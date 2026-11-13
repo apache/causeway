@@ -1,0 +1,387 @@
+= OpenTelemetry Setup and Local Verification
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This guide explains how Causeway supports open telemetry tracing and metrics, using first Boot-managed tracing and then using Agent-initiated tracing.
+It uses the petclinic application to demonstrate.
+
+It also outlines how to enable for your own applications.
+
+
+== Start the local telemetry services
+
+From the Causeway repository root, with Docker Desktop or a Docker daemon running and Docker Compose v2 or later available:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh start
+./scripts/metrics-local.sh start
+----
+
+The first command starts Jaeger; the second starts Prometheus and Grafana and provisions Grafana's Prometheus data source.
+Each script checks readiness independently.
+The Petclinic launcher does not start or stop these services.
+Repeated starts reuse running services.
+All published ports bind to localhost.
+
+[cols="1,2",options="header"]
+|===
+|Address |Purpose
+|http://localhost:16686 |Jaeger trace UI
+|http://localhost:4318/v1/traces |Jaeger OTLP HTTP trace receiver
+|http://localhost:9090 |Prometheus query UI
+|http://localhost:9090/api/v1/otlp/v1/metrics |Prometheus OTLP HTTP metrics receiver
+|http://localhost:3000 |Grafana; initial login `admin` / `admin`
+|===
+
+Grafana queries the internal Docker address `http://prometheus:9090`; Petclinic sends to `localhost:9090` from the host.
+
+Jaeger stores traces in memory, so
+restarting Jaeger will lose earlier traces.
+Similarly Prometheus and Grafana data directories use size-limited tmpfs; there are no persistent data volumes or host data directories.
+
+To check status:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh status
+./scripts/metrics-local.sh status
+----
+
+To inspect logs:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh logs
+./scripts/metrics-local.sh logs
+----
+
+
+== Run with Boot-managed telemetry
+
+Use a checkout whose Causeway dependencies have been built and installed into your local Maven repository.
+The launcher builds the webcomponents modules; changes to other modules (such as the Wicket viewer) must be installed before running it.
+The Petclinic launcher requires Maven and a supported build JDK, respects `JAVA_HOME` and `MVN`, and runs in the foreground:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
+
+[TIP]
+====
+Additional Maven options can be specified after `--`, for example `run-with-telemetry.sh -- -o` for an offline build.
+====
+
+The launcher activates the Maven `observation` profile for dependencies and the Spring `observation` profile for framework instrumentation and export configuration.
+
+Boot owns the tracing, no Java agent is attached in this mode.
+Micrometer meanwhile exports metrics.
+The petclinic sample is configured so that traces are fully sampled and metrics are exported every ten seconds (this can be adjusted, see xref:#configuring-your-own-app[below].)
+
+
+
+=== Exercise the application
+
+Open the app:
+
+* http://localhost:8080/htmx (htmx viewer)
++
+no password (uses bypass authentication); or
+
+* http://localhost:8080/wicket/ (Wicket viewer)
++
+sign in with `sven` / `pass`
+
+Try:
+
+* opening Mary Smith
+* changing an owner's name
+* registering a pet.
+
+
+[[inspect-traces-and-metrics]]
+=== Inspect traces and metrics
+
+In Jaeger:
+
+* select service *Causeway Pet Clinic*
+* click *Find Traces*
+* open a recent trace from a domain operation.
++
+HTMX domain operations use `/graphql`; Wicket requests use `/wicket/` paths.
+
+* Inspect the HTTP entry span and its display name.
++
+In both Boot-managed and agent-managed tracing, Causeway names eligible foreground requests from their domain outcome: `act <logical-type>#<action>`, `prompt <logical-type>#<action>` or `view <logical-type>`.
+In Wicket, opening Mary Smith's object page gives `view petclinic.PetOwner`; opening *Update Name* gives `prompt petclinic.PetOwner#updateName`; submitting that action gives `act petclinic.PetOwner#updateName`.
+Use fresh requests for each operation, then refresh *Find Traces* to inspect their names in the trace list.
++
+An eligible top-level action takes priority over a prompt, which takes priority over a page view; the first candidate wins ties.
+The selected entry has `causeway.trace.name` and the complete `causeway.action.id` (including parameter types) or `causeway.object.type`.
+These entry attributes describe static domain identity; `causeway.user.name`, tenancy and interaction UUID remain on the root interaction span.
++
+Action naming applies to matching top-level commands across servlet entry points, including GraphQL/HTMX.
+Page-view and prompt nominations come from Wicket rendering.
+A request without a supported outcome, such as a static-resource request or an arbitrary Ajax subtree refresh, retains its HTTP display name.
+Wicket detail and span-budget settings do not suppress entry-name nominations, even with `NONE` detail or an exhausted budget.
+HTTP method, route/path and status attributes remain available; use those attributes when you want to group by route rather than domain outcome.
+Naming covers synchronous work in the initial request dispatch, without propagating nominations to asynchronous continuations.
+
+* Expand the span tree and inspect the spans
++
+Span display names identify the domain member being interacted with, for example `act petclinic.PetOwner#updateName`, `prop petclinic.PetOwner#name` or `coll petclinic.PetOwner#visits`.
+Display names retain identifier casing and are limited to 50 characters: long names lose their namespace first, then are truncated if still too long.
++
+Each member span also has its full identifier under `causeway.action.id`, `causeway.property.id` or `causeway.collection.id`.
+The full identifier attribute is never truncated.
++
+Within the member span, there may be spans for updates (using `Property Update`) or to persist (using `Persist <entity type>`).
++
+[NOTE]
+====
+instance identifiers, object titles or argument values are _not_ included in the spans.
+====
+
+
+* For Wicket object pages, inspect the preparation and rendering regions.
++
+Opening an owner shows `prepare petclinic.PetOwner` for building/configuring the page and preparing its child components, followed by `render petclinic.PetOwner` for rendering the page markup.
+The preparation scope finishes before markup rendering starts.
+Within the page render, look for regions such as `render fieldset identity`, `render property petclinic.PetOwner#name` and `render collection petclinic.PetOwner#visits`.
+Object action controls have `render action <logical-type>#<member>` regions.
+These describe UI rendering; `act`, `prop` and `coll` spans describe domain member execution and access.
++
+Open the owner's *Update Name* action prompt to see `prompt petclinic.PetOwner#updateName`.
+Inspect its `causeway.action.id` attribute for the complete identifier, including declared parameter types: `petclinic.PetOwner#updateName(java.lang.String)`.
+Region spans carry `causeway.object.type` and, where applicable, `causeway.fieldset.id`, `causeway.property.id`, `causeway.collection.id` or `causeway.action.id`.
+Full identifier attributes remain intact when a display name is shortened.
+In Jaeger's *Attributes* search field, for example use `causeway.action.id="petclinic.PetOwner#updateName(java.lang.String)"` with *All Span Names* selected; this can find action execution, action-control rendering and prompt rendering.
++
+Ajax updates render only the selected component subtree, so they can contain member rendering regions without a page-render region.
+Hidden regions and action parameter widgets do not produce domain-property rendering regions.
+These Wicket regions work in both tracing modes with the existing launcher and configuration.
+HTMX `/graphql` traces retain their domain-operation spans; they do not contain Wicket regions.
+Parented collections also have `prepare collection <logical-type>#<member>` and table/header/body/footer rendering regions.
+Within the table body, `render row <element-type>` encloses logical property and row-action rendering; `prepare row <element-type>` measures row population during collection preparation.
+Only rows participating in the current page or Ajax update are measured.
+Header labels, navigation controls and decorative cells do not produce member spans.
+The HTTP entry display describes the request outcome; these child regions describe rendering work within that request.
++
+The default detail is `MEMBERS`, with no Wicket span limit.
+To reduce collection detail and bound the number of Causeway semantic Wicket observations, export settings before starting the existing launcher:
++
+[source,bash]
+----
+export CAUSEWAY_VIEWER_WICKET_OBSERVATION_DETAIL=REGIONS
+export CAUSEWAY_VIEWER_WICKET_OBSERVATION_MAX_SPANS_PER_REQUEST=100
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh
+----
++
+These startup settings work in both tracing modes; add `--agent` to the launcher command for agent-managed tracing.
+Detail is cumulative: `NONE` omits Causeway semantic Wicket observations, `PAGE` includes page preparation/rendering and prompts, `REGIONS` adds fieldsets, collections and table phases, `ROWS` adds row preparation/rendering, and `MEMBERS` adds logical properties and eligible actions.
+The limit counts admitted observations across the entire request, including preparation and all collections; closing an observation does not free a place.
+`0` means unlimited.
+A small part of a finite budget is reserved for page/region observations, but a sufficiently small budget can omit those too.
+The enclosing Apache Wicket Request Cycle, HTTP, interaction, transaction, domain-execution, JPA and agent JDBC spans are unaffected.
++
+Select an admitted collection preparation/render span in Jaeger to inspect `causeway.wicket.collection.row.count`, `causeway.wicket.collection.row.duration.total.nanos` and `causeway.wicket.collection.row.duration.max.nanos`.
+Render spans also report `causeway.wicket.collection.logical-cell.count` and, when positive, `causeway.wicket.collection.suppressed.children`.
+These describe participating callbacks, not total collection size; row durations and logical-cell counts remain available when child spans are omitted.
+Positive `causeway.wicket.suppressed.detail` and `causeway.wicket.suppressed.budget` attributes on surviving page/region spans explain omissions.
+There is no summary span if its carrier was itself omitted.
+Unset the two exported variables to restore defaults for the next application start.
+
+
+=== Micrometer
+
+Underlying Micrometer operation names are categories such as `causeway.member.action` and `causeway.jpa.persist`.
+
+Repeat operations on different owners:
+
+* the Causeway member/JPA span names and member/entity metadata describe the operation and type
+
+In Prometheus:
+
+* open directly
+
+In Grafana:
+
+* log in (`admin` / `admin`).
+* choose *Explore*
+* select *Prometheus* in the data-source dropdown at the top, and switch to *Code* mode for PromQL.
++
+The provisioned *Prometheus* source is also listed under *Connections → Data sources*.
+
+After exercising Petclinic, wait 10–20 seconds and try these queries separately:
+
+* JVM memory used bytes
++
+[source,promql]
+----
+jvm_memory_used_bytes
+----
+
+* discover available Causeway metric names and counts their series:
++
+[source,promql]
+----
+count by (__name__) ({__name__=~"causeway_.*"})
+----
+
+* select an actual metric name to inspect values.
+
+Note that Prometheus metric names can differ from contextual span names, including dots translated to underscores.
+
+
+
+
+== Switch to agent-managed tracing
+
+The principal benefit of using agent-managed tracing is that the agent will instrument libraries, such as JDBC access.
+This setup requires both:
+
+* The JVM option `-javaagent:/path/to/opentelemetry-javaagent.jar`, which attaches the agent to supply the tracing SDK, exporter and automatic HTTP/JDBC instrumentation.
+* The Spring profiles `observation,agent`: `observation` enables Causeway instrumentation, while `agent` selects Causeway's bridge to the agent and disables competing Boot tracing auto-configuration.
+
+Activating the profiles does not attach the Java agent, and attaching the agent does not activate the profiles.
+The sample launcher handles both settings for you when passed `--agent`.
+
+=== Try it out
+
+Stop the Boot-managed Petclinic process, keep all three telemetry services running, then add `--agent`:
+
+[source,bash]
+----
+./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
+----
+
+On first use, Maven downloads the (compatible) agent into the sample's `target/agents/` directory.
+The launcher attaches it to the application JVM with `spring-boot.run.agents` (the Maven equivalent of `-javaagent`) and activates `observation,agent` with `spring-boot.run.profiles`.
+
+Alternatively, the location of the agent JAR can be specified using an env var:
+
+[source,bash]
+----
+OTEL_JAVAAGENT_PATH=/absolute/path/to/opentelemetry-javaagent.jar \
+  ./viewers/webcomponents/sample-htmx-petclinic/run-with-telemetry.sh --agent
+----
+
+
+Micrometer continues to export metrics to Prometheus in both modes; the agent's own metrics exporter is disabled to avoid duplicate JVM metrics.
+This setup also disables agent log export.
+
+The launcher sets OTLP HTTP trace export, full trace sampling and service name *Causeway Pet Clinic* by default.
+
+
+== Stop the local services
+
+When finished, stop Petclinic with Ctrl-C, then stop all telemetry services:
+
+[source,bash]
+----
+./scripts/jaeger-local.sh stop
+./scripts/metrics-local.sh stop
+----
+
+The Jaeger command discards stored traces.
+The metrics command discards metrics and Grafana UI changes and removes its Compose network.
+Each script manages only its own services.
+`./scripts/metrics-local.sh config` validates Compose configuration without starting services.
+
+
+[#configuring-your-own-app]
+== Configuring your own app.
+
+Use the BOM-managed starter, which includes the Micrometer OTLP metrics registry:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-opentelemetry</artifactId>
+</dependency>
+----
+
+Activate `observation` alongside the application's other Spring profiles:
+
+[source,yaml]
+.application.yaml
+----
+spring:
+  application:
+    name: my-causeway-app
+  profiles:
+    active: observation
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: http://localhost:9090/api/v1/otlp/v1/metrics
+        step: 10s
+        aggregation-temporality: cumulative
+----
+
+Traces are sent to Jaeger, and metrics to Prometheus using the endpoints above.
+The configuration records every trace (sampling probability) and exports metrics every ten seconds.
+
+
+=== To configure agent-managed tracing
+
+Keep the starter and Micrometer metrics configuration above, and add the BOM-managed OpenTelemetry bridge dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-tracing-bridge-otel</artifactId>
+</dependency>
+----
+
+With `observation,agent` active, Causeway automatically connects its observations to the agent and disables competing Boot tracing configuration.
+No custom Java configuration or manual Boot exclusions are needed.
+The agent supplies trace sampling and export, so the Boot tracing settings above are unused in this mode; the Micrometer metrics settings still apply.
+
+Obtain an OpenTelemetry Java agent JAR (the sample uses version 2.31.1), configure its export settings, and launch with both `-javaagent` and the `observation,agent` profiles:
+
+[source,bash]
+----
+export OTEL_SERVICE_NAME=my-causeway-app
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+export OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:4318/v1/traces
+export OTEL_TRACES_SAMPLER=always_on
+export OTEL_METRICS_EXPORTER=none
+export OTEL_LOGS_EXPORTER=none
+java -javaagent:/absolute/path/to/opentelemetry-javaagent.jar \
+  -jar application.jar --spring.profiles.active=observation,agent
+----
+
+These settings send traces to Jaeger and leave metrics with Micrometer.
+Causeway prevents the agent's `OTEL_METRICS_EXPORTER=none` setting from disabling Micrometer's metrics exporter.
+JVM and Causeway metrics remain available; Boot's HTTP request observation meters are absent because the agent supplies HTTP instrumentation.
+
+If you already provide a custom tracer or observation registry, Causeway uses it.
+A custom registry must configure its tracing handlers to use the same single or primary tracer as Causeway.
+
+
+
+== Further reading
+
+* https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot[OpenTelemetry with Spring Boot]
+* https://www.jaegertracing.io/docs/2.21/getting-started/[Jaeger getting started]
+* https://prometheus.io/docs/guides/opentelemetry/[Prometheus OTLP ingestion]
+* https://grafana.com/docs/grafana/latest/administration/provisioning/[Grafana provisioning]

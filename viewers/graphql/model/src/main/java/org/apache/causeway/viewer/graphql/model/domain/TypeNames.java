@@ -36,13 +36,13 @@ public final class TypeNames {
 
     public String objectTypeFieldNameFor(
             final ObjectSpecification objectSpecification) {
-        return sanitized(objectSpecification.getLogicalTypeName());
+        return sanitized(objectSpecification.logicalTypeName());
     }
 
     public String objectTypeNameFor(
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
-        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.getLogicalTypeName());
+        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.logicalTypeName());
     }
 
     public String metaTypeNameFor(
@@ -55,6 +55,12 @@ public final class TypeNames {
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
         return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_input";
+    }
+
+    public String polymorphicTypeNameFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_union";
     }
 
     public String enumTypeNameFor(
@@ -106,6 +112,20 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + otoa.asciiId() + "__gqlv_property";
     }
 
+    public String propertyAutocompleteWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToOneAssociation otoa,
+            final SchemaType schemaType) {
+        return propertyTypeNameFor(owningType, otoa, schemaType) + "_autocomplete_window";
+    }
+
+    public String actionParamAutocompleteWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectActionParameter oap,
+            final SchemaType schemaType) {
+        return actionParamTypeNameFor(owningType, oap, schemaType) + "_autocomplete_window";
+    }
+
     public String propertyLobTypeNameFor(
             final ObjectSpecification owningType,
             final OneToOneAssociation otoa,
@@ -120,6 +140,13 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + otma.asciiId() + "__gqlv_collection";
     }
 
+    public String collectionWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToManyAssociation otma,
+            final SchemaType schemaType) {
+        return collectionTypeNameFor(owningType, otma, schemaType) + "_window";
+    }
+
     public String memberTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectMember objectMember,
@@ -128,20 +155,20 @@ public final class TypeNames {
     }
 
     // -- HELPER
-    
+
     String sanitized(final String name) {
         var result = name.replace('.', '_').replace("#", "__").replace("()", "");
         result = hyphenedToCamelCase(result);
-        return result;    
+        return result;
     }
 
     /**
      * Converts e.g. {@code a-b} to {@code aB}.
-     * Which allows namespaces that contain a hyphen like 
+     * Which allows namespaces that contain a hyphen like
      * {@code university.calc.calculator-hyphenated} to be referenced from QraphQL via
-     * {@code university.calc.calculatorHyphenated} say. 
+     * {@code university.calc.calculatorHyphenated} say.
      */
-    private String hyphenedToCamelCase(String string) {
+    private String hyphenedToCamelCase(final String string) {
       final int hyphenStart = string.indexOf("-");
       return hyphenStart > 0
         ? string.substring(0,hyphenStart) + Arrays.stream(string.substring(hyphenStart + 1).split("-"))

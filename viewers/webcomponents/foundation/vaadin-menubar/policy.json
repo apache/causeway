@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "directPackages": {
+    "@vaadin/a11y-base": "25.2.8",
+    "@vaadin/button": "25.2.8",
+    "@vaadin/component-base": "25.2.8",
+    "@vaadin/context-menu": "25.2.8",
+    "@vaadin/item": "25.2.8",
+    "@vaadin/list-box": "25.2.8",
+    "@vaadin/menu-bar": "25.2.8",
+    "@vaadin/overlay": "25.2.8",
+    "@vaadin/vaadin-themable-mixin": "25.2.8"
+  },
+  "bundleSha256": "fb207a9548b8683f481f1961b27028e41fc9c94c9fcadd60cb5be42a5ab45192",
+  "maximumGzipBytes": 98304,
+  "cspStyleHashes": [
+    "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+  ]
+}

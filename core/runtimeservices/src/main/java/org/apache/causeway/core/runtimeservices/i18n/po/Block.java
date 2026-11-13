@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.core.runtimeservices.i18n.po;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 
 class Block {
 
@@ -53,7 +52,7 @@ class Block {
 
     State state = State.SPECIFIC_CONTEXT;
 
-    List<String> contextList = _Lists.newArrayList();
+    List<String> contextList = new ArrayList<>();
     String msgid = null;
     String msgid_plural = null;
     String msgstr = null; // either from msgstr or msgstr[0] if there is a plural
@@ -88,9 +87,8 @@ class Block {
             if (msgidMatcher.matches()) {
                 msgid = msgidMatcher.group("value");
                 state = State.MSGID_PLURAL; // found, next time look for plurals
-            } else {
-                return new Block();
-            }
+            } else
+				return new Block();
             return this;
         }
 

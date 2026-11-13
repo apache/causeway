@@ -28,8 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.io.FileUtils;
 
-import lombok.val;
-
 class TranslationsResolverDefaultTest {
 
     private File tempDir;
@@ -42,14 +40,14 @@ class TranslationsResolverDefaultTest {
     @Test
     public void simple() throws Exception {
         final File file = TranslationsResolverDefault.newFile(tempDir.getAbsolutePath(), "bar").toFile();
-        val expected = new File(tempDir, "bar");
+        var expected = new File(tempDir, "bar");
         assertThat(file.getAbsolutePath(), is(expected.getAbsolutePath()));
     }
 
     @Test
     public void nestedChild() throws Exception {
         final File file = TranslationsResolverDefault.newFile(tempDir.getAbsolutePath(), "bar/baz").toFile();
-        val expected = new File(tempDir, "bar/baz");
+        var expected = new File(tempDir, "bar/baz");
         assertThat(file.getAbsolutePath(), is(expected.getAbsolutePath()));
     }
 

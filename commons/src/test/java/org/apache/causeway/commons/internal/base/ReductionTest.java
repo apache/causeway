@@ -67,5 +67,4 @@ class ReductionTest {
         assertThat(toMinReduction.getResult().get(), is(1));
     }
 
-
 }

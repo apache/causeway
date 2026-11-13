@@ -20,10 +20,10 @@ package org.apache.causeway.core.metamodel.facets.param.parameter.mandatory;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
@@ -54,6 +54,5 @@ extends MandatoryFacetAbstract {
     private MandatoryFacetInvertedByNullableAnnotationOnParameter(final FacetHolder holder) {
         super(Semantics.OPTIONAL, holder);
     }
-
 
 }

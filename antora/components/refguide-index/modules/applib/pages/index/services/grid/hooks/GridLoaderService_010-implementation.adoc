@@ -4,7 +4,6 @@
 
 == Implementation
 
-The framework provides a default implementation of this service, namely `GridLoaderServiceDefault`.
-This implementation loads the grid from its serialized representation as a `.layout.xml` file, loaded from the classpath.
+The xref:core:metamodel:about.adoc[Core Metamodel] module provides a default implementation of this service, xref:refguide:core:index/metamodel/services/grid/GridLoaderServiceDefault.adoc[], which loads the grid from its serialized representation as a `.layout.xml` file, loaded from the classpath.
 
 For example, the layout for a domain class `com.mycompany.myapp.Customer` would be loaded from `com/mycompany/myapp/Customer.layout.xml`.

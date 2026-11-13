@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -25,18 +26,16 @@ import java.util.stream.IntStream;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.springframework.http.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
@@ -50,14 +49,14 @@ public class ObjectActionArgHelper {
             final ObjectAction action,
             final JsonRepresentation arguments) {
 
-        val jsonArgList = argListFor(action, arguments);
-        val parameters = action.getParameters();
+        var jsonArgList = argListFor(action, arguments);
+        var parameters = action.getParameters();
 
         return IntStream.range(0, jsonArgList.size())
         .mapToObj(argIndex->{
             final JsonRepresentation argRepr = jsonArgList.get(argIndex);
-            val paramMeta = parameters.getElseFail(argIndex);
-            val paramSpec = paramMeta.getElementType();
+            var paramMeta = parameters.getElseFail(argIndex);
+            var paramSpec = paramMeta.getElementType();
 
             final Try<ManagedObject> tryArgument = (paramMeta.isOptional()
                     && argRepr == null)
@@ -69,7 +68,7 @@ public class ObjectActionArgHelper {
                                 ? success
                                 : ManagedObject.empty(paramSpec));
 
-            val objectOrVeto = tryArgument.<Railway<InteractionVeto, ManagedObject>>fold(
+            var objectOrVeto = tryArgument.<Railway<InteractionVeto, ManagedObject>>fold(
                     exception->Railway.failure(
                             InteractionVeto.actionParamInvalid(
                                     String.format("exception when parsing paramNr %d [%s]: %s",
@@ -94,29 +93,27 @@ public class ObjectActionArgHelper {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
-                    .createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
+                    .createWithBody(HttpStatus.BAD_REQUEST, arguments, reason);
             }
         });
 
         // ensure that an argument value has been provided for all non-optional
         // parameters
-        val argList = _Lists.<JsonRepresentation>newArrayList();
-        val parameters = action.getParameters();
+        var argList = new ArrayList<JsonRepresentation>();
+        var parameters = action.getParameters();
         for (final ObjectActionParameter param : parameters) {
             final String paramId = param.getId();
             final JsonRepresentation argRepr = arguments.getRepresentation(paramId);
             if (argRepr == null
                     && !param.isOptional()) {
-                val reason = String.format("No argument found for (mandatory) parameter '%s'", paramId);
+                var reason = String.format("No argument found for (mandatory) parameter '%s'", paramId);
                 arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
-                    .createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
+                    .createWithBody(HttpStatus.BAD_REQUEST, arguments, reason);
             }
             argList.add(argRepr);
         }
         return argList;
     }
-
-
 
 }

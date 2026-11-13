@@ -51,7 +51,6 @@ public interface UiHintContainer {
             return hintContainerOf(component.getParent(), additionalConstraint);
         }
 
-
         public static String hintPathFor(Component component) {
             final String fullHintPath = fullHintPathFor(component);
             final String firstPathComponent =
@@ -77,8 +76,6 @@ public interface UiHintContainer {
             return fullHintPath;
         }
 
-
     }
-
 
 }

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclass;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

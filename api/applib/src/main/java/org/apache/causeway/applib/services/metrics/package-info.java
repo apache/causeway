@@ -19,7 +19,7 @@
 
 /**
  * The {@link org.apache.causeway.applib.services.metrics.MetricsService} is a request-scoped domain service that hooks
- * into the JDO/DataNucleus ObjectStore to provide a number of counters relating to numbers of object loaded,
+ * into the underlying objectStore to provide a number of counters relating to numbers of object loaded,
  * dirtied etc.
  *
  *

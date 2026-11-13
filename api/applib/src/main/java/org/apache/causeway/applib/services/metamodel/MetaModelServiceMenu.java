@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -46,11 +44,11 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
@@ -71,22 +69,22 @@ public class MetaModelServiceMenu {
     public enum ExportFormat implements BiFunction<String, MetaModelServiceAndConfig, Clob>  {
         ASCII{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-                val content = _AsciiExport.toAscii(dto).toString();
+                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+                var content = _AsciiExport.toAscii(dto).toString();
                 return Clob.of(fileName, CommonMimeType.TXT, content);
             }
         },
         CSV{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-                val content = _CsvExport2.toCsv(dto);
+                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+                var content = _CsvExport2.toCsv(dto);
                 return Clob.of(fileName, CommonMimeType.CSV, content);
             }
         },
         DETAILED_CSV{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
 
-                val domainModel =  metaModelServiceAndConfig.metaModelService.getDomainModel();
+                var domainModel =  metaModelServiceAndConfig.metaModelService.getDomainModel();
                 final StringBuilder csv = _CsvExport.toCsv(domainModel);
 
                 return Clob.of(fileName, CommonMimeType.CSV, csv);
@@ -95,15 +93,15 @@ public class MetaModelServiceMenu {
         //XXX infinite recursion
 //        JSON{
 //        @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-//                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-//                val content = _Json.toString(dto);
+//                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+//                var content = _Json.toString(dto);
 //                return Clob.of(fileName, CommonMimeType.JSON, content);
 //            }
 //        },
         XML{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-                val content = JaxbUtils.mapperFor(MetamodelDto.class, opts->opts
+                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+                var content = JaxbUtils.mapperFor(MetamodelDto.class, opts->opts
                         .useContextCache(true)
                         .formattedOutput(true))
                 .toString(dto);
@@ -113,8 +111,8 @@ public class MetaModelServiceMenu {
         //XXX empty
 //        YAML{
 //        @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-//                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-//                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
+//                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+//                var content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
 //                return Clob.of(fileName, CommonMimeType.YAML, content);
 //            }
 //        },
@@ -158,9 +156,9 @@ public class MetaModelServiceMenu {
                 final boolean zip
         ) {
 
-            val config = defaultConfig(includeInterfaces, namespaces);
+            var config = defaultConfig(includeInterfaces, namespaces);
 
-            val blob = exportFormat.apply(fileName, new MetaModelServiceAndConfig(metaModelService, config))
+            var blob = exportFormat.apply(fileName, new MetaModelServiceAndConfig(metaModelService, config))
                     .toBlob(UTF_8);
             return zip
                     ? blob.zip()
@@ -170,9 +168,8 @@ public class MetaModelServiceMenu {
         @MemberSupport public String validateAct(
                 final String fileName, final List<String> namespacePrefixes, final boolean includeInterfaces,
                 final ExportFormat exportFormat, final boolean zip) {
-            if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
-                return "At least one package must be selected";
-            }
+            if(namespacePrefixes == null || namespacePrefixes.isEmpty())
+				return "At least one package must be selected";
             return null;
         }
 
@@ -183,7 +180,6 @@ public class MetaModelServiceMenu {
         @MemberSupport public boolean defaultZip() { return true; }
 
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -220,14 +216,14 @@ public class MetaModelServiceMenu {
 
         ) throws IOException {
 
-            val config = defaultConfig(includeInterfaces, namespaces);
+            var config = defaultConfig(includeInterfaces, namespaces);
 
             final MetamodelDto leftMetamodelDto =  metaModelService.exportMetaModel(config);
 
             final String xml = zippedMetamodelBlob
                     .unZip(CommonMimeType.XML)
                     .toClob(UTF_8)
-                    .getChars()
+                    .chars()
                     .toString();
 
             final MetamodelDto rightMetamodelDto =  jaxbService.fromXml(MetamodelDto.class, xml);
@@ -246,9 +242,8 @@ public class MetaModelServiceMenu {
                 final List<String> namespacePrefixes,
                 final boolean includeInterfaces,
                 final Blob rightMetamodelBlob) {
-            if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
-                return "At least one package must be selected";
-            }
+            if(namespacePrefixes == null || namespacePrefixes.isEmpty())
+				return "At least one package must be selected";
             return null;
         }
 
@@ -258,13 +253,11 @@ public class MetaModelServiceMenu {
 
     }
 
-
     // -- HELPER
 
-    @lombok.Value
-    static class MetaModelServiceAndConfig {
-        MetaModelService metaModelService;
-        Config config;
+    static record MetaModelServiceAndConfig(
+            MetaModelService metaModelService,
+            Config config) {
     }
 
     private Config defaultConfig(
@@ -283,14 +276,14 @@ public class MetaModelServiceMenu {
     }
 
     private List<String> namespaceChoices() {
-        val domainModel = metaModelService.getDomainModel();
-        val domainMembers = domainModel.getDomainMembers();
-        val namespaces = _Sets.<String>newTreeSet();
-        for (val domainMember : domainMembers) {
-            val namespace = domainMember.getNamespace();
-            val namespaceParts = namespace.split("[.]");
-            val buf = new StringBuilder();
-            for (val part : namespaceParts) {
+        var domainModel = metaModelService.getDomainModel();
+        var domainMembers = domainModel.getDomainMembers();
+        var namespaces = new TreeSet<String>();
+        for (var domainMember : domainMembers) {
+            var namespace = domainMember.getNamespace();
+            var namespaceParts = namespace.split("[.]");
+            var buf = new StringBuilder();
+            for (var part : namespaceParts) {
                 if(buf.length() > 0) {
                     buf.append(".");
                 }

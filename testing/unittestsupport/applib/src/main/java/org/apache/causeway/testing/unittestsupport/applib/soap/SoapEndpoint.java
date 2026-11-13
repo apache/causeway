@@ -53,5 +53,4 @@ class SoapEndpoint {
         return port;
     }
 
-
 }

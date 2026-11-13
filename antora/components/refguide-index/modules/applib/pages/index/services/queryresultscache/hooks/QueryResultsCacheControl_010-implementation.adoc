@@ -5,5 +5,5 @@
 
 == Implementation
 
-The xref:testing:fixtures:about.adoc[fixtures module] provides an implementation, `o.a.c.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlDefault`.
+The xref:testing:fixtures:about.adoc[fixtures module] provides an implementation, xref:refguide:testing:index/fixtures/applib/queryresultscache/QueryResultsCacheControlForFixtures.adoc[].
 This will cause the cache to be ignored while fixtures are being installed.

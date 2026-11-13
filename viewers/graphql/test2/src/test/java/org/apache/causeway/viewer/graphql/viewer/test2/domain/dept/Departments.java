@@ -23,7 +23,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -43,7 +43,7 @@ public class Departments {
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public Department createDepartment(
             final String name,
-            @Nullable final DeptHead deptHead
+            final @Nullable DeptHead deptHead
     ){
         return departmentRepository.create(name, deptHead);
     }

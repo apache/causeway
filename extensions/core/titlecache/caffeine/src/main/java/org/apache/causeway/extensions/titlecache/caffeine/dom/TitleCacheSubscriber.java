@@ -39,16 +39,15 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.extensions.titlecache.applib.event.Cached;
 import org.apache.causeway.extensions.titlecache.applib.event.CachedWithCacheSettings;
 import org.apache.causeway.extensions.titlecache.caffeine.CausewayModuleExtTitlecacheCaffeine;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Holds a cache for each entity type that indicates its title should be cached.
@@ -64,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(TitleCacheSubscriber.LOGICAL_TYPE_NAME)
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class TitleCacheSubscriber implements EntityTitleSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtTitlecacheCaffeine.NAMESPACE + ".TitleCacheSubscriber";
@@ -106,7 +105,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
      */
     @Override
     public void entityTitleIs(final Bookmark bookmark, final String title) {
-        val cache = cacheByLogicalTypeName.get(bookmark.getLogicalTypeName());
+        var cache = cacheByLogicalTypeName.get(bookmark.logicalTypeName());
         if(cache == null) {
             return;
         }
@@ -128,18 +127,18 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
      */
     @EventListener(CausewayModuleApplib.TitleUiEvent.class)
     public void on(final CausewayModuleApplib.TitleUiEvent<?> ev) {
-        val domainObject = ev.getSource();
+        var domainObject = ev.getSource();
         if(domainObject == null) {
             return;
         }
-        val bookmarkIfAny = bookmarkService.bookmarkFor(domainObject);
+        var bookmarkIfAny = bookmarkService.bookmarkFor(domainObject);
         bookmarkIfAny
                 .filter(bookmark -> isCached(bookmark, ev))
                 .ifPresent(bookmark -> {
-                    val cache = cacheByLogicalTypeName.computeIfAbsent(
-                        bookmark.getLogicalTypeName(), ltn -> addCache(ev, ltn)
+                    var cache = cacheByLogicalTypeName.computeIfAbsent(
+                        bookmark.logicalTypeName(), ltn -> addCache(ev, ltn)
                     );
-                    val valueWrapper = cache.get(bookmark);
+                    var valueWrapper = cache.get(bookmark);
                     setTitleOnEventFromCacheValue(valueWrapper, ev, bookmark);
                 });
     }
@@ -147,11 +146,11 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
     private Cache addCache(
             final CausewayModuleApplib.TitleUiEvent<?> ev,
             final String logicalTypeName) {
-        val titlecacheConfig = causewayConfiguration.getExtensions().getTitlecache().getCaffeine();
-        int expiryDurationInMinutes = titlecacheConfig.getExpiryDurationInMinutes();
-        int maxSizeInEntries = titlecacheConfig.getMaxSizeInEntries();
+        var titlecacheConfig = causewayConfiguration.extensions().titlecache().caffeine();
+        int expiryDurationInMinutes = titlecacheConfig.expiryDurationInMinutes();
+        int maxSizeInEntries = titlecacheConfig.maxSizeInEntries();
         if(ev instanceof CachedWithCacheSettings) {
-            val settings = (CachedWithCacheSettings) ev;
+            var settings = (CachedWithCacheSettings) ev;
             expiryDurationInMinutes = settings.expiryDurationInMinutes();
             maxSizeInEntries = settings.maxSizeInEntries();
         }
@@ -186,18 +185,19 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
     }
 
     private Boolean isCached(final Bookmark bookmark, final CausewayModuleApplib.TitleUiEvent<?> ev) {
-        return isCached(bookmark.getLogicalTypeName(), ev);
+        return isCached(bookmark.logicalTypeName(), ev);
     }
 
     private Boolean isCached(
             final String logicalTypeName, final CausewayModuleApplib.TitleUiEvent<?> ev) {
         return isCachedByLogicalTypeName.computeIfAbsent(logicalTypeName, ltn -> {
-            if (!(ev instanceof Cached)) {
-                return false;
-            }
-            val objectSpecification =
-                    specificationLoader.loadSpecification(ltn, IntrospectionState.NOT_INTROSPECTED);
-            return objectSpecification != null && objectSpecification.isEntity();
+            if (!(ev instanceof Cached)) return false;
+
+            return specificationLoader
+                .lookupLogicalType(logicalTypeName)
+                .flatMap(specificationLoader::lookupBeanSort)
+                .map(BeanSort::isEntity)
+                .orElse(false);
         });
     }
 }

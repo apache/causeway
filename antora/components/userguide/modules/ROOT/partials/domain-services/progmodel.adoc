@@ -11,7 +11,7 @@ Domain services that are visible in the UI or REST API are annotated with xref:r
 link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service]
 or link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
 
-Once declared, domain services can be injected into other domain objects (*including* entities and view models) using `@javax.inject.Inject`.
+Once declared, domain services can be injected into other domain objects (*including* entities and view models) using `@jakarta.inject.Inject`.
 There's more on this topic xref:domain-services.adoc#injecting-services[below].
 
 === Nature of Service

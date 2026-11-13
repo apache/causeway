@@ -27,14 +27,9 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
@@ -44,8 +39,6 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -61,14 +54,21 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(ApplicationFeatureRepositoryDefault.LOGICAL_TYPE_NAME)
-@Log4j2
+@Slf4j
 public class ApplicationFeatureRepositoryDefault
 implements ApplicationFeatureRepository, MetamodelListener {
 
@@ -77,17 +77,16 @@ implements ApplicationFeatureRepository, MetamodelListener {
     private final CausewayConfiguration configuration;
     private final SpecificationLoader specificationLoader;
 
-
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
 
-    final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = _Maps.newTreeMap();
-    private final SortedMap<LogicalType, ApplicationFeatureId> typeFeatureIdByLogicalType = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
+    final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = new TreeMap<>();
+    private final SortedMap<LogicalType, ApplicationFeatureId> typeFeatureIdByLogicalType = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = new TreeMap<>();
 
     @Inject
     public ApplicationFeatureRepositoryDefault(
@@ -107,7 +106,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     private boolean isEagerInitialize() {
         ApplicationFeaturesInitConfiguration setting =
-                configuration.getCore().getRuntimeServices().getApplicationFeatures().getInit();
+                configuration.core().runtimeServices().applicationFeatures().init();
         return setting == ApplicationFeaturesInitConfiguration.EAGER
                 || setting == ApplicationFeaturesInitConfiguration.EAGERLY;
     }
@@ -121,16 +120,15 @@ implements ApplicationFeatureRepository, MetamodelListener {
     private InitializationState initializationState = InitializationState.NOT_INITIALIZED;
 
     private synchronized void initializeIfRequired() {
-        if(initializationState == InitializationState.INITIALIZED) {
+        if(initializationState == InitializationState.INITIALIZED)
             return;
-        }
         initializationState = InitializationState.INITIALIZED;
 
-        for (val spec : specificationLoader.snapshotSpecifications()) {
+        for (var spec : specificationLoader.snapshotSpecifications()) {
             createApplicationFeaturesFor(spec);
         }
 
-        val featuresByName = new HashMap<String, ApplicationFeatureId>();
+        var featuresByName = new HashMap<String, ApplicationFeatureId>();
         visitFeatureIdentifierByName(namespaceFeatures, featuresByName::put);
         visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
@@ -145,9 +143,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     void createApplicationFeaturesFor(final ObjectSpecification spec) {
 
-        if (exclude(spec)) {
+        if (exclude(spec))
             return;
-        }
 
         final List<ObjectAssociation> properties = spec.streamProperties(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
@@ -156,14 +153,12 @@ implements ApplicationFeatureRepository, MetamodelListener {
         final List<ObjectAction> actions = spec.streamAnyActions(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
-        if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {
+        if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty())
             return;
-        }
 
-
-        val logicalType = spec.getLogicalType();
-        val logicalTypeName = logicalType.getLogicalTypeName();
-        val typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
+        var logicalType = spec.logicalType();
+        var logicalTypeName = logicalType.logicalName();
+        var typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
@@ -205,16 +200,16 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     private static Class<?> correspondingClassFor(final ObjectSpecification objectSpec) {
-        return objectSpec != null ? objectSpec.getCorrespondingClass() : null;
+        return objectSpec != null ? objectSpec.correspondingClass() : null;
     }
 
     private static Integer valueOf(
             final FacetHolder facetHolder,
             final Class<? extends SingleIntValueFacet> cls) {
-        final SingleIntValueFacet facet = facetHolder.getFacet(cls);
-        return facet != null ? facet.value() : null;
+        return facetHolder.lookupFacet(cls)
+            .map(SingleIntValueFacet::value)
+            .orElse(null);
     }
-
 
     ApplicationFeatureId addClassParent(final ApplicationFeatureId classFeatureId) {
         final ApplicationFeatureId parentPackageId = classFeatureId.getParentNamespaceFeatureId();
@@ -226,9 +221,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     void addParents(final ApplicationFeatureId classOrPackageId) {
         final ApplicationFeatureId parentPackageId = classOrPackageId.getParentNamespaceFeatureId();
-        if (parentPackageId == null) {
+        if (parentPackageId == null)
             return;
-        }
 
         final ApplicationFeatureDefault parentPackage = (ApplicationFeatureDefault)findPackageElseCreate(parentPackageId);
 
@@ -288,9 +282,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
             final Integer maxLength,
             final Integer typicalLength,
             final SemanticsOf actionSemantics) {
-        if (objectMember.isAlwaysHidden()) {
+        if (objectMember.isAlwaysHidden())
             return false;
-        }
         newMember(classFeatureId, objectMember.getId(), memberSort, returnType, derived, maxLength, typicalLength, actionSemantics);
         return true;
     }
@@ -325,31 +318,28 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     private SortedMap<ApplicationFeatureId, ApplicationFeature> featuresMapFor(final ApplicationMemberSort memberSort) {
-        switch (memberSort) {
-        case PROPERTY:
-            return propertyFeatures;
-        case COLLECTION:
-            return collectionFeatures;
-        default: // case ACTION:
-            return actionFeatures;
-        }
+        return switch (memberSort) {
+            case PROPERTY->propertyFeatures;
+            case COLLECTION->collectionFeatures;
+            default->actionFeatures; // case ACTION:
+        };
     }
 
     protected boolean exclude(final ObjectSpecification spec) {
 
-        val excluded = spec.isMixin()
+        var excluded = spec.isMixin()
                 || spec.isAbstract()
-                || spec.getBeanSort().isVetoed()
-                || spec.getBeanSort().isUnknown()
+                || spec.beanSort().isVetoed()
+                || spec.beanSort().isUnknown()
                 || isBuiltIn(spec)
                 || isHidden(spec);
 
         if(excluded && log.isDebugEnabled()) {
             log.debug("{} excluded because: abstract:{} vetoed:{} unknown-sort:{} builtIn:{} hidden:{}",
-                    spec.getCorrespondingClass().getSimpleName(),
+                    spec.correspondingClass().getSimpleName(),
                     spec.isAbstract(),
-                    spec.getBeanSort().isVetoed(),
-                    spec.getBeanSort().isUnknown(),
+                    spec.beanSort().isVetoed(),
+                    spec.beanSort().isUnknown(),
                     isBuiltIn(spec),
                     isHidden(spec)
                     );
@@ -363,8 +353,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
-        final String className = spec.getFullIdentifier();
-        return className.startsWith("java") || className.startsWith("org.joda");
+        final String className = spec.fullIdentifier();
+        return className.startsWith("java");
     }
 
     // -- FACTORY
@@ -379,53 +369,39 @@ implements ApplicationFeatureRepository, MetamodelListener {
     @Override
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         initializeIfRequired();
-        switch (featureId.getSort()) {
-        case NAMESPACE:
-            return findNamespace(featureId);
-        case TYPE:
-            return findLogicalType(featureId);
-        case MEMBER:
-            return findMember(featureId);
-        }
-        throw _Exceptions.illegalArgument("Feature of unknown sort '%s'", featureId.getSort());
+        return switch (featureId.getSort()) {
+            case NAMESPACE -> findNamespace(featureId);
+            case TYPE -> findLogicalType(featureId);
+            case MEMBER -> findMember(featureId);
+        };
     }
-
 
     public ApplicationFeature findNamespace(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return namespaceFeatures.get(featureId);
     }
 
-
     public ApplicationFeature findLogicalType(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return typeFeatures.get(featureId);
     }
-
 
     public ApplicationFeature findMember(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return memberFeatures.get(featureId);
     }
 
-
-
     // -- allFeatures, allPackages, allClasses, allMembers
 
     public Collection<ApplicationFeature> allFeatures(final ApplicationFeatureSort featureType) {
         initializeIfRequired();
-        if (featureType == null) {
+        if (featureType == null)
             return Collections.emptyList();
-        }
-        switch (featureType) {
-        case NAMESPACE:
-            return allNamespaces();
-        case TYPE:
-            return allTypes();
-        case MEMBER:
-            return allMembers();
-        }
-        throw new IllegalArgumentException("Unknown feature type " + featureType);
+        return switch (featureType) {
+            case NAMESPACE -> allNamespaces();
+            case TYPE -> allTypes();
+            case MEMBER -> allMembers();
+        };
     }
 
     @Override
@@ -450,9 +426,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
     public SortedSet<ApplicationFeatureId> propertyIdsFor(final LogicalType logicalType) {
         initializeIfRequired();
         ApplicationFeatureId typeFeatureId = typeFeatureIdByLogicalType.get(logicalType);
-        if (typeFeatureId == null) {
+        if (typeFeatureId == null)
             return Collections.emptySortedSet();
-        }
         ApplicationFeature applicationFeature = typeFeatures.get(typeFeatureId);
         return applicationFeature.getProperties();
     }
@@ -480,6 +455,5 @@ implements ApplicationFeatureRepository, MetamodelListener {
         initializeIfRequired();
         return featureIdentifiersByName;
     }
-
 
 }

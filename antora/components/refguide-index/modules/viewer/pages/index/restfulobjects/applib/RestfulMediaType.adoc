@@ -3,7 +3,7 @@
 
 Media types including the `profile` parameter.
 
-Because these values are used in the `@Produces` annotation on the jax-rs resources, they must be constants and must be strings.
+Because these values are used with _RequestMapping_ annotations, they must be constant strings.
 
 == API
 

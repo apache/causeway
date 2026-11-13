@@ -34,10 +34,6 @@ implements ActionParameterAutoCompleteFacet {
         super(type(), holder);
     }
 
-    protected ActionParameterAutoCompleteFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
-
     @Override
     public abstract int getMinLength();
 

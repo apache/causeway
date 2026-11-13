@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway</groupId>
 		<artifactId>causeway-bom</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
@@ -40,7 +40,7 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-				<version>0.16.1</version>
+				<version>0.18</version>
 
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
@@ -99,8 +99,6 @@
                         <exclude>**/*.ucd</exclude>
                         <exclude>**/*.ucls</exclude>
                         <exclude>**/*.puml</exclude>
-
-                        <exclude>**/datanucleus.log</exclude>
 
                         <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                         <exclude>**/bootstrap-datetimepicker.css</exclude>

@@ -28,7 +28,7 @@ In some cases there are several factories for a given `ComponentType`; this is m
 After doing a first pass selection of candidate factories by `ComponentType`, each factory is then asked if it `appliesTo(Model)`.
 This is an opportunity for the factory to check the model itself to see if the data within it is of the appropriate type.
 
-Thus, the `BooleanPanelFactory` checks that the `ScalarModel` holds a boolean, while the `JodaLocalDatePanelFactory` checks to see if it holds `org.joda.time.LocalDate`.
+Thus, the `BooleanAttributePanelFactory` checks that the `ScalarModel` holds a boolean, while the `BlobAttributePanelFactory` checks to see if it holds `Blob`.
 
 There will typically be only one `ComponentFactory` capable of rendering a particular `ComponentType`/`ScalarModel` combination; at any rate, the framework stops as soon as one is found.
 

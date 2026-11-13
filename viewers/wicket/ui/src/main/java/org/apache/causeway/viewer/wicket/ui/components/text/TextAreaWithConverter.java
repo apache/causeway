@@ -25,11 +25,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Also properly handles absence of a {@link IConverter}.
@@ -67,5 +67,3 @@ public class TextAreaWithConverter<T> extends TextArea<T> {
     }
 
 }
-
-

@@ -18,35 +18,27 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.annotation.ObjectSupport.IconResource;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
-
 /**
- * Creates {@link ObjectIcon}(s), which are class-path resource references.
- * <p>
- * Clients should not use this service directly. Either use
- * {@link ManagedObject#getIcon()} or
- * {@link ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject)}.
+ * Resolves instances of {@link IconResource} to instances of {@link ObjectIcon}.
+ *
+ * <p>Clients should not use this service directly. Either use
+ * {@link ManagedObject#getIcon(IconSize)} or
+ * {@link ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject, IconSize)}.
  *
  * @apiNote internal service, used by the metamodel
  *
- * @see ManagedObject#getIcon()
- * @see ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject)
- * @since 2.0
+ * @see ManagedObject#getIcon(IconSize)
+ * @see ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject, IconSize)
+ * @since 2.0 revised for 4.0
  */
 public interface ObjectIconService {
 
-    /**
-     * {@link ObjectIcon} for given {@link ObjectSpecification}
-     * and iconNameSuffix.
-     * @return non-null
-     */
-    ObjectIcon getObjectIcon(
-            @NonNull ObjectSpecification specification,
-            @Nullable String iconNameSuffixIfAny);
+    ObjectIcon getObjectIcon(ManagedObject managedObject, IconSize iconSize);
 
 }

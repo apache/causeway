@@ -21,16 +21,6 @@ package org.apache.causeway.viewer.wicket.model.util;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.wicket.core.request.handler.IPageRequestHandler;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
@@ -43,9 +33,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -73,8 +70,8 @@ public class PageParameterUtils {
      * @return a new PageParameters instance
      */
     public PageParameters newPageParameters() {
-        val newPageParameters = new PageParameters();
-        val requestCycle = RequestCycle.get();
+        var newPageParameters = new PageParameters();
+        var requestCycle = RequestCycle.get();
 
         if (requestCycle != null) {
             Optional.ofNullable(PageRequestHandlerTracker.getFirstHandler(requestCycle))
@@ -108,7 +105,7 @@ public class PageParameterUtils {
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
     public PageParameters createPageParametersForBookmark(final Bookmark bookmark) {
-        val pageParameters = PageParameterUtils.newPageParameters();
+        var pageParameters = PageParameterUtils.newPageParameters();
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
         return pageParameters;
     }
@@ -119,15 +116,15 @@ public class PageParameterUtils {
      */
     public PageParameters createPageParametersForObject(final ManagedObject adapter) {
 
-        val pageParameters = PageParameterUtils.newPageParameters();
-        val isEntity = ManagedObjects.isIdentifiable(adapter);
+        var pageParameters = PageParameterUtils.newPageParameters();
+        var isEntity = ManagedObjects.isIdentifiable(adapter);
 
         if (isEntity) {
             ManagedObjects.stringify(adapter)
             .ifPresent(oidStr->PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
         } else {
             // don't do anything; instead the page should be redirected back to
-            // an EntityPage so that the underlying EntityModel that contains
+            // a DomainObjectPage so that the underlying EntityModel that contains
             // the memento for the transient ObjectAdapter can be accessed.
         }
         return pageParameters;
@@ -150,11 +147,11 @@ public class PageParameterUtils {
             final ObjectAction objectAction,
             final Can<ManagedObject> paramValues) {
 
-        val pageParameters = createPageParameters(adapter, objectAction);
+        var pageParameters = createPageParameters(adapter, objectAction);
 
         // capture argument values
-        for(val argumentAdapter: paramValues) {
-            val encodedArg = encodeArg(argumentAdapter);
+        for(var argumentAdapter: paramValues) {
+            var encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
 
@@ -162,7 +159,7 @@ public class PageParameterUtils {
     }
 
     public Optional<Bookmark> toBookmark(final PageParameters pageParameters) {
-        val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        var oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return _Strings.isEmpty(oidStr)
                 ? Optional.empty()
                 : Optional.of(Bookmark.parseElseFail(oidStr));
@@ -173,21 +170,21 @@ public class PageParameterUtils {
     private static PageParameters createPageParameters(
             final ManagedObject adapter, final ObjectAction objectAction) {
 
-        val pageParameters = PageParameterUtils.newPageParameters();
+        var pageParameters = PageParameterUtils.newPageParameters();
 
         ManagedObjects.stringify(adapter)
         .ifPresent(oidStr->
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
 
-        val actionScope = objectAction.getScope();
+        var actionScope = objectAction.getScope();
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionScope);
 
-        val actionOnTypeSpec = objectAction.getDeclaringType();
+        var actionOnTypeSpec = objectAction.getDeclaringType();
         if (actionOnTypeSpec != null) {
-            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
+            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.fullIdentifier());
         }
 
-        val actionId = determineActionId(objectAction);
+        var actionId = determineActionId(objectAction);
         PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
 
         return pageParameters;
@@ -195,18 +192,16 @@ public class PageParameterUtils {
 
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getFeatureIdentifier();
-        if (identifier != null) {
-            return identifier.getMemberNameAndParameterClassNamesIdentityString();
-        }
+        if (identifier != null)
+			return identifier.getMemberNameAndParameterClassNamesIdentityString();
         // fallback (used for action sets)
         return objectAction.getId();
     }
 
     private static final String NULL_ARG = "$nullArg$";
     private String encodeArg(final ManagedObject adapter) {
-        if(adapter == null) {
-            return NULL_ARG;
-        }
+        if(adapter == null)
+			return NULL_ARG;
         return ManagedObjects.stringify(adapter).orElse(null);
     }
 
@@ -215,9 +210,8 @@ public class PageParameterUtils {
             final @NonNull MetaModelContext mmc,
             final ObjectSpecification objSpec,
             final String encoded) {
-        if(NULL_ARG.equals(encoded)) {
-            return null;
-        }
+        if(NULL_ARG.equals(encoded))
+			return null;
         try {
             return Bookmark.parseUrlEncoded(encoded)
                     .flatMap(mmc.getObjectManager()::loadObject)

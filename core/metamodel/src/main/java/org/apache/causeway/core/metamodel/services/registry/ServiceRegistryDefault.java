@@ -19,61 +19,79 @@
 package org.apache.causeway.core.metamodel.services.registry;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+/**
+ * Default implementation of {@link ServiceRegistry}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+
     // enforces provisioning order (this is a depends-on relationship)
-    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
-    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    @Inject
+    public ServiceRegistryDefault(
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
+        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
+    }
 
     @Override
-    public Optional<_SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {
-        return Optional.ofNullable(contributingDomainServicesById.get().get(id.getLogicalTypeName()));
+    public Optional<SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {
+        return Optional.ofNullable(contributingDomainServicesById.get().get(id.logicalName()));
     }
 
     @Override
     public Optional<?> lookupBeanById(final String id) {
-        return causewaySystemEnvironment.getIocContainer().lookupBean(id);
+        return causewaySystemEnvironment.springContextHolder().lookupBean(id);
     }
 
     @Override
-    public Stream<_SingletonBeanProvider> streamRegisteredBeans() {
+    public Stream<SingletonBeanProvider> streamRegisteredBeans() {
         return contributingDomainServicesById.get().values().stream();
     }
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        val iocContainer = causewaySystemEnvironment.getIocContainer();
-        return iocContainer
-                .select(type, qualifiers);
+        var springContextHolder = causewaySystemEnvironment.springContextHolder();
+        return springContextHolder!=null
+                ? springContextHolder.select(type, _NullSafe.stream(qualifiers)
+                		.map(annot->annot instanceof Qualifier qualifier
+                				? qualifier : null)
+                		.filter(Objects::nonNull)
+                		.findFirst()
+                		.orElse(null))
+                : Can.empty();
     }
 
     @Override
@@ -83,25 +101,25 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     // -- HELPER
 
-    private final _Lazy<Map<String, _SingletonBeanProvider>> contributingDomainServicesById =
+    private final _Lazy<Map<String, SingletonBeanProvider>> contributingDomainServicesById =
             _Lazy.threadSafe(this::enumerateContributingDomainServices);
 
-    private Map<String, _SingletonBeanProvider> enumerateContributingDomainServices() {
-        val managedBeanAdapterByName = _Maps.<String, _SingletonBeanProvider>newHashMap();
+    private Map<String, SingletonBeanProvider> enumerateContributingDomainServices() {
+        var managedBeanAdapterByName = new HashMap<String, SingletonBeanProvider>();
 
-        causewaySystemEnvironment.getIocContainer()
-        .streamAllBeans()
-        .filter(contributes())
-        .forEach(singletonProvider->
-            managedBeanAdapterByName.put(singletonProvider.getId(), singletonProvider));
+        causewaySystemEnvironment.springContextHolder()
+            .streamAllBeans()
+            .filter(contributes())
+            .forEach(singletonProvider->
+                managedBeanAdapterByName.put(singletonProvider.id(), singletonProvider));
 
         return managedBeanAdapterByName;
     }
 
-    private Predicate<_SingletonBeanProvider> contributes() {
-        var managedBeansContributing = causewayBeanTypeRegistry.getManagedBeansContributing().keySet();
+    private Predicate<SingletonBeanProvider> contributes() {
         return singletonProvider->singletonProvider!=null
-                ? managedBeansContributing.contains(singletonProvider.getBeanClass()) // do not register unknown sort
+                ? causewayBeanTypeRegistry.containsManagedBeansContributing(singletonProvider.beanClass())
+                // do not register unknown sort
                 : false;
     }
 

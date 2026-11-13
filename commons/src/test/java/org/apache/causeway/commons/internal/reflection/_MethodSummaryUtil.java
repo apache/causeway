@@ -20,7 +20,7 @@ package org.apache.causeway.commons.internal.reflection;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;

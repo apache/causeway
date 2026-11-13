@@ -24,30 +24,35 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class ObjectDescribedFacetForDomainObjectLayoutXml
-extends ObjectDescribedFacetAbstract {
+extends ObjectDescribedFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<ObjectDescribedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        if(domainObjectLayout == null) {
+            final Facet.Precedence precedence,
+            final @Nullable String qualifier) {
+        if(domainObjectLayout == null)
             return Optional.empty();
-        }
         final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
     private ObjectDescribedFacetForDomainObjectLayoutXml(
             final String described,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(described, holder, precedence);
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
     @Override

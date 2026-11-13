@@ -28,7 +28,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -36,16 +35,16 @@ import lombok.val;
 @Service
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".PrimaryConfig")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-//@Log4j2
+//@Slf4j
 public class PrimaryConfig {
 
     @Getter final String secondaryBaseUrlWicket;
 
     public PrimaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
-        val config = causewayConfiguration.getExtensions().getCommandReplay();
+        var config = causewayConfiguration.extensions().commandReplay();
 
-        val secondaryAccess = config.getSecondaryAccess();
-        secondaryBaseUrlWicket = secondaryAccess.getBaseUrlWicket().orElse(null);
+        var secondaryAccess = config.secondaryAccess();
+        secondaryBaseUrlWicket = secondaryAccess.baseUrlWicket().orElse(null);
     }
 
     public boolean isConfigured() {

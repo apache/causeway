@@ -33,10 +33,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import jakarta.inject.Inject;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.annotation.TimeZoneTranslation;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
@@ -53,11 +49,11 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Date
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -67,7 +63,7 @@ import lombok.experimental.Accessors;
  *
  * @param <T> implementing {@link java.time.temporal.Temporal} type
  */
-//@Log4j2
+//@Slf4j
 public abstract class TemporalValueSemanticsProvider<T extends Temporal>
 extends ValueSemanticsAbstract<T>
 implements TemporalValueSemantics<T> {
@@ -124,16 +120,15 @@ implements TemporalValueSemantics<T> {
     @Override
     public final int compare(final T a, final T b, final @NonNull Duration epsilon) {
 
-        val delta = (!a.isSupported(ChronoUnit.SECONDS))
+        var delta = (!a.isSupported(ChronoUnit.SECONDS))
                 ? Duration.ofDays(a.until(b, ChronoUnit.DAYS))
                 : Duration.between(a, b);
 
-        if(epsilon.minus(delta.abs()).isNegative()) {
+        if(epsilon.minus(delta.abs()).isNegative())
             // negative delta means a > b => should return +1
             return delta.isNegative()
                     ? 1
                     : -1;
-        }
         return 0;
     }
 
@@ -181,21 +176,19 @@ implements TemporalValueSemantics<T> {
 
     @Override
     public final T parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val temporalString = _Strings.blankToNullOrTrim(text);
-        if(temporalString==null) {
+        var temporalString = _Strings.blankToNullOrTrim(text);
+        if(temporalString==null)
             return null;
-        }
 
-        T contextTemporal = null; //FIXME[CAUSEWAY-2882] not implemented yet
-        if(contextTemporal != null) {
-            val adjusted = TemporalAdjust
-                    .parseAdjustment(adjuster, contextTemporal, temporalString);
-            if(adjusted!=null) {
-                return adjusted;
-            }
-        }
+//        T contextTemporal = null; //FIXME[CAUSEWAY-2882] not implemented yet
+//        if(contextTemporal != null) {
+//            var adjusted = TemporalAdjust
+//                    .parseAdjustment(adjuster, contextTemporal, temporalString);
+//            if(adjusted!=null)
+//                return adjusted;
+//        }
 
-        val format = getEditingInputFormat(context);
+        var format = getEditingInputFormat(context);
 
         try {
             return format.parse(temporalString, query);
@@ -214,20 +207,20 @@ implements TemporalValueSemantics<T> {
             final ValueSemanticsProvider.Context context,
             final BadgeRenderer badgeRenderer) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
-        val datePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern();
-        val dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
-        val temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
+        var datePattern = mmc.getConfiguration().valueTypes().temporal().display().datePattern();
+        var dateTimePattern = mmc.getConfiguration().valueTypes().temporal().display().dateTimePattern();
+        var temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getDateFormatStyle(),
-                dateAndTimeFormatStyle.getTimeFormatStyle(),
+                dateAndTimeFormatStyle.dateFormatStyle(),
+                dateAndTimeFormatStyle.timeFormatStyle(),
                 datePattern, dateTimePattern);
 
-        val temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
+        var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic).orElse(null);
 
-        val timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
+        var timeZoneTranslation = dateAndTimeFormatStyle.timeZoneTranslation();
 
         return time-> {
 
@@ -282,6 +275,43 @@ implements TemporalValueSemantics<T> {
         };
     }
 
+    // -- FORMAT
+
+    protected DateTimeFormatter getTemporalNoZoneRenderingFormat(
+            final @Nullable Context context,
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
+            final @NonNull FormatStyle dateFormatStyle,
+            final @NonNull FormatStyle timeFormatStyle,
+            final @Nullable String datePattern,
+            final @Nullable String dateTimePattern) {
+
+        final DateTimeFormatter noZoneOutputFormat = switch (temporalCharacteristic) {
+            case DATE_TIME -> dateTimePattern != null
+                                ? DateTimeFormatter.ofPattern(dateTimePattern)
+                                : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
+            case DATE_ONLY -> datePattern != null
+                                ? DateTimeFormatter.ofPattern(datePattern)
+                                : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
+            case TIME_ONLY -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle);
+        };
+
+        return noZoneOutputFormat
+                .withLocale(getUserLocale(context).timeFormatLocale());
+    }
+
+    protected Optional<DateTimeFormatter> getTemporalZoneOnlyRenderingFormat(
+            final ValueSemanticsProvider.@Nullable Context context,
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
+
+        return switch (offsetCharacteristic) {
+            case LOCAL -> Optional.empty();
+            case OFFSET -> Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
+            case ZONED -> Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
+        };
+    }
+
 //    /**
 //     * Converts given {@link Temporal} when offset,
 //     * to a temporal that is local to the user's (client's) time-zone.
@@ -312,31 +342,27 @@ implements TemporalValueSemantics<T> {
      * In other words, this conversion preserves the time {@link Instant}.
      */
     private Temporal translateToUserLocalTimeZone(final ValueSemanticsProvider.Context context, final Temporal t) {
-        if(t instanceof ZonedDateTime) {
-            return _Temporals.translateToTimeZone((ZonedDateTime) t,
-                    context.getInteractionContext().getTimeZone());
-        }
-        if(t instanceof OffsetDateTime) {
-            return _Temporals.translateToTimeZone((OffsetDateTime) t,
-                    context.getInteractionContext().getTimeZone());
-        }
-        if(t instanceof OffsetTime) {
-            return _Temporals.translateToTimeOffset((OffsetTime) t,
-                    context.getInteractionContext().getTimeZoneOffsetNow());
-        }
+        if(t instanceof ZonedDateTime zonedDateTime)
+            return _Temporals.translateToTimeZone(zonedDateTime,
+                    context.interactionContext().getTimeZone());
+        if(t instanceof OffsetDateTime offsetDateTime)
+            return _Temporals.translateToTimeZone(offsetDateTime,
+                    context.interactionContext().getTimeZone());
+        if(t instanceof OffsetTime offsetTime)
+            return _Temporals.translateToTimeOffset(offsetTime,
+                    context.interactionContext().getTimeZoneOffsetNow());
         return t; // otherwise acts as identity operator
     }
-
 
     /**
      * Format used for rendering editable text representation.
      */
     protected DateTimeFormatter getEditingOutputFormat(final ValueSemanticsProvider.Context context) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getTimePrecision(),
+                dateAndTimeFormatStyle.timePrecision(),
                 EditingFormatDirection.OUTPUT,
                 temporalEditingPattern());
     }
@@ -346,10 +372,10 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getEditingInputFormat(final ValueSemanticsProvider.Context context) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getTimePrecision(),
+                dateAndTimeFormatStyle.timePrecision(),
                 EditingFormatDirection.INPUT,
                 temporalEditingPattern());
     }
@@ -357,11 +383,11 @@ implements TemporalValueSemantics<T> {
     @Override
     public String getPattern(final ValueSemanticsProvider.Context context) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return temporalEditingPattern()
                 .getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                        dateAndTimeFormatStyle.getTimePrecision(),
+                        dateAndTimeFormatStyle.timePrecision(),
                         EditingFormatDirection.OUTPUT);
     }
 
@@ -374,46 +400,45 @@ implements TemporalValueSemantics<T> {
 
     // -- HELPER
 
-    @Value(staticConstructor = "of")
-    static class DateAndTimeFormatStyle {
-        @NonNull FormatStyle dateFormatStyle;
-        @NonNull FormatStyle timeFormatStyle;
-        @NonNull TimePrecision timePrecision;
-        @NonNull TimeZoneTranslation timeZoneTranslation;
+    record DateAndTimeFormatStyle(
+            @NonNull FormatStyle dateFormatStyle,
+            @NonNull FormatStyle timeFormatStyle,
+            @NonNull TimePrecision timePrecision,
+            @NonNull TimeZoneTranslation timeZoneTranslation) {
 
         static DateAndTimeFormatStyle forContext(
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
-                final @Nullable ValueSemanticsProvider.Context context) {
+                final ValueSemanticsProvider.@Nullable Context context) {
 
-            val featureIfAny = Optional.ofNullable(mmc)
+            var featureIfAny = Optional.ofNullable(mmc)
                     .map(MetaModelContext::getSpecificationLoader)
                     .flatMap(specLoader->specLoader.loadFeature(
                             Optional.ofNullable(context)
-                            .map(ValueSemanticsProvider.Context::getFeatureIdentifier)
+                            .map(ValueSemanticsProvider.Context::featureIdentifier)
                             .orElse(null)));
 
-            // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern());
-            val dateFormatStyle = featureIfAny
+            // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().valueTypes().temporal().display().datePattern());
+            var dateFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
                     .map(DateFormatStyleFacet::getDateFormatStyle)
                     .orElse(FormatStyle.MEDIUM);
 
-            val timeFormatStyle = featureIfAny
+            var timeFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(TimeFormatStyleFacet.class))
                     .map(TimeFormatStyleFacet::getTimeFormatStyle)
                     .orElse(FormatStyle.MEDIUM);
 
-            val timePrecision = featureIfAny
+            var timePrecision = featureIfAny
                     .flatMap(feature->feature.lookupFacet(TimeFormatPrecisionFacet.class))
                     .map(TimeFormatPrecisionFacet::getTimePrecision)
                     .orElse(TimePrecision.SECOND);
 
-            val timeZoneTranslation = featureIfAny
+            var timeZoneTranslation = featureIfAny
                     .flatMap(feature->feature.lookupFacet(TimeZoneTranslationFacet.class))
                     .map(TimeZoneTranslationFacet::getTimeZoneTranslation)
                     .orElse(TimeZoneTranslation.TO_LOCAL_TIMEZONE);
 
-            return of(dateFormatStyle, timeFormatStyle, timePrecision, timeZoneTranslation);
+            return new DateAndTimeFormatStyle(dateFormatStyle, timeFormatStyle, timePrecision, timeZoneTranslation);
         }
 
     }
@@ -421,12 +446,12 @@ implements TemporalValueSemantics<T> {
     private org.apache.causeway.core.config.CausewayConfiguration.ValueTypes.Temporal temporalConfig() {
         return Optional.ofNullable(mmc) // nullable .. JUnit support
                 .map(MetaModelContext::getConfiguration)
-                .map(conf->conf.getValueTypes().getTemporal())
-                .orElseGet(CausewayConfiguration.ValueTypes.Temporal::new);
+                .map(conf->conf.valueTypes().temporal())
+                .orElseGet(()->new CausewayConfiguration.ValueTypes.Temporal(new TemporalEditingPattern(), new TemporalDisplayPattern(null, null)));
     }
 
     protected TemporalEditingPattern temporalEditingPattern() {
-        return temporalConfig().getEditing();
+        return temporalConfig().editing();
     }
 
 }

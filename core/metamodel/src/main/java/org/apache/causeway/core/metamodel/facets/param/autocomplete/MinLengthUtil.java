@@ -23,8 +23,6 @@ import java.lang.annotation.Annotation;
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
-import lombok.val;
-
 public final class MinLengthUtil {
 
     /**
@@ -37,7 +35,7 @@ public final class MinLengthUtil {
             return MIN_LENGTH_DEFAULT;
         }
 
-        val lastParam = method.method().getParameters()[method.paramCount()-1];
+        var lastParam = method.method().getParameters()[method.paramCount()-1];
 
         for(Annotation annotation: lastParam.getAnnotations()) {
             if(annotation instanceof MinLength) {
@@ -49,7 +47,5 @@ public final class MinLengthUtil {
     }
 
     public static final int MIN_LENGTH_DEFAULT = 1;
-
-
 
 }

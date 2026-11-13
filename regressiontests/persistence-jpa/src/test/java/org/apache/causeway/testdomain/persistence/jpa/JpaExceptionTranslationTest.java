@@ -29,15 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
-
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -47,9 +41,6 @@ import lombok.val;
                 "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest",
         }
 )
-@TestPropertySources({
-    @TestPropertySource(CausewayPresets.UseLog4j2Test)
-})
 class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @BeforeAll
@@ -70,12 +61,11 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
                 // given
 
-                val inventories = repositoryService.allInstances(JpaInventory.class);
+                var inventories = repositoryService.allInstances(JpaInventory.class);
                 assertEquals(1, inventories.size());
 
-                val inventory = inventories.get(0);
+                var inventory = inventories.get(0);
                 assertNotNull(inventory);
-
 
                 // add a conflicting book (unique ISBN violation)
                 testFixtures.addABookTo(inventory);
@@ -88,10 +78,10 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
         run(()->{
 
-            val inventories = repositoryService.allInstances(JpaInventory.class);
+            var inventories = repositoryService.allInstances(JpaInventory.class);
             assertEquals(1, inventories.size());
 
-            val inventory = inventories.get(0);
+            var inventory = inventories.get(0);
             assertNotNull(inventory);
 
             assertNotNull(inventory);

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.pages.accmngt.password_reset;
 
-
 import org.apache.wicket.validation.Validatable;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -74,6 +73,5 @@ public class EmailAddressValidator_Test {
 
         Assertions.assertThat(validatable.getErrors()).isEmpty();
     }
-
 
 }

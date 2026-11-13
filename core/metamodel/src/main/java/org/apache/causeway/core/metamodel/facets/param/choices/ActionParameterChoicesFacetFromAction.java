@@ -32,9 +32,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterChoicesFacetFromAction
 extends ActionParameterChoicesFacetAbstract {
@@ -53,7 +51,7 @@ extends ActionParameterChoicesFacetAbstract {
                 // param type must be assignable from types returned by choices
                 .filter(coll->coll.getElementType().isOfType(param.getElementType()))
                 .map(coll->
-                    new ActionParameterChoicesFacetFromAction(coll, param.getFacetHolder()));
+                    new ActionParameterChoicesFacetFromAction(coll, param.facetHolder()));
     }
 
     private final OneToManyAssociation choicesFromCollection;
@@ -61,8 +59,14 @@ extends ActionParameterChoicesFacetAbstract {
     private ActionParameterChoicesFacetFromAction(
             final OneToManyAssociation choicesFromCollection,
             final FacetHolder holder) {
-        super(holder, Precedence.LOW); // precedence low, so is overridden by imperative facets (member support)
+        super(holder);
         this.choicesFromCollection = choicesFromCollection;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// precedence low, so is overridden by imperative facets (member support)
+    	return Precedence.LOW;
     }
 
     @Override
@@ -72,7 +76,7 @@ extends ActionParameterChoicesFacetAbstract {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val collectionAsObject = choicesFromCollection.get(head.getOwner(), interactionInitiatedBy);
+        var collectionAsObject = choicesFromCollection.get(head.owner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
     }
 

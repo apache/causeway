@@ -20,6 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,19 +31,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Named;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
-
-import lombok.val;
+import org.springframework.stereotype.Component;
 
 import io.swagger.v3.oas.models.media.BooleanSchema;
 import io.swagger.v3.oas.models.media.ByteArraySchema;
@@ -50,14 +44,15 @@ import io.swagger.v3.oas.models.media.NumberSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.media.UUIDSchema;
+import jakarta.inject.Named;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ValueSchemaFactoryDefault")
 public class ValueSchemaFactoryDefault implements ValueSchemaFactory {
 
-    private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();
+    private final Map<Class<?>, Factory> propertyFactoryByClass = new HashMap<>();
 
-    private static interface Factory extends Supplier<Schema<?>> {};
+    private static interface Factory extends Supplier<Schema<?>> {}
 
     public ValueSchemaFactoryDefault() {
 
@@ -93,7 +88,7 @@ public class ValueSchemaFactoryDefault implements ValueSchemaFactory {
         propertyFactoryByClass.put(UUID.class, UUIDSchema::new);
 
         propertyFactoryByClass.put(java.util.Date.class, DateTimeSchema::new);
-        propertyFactoryByClass.put(DateTime.class, DateTimeSchema::new);
+        propertyFactoryByClass.put(ZonedDateTime.class, DateTimeSchema::new);
         propertyFactoryByClass.put(LocalDateTime.class, DateTimeSchema::new);
 
         propertyFactoryByClass.put(java.sql.Date.class, DateSchema::new);
@@ -106,23 +101,21 @@ public class ValueSchemaFactoryDefault implements ValueSchemaFactory {
 
     @Override
     public Optional<Schema<?>> schemaForValue(final Class<?> cls) {
-        if(cls == null) {
-            return Optional.empty();
-        }
+        if(cls == null)
+			return Optional.empty();
 
         // special case, want to treat as a value
         if(cls.isEnum()) {
             final List<String> enumNames = _NullSafe.stream(cls.getEnumConstants())
                     .map(input->((Enum<?>)input).name())
                     .collect(Collectors.toList());
-            val schema = new StringSchema()._enum(enumNames);
+            var schema = new StringSchema()._enum(enumNames);
             return Optional.of(schema);
         }
 
         final Factory factory = propertyFactoryByClass.get(cls);
-        if(factory != null) {
-            return Optional.ofNullable(factory.get());
-        }
+        if(factory != null)
+			return Optional.ofNullable(factory.get());
 
         return Optional.empty();
     }

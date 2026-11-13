@@ -20,7 +20,7 @@ Add a section for _Flyway_'s own BOM:
             <artifactId>causeway-extensions-flyway</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv3}</version>
+            <version>{page-causewayreleaseversion}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -76,23 +76,15 @@ causeway.persistence.schema.auto-create-schemas=    // <.>
 <.> whether Flyway should automatically create schemas ; see link:https://flywaydb.org/documentation/configuration/parameters/createSchemas[flyway.createSchemas] for more info
 <.> instruct Apache Causeway to _not_ attempt to create schemas
 
-The ORM should also be configured to _not_ automatically create tables:
+The ORM should also be configured to _not_ automatically create tables.
+If using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], then:
 
-* if using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], then:
-+
 [source,properties]
 .application.properties
 ----
 eclipselink.ddl-generation=none
 ----
 
-* if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], then:
-+
-[source,properties]
-.application.properties
-----
-datanucleus.schema.autoCreateAll=false
-----
 
 
 == Managing different variants

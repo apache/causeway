@@ -18,77 +18,161 @@
  */
 package org.apache.causeway.core.config.beans;
 
-import java.util.Optional;
+import java.io.Serializable;
+import java.lang.reflect.Modifier;
+import java.util.function.Supplier;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.support.SpringFactoriesLoader;
+import jakarta.persistence.Entity;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeProgrammaticMarker;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
-import lombok.NonNull;
+@Programmatic
+public record CausewayBeanTypeClassifier(
+        @NonNull Can<String> activeProfiles,
+        @NonNull ContextType contextType,
+        @NonNull _ClassCache classCache) {
 
-/**
- * ServiceLoader SPI that allows for implementing instances to have a say during bean type scanning.
- * @since 2.0
- */
-public interface CausewayBeanTypeClassifier {
-
-    public enum Attributes {
-        /**
-         * Corresponds to presence of a {@link DomainService} annotation.
-         * @see _ClassCache#lookupAttribute(Class, String)
-         */
-        HAS_DOMAIN_SERVICE_SEMANTICS,
-
-        /**
-         * Corresponds to {@link DomainObject#mixinMethod()}.
-         * @see _ClassCache#lookupAttribute(Class, String)
-         */
-        MIXIN_MAIN_METHOD_NAME;
-
-        public void set(final _ClassCache classCache, final Class<?> type, final String attributeValue) {
-            classCache.setAttribute(type, this.name(), attributeValue);
-        }
-        public Optional<String> lookup(final _ClassCache classCache, final Class<?> type) {
-            return classCache.lookupAttribute(type, this.name());
-        }
+    public enum ContextType {
+        SPRING,
+        MOCKUP
     }
 
-    // -- INTERFACE
+    // -- CONSTRUCTION
+
+    CausewayBeanTypeClassifier(final String[] activeProfiles, final ContextType contextType) {
+        this(Can.ofArray(activeProfiles), contextType, _ClassCache.getInstance());
+    }
+
+    // -- CLASSIFY
 
     /**
-     * Returns the bean classification for given {@code type}.
+     * Classify {@link LogicalType} as detected and named by either Causeway or Spring.
+     * <p>
+     * Typically Causeway we will use a different fallback naming strategy for 'unnamed' types,
+     * that is, it uses the fully qualified class name.
      *
-     * @apiNote Initially used to collect all concrete types that are considered by Spring
-     * for type inspection, most likely without any {@code context} yet being available,
-     * but later used by the {@code SpecificationLoader} to also
-     * classify non-concrete types (interfaces and abstract classes).
+     * @param logicalType with name as either forced by Causeway or suggested by Spring
      */
-    CausewayBeanMetaData classify(Class<?> type);
+    public CausewayBeanMetaData classify(final @NonNull LogicalType logicalType, final DiscoveredBy discoveredBy) {
 
-    // -- FACTORY
+        var type = logicalType.correspondingClass();
 
-    /**
-     * in support of JUnit testing
-     */
-    static CausewayBeanTypeClassifier createInstance() {
-        return new CausewayBeanTypeClassifierDefault(Can.empty());
+        Supplier<LogicalType> named = ()->discoveredBy.isSpring()
+            ? LogicalType.infer(type) // use only if discovered by Spring but NOT managed by Spring
+            : logicalType; // name is already inferred, when discovered by Causeway
+
+        if(ClassUtils.isPrimitiveOrWrapper(type)
+                || type.isEnum())
+            return CausewayBeanMetaData.value(named.get(), discoveredBy);
+
+        if(CollectionSemantics.valueOf(type).isPresent())
+            return CausewayBeanMetaData.collection(named.get(), discoveredBy);
+
+        if(type.isInterface()
+                // modifier predicate must be called after testing for non-scalar type above,
+                // otherwise we'd get false positives
+                || Modifier.isAbstract(type.getModifiers()))
+            // apiNote: abstract types and interfaces cannot be vetoed
+            // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
+            // however, concrete types that inherit abstract ones with vetoes,
+            // will effectively be vetoed through means of annotation synthesis
+            return CausewayBeanMetaData.interfaceOrAbstract(named.get(), discoveredBy);
+
+        var typeHead = classCache().head(type);
+
+        // handle vetoing ...
+        if(TypeVetoMarker.anyMatchOn(typeHead))
+            return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
+
+        var profiles = typeHead.springProfiles();
+        if(profiles.isNotEmpty()
+                && !profiles.stream().anyMatch(this::isProfileActive))
+            return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
+
+        // handle introspection veto (programmatic bean) ...
+        if(TypeProgrammaticMarker.anyMatchOn(typeHead)) {
+            if(contextType==ContextType.MOCKUP) return CausewayBeanMetaData.springNotContributing(logicalType);
+            return switch (discoveredBy) {
+                 case SPRING, CAUSEWAY_UPFRONT -> CausewayBeanMetaData.springNotContributing(logicalType);
+                 case CAUSEWAY_ONTHEFLY -> CausewayBeanMetaData.programmatic(named.get());
+            };
+        }
+
+        // when implements ViewModel, yield VIEW_MODEL unless vetoed
+        if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type))
+            return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
+
+        // value types
+        if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class))
+            return CausewayBeanMetaData.value(named.get(), discoveredBy);
+
+        // domain service
+        if(typeHead.hasAnnotation(DomainService.class))
+            return CausewayBeanMetaData.springContributing(logicalType);
+
+        // entity support
+        if(typeHead.hasAnnotation(Entity.class))
+            return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.JPA);
+
+        // domain object
+        var aDomainObject = typeHead.annotation(DomainObject.class).orElse(null);
+        if(aDomainObject!=null)
+            return switch (aDomainObject.nature()) {
+            case BEAN -> CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING);
+            case MIXIN -> {
+                // memoize mixin main name
+                typeHead.putAttribute(_ClassCache.Attribute.MIXIN_MAIN_METHOD_NAME, aDomainObject.mixinMethod());
+                yield CausewayBeanMetaData.mixin(named.get(), discoveredBy);
+            }
+            case ENTITY -> CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.UNSPECIFIED);
+            case VIEW_MODEL, NOT_SPECIFIED -> /*because object is not associated with a persistence context unless discovered above */ CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
+            };
+
+        if(typeHead.hasJaxbRootElementSemantics())
+            return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
+
+        if(typeHead.hasAnnotation(Component.class))
+            return CausewayBeanMetaData.unspecified(logicalType, discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
+
+        // unless explicitly declared otherwise, map records to unknown
+        if(type.isRecord()) {
+            var aDomainObjectLayout = typeHead.annotation(DomainObjectLayout.class).orElse(null);
+            // with presence of @DomainObjectLayout annotation, assume Viewmodel
+            return aDomainObjectLayout!=null
+                ? CausewayBeanMetaData.viewModel(named.get(), discoveredBy)
+                : CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
+        }
+
+        if(Serializable.class.isAssignableFrom(type))
+            return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.VALUE);
+
+        return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
     }
 
-    static CausewayBeanTypeClassifier createInstance(final @NonNull ApplicationContext applicationContext) {
-        return new CausewayBeanTypeClassifierDefault(
-                Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()));
-    }
+    // -- HELPER
 
-    // -- LOOKUP
-
-    public static Can<CausewayBeanTypeClassifier> get() {
-        return Can.ofCollection(SpringFactoriesLoader
-                .loadFactories(CausewayBeanTypeClassifier.class, _Context.getDefaultClassLoader()));
+    /*TODO yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
+      either we find a Spring Boot utility class that does this logic for us, or we make it clear with the
+      docs, that we have only limited support for the @Profile annotation*/
+    private boolean isProfileActive(final String profile) {
+        return activeProfiles.contains(profile);
     }
 
 }

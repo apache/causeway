@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
-import jakarta.ws.rs.core.MediaType;
+import org.jspecify.annotations.Nullable;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.http.MediaType;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * @since 1.x {@index}
@@ -39,10 +41,10 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
     public String getRel() {
-        return asObjectNode().path("rel").textValue();
+        return stringValue(asObjectNode().path("rel"));
     }
 
-    public LinkRepresentation withRel(final String rel) {
+	public LinkRepresentation withRel(final String rel) {
         asObjectNode().put("rel", rel);
         return this;
     }
@@ -51,9 +53,8 @@ public final class LinkRepresentation extends JsonRepresentation {
         return withRel(rel.getName());
     }
 
-
     public String getHref() {
-        return asObjectNode().path("href").textValue();
+        return stringValue(asObjectNode().path("href"));
     }
 
     public LinkRepresentation withHref(final String href) {
@@ -75,14 +76,14 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
     public RestfulHttpMethod getHttpMethod() {
-        final String methodStr = asObjectNode().path("method").textValue();
+        final String methodStr = stringValue(asObjectNode().path("method"));
         return RestfulHttpMethod.valueOf(methodStr);
     }
 
     public MediaType getType() {
-        final String typeStr = asObjectNode().path("type").textValue();
+        final String typeStr = stringValue(asObjectNode().path("type"));
         if (typeStr == null) {
-            return MediaType.APPLICATION_JSON_TYPE;
+            return MediaType.APPLICATION_JSON;
         }
         return MediaType.valueOf(typeStr);
     }
@@ -118,15 +119,9 @@ public final class LinkRepresentation extends JsonRepresentation {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final LinkRepresentation other = (LinkRepresentation) obj;
         if (getHref() == null) {
             if (other.getHref() != null) {
@@ -145,6 +140,14 @@ public final class LinkRepresentation extends JsonRepresentation {
     public String toString() {
         return "Link [rel=" + getRel() + ", href=" + getHref() + ", method=" + getHttpMethod() + ", type=" + getType() + "]";
     }
-
+    
+    // -- HELPER
+    
+    @Nullable
+    private static String stringValue(JsonNode node) {
+    	if(node==null 
+    			|| node.isMissingNode()) return null;
+		return node.stringValue();
+	}
 
 }

@@ -5,4 +5,4 @@
 
 == Implementation
 
-The default implementation is provided by `o.a.c.core.runtimeservices.homepage.HomePageResolverServiceDefault`.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation, xref:refguide:core:index/runtimeservices/homepage/HomePageResolverServiceDefault.adoc[].

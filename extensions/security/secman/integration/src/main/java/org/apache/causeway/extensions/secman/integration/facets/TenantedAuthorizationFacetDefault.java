@@ -30,13 +30,11 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
-
-import lombok.val;
 
 public class TenantedAuthorizationFacetDefault
 extends FacetAbstract
@@ -66,13 +64,13 @@ implements TenantedAuthorizationFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        return evaluate(ApplicationTenancyEvaluator::hides, ic.getHead())
+        return evaluate(ApplicationTenancyEvaluator::hides, ic.head())
                 .orElse(null);
     }
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        return evaluate(ApplicationTenancyEvaluator::disables, ic.getHead())
+        return evaluate(ApplicationTenancyEvaluator::disables, ic.head())
                 .map(VetoReason::explicit);
     }
 
@@ -83,16 +81,16 @@ implements TenantedAuthorizationFacet {
             return Optional.empty();
         }
 
-        val domainObject = head.getOwner().getPojo();
-        val userName = userService.currentUserNameElseNobody();
+        var domainObject = head.owner().getPojo();
+        var userName = userService.currentUserNameElseNobody();
 
-        val applicationUser = findApplicationUser(userName);
+        var applicationUser = findApplicationUser(userName);
         if (applicationUser == null) {
             // not expected, but best to be safe...
             return Optional.of("Could not locate application user for " + userName);
         }
 
-        for (val evaluator : evaluators) {
+        for (var evaluator : evaluators) {
             final String reasonString = evaluationDispatcher.dispatch(evaluator, domainObject, applicationUser);
             if(reasonString != null) {
                 return Optional.of(reasonString);
@@ -104,7 +102,6 @@ implements TenantedAuthorizationFacet {
     interface EvaluationDispatcher {
         String dispatch(ApplicationTenancyEvaluator evaluator, Object domainObject, ApplicationUser applicationUser);
     }
-
 
     /**
      * Per {@link #findApplicationUserNoCache(String)},
@@ -122,7 +119,5 @@ implements TenantedAuthorizationFacet {
     protected ApplicationUser findApplicationUserNoCache(final String userName) {
         return applicationUserRepository.findByUsername(userName).orElse(null);
     }
-
-
 
 }

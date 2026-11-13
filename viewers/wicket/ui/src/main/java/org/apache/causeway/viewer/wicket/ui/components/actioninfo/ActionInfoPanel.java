@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 /**
  * Renders a panel providing summary information about an action.
  */
-public class ActionInfoPanel
+class ActionInfoPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

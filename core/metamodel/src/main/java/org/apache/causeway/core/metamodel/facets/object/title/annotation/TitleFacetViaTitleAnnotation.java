@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.title.annotation;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -28,15 +29,14 @@ import java.util.function.Consumer;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.compare._Comparators;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
 import org.apache.causeway.core.metamodel.facets.Evaluators.MethodEvaluator;
@@ -46,15 +46,14 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.jspecify.annotations.NonNull;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class TitleFacetViaTitleAnnotation
 extends TitleFacetAbstract
 implements ImperativeFacet {
@@ -63,9 +62,9 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        val titles = new ArrayDeque<Title>();
+        var titles = new ArrayDeque<Title>();
 
-        val titleComponents = Evaluators
+        var titleComponents = Evaluators
                 .streamEvaluators(cls,
                     annotatedElement->isTitleComponent(annotatedElement, titles::addLast),
                     TypeHierarchyPolicy.EXCLUDE,
@@ -78,9 +77,8 @@ implements ImperativeFacet {
               //.distinct((a, b)->a.getTitleEvaluator().name().equals(b.getTitleEvaluator().name()))
               .sorted(TitleComponent::compareTo);
 
-        if (titleComponents.isEmpty()) {
-            return Optional.empty();
-        }
+        if (titleComponents.isEmpty())
+			return Optional.empty();
 
         return Optional.of(new TitleFacetViaTitleAnnotation(titleComponents, holder));
     }
@@ -117,14 +115,13 @@ implements ImperativeFacet {
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
 
-        final ManagedObject targetAdapter = titleRenderRequest.getObject();
+        final ManagedObject targetAdapter = titleRenderRequest.object();
 
-        val pojo = targetAdapter.getPojo();
-        if(pojo==null) {
-            return "";
-        }
-        val stringBuilder = new StringBuilder();
-        val objectManager = getObjectManager();
+        var pojo = targetAdapter.getPojo();
+        if(pojo==null) return "";
+
+        var stringBuilder = new StringBuilder();
+        var objectManager = getObjectManager();
 
         try {
             for (final TitleComponent component : this.components) {
@@ -133,8 +130,8 @@ implements ImperativeFacet {
                     continue;
                 }
                 // ignore context, if provided
-                val titlePartAdapter = objectManager.adapt(titlePart);
-                if(titleRenderRequest.getSkipTitlePartEvaluator().test(titlePartAdapter)) {
+                var titlePartAdapter = objectManager.adapt(titlePart);
+                if(titleRenderRequest.skipTitlePartEvaluator().test(titlePartAdapter)) {
                     continue;
                 }
 
@@ -157,7 +154,7 @@ implements ImperativeFacet {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
+            var isUnitTesting = getSystemEnvironment().isUnitTesting();
             if(!isUnitTesting) {
                 log.warn("Title failure", ex);
             }
@@ -176,9 +173,8 @@ implements ImperativeFacet {
     // -- HELPER
 
     private String titleOf(final ManagedObject adapter) {
-        if (adapter == null) {
-            return null;
-        }
+        if (adapter == null)
+			return null;
         return adapter.getTitle();
     }
 
@@ -234,7 +230,7 @@ implements ImperativeFacet {
 
         @Override
         public String toString() {
-            final List<String> parts = _Lists.newArrayList();
+            final List<String> parts = new ArrayList<String>();
             parts.add("evaluator=" + titleEvaluator.name());
             if(prepend != null && !_Strings.isNullOrEmpty(prepend.trim())) {
                 parts.add("prepend=" + prepend);

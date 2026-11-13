@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
 
 import jakarta.inject.Inject;
@@ -33,31 +32,30 @@ import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
-import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
@@ -70,12 +68,14 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
-import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
+import org.apache.causeway.viewer.wicket.viewer.integration.RehydrationHandler;
+import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
+import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStartHandler;
+import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStopHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -94,13 +94,12 @@ import lombok.extern.log4j.Log4j2;
  * See <tt>asciidoc</tt> extension for an example of this.
  *
  */
-@Log4j2
+@Slf4j
 public class CausewayWicketApplication
 extends AuthenticatedWebApplication
 implements
     HasComponentFactoryRegistry,
-    HasPageClassRegistry,
-    HasMetaModelContext {
+    HasPageClassRegistry {
 
     private static final long serialVersionUID = 1L;
 
@@ -111,11 +110,13 @@ implements
         return (CausewayWicketApplication) AuthenticatedWebApplication.get();
     }
 
-    @Getter(onMethod = @__(@Override))
+    @Getter
     @Inject private MetaModelContext metaModelContext;
     @Inject private List<WicketApplicationInitializer> applicationInitializers;
     @Inject private CausewaySystemEnvironment systemEnvironment;
     @Inject private CausewayConfiguration configuration;
+    @Inject private MetricsService metricService;
+    @Inject private CausewayObservationIntegration observationIntegration;
 
     @Getter(onMethod = @__(@Override))
     @Inject private ComponentFactoryRegistry componentFactoryRegistry;
@@ -141,11 +142,7 @@ implements
         // in which search for i18n properties, to search for the application-specific
         // settings before any other.
         setResourceSettings(new CausewayResourceSettings(this));
-
         super.internalInit();
-
-        // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
@@ -177,13 +174,15 @@ implements
         super.init();
 
         // initialize Spring Dependency Injection for wicket
-        val springInjector = new SpringComponentInjector(this);
+        ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        var springInjector = new SpringComponentInjector(this, context, false); //workaround https://github.com/raphw/byte-buddy/issues/1915#issuecomment-4901692009
+        //var springInjector = new SpringComponentInjector(this); //origin
         getComponentInstantiationListeners().add(springInjector);
 
         // self managed dependency injection
         {
             // get the Apache Causeway ServiceInjector
-            val serviceInjectorHolder = new ServiceInjectorHolder();
+            var serviceInjectorHolder = new ServiceInjectorHolder();
             springInjector.inject(serviceInjectorHolder);
 
             // resolve injection-points on self
@@ -191,7 +190,7 @@ implements
         }
 
         // gather configuration plugins into a list of named tasks
-        val initializationTasks =
+        var initializationTasks =
                 _ConcurrentTaskList.named("Causeway Application Initialization Tasks");
         applicationInitializers
             .forEach(initializer->initializationTasks
@@ -207,15 +206,19 @@ implements
                 .submit(_ConcurrentContext.sequential())
                 .await();
 
+            setRequestCycleProvider(RequestCycle2::new);
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
-            getRequestCycleListeners().add(createWebRequestCycleListenerForCauseway());
+            getRequestCycleListeners().add(new TelemetryStartHandler(observationIntegration));
+            getRequestCycleListeners().add(new WebRequestCycleForCauseway(metaModelContext, getPageClassRegistry()));
+            getRequestCycleListeners().add(new TelemetryStopHandler(metricService));
+            getRequestCycleListeners().add(new RehydrationHandler());
             getRequestCycleListeners().add(new PageRequestHandlerTracker());
 
             //XXX CAUSEWAY-2530, don't recreate expired pages
             getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
-            getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
+            getMarkupSettings().setStripWicketTags(configuration.viewer().wicket().stripWicketTags());
 
             configureSecurity(configuration);
 
@@ -243,53 +246,19 @@ implements
         return new _PageFactory(this, super.newPageFactory());
     }
 
-
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
     protected void configureSecurity(final CausewayConfiguration configuration) {
         // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
         getCspSettings().blocking().disabled();
-        getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
 
         // TODO CAUSEWAY-987 Either make the API better (no direct access to the map) or use DB records
         final int maxEntries = 1000;
         setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.ofDays(1)));
     }
 
-    /**
-     * protected visibility to allow ad-hoc overriding of some other authentication strategy.
-     */
-    protected IAuthenticationStrategy newAuthenticationStrategy(final CausewayConfiguration configuration) {
-        val rememberMe = configuration.getViewer().getWicket().getRememberMe();
-        val cookieKey = rememberMe.getCookieKey();
-        val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
-        return new DefaultAuthenticationStrategy(cookieKey, _CryptFactory.sunJceCrypt(encryptionKey));
-    }
-
-    /**
-     * As called by {@link #newAuthenticationStrategy(CausewayConfiguration)}.
-     * If an encryption key for the 'rememberMe' cookie hasn't been configured,
-     * then use a different encryption key for the 'rememberMe'
-     * cookie each time the app is restarted.
-     */
-    protected String defaultEncryptionKey() {
-        return systemEnvironment.isPrototyping()
-                ? _CryptFactory.FIXED_SALT_FOR_PROTOTYPING
-                : UUID.randomUUID().toString();
-    }
-
     // //////////////////////////////////////
-
-    /**
-     * Factored out for easy (informal) pluggability.
-     */
-    protected IRequestCycleListener createWebRequestCycleListenerForCauseway() {
-        val webRequestCycleForCauseway = new WebRequestCycleForCauseway();
-        webRequestCycleForCauseway.setPageClassRegistry(getPageClassRegistry());
-        return webRequestCycleForCauseway;
-    }
-
 
     protected static final Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
             (final ComponentFactory input) -> {
@@ -323,7 +292,7 @@ implements
         mountPage("/signup", PageType.SIGN_UP);
         mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
         mountPage("/password/reset", PageType.PASSWORD_RESET);
-        mountPage("/entity/#{objectOid}", PageType.ENTITY);
+        mountPage("/object/#{objectOid}", PageType.DOMAIN_OBJECT);
         mountPage("/logout", WicketLogoutPage.class);
     }
 
@@ -335,9 +304,8 @@ implements
     @Override
     public final RuntimeConfigurationType getConfigurationType() {
 
-        if(systemEnvironment==null) {
+        if(systemEnvironment==null)
             return RuntimeConfigurationType.DEPLOYMENT;
-        }
 
         return systemEnvironment.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT
@@ -378,7 +346,6 @@ implements
     protected IConverterLocator newConverterLocator() {
         final ConverterLocator converterLocator = new ConverterLocator();
         converterLocator.set(ManagedObject.class, new ConverterForObjectAdapter());
-        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento());
         return converterLocator;
     }
 

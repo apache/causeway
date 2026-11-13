@@ -22,43 +22,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.springframework.lang.Nullable;
+import org.springframework.http.HttpStatus;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapperUtil;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-import lombok.NonNull;
-import lombok.experimental.Accessors;
+import tools.jackson.core.JacksonException;
 
-@lombok.Value(staticConstructor = "of")
-@Accessors(fluent=true) //XXX record candidate
-public class RequestParams {
+public record RequestParams(
+        RequestParams.@NonNull Nature nature,
+        @Nullable String raw) {
 
     static enum Nature {
         REQUEST_BODY,
         QUERY_STRING
     }
 
-    private final @NonNull RequestParams.Nature nature;
-    private final @Nullable String raw;
-
     public static RequestParams ofRequestBody(final InputStream is) {
-        return of(Nature.REQUEST_BODY, asStringUtf8(is));
+        return new RequestParams(Nature.REQUEST_BODY, asStringUtf8(is));
     }
 
     public static RequestParams ofQueryString(final String queryString) {
-        return of(Nature.QUERY_STRING, queryString);
+        return new RequestParams(Nature.QUERY_STRING, queryString);
     }
 
     public static RequestParams ofEmptyQueryString() {
-        return of(Nature.QUERY_STRING, "");
+        return new RequestParams(Nature.QUERY_STRING, "");
     }
 
     public JsonRepresentation asMap() {
@@ -75,7 +70,7 @@ public class RequestParams {
             return _Strings.ofBytes(_Bytes.of(body), StandardCharsets.UTF_8);
         } catch (final IOException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read body");
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not read body");
         }
     }
 
@@ -91,23 +86,19 @@ public class RequestParams {
             return JsonRepresentation.newMap();
         }
 
-
         try {
-            final JsonRepresentation jsonRepr = JsonMapper.instance().read(rawArgs);
+            final JsonRepresentation jsonRepr = JsonMapperUtil.instance().read(rawArgs);
             if (!jsonRepr.isMap()) {
                 throw RestfulObjectsApplicationException
-                .createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
+                .createWithMessage(HttpStatus.BAD_REQUEST, "could not read %s as a JSON map".formatted(argsNature));
             }
             return jsonRepr;
-        } catch (final JsonParseException e) {
+        } catch (final JacksonException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
-        } catch (final JsonMappingException e) {
-            throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not read %s as JSON".formatted(argsNature));
         } catch (final IOException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not parse %s".formatted(argsNature));
         }
 
     }

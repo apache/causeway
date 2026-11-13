@@ -38,21 +38,20 @@ import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @XmlRootElement(name = "BlobDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("regressiontests.BlobDemo")
 @DomainObject(nature=Nature.VIEW_MODEL)
-@Log4j2
+@Slf4j
 public class BlobDemo {
 
     public void initDefaults() {
 
         try {
-            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "causeway-logo-605x449.png"));
+            var bytes = _Bytes.of(_Resources.load(BlobDemo.class, "causeway-logo-605x449.png"));
             logo = Blob.of("causeway-logo-605x449.png", CommonMimeType.PNG, bytes);
         } catch (Exception e) {
             log.error("failed to create Blob from image resource", e);

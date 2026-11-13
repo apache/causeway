@@ -7,11 +7,11 @@
 .UserResource.java
 ----
 interface UserResource {
-  Response user()
-  Response deleteUserNotAllowed()
-  Response putUserNotAllowed()
-  Response postUserNotAllowed()
-  Response logout()     // <.>
+  ResponseEntity<Object> user()
+  ResponseEntity<Object> deleteUserNotAllowed()
+  ResponseEntity<Object> putUserNotAllowed()
+  ResponseEntity<Object> postUserNotAllowed()
+  ResponseEntity<Object> logout()     // <.>
 }
 ----
 

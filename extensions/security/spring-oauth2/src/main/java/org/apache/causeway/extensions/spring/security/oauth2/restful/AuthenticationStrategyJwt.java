@@ -26,11 +26,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyAbstract;
-
-import lombok.val;
 
 /**
  * This class enables support for JWT for Restful clients.
@@ -63,14 +61,14 @@ public class    AuthenticationStrategyJwt extends AuthenticationStrategyAbstract
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
 
-        val authentication = SecurityContextHolder.getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof Jwt) {
                 Jwt jwt = (Jwt) principal;
-                val authenticationRequestPwd = new AuthenticationRequestPassword(getName(jwt), null);
-                val authenticationManager = super.getAuthenticationManager(httpServletRequest);
+                var authenticationRequestPwd = new AuthenticationRequestPassword(getName(jwt), null);
+                var authenticationManager = super.getAuthenticationManager(httpServletRequest);
                 return authenticationManager.authenticate(authenticationRequestPwd);
             }
         }

@@ -34,8 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterDefaultsFacetViaMethod
 extends ActionParameterDefaultsFacetAbstract
@@ -69,14 +68,14 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
+    public Can<ManagedObject> getDefault(final @NonNull ParameterNegotiationModel pendingArgs) {
 
-        val method = methods.getFirstElseFail();
-        val managedParam = pendingArgs.getParamModels().getElseFail(paramNum);
+        var method = methods.getFirstElseFail();
+        var managedParam = pendingArgs.getParamModels().getElseFail(paramNum);
 
         // call with args: defaultNAct(X x, Y y, ...)
 
-        val defaultValue = patConstructor.isPresent()
+        var defaultValue = patConstructor.isPresent()
             // PAT programming model
             ? MmInvokeUtils
                     .invokeWithPAT(patConstructor.get(), method.asMethodForIntrospection(),

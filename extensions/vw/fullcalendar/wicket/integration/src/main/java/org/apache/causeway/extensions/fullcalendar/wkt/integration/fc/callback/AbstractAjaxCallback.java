@@ -22,7 +22,7 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 abstract class AbstractAjaxCallback extends AbstractDefaultAjaxBehavior {
 

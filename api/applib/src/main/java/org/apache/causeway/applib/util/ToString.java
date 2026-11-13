@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.applib.util;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * Fluent Object to String Composition.
@@ -35,29 +34,29 @@ import org.apache.causeway.commons.internal.collections._Lists;
  */
 public class ToString<T> {
 
-    public static <T> ToString<T> toString(String name, Function<? super T, ?> getter) {
+    public static <T> ToString<T> toString(final String name, final Function<? super T, ?> getter) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
         return new ToString<>(name, getter, false);
     }
 
-    public static <T> ToString<T> toStringOmitIfAbsent(String name, Function<? super T, ?> getter) {
+    public static <T> ToString<T> toStringOmitIfAbsent(final String name, final Function<? super T, ?> getter) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
         return new ToString<>(name, getter, true);
     }
 
-    private final List<String> names = _Lists.newArrayList();
-    private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
+    private final List<String> names = new ArrayList<>();
+    private final List<Function<? super T, ?>> getters = new ArrayList<>();
     private final BitSet omitIfAbsent = new BitSet();
 
-    private ToString(String name, Function<? super T, ?> getter, boolean omitIfAbsent) {
+    private ToString(final String name, final Function<? super T, ?> getter, final boolean omitIfAbsent) {
         addBit(omitIfAbsent);
         names.add(name);
         getters.add(getter);
     }
 
-    public ToString<T> thenToString(String name, Function<? super T, ?> getter){
+    public ToString<T> thenToString(final String name, final Function<? super T, ?> getter){
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
         addBit(false);
@@ -66,7 +65,7 @@ public class ToString<T> {
         return this;
     }
 
-    public ToString<T> thenToStringOmitIfAbsent(String name, Function<? super T, ?> getter){
+    public ToString<T> thenToStringOmitIfAbsent(final String name, final Function<? super T, ?> getter){
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
         addBit(true);
@@ -75,19 +74,17 @@ public class ToString<T> {
         return this;
     }
 
-    public String toString(T target){
+    public String toString(final T target){
         return toString(target, value->""+value);
     }
 
-    public String toString(T target, Function<Object, String> valueToStringFunction){
+    public String toString(final T target, final Function<Object, String> valueToStringFunction){
 
-        if(valueToStringFunction==null) {
-            return toString(target);
-        }
+        if(valueToStringFunction==null)
+			return toString(target);
 
-        if(target==null) {
-            return "null";
-        }
+        if(target==null)
+			return "null";
 
         Objects.requireNonNull(valueToStringFunction);
 
@@ -110,7 +107,7 @@ public class ToString<T> {
 
     // -- HELPER
 
-    private void addBit(boolean bit) {
+    private void addBit(final boolean bit) {
         final int index = names.size();
         if(bit) {
             omitIfAbsent.set(index);

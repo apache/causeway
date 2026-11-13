@@ -22,11 +22,9 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
-
-import jakarta.inject.Named;
+import java.util.TreeSet;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
@@ -35,25 +33,22 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.jspecify.annotations.NonNull;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
  * Canonical application feature, identified by {@link ApplicationFeatureId},
  * and wired together with other application features and cached by {@link ApplicationFeatureRepository}.
  *
- * <p>
- *     Note that this is NOT a view model; instead it can be converted to a string using methods of
- *     {@link ApplicationFeatureRepository}.
- * </p>
+ * <p> Note that this is NOT a view model; instead it can be converted to a string using methods of
+ * {@link ApplicationFeatureRepository}.
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".services.appfeat.ApplicationFeature")
-@Value
+@org.apache.causeway.applib.annotation.Value
 public class ApplicationFeatureDefault
 implements
 ApplicationFeature,
@@ -95,16 +90,16 @@ Comparable<ApplicationFeature> {
     private @NonNull OptionalInt propertyTypicalLength = OptionalInt.empty();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> contents = new TreeSet<>();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> properties = new TreeSet<>();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> collections = new TreeSet<>();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> actions = new TreeSet<>();
 
     // -- PACKAGE PRIVATE ACCESS
 
@@ -117,43 +112,41 @@ Comparable<ApplicationFeature> {
     void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberSort memberSort) {
         _Asserts.assertIsType(this.getFeatureId());
         _Asserts.assertIsMember(memberId);
-
         getMembersOfSort(memberSort).add(memberId);
     }
 
     // -- OBJECT CONTRACT
 
-    private static final Comparator<ApplicationFeature> comparator =
+    private static final Comparator<ApplicationFeature> COMPARATOR =
             Comparator.comparing(ApplicationFeature::getFeatureId);
 
-    private static final Equality<ApplicationFeature> equality =
+    private static final Equality<ApplicationFeature> EQUALITY =
             ObjectContracts.checkEquals(ApplicationFeature::getFeatureId);
 
-    private static final Hashing<ApplicationFeature> hashing =
+    private static final Hashing<ApplicationFeature> HASHING =
             ObjectContracts.hashing(ApplicationFeature::getFeatureId);
 
-    private static final ToString<ApplicationFeature> toString =
+    private static final ToString<ApplicationFeature> TOSTRING =
             ObjectContracts.toString("featureId", ApplicationFeature::getFeatureId);
 
     @Override
     public int compareTo(final ApplicationFeature other) {
-        return comparator.compare(this, other);
+        return COMPARATOR.compare(this, other);
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return equality.equals(this, obj);
+        return EQUALITY.equals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return hashing.hashCode(this);
+        return HASHING.hashCode(this);
     }
 
     @Override
     public String toString() {
-        return toString.toString(this);
+        return TOSTRING.toString(this);
     }
-
 
 }

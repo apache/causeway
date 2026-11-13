@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -27,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class DomainServiceLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -39,31 +37,28 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
-        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
-        val domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
+        var domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        var domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
 
         // either one is enough to treat this as a domain service
-        val isAnyPresent =
+        var isAnyPresent =
                 domainServiceIfAny.isPresent() ||
                 domainServiceLayoutIfAny.isPresent();
 
-        if(!isAnyPresent) {
-            return;
-        }
+        if(!isAnyPresent)
+			return;
 
-        val menuBar = domainServiceLayoutIfAny
+        var menuBar = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::menuBar)
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
 
-        addFacet(
-                new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
+        new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar);
 
-        addFacetIfPresent(
-                ObjectNamedFacetForDomainServiceLayoutAnnotation
-                .create(domainServiceLayoutIfAny, facetHolder));
+        ObjectNamedFacetForDomainServiceLayoutAnnotation
+                .create(domainServiceLayoutIfAny, facetHolder);
     }
 
 }

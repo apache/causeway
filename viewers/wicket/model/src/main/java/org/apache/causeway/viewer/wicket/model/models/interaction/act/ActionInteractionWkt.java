@@ -18,36 +18,35 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.val;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
@@ -74,35 +73,38 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private static final long serialVersionUID = 1L;
 
     private final String memberId;
-    private final Where where;
+    @Getter @Accessors(fluent=true) private final Where where;
 
     /**
      * memoize, so if we only need the meta-model,
      * we don't have to re-attach the entire model (ActionInteraction)
      * <p>
      * nullable in support of lazy evaluation
+     * <p>
+     * make sure we don't memoize non-serializable ObjectAction instances (as introduced via composite value type support)
      */
-    private @Nullable ActionMemento actionMemento;
+    private @Nullable ObjectAction actionMemento;
+    private transient @Nullable ObjectAction objectAction; // might be a proxy (non-serializbale)
 
     private Can<UiParameterWkt> childModels;
-    private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
-    private @Nullable ScalarParameterModel associatedWithParameterIfAny;
-    private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
+    private @Nullable PropertyModel associatedWithPropertyIfAny;
+    private @Nullable ParameterModel associatedWithParameterIfAny;
+    private @Nullable CollectionModel associatedWithCollectionIfAny;
 
     public static ActionInteractionWkt forEntity(
             final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
+            final PropertyModel associatedWithPropertyIfAny,
+            final ParameterModel associatedWithParameterIfAny,
+            final CollectionModel associatedWithCollectionIfAny) {
 
-        val onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
-        val objectAction = onwerSpec.getAction(actionIdentifier.getMemberLogicalName());
+        var onwerSpec = parentEntityModel.getBookmarkedOwner().objSpec();
+        var objectAction = onwerSpec.getAction(actionIdentifier.memberLogicalName());
 
         return new ActionInteractionWkt(
                 parentEntityModel.bookmarkedObjectModel(),
-                actionIdentifier.getMemberLogicalName(),
+                actionIdentifier.memberLogicalName(),
                 where,
                 objectAction,
                 associatedWithPropertyIfAny,
@@ -123,18 +125,24 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
              * then we simply evaluate the {@link ObjectAction} later via {@link #getMetaModel()}.
              */
             final Optional<ObjectAction> objectAction,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
+            final PropertyModel associatedWithPropertyIfAny,
+            final ParameterModel associatedWithParameterIfAny,
+            final CollectionModel associatedWithCollectionIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
-        this.actionMemento = objectAction
-                    .map(ObjectAction::getMemento) // if present, eagerly memoize
-                    .orElse(null);
+        setObjectAction(objectAction.orElse(null));
         this.associatedWithPropertyIfAny = associatedWithPropertyIfAny;
         this.associatedWithParameterIfAny = associatedWithParameterIfAny;
         this.associatedWithCollectionIfAny = associatedWithCollectionIfAny;
+    }
+
+    private void setObjectAction(final ObjectAction objectAction) {
+        this.objectAction = objectAction;
+        this.actionMemento = objectAction!=null
+                && !(objectAction instanceof CompositeValueUpdater)
+            ? objectAction
+            : null;
     }
 
     @Override
@@ -147,16 +155,14 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                     associatedWithParameterIfAny.getParameterNegotiationModel(), paramIndex, memberId, where);
         }
 
-        if(associatedWithCollectionIfAny!=null) {
+        if(associatedWithCollectionIfAny!=null)
             return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
                     associatedWithCollectionIfAny.getDataTableModel());
-        }
 
-        if(associatedWithPropertyIfAny!=null) {
+        if(associatedWithPropertyIfAny!=null)
             // supports composite-value-types via mixin
             return ActionInteraction.startAsBoundToProperty(
                     associatedWithPropertyIfAny.getManagedProperty(), memberId, where);
-        }
 
         return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
     }
@@ -166,31 +172,25 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public final ObjectAction getMetaModel() {
-
         //[CAUSEWAY-3648] In support of the composite value type's 'Xxx_default' mixin.
-        if(actionMemento==null) {
-            val objectAction = actionInteraction().getMetamodel()
-                .orElseThrow(()->_Exceptions
-                        .noSuchElement("could not resolve action by memberId '%s'", memberId));
-            this.actionMemento = objectAction.getMemento();
-            return objectAction;
-        }
-
+        if(objectAction!=null) return objectAction;
+        if(actionMemento!=null) return actionMemento;
+        setObjectAction(actionInteraction()
+                .getObjectActionElseFail());
         // re-attachment fails, if the owner is not found (eg. deleted entity),
         // hence we return the directly memoized meta-model of the underlying action
-        return Objects.requireNonNull(actionMemento.getAction(this::getSpecificationLoader),
-                ()->"framework bug: lost objectAction on model recycling (serialization issue)");
+        return objectAction;
     }
 
-    public Optional<ScalarPropertyModel> associatedWithProperty() {
+    public Optional<PropertyModel> associatedWithProperty() {
         return Optional.ofNullable(associatedWithPropertyIfAny);
     }
 
-    public Optional<ScalarParameterModel> associatedWithParameter() {
+    public Optional<ParameterModel> associatedWithParameter() {
         return Optional.ofNullable(associatedWithParameterIfAny);
     }
 
-    public Optional<EntityCollectionModel> associatedWithCollection() {
+    public Optional<CollectionModel> associatedWithCollection() {
         return Optional.ofNullable(associatedWithCollectionIfAny);
     }
 

@@ -27,7 +27,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 
 class RestfulResponse_HeaderTest_Warning {
 
-
     @Test
     public void nonEmptyString() throws Exception {
         assertThat(RestfulResponse.Header.WARNING.parse("199 RestfulObjects abc"), is("abc"));

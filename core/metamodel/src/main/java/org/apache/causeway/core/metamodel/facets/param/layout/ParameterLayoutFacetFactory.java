@@ -20,14 +20,12 @@ package org.apache.causeway.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class ParameterLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -39,7 +37,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val parameterLayoutIfAny = processParameterContext.synthesizeOnParameter(ParameterLayout.class);
+        var parameterLayoutIfAny = processParameterContext.synthesizeOnParameter(ParameterLayout.class);
         addFacets(processParameterContext, parameterLayoutIfAny);
     }
 
@@ -47,31 +45,25 @@ extends FacetFactoryAbstract {
             final ProcessParameterContext processParameterContext,
             final Optional<ParameterLayout> parameterLayoutIfAny) {
 
-        val facetHolder = processParameterContext.getFacetHolder();
+        var facetHolder = processParameterContext.facetHolder();
 
-        addFacetIfPresent(
-                CssClassFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        CssClassFacetForParameterLayoutAnnotation
+            .create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                ParamDescribedFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        ParamDescribedFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                LabelAtFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        LabelAtFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                MultiLineFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        MultiLineFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                NamedFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        NamedFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(TypicalLengthFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
-
+        TypicalLengthFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
     }
 
 }

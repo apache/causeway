@@ -35,7 +35,6 @@ import org.apache.causeway.schema.metamodel.v2.Property;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
@@ -59,8 +58,8 @@ public class TitleAnnotator implements MetaModelAnnotator {
             final DomainClassDto domainClass, final ObjectSpecification specification) {
         titleAnnotation(domainClass,
                 String.format("%s: %s",
-                        specification.getLogicalTypeName(),
-                        config().abbrev(specification.getCorrespondingClass())));
+                        specification.logicalTypeName(),
+                        config().abbrev(specification.correspondingClass())));
     }
 
     @Override
@@ -69,7 +68,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
         titleAnnotation(actionType,
             String.format("%s(...): %s%s",
                     action.getId(),
-                    config().abbrev(action.getReturnType().getCorrespondingClass()),
+                    config().abbrev(action.getReturnType().correspondingClass()),
                     titleSuffix(action.isMixedIn())));
     }
 
@@ -80,7 +79,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
                 String.format("%s: %s",
                         parameter.getId(),
                         parameter.isSingular()
-                        ? config().abbrev(parameter.getElementType().getCorrespondingClass())
+                        ? config().abbrev(parameter.getElementType().correspondingClass())
                         : renderTypeOf((OneToManyFeature) parameter, config()))
                 );
     }
@@ -91,7 +90,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
         titleAnnotation(propertyType,
                 String.format("%s: %s%s",
                         property.getId(),
-                        config().abbrev(property.getElementType().getCorrespondingClass()),
+                        config().abbrev(property.getElementType().correspondingClass()),
                         titleSuffix(property.isMixedIn())));
     }
 
@@ -108,11 +107,11 @@ public class TitleAnnotator implements MetaModelAnnotator {
     // -- HELPER
 
     private String renderTypeOf(final OneToManyFeature nonScalarFeature, final ExporterConfig exporterConfig) {
-        val toac = nonScalarFeature.getTypeOfAnyCardinality();
-        val containerType = toac.collectionSemantics()
+        var toac = nonScalarFeature.getTypeOfAnyCardinality();
+        var containerType = toac.collectionSemantics()
                 .map(CollectionSemantics::getContainerType)
                 .map(exporterConfig::simpleName).orElse("?");
-        val elementType = exporterConfig.abbrev(toac.elementType());
+        var elementType = exporterConfig.abbrev(toac.elementType());
         return String.format("%s<%s>", containerType, elementType);
     }
 

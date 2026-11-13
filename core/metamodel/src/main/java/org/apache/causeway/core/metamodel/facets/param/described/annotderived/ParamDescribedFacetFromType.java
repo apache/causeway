@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacetAbstract;
 
-import lombok.val;
-
 public class ParamDescribedFacetFromType
 extends ParamDescribedFacetAbstract {
 
@@ -35,7 +33,7 @@ extends ParamDescribedFacetAbstract {
             final ObjectDescribedFacet objectDescribedFacet,
             final FacetHolder holder) {
 
-        val describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
+        var describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
 
         return Optional.ofNullable(describedIfAny)
         .map(described->
@@ -45,7 +43,12 @@ extends ParamDescribedFacetAbstract {
     private ParamDescribedFacetFromType(
             final String described,
             final FacetHolder holder) {
-        super(described, holder, Precedence.INFERRED);
+        super(described, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
 }

@@ -18,26 +18,22 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
-
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -46,40 +42,31 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-public class FakeDataServiceTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+class FakeDataServiceTest {
 
     FakeDataService fakeDataService;
+    RepositoryService mockRepositoryService = Mockito.mock(RepositoryService.class);
+    ClockService mockClockService = Mockito.mock(ClockService.class);
 
-    @Mock
-    RepositoryService mockRepositoryService;
-
-    @Mock
-    ClockService mockClockService;
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         fakeDataService = new FakeDataService(mockClockService, mockRepositoryService);
         fakeDataService.init();
 
-        final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now()); 
-        
-        context.checking(new Expectations() {{
-            allowing(mockClockService).getClock();
-            will(returnValue(virtualClock));
-        }});
+        final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now());
+        Mockito.when(mockClockService.getClock()).thenReturn(virtualClock);
     }
 
     public static class CausewayBlobsTest extends FakeDataServiceTest {
 
         CausewayBlobs causewayBlobs;
 
-        @Before
+        @Override
+        @BeforeEach
         public void setUp() throws Exception {
             super.setUp();
             causewayBlobs = fakeDataService.causewayBlobs();
@@ -91,10 +78,10 @@ public class FakeDataServiceTest {
             final Blob blob = causewayBlobs.any();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).isNotNull();
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType()).isNotNull();
+            assertThat(blob.name()).isNotNull();
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType()).isNotNull();
         }
 
         @Test
@@ -103,12 +90,11 @@ public class FakeDataServiceTest {
             final Blob blob = causewayBlobs.anyJpg();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).endsWith(".jpg");
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType().toString()).isEqualTo("image/jpeg");
+            assertThat(blob.name()).endsWith(".jpg");
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType().toString()).isEqualTo("image/jpeg");
         }
-
 
         @Test
         public void anyPdf() throws Exception {
@@ -116,10 +102,10 @@ public class FakeDataServiceTest {
             final Blob blob = causewayBlobs.anyPdf();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).endsWith(".pdf");
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType().toString()).isEqualTo("application/pdf");
+            assertThat(blob.name()).endsWith(".pdf");
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType().toString()).isEqualTo("application/pdf");
         }
 
     }
@@ -128,7 +114,8 @@ public class FakeDataServiceTest {
 
         CausewayClobs causewayClobs;
 
-        @Before
+        @Override
+        @BeforeEach
         public void setUp() throws Exception {
             super.setUp();
             causewayClobs = fakeDataService.causewayClobs();
@@ -140,10 +127,10 @@ public class FakeDataServiceTest {
             final Clob clob = causewayClobs.any();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).isNotNull();
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType()).isNotNull();
+            assertThat(clob.name()).isNotNull();
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType()).isNotNull();
         }
 
         @Test
@@ -152,12 +139,11 @@ public class FakeDataServiceTest {
             final Clob clob = causewayClobs.anyRtf();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).endsWith(".rtf");
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType().toString()).isEqualTo("application/rtf");
+            assertThat(clob.name()).endsWith(".rtf");
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType().toString()).isEqualTo("application/rtf");
         }
-
 
         @Test
         public void anyXml() throws Exception {
@@ -165,10 +151,10 @@ public class FakeDataServiceTest {
             final Clob clob = causewayClobs.anyXml();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).endsWith(".xml");
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType().toString()).isEqualTo("text/xml");
+            assertThat(clob.name()).endsWith(".xml");
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType().toString()).isEqualTo("text/xml");
         }
 
     }
@@ -207,27 +193,25 @@ public class FakeDataServiceTest {
     @Test
     public void passwords_any() throws Exception {
         final Password pwd = fakeDataService.causewayPasswords().any();
-        assertThat(pwd.getPassword()).isNotNull();
-        assertThat(pwd.getPassword().length()).isEqualTo(12);
+        assertThat(pwd.password()).isNotNull();
+        assertThat(pwd.password().length()).isEqualTo(12);
     }
 
-  //TODO[2249] deprecated    
-//    @Test
-//    public void moneys_any() throws Exception {
-//        final Money pwd = fakeDataService.causewayMoneys().any();
-//        assertThat(pwd.getAmount()).isNotNull();
-//        assertThat(pwd.getCurrency()).isNotNull();
-//    }
-
     @Test
-    public void jodaDateTimes_any() throws Exception {
-        final OffsetDateTime any = fakeDataService.javaTimeDateTimes().any();
+    public void offsetDateTimes_any() throws Exception {
+        final OffsetDateTime any = fakeDataService.offsetDateTimes().any();
         assertThat(any).isNotNull();
     }
 
     @Test
-    public void jodaLocalDates_any() throws Exception {
-        final LocalDate any = fakeDataService.javaTimeLocalDates().any();
+    public void zonedDateTimes_any() throws Exception {
+        final ZonedDateTime any = fakeDataService.zonedDateTimes().any();
+        assertThat(any).isNotNull();
+    }
+
+    @Test
+    public void localDates_any() throws Exception {
+        final LocalDate any = fakeDataService.localDates().any();
         assertThat(any).isNotNull();
     }
 
@@ -261,13 +245,12 @@ public class FakeDataServiceTest {
         assertThat(any).isNotNull();
     }
 
-
     public static class CollectionsTest extends FakeDataServiceTest {
 
         @Test
         public void anyOfObject() throws Exception {
 
-           final Set<Object> seen = _Sets.newHashSet();
+           final Set<Object> seen = new HashSet<>();
            final ArrayList<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), new Object(), new Object()));
 
            for (int i = 0; i < 1000; i++) {
@@ -280,21 +263,15 @@ public class FakeDataServiceTest {
            assertThat(ints).isEmpty();
         }
 
-
         @Test
         public void anyOfObjectExcept() throws Exception {
 
             final Object thisOne = new Object();
-            final Set<Object> seen = _Sets.newHashSet();
+            final Set<Object> seen = new HashSet<>();
             final Collection<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), thisOne, new Object()));
 
             for (int i = 0; i < 1000; i++) {
-                final Object rand = fakeDataService.collections().anyOfExcept(ints, new Predicate<Object>() {
-                    @Override
-                    public boolean test(final Object obj) {
-                        return obj == thisOne;
-                    }
-                });
+                final Object rand = fakeDataService.collections().anyOfExcept(ints, (Predicate<Object>) obj -> obj == thisOne);
                 seen.add(rand);
             }
 
@@ -307,7 +284,7 @@ public class FakeDataServiceTest {
         @Test
         public void anyInt() throws Exception {
 
-           final Set<Integer> seen = _Sets.newHashSet();
+           final Set<Integer> seen = new HashSet<>();
            final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {
@@ -323,16 +300,11 @@ public class FakeDataServiceTest {
         @Test
         public void anyIntExcept() throws Exception {
 
-           final Set<Integer> seen = _Sets.newHashSet();
+           final Set<Integer> seen = new HashSet<>();
            final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {
-               final int rand = fakeDataService.collections().anyOfExcept(ints, new Predicate<Integer>() {
-                   @Override
-                   public boolean test(final Integer integer) {
-                       return integer == 2;
-                   }
-               });
+               final int rand = fakeDataService.collections().anyOfExcept(ints, (Predicate<Integer>) integer -> integer == 2);
                 seen.add(rand);
            }
 

@@ -1,0 +1,96 @@
+= QueryDslSupport
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Factory for attached query expressions, executable directly (using for example _DslQuery#fetch()_ , _DslQuery#fetchOne()_ , _DslQuery#fetchFirst()_ etc).
+
+== API
+
+[source,java]
+.QueryDslSupport.java
+----
+interface QueryDslSupport {
+  DeleteClause<?> delete(EntityPath<?> path)
+  DslQuery<T> select(Expression<T> expr)     // <.>
+  DslQuery<Tuple> select(Expression<?>... exprs)     // <.>
+  DslQuery<T> selectDistinct(Expression<T> expr)     // <.>
+  DslQuery<Tuple> selectDistinct(Expression<?>... exprs)     // <.>
+  DslQuery<Integer> selectZero()     // <.>
+  DslQuery<Integer> selectOne()     // <.>
+  DslQuery<T> selectFrom(EntityPath<T> expr)     // <.>
+  DslQuery<T> from(EntityPath<T> from)
+  DslQuery<T> from(EntityPath<T>... from)
+}
+----
+
+<.> xref:#select_Expression[select(Expression)]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+--
+<.> xref:#select_Expression[select(Expression)]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+--
+<.> xref:#selectDistinct_Expression[selectDistinct(Expression)]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+--
+<.> xref:#selectDistinct_Expression[selectDistinct(Expression)]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+--
+<.> xref:#selectZero_[selectZero()]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the projection 0
+--
+<.> xref:#selectOne_[selectOne()]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the projection 1
+--
+<.> xref:#selectFrom_EntityPath[selectFrom(EntityPath)]
++
+--
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+--
+
+== Members
+
+[#select_Expression]
+=== select(Expression)
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+
+[#select_Expression]
+=== select(Expression)
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+
+[#selectDistinct_Expression]
+=== selectDistinct(Expression)
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+
+[#selectDistinct_Expression]
+=== selectDistinct(Expression)
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection
+
+[#selectZero_]
+=== selectZero()
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the projection 0
+
+[#selectOne_]
+=== selectOne()
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the projection 1
+
+[#selectFrom_EntityPath]
+=== selectFrom(EntityPath)
+
+Create a new xref:refguide:persistence:index/querydsl/applib/query/DslQuery.adoc[DslQuery] instance with the given projection

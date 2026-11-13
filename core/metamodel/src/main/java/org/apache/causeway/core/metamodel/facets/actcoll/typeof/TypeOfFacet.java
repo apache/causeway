@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 /**
  * The type of the collection or the action.
  * <p>
@@ -57,20 +55,20 @@ public interface TypeOfFacet extends Facet {
             final MethodFacade method,
             final int paramIndex,
             final FacetHolder holder) {
-        val type = method.resolveParameter(paramIndex);
+        var type = method.resolveParameter(paramIndex);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
             final MethodFacade method,
             final FacetHolder holder) {
-        val type = method.resolveMethodReturn();
+        var type = method.resolveMethodReturn();
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
     static Optional<TypeOfFacet> inferFromPluralType(
             final CollectionSemantics collectionSemantics, final Class<?> pluralType, final FacetHolder holder) {
-        val type = _GenericResolver.forPluralType(pluralType, collectionSemantics);
+        var type = _GenericResolver.forPluralType(pluralType, collectionSemantics);
         return toInferredFrom(TypeOfFacet::inferredFromType, type, holder);
     }
 

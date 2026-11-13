@@ -1,0 +1,34 @@
+{
+  "data" : {
+    "__type" : {
+      "fields" : [ {
+        "name" : "menuBars",
+        "description" : "The authorized effective menu-bars structural resource.",
+        "type" : {
+          "kind" : "OBJECT",
+          "name" : "rich__gqlv_application_menu_bars",
+          "ofType" : null
+        }
+      }, {
+        "name" : "home",
+        "description" : "The supported configured object home page, when available.",
+        "type" : {
+          "kind" : "OBJECT",
+          "name" : "rich__gqlv_application_home",
+          "ofType" : null
+        }
+      }, {
+        "name" : "issues",
+        "description" : "Bounded non-disclosing application-entry diagnostics.",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "LIST",
+            "name" : null
+          }
+        }
+      } ]
+    }
+  }
+}

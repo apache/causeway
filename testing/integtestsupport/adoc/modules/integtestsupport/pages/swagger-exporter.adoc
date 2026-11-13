@@ -15,8 +15,8 @@ The example below is taken from the xref:docs:starters:simpleapp.adoc[simpleapp]
 ----
 @SpringBootTest(
     classes = {
-        ApplicationIntegTestAbstract.AppManifest.class,             // <1>
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class          // <2>
+        ApplicationIntegTestAbstract.AppManifest.class,             // <.>
+        CausewayModuleViewerRestfulObjectsViewer.class              // <.>
     }
 )
 class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {
@@ -25,17 +25,17 @@ class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {
 
     @Test
     void export() throws IOException {
-        val swaggerExporter = new SwaggerExporter(serviceRegistry); // <3>
+        val swaggerExporter = new SwaggerExporter(serviceRegistry); // <.>
         swaggerExporter.export(
-                            SwaggerService.Visibility.PRIVATE,      // <4>
+                            SwaggerService.Visibility.PRIVATE,      // <.>
                             SwaggerService.Format.JSON);            // <4>
     }
 }
 ----
-<1> bootstrap using the usual `AppManifest` for integration tests ...
-<2> \... and _also_ include the xref:vro:ROOT:about.adoc[Restful Objects] viewer because this contains the implementation of xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService].
-<3> instantiate the `SwaggerExporter` utility class
-<4> Export specifies the required visibility and format.
+<.> bootstrap using the usual `AppManifest` for integration tests ...
+<.> \... and _also_ include the xref:vro:ROOT:about.adoc[Restful Objects] viewer because this contains the implementation of xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService].
+<.> instantiate the `SwaggerExporter` utility class
+<.> Export specifies the required visibility and format.
 
 By default the file will be written to `target/generated-resources/swagger-export`.
 Overloads of the `export(...)` method allow this to be changed as required.

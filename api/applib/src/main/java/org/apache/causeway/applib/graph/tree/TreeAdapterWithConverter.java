@@ -22,24 +22,25 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.IndexedFunction;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
-@RequiredArgsConstructor
-public abstract class TreeAdapterWithConverter<U, T>
+/**
+ * Acts as a TreeAdapter facade by wrapping an underlying {@link TreeAdapter}
+ * and translating the node type back and forth using a {@link TreeConverter}.
+ * @param <U> underlying tree node generic type
+ * @param <T> tree node generic type of this facade
+ */
+record TreeAdapterWithConverter<U, T>(
+        TreeAdapter<U> underlyingAdapter,
+        TreeConverter<U, T> converter)
 implements TreeAdapter<T>{
-
-    protected abstract TreeAdapter<U> underlyingAdapter();
-    protected abstract TreeConverter<U, T> converter();
 
     @Override
     public final int childCountOf(final @Nullable T t) {
         if(t==null) return 0;
-        val underlyingNode = converter().toUnderlyingNode(t);
+        var underlyingNode = converter().toUnderlyingNode(t);
         return underlyingNode!=null
                 ? underlyingAdapter().childCountOf(underlyingNode)
                 : 0;
@@ -48,7 +49,7 @@ implements TreeAdapter<T>{
     @Override
     public final Stream<T> childrenOf(final @Nullable T t) {
         if(t==null) return Stream.empty();
-        val underlyingNode = converter().toUnderlyingNode(t);
+        var underlyingNode = converter().toUnderlyingNode(t);
         return underlyingNode!=null
                 ? underlyingAdapter().childrenOf(underlyingNode)
                         .map(childFactoryForParentNode(t))
@@ -58,7 +59,7 @@ implements TreeAdapter<T>{
     @Override
     public final Optional<T> resolveRelative(final @Nullable T t, final @Nullable TreePath relativePath) {
         if(t==null) return Optional.empty();
-        val underlyingNode = converter().toUnderlyingNode(t);
+        var underlyingNode = converter().toUnderlyingNode(t);
         return underlyingNode!=null
                 ? underlyingAdapter().resolveRelative(underlyingNode, relativePath)
                         .map(childFactoryForParentNode(t))

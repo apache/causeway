@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -50,10 +50,9 @@ import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Data;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.x {@index}
@@ -62,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.testing.fixtures.ModuleWithFixturesService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ModuleWithFixturesService {
 
@@ -97,24 +96,23 @@ public class ModuleWithFixturesService {
     }
 
     public List<ModuleWithFixturesDescriptor> modules() {
-        val beans = springBeansService.beans();
-        val modules = modulesWithin(beans);
+        var modules = modulesWithin(springBeansService.beansByContextId().entrySet());
         return sequenced(modules);
     }
 
-    static List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans) {
+    static List<ModuleWithFixturesDescriptor> modulesWithin(final Iterable<Map.Entry<String, ContextBeans>> beans) {
 
-        val descriptors = new ArrayList<ModuleWithFixturesDescriptor>();
-        for (Map.Entry<String, ContextBeans> contextEntry : beans.entrySet()) {
+        var descriptors = new ArrayList<ModuleWithFixturesDescriptor>();
+        for (Map.Entry<String, ContextBeans> contextEntry : beans) {
             final String contextId = contextEntry.getKey();
             final ContextBeans contextBeans = contextEntry.getValue();
-            final ConfigurableApplicationContext context = contextBeans.getContext();
+            final ConfigurableApplicationContext context = contextBeans.context();
 
             final Map<String, ModuleWithFixtures> modulesByBeanName = context.getBeansOfType(ModuleWithFixtures.class);
             final Map<String, Object> configurationBeansByBeanName = context.getBeansWithAnnotation(Configuration.class);
             final Map<String, Object> beansAnnotatedWithImportByBeanName = context.getBeansWithAnnotation(Import.class);
 
-            for (Map.Entry<String, BeanDescriptor> beanEntry : contextBeans.getBeans().entrySet()) {
+            for (Map.Entry<String, BeanDescriptor> beanEntry : contextBeans.beans().entrySet()) {
                 final String beanName = beanEntry.getKey();
 
                 final ModuleWithFixtures module = modulesByBeanName.get(beanName);
@@ -136,7 +134,7 @@ public class ModuleWithFixturesService {
                             })
                             .orElseGet(Collections::emptyMap);
 
-                    val descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);
+                    var descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);
                     descriptors.add(descriptor);
                 }
             }
@@ -170,12 +168,11 @@ public class ModuleWithFixturesService {
         });
     }
 
-
     static List<ModuleWithFixturesDescriptor> sequenced(final List<ModuleWithFixturesDescriptor> modules) {
-        val remaining = new ArrayList<>(modules);
-        val sequenced = new ArrayList<ModuleWithFixturesDescriptor>();
+        var remaining = new ArrayList<>(modules);
+        var sequenced = new ArrayList<ModuleWithFixturesDescriptor>();
 
-        val moduleByName = new LinkedHashMap<String, ModuleWithFixturesDescriptor>();
+        var moduleByName = new LinkedHashMap<String, ModuleWithFixturesDescriptor>();
         modules.forEach(module -> {
             moduleByName.put(module.getBeanName(), module);
         });
@@ -203,7 +200,7 @@ public class ModuleWithFixturesService {
             final LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName) {
 
         for (ModuleWithFixturesDescriptor module : remaining) {
-            val numDependenciesNotYetEncountered =
+            var numDependenciesNotYetEncountered =
                     module.getDependenciesByName().keySet().stream()
                             .map(moduleByName::get)
                             .filter(dependency -> !result.contains(dependency)) // ignore if already known about
@@ -220,7 +217,7 @@ public class ModuleWithFixturesService {
     public void onContextRefreshed(final ContextRefreshedEvent event) {
         log.info("onContextRefreshed");
         for (final ModuleWithFixturesDescriptor descriptor : modules()) {
-            log.info(descriptor);
+            log.info("%s".formatted(descriptor));
         }
     }
 

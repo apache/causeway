@@ -20,12 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.util.Map;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -43,7 +42,7 @@ public class XrayWkt {
     // -- FORMATTERS
 
     public String formatAsListGroup(final @Nullable Map<String, String> keyValuePairs) {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("<ul class=\"list-group\">");
         if(keyValuePairs!=null) {
             keyValuePairs.forEach((key, value)->{

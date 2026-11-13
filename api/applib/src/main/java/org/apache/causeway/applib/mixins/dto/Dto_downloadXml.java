@@ -32,7 +32,6 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Mixin that provides the ability to download a view model as XML.
@@ -73,7 +72,7 @@ public class Dto_downloadXml {
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
-        val xmlString = jaxbService.toXml(holder);
+        var xmlString = jaxbService.toXml(holder);
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 

@@ -48,5 +48,4 @@ public class DeptHeads {
         return deptHeadRepository.findByName(name);
     }
 
-
 }

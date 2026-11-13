@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.valuetypes.vega.ui.wkt.components.js;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -33,19 +34,23 @@ import lombok.experimental.Accessors;
  * @see "https://vega.github.io/vega-lite/usage/embed.html"
  * @since 2.0
  */
-public class VegaLiteJsReference
-extends JavaScriptResourceReference {
+public class VegaLiteJsReference extends WebjarsJavaScriptResourceReference {
+
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
     private static final VegaLiteJsReference instance =
         new VegaLiteJsReference();
 
-    public static JavaScriptHeaderItem asHeaderItem() {
-        return JavaScriptReferenceHeaderItem.forReference(VegaLiteJsReference.instance());
+    private VegaLiteJsReference() {
+        super(WebJar.VEGA_LITE_JS.resource());
     }
 
-    private VegaLiteJsReference() {
-        super(VegaLiteJsReference.class, "vega-lite@5.9.1.js");
+    /**
+     * @return this resource reference singleton instance as header item
+     */
+    public static HeaderItem asHeaderItem() {
+        return JavaScriptHeaderItem.forReference(instance());
     }
+
 }

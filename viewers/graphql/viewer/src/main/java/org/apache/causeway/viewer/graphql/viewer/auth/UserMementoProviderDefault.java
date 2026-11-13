@@ -33,7 +33,6 @@ import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 import graphql.execution.ExecutionContext;
 import graphql.execution.ExecutionStrategyParameters;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoProviderDefault implements UserMementoProvider {
@@ -50,21 +49,19 @@ public class UserMementoProviderDefault implements UserMementoProvider {
 
     @Inject private final CausewayConfiguration causewayConfiguration;
 
-
     @Override
     public UserMemento userMemento(
             final ExecutionContext executionContext,
             final ExecutionStrategyParameters parameters) {
 
-        val fallbackUsername = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getUsername();
+        var fallbackUsername = causewayConfiguration.viewer().graphql().authentication().fallback().username();
         if (fallbackUsername == null) {
             return null;
         }
 
-        val fallbackRoles = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getRoles();
-        val roles = Can.ofStream(fallbackRoles.stream().map(roleName -> RoleMemento.builder().name(roleName).build()));
-        return UserMemento.builder()
-                .name(fallbackUsername)
+        var fallbackRoles = causewayConfiguration.viewer().graphql().authentication().fallback().roles();
+        var roles = Can.ofStream(fallbackRoles.stream().map(roleName -> RoleMemento.builder().name(roleName).build()));
+        return UserMemento.builder(fallbackUsername)
                 .roles(roles)
                 .build();
 

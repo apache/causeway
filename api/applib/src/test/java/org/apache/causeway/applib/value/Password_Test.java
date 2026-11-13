@@ -25,9 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-
-import lombok.val;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 
 class Password_Test {
 
@@ -47,7 +45,7 @@ class Password_Test {
         @Test
         void given_empty() {
             // given
-            val password = new Password("");
+            var password = new Password("");
 
             // when, then
             assertTrue(password.checkPassword(""));
@@ -58,7 +56,7 @@ class Password_Test {
         public void given_null() {
 
             // given
-            val password = new Password(null);
+            var password = new Password(null);
 
             // when, then
             assertFalse(password.checkPassword(""));

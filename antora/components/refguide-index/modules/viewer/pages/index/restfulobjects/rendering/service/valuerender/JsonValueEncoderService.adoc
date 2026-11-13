@@ -20,17 +20,17 @@ interface JsonValueEncoderService {
 <.> xref:#asAdapter_ObjectSpecification_JsonRepresentation_JsonValueConverter_Context[asAdapter(ObjectSpecification, JsonRepresentation, JsonValueConverter_Context)]
 +
 --
-The value recovered from xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] as xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] honoring _Context_ , otherwise `null` .
+The value recovered from xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] as xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] honoring _JsonValueConverter.Context_ , otherwise `null` .
 --
 <.> xref:#appendValueAndFormat_ManagedObject_JsonRepresentation_JsonValueConverter_Context[appendValueAndFormat(ManagedObject, JsonRepresentation, JsonValueConverter_Context)]
 +
 --
-Appends given value type representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] to given xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] honoring _Context_ .
+Appends given value type representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] to given xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] honoring _JsonValueConverter.Context_ .
 --
 <.> xref:#asObject_ManagedObject_JsonValueConverter_Context[asObject(ManagedObject, JsonValueConverter_Context)]
 +
 --
-A _JsonNode_ or otherwise natively supported simple type from given xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] , honoring _Context_ .
+A _JsonNode_ or otherwise natively supported simple type from given xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] , honoring _JsonValueConverter.Context_ .
 --
 
 == Members
@@ -38,14 +38,14 @@ A _JsonNode_ or otherwise natively supported simple type from given xref:refguid
 [#asAdapter_ObjectSpecification_JsonRepresentation_JsonValueConverter_Context]
 === asAdapter(ObjectSpecification, JsonRepresentation, JsonValueConverter_Context)
 
-The value recovered from xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] as xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] honoring _Context_ , otherwise `null` .
+The value recovered from xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] as xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] honoring _JsonValueConverter.Context_ , otherwise `null` .
 
 [#appendValueAndFormat_ManagedObject_JsonRepresentation_JsonValueConverter_Context]
 === appendValueAndFormat(ManagedObject, JsonRepresentation, JsonValueConverter_Context)
 
-Appends given value type representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] to given xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] honoring _Context_ .
+Appends given value type representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] to given xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] honoring _JsonValueConverter.Context_ .
 
 [#asObject_ManagedObject_JsonValueConverter_Context]
 === asObject(ManagedObject, JsonValueConverter_Context)
 
-A _JsonNode_ or otherwise natively supported simple type from given xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] , honoring _Context_ .
+A _JsonNode_ or otherwise natively supported simple type from given xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] , honoring _JsonValueConverter.Context_ .

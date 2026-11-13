@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.val;
-
 
 /**
  * Describes what to include in the export from
@@ -45,7 +44,7 @@ public class Config {
     private final boolean includeTitleAnnotations;
 
     @Builder.Default
-    private final Set<String> namespacePrefixes = _Sets.newHashSet();
+    private final Set<String> namespacePrefixes = new HashSet<>();
 
     public boolean isNamespacePrefixAny() {
         return namespacePrefixes.isEmpty()
@@ -56,7 +55,7 @@ public class Config {
      * Returns a copy of this config with given namespace added.
      */
     public Config withNamespacePrefix(final String namespace) {
-        val newConfig = asBuilder().build();
+        var newConfig = asBuilder().build();
         newConfig.namespacePrefixes.add(namespace);
         return newConfig;
     }
@@ -72,6 +71,5 @@ public class Config {
                 .includeTitleAnnotations(includeTitleAnnotations)
                 .namespacePrefixes(_Sets.newHashSet(namespacePrefixes));
     }
-
 
 }

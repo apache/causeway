@@ -18,47 +18,37 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.springframework.util.ClassUtils;
+import java.util.Objects;
 
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import lombok.experimental.Accessors;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
+	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull Class<? extends Facet> facetType;
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
-
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull FacetHolder facetHolder;
-
-    public FacetAbstract(
-            final Class<? extends Facet> facetType,
-            final FacetHolder facetHolder,
-            final Facet.Precedence precedence) {
-
-        this.facetType = facetType;
-        this.facetHolder = facetHolder;
-        this.precedence = precedence;
-    }
 
     protected FacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder facetHolder) {
-        this(facetType, facetHolder, Facet.Precedence.DEFAULT);
+        this.facetType = Objects.requireNonNull(facetType);
+        this.facetHolder = Objects.requireNonNull(facetHolder);
+        prebind(facetHolder);
+        // binding by contract
+        _BindUtil.resolveInternalElseFail(facetHolder)
+    			.addFacet(this);
     }
 
     @Override
-    public final Class<? extends Facet> facetType() {
-        return facetType;
+    public Precedence precedence() {
+    	return Precedence.DEFAULT;
     }
 
     @Override
@@ -66,42 +56,16 @@ implements Facet, HasMetaModelContext {
         return FacetUtil.toString(this);
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
-
-        val interactionAdvisors = interactionAdvisors(", ");
-
-        // suppress 'advisors' if none
-        if(!interactionAdvisors.isEmpty()) {
-            visitor.accept("interactionAdvisors", interactionAdvisors);
-        }
-    }
+    // -- HELPER
 
     /**
-     * Marker interface used within {@link #toString()}.
+     * Some {@link Facet}(s) may need certain adjustments to the {@link FacetHolder} which they are about to be added to.
+     * This method is called before binding this {@link Facet} to its holder. It is called inside the {@link Facet}'s constructor.
      */
-    public static interface HidingOrShowing {
-    }
-
-    /**
-     * Marker interface used within {@link #toString()}.
-     */
-    public static interface DisablingOrEnabling {
-    }
-
-    /**
-     * Marker interface used within {@link #toString()}.
-     */
-    public static interface Validating {
-    }
-
-    private String interactionAdvisors(final String delimiter) {
-        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
-        .filter(marker->marker.isAssignableFrom(getClass()))
-        .map(Class::getSimpleName)
-        .collect(Collectors.joining(delimiter));
+    private final void prebind(final FacetHolder facetHolder) {
+    	if(this instanceof ReloadableFacet reloadableFacet) {
+    		reloadableFacet.onPrebind(facetHolder); // dynamic update support
+    	}
     }
 
 }

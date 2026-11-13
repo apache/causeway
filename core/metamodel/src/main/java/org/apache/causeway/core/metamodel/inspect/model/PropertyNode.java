@@ -18,54 +18,31 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Member;
+import lombok.RequiredArgsConstructor;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
+@RequiredArgsConstructor
+final class PropertyNode extends MemberNode {
 
-@Named(PropertyNode.LOGICAL_TYPE_NAME)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED)
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class PropertyNode extends MemberNode {
-
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PropertyNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private org.apache.causeway.schema.metamodel.v2.Property property;
+    private final OneToOneAssociation property;
 
     @Override
-    public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->
-            String.format("%s: %s%s",
-                    property.getId(),
-                    ""+property.getType(),
-                    titleSuffix()));
-        return title;
+    public String title() {
+        return property.getId();
     }
 
     @Override
-    protected Member member() {
+    public void putDetails(Details details) {
+        details.put("Id", property.getId());
+        details.put("Friendly Name", property.getCanonicalFriendlyName());
+        details.put("Mixed In", "" + isMixedIn());
+        details.put("Element Type", property.getElementType().logicalTypeName());
+    }
+    
+    @Override
+    protected ObjectMember member() {
         return property;
     }
 

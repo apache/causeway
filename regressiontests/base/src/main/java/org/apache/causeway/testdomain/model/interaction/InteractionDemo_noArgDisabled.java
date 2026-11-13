@@ -38,5 +38,4 @@ public class InteractionDemo_noArgDisabled {
         return "Disabled for demonstration.";
     }
 
-
 }

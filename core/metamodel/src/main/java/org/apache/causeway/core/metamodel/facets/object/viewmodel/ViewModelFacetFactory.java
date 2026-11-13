@@ -18,29 +18,52 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
-import jakarta.inject.Inject;
+import java.util.Objects;
 
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class ViewModelFacetFactory
 extends FacetFactoryAbstract
 implements
     MetaModelRefiner {
 
-    @Inject
+    // self-managed injection point resolving via constructor ..
+    @Inject HmacAuthority hmacAuthority;
+    @Inject UrlEncodingService urlCodec;
+    @Inject JaxbService jaxbService;
+    @Inject ValueCodec valueCodec;
+
+    private final HmacUrlCodec hmacUrlCodec;
+    private final MementoHmacContext mementoHmacContext;
+
     public ViewModelFacetFactory(
             final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
+
+        mmc.getServiceInjector().injectServicesInto(this);
+        Objects.requireNonNull(hmacAuthority);
+        Objects.requireNonNull(urlCodec);
+
+        Objects.requireNonNull(jaxbService);
+        Objects.requireNonNull(valueCodec);
+
+        this.hmacUrlCodec = new HmacUrlCodec(hmacAuthority, urlCodec);
+        this.mementoHmacContext = new MementoHmacContext(hmacUrlCodec, valueCodec);
     }
 
     /**
@@ -52,32 +75,26 @@ implements
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val facetHolder = processClassContext.getFacetHolder();
-        val type = processClassContext.getCls();
+        var facetHolder = processClassContext.facetHolder();
+        var type = processClassContext.cls();
 
         // XmlRootElement annotation (with default precedence)
-        val hasXmlRootElementAnnotation = _ClassCache.getInstance().hasJaxbRootElementSemantics(type);
-        FacetUtil
-        .addFacetIfPresent(
-                ViewModelFacetForXmlRootElementAnnotation
-                .create(hasXmlRootElementAnnotation, facetHolder));
+        var hasXmlRootElementAnnotation = _ClassCache.getInstance().head(type).hasJaxbRootElementSemantics();
 
-        // (with high precedence)
-        FacetUtil
-        .addFacetIfPresent(
-            // either ViewModel interface (highest precedence)
-            ViewModelFacetForViewModelInterface.create(type, facetHolder)
-            // or Serializable interface (if any)
-            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder))
-            // or else Java record (if any)
-            .or(()->ViewModelFacetForJavaRecord.create(type, facetHolder))
-        );
+        ViewModelFacetForXmlRootElementAnnotation
+                .create(hasXmlRootElementAnnotation, hmacUrlCodec, jaxbService, facetHolder);
+
+        // either ViewModel interface (highest precedence)
+        ViewModelFacetForViewModelInterface.create(type, hmacUrlCodec, facetHolder)
+        // or Serializable interface (if any)
+        .or(()->ViewModelFacetForSerializableInterface.create(type, hmacUrlCodec, facetHolder))
+        // or else Java record (if any)
+        .or(()->ViewModelFacetForJavaRecord.create(type, mementoHmacContext, facetHolder));
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }
 
-
-    // //////////////////////////////////////
+    // --
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
@@ -86,12 +103,12 @@ implements
 
             // ensure concrete viewmodel types have a ViewModelFacet
             if(!objectSpec.isAbstract()
-                    && objectSpec.getBeanSort().isViewModel()
+                    && objectSpec.beanSort().isViewModel()
                     && !objectSpec.viewmodelFacet().isPresent()) {
                 ValidationFailure.raiseFormatted(objectSpec,
                         ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
                             .builder()
-                            .addVariable("type", objectSpec.getCorrespondingClass().getName())
+                            .addVariable("type", objectSpec.correspondingClass().getName())
                             .buildMessage());
             }
 
@@ -103,7 +120,7 @@ implements
                     ValidationFailure.raiseFormatted(objectSpec,
                             ProgrammingModelConstants.MessageTemplate.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
                                 .builder()
-                                .addVariable("type", objectSpec.getFullIdentifier())
+                                .addVariable("type", objectSpec.fullIdentifier())
                                 .addVariable("facetA", a.getClass().getSimpleName())
                                 .addVariable("facetB", b.getClass().getSimpleName())
                                 .buildMessage());

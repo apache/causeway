@@ -1,0 +1,12 @@
+{
+  "errors" : [ {
+    "message" : "Validation error (WrongType@[rich/university_calc_Calculator/echoUnmappedValue/invoke]) : argument 'value' with value 'StringValue{value='unsupported'}' is not a valid 'UnsupportedValue' - This Causeway value has no reversible GraphQL input strategy; register a ScalarMarshaller or TypeMapper",
+    "locations" : [ {
+      "column" : 16,
+      "line" : 5
+    } ],
+    "extensions" : {
+      "classification" : "ValidationError"
+    }
+  } ]
+}

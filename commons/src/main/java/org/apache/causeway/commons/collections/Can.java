@@ -25,7 +25,9 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -34,6 +36,7 @@ import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
@@ -41,13 +44,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  *
@@ -80,14 +80,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     Optional<T> get(int elementIndex);
 
     /**
-     * Shortcut for {@code get(this.size() - 1 - (-offset))} 
+     * Shortcut for {@code get(this.size() - 1 - (-offset))}
      * @param offset - expected zero or negative (zero returning the last element)
      * @see #get(int)
      */
-    default Optional<T> getRelativeToLast(int offset) {
+    default Optional<T> getRelativeToLast(final int offset) {
         return get(size() - 1 + offset);
     }
-    
+
     /**
      * Shortcut to {@code get(elementIndex).orElseThrow(...)}
      * <p>
@@ -102,9 +102,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));
     }
-    
+
     /**
-     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))} 
+     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))}
      * @param offset - expected zero or negative (zero returning the last element)
      * @see #getElseFail(int)
      */
@@ -165,10 +165,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofNullable(final @Nullable T element) {
-        if(element==null) {
-            return empty();
-        }
-        return Can_Singleton.of(element);
+        if(element==null)
+			return empty();
+        return new Can_Singleton<>(element);
     }
 
     /**
@@ -180,7 +179,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @throws NullPointerException if {@code element} is {@code null}
      */
     public static <T> Can<T> ofSingleton(final @NonNull T element) {
-        return Can_Singleton.of(element);
+        return new Can_Singleton<>(element);
     }
 
     /**
@@ -212,18 +211,15 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofArray(final @Nullable T[] array) {
-        if(_NullSafe.size(array)==0) {
-            return empty();
-        }
+        if(_NullSafe.size(array)==0)
+			return empty();
 
-        val nonNullElements = Stream.of(array)
-                .filter(_NullSafe::isPresent)
+        var nonNullElements = Stream.of(array)
+                .filter(Objects::nonNull)
                 .collect(_CanFactory.toListWithSizeUpperBound(array.length));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
-
-
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code collection}
@@ -238,14 +234,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofCollection(final @Nullable Collection<T> collection) {
 
-        val inputSize = _NullSafe.size(collection);
+        var inputSize = _NullSafe.size(collection);
 
-        if(inputSize==0) {
-            return empty();
-        }
+        if(inputSize==0)
+			return empty();
 
-        val nonNullElements = collection.stream()
-                .filter(_NullSafe::isPresent)
+        var nonNullElements = collection.stream()
+                .filter(Objects::nonNull)
                 .collect(_CanFactory.toListWithSizeUpperBound(inputSize));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
@@ -264,15 +259,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofIterable(final @Nullable Iterable<T> iterable) {
 
-        if(iterable==null) {
-            return empty();
-        }
+        if(iterable==null)
+			return empty();
         // Can implements Iterable, hence there is a potential shortcut, assuming un-modifaiablitity.
-        if(iterable instanceof Can) {
-            return (Can<T>)iterable;
-        }
+        if(iterable instanceof Can)
+			return (Can<T>)iterable;
 
-        val nonNullElements = new ArrayList<T>();
+        var nonNullElements = new ArrayList<T>();
         iterable.forEach(element->{
             if(element!=null) {
                 nonNullElements.add(element);
@@ -298,13 +291,12 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofEnumeration(final @Nullable Enumeration<T> enumeration) {
 
-        if(enumeration==null) {
-            return empty();
-        }
+        if(enumeration==null)
+			return empty();
 
-        val nonNullElements = new ArrayList<T>();
+        var nonNullElements = new ArrayList<T>();
         while(enumeration.hasMoreElements()) {
-            val element = enumeration.nextElement();
+            var element = enumeration.nextElement();
             if(element!=null) {
                 nonNullElements.add(element);
             }
@@ -328,13 +320,12 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofStream(final @Nullable Stream<T> stream) {
 
-        if(stream==null) {
-            return empty();
-        }
+        if(stream==null)
+			return empty();
 
-        val nonNullElements = stream
-                .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(()->new ArrayList<>()));
+        var nonNullElements = stream
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
@@ -354,7 +345,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 //        if(instance.isResolvable()) {
 //            return Can_Singleton.of(instance.get());
 //        }
-//        val nonNullElements = instance.stream()
+//        var nonNullElements = instance.stream()
 //                .collect(Collectors.toCollection(()->new ArrayList<>()));
 //
 //        return Can_Multiple.of(nonNullElements);
@@ -415,14 +406,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     default <R> Can<R> map(final @NonNull Function<? super T, R> mapper) {
 
-        if(isEmpty()) {
-            return empty();
-        }
+        if(isEmpty())
+			return empty();
 
-        val nonNullMappedElements =
+        var nonNullMappedElements =
                 stream()
                 .map(mapper)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .collect(_CanFactory.toListWithSizeUpperBound(size()));
 
         return _CanFactory.ofNonNullElements(nonNullMappedElements);
@@ -430,14 +420,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     default <R> Can<R> flatMap(final @NonNull Function<? super T, ? extends Can<? extends R>> mapper) {
 
-        if(isEmpty()) {
-            return empty();
-        }
+        if(isEmpty())
+			return empty();
 
         return
                 stream()
                 .map(mapper)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .flatMap(Can::stream)
                 .collect(Can.toCan());
     }
@@ -465,17 +454,15 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> concat(final @Nullable Can<T> can, final @Nullable T element) {
-        if(can==null || can.isEmpty()) {
-            return ofNullable(element);
-        }
-        if(element==null) {
-            return can;
-        }
+        if(can==null || can.isEmpty())
+			return ofNullable(element);
+        if(element==null)
+			return can;
         // at this point: can is not empty and variant is not null
-        val newSize = can.size() + 1;
-        val union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
+        var newSize = can.size() + 1;
+        var union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
         union.add(element);
-        return Can_Multiple.of(union);
+        return new Can_Multiple<>(union);
     }
 
     // -- TRAVERSAL
@@ -494,7 +481,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     void forEach(@NonNull Consumer<? super T> action);
 
     /**
-     * Similar to {@link #forEach(Consumer)}, but zipps in {@code zippedIn} to iterate through
+     * Similar to {@link #forEach(Consumer)}, but zips in {@code zippedIn} to iterate through
      * its elements and passes them over as the second argument to the {@code action}.
      * @param <R>
      * @param zippedIn must have at least as much elements as this {@code Can}
@@ -504,15 +491,29 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action);
 
     /**
-     * Similar to {@link #map(Function)}, but zipps in {@code zippedIn} to iterate through
+     * Similar to {@link #map(Function)}, but zips in {@code zippedIn} to iterate through
      * its elements and passes them over as the second argument to the {@code mapper}.
      * @param <R>
      * @param <Z>
      * @param zippedIn must have at least as much elements as this {@code Can}
      * @param mapper
      * @throws NoSuchElementException if {@code zippedIn} overflows
+     * @see {@link #zipStream(Iterable, BiFunction)}
      */
     <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper);
+
+    /**
+     * Semantically equivalent to {@link #zipMap(Iterable, BiFunction)}.stream().
+     * <p> (Actual implementations might be optimized.)
+     * @apiNote the resulting Stream will not contain {@code null} elements
+     * @param <R>
+     * @param <Z>
+     * @param zippedIn must have at least as much elements as this {@code Can}
+     * @param mapper
+     * @throws NoSuchElementException if {@code zippedIn} overflows
+     * @see {@link #zipMap(Iterable, BiFunction)}
+     */
+    <R, Z> Stream<R> zipStream(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper);
 
     // -- MANIPULATION
 
@@ -524,9 +525,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return same or new instance
      */
     default Can<T> addUnique(final @Nullable T element) {
-        if(contains(element)) {
-            return this;
-        }
+        if(contains(element))
+			return this;
         return add(element);
     }
 
@@ -667,6 +667,18 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     int indexOf(@Nullable T element);
 
+    // -- MATCH
+
+    /**
+     * Returns whether any elements of this {@link Can} match the provided
+     * predicate.
+     */
+    boolean anyMatch(final Predicate<? super T> predicate);
+    /**
+     * Returns whether all elements of this stream match the provided predicate.
+     */
+    boolean allMatch(final Predicate<? super T> predicate);
+
     // -- EQUALITY
 
     /**
@@ -674,20 +686,17 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return whether this is element-wise equal to {@code other}
      */
     default boolean isEqualTo(final @Nullable Can<?> other) {
-        if(other==null) {
-            return false;
-        }
-        if(this.size()!=other.size()) {
-            return false;
-        }
+        if(other==null)
+			return false;
+        if(this.size()!=other.size())
+			return false;
 
-        val otherIterator = other.iterator();
+        var otherIterator = other.iterator();
 
         for(T element: this) {
-            val otherElement = otherIterator.next();
-            if(!element.equals(otherElement)) {
-                return false;
-            }
+            var otherElement = otherIterator.next();
+            if(!element.equals(otherElement))
+				return false;
         }
 
         return true;
@@ -703,23 +712,20 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     default boolean startsWith(final @Nullable Can<?> other) {
         if(other==null
-                || other.isEmpty()) {
-            return true;
-        }
-        if(this.size()<other.size()) {
-            return false;
-        }
+                || other.isEmpty())
+			return true;
+        if(this.size()<other.size())
+			return false;
 
-        val thisIterator = this.iterator();
-        val otherIterator = other.iterator();
+        var thisIterator = this.iterator();
+        var otherIterator = other.iterator();
 
         while(otherIterator.hasNext()) {
-            val otherElement = otherIterator.next();
-            val thisElement  = thisIterator.next();
+            var otherElement = otherIterator.next();
+            var thisElement  = thisIterator.next();
 
-            if(!thisElement.equals(otherElement)) {
-                return false;
-            }
+            if(!thisElement.equals(otherElement))
+				return false;
         }
         return true;
     }
@@ -732,23 +738,20 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     default boolean endsWith(final @Nullable Can<?> other) {
         if(other==null
-                || other.isEmpty()) {
-            return true;
-        }
-        if(this.size()<other.size()) {
-            return false;
-        }
+                || other.isEmpty())
+			return true;
+        if(this.size()<other.size())
+			return false;
 
-        val thisIterator = this.reverseIterator();
-        val otherIterator = other.reverseIterator();
+        var thisIterator = this.reverseIterator();
+        var otherIterator = other.reverseIterator();
 
         while(otherIterator.hasNext()) {
-            val otherElement = otherIterator.next();
-            val thisElement  = thisIterator.next();
+            var otherElement = otherIterator.next();
+            var thisElement  = thisIterator.next();
 
-            if(!thisElement.equals(otherElement)) {
-                return false;
-            }
+            if(!thisElement.equals(otherElement))
+				return false;
         }
         return true;
     }
@@ -776,7 +779,6 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     public static <T>
     Collector<T, ?, Can<T>> toCan() {
-
         return Collectors.collectingAndThen(
                 Collectors.toList(),
                 Can::ofCollection);
@@ -785,35 +787,24 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     // -- CONVERSIONS
 
     /**
-     * @return a serializable and immutable {@link List}, containing the elements of this Can
+     * @return a serializable and unmodifiable {@link List}, containing the elements of this Can
      */
     List<T> toList();
 
     /**
-     * @return a (serializable and mutable) {@link ArrayList}, containing the elements of this Can
+     * @return a (serializable and modifiable) {@link ArrayList}, containing the elements of this Can
      */
     List<T> toArrayList();
 
     /**
-     * @return a serializable and immutable {@link Set}, containing the elements of this Can
+     * @return a serializable and unmodifiable {@link Set}, containing the elements of this Can
      */
     Set<T> toSet();
 
     /**
-     * @return a serializable and immutable {@link Set}, containing the elements of this Can
+     * @return a serializable and unmodifiable {@link Set}, containing the elements of this Can
      */
     Set<T> toSet(@NonNull Consumer<T> onDuplicated);
-
-//XXX to implement when needed
-//    Set<T> toSortedSet();
-//    Set<T> toSortedSet(Comparator<T> comparator);
-
-    /**
-     * @param <C>
-     * @param collectionFactory
-     * @return a collection, containing the elements of this Can
-     */
-    <C extends Collection<T>> C toCollection(Supplier<C> collectionFactory);
 
     /**
      * @param a the array into which the elements of this Can are to
@@ -825,11 +816,121 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         return toList().toArray(a);
     }
 
+    T[] toArray(final IntFunction<T[]> generator);
+
     /**
      * @param elementType the {@code Class} object representing the component
      *          type of the new array
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
+    // -- TO MAP
+
+    /**
+     * Returns a {@link Map} with values from this {@link Can},
+     * and keys as produced by given {@code keyExtractor}.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
+     * <p>
+     * On duplicate keys, behavior is unspecified.
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     */
+    <K> Map<K, T> toMap(
+            @NonNull Function<? super T, ? extends K> keyExtractor);
+
+    /**
+     * Returns a {@link Map} with values from this {@link Can},
+     * and keys as produced by given {@code keyExtractor}.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     * @param mergeFunction a merge function, used to resolve collisions between
+     *                      values associated with the same key, as supplied
+     *                      to {@link Map#merge(Object, Object, BiFunction)}
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *                   into which the results will be inserted
+     */
+    <K, M extends Map<K, T>> Map<K, T> toMap(
+            @NonNull Function<? super T, ? extends K> keyExtractor,
+            @NonNull BinaryOperator<T> mergeFunction,
+            @NonNull Supplier<M> mapFactory);
+
+    // -- COLLECT
+
+    /**
+     * Semantically equivalent to {@link #stream()}
+     * .{@link Stream#collect(Collector) collect(collector)}.
+     * <p>
+     * (Actual implementations might be optimized.)
+     * <p>
+     * Whether the result is protected from modification,
+     * is up to given {@link Collector}.
+     * @param <R>
+     * @param <A>
+     * @param collector
+     */
+    <R, A> R collect(@NonNull Collector<? super T, A, R> collector);
+
+    // -- GROUP BY
+
+    /**
+     * Groups elements of this {@link Can} into a multi-valued {@link Map},
+     * according to given classification function.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
+     */
+    <K> Map<K, Can<T>> groupBy(
+            @NonNull Function<? super T, ? extends K> classifier);
+
+    /**
+     * Groups elements of this {@link Can} into a multi-valued {@link Map},
+     * according to given classification function.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *      into which the results will be inserted
+     */
+    <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
+            @NonNull Function<? super T, ? extends K> classifier,
+            @NonNull Supplier<M> mapFactory);
+
+    // -- JOIN AS STRING
+
+    /**
+     * Semantically equivalent to {@link #map(Function) map(Object::toString)}
+     * <br>{@code .collect(Collectors.joining(delimiter));}
+     * <p>(Actual implementations might be optimized.)
+     * @param delimiter
+     * @apiNote the corner case,
+     *      when the {@code Object::toString} function returns {@code null} for some elements,
+     *      results in those elements simply being ignored by the join
+     */
+    String join(@NonNull String delimiter);
+
+    /**
+     * Semantically equivalent to {@link #map(Function) map(toStringFunction)}
+     * <br>{@code .collect(Collectors.joining(delimiter));}
+     * <p>(Actual implementations might be optimized.)
+     * @param toStringFunction
+     * @param delimiter
+     * @apiNote the corner case,
+     *      when given {@code toStringFunction} function returns {@code null} for some elements,
+     *      results in those elements simply being ignored by the join
+     */
+    String join(@NonNull Function<? super T, String> toStringFunction, @NonNull String delimiter);
+
+    // -- GROUP BY, HISTOGRAM, MIN, MAX
+
+//    <G> Map<G, Can<T>> groupBy(@NonNull Function<? super T, G> toGroupFunction);
+//    <G> SortedMap<G, Can<T>> groupBy(@NonNull Function<? super T, G> toGroupFunction, @NonNull Comparator<G> groupComparator);
+//
+//
+//    <O extends Comparable<O>> Can<T> min(@NonNull Function<? super T, O> toOrdinalFunction);
+//    <O> Can<T> min(@NonNull Function<? super T, O> toOrdinalFunction, @NonNull Comparator<O> ordinalComparator);
 
 }

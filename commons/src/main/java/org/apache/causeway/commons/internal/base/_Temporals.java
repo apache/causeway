@@ -37,12 +37,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -164,7 +163,6 @@ public final class _Temporals {
     private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_PARSER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" + FRACTIONAL_SECONDS_READ_PATTERN + "[ VV]");
 
-
     /**
      * Returns a {@link String} representing given temporal suitable for the data-store.
      */
@@ -266,7 +264,7 @@ public final class _Temporals {
     public Can<ZonedDateTime> sampleZonedDateTime() {
         // don't depend on current TimeZone.getDefault(),
         // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
-        val localNow = LocalDateTime.now();
+        var localNow = LocalDateTime.now();
         return Can.of(
                 ZonedDateTime.of(localNow, ZoneId.of("Europe/Paris")),
                 ZonedDateTime.of(localNow, ZoneOffset.UTC),
@@ -278,7 +276,7 @@ public final class _Temporals {
     public Can<OffsetTime> sampleOffsetTime() {
         // don't depend on current TimeZone.getDefault(),
         // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
-        val localNow = LocalTime.now();
+        var localNow = LocalTime.now();
         return Can.of(
                 OffsetTime.of(localNow, ZoneOffset.UTC),
                 OffsetTime.of(localNow, ZoneOffset.ofHours(2)),
@@ -288,7 +286,7 @@ public final class _Temporals {
     public Can<OffsetDateTime> sampleOffsetDateTime() {
         // don't depend on current TimeZone.getDefault(),
         // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
-        val localNow = LocalDateTime.now();
+        var localNow = LocalDateTime.now();
         return Can.of(
                 OffsetDateTime.of(localNow, ZoneOffset.UTC),
                 OffsetDateTime.of(localNow, ZoneOffset.ofHours(2)),

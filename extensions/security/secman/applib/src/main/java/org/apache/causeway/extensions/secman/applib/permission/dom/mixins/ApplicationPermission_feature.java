@@ -67,5 +67,4 @@ public class ApplicationPermission_feature {
         return ApplicationFeatureId.newFeature(permission.getFeatureSort(), permission.getFeatureFqn());
     }
 
-
 }

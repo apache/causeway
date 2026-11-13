@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Simply a tuple of {event-type, {@link EventTypeOrigin}, post-able-flag}.
@@ -86,6 +86,5 @@ public interface DomainEventHolder<T> {
         private final @NonNull EventTypeOrigin eventTypeOrigin;
         private boolean postable;
     }
-
 
 }

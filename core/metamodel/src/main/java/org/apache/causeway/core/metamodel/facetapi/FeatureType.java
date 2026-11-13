@@ -19,6 +19,8 @@
 package org.apache.causeway.core.metamodel.facetapi;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -48,14 +50,14 @@ public enum FeatureType {
         @Override
         public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
             return Identifier.propertyIdentifier(typeIdentifier,
-                    AccessorSemantics.associationIdentifierFor(method.asMethodElseFail())); // expected regular
+                    AccessorSemantics.associationIdentifierFor(method.asMethodElseFail(), Property.class)); // expected regular
         }
     },
     COLLECTION("Collection") {
         @Override
         public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
             return Identifier.collectionIdentifier(typeIdentifier,
-                    AccessorSemantics.associationIdentifierFor(method.asMethodElseFail())); // expected regular
+                    AccessorSemantics.associationIdentifierFor(method.asMethodElseFail(), Collection.class)); // expected regular
         }
     },
     ACTION("Action") {

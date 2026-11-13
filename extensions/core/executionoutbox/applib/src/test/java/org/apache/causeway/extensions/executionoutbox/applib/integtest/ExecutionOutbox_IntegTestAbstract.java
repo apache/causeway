@@ -18,24 +18,18 @@
  */
 package org.apache.causeway.extensions.executionoutbox.applib.integtest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import jakarta.inject.Inject;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -50,11 +44,13 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrationTestAbstract {
-
 
     @BeforeAll
     static void beforeAll() {
@@ -64,7 +60,8 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     Counter counter1;
     Counter counter2;
 
-    @BeforeEach
+    @SuppressWarnings("unchecked")
+	@BeforeEach
     void beforeEach() {
         counterRepository.removeAll();
         executionOutboxEntryRepository.removeAll();
@@ -81,7 +78,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     }
 
     protected abstract Counter newCounter(String name);
-
 
     @Test
     void invoke_mixin() {
@@ -173,8 +169,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         assertThat(all).isEmpty();
     }
 
-
-
     @Test
     void edit() {
 
@@ -219,7 +213,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         assertThat(all).isEmpty();
     }
 
-
     @Test
     void roundtrip_EOE_bookmarks() {
 
@@ -239,7 +232,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         // then
         assertThat(eleBookmarkIfAny).isPresent();
         Bookmark eleBookmark = eleBookmarkIfAny.get();
-        String identifier = eleBookmark.getIdentifier();
+        String identifier = eleBookmark.identifier();
         UUID.fromString(identifier.substring(0, identifier.indexOf("_"))); // should not fail, ie check the format is as we expect
         Integer.parseInt(identifier.substring(identifier.indexOf("_")+1)); // should not fail, ie check the format is as we expect
 
@@ -260,7 +253,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     void test_all_the_repository_methods() {
 
         // given
-        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
         interactionService.closeInteractionLayers();    // to flush
@@ -272,7 +265,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         // then
         assertThat(executionTarget1User1IfAny).hasSize(1);
         var executionTarget1User1 = executionTarget1User1IfAny.get(0);
-        val executionTarget1User1Id = executionTarget1User1.getInteractionId();
+        var executionTarget1User1Id = executionTarget1User1.getInteractionId();
 
         // when
         Optional<? extends ExecutionOutboxEntry> executionTarget1User1ById = executionOutboxEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);
@@ -287,7 +280,8 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
-    @Inject CounterRepository counterRepository;
+    @SuppressWarnings("rawtypes")
+	@Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
 

@@ -23,15 +23,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -62,19 +61,19 @@ public final class MmUnwrapUtils {
 
     @Nullable
     public static Object[] multipleAsArray(final @NonNull Can<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), MmUnwrapUtils::single);
+        var unwrappedObjects = _Arrays.mapCollection(adapters.toList(), MmUnwrapUtils::single);
         return unwrappedObjects;
     }
 
     @Nullable
     public static Object[] multipleAsArray(final @Nullable Collection<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters, MmUnwrapUtils::single);
+        var unwrappedObjects = _Arrays.mapCollection(adapters, MmUnwrapUtils::single);
         return unwrappedObjects;
     }
 
     @Nullable
     public static Object[] multipleAsArray(final @Nullable ManagedObject[] adapters) {
-        val unwrappedObjects = _Arrays.map(adapters, MmUnwrapUtils::single);
+        var unwrappedObjects = _Arrays.map(adapters, MmUnwrapUtils::single);
         return unwrappedObjects;
     }
 
@@ -107,7 +106,6 @@ public final class MmUnwrapUtils {
                 .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
     }
-
 
     /**
      *

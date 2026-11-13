@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.security.authentication;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 
 /**
  * Represents an authentication mechanism capable of authenticating certain

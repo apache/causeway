@@ -22,9 +22,10 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 
 /**
  * @since 2.0 {@index}
@@ -41,7 +42,7 @@ public class CausewayInteractionHandler implements BeforeEachCallback, AfterEach
                 var mmc = springContext.getBean(MetaModelContext.class);
                 _Assert.assertNotNull(mmc, ()->
                         "MetaModelContext not found on Spring's test context.");
-                MetaModelContext.setOrReplace(mmc);
+                MetaModelContextFactory.setTestContext(mmc);
             });
 
         _Helper

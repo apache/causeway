@@ -28,5 +28,4 @@ public interface TreeThemeProvider {
      */
     public Behavior treeThemeFor(Object model);
 
-
 }

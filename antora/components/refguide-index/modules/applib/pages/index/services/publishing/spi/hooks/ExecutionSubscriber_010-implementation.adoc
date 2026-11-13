@@ -5,9 +5,13 @@
 
 == Implementation
 
-The framework allows multiple implementations of this service to be registered; all will be called.
+This is an SPI, and the framework provides several implementations.
 
-This is an SPI, but the framework provides a simple implementation, `o.a.c.applib.services.publishing.log.ExecutionLogger`, that just logs events as they are received.
+NOTE: The framework allows multiple implementations of this service to be registered; all will be called.
+
+=== Applib (Log4j2)
+
+The applib provides a simple implementation, xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[], that just logs events as they are received.
 
 It can be configured using:
 
@@ -30,4 +34,12 @@ It can be configured using:
 
 See the `log4j2-spring.xml` file in xref:docs:starters:simpleapp.adoc[simpleapp] for the omitted detail.
 
-//* the xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] in the xref:mappings:ROOT:about.adoc[Mappings catalog] persists each interaction into a link:https://microservices.io/patterns/data/transactional-outbox.html[outbox table] for subsequent processing.
+=== Execution Log
+
+The xref:userguide:executionlog:about.adoc[] module also provides an implementation, xref:refguide:extensions:index/executionlog/applib/spiimpl/ExecutionSubscriberForExecutionLog.adoc[].
+This implementation persists an instance of the xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[] entity for each event.
+
+=== Execution Outbox
+
+The xref:userguide:executionoutbox:about.adoc[] module also provides an implementation, xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ExecutionSubscriberForExecutionOutbox.adoc[].
+This implementation persists an instance of the xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[] entity for each event.

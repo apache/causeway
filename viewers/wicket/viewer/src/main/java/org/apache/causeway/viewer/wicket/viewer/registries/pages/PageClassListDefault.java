@@ -18,13 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.apache.wicket.Page;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -34,22 +36,32 @@ import org.apache.causeway.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
-/**
- * Default implementation of {@link PageClassList}, specifying the default pages
- * for each of the {@link PageType}s.
- */
-@Service
-@Named("causeway.viewer.wicket.PageClassListDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
 public class PageClassListDefault implements PageClassList {
+
+    /**
+     * Default implementation of {@link PageClassList}, specifying the default pages
+     * for each of the {@link PageType}s.
+     */
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @Named(CausewayModuleViewerWicketViewer.NAMESPACE + ".PageClassListDefault")
+        @ConditionalOnMissingBean(PageClassList.class)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public PageClassList pageClassListDefault() {
+            return new PageClassListDefault();
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -60,7 +72,7 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.SIGN_UP_VERIFY, getSignUpVerifyPageClass());
         pageRegistry.registerPage(PageType.PASSWORD_RESET, getPasswordResetPageClass());
         pageRegistry.registerPage(PageType.ABOUT, getAboutPageClass());
-        pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
+        pageRegistry.registerPage(PageType.DOMAIN_OBJECT, getDomainObjectPageClass());
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
         pageRegistry.registerPage(PageType.HOME_AFTER_PAGETIMEOUT, getHomePageClass());
         pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
@@ -68,12 +80,11 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.VOID_RETURN, getVoidReturnPageClass());
     }
 
-
     /**
      * For subclassing if required.
      */
-    protected Class<? extends Page> getEntityPageClass() {
-        return EntityPage.class;
+    protected Class<? extends Page> getDomainObjectPageClass() {
+        return DomainObjectPage.class;
     }
 
     /**

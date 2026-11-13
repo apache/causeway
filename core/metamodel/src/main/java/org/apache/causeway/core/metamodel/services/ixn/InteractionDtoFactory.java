@@ -40,10 +40,10 @@ import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
  * </p>
  *
  * @see org.apache.causeway.core.metamodel.services.command.CommandDtoFactory
- * @since 1.x {@index}
+ *
+ * @since 1.x revised for 2.0
  */
 public interface InteractionDtoFactory {
-
 
     /**
      * Called by the framework when invoking an action, to create an
@@ -62,7 +62,8 @@ public interface InteractionDtoFactory {
      * @see PropertyEditDto
      */
     ActionInvocationDto asActionInvocationDto(
-            ObjectAction objectAction,
+    		int executionSequence,
+    		ObjectAction objectAction,
             InteractionHead head,
             Can<ManagedObject> argumentAdapters);
 
@@ -83,8 +84,10 @@ public interface InteractionDtoFactory {
      * @see ActionInvocationDto
      */
     PropertyEditDto asPropertyEditDto(
+    		int executionSequence,
             OneToOneAssociation property,
-            InteractionHead interactionHead, ManagedObject newValueAdapterIfAny);
+            InteractionHead interactionHead, 
+            ManagedObject newValueAdapterIfAny);
 
     /**
      * Called by the framework to attach the result of an action invocation
@@ -94,6 +97,5 @@ public interface InteractionDtoFactory {
             ActionInvocationDto actionInvocationDto,
             ObjectAction objectAction,
             ManagedObject resultObject);
-
 
 }

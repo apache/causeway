@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Specializations {@link ActionParameterSupportFacetFactoryAbstract} and

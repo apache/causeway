@@ -23,13 +23,12 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Collects together methods for creating, persisting and searching for
@@ -61,18 +60,11 @@ public interface RepositoryService {
     EntityState getEntityState(@Nullable Object object);
 
     /**
-     * Usually called as a precursor to persisting a domain entity, this method
-     * verifies that the object is an entity and injects domain services into
-     * it.
+     * Creates a new detached entity instance, with injection points resolved.
      *
      * <p>
-     *     This approach allows the domain entity to have regular constructor
-     *     (with parameters) to set up the initial state of the domain object.
-     *     This is preferred over {@link #detachedEntity(Class)}, which
-     *     also instantiates the class and then injects into it - but requires
-     *     that the domain object has a no-arg constructor to do so.
+     * The entity will not yet be persisted, in other words: it is not yet known to the persistence layer.
      * </p>
-     *
      *
      * <p>
      * This is the same functionality as exposed by
@@ -86,7 +78,7 @@ public interface RepositoryService {
     <T> T detachedEntity(@NonNull T entity);
 
     /**
-     * Executes the passed in {@param callable} in bulk mode, meaning that the transaction will not be flushed within.
+     * Executes the passed in {@code callable} in bulk mode, meaning that the transaction will not be flushed within.
      *
      * <p>
      * Used for example by the audit trail extension, as a performance optimization.
@@ -134,7 +126,7 @@ public interface RepositoryService {
     default void persistAndFlush(final Object... domainObjects) {
         final int length = domainObjects.length;
         for (int i = 0; i < length; i++) {
-            val domainObject = domainObjects[i];
+            var domainObject = domainObjects[i];
             if (i < length - 1) {
                 // not at the end
                 persist(domainObject);
@@ -278,10 +270,9 @@ public interface RepositoryService {
      *     multiple instances, where a
      *     {@link org.apache.causeway.applib.query.NamedQuery} can be passed in
      *     that ultimately describes a SELECT query with WHERE predicates.
-     *     The mechanism by which this is defined depends on the ORM (JDO or
-     *     JPA).  A {@link org.apache.causeway.applib.query.NamedQuery} can
-     *     optionally specify a
-     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range} of instances to be returned.
+     *     A {@link org.apache.causeway.applib.query.NamedQuery} can optionally specify a
+     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range}
+     *     of instances to be returned.
      * </p>
      *
      * <p>
@@ -336,10 +327,9 @@ public interface RepositoryService {
      *     no more than one instance, where a
      *     {@link org.apache.causeway.applib.query.NamedQuery} can be passed in
      *     that ultimately describes a SELECT query with WHERE predicates.
-     *     The mechanism by which this is defined depends on the ORM (JDO or
-     *     JPA).  A {@link org.apache.causeway.applib.query.NamedQuery} can
-     *     optionally specify a
-     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range} of instances to be returned.
+     *     A {@link org.apache.causeway.applib.query.NamedQuery} can optionally specify a
+     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range}
+     *     of instances to be returned.
      * </p>
      *
      * <p>
@@ -356,7 +346,7 @@ public interface RepositoryService {
 
     /**
      * Find the only instance of the specified type (including subtypes) that
-     * satifies the provided (client-side) predicate.
+     * satisfies the provided (client-side) predicate.
      *
      * <p>
      * This method is useful during exploration/prototyping, but - because the
@@ -387,10 +377,9 @@ public interface RepositoryService {
      *     the first matching instance, where a
      *     {@link org.apache.causeway.applib.query.NamedQuery} can be passed in
      *     that ultimately describes a SELECT query with WHERE predicates.
-     *     The mechanism by which this is defined depends on the ORM (JDO or
-     *     JPA).  A {@link org.apache.causeway.applib.query.NamedQuery} can
-     *     optionally specify a
-     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range} of instances to be returned.
+     *     A {@link org.apache.causeway.applib.query.NamedQuery} can optionally specify a
+     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range}
+     *     of instances to be returned.
      * </p>
      *
      * <p>

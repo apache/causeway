@@ -26,17 +26,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import lombok.val;
 
 class ChainOfResponsibilityTest {
 
     @Test
     void threeHandlers_shouldProperlyTakeResponsibilityInOrder() {
 
-        val aToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
+        var aToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -50,7 +49,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val bToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
+        var bToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -64,7 +63,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val finallyNoop = new ChainOfResponsibility.Handler<String, String>() {
+        var finallyNoop = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -78,12 +77,12 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val chainOfResponsibility = ChainOfResponsibility.of(
+        var chainOfResponsibility = new ChainOfResponsibility<>("test",
                 Arrays.asList(aToUpperCase, bToUpperCase, finallyNoop));
 
-        assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
-        assertEquals("BSTRING", chainOfResponsibility.handle("bString")); // handled by second handler
-        assertEquals("cString", chainOfResponsibility.handle("cString")); // handled by third handler
+        assertEquals("ASTRING", chainOfResponsibility.handleElseFail("aString")); // handled by first handler
+        assertEquals("BSTRING", chainOfResponsibility.handleElseFail("bString")); // handled by second handler
+        assertEquals("cString", chainOfResponsibility.handleElseFail("cString")); // handled by third handler
 
     }
 
@@ -95,7 +94,7 @@ class ChainOfResponsibilityTest {
     @Test
     void whenExtended_shouldWorkAsWell() {
 
-        val aToUpperCase = new StringHandler() {
+        var aToUpperCase = new StringHandler() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -109,18 +108,16 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val handlers = Arrays.asList(aToUpperCase);
+        var chainOfResponsibility = new ChainOfResponsibility<>("test", Can.of(aToUpperCase));
 
-        val chainOfResponsibility = ChainOfResponsibility.of(handlers);
-
-        assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
-        assertThrows(NoSuchElementException.class, ()->chainOfResponsibility.handle("xxx")); // not handled
+        assertEquals("ASTRING", chainOfResponsibility.handleElseFail("aString")); // handled by first handler
+        assertThrows(NoSuchElementException.class, ()->chainOfResponsibility.handleElseFail("xxx")); // not handled
     }
 
     @Test
     void handlerExceptions_shouldNoBeSwallowed() {
 
-        val throwingHandler = new ChainOfResponsibility.Handler<String, String>() {
+        var throwingHandler = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -134,10 +131,10 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val chainOfResponsibility = ChainOfResponsibility.of(
+        var chainOfResponsibility = new ChainOfResponsibility<>("test",
                 Arrays.asList(throwingHandler));
 
-        assertThrows(RuntimeException.class, ()->chainOfResponsibility.handle("throw"));
+        assertThrows(RuntimeException.class, ()->chainOfResponsibility.handleElseFail("throw"));
     }
 
 }

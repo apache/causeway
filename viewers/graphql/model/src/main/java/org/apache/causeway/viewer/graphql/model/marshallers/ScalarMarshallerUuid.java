@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 import graphql.scalars.ExtendedScalars;
 
-
 /**
  * Maps to a string to avoid loss of precision.
  */
@@ -41,7 +40,7 @@ public class ScalarMarshallerUuid extends ScalarMarshallerAbstract<UUID> {
 
     @Inject
     public ScalarMarshallerUuid(final CausewayConfiguration causewayConfiguration) {
-        super(UUID.class, ExtendedScalars.UUID, causewayConfiguration);
+        super(UUID.class, ExtendedScalars.UUID, causewayConfiguration, true);
     }
 
     @Override

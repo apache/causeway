@@ -26,13 +26,12 @@ import org.springframework.data.jpa.repository.JpaContext;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class JpaSupportServiceUsingSpring implements JpaSupportService {
 
     private final JpaContext jpaContextSpring;
@@ -40,7 +39,7 @@ public class JpaSupportServiceUsingSpring implements JpaSupportService {
     @Override
     public Try<EntityManager> getEntityManager(final @NonNull Class<?> entityClass) {
         try {
-            val em = jpaContextSpring.getEntityManagerByManagedType(entityClass);
+            var em = jpaContextSpring.getEntityManagerByManagedType(entityClass);
             return Try.success(em);
         } catch (Exception e) {
             log.error(String.format("failed to get an EntityManager for entity type %s", entityClass), e);

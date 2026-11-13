@@ -23,6 +23,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -30,7 +31,6 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -38,15 +38,14 @@ import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ThrowableExtensions;
+import org.jspecify.annotations.NonNull;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
-//@Log4j2
+//@Slf4j
 public final class Evaluators  {
 
     /**
@@ -72,14 +71,14 @@ public final class Evaluators  {
             final Class<?> cls,
             final Predicate<AnnotatedElement> memberFilter) {
 
-        val classCache = _ClassCache.getInstance();
+        var classCache = _ClassCache.getInstance();
 
         // if it so happens (eg. lombok) that both the field and its getter are annotated,
         // don't duplicate, let the method win
 
-        val methodEvaluators = streamMethodEvaluators(cls, memberFilter, classCache)
+        var methodEvaluators = streamMethodEvaluators(cls, memberFilter, classCache)
                 .collect(Can.toCan());
-        val fieldEvaluators = streamFieldEvaluators(cls, memberFilter, classCache)
+        var fieldEvaluators = streamFieldEvaluators(cls, memberFilter, classCache)
                 .filter(fieldEvaluator->!fieldEvaluator.isSameAsAnyOf(methodEvaluators));
 
         return Stream.concat(
@@ -100,7 +99,7 @@ public final class Evaluators  {
         .map(method->memberFilter.test(method.method())
                 ? new MethodEvaluator(cls, method)
                 : null)
-        .filter(_NullSafe::isPresent);
+        .filter(Objects::nonNull);
     }
 
     private static <T extends Annotation> Stream<FieldEvaluator> streamFieldEvaluators(
@@ -113,7 +112,7 @@ public final class Evaluators  {
         .map(field->memberFilter.test(field)
                 ? new FieldEvaluator(cls, field, classCache.getterForField(cls, field))
                 : null)
-        .filter(_NullSafe::isPresent);
+        .filter(Objects::nonNull);
     }
 
     // -- EVALUATOR
@@ -135,7 +134,7 @@ public final class Evaluators  {
         @Override
         public Object value(final Object obj) {
 
-            val mh = getMethodHandleRef()
+            var mh = getMethodHandleRef()
             .mapFailure(this::failure)
             .ifFailureFail()
             .getValue()
@@ -198,7 +197,7 @@ public final class Evaluators  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            val getter = correspondingGetter.orElse(null);
+            var getter = correspondingGetter.orElse(null);
             return getter!=null
                     ? MethodHandles.lookup().unreflect(getter.method())
                     : MethodHandles.lookup().unreflectGetter(field);

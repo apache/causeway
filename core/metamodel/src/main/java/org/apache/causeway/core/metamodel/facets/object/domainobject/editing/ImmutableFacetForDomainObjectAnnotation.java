@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
-import lombok.val;
-
 public class ImmutableFacetForDomainObjectAnnotation
 extends ImmutableFacetAbstract {
 
@@ -43,12 +41,12 @@ extends ImmutableFacetAbstract {
             final FacetHolder holder) {
 
         final boolean editingDisabledByDefault =
-                configuration.getApplib().getAnnotation().getDomainObject().getEditing()
+                configuration.applib().annotation().domainObject().editing()
                 == DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE;
 
         if(domainObjectIfAny.isPresent()) {
-            val domainObject = domainObjectIfAny.get();
-            val disabledReason = createDisabledReason(domainObject);
+            var domainObject = domainObjectIfAny.get();
+            var disabledReason = createDisabledReason(domainObject);
 
             switch (domainObject.editing()) {
             case NOT_SPECIFIED:
@@ -103,6 +101,5 @@ extends ImmutableFacetAbstract {
                 // assuming there is no ImmutableFacet(s) with inverted semantics
                 .orElseGet(()->VetoReason.editingObjectDisabledReasonNotGiven());
     }
-
 
 }

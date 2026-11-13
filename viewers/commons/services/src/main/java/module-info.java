@@ -36,7 +36,7 @@ module org.apache.causeway.viewer.commons.services {
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
 
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires org.apache.causeway.viewer.commons.model;

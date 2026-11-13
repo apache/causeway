@@ -18,23 +18,21 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.TextUtils;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -53,9 +51,8 @@ public final class _Text {
     private _Text() {}
 
     public static Can<String> breakLines(final Can<String> lines, final int maxChars) {
-        if(lines.isEmpty()) {
-            return lines;
-        }
+        if(lines.isEmpty())
+			return lines;
         return lines.stream()
         .flatMap(line->breakLine(line, maxChars))
         .collect(Can.toCan());
@@ -64,9 +61,8 @@ public final class _Text {
     // -- NORMALIZING
 
     public static String normalize(final @Nullable String text) {
-        if(text==null) {
-            return "";
-        }
+        if(text==null)
+			return "";
         return normalize(TextUtils.readLines(text)).stream().collect(Collectors.joining("\n"));
     }
 
@@ -99,16 +95,17 @@ public final class _Text {
      */
     public static Can<String> removeLeadingEmptyLines(final @NonNull Can<String> lines) {
 
-        if(lines.isEmpty()) {
-            return lines;
-        }
+        if(lines.isEmpty())
+			return lines;
 
         final int[] nonEmptyLineCount = {0};
 
         return lines.stream()
                 // peek with side-effect
                 .peek(line->{
-                    if(hasNonWhiteSpaceChars(line)) nonEmptyLineCount[0]++;
+                    if(hasNonWhiteSpaceChars(line)) {
+						nonEmptyLineCount[0]++;
+					}
                 })
                 .filter(line->nonEmptyLineCount[0]>0)
                 .collect(Can.toCan());
@@ -125,9 +122,8 @@ public final class _Text {
      */
     public static Can<String> removeTrailingEmptyLines(final @NonNull Can<String> lines) {
 
-        if(lines.isEmpty()) {
-            return lines;
-        }
+        if(lines.isEmpty())
+			return lines;
 
         final int lastLineIndex = lines.size()-1;
 
@@ -136,9 +132,8 @@ public final class _Text {
         .max()
         .orElse(-1);
 
-        if(lastLineIndex == lastNonEmptyLineIndex) {
-            return lines; // reuse immutable object
-        }
+        if(lastLineIndex == lastNonEmptyLineIndex)
+			return lines; // reuse immutable object
 
         return lines.stream().limit(1L + lastNonEmptyLineIndex).collect(Can.toCan());
     }
@@ -155,17 +150,15 @@ public final class _Text {
     public static Can<String> removeRepeatedEmptyLines(final @NonNull Can<String> lines) {
 
         // we need at least 2 lines
-        if(lines.size()<2) {
-            return lines;
-        }
+        if(lines.size()<2)
+			return lines;
 
         final int[] latestEmptyLineIndex = {-2};
 
         return streamLineObjects(lines)
         .peek(line->{
-            if(!line.isEmpty()) {
-                return; // ignore
-            }
+            if(!line.isEmpty())
+				return; // ignore
             if(latestEmptyLineIndex[0] == line.getIndex()-1) {
                 line.setMarkedForRemoval(true);
             }
@@ -177,12 +170,22 @@ public final class _Text {
 
     }
 
+    // -- LABEL ABBREVIATION
+
+    public static String abbreviated(final String str, final int maxLength) {
+        int length = str.length();
+        if (length <= maxLength)
+			return str;
+        return maxLength <= 3
+                ? ""
+                : str.substring(0, maxLength - 3) + "...";
+    }
+
     // -- LOGGING SUPPORT
 
     public static String abbreviate(final @Nullable String input) {
-        if(input==null) {
-            return input;
-        }
+        if(input==null)
+			return input;
         var s = input;
         s = s.replace("org.apache.causeway.", "..causeway.");
         s = s.replace(".viewer.wicket.", "..wkt.");
@@ -190,16 +193,14 @@ public final class _Text {
     }
 
     public static String abbreviate(final @Nullable Class<?> cls) {
-        if(cls==null) {
-            return "[none]";
-        }
+        if(cls==null)
+			return "[none]";
         return abbreviate(cls.getCanonicalName());
     }
 
     public static String abbreviateClassOf(final @Nullable Object obj) {
-        if(obj==null) {
-            return "[none]";
-        }
+        if(obj==null)
+			return "[none]";
         return abbreviate(obj.getClass());
     }
 
@@ -219,10 +220,10 @@ public final class _Text {
 
     public static void assertTextEquals(final @NonNull Can<String> a, final @NonNull Can<String> b) {
 
-        val na = normalize(a);
-        val nb = normalize(b);
+        var na = normalize(a);
+        var nb = normalize(b);
 
-        val lineNrRef = _Refs.intRef(0);
+        var lineNrRef = _Refs.intRef(0);
 
         if(na.size()<=nb.size()) {
             na.zip(nb, (left, right)->{
@@ -242,9 +243,8 @@ public final class _Text {
     // -- HELPER
 
     private static boolean hasNonWhiteSpaceChars(final String s) {
-        if(s==null) {
-            return false;
-        }
+        if(s==null)
+			return false;
         return !s.trim().isEmpty();
     }
 
@@ -279,17 +279,16 @@ public final class _Text {
 
     private static Stream<String> breakLine(String line, final int maxChars) {
         line = line.trim();
-        if(line.length()<=maxChars) {
-            return Stream.of(line);
-        }
-        val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
+        if(line.length()<=maxChars)
+			return Stream.of(line);
+        var tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
                 .map(String.class::cast);
 
-        val constraintLines = _Lists.<String>newArrayList();
-        val partialSum = _Refs.intRef(0);
-        val partialCount = _Refs.intRef(0);
+        var constraintLines = new ArrayList<String>();
+        var partialSum = _Refs.intRef(0);
+        var partialCount = _Refs.intRef(0);
 
-        val tokenIterator = tokens.iterator();
+        var tokenIterator = tokens.iterator();
 
         tokens.stream()
         .mapToInt(String::length)
@@ -319,6 +318,5 @@ public final class _Text {
 
         return constraintLines.stream();
     }
-
 
 }

@@ -27,39 +27,33 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.testdomain.conf.Configuration_usingSpringDataJpa;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingSpringDataJpa;
 import org.apache.causeway.testdomain.jpa.springdata.Employee;
 import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
-
-@DataJpaTest(
+@SpringBootTest(
+        classes = {
+                Configuration_usingSpringDataJpa.class,
+        },
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:SpringDataJpaBootstrappingTest",
         })
-@ContextConfiguration(classes = {
-        Configuration_usingSpringDataJpa.class,
-})
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
 // @Disabled // CAUSEWAY-2789 revert
@@ -95,10 +89,10 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
 
-            val txDef = new DefaultTransactionDefinition();
+            var txDef = new DefaultTransactionDefinition();
             txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
 
-            val txStatus = ptm.getTransaction(txDef);
+            var txStatus = ptm.getTransaction(txDef);
 
             assertNotNull(txStatus);
             assertFalse(txStatus.isCompleted());
@@ -108,7 +102,7 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Test @Order(0)
     void jpaEntities_shouldBeRecognisedAsSuch() {
-        val productSpec = specLoader.loadSpecification(Employee.class);
+        var productSpec = specLoader.loadSpecification(Employee.class);
         assertTrue(productSpec.isEntity());
         assertNotNull(productSpec.entityFacetElseFail());
     }
@@ -127,10 +121,10 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // then - expected post condition: 4 employees
 
-        val employees = repository.allInstances(Employee.class);
+        var employees = repository.allInstances(Employee.class);
         assertEquals(4, employees.size());
 
-        val employee = employees.get(0);
+        var employee = employees.get(0);
         assertNotNull(employee);
         assertNotNull(employee.getLastName());
 
@@ -140,6 +134,5 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
     void aSecondRunShouldWorkAsWell() {
         sampleEmployeesShouldBeSetUp();
     }
-
 
 }

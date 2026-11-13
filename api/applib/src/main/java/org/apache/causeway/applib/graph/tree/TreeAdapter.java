@@ -21,7 +21,7 @@ package org.apache.causeway.applib.graph.tree;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Domain;
 
@@ -50,7 +50,6 @@ public interface TreeAdapter<T> {
      */
     @Domain.Exclude
     Stream<T> childrenOf(T value);
-
 
     /**
      * Resolves given {@link TreePath} to its corresponding sub-node relative to given node if possible.
@@ -84,6 +83,11 @@ public interface TreeAdapter<T> {
         return relativePath.size()>2
                 ? resolveRelative(childNode.get(), relativePath.subPath(1))
                 : childNode;
+    }
+
+    /** converts this {@code TreeAdapter<T>} to an equivalent {@code TreeAdapter<R>} */
+    default <R> TreeAdapter<R> convert(final TreeConverter<T, R> converter) {
+        return new TreeAdapterWithConverter<T, R>(this, converter);
     }
 
 }

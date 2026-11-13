@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
@@ -42,7 +42,6 @@ import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Implementation of the {@link SessionSubscriber} SPI, which persists a log entry to the database (the
@@ -55,7 +54,7 @@ import lombok.val;
 @Named(SessionSubscriberForSessionLog.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("sessionlog")
-//@Log4j2
+//@Slf4j
 public class SessionSubscriberForSessionLog implements SessionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
@@ -69,7 +68,7 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
     public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final UUID sessionGuid, final String httpSessionId) {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                val sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
+                var sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
                 if (type == Type.LOGIN) {
                     if (sessionLogEntryIfAny.isEmpty()) {
                         sessionLogEntryRepository.create(username, sessionGuid, httpSessionId, causedBy, Timestamp.from(date.toInstant()));

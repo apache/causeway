@@ -26,27 +26,26 @@ import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 
-import lombok.val;
-
 public class MemberDescribedFacetFromType
 extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
             final ObjectDescribedFacet objectDescribedFacet,
             final FacetHolder holder) {
-
-        val describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
-
-        return Optional.ofNullable(describedIfAny)
-        .map(described->
-            new MemberDescribedFacetFromType(described, holder));
-
+        return _Strings.nonEmpty(objectDescribedFacet.text())
+	        .map(described->
+	            new MemberDescribedFacetFromType(described, holder));
     }
 
     private MemberDescribedFacetFromType(
             final String described,
             final FacetHolder holder) {
-        super(described, holder, Precedence.INFERRED);
+        super(described, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
 }

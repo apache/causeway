@@ -26,7 +26,7 @@ import jakarta.ws.rs.client.Entity;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.Blob;
@@ -39,9 +39,10 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
+ * Use {@link RestfulClient#arguments()} to get an instance.
  * @since 2.0 {@index}
  */
 public class ActionParameterListBuilder {
@@ -53,13 +54,6 @@ public class ActionParameterListBuilder {
 
     private final RestfulClient restfulClient;
 
-    /**
-     * @deprecated  - use {@link RestfulClient#arguments()}
-     */
-    @Deprecated
-    public ActionParameterListBuilder() {
-        this(null);
-    }
     public ActionParameterListBuilder(RestfulClient restfulClient) {
         this.restfulClient = restfulClient;
     }
@@ -116,9 +110,9 @@ public class ActionParameterListBuilder {
 
     public ActionParameterListBuilder addActionParameter(final String parameterName, final Blob blob) {
         var blobDto = new BlobDto();
-        blobDto.setName(blob.getName());
-        blobDto.setMimeType(blob.getMimeType().getBaseType());
-        blobDto.setBytes(blob.getBytes());
+        blobDto.setName(blob.name());
+        blobDto.setMimeType(blob.mimeType().getBaseType());
+        blobDto.setBytes(blob.bytes());
         var fundamentalTypeDto = new ValueWithTypeDto();
         fundamentalTypeDto.setType(ValueType.BLOB);
         fundamentalTypeDto.setBlob(blobDto);
@@ -129,8 +123,8 @@ public class ActionParameterListBuilder {
 
     public ActionParameterListBuilder addActionParameter(final String parameterName, final Clob clob) {
         var clobDto = new ClobDto();
-        clobDto.setName(clob.getName());
-        clobDto.setMimeType(clob.getMimeType().getBaseType());
+        clobDto.setName(clob.name());
+        clobDto.setMimeType(clob.mimeType().getBaseType());
         clobDto.setChars(clob.asString());
         var fundamentalTypeDto = new ValueWithTypeDto();
         fundamentalTypeDto.setType(ValueType.CLOB);
@@ -171,9 +165,8 @@ public class ActionParameterListBuilder {
     }
 
     private String asRelativeHref(Bookmark bookmark) {
-        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
+        return String.format("objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier());
     }
-
 
     public <T> ActionParameterListBuilder addActionParameter(
             final String parameterName,

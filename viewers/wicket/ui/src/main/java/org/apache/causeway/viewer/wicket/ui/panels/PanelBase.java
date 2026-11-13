@@ -22,20 +22,19 @@ import java.util.function.Supplier;
 
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.causeway.viewer.wicket.model.models.IconResourceReferenceFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
-import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProviderDefault;
+import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProviderBootstrap;
 import org.apache.causeway.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
@@ -46,7 +45,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
  */
 public class PanelBase<T>
 extends GenericPanel<T>
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +53,7 @@ implements HasCommonContext {
         this(id, null);
     }
 
-    public PanelBase(final String id, @Nullable final IModel<T> model) {
+    public PanelBase(final String id, final @Nullable IModel<T> model) {
         super(id, model);
     }
 
@@ -63,9 +62,9 @@ implements HasCommonContext {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
 
-    private transient ImageResourceCache imageCache;
-    public ImageResourceCache getImageResourceCache() {
-        return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
+    private transient IconResourceReferenceFactory iconResourceReferenceFactory;
+    public IconResourceReferenceFactory getIconResourceReferenceFactory() {
+        return iconResourceReferenceFactory = computeIfAbsent(IconResourceReferenceFactory.class, iconResourceReferenceFactory);
     }
 
     private transient LanguageProvider localeProvider;
@@ -75,7 +74,7 @@ implements HasCommonContext {
 
     private transient TreeThemeProvider treeThemeProvider;
     protected TreeThemeProvider getTreeThemeProvider() {
-        return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderDefault::new);
+        return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderBootstrap::new);
     }
 
     private transient EmailNotificationService emailNotificationService;

@@ -53,7 +53,7 @@ public class ApplicationRoleManager {
     @Property @PropertyLayout(fieldSetId = "metadata")
     public String getRoleType() {
         return specLoader.specForLogicalTypeName(ApplicationRole.LOGICAL_TYPE_NAME)
-                .map(ObjectSpecification::getCorrespondingClass)
+                .map(ObjectSpecification::correspondingClass)
                 .map(Class::getName)
                 .orElse("not found");
     }

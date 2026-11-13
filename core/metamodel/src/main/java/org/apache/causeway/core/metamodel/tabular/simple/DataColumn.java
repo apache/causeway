@@ -24,30 +24,26 @@ import java.util.Optional;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a single association of a domain object type (typically an entity type).
  *
  * @since 2.0 {@index}
  */
-public class DataColumn {
+public record DataColumn(
+        @NonNull ObjectAssociation metamodel,
+        @NonNull String columnId,
+        @NonNull String columnFriendlyName,
+        @NonNull Optional<String> columnDescription,
+        boolean isMultivalued
+    ) {
 
-    @Getter private final @NonNull DataTable parentTable;
-    @Getter private final @NonNull ObjectAssociation metamodel;
-    @Getter private final @NonNull String columnId;
-    @Getter private final @NonNull String columnFriendlyName;
-    @Getter private final @NonNull Optional<String> columnDescription;
-    @Getter private final boolean isMultivalued;
-
-    public DataColumn(final DataTable parentTable, final ObjectAssociation metamodel) {
-        this.parentTable = parentTable;
-        this.metamodel = metamodel;
-        this.columnId = metamodel.getId();
-        this.columnFriendlyName = metamodel.getCanonicalFriendlyName();
-        this.columnDescription = metamodel.getCanonicalDescription();
-        this.isMultivalued = metamodel.isCollection();
+    public DataColumn(final ObjectAssociation metamodel) {
+        this(metamodel, metamodel.getId(),
+            metamodel.getCanonicalFriendlyName(),
+            metamodel.getCanonicalDescription(),
+            metamodel.isCollection());
     }
 
     // -- UTILITY
@@ -57,8 +53,8 @@ public class DataColumn {
      */
     public static Comparator<DataColumn> orderByColumnId() {
         return (o1, o2) -> _Strings.compareNullsFirst(
-                o1.getColumnId(),
-                o2.getColumnId());
+                o1.columnId(),
+                o2.columnId());
     }
 
 }

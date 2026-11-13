@@ -36,7 +36,12 @@ extends ImmutableFacetAbstract {
     // -- CONSTRUCTOR
 
     private ImmutableFacetFromConfiguration(final VetoReason reason, final FacetHolder holder) {
-        super(reason, holder, Precedence.LOW);
+        super(reason, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.LOW;
     }
 
     // -- IMPL
@@ -45,8 +50,5 @@ extends ImmutableFacetAbstract {
     public ImmutableFacet clone(final FacetHolder holder) {
         return new ImmutableFacetFromConfiguration(reason, holder);
     }
-
-
-
 
 }

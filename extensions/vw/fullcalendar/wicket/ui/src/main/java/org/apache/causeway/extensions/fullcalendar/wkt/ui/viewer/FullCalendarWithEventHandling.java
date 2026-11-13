@@ -30,9 +30,7 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarRe
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.ClickedEvent;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -59,23 +57,21 @@ implements HasMetaModelContext {
 
         final String oidStr = (String) event.getEvent().getPayload();
         final Bookmark bookmark = Bookmark.parse(oidStr).orElse(null);
-        if(bookmark==null) {
-            return;
-        }
+        if(bookmark==null) return;
 
-        val commonContext = getMetaModelContext();
+        var commonContext = getMetaModelContext();
 
         final SpecificationLoader specificationLoader = commonContext.getSpecificationLoader();
         final ObjectManager objectManager = commonContext.getObjectManager();
 
-        val managedObject = objectManager
+        var managedObject = objectManager
                 .loadObject(ProtoObject.resolveElseFail(specificationLoader, bookmark));
 
-        final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(managedObject);
+        final UiObjectWkt objectModel = UiObjectWkt.ofAdapter(managedObject);
 
-        val pageParameters = entityModel.getPageParameters();
+        var pageParameters = objectModel.getPageParameters();
         if(pageParameters!=null) {
-            throw new RestartResponseException(EntityPage.class, pageParameters);
+            throw new RestartResponseException(DomainObjectPage.class, pageParameters);
         }
 
         // otherwise ignore

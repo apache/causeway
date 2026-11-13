@@ -38,8 +38,6 @@ import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
 
@@ -48,12 +46,12 @@ extends TitleFacetAbstract {
             final MetamodelEventService metamodelEventService,
             final FacetHolder facetHolder) {
 
-        val isPostForDefault = facetHolder.getConfiguration()
-                .getApplib()
-                .getAnnotation()
-                .getDomainObjectLayout()
-                .getTitleUiEvent()
-                .isPostForDefault();
+        var isPostForDefault = facetHolder.getConfiguration()
+                .applib()
+                .annotation()
+                .domainObjectLayout()
+                .titleUiEvent()
+                .postForDefault();
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::titleUiEvent)
@@ -62,13 +60,11 @@ extends TitleFacetAbstract {
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
                         isPostForDefault))
-                .map(titleUiEventClass -> {
-                    return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
-                            titleUiEventClass,
-                            translationContextFor(facetHolder),
-                            metamodelEventService,
-                            facetHolder);
-                });
+                .map(titleUiEventClass -> new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
+                        titleUiEventClass,
+                        translationContextFor(facetHolder),
+                        metamodelEventService,
+                        facetHolder));
     }
 
     private final Class<? extends TitleUiEvent<Object>> titleUiEventClass;
@@ -81,7 +77,7 @@ extends TitleFacetAbstract {
             final TranslationContext translationContext,
             final MetamodelEventService metamodelEventService,
             final FacetHolder holder) {
-        super(holder, Precedence.EVENT);
+        super(holder);
         this.titleUiEventClass = _Casts.uncheckedCast(titleUiEventClass);
         this.translationService = super.getTranslationService();
         this.translationContext = translationContext;
@@ -89,13 +85,16 @@ extends TitleFacetAbstract {
     }
 
     @Override
+    public Precedence precedence() {
+    	return Precedence.EVENT;
+    }
+
+    @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
 
-        final ManagedObject owningAdapter = titleRenderRequest.getObject();
+        final ManagedObject owningAdapter = titleRenderRequest.object();
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
-            return null;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) return null;
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
@@ -104,20 +103,17 @@ extends TitleFacetAbstract {
         if(titleUiEvent.getTitle() == null
                 && titleUiEvent.getTranslatableTitle() == null) {
             // ie no subscribers out there...
-
             final TitleFacet underlyingTitleFacet = getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class))
-            .orElse(null);
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class))
+                .orElse(null);
 
-            if(underlyingTitleFacet!=null) {
+            if(underlyingTitleFacet!=null)
                 return underlyingTitleFacet.title(titleRenderRequest);
-            }
         }
 
         final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
-        if(translatedTitle != null) {
+        if(translatedTitle != null)
             return translatedTitle.translate(translationService, translationContext);
-        }
         return titleUiEvent.getTitle();
     }
 
@@ -130,9 +126,8 @@ extends TitleFacetAbstract {
     // -- HELPER
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
-        if(facetHolder instanceof ObjectSpecification) {
+        if(facetHolder instanceof ObjectSpecification)
             return facetHolder.getTranslationContext();
-        }
         return null;
     }
 

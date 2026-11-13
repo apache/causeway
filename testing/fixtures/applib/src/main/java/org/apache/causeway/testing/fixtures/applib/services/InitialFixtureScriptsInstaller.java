@@ -31,11 +31,14 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
+import org.apache.causeway.applib.services.command.PauseCommandLoggingEvent;
+import org.apache.causeway.applib.services.command.ResumeCommandLoggingEvent;
+import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -44,21 +47,24 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.testing.fixtures.InitialFixtureScriptsInstaller")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class InitialFixtureScriptsInstaller {
 
     private final FixtureScripts fixtureScripts;
+    private final EventBusService eventBusService;
 
     private FixtureScript initialFixtureScript;
 
     @Inject
     public InitialFixtureScriptsInstaller(
             final CausewayConfiguration causewayConfiguration,
-            final FixtureScripts fixtureScripts) {
+            final FixtureScripts fixtureScripts,
+            final EventBusService eventBusService) {
 
         this.fixtureScripts = fixtureScripts;
+        this.eventBusService = eventBusService;
 
-        final Class<?> initialScript = causewayConfiguration.getTesting().getFixtures().getInitialScript();
+        final Class<?> initialScript = causewayConfiguration.testing().fixtures().initialScript();
         if (initialScript != null
                 && FixtureScript.class.isAssignableFrom(initialScript)) {
             try {
@@ -79,7 +85,12 @@ public class InitialFixtureScriptsInstaller {
                 && initialFixtureScript != null) {
 
             log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
-            fixtureScripts.run(initialFixtureScript);
+            try {
+                eventBusService.post(new PauseCommandLoggingEvent(this));
+                fixtureScripts.run(initialFixtureScript);
+            } finally {
+                eventBusService.post(new ResumeCommandLoggingEvent(this));
+            }
         }
     }
 

@@ -19,7 +19,7 @@
 package org.apache.causeway.testdomain;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
 public interface HasPersistenceStandard {
 
@@ -36,7 +36,5 @@ public interface HasPersistenceStandard {
                 format,
                 _Strings.capitalize(getPersistenceStandard().name().toLowerCase()));
     }
-
-
 
 }

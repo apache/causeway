@@ -27,12 +27,12 @@ import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.TransactionScope;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -44,8 +44,11 @@ import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 import lombok.RequiredArgsConstructor;
 
 /**
- * @see ObjectLifecyclePublisher
+ * Default implementation of {@link ObjectLifecyclePublisher}.
+ *
  * @since 2.0 {@index}
+ *
+ * @see ObjectLifecyclePublisher
  */
 @Service
 @TransactionScope
@@ -53,7 +56,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+//@Slf4j
 public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher {
 
     private final Provider<EntityChangeTracker> entityChangeTrackerProvider;
@@ -97,7 +100,6 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
     public void onPostUpdate(final ManagedObject entity) {
         lifecycleCallbackNotifier().postUpdate(entity);
     }
-
 
     @Override
     public void onPreRemove(final ManagedObject entity) {

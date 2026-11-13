@@ -32,14 +32,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.causeway.applib.services.metamodel.MetaModelServiceMenu.ExportFormat;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
+import org.apache.causeway.testdomain.domainmodel.MetaModelRegressionTest.EnableHmacAuthority;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 
@@ -49,7 +53,7 @@ import lombok.SneakyThrows;
         classes = {
                 Configuration_headless.class,
                 Configuration_usingValidDomain.class,
-
+                EnableHmacAuthority.class
         },
         properties = {
                 "causeway.core.meta-model.introspector.mode=FULL",
@@ -64,6 +68,14 @@ class MetaModelRegressionTest {
 
     @Inject MetaModelServiceMenu metaModelServiceMenu;
     @Inject FactoryService factoryService;
+
+    @Configuration(proxyBeanMethods = false)
+    static class EnableHmacAuthority {
+        @Bean
+        public HmacAuthority hmacAuthority() {
+            return HmacAuthority.HmacSHA256.randomInstance();
+        }
+    }
 
     @BeforeEach
     void setUp() {

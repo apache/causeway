@@ -21,9 +21,9 @@ package org.apache.causeway.applib.services.keyvaluestore;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Defines a mechanism for viewers to store arbitrary key value pairs
@@ -34,6 +34,7 @@ import lombok.NonNull;
  *
  * @since 2.0 {@index}
  */
+@SuppressWarnings("javadoc")
 public interface KeyValueSessionStore {
 
     /**

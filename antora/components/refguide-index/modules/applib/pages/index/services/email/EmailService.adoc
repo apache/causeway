@@ -11,7 +11,6 @@ The framework provides a default implementation to send emails using an external
 .EmailService.java
 ----
 interface EmailService {
-  void init()
   boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body, DataSource... attachments)     // <.>
   boolean isConfigured()     // <.>
 }

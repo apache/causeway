@@ -65,7 +65,7 @@ class FontAwesomeLayersTest {
 
         var iconStack = iconStackSample;
 
-        assertEquals(3, _NullSafe.size(iconStack.getIconEntries()));
+        assertEquals(3, _NullSafe.size(iconStack.iconEntries()));
 
         //debug
         //System.err.printf("%s%n", iconStack.toJson());

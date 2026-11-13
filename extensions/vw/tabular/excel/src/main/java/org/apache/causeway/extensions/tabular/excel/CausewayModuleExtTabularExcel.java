@@ -21,14 +21,14 @@ package org.apache.causeway.extensions.tabular.excel;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.tabular.excel.exporter.CollectionContentsAsExcelExporter;
+import org.apache.causeway.extensions.tabular.excel.exporter.TabularExcelExporter;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-    CollectionContentsAsExcelExporter.class
+    TabularExcelExporter.class
 })
 public class CausewayModuleExtTabularExcel {
 }

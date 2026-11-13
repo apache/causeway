@@ -30,21 +30,19 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Repaint;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel.Repaint;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
-
-import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
@@ -66,9 +64,9 @@ extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected void addParameters() {
-        val actionModel = actionModel();
+        var actionModel = actionModel();
 
-        val repeatingView =
+        var repeatingView =
                 Wkt.add(this, new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS));
 
         paramPanels.clear();
@@ -77,7 +75,7 @@ extends PromptFormAbstract<ActionModel> {
         .map(UiParameterWkt.class::cast)
         .forEach(paramModel->{
 
-            val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
+            var container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
 
             newParamPanel(container, paramModel, paramPanels::add);
 
@@ -89,16 +87,16 @@ extends PromptFormAbstract<ActionModel> {
     private void newParamPanel(
             final WebMarkupContainer container,
             final UiParameterWkt paramModel,
-            final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
+            final Consumer<AttributePanel> onNewScalarPanel) {
 
-        val scalarParamModel = ScalarParameterModel.wrap(paramModel);
+        var scalarParamModel = ParameterModel.wrap(paramModel);
 
         // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
-        val component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
-                        UiComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
+        var component = getComponentFactoryRegistry()
+                .addOrReplaceComponent(container, ActionParametersFormPanel.ID_ATTRIBUTE_NAME_AND_VALUE,
+                        UiComponentType.ATTRIBUTE_NAME_AND_VALUE, scalarParamModel);
 
-        _Casts.castTo(ScalarPanelAbstract.class, component)
+        _Casts.castTo(AttributePanel.class, component)
         .ifPresent(scalarPanel->{
             scalarPanel.addChangeListener(this); // handling onUpdate and onError
             onNewScalarPanel.accept(scalarPanel);
@@ -118,22 +116,22 @@ extends PromptFormAbstract<ActionModel> {
      * @param button The button which action should be confirmed
      */
     private void applyAreYouSure(final AjaxButton button) {
-        val actionModel = actionModel();
-        val action = actionModel.getAction();
+        var actionModel = actionModel();
+        var action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmDecorationModel.areYouSure(getTranslationService(), UiPlacementDirection.BOTTOM);
-            WktDecorators.getConfirm().decorate(button, confirmUiModel);
+            var confirmUiModel = ConfirmDecorationModel.areYouSure(UiPlacementDirection.BOTTOM);
+            WktDecorators.confirm().decorate(button, confirmUiModel);
         }
     }
 
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
+    public void onUpdate(final AjaxRequestTarget target, final AttributePanel scalarPanelUpdated) {
 
-        val actionModel = actionModel();
-        val updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
-        val paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
-        val pendingParamModels = actionModel.streamPendingParamUiModels().collect(Can.toCan());
+        var actionModel = actionModel();
+        var updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
+        var paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
+        var pendingParamModels = actionModel.streamPendingParamUiModels().collect(Can.toCan());
 
         final int paramIndexOfUpdated = updatedParamModel.getParameterIndex();
         _Xray.beforeParamFormUpdate(paramIndexOfUpdated, paramNegotiationModel);
@@ -148,8 +146,8 @@ extends PromptFormAbstract<ActionModel> {
                     Repaint.required(wasValueChanged);
             _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
-            val paramPanel = paramPanels.get(paramIndexForReassessment);
-            val paramModel = pendingParamModels.getElseFail(paramIndexForReassessment);
+            var paramPanel = paramPanels.get(paramIndexForReassessment);
+            var paramModel = pendingParamModels.getElseFail(paramIndexForReassessment);
             /* repaint is required, either because of a changed value during reassessment above
              * or because visibility or usability have changed */
             paramRepaint = paramRepaint.max(
@@ -176,7 +174,7 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+    protected Either<ActionModel, PropertyModel> getMemberModel() {
         return Either.left(actionModel());
     }
 

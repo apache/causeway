@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Apache Causeway Value Types Vega Persistence JDO DataNucleus Implementation
-Bundle-SymbolicName: org.apache.causeway.valuetypes.vega.persistence.jdo.dn
-Bundle-Version: 2.0.0
-Bundle-Vendor: Apache Causeway

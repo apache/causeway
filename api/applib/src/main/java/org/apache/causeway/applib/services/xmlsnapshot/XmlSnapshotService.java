@@ -45,7 +45,6 @@ import org.w3c.dom.Element;
  */
 public interface XmlSnapshotService {
 
-
     /**
      * @since 1.x {@index}
      */
@@ -90,13 +89,11 @@ public interface XmlSnapshotService {
     XmlSnapshotService.Snapshot.Builder builderFor(
                                     final Object domainObject);
 
-
     /**
      * Convenience method to extract value of an XML element, based on its type.
      */
     <T> T getChildElementValue(
             final Element el, final String tagname,
             final Class<T> expectedCls);
-
 
 }

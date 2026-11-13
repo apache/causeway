@@ -24,8 +24,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class LabelAtFacetAbstract
 extends FacetAbstract
@@ -38,11 +37,7 @@ implements LabelAtFacet {
     private final LabelPosition value;
 
     public LabelAtFacetAbstract(final LabelPosition value, final FacetHolder holder) {
-        this(value, holder, Precedence.DEFAULT);
-    }
-
-    public LabelAtFacetAbstract(final LabelPosition value, final FacetHolder holder, final Precedence precedence) {
-        super(type(), holder, precedence);
+        super(type(), holder);
         this.value = value;
     }
 
@@ -58,7 +53,7 @@ implements LabelAtFacet {
     }
 
     @Override
-    public boolean semanticEquals(@NonNull final Facet other) {
+    public boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof LabelAtFacetAbstract
                 && this.label() == ((LabelAtFacetAbstract) other).label();
     }

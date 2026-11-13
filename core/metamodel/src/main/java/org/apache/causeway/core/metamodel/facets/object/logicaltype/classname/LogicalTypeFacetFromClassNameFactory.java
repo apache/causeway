@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.logicaltype.classname;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.XmlType;
-
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -33,7 +31,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlType;
 
 public class LogicalTypeFacetFromClassNameFactory
 extends FacetFactoryAbstract
@@ -66,20 +65,20 @@ implements
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
+        var shouldCheck = getConfiguration().core().metaModel().validator().explicitLogicalTypeNames();
         if(!shouldCheck) return;
 
         programmingModel.addValidatorSkipManagedBeans(objectSpec-> {
             if(skip(objectSpec)) return;
 
-            val logicalType = objectSpec.getLogicalType();
+            var logicalType = objectSpec.logicalType();
 
-            //XXX has a slight chance to be a false positive; would need to check whether annotated with @Named
-            if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())) {
+            if(logicalType.className().equals(logicalType.logicalName())
+                    && !_ClassCache.getInstance().isNamed(objectSpec.correspondingClass())) {
                 ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
                         .builder()
-                        .addVariable("type", objectSpec.getFullIdentifier())
-                        .addVariable("beanSort", objectSpec.getBeanSort().name())
+                        .addVariable("type", objectSpec.fullIdentifier())
+                        .addVariable("beanSort", objectSpec.beanSort().name())
                         .addVariable("configProperty", "causeway.core.meta-model.validator.explicit-logical-type-names")
                         .buildMessage());
             }
@@ -95,11 +94,10 @@ implements
                 || objectSpec.isMixin()
                 || MmSpecUtils.isFixtureScript(objectSpec)) return true;
         if (objectSpec.isEntity()) return false;
-        if (objectSpec.isViewModel()) {
-            // with
+        if (objectSpec.isViewModel())
+			// with
             // skip JAXB DTOs
-            return objectSpec.getCorrespondingClass().getAnnotation(XmlType.class) != null;
-        }
+            return objectSpec.correspondingClass().getAnnotation(XmlType.class) != null;
         if (objectSpec.isInjectable()) {
             // only check if its a domain service (that is potentially contributing to UI or Web-API(s).
             if(!objectSpec.isDomainService()) return true;

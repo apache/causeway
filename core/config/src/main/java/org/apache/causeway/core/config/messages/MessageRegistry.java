@@ -35,5 +35,4 @@ public class MessageRegistry {
                 MSG_CANCEL);
     }
 
-
 }

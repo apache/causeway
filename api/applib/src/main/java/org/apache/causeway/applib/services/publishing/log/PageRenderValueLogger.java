@@ -31,8 +31,7 @@ import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
@@ -45,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class PageRenderValueLogger implements PageRenderSubscriber {
 
     private final UserService userService;
@@ -70,7 +69,7 @@ public class PageRenderValueLogger implements PageRenderSubscriber {
     @Override
     public void onRenderedValue(final Object value) {
         if(log.isDebugEnabled()) {
-            val timing = timings.get();
+            var timing = timings.get();
             log.debug("rendered value: [ \"{}\" ]  user: {}  took: {}ms", value, userService.currentUserNameElseNobody(), timing.took());
         }
     }

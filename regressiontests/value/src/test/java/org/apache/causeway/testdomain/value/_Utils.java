@@ -21,13 +21,12 @@ package org.apache.causeway.testdomain.value;
 import java.util.Locale;
 
 import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -39,7 +38,7 @@ class _Utils {
 
     // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
     String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
-        val rawXml = Try.call(()->JaxbUtils.toStringUtf8(valueWithTypeDto, opts->opts
+        var rawXml = Try.call(()->JaxbUtils.toStringUtf8(valueWithTypeDto, opts->opts
                 .useContextCache(true)
                 .formattedOutput(true)))
         .getValue().orElseThrow();

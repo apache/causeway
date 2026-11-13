@@ -49,7 +49,7 @@ extends TableDecoratorFacetAbstract {
                         tableDecorator, holder))
         ,
         () -> new TableDecoratorFacetFromConfiguration(
-                holder.getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getTableDecorator(),
+                holder.getConfiguration().applib().annotation().domainObjectLayout().tableDecorator(),
                 holder));
     }
 }

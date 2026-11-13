@@ -53,8 +53,8 @@ public final class Converter {
     private static MarkdownSupport markdownSupport;
 
     private static class MarkdownSupport {
-        private Parser parser;
-        private HtmlRenderer renderer;
+        private final Parser parser;
+        private final HtmlRenderer renderer;
 
         public MarkdownSupport() {
             MutableDataSet options = new MutableDataSet();
@@ -66,6 +66,9 @@ public final class Converter {
 
             // uncomment to convert soft-breaks to hard breaks
             //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+
+            // CAUSEWAY-4079: do not emit raw (user-supplied) HTML; prevents XSS
+            options.set(HtmlRenderer.SUPPRESS_HTML, true);
 
             parser = Parser.builder(options).build();
             renderer = HtmlRenderer.builder(options).build();

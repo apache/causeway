@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.model.components;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -29,11 +29,10 @@ import lombok.RequiredArgsConstructor;
 /**
  * Enumerates the different types of UI <i>Components</i> that can be constructed
  * using component factories.
- *
  * <p>
- * Some are fine-grained (such as {@link UiComponentType#SCALAR_NAME_AND_VALUE}, a
- * panel to represent a single scalar property or parameter), but others are
- * somewhat larger (such as {@link UiComponentType#ENTITY}, representing an
+ * Some are fine-grained (such as {@link UiComponentType#ATTRIBUTE_NAME_AND_VALUE}, a
+ * panel to represent a single property or parameter), but others are
+ * somewhat larger (such as {@link UiComponentType#DOMAIN_OBJECT}, representing an
  * entity, with its actions, properties and collections).
  */
 @RequiredArgsConstructor
@@ -49,48 +48,48 @@ public enum UiComponentType {
     WELCOME,
     /**
      * List of services and their actions.
-     *
      * <p>
      * Could be rendered using a JavaScript or DHTML menu, an accordion, or a
      * tree view.
      */
     SERVICE_ACTIONS,
     /**
-     * A single domain entity.
+     * A single domain object.
      */
-    ENTITY,
+    DOMAIN_OBJECT,
     /**
-     * Icon and title for a single entity.
+     * Icon and title for a single domain object.
      */
-    ENTITY_ICON_AND_TITLE,
+    OBJECT_ICON_AND_TITLE,
     /**
-     * Icon, title and a copy link for a single entity.
+     * Icon, title and a copy link for a single domain object.
      */
-    ENTITY_ICON_TITLE_AND_COPYLINK,
+    OBJECT_ICON_TITLE_AND_COPYLINK,
     /**
-     * Title, icon and action list for a single entity.
+     * Title, icon and action list for a single domain object.
      */
-    ENTITY_SUMMARY,
+    OBJECT_SUMMARY,
     /**
-     * A single &quot;parented&quot; collection of an entity.
-     *
+     * A single &quot;parented&quot; collection of domain objects.
      * <p>
-     *     Note that the default implementation is actually a wrapper that provides a selector over all available
-     *     individual representations of the entity by way of {@link #COLLECTION_CONTENTS} component type.  The
-     *     framework provides a number of implementations of this lower-level component: as a table, as
-     *     collapsed/hidden, as a summary.  Any additional representations that are found that can render the
-     *     collection (eg map, calendar) are added to the selector.
-     * </p>
+     * Note that the default implementation is actually a wrapper that provides a selector over all available
+     * individual representations of the entity by way of {@link #COLLECTION_CONTENTS} component type.  The
+     * framework provides a number of implementations of this lower-level component: as a table, as
+     * collapsed/hidden, as a summary. Any additional representations that are found that can render the
+     * collection (eg map, calendar) are added to the selector.
      */
-    ENTITY_COLLECTION,
+    PARENTED_COLLECTION,
     /**
      * A single standalone value, as might be returned from an action.
      */
     VALUE,
     /**
-     * The name and value of a single property or parameter, ie a scalar.
+     * The name and value of a single property or parameter, ie an attribute.
+     * <p>
+     * We refer to both method parameters and instance fields collectively as "attributes" of a class or method.
+     * (Parameters can be single- or multi-valued.)
      */
-    SCALAR_NAME_AND_VALUE,
+    ATTRIBUTE_NAME_AND_VALUE,
     /**
      * The parameter form (dialog box) of an action.
      */
@@ -126,11 +125,11 @@ public enum UiComponentType {
      */
     COLLECTION_CONTENTS_EXPORT(Optionality.OPTIONAL),
     /**
-     * A link to an entity.
+     * A link to a domain object.
      */
-    ENTITY_LINK,
+    OBJECT_LINK,
     /**
-     * A collection of entities, from an action, but none returned.
+     * A collection of objects, from an action, but none returned.
      */
     EMPTY_COLLECTION,
     /**
@@ -147,12 +146,10 @@ public enum UiComponentType {
      * acts as a fallback whenever a more suitable factory cannot be located.
      */
     UNKNOWN,
-
     /**
      * The header (navigation bar) of the page
      */
     HEADER,
-
     /**
      * The footer of the page
      */

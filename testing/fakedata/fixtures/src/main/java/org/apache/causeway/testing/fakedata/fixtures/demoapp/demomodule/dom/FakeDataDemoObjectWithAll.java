@@ -22,20 +22,21 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.UUID;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.VersionStrategy;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
@@ -58,16 +59,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType=IdentityType.DATASTORE,
+@Entity
+@Table(
         schema = "libFakeDataFixture"
 )
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="id")
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
-        column="version")
 @DomainObject(editing = Editing.DISABLED)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_ROOT)
 @NoArgsConstructor
@@ -78,8 +73,13 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         this.name = name;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
-    @javax.jdo.annotations.Column(allowsNull="false")
+    long id;
+
+    @Getter @Setter
+    @Column(nullable = false)
     @Title(sequence="1")
     @PropertyLayout(sequence="1")
     private String name;
@@ -109,118 +109,94 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @Getter @Setter
     private char someChar;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Boolean someBooleanWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Byte someByteWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Short someShortWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Integer someIntegerWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Long someLongWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Float someFloatWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Double someDoubleWrapper;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Character someCharacterWrapper;
 
     @Getter @Setter
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     private String someString;
 
-    @javax.jdo.annotations.Persistent()
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     @Property(optionality=Optionality.OPTIONAL)
     private Password somePassword;
 
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-            @javax.jdo.annotations.Column(name = "someBlob_name"),
-            @javax.jdo.annotations.Column(name = "someBlob_mimetype"),
-            @javax.jdo.annotations.Column(name = "someBlob_bytes", jdbcType = "BLOB", sqlType = "LONGVARBINARY")
-    })
     @Getter @Setter
     @Property(optionality = Optionality.OPTIONAL)
     private Blob someBlob;
 
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-            @javax.jdo.annotations.Column(name = "someClob_name"),
-            @javax.jdo.annotations.Column(name = "someClob_mimetype"),
-            @javax.jdo.annotations.Column(name = "someClob_chars", jdbcType = "CLOB", sqlType = "LONGVARCHAR")
-    })
     @Getter @Setter
     @Property(optionality=Optionality.OPTIONAL)
     private Clob someClob;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private java.util.Date someJavaUtilDate;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private java.sql.Date someJavaSqlDate;
 
-    @Column(allowsNull = "true")
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
+    @Column(nullable = true)
     @Getter @Setter
-    private org.joda.time.LocalDate someJodaLocalDate;
+    private LocalDate someLocalDate;
 
-    @Column(allowsNull = "true")
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
+    @Column(nullable = true)
     @Getter @Setter
-    private org.joda.time.DateTime someJodaDateTime;
+    private ZonedDateTime someZonedDateTime;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private java.sql.Timestamp someJavaSqlTimestamp;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private BigInteger someBigInteger;
 
-    @Column(allowsNull = "true", length = 14, scale = 4)
+    @Column(nullable = true, length = 14, scale = 4)
     @Getter @Setter
     private BigDecimal someBigDecimal;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private java.net.URL someUrl;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private java.util.UUID someUuid;
 
-
-//    @javax.jdo.annotations.Persistent(defaultFetchGroup="true", columns = {
-//            @javax.jdo.annotations.Column(name = "someMoneyOptional_amount"),
-//            @javax.jdo.annotations.Column(name = "someMoneyOptional_currency")
-//    })
-//    @Property(optionality = Optionality.OPTIONAL)
-//    @Getter @Setter
-//    private Money someMoney;
-
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private EnumOf3 someEnumOf3;
-
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeBoolean(final boolean b) {
@@ -231,7 +207,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return isSomeBoolean();
     }
 
-
     @Action(semantics= SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeByte(final byte b) {
         setSomeByte(b);
@@ -240,7 +215,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @MemberSupport public byte default0UpdateSomeByte() {
         return getSomeByte();
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeShort(final short s) {
@@ -251,7 +225,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return getSomeShort();
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeInt(final int i) {
         setSomeInt(i);
@@ -260,7 +233,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @MemberSupport public int default0UpdateSomeInt() {
         return getSomeInt();
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeLong(final long l) {
@@ -271,7 +243,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return getSomeLong();
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeFloat(final float f) {
         setSomeFloat(f);
@@ -280,7 +251,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @MemberSupport public float default0UpdateSomeFloat() {
         return getSomeFloat();
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeDouble(final double d) {
@@ -291,7 +261,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return getSomeDouble();
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeChar(final char i) {
         setSomeChar(i);
@@ -300,7 +269,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @MemberSupport public char default0UpdateSomeChar() {
         return getSomeChar();
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeBooleanWrapper(
@@ -319,7 +287,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeByteWrapper(final @Nullable Byte b) {
         setSomeByteWrapper(b);
@@ -334,7 +301,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeByteWrapper(null);
         return this;
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeShortWrapper(final @Nullable Short s) {
@@ -351,7 +317,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeIntegerWrapper(final @Nullable Integer i) {
         setSomeIntegerWrapper(i);
@@ -367,7 +332,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeLongWrapper(final @Nullable Long l) {
         setSomeLongWrapper(l);
@@ -379,7 +343,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeLongWrapper(null);
         return this;
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeFloatWrapper(final @Nullable Float f) {
@@ -411,7 +374,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeCharacterWrapper(final @Nullable Character i) {
         setSomeCharacterWrapper(i);
@@ -426,7 +388,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeCharacterWrapper(null);
         return this;
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeString(final @Nullable String i) {
@@ -458,7 +419,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeBlob(
             @Nullable
@@ -473,7 +433,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeClob(final @Nullable Clob clob) {
         setSomeClob(clob);
@@ -486,9 +445,8 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaUtilDate(final @Nullable java.util.Date i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaUtilDate(final java.util.@Nullable Date i) {
         setSomeJavaUtilDate(i);
         return this;
     }
@@ -502,9 +460,8 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaSqlDate(final @Nullable java.sql.Date i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaSqlDate(final java.sql.@Nullable Date i) {
         setSomeJavaSqlDate(i);
         return this;
     }
@@ -518,60 +475,54 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaLocalDate(final @Nullable LocalDate i) {
-        setSomeJodaLocalDate(i);
+    public FakeDataDemoObjectWithAll updateSomeLocalDate(final @Nullable LocalDate i) {
+        setSomeLocalDate(i);
         return this;
     }
-    @MemberSupport public org.joda.time.LocalDate default0UpdateSomeJodaLocalDate() {
-        return getSomeJodaLocalDate();
+    @MemberSupport public LocalDate default0UpdateSomeLocalDate() {
+        return getSomeLocalDate();
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeJodaLocalDate() {
-        setSomeJodaLocalDate(null);
+    public FakeDataDemoObjectWithAll resetSomeLocalDate() {
+        setSomeLocalDate(null);
         return this;
     }
 
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
-    private org.joda.time.LocalDateTime someJodaLocalDateTime;
-
-
-    @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaLocalDateTime(final LocalDateTime i) {
-        setSomeJodaLocalDateTime(i);
-        return this;
-    }
-    @MemberSupport public org.joda.time.LocalDateTime default0UpdateSomeJodaLocalDateTime() {
-        return getSomeJodaLocalDateTime();
-    }
-
+    private LocalDateTime someLocalDateTime;
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeJodaLocalDateTime() {
-        setSomeJodaLocalDateTime(null);
+    public FakeDataDemoObjectWithAll updateSomeLocalDateTime(final LocalDateTime i) {
+        setSomeLocalDateTime(i);
         return this;
     }
-
-
-    @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaDateTime(final @Nullable DateTime i) {
-        setSomeJodaDateTime(i);
-        return this;
-    }
-    @MemberSupport public org.joda.time.DateTime default0UpdateSomeJodaDateTime() {
-        return getSomeJodaDateTime();
+    @MemberSupport public LocalDateTime default0UpdateSomeLocalDateTime() {
+        return getSomeLocalDateTime();
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeJodaDateTime() {
-        setSomeJodaDateTime(null);
+    public FakeDataDemoObjectWithAll resetSomeLocalDateTime() {
+        setSomeLocalDateTime(null);
         return this;
     }
 
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public FakeDataDemoObjectWithAll updateSomeZonedDateTime(final @Nullable ZonedDateTime i) {
+        setSomeZonedDateTime(i);
+        return this;
+    }
+    @MemberSupport public ZonedDateTime default0UpdateSomeZonedDateTime() {
+        return getSomeZonedDateTime();
+    }
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public FakeDataDemoObjectWithAll resetSomeZonedDateTime() {
+        setSomeZonedDateTime(null);
+        return this;
+    }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeJavaSqlTimestamp(final @Nullable Timestamp i) {
@@ -587,7 +538,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJavaSqlTimestamp(null);
         return this;
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeBigInteger(
@@ -606,7 +556,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeBigDecimal(
             @Nullable @ValueSemantics(maxTotalDigits = 14, maxFractionalDigits = 4) final BigDecimal d) {
@@ -623,7 +572,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
     @Action(semantics= SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeUrl(final @Nullable URL i) {
         setSomeUrl(i);
@@ -638,7 +586,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeUrl(null);
         return this;
     }
-
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeUuid(final @Nullable UUID i) {
@@ -671,7 +618,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 //        return this;
 //    }
 
-
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeEnumOf3(final @Nullable EnumOf3 i) {
         setSomeEnumOf3(i);
@@ -695,6 +641,5 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     public int compareTo(final FakeDataDemoObjectWithAll other) {
         return comparator.compare(this, other);
     }
-
 
 }

@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.validating.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class PropertyValidateFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract  {
@@ -41,18 +39,15 @@ extends MemberSupportFacetFactoryAbstract  {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        val getterMethod = processMethodContext.getMethod();
-        val argType = getterMethod.getReturnType();
+        var getterMethod = processMethodContext.methodFacade();
+        var argType = getterMethod.getReturnType();
 
         methodFinder
-        .streamMethodsMatchingSignature(new Class[] { argType })
-        .peek(processMethodContext::removeMethod)
-        .forEach(validateMethod->{
-            addFacet(
-                    new PropertyValidateFacetViaMethod(
-                            validateMethod, processMethodContext.getFacetHolder()));
-        });
-
+	        .streamMethodsMatchingSignature(new Class[] { argType })
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(validateMethod->
+	                new PropertyValidateFacetViaMethod(
+	                        validateMethod, processMethodContext.facetHolder()));
     }
 
 }

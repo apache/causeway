@@ -29,14 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
-
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
@@ -52,7 +49,6 @@ import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIf
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaTransactionScopeListenerTest",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 /**
  * With this test we manage CausewayInteractions ourselves. (not sub-classing CausewayIntegrationTestAbstract)
  */
@@ -124,6 +120,5 @@ class JpaTransactionScopeListenerTest {
         assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsCommitted(kvStore));
 
     }
-
 
 }

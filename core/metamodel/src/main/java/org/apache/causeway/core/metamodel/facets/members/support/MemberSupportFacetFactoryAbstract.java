@@ -23,9 +23,7 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Membe
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public abstract class MemberSupportFacetFactoryAbstract
 extends MemberAndPropertySupportFacetFactoryAbstract {
@@ -52,27 +50,26 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
         if(mixinSupportExplicitlyAdded
                 && !processMethodContext.isMixinMain()) {
             // stop processing if it is not an allowed property or collection
-            val isProp = getFeatureTypes().contains(FeatureType.PROPERTY)
-                    && processMethodContext.getFeatureType().isProperty();
-            val isColl = getFeatureTypes().contains(FeatureType.COLLECTION)
-                    && processMethodContext.getFeatureType().isCollection();
+            var isProp = getFeatureTypes().contains(FeatureType.PROPERTY)
+                    && processMethodContext.featureType().isProperty();
+            var isColl = getFeatureTypes().contains(FeatureType.COLLECTION)
+                    && processMethodContext.featureType().isCollection();
             if(!(isProp
-                    || isColl)) {
-                return; // skip
-            }
+                    || isColl))
+				return; // skip
         }
 
-        val getterMethod = processMethodContext.getMethod();
-        val elementType = getterMethod.getReturnType(); // in case of an action, is never used
+        var getterMethod = processMethodContext.methodFacade();
+        var elementType = getterMethod.getReturnType(); // in case of an action, is never used
 
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+        var methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::memberSupportCandidates);
 
         search(processMethodContext,
                 MethodFinder
-                .memberSupport(processMethodContext.getCls(),
+                .memberSupport(processMethodContext.cls(),
                         methodNameCandidates,
-                        processMethodContext.getIntrospectionPolicy())
+                        processMethodContext.introspectionPolicy())
                 .withReturnTypeAnyOf(memberSupportPrefix
                         .getSupportMethodReturnType().matchingTypes(elementType))
                 );

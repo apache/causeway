@@ -21,10 +21,8 @@ package org.apache.causeway.core.metamodel.facets.param.validate;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
 public abstract class ActionParameterValidationFacetAbstract
 extends FacetAbstract
@@ -40,13 +38,12 @@ implements ActionParameterValidationFacet {
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof ActionArgValidityContext)) {
-            return null;
-        }
-        val actionArgValidityContext = (ActionArgValidityContext) context;
+        if (!(context instanceof ParamValidityContext)) return null;
+
+        var actionArgValidityContext = (ParamValidityContext) context;
         return invalidReason(
-                actionArgValidityContext.getTarget(),
-                actionArgValidityContext.getArgs(),
-                actionArgValidityContext.getPosition());
+                actionArgValidityContext.target(),
+                actionArgValidityContext.args(),
+                actionArgValidityContext.position());
     }
 }

@@ -18,35 +18,32 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-import lombok.val;
-
-public class HiddenTypeFacetFromAuthorization
+public final class HiddenTypeFacetFromAuthorization
 extends FacetAbstract
 implements HiddenTypeFacet {
 
-    private static final Class<? extends Facet> type() {
-        return HiddenTypeFacet.class;
-    }
+	public HiddenTypeFacetFromAuthorization(final FacetHolder facetHolder) {
+		super(HiddenTypeFacet.class, facetHolder);
+	}
 
-    public HiddenTypeFacetFromAuthorization(final FacetHolder holder) {
-        super(type(), holder, Precedence.HIGH); // facet has final say, don't override
-    }
+	@Override
+	public Precedence precedence() {
+		return Precedence.HIGH; // facet has final say, don't override;
+	}
 
     @Override
     public String hides(final VisibilityContext vc) {
-        val spec = (ObjectSpecification) getFacetHolder();
+        var spec = (ObjectSpecification) facetHolder();
 
-        if(!spec.isEntityOrViewModelOrAbstract()) {
-            return null;
-        }
+        if(!spec.isEntityOrViewModelOrAbstract())
+        	return null;
 
         /*[CAUSEWAY-3657] Don't hide members based on their element type having no visible actions,
          * properties or collections in case the element type is an interface.
@@ -56,34 +53,23 @@ implements HiddenTypeFacet {
          * and it is the case that any interface when PROTOTYPING has some Object_ actions mixed in,
          * but not necessarily in production.
          */
-        if(spec.getCorrespondingClass().isInterface()) {
-            return null;
-        }
+        if(spec.correspondingClass().isInterface())
+        	return null;
 
-        val hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
+        var hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
                 .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));
+        if (hasVisibleProperty) return null;
 
-        if (hasVisibleProperty) {
-            return null;
-        }
-
-        val hasVisibleCollection = spec.streamCollections(MixedIn.INCLUDED)
+        var hasVisibleCollection = spec.streamCollections(MixedIn.INCLUDED)
                 .anyMatch(coll -> !AuthorizationFacet.hidesCollection(coll, vc));
+        if (hasVisibleCollection) return null;
 
-        if (hasVisibleCollection) {
-            return null;
-        }
-
-        val hasVisibleAction = spec.streamRuntimeActions(MixedIn.INCLUDED)
+        var hasVisibleAction = spec.streamRuntimeActions(MixedIn.INCLUDED)
                 .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
+        if (hasVisibleAction) return null;
 
-        if (hasVisibleAction) {
-            return null;
-        }
-
-        return String.format("All members (actions, properties and collections) are hidden for logical-type %s",
-                spec.getLogicalTypeName());
-
+        return "All members (actions, properties and collections) are hidden for logical-type %s"
+        		.formatted(spec.logicalTypeName());
     }
 
 }

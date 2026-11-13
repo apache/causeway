@@ -32,20 +32,19 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Testing")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class EntityPropertyChangeSubscriberForTesting
 implements EntityPropertyChangeSubscriber {
 
@@ -61,14 +60,14 @@ implements EntityPropertyChangeSubscriber {
     @Override
     public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        PersistenceStack persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
+        PersistenceStack persistenceStack = causewayBeanTypeRegistry.persistenceStack();
 
-        val target = entityPropertyChange.getTarget();
-        val targetLogicalTypeName = target.getLogicalTypeName();
-        val targetLogicalType = specificationLoader.lookupLogicalTypeElseFail(targetLogicalTypeName);
-        val targetSimpleName = targetLogicalType.getLogicalTypeSimpleName();
+        var target = entityPropertyChange.getTarget();
+        var targetLogicalTypeName = target.logicalTypeName();
+        var targetLogicalType = specificationLoader.lookupLogicalTypeElseFail(targetLogicalTypeName);
+        var targetSimpleName = targetLogicalType.logicalSimpleName();
 
-        val propertyChangeEntry = String.format("%s %s/%s: '%s' -> '%s'",
+        var propertyChangeEntry = String.format("%s %s/%s: '%s' -> '%s'",
                 persistenceStack.titleCase(),
                 targetSimpleName,
                 entityPropertyChange.getPropertyId(),
@@ -76,7 +75,7 @@ implements EntityPropertyChangeSubscriber {
                 entityPropertyChange.getPostValue());
 
         @SuppressWarnings("unchecked")
-        val propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
+        var propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
             .orElseGet(ArrayList::new);
         kvStore.put(this, "propertyChangeEntries", propertyChangeEntries);
 
@@ -98,7 +97,5 @@ implements EntityPropertyChangeSubscriber {
     public static void clearPropertyChangeEntries(final KVStoreForTesting kvStore) {
         kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
-
-
 
 }

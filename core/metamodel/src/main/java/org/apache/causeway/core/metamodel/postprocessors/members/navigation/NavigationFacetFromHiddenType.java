@@ -28,11 +28,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
-import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
 
 public class NavigationFacetFromHiddenType
 extends FacetAbstract
@@ -61,18 +59,18 @@ implements
 
     @Override
     public String hides(final VisibilityContext ic) {
-        val facet = navigatedType.getFacet(HiddenTypeFacet.class);
+        var facet = navigatedType.lookupFacet(HiddenTypeFacet.class).orElse(null);
         if(facet == null) {
             // not expected to happen; this facet should only be installed for object members
             // that navigate to a class that has the HiddenTypeFacet
             return null;
         }
-        val objVisibilityContext = new ObjectVisibilityContext(
-                ic.getHead(),
-                Identifier.classIdentifier(navigatedType.getLogicalType()),
-                ic.getInitiatedBy(),
-                ic.getWhere(),
-                ic.getRenderPolicy());
+        var objVisibilityContext = new ObjectVisibilityContext(
+                ic.head(),
+                Identifier.classIdentifier(navigatedType.logicalType()),
+                ic.initiatedBy(),
+                ic.where(),
+                ic.renderPolicy());
         final String hides = facet.hides(objVisibilityContext);
         return hides;
     }
@@ -80,8 +78,8 @@ implements
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("navigatedType", navigatedType.getLogicalTypeName());
-        visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
+        visitor.accept("navigatedType", navigatedType.logicalTypeName());
+        visitor.accept("navigatedTypeFqcn", navigatedType.correspondingClass().getName());
     }
 
 }

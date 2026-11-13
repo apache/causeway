@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface HasSemanticEqualityByClass
 extends HasSemanticEquality {

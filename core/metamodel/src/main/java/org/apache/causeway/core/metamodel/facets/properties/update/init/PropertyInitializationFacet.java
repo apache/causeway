@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.properties.update.init;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -38,7 +37,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  *
  * @see PropertyOrCollectionAccessorFacet
  * @see PropertySetterFacet
- * @see PropertyClearFacet
  */
 public interface PropertyInitializationFacet extends Facet {
 

@@ -1,0 +1,43 @@
+[#jakarta-persistence-Transient]
+= @Transient (jpa)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The `@Transient` annotation is part of the Jakarta Persistence API (JPA) and is used to indicate that a field or property of an entity should not be persisted to the database.
+Fields marked with `@Transient` are ignored by the JPA provider during persistence operations.
+
+Such fields are useful for temporary, calculated, or helper fields that should not be stored.
+In particular, injected services should be annotated with `@Transient`
+
+Although this annotation is recognised by Causeway, its metadata is currently unused.
+
+== Usage
+
+Annotate a field or getter in your entity class with `@Transient` to exclude it from persistence:
+
+[source,java]
+----
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
+
+@Entity
+public class Product {
+
+    @Column(length=100)
+    private String name;
+
+    // ...
+
+    @Transient                                          // <.>
+    @Inject
+    private RepositoryService repositoryService;
+}
+----
+<.> indicates that this injected service should be ignored so far as persistence goes.
+
+
+== See Also
+
+- link:https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/Transient[@Transient] (JPA API javadoc)
+

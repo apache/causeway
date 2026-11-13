@@ -1,0 +1,276 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
+ */
+package org.apache.causeway.persistence.querydsl.jpa.services.support;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
+
+import com.mysema.commons.lang.CloseableIterator;
+import com.querydsl.core.FetchableQuery;
+import com.querydsl.core.NonUniqueResultException;
+import com.querydsl.core.QueryMetadata;
+import com.querydsl.core.QueryModifiers;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.ResultTransformer;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.CollectionExpression;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.ParamExpression;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Visitor;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanOperation;
+import com.querydsl.jpa.impl.JPAQuery;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(staticName = "of")
+public class DslQueryJpa<T> implements DslQuery<T> {
+	private static final long serialVersionUID = 1L;
+
+    final JPAQuery<T> jpaQuery;
+
+    @Override
+    public <U> DslQuery<U> projection(final Expression<U> expr) {
+        return DslQueryJpa.of(jpaQuery.select(expr));
+    }
+
+    @Override
+    public DslQuery<T> from(final EntityPath<?>... sources) {
+        return DslQueryJpa.of(jpaQuery.from(sources));
+    }
+
+    @Override
+    public <U> DslQuery<T> from(final CollectionExpression<?, U> path, final Path<U> alias) {
+        return DslQueryJpa.of(jpaQuery.from(path,alias));
+    }
+
+    @Override
+    public <U> FetchableQuery<U, ?> select(final Expression<U> expression) {
+        return jpaQuery.select(expression);
+    }
+
+    @Override
+    public FetchableQuery<Tuple, ?> select(final Expression<?>... expressions) {
+        return jpaQuery.select(expressions);
+    }
+
+    @Override
+    public <S> S transform(final ResultTransformer<S> resultTransformer) {
+        return jpaQuery.transform(resultTransformer);
+    }
+
+    @Override
+    public List<T> fetch() {
+        return jpaQuery.fetch();
+    }
+
+    @Override
+    public T fetchFirst() {
+        return jpaQuery.fetchFirst();
+    }
+
+    @Override
+    public T fetchOne() throws NonUniqueResultException {
+        return jpaQuery.fetchOne();
+    }
+
+    @Override
+    public CloseableIterator<T> iterate() {
+        return jpaQuery.iterate();
+    }
+
+    @SuppressWarnings("deprecation") // it seems, nothing we can do about this deprecation, hence suppress
+	@Override
+    public QueryResults<T> fetchResults() {
+        return jpaQuery.fetchResults();
+    }
+
+    @SuppressWarnings("deprecation") // it seems, nothing we can do about this deprecation, hence suppress
+	@Override
+    public long fetchCount() {
+        return jpaQuery.fetchCount();
+    }
+
+    @Override
+    public DslQuery<T> groupBy(final Expression<?>... expressions) {
+        return DslQueryJpa.of(jpaQuery.groupBy(expressions));
+    }
+
+    @Override
+    public DslQuery<T> having(final Predicate... predicates) {
+        return DslQueryJpa.of(jpaQuery.having(predicates));
+    }
+
+    @Override
+    public DslQuery<T> limit(final long limit) {
+        return DslQueryJpa.of(jpaQuery.limit(limit));
+    }
+
+    @Override
+    public DslQuery<T> offset(final long offset) {
+        return DslQueryJpa.of(jpaQuery.offset(offset));
+    }
+
+    @Override
+    public DslQuery<T> restrict(final QueryModifiers queryModifiers) {
+        return DslQueryJpa.of(jpaQuery.restrict(queryModifiers));
+    }
+
+    @Override
+    public DslQuery<T> orderBy(final OrderSpecifier<?>... orderSpecifiers) {
+        return DslQueryJpa.of(jpaQuery.orderBy(orderSpecifiers));
+    }
+
+    @Override
+    public <P> DslQuery<T> set(final ParamExpression<P> paramExpression, final P t) {
+        return DslQueryJpa.of(jpaQuery.set(paramExpression,t));
+    }
+
+    @Override
+    public DslQuery<T> distinct() {
+        return DslQueryJpa.of(jpaQuery.distinct());
+    }
+
+    @Override
+    public DslQuery<T> where(final Predicate... predicates) {
+        return DslQueryJpa.of(jpaQuery.where(predicates));
+    }
+
+    @Override
+    public BooleanExpression eq(final Expression<? extends T> expression) {
+        return jpaQuery.eq(expression);
+    }
+
+    @Override
+    public BooleanExpression eq(final T t) {
+        return jpaQuery.eq(t);
+    }
+
+    @Override
+    public BooleanExpression ne(final Expression<? extends T> expression) {
+        return jpaQuery.ne(expression);
+    }
+
+    @Override
+    public BooleanExpression ne(final T t) {
+        return jpaQuery.ne(t);
+    }
+
+    @Override
+    public BooleanExpression contains(final Expression<? extends T> expression) {
+        return jpaQuery.contains(expression);
+    }
+
+    @Override
+    public BooleanExpression contains(final T t) {
+        return jpaQuery.contains(t);
+    }
+
+    @Override
+    public BooleanExpression exists() {
+        return jpaQuery.exists();
+    }
+
+    @Override
+    public BooleanExpression notExists() {
+        return jpaQuery.exists();
+    }
+
+    @Override
+    public BooleanExpression lt(final Expression<? extends T> expression) {
+        return jpaQuery.lt(expression);
+    }
+
+    @Override
+    public BooleanExpression lt(final T t) {
+        return jpaQuery.lt(t);
+    }
+
+    @Override
+    public BooleanExpression gt(final Expression<? extends T> expression) {
+        return jpaQuery.gt(expression);
+    }
+
+    @Override
+    public BooleanExpression gt(final T t) {
+        return jpaQuery.gt(t);
+    }
+
+    @Override
+    public BooleanExpression loe(final Expression<? extends T> expression) {
+        return jpaQuery.loe(expression);
+    }
+
+    @Override
+    public BooleanExpression loe(final T t) {
+        return jpaQuery.loe(t);
+    }
+
+    @Override
+    public BooleanExpression goe(final Expression<? extends T> expression) {
+        return jpaQuery.goe(expression);
+    }
+
+    @Override
+    public BooleanExpression goe(final T t) {
+        return jpaQuery.goe(t);
+    }
+
+    @Override
+    public BooleanOperation isNull() {
+        return jpaQuery.isNull();
+    }
+
+    @Override
+    public BooleanOperation isNotNull() {
+        return jpaQuery.isNotNull();
+    }
+
+    @Override
+    public BooleanExpression in(final Collection<? extends T> collection) {
+        return jpaQuery.in(collection);
+    }
+
+    @Override
+    public BooleanExpression in(@SuppressWarnings("unchecked") final T... ts) {
+        return jpaQuery.in(ts);
+    }
+
+    @Override
+    public QueryMetadata getMetadata() {
+        return jpaQuery.getMetadata();
+    }
+
+    @Override
+    public <R, C> R accept(final Visitor<R, C> visitor, final C c) {
+        return jpaQuery.accept(visitor,c);
+    }
+
+    @Override
+    public Class<? extends T> getType() {
+        return jpaQuery.getType();
+    }
+}

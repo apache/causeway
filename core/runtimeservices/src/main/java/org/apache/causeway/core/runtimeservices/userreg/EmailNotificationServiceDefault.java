@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link EmailNotificationService}.
  *
  * @since 2.0 {@index}
  */
@@ -65,7 +66,6 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     private String passwordResetTemplate;
     private String emailVerificationTemplate;
-
 
     // -- INIT
 
@@ -161,6 +161,5 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
         return message;
     }
-
 
 }

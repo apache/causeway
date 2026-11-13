@@ -18,37 +18,31 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collection;
 
-import java.util.Optional;
-
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
- * of) {@link ScalarPanelAbstract}.
+ * of) {@link AttributePanel}.
  */
 public class CollectionPanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModelParented>
+extends PanelAbstract<DataTableInteractive, CollectionModelParented>
 implements
-    CollectionPresentationSelectorProvider,
-    MultiselectToggleProvider {
+    CollectionPresentationSelectorProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,13 +52,13 @@ implements
 
     public CollectionPanel(
             final String id,
-            final EntityCollectionModelParented collectionModel) {
+            final CollectionModelParented collectionModel) {
         super(id, collectionModel);
 
-        val collMetaModel = getModel().getMetaModel();
+        var collMetaModel = getModel().getMetaModel();
 
-        val associatedActions = collMetaModel.streamAssociatedActions()
-        .map(LinkAndLabelFactory.forCollection(collectionModel))
+        var associatedActions = collMetaModel.streamAssociatedActions()
+        .map(act->ActionModel.forCollection(act, collectionModel))
         .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(associatedActions);
@@ -77,29 +71,13 @@ implements
     }
 
     private void buildGui() {
-        val collectionContents = getComponentFactoryRegistry()
+        var collectionContents = getComponentFactoryRegistry()
                 .addOrReplaceComponent(this, UiComponentType.COLLECTION_CONTENTS, getModel());
 
         addOrReplace(new NotificationPanel(ID_FEEDBACK, collectionContents,
                 new ComponentFeedbackMessageFilter(collectionContents)));
 
         setOutputMarkupId(true);
-    }
-
-    // -- MULTI SELECTION SUPPORT
-
-    private transient Optional<ToggleboxColumn> toggleboxColumn;
-
-    @Override
-    public ToggleboxColumn getToggleboxColumn() {
-        if(toggleboxColumn == null) {
-            val collModel = getModel();
-            val collMetaModel = collModel.getMetaModel();
-            toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new ToggleboxColumn(collModel.delegate()))
-                    : Optional.empty();
-        }
-        return toggleboxColumn.orElse(null);
     }
 
 }

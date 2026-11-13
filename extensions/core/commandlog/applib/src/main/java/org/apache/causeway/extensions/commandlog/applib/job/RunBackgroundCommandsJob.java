@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -37,13 +37,15 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayTraceClassifier;
+import org.apache.causeway.core.config.observation.CausewayTraceClassifier.ExecutionMode;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -53,8 +55,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An implementation of a Quartz {@link Job} that queries for {@link CommandLogEntry}s that have been persisted by
@@ -73,7 +74,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
-@Log4j2
+@Slf4j
 public class RunBackgroundCommandsJob implements Job {
 
     final static int RETRY_COUNT = 3;
@@ -90,16 +91,21 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Autowired private CausewayConfiguration causewayConfiguration;
 
+    @Inject CausewayTraceClassifier traceClassifier;
+
     @Override
     public void execute(final JobExecutionContext quartzContext) {
+        // Instrumentation (for example the Java agent) owns the job entry span.
+        // Classify even paused runs, but never manufacture a span when none exists.
+        traceClassifier.classifyCurrentSpan(ExecutionMode.BACKGROUND);
 
         if (backgroundCommandsJobControl.isPaused()) {
             log.debug("currently paused");
             return;
         }
 
-        val userMemento = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
-        val interactionContext = InteractionContext.builder().user(userMemento).build();
+        var userMemento = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
+        var interactionContext = InteractionContext.builder().user(userMemento).build();
 
         // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
         final Optional<List<CommandDto>> commandDtosIfAny = pendingCommandDtos(interactionContext);
@@ -110,7 +116,7 @@ public class RunBackgroundCommandsJob implements Job {
             for (CommandDto dto : commandDtos) {
                 Try<?> attempt = executeCommandWithinTransaction(dto, interactionContext);
                 if(attempt.isFailure()) {
-                    val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+                    var onFailurePolicy = causewayConfiguration.extensions().commandLog().runBackgroundCommands().onFailurePolicy();
                     if (onFailurePolicy == CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands.OnFailurePolicy.STOP_THE_LINE) {
                         break;
                     }
@@ -121,7 +127,7 @@ public class RunBackgroundCommandsJob implements Job {
 
             // an enhancement for the listener interface would be to say whether each interaction succeeded or not
             // whether his is relevant depends on the onFailurePolicy (if it's set to STOP_THE_LINE, then everything passed on will have succeeded)
-            val interactionIds = commandResults.stream()
+            var interactionIds = commandResults.stream()
                     .filter(commandAndResult -> commandAndResult.getExecutionResult().isSuccess())  // only the successes
                     .map(CommandAndResult::getCommandDto)
                     .map(CommandDto::getInteractionId)
@@ -145,7 +151,7 @@ public class RunBackgroundCommandsJob implements Job {
                 commandLogEntryRepository.findBackgroundAndNotYetStarted()
                         .stream()
                         .map(CommandLogEntry::getCommandDto)
-                        .limit(causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getBatchSize())
+                        .limit(causewayConfiguration.extensions().commandLog().runBackgroundCommands().batchSize())
                         .collect(Collectors.toList())
                 )
                 .ifFailureFail()
@@ -168,12 +174,12 @@ public class RunBackgroundCommandsJob implements Job {
 
                 // previously we were creating a new transaction here with REQUIRES_NEW, but this isn't necessary
                 // (and massively complicates things) since each interaction will implictly creates its own transaction
-                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                var commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
                 if(commandLogEntryIfAny.isEmpty()) {
                     return Try.empty();
                 }
 
-                val commandLogEntry = commandLogEntryIfAny.get();
+                var commandLogEntry = commandLogEntryIfAny.get();
                 return commandExecutorService.executeCommand(
                             CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto)
                         .ifSuccess(
@@ -197,7 +203,7 @@ public class RunBackgroundCommandsJob implements Job {
         }
 
         // a failure has occurred
-        val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+        var onFailurePolicy = causewayConfiguration.extensions().commandLog().runBackgroundCommands().onFailurePolicy();
         switch (onFailurePolicy) {
             case CONTINUE_WITH_NEXT:
                 // the result _will_ contain a failure
@@ -240,14 +246,14 @@ public class RunBackgroundCommandsJob implements Job {
 
         interactionService.run(interactionContext, () -> {
             // look up the CommandLogEntry again because we are within a new transaction.
-            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+            var commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
             // capture the error
             commandLogEntryIfAny.ifPresent(
                 commandLogEntry -> {
                     // use tunnelled info if available
                     if (throwable instanceof ThrowableWithDetailsOfAttempt) {
-                        val throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
+                        var throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
                         commandLogEntry.setStartedAt(throwableWithDetailsOfAttempt.getStartedAt());
                         commandLogEntry.setException(throwableWithDetailsOfAttempt.getOriginal());
                     } else {

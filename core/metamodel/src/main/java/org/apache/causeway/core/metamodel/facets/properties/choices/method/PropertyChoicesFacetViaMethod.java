@@ -25,7 +25,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -33,8 +33,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyChoicesFacetViaMethod
 extends PropertyChoicesFacetAbstract
@@ -62,10 +61,10 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
-        val optionPojos = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
-        val visibleChoices = ManagedObjects
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var elementSpec = ((FacetedMethod) facetHolder()).elementSpecification();
+        var optionPojos = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
+        var visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         elementSpec, optionPojos, interactionInitiatedBy);
         return visibleChoices;

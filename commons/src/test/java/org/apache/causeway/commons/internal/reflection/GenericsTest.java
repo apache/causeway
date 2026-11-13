@@ -28,8 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 
-import lombok.val;
-
 class GenericsTest {
 
     Class<?> typeUnderTest;
@@ -44,7 +42,7 @@ class GenericsTest {
     @Test
     void streamGenericTypeArgumentsOfType() {
 
-        val actualTypeArgs = _Generics.streamGenericTypeArgumentsOfType(typeUnderTest)
+        var actualTypeArgs = _Generics.streamGenericTypeArgumentsOfType(typeUnderTest)
         .collect(Can.toCan());
 
         // impossible, so empty
@@ -54,9 +52,9 @@ class GenericsTest {
     @Test
     void streamGenericTypeArgumentsOfMethodReturnType() throws NoSuchMethodException, SecurityException {
 
-        val methodUnderTest = this.getClass().getDeclaredMethod("methodUnderTest", _Constants.emptyClasses);
+        var methodUnderTest = this.getClass().getDeclaredMethod("methodUnderTest", _Constants.emptyClasses);
 
-        val actualTypeArgs = _Generics.streamGenericTypeArgumentsOfMethodReturnType(methodUnderTest)
+        var actualTypeArgs = _Generics.streamGenericTypeArgumentsOfMethodReturnType(methodUnderTest)
         .collect(Can.toCan());
 
         assertEquals(Can.of(String.class), actualTypeArgs);
@@ -65,9 +63,9 @@ class GenericsTest {
     @Test
     void streamGenericTypeArgumentsOfField() throws NoSuchFieldException, SecurityException {
 
-        val fieldUnderTest = this.getClass().getDeclaredField("fieldUnderTest");
+        var fieldUnderTest = this.getClass().getDeclaredField("fieldUnderTest");
 
-        val actualTypeArgs = _Generics.streamGenericTypeArgumentsOfField(fieldUnderTest)
+        var actualTypeArgs = _Generics.streamGenericTypeArgumentsOfField(fieldUnderTest)
         .collect(Can.toCan());
 
         assertEquals(Can.of(String.class), actualTypeArgs);

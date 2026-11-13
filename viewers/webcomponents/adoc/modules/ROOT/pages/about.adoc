@@ -1,0 +1,58 @@
+= Web Component Viewers
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; see the NOTICE file distributed with this work. The ASF licenses this file under the Apache License, Version 2.0, available at https://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the License for the specific language governing permissions and limitations under the License.
+
+The HTMX and Vue viewers render an Apache Causeway domain model using shared semantic web components backed by the xref:gqlv:ROOT:about.adoc[GraphQL viewer].
+They offer two ways to host the same component model: server-routed HTML or an application-owned Vue frontend.
+Domain rules remain on the server; the host does not need to reproduce choices, validation, permissions, or action semantics.
+
+== Choose a host
+
+[cols="1,2,2",options="header"]
+|===
+|Concern |HTMX |Vue
+|Application integration |Maven module and Spring bootstrap |Vue package, router plugin, and application backend
+|Navigation |Server-rendered route fragments enhanced by HTMX |Client-side Vue Router routes
+|Shell |Built-in shell or packaged application HTML body |Application-owned Vue component
+|Custom pages |Packaged HTML selected by exact logical type |Vue components selected by exact logical type
+|Domain interaction |Shared Causeway components and rich GraphQL |Shared Causeway components and rich GraphQL
+|===
+
+Start with xref:htmx/getting-started.adoc[HTMX] if you want server-owned routing and declarative HTML pages.
+Start with xref:vue/getting-started.adoc[Vue] if your application already owns a Vue frontend or needs Vue composition around domain components.
+Neither choice requires replacing the domain model, and neither implies complete Wicket feature parity.
+The supported boundaries are described in the relevant guide.
+
+== Architecture
+
+[listing]
+....
+Application host
+  HTMX shell + route fragments     OR     Vue shell + route components
+                         |
+              Causeway custom elements
+         contexts, menus, properties, actions,
+               layouts, collections, results
+                         |
+                  rich GraphQL API
+                         |
+              Causeway domain model
+       visibility, validation, actions, persistence
+....
+
+The foundation supplies framework-neutral ECMAScript modules and custom elements such as `<cw-object-context>`, `<cw-property>`, and `<cw-action>`.
+It does not depend on HTMX or Vue.
+Hosts own route selection, history, shell stability, and lifecycle; components own GraphQL projections, semantic state, and interaction results.
+Optional toolkit adapters change eligible presentation without becoming application-facing domain APIs.
+
+== Guide map
+
+* xref:prerequisites.adoc[Backend and deployment prerequisites]
+* xref:components.adoc[Compose objects and interactions]
+* xref:presentation.adoc[Presentation, resources, and toolkits]
+* xref:htmx/getting-started.adoc[HTMX installation and Petclinic walkthrough]
+* xref:vue/getting-started.adoc[Vue installation and Petclinic walkthrough]
+* xref:troubleshooting.adoc[Troubleshooting]
+
+Authentication is optional host integration, not a feature of the generic components.
+See the xref:htmx/security.adoc[HTMX] and xref:vue/security.adoc[Vue] security guides before deploying a session-authenticated application.

@@ -27,7 +27,7 @@ import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * This class is {@link Serializable} so that it can be injected into Wicket components.
@@ -134,8 +133,8 @@ public class WebAppContextPath implements Serializable {
         if(contextPath == null) {
             return "";
         }
-        val matcher = pattern.matcher(contextPath);
-        val path = matcher.matches()
+        var matcher = pattern.matcher(contextPath);
+        var path = matcher.matches()
                 ? matcher.group(1)
                         : "";
 
@@ -155,6 +154,5 @@ public class WebAppContextPath implements Serializable {
                 ? "/" + url
                         : url;
     }
-
 
 }

@@ -25,21 +25,20 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 final class _Xray {
 
     static void onSclarModelUpdate(
-            final ScalarModel scalarModel, final ManagedObject oldValue, final ManagedObject newValue) {
+            final UiAttributeWkt attributeModel, final ManagedObject oldValue, final ManagedObject newValue) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val oldPojo = MmUnwrapUtils.single(oldValue);
-        val newPojo = MmUnwrapUtils.single(newValue);
-        val changed = !Objects.equals(oldPojo, newPojo);
+        var oldPojo = MmUnwrapUtils.single(oldValue);
+        var newPojo = MmUnwrapUtils.single(newValue);
+        var changed = !Objects.equals(oldPojo, newPojo);
 
-        final String updatingWhat = scalarModel.getSpecialization()
+        final String updatingWhat = attributeModel.getSpecialization()
                 .fold(
                     param->
                         String.format("param[index=%d,name=%s,changed=%b]",
@@ -51,7 +50,7 @@ final class _Xray {
                     );
 
         _XrayEvent.user("%s Model - updating %s: %s -> %s",
-                scalarModel.isParameter() ? "Parameter" : "Property",
+                attributeModel.isParameter() ? "Parameter" : "Property",
                 updatingWhat,
                 oldPojo, newPojo);
     }

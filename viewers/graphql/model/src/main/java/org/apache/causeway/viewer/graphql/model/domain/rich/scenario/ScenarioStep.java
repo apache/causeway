@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import graphql.schema.DataFetchingEnvironment;
-
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
@@ -32,7 +30,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 
-import lombok.val;
+import graphql.schema.DataFetchingEnvironment;
 
 public class ScenarioStep
         extends ElementCustom
@@ -46,29 +44,26 @@ public class ScenarioStep
             final Context context) {
         super("ScenarioStep", context);
 
-        if(isBuilt()) {
-            return;
-        }
+        if(isBuilt())
+			return;
 
         // add domain object lookup to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
-                    val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
+            switch (objectSpec.beanSort()) {
+                case ABSTRACT,
+                VIEW_MODEL, // @DomainObject(nature=VIEW_MODEL)
+                ENTITY -> {     // @DomainObject(nature=ENTITY)
+                    var gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
                     addChildField(gqlvDomainObject.newField());
                     domainObjects.add(gqlvDomainObject);
-
-                    break;
+                }
+                default -> {}
             }
         });
 
         context.objectSpecifications().forEach(objectSpec -> {
-            if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
-                context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+            if (Objects.requireNonNull(objectSpec.beanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
+                context.serviceRegistry.lookupBeanById(objectSpec.logicalTypeName())
                         .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
             }
         });
@@ -76,8 +71,7 @@ public class ScenarioStep
         buildObjectType();
     }
 
-
-
+    @Override
     protected void addDataFetchersForChildren() {
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
@@ -90,7 +84,7 @@ public class ScenarioStep
     }
 
     @Override
-    protected DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
+    protected DataFetchingEnvironment fetchData(final DataFetchingEnvironment environment) {
         return environment;
     }
 

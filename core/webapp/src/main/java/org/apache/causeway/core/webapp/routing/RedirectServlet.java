@@ -28,9 +28,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.causeway.commons.internal.resources._Resources;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RedirectServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

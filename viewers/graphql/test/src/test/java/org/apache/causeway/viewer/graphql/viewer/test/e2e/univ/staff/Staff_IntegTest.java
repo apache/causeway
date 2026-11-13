@@ -29,7 +29,6 @@ import org.junit.jupiter.api.TestFactory;
 
 import org.springframework.test.context.ActiveProfiles;
 
-
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
 @ActiveProfiles("test")
@@ -40,6 +39,5 @@ public class Staff_IntegTest extends Abstract_IntegTest {
     public Iterable<DynamicTest> each() throws IOException, URISyntaxException {
         return super.each();
     }
-
 
 }

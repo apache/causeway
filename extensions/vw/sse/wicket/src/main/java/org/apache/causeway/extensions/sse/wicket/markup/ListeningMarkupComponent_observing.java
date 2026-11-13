@@ -26,9 +26,9 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
 import static org.apache.causeway.commons.internal.base._Strings.isNullOrEmpty;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 final class ListeningMarkupComponent_observing  {
 
     private static final String jScriptTemplateResource = "js/ObservingComponent.js";

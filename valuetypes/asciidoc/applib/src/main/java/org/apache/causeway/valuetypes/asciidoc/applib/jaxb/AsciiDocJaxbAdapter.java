@@ -42,19 +42,17 @@ public final class AsciiDocJaxbAdapter extends XmlAdapter<String, AsciiDoc> {
 
     @Override
     public AsciiDoc unmarshal(final String v) throws Exception {
-        if(v==null) {
-            return null;
-        }
+        if(v==null)
+			return null;
         final String adoc = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
         return AsciiDoc.valueOf(adoc);
     }
 
     @Override
     public String marshal(final AsciiDoc v) throws Exception {
-        if(v==null) {
-            return null;
-        }
-        final String adoc = v.getAdoc();
+        if(v==null)
+			return null;
+        final String adoc = v.adoc();
         return encoder.encodeToString(_Strings.toBytes(adoc, StandardCharsets.UTF_8));
     }
 }

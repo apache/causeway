@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
@@ -41,14 +40,6 @@ implements LayoutGroupFacet {
             final GroupIdAndName groupIdAndName,
             final FacetHolder holder) {
         super(type(), holder);
-        this.groupIdAndName = groupIdAndName;
-    }
-
-    protected LayoutGroupFacetAbstract(
-            final GroupIdAndName groupIdAndName,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
         this.groupIdAndName = groupIdAndName;
     }
 

@@ -23,19 +23,9 @@ import java.util.stream.Stream;
 import org.apache.causeway.commons.internal.compare._Comparators;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
-import org.apache.causeway.core.metamodel.spec.feature.memento.CollectionMemento;
-
-import lombok.val;
 
 public interface OneToManyAssociation
 extends ObjectAssociation, OneToManyFeature {
-
-    /**
-     * Returns a serializable representation of this collection.
-     */
-    default CollectionMemento getMemento() {
-        return CollectionMemento.forCollection(this);
-    }
 
     // -- ASSOCIATED ACTIONS
 
@@ -75,10 +65,10 @@ extends ObjectAssociation, OneToManyFeature {
     // -- ASSOCIATED ACTION ORDER
 
     private int deweyOrderCompare(final ObjectAction a, final ObjectAction b) {
-        val seqA = a.lookupFacet(LayoutOrderFacet.class)
+        var seqA = a.lookupFacet(LayoutOrderFacet.class)
             .map(LayoutOrderFacet::getSequence)
             .orElse("1");
-        val seqB = b.lookupFacet(LayoutOrderFacet.class)
+        var seqB = b.lookupFacet(LayoutOrderFacet.class)
             .map(LayoutOrderFacet::getSequence)
             .orElse("1");
         return _Comparators.deweyOrderCompare(seqA, seqB);

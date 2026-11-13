@@ -18,16 +18,33 @@
  */
 package org.apache.causeway.core.runtimeservices.transaction;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.xactn.TransactionId;
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.services.xactn.TransactionState;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.observation.ObservationClosure;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
+import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
+import org.jspecify.annotations.NonNull;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -41,43 +58,27 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.xactn.TransactionId;
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.applib.services.xactn.TransactionState;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
-import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * @implNote This implementation yet does not support more than one {@link PlatformTransactionManager}
+ * Default implementation of {@link TransactionService}, which delegates to Spring's own transaction management
+ * framework, such as {@link PlatformTransactionManager}.
+ *
+ * @implNote This implementation does not yet support more than one {@link PlatformTransactionManager}
  * on the same Spring context. If more than one are discovered, some methods will fail
  * with {@link IllegalStateException}s.
  *
  * @since 2.0 {@index}
- *
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".TransactionServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
-@Log4j2
+@Slf4j
 public class TransactionServiceSpring
 implements
     TransactionService {
@@ -86,13 +87,15 @@ implements
     private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
     private final ConfigurableListableBeanFactory configurableListableBeanFactory;
+    private final ObservationProvider observationProvider;
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final Provider<InteractionLayerTracker> interactionLayerTrackerProvider,
-            final ConfigurableListableBeanFactory configurableListableBeanFactory
+            final ConfigurableListableBeanFactory configurableListableBeanFactory,
+            final CausewayObservationIntegration observationIntegration
     ) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
@@ -104,6 +107,9 @@ implements
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
         this.interactionLayerTrackerProvider = interactionLayerTrackerProvider;
+
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreMetamodel.NAMESPACE));
     }
 
     // -- API
@@ -111,25 +117,26 @@ implements
     @Override
     public <T> Try<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
 
-        val platformTransactionManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
+        var platformTransactionManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
 
         Try<T> result = null;
 
         try {
             TransactionStatus txStatus = platformTransactionManager.getTransaction(def);
-            registerTransactionSynchronizations(txStatus);
+            registerTransactionSynchronizations();
 
             result = Try.call(() -> {
-                        final T callResult = callable.call();
 
-                        if(!FlushMgmt.isAutoFlushSuppressed()) {
-                            // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
-                            txStatus.flush();
-                        }
+                    final T callResult = callable.call();
 
-                        return callResult;
-                    })
-                    .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
+                    if(!FlushMgmt.isAutoFlushSuppressed()) {
+                        // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
+                        txStatus.flush();
+                    }
+
+                    return callResult;
+                })
+                .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
             if(result.isFailure()) {
                 // if this is a nested transaction, then the javadoc says it will actually be just a call to
@@ -143,9 +150,8 @@ implements
             // return the original failure cause (originating from calling the callable)
             // (so we don't shadow the original failure)
             // return the failure we just caught
-            if (result != null && result.isFailure()) {
-                return result;
-            }
+            if (result != null && result.isFailure())
+				return result;
 
             // otherwise, we thought we had a success, but now we have an exception thrown by either ,
             // the call to rollback or commit above.  We don't need to do anything though; if either of
@@ -154,12 +160,10 @@ implements
 
             return Try.failure(translateExceptionIfPossible(ex, platformTransactionManager));
         }
-
         return result;
     }
 
-
-    private void registerTransactionSynchronizations(final TransactionStatus txStatus) {
+    private void registerTransactionSynchronizations() {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
                     .values()
@@ -167,50 +171,6 @@ implements
                     .forEach(TransactionSynchronizationManager::registerSynchronization);
         }
     }
-
-//    @Override
-//    public void nextTransaction() {
-//
-//        val txManager = singletonTransactionManagerElseFail();
-//
-//        try {
-//
-//            val txTemplate = new TransactionTemplate(txManager);
-//            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-//
-//            // either reuse existing or create new
-//            val txStatus = txManager.getTransaction(txTemplate);
-//            if(txStatus.isNewTransaction()) {
-//                // we have created a new transaction, so we are done
-//                return;
-//            }
-//            // we are reusing an exiting transaction, so end it and create a new one afterwards
-//            if(txStatus.isRollbackOnly()) {
-//                txManager.rollback(txStatus);
-//            } else {
-//                //XXX we removed the entire method, because of following subtlety
-                  // If the transaction wasn't a new one, omit the commit for proper participation in
-//                // the surrounding transaction. If a previous transaction has been suspended to be
-//                // able to create a new one, resume the previous transaction after committing the new one.
-//                txManager.commit(txStatus);
-//           }
-//
-//            // begin a new transaction
-//            txManager.getTransaction(txTemplate);
-//
-//        } catch (RuntimeException ex) {
-//
-//            val translatedEx = translateExceptionIfPossible(ex, txManager);
-//
-//            if(translatedEx instanceof RuntimeException) {
-//                throw ex;
-//            }
-//
-//            throw new RuntimeException(ex);
-//
-//        }
-//
-//    }
 
     @Override
     public void flushTransaction() {
@@ -224,27 +184,25 @@ implements
 
         } catch (RuntimeException ex) {
 
-            val txManager = singletonTransactionManagerElseFail();
+            var txManager = singletonTransactionManagerElseFail();
 
-            val translatedEx = translateExceptionIfPossible(ex, txManager);
+            var translatedEx = translateExceptionIfPossible(ex, txManager);
 
-            if(translatedEx instanceof RuntimeException) {
-                throw ex;
-            }
+            if(translatedEx instanceof RuntimeException)
+				throw ex;
 
             throw new RuntimeException(ex);
 
         }
     }
 
-
     @Override
     public Optional<TransactionId> currentTransactionId() {
         return interactionLayerTrackerProvider.get().getInteractionId()
                 .map(uuid->{
                     //XXX get current transaction's persistence context (once we support multiple contexts)
-                    val persistenceContext = "";
-                    return TransactionId.of(uuid, txCounter.get().intValue(), persistenceContext);
+                    var persistenceContext = "";
+                    return new TransactionId(uuid, txCounter.get().intValue(), persistenceContext);
                 });
     }
 
@@ -254,11 +212,10 @@ implements
         return currentTransactionStatus()
         .map(txStatus->{
 
-            if(txStatus.isCompleted()) {
-                return txStatus.isRollbackOnly()
+            if(txStatus.isCompleted())
+				return txStatus.isRollbackOnly()
                         ? TransactionState.ABORTED
                         : TransactionState.COMMITTED;
-            }
 
             return txStatus.isRollbackOnly()
                     ? TransactionState.MUST_ABORT
@@ -268,24 +225,20 @@ implements
         .orElse(TransactionState.NONE);
     }
 
-
     // -- TRANSACTION SEQUENCE TRACKING
 
     // TODO: this ThreadLocal (as with all thread-locals) should perhaps somehow be managed using
     //  TransactionSynchronizationManager; see its javadoc for more details and look at implementations of
     //  TransactionSynchronization
-    private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
-
+    private final ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
     // -- SPRING INTEGRATION
 
-
     private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
-            val txManager = ((TransactionTemplate)def).getTransactionManager();
-            if(txManager!=null) {
-                return txManager;
-            }
+            var txManager = ((TransactionTemplate)def).getTransactionManager();
+            if(txManager!=null)
+				return txManager;
         }
         return platformTransactionManagers.getSingleton()
                 .orElseThrow(()->
@@ -307,14 +260,13 @@ implements
 
     private Optional<TransactionStatus> currentTransactionStatus() {
 
-        val txManager = singletonTransactionManagerElseFail();
-        val txTemplate = new TransactionTemplate(txManager);
+        var txManager = singletonTransactionManagerElseFail();
+        var txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_MANDATORY);
 
         // not strictly required, but to prevent stack-trace creation later on
-        if(!TransactionSynchronizationManager.isActualTransactionActive()) {
-            return Optional.empty();
-        }
+        if(!TransactionSynchronizationManager.isActualTransactionActive())
+			return Optional.empty();
 
         // get current transaction else throw an exception
         return Try.call(()->
@@ -326,69 +278,76 @@ implements
 
     private Throwable translateExceptionIfPossible(final Throwable ex, final PlatformTransactionManager txManager) {
 
-        if(ex instanceof DataAccessException) {
-            return ex; // nothing to do, already translated
-        }
+        if(ex instanceof DataAccessException)
+			return ex; // nothing to do, already translated
 
         if(ex instanceof RuntimeException) {
 
-            val translatedEx = persistenceExceptionTranslators.stream()
+            var translatedEx = persistenceExceptionTranslators.stream()
             //debug .peek(translator->System.out.printf("%s%n", translator.getClass().getName()))
             .map(translator->translator.translateExceptionIfPossible((RuntimeException)ex))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .findFirst()
             .orElse(null);
 
-            if(translatedEx!=null) {
-                return translatedEx;
-            }
+            if(translatedEx!=null)
+				return translatedEx;
 
         }
 
         return ex;
     }
 
-
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, sets up
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, sets up
      * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void onOpen(final @NonNull CausewayInteraction interaction) {
+    public void onOpen(final @NonNull Interaction interaction) {
 
         txCounter.get().reset();
+        if (platformTransactionManagers.isEmpty())
+			return;
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-        if (!platformTransactionManagers.isEmpty()) {
-            val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+        var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ArrayList<>());
+        interaction.putAttribute(OnCloseHandle.class, onCloseHandle);
 
-            interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
+        platformTransactionManagers.forEach(txManager -> {
 
-            platformTransactionManagers.forEach(txManager -> {
+            var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
+            txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-                val txDefn = new TransactionTemplate(txManager); // specify the txManager in question
-                txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+            var observationClosure = new ObservationClosure();
+            onCloseHandle.observationClosures().add(observationClosure);
+            @SuppressWarnings("unused")
+			var obs = observationClosure.startAndOpenScope(observationProvider.get("Transaction"))
+                .observation()
+                .highCardinalityKeyValue("txManager", txManager.getClass().getName());
 
-                // either participate in existing or create new transaction
-                TransactionStatus txStatus = txManager.getTransaction(txDefn);
+            // either participate in existing or create new transaction
+            TransactionStatus txStatus = observationProvider.get("Transaction Creation")
+                    .observe(()->txManager.getTransaction(txDefn));
+            if(!txStatus.isNewTransaction()) {
+                // discard telemetry data when participating in existing transaction
+                observationClosure.discard();
+                // we are participating in an exiting transaction (or testing), nothing to do
+                return;
+            }
 
-                if(!txStatus.isNewTransaction()) {
-                    // we are participating in an exiting transaction (or testing), nothing to do
-                    return;
-                }
-                registerTransactionSynchronizations(txStatus);
+            registerTransactionSynchronizations();
 
-
-                // we have created a new transaction, so need to provide a CloseTask
-                onCloseTasks.add(
-                    new CloseTask(
-                        txStatus,
-                        txManager.getClass().getName(), // info to be used for display in case of errors
-                        () -> {
+            // we have created a new transaction, so need to provide a CloseTask
+            onCloseHandle.onCloseTasks().add(
+                new CloseTask(
+                    txStatus,
+                    txManager.getClass().getName(), // info to be used for display in case of errors
+                    ()->observationProvider.get("Transaction Completion")
+                        .observe(() -> {
                             _Xray.txBeforeCompletion(interactionLayerTrackerProvider.get(), "tx: beforeCompletion");
                             final TransactionCompletionStatus event;
                             if (txStatus.isRollbackOnly()) {
@@ -399,38 +358,35 @@ implements
                                 event = TransactionCompletionStatus.COMMITTED;
                             }
                             _Xray.txAfterCompletion(interactionLayerTrackerProvider.get(), String.format("tx: afterCompletion (%s)", event.name()));
-
                             txCounter.get().increment();
-                        }
-                    )
-                );
-            });
-        }
+                        })
+                )
+            );
+        });
+
     }
 
-
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, if
-     * {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)}
-     * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, if
+     * {@link org.apache.causeway.applib.services.iactn.InteractionService#run(InteractionContext, ThrowingRunnable)}
+     * or {@link org.apache.causeway.applib.services.iactn.InteractionService#call(InteractionContext, Callable)}
      * (or their various overloads) result in an exception.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void requestRollback(final @NonNull CausewayInteraction interaction) {
+    public void requestRollback(final @NonNull Interaction interaction) {
         Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                 .ifPresent(OnCloseHandle::requestRollback);
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, to close the
-     * transaction initially set up in {@link #onOpen(CausewayInteraction)} against all configured
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, to close the
+     * transaction initially set up in {@link #onOpen(Interaction)} against all configured
      * {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void onClose(final @NonNull CausewayInteraction interaction) {
-
+    public void onClose(final @NonNull Interaction interaction) {
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
         }
@@ -443,16 +399,16 @@ implements
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
 
-    @Value
-    private static class CloseTask {
-        @NonNull TransactionStatus txStatus;
-        @NonNull String onErrorInfo;
-        @NonNull ThrowingRunnable runnable;
+    private record CloseTask(
+            @NonNull TransactionStatus txStatus,
+            @NonNull String onErrorInfo,
+            @NonNull ThrowingRunnable runnable) {
     }
 
-    @RequiredArgsConstructor
-    private static class OnCloseHandle {
-        private final @NonNull List<CloseTask> onCloseTasks;
+    private record OnCloseHandle(
+            List<CloseTask> onCloseTasks,
+            List<ObservationClosure> observationClosures) {
+
         void requestRollback() {
             onCloseTasks.forEach(onCloseTask->{
                 onCloseTask.txStatus.setRollbackOnly();
@@ -460,18 +416,29 @@ implements
         }
         void runOnCloseTasks() {
             onCloseTasks.forEach(onCloseTask->{
-
                 try {
-                    onCloseTask.getRunnable().run();
+                    onCloseTask.runnable().run();
                 } catch(final Throwable ex) {
                     // ignore
                     log.error(
                             "failed to close transactional boundary using transaction-manager {}; "
                                     + "continuing to avoid memory leakage",
-                            onCloseTask.getOnErrorInfo(),
+                            onCloseTask.onErrorInfo(),
                             ex);
                 }
             });
+            Throwable failure = null;
+            for (int i = observationClosures.size() - 1; i >= 0; --i) {
+                try {
+                    observationClosures.get(i).close();
+                } catch (RuntimeException | Error ex) {
+                    if (failure == null) failure = ex;
+                    else if (failure != ex) failure.addSuppressed(ex);
+                }
+            }
+            observationClosures.clear();
+            if (failure instanceof RuntimeException ex) throw ex;
+            if (failure instanceof Error ex) throw ex;
         }
     }
 }

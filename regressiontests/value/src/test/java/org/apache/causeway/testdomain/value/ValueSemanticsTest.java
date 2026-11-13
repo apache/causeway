@@ -38,7 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
@@ -53,8 +53,6 @@ import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExampleService;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExampleService.Scenario;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -122,7 +120,7 @@ class ValueSemanticsTest {
         valueTypesKnown.remove(Markdown.class);
         valueTypesKnown.remove(AsciiDoc.class);
 
-        val valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
+        var valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
 
         assertTrue(valueTypesNotCovered.isEmpty(), ()->
             String.format("value-types not covered by tests:\n\t%s",
@@ -138,12 +136,12 @@ class ValueSemanticsTest {
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
 
-        //val env = new TestEnvironment();
+        //var env = new TestEnvironment();
 
         assertNotNull(example);
 
-        val tester = createTester(example);
-        val actionInteractionProbe = serviceInjector.injectServicesInto(
+        var tester = createTester(example);
+        var actionInteractionProbe = serviceInjector.injectServicesInto(
                 new ActionInteractionProbeImpl<>(name, valueType, example, tester));
 
         tester.actionInteraction("sampleAction",
@@ -154,7 +152,6 @@ class ValueSemanticsTest {
        // env.cleanup();
     }
 
-
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideValueTypeExamples")
     <T> void propertyInteraction(
@@ -162,12 +159,12 @@ class ValueSemanticsTest {
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
 
-        //val env = new TestEnvironment();
+        //var env = new TestEnvironment();
 
         assertNotNull(example);
 
-        val tester = createTester(example);
-        val propertyInteractionProbe = serviceInjector.injectServicesInto(
+        var tester = createTester(example);
+        var propertyInteractionProbe = serviceInjector.injectServicesInto(
                 new PropertyInteractionProbeImpl<>(name, valueType, example, tester));
 
         tester.propertyInteraction("value",
@@ -197,7 +194,7 @@ class ValueSemanticsTest {
 
     Stream<Arguments> provideValueTypeExamples() {
         return valueTypeExampleService.streamScenarios()
-                .map(Scenario::getArguments);
+                .map(Scenario::arguments);
     }
 
 }

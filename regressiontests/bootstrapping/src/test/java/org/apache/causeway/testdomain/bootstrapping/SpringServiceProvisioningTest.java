@@ -37,7 +37,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -46,13 +46,11 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 import static org.apache.causeway.commons.internal.collections._Collections.toStringJoiningNewLine;
 import static org.apache.causeway.commons.internal.collections._Sets.intersectSorted;
 
-import lombok.val;
-
 //import org.apache.causeway.testdomain.Incubating;
 
 @SpringBootTest(
-        classes = { 
-                Configuration_headless.class, 
+        classes = {
+                Configuration_headless.class,
         },
         properties = {
                 // "causeway.core.meta-model.introspector.parallelize=false",
@@ -62,12 +60,11 @@ import lombok.val;
     //CausewayPresets.DebugDiscovery
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel,
-    CausewayPresets.UseLog4j2Test,
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {
-    
-    @Inject private ServiceRegistry serviceRegistry; 
+
+    @Inject private ServiceRegistry serviceRegistry;
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
 
     @BeforeEach
@@ -78,12 +75,12 @@ class SpringServiceProvisioningTest {
     @Test
     void dump_all() throws IOException {
 
-        final List<String> beans = causewaySystemEnvironment.getIocContainer().streamAllBeans()
-                .map(_SingletonBeanProvider::getId)
+        final List<String> beans = causewaySystemEnvironment.springContextHolder().streamAllBeans()
+                .map(SingletonBeanProvider::id)
                 .sorted()
                 .collect(Collectors.toList());
 
-        val beansFound = toStringJoiningNewLine(beans);
+        var beansFound = toStringJoiningNewLine(beans);
         System.out.println("--- Beans discovered by Causeway ---");
         System.out.println(beansFound);
         System.out.println("--------------------------------");
@@ -92,24 +89,23 @@ class SpringServiceProvisioningTest {
     @Test @Disabled("constantly changing")
     void builtInServices_shouldBeSetUp() throws IOException {
 
-        val managedServices = serviceRegistry.streamRegisteredBeans()
-                .map(_SingletonBeanProvider::getBeanClass)
+        var managedServices = serviceRegistry.streamRegisteredBeans()
+                .map(SingletonBeanProvider::beanClass)
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
-        val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
+        var singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
+        var expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
                 .filter(entry->!entry.startsWith("#"))
                 .filter(entry->!entry.startsWith("org.apache.causeway.testdomain."))
                 .collect(Collectors.toCollection(TreeSet::new));
-        
+
         assertFalse(expectedSingletons.isEmpty());
-        
-        val servicesFound = toStringJoiningNewLine(managedServices);
+
+        var servicesFound = toStringJoiningNewLine(managedServices);
         System.out.println("--- Services discovered by Causeway ---");
         System.out.println(servicesFound);
         System.out.println("--------------------------------");
-        
 
         // same as managedServices.containsAll(singletonSet) but more verbose in case of
         // failure

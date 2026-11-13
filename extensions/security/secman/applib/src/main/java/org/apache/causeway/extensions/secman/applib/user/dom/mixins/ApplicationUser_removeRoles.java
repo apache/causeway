@@ -68,7 +68,6 @@ public class ApplicationUser_removeRoles {
 
     private final ApplicationUser target;
 
-
     @MemberSupport public ApplicationUser act(final Collection<ApplicationRole> roles) {
 
         _NullSafe.stream(roles)
@@ -89,6 +88,5 @@ public class ApplicationUser_removeRoles {
         }
         return true;
     }
-
 
 }

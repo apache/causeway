@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.panels;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.HasPageClassRegistry;
@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
 public abstract class FormAbstract<T> extends Form<T>
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     HasComponentFactoryRegistry,
     HasPageClassRegistry {
 

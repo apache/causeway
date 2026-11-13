@@ -19,14 +19,17 @@
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.Marshaller;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -36,15 +39,15 @@ import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
+ * Default implementation of {@link MenuBarsMarshallerService} parameterized on {@link BSMenuBars},
+ * supports DTOs modelled on <a href="https://getbootstrap.com/">Bootstrap</a> CSS/JS design system.
  *
  * @since 2.0 {@index}
  */
@@ -52,7 +55,7 @@ import lombok.experimental.Accessors;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsMarshallerBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-//@Log4j2
+//@Slf4j
 public class MenuBarsMarshallerServiceBootstrap
 implements MenuBarsMarshallerService<BSMenuBars> {
 
@@ -76,7 +79,7 @@ implements MenuBarsMarshallerService<BSMenuBars> {
     @Override
     public String marshal(final @NonNull BSMenuBars menuBars, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
-        return jaxbService.toXml(menuBars, _Maps.unmodifiable(
+        return jaxbService.toXml(menuBars, Map.of(
                 Marshaller.JAXB_SCHEMA_LOCATION, menuBars.getTnsAndSchemaLocation()));
     }
 

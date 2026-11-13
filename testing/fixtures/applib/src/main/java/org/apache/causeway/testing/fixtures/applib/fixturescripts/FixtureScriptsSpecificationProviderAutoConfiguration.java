@@ -18,16 +18,13 @@
  */
 package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.CausewayConfiguration;
-
-import lombok.val;
 
 /**
  * Provides a fallback implementation of {@link FixtureScriptsSpecificationProvider} if none has been provided explicitly by the application itself.
@@ -44,30 +41,29 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
      *
      * @return
      */
-    @Bean("causeway.testing.fixtures.FixtureScriptsSpecificationProviderDefault")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Bean("causeway.testing.fixtures.FixtureScriptsSpecificationProviderDefault")
     @ConditionalOnMissingBean(FixtureScriptsSpecificationProvider.class)
     @Qualifier("Default")
     FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final CausewayConfiguration causewayConfiguration) {
 
-        val fixturesConfig = causewayConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
-        val builder = builderFrom(fixturesConfig);
+        var fixturesConfig = causewayConfiguration.testing().fixtures().fixtureScriptsSpecification();
+        var builder = builderFrom(fixturesConfig);
 
-        builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.getNonPersistedObjectsStrategy().name()));
-        builder.with(FixtureScripts.MultipleExecutionStrategy.valueOf(fixturesConfig.getMultipleExecutionStrategy().name()));
-        builder.withRecreate((Class) fixturesConfig.getRecreate());
-        builder.withRunScriptDefault((Class) fixturesConfig.getRunScriptDefault());
+        builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.nonPersistedObjectsStrategy().name()));
+        builder.with(FixtureScripts.MultipleExecutionStrategy.valueOf(fixturesConfig.multipleExecutionStrategy().name()));
+        builder.withRecreate((Class) fixturesConfig.recreate());
+        builder.withRunScriptDefault((Class) fixturesConfig.runScriptDefault());
 
         return builder::build;
     }
 
-    private static FixtureScriptsSpecification.Builder builderFrom(CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
-        val contextClass = fixturesConfig.getContextClass();
-        if(contextClass != null) {
-            return FixtureScriptsSpecification.builder(contextClass);
-        }
-        val packagePrefix = fixturesConfig.getPackagePrefix(); // could be null; this is legitimate
+    private static FixtureScriptsSpecification.Builder builderFrom(final CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
+        var contextClass = fixturesConfig.contextClass();
+        if(contextClass != null)
+			return FixtureScriptsSpecification.builder(contextClass);
+        var packagePrefix = fixturesConfig.packagePrefix(); // could be null; this is legitimate
         return FixtureScriptsSpecification.builder(packagePrefix);
     }
-
 
 }

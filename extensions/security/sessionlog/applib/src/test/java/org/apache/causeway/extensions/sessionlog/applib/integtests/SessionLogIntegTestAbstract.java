@@ -46,7 +46,6 @@ import lombok.RequiredArgsConstructor;
 
 public abstract class SessionLogIntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-
     @Value
     @RequiredArgsConstructor
     static class Session {
@@ -133,7 +132,6 @@ public abstract class SessionLogIntegTestAbstract extends CausewayIntegrationTes
         // then
         sessions = sessionLogEntryRepository.findActiveSessions();
         Assertions.assertThat(sessions).isEmpty();
-
 
     }
 

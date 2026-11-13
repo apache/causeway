@@ -18,39 +18,45 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
+import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.TextUtils;
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
-
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.io.TextUtils;
+import org.approvaltests.reporters.linux.ReportWithMeldMergeLinux;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
+import tools.jackson.databind.ObjectMapper;
 
 @UtilityClass
 public class ApprovalsOptions {
 
+	public static Options defaultOptions() {
+		var opts = new Options();
+		// on Linux, at time of writing, the default reporter find mechanism throws an exception while evaluating Windows Diff Reporters;
+		// this is a workaround, provided you are on Linux and have Meld installed
+		return ReportWithMeldMergeLinux.INSTANCE.checkFileExists()
+			? opts.withReporter(ReportWithMeldMergeLinux.INSTANCE)
+			: opts;
+	}
+
     public static Options xmlOptions() {
-        return new Options()
-                .withScrubber(ApprovalsOptions::scrub)
-                .forFile()
-                .withExtension(".xml");
+        return defaultOptions()
+            .withScrubber(ApprovalsOptions::scrub)
+            .forFile()
+            .withExtension(".xml");
     }
 
     private String scrub(final String input) {
         return TextUtils.streamLines(input)
-                .map(ApprovalsOptions::scrubLine)
-                .filter(line->!_Strings.nullToEmpty(line).isBlank()) // ignore blank lines, just in case
-                .collect(Collectors.joining("\n")); // UNIX line ending convention
+            .map(ApprovalsOptions::scrubLine)
+            .filter(line->!_Strings.nullToEmpty(line).isBlank()) // ignore blank lines, just in case
+            .collect(Collectors.joining("\n")); // UNIX line ending convention
     }
-
 
     /**
      * As the XML spec states, order of attributes has no semantic significance and hence is not
@@ -64,49 +70,48 @@ public class ApprovalsOptions {
      */
     private String scrubLine(final String line) {
 
-        val magicPrefix = "<mml:param ";
-        val magicSuffix = ">";
+        var magicPrefix = "<mml:param ";
+        var magicSuffix = ">";
         int p = line.indexOf(magicPrefix);
-        if(p<0) {
-            return line;
-        }
+        if(p<0)
+			return line;
         p += magicPrefix.length(); // pointer at end of "...<mml:param "
         int q = line.lastIndexOf(magicSuffix); // pointer at start of "... >"
 
-        val chunks = _Lists.<String>newArrayList();
+        var chunks = new ArrayList<String>();
         chunks.add(line.substring(0, p-1)); // first chunk "...<mml:param"
 
         // ordered attributes
-        val attrs = _Maps.<String, _Strings.KeyValuePair>newTreeMap();
+        var attrs = new TreeMap<String, _Strings.KeyValuePair>();
         _Strings.splitThenStream(line.substring(p, q), " ")
                 .map(attrLiteral->
                         _Strings.parseKeyValuePair(attrLiteral, '=')
                                 .orElseGet(()->_Strings.pair(attrLiteral, null))
                 )
-                .forEach(attr->attrs.put(attr.getKey(), attr));
+                .forEach(attr->attrs.put(attr.key(), attr));
 
         // collect all chunks
         attrs.values()
                 .forEach(attr->chunks.add(
-                        attr.getValue()!=null
-                                ? " " + attr.getKey() + "=" + attr.getValue()
-                                : " " + attr.getKey()));
+                        attr.value()!=null
+                                ? " " + attr.key() + "=" + attr.value()
+                                : " " + attr.key()));
         chunks.add(magicSuffix);
 
         // reassemble line
         return chunks.stream().collect(Collectors.joining());
     }
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     public Options gqlOptions() {
-        return new Options().withScrubber(new Scrubber() {
-            @SneakyThrows
-            @Override
-            public String scrub(final String s) {
-                return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
-            }
-        }).forFile().withExtension(".gql");
+        return defaultOptions()
+    		.withScrubber(new Scrubber() {
+    			private final ObjectMapper objectMapper = new ObjectMapper();
+			    @SneakyThrows @Override public String scrub(final String s) {
+			        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+			    }
+			})
+    		.forFile()
+    		.withExtension(".gql");
     }
 
 }

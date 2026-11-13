@@ -7,11 +7,9 @@
 .InjectUtils.java
 ----
 class InjectUtils {
-  public static final Predicate<? super Field> persistentMappedBy;
   Predicate<Field> withTypeAssignableFrom(Class<T> type)
   Predicate<Method> withReturnTypeAssignableFrom(Class<T> type)
   Predicate<Method> withParametersAssignableFrom(Class<?>... types)
-  Predicate<? super Method> withEntityParameter()
 }
 ----
 

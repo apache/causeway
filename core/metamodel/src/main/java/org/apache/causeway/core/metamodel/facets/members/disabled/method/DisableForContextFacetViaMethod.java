@@ -29,13 +29,12 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class DisableForContextFacetViaMethod
 extends DisableForContextFacetAbstract
@@ -62,11 +61,11 @@ implements ImperativeFacet {
      */
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        final ManagedObject target = ic.getTarget();
+        final ManagedObject target = ic.target();
         if (target == null) {
             return Optional.empty();
         }
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object returnValue = MmInvokeUtils.invokeAutofit(method.method(), target);
         final String reasonString = returnValue instanceof String
                 ? (String) returnValue

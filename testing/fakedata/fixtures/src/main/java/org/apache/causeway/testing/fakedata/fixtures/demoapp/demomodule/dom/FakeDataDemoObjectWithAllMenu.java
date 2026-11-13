@@ -31,8 +31,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
-import lombok.val;
-
 @DomainService
 @Named("libFakeDataFixture.FakeDataDemoObjectWithAllMenu")
 @DomainServiceLayout(
@@ -40,7 +38,6 @@ import lombok.val;
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class FakeDataDemoObjectWithAllMenu {
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(sequence = "1")
@@ -59,7 +56,7 @@ public class FakeDataDemoObjectWithAllMenu {
             final long someLong,
             final float someFloat,
             final double someDouble) {
-        val obj = new FakeDataDemoObjectWithAll(name);
+        var obj = new FakeDataDemoObjectWithAll(name);
         obj.setSomeBoolean(someBoolean);
         obj.setSomeChar(someChar);
         obj.setSomeByte(someByte);

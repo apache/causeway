@@ -21,13 +21,11 @@ package org.apache.causeway.core.metamodel.facets.object.navparent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**
- *
  * Mechanism for obtaining the navigable parent (a domain-object or a domain-view-model)
  * of an instance of a class, used to build a navigable parent chain as required by the
  * 'where-am-I' feature.
  *
  * @since 2.0
- *
  */
 public interface NavigableParentFacet extends Facet {
 

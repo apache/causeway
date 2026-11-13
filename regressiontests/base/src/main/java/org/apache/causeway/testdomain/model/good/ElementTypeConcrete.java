@@ -28,5 +28,4 @@ public class ElementTypeConcrete
 extends ElementTypeAbstract
 implements ElementTypeInterface {
 
-
 }

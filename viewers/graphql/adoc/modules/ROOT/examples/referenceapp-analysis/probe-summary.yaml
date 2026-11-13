@@ -1,0 +1,152 @@
+probeEnvironment:
+  referenceApplicationRevision: 04cff95802de44d0ff5ac0802857f3bb2ffe8c3a
+  causewayRevision: local htmx branch at analysis execution
+  causewayVersion: 4.0.0-SNAPSHOT
+  java: 25.0.3
+  endpoint: http://localhost:8080/graphql
+  schemaStyle: RICH_AND_SIMPLE
+  functionalProbeSecurity: explicit AuthorizorBypass chooser
+  authorizationProbeSecurity: reference application Secman configuration
+startupAdaptations:
+  - Add the orphaned wicket/jpa-and-graphql directory to the root reactor.
+  - Align its stale 3.4.0-SNAPSHOT parent with 4.0.0-SNAPSHOT.
+  - Depend on wicket/jpa rather than the obsolete common-only assembly.
+  - Use ReferenceAppWicketJpa rather than the obsolete DemoAppWicketJpa main class.
+  - Import CausewayModuleViewerGraphqlViewer into the application configuration.
+  - Keep the dependency JPA jar thin while repackaging the GraphQL application jar.
+  - Exclude Spring Boot default logging from the GraphQL dependency to retain the application's Log4j2 binding.
+  - Use -Dmaven.compiler.proc=full for Lombok under JDK 25.
+  - Skip build-info because the orphaned module has no project description.
+evidence:
+  E01:
+    name: Source inventory
+    outcomes:
+      javaFiles: 1271
+      layoutXmlFiles: 276
+      domainServices: 38
+      domainObjects: 351
+      properties: 664
+      collections: 128
+      actions: 612
+      memberSupportMethods: 724
+      homePages: 1
+      menuBars:
+        primary: {menus: 10, sections: 37, actions: 141}
+        secondary: {menus: 3, sections: 17, actions: 48}
+        tertiary: {menus: 1, sections: 4, actions: 8}
+  E02:
+    name: Current application startup
+    outcomes:
+      endpointStatus: HTTP 200
+      smokeQuery: 'query { __typename }'
+      smokeResult: SimpleAndRich
+      startupSeconds: 20.545
+      incidentalGridErrors: 2
+  E03:
+    name: Schema inventory
+    outcomes:
+      queryType: SimpleAndRich
+      mutationType: Mutation
+      richLookupFields: 430
+      simpleLookupFields: 430
+      mutationFields: 3154
+      logicalTypeEnumValues: 277
+      totalTypes: 21142
+      objectTypes: 20365
+      inputObjectTypes: 732
+      enumTypes: 33
+      scalarTypes: 12
+  E04:
+    name: Rich service, object, member, and mixin introspection
+    outcomes:
+      domainServices: discoverable
+      safeActions: query invoke wrapper
+      mutatingActions: top-level mutation
+      viewModels: reusable encoded identifier
+      mixinProperties: present
+      mixinActions: present
+      hiddenAndDisabled: present
+  E05:
+    name: Authorization probe
+    outcomes:
+      unauthorizedActionHidden: true
+      unauthorizedActionDisabledReasonPresent: true
+      unauthorizedInvocationAttempted: false
+      note: Functional probes used an explicit bypass chooser only after this Secman probe.
+  E06:
+    name: Successful interaction probes
+    outcomes:
+      propertyValidationMessage: Not of working age [18-65]
+      invalidPropertyMutationRejected: true
+      actionChoiceCounts: {male: 7, female: 6}
+      autocomplete: {search: ba, results: [Barbara]}
+      safeActionInvocation: successful
+      mutatingActionInvocation: successful for object-list arguments when validation was not selected
+  E07:
+    name: Object and collection interaction defects
+    outcomes:
+      abstractEntityLookup: logical type required but absent from logicalTypeNames__gqlv_enum
+      abstractCollectionGet: field absent
+      viewModelPropertyMutation: returned original value and unchanged identifier
+      collectionArgumentValidation: HTTP 500 with LinkedHashMap scalar assertion
+      bulkChoices: data-fetching exception because argument map was null
+  E08:
+    name: Value round-trip probes
+    outcomes:
+      LocalDateTime: String input rejected as incompatible with java.time.LocalDateTime
+      URL: String input rejected as incompatible with java.net.URL
+      Blob: descriptive String input rejected as incompatible with Blob
+      Clob: descriptive String input rejected as incompatible with Clob
+      ComplexNumber: String input rejected as incompatible with custom ComplexNumber
+      explicitMarshallerGroups: primitives, wrappers, String, BigDecimal, BigInteger, selected java-time types, UUID, void
+  E09:
+    name: View-model property mutation detail
+    outcomes:
+      initialAge: 18
+      submittedAge: 30
+      returnedAge: 18
+      identifierChanged: false
+      reloadedAge: 18
+  E10:
+    name: Collection paging probe
+    outcomes:
+      configuredPageSize: 5
+      returnedRows: 13
+      getArguments: []
+      countMetadata: absent
+      continuationMetadata: absent
+  E11:
+    name: Metadata and effective grid probe
+    outcomes:
+      independentFriendlyNameAndDescription: absent
+      collectionPagedWrapperMetadata: absent
+      fileAcceptWrapperMetadata: absent
+      effectiveGridWhenDirect: HTTP 200 application/xml
+      effectiveGridLength: 5911
+      effectiveGridNodes: {rows: 5, columns: 8, fieldSets: 6, actions: 20, properties: 7, collections: 2}
+      gridCarriesLayoutHints: true
+  E12:
+    name: Resource policy and URL probe
+    outcomes:
+      forbiddenEndpointStatus: 403
+      forbiddenBlobLinkFieldPresent: true
+      directGridStatus: 200
+      directIconStatus: 200
+      generatedPrefix: '///graphql/object/'
+      standardUrlHost: graphql
+      manuallyNormalizedSameOriginPathWorks: true
+  E13:
+    name: Application-entry probe
+    outcomes:
+      richMenuBarFields: []
+      richServiceMenuTypes: 58
+      menuBarsUtilityMutation: causeway_applib_LayoutServiceMenu__downloadMenuBarsLayout
+      homeNamedFields: [demo_Homepage]
+      homeDesignationMetadata: absent
+      homeLookupWithoutObject: data-fetching exception
+  E14:
+    name: Sensitive value probe
+    outcomes:
+      passwordDefault: suppressed
+      passwordDatatype: rich__causeway_applib_value_Password
+      passwordCleartextObserved: false

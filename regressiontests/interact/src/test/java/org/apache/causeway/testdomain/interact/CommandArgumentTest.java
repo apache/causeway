@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.interact;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +51,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -81,7 +79,6 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
     }
 
-
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -91,7 +88,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         @Action
         public CommandResult list(final List<Long> someIds){
-            val stringified = ""+someIds;
+            var stringified = ""+someIds;
             assertEquals("[1, 2, 3]", stringified);
             return CommandResult.of(stringified);
         }
@@ -101,18 +98,18 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @Test
     void listParam_shouldAllowInvocation() {
 
-        val actionInteraction = startActionInteractionOn(CommandArgDemo.class, "list", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(CommandArgDemo.class, "list", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        var pendingArgs = actionInteraction.startParameterNegotiation().get();
 
-        pendingArgs.setParamValue(0, objectManager.adapt(Arrays.asList(1L, 2L, 3L)));
+        pendingArgs.setParamValue(0, objectManager.adapt(List.of(1L, 2L, 3L)));
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());
 
-        val stringified = resultOrVeto.getSuccess()
+        var stringified = resultOrVeto.getSuccess()
                 .map(ManagedObject::getPojo)
                 .map(CommandResult.class::cast)
                 .map(CommandResult::getResultAsString)
@@ -123,17 +120,17 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @Test
     void listParam_shouldAllowAsyncInvocation() throws InterruptedException, ExecutionException, TimeoutException {
 
-        val commandArgDemo = new CommandArgDemo();
+        var commandArgDemo = new CommandArgDemo();
 
-        val control = AsyncControl.returning(CommandResult.class);
+        var control = AsyncControl.defaults();
 
-        wrapperFactory.asyncWrap(commandArgDemo, control)
-        .list(Arrays.asList(1L, 2L, 3L));
-
-        val stringified = control.getFuture().get(3L, TimeUnit.DAYS).getResultAsString();
+        var stringified = wrapperFactory.asyncWrap(commandArgDemo, control)
+            .applyAsync(commandResult->commandResult.list(List.of(1L, 2L, 3L)))
+            .tryGet(3L, TimeUnit.DAYS) // wait till done
+            .valueAsNonNullElseFail()
+            .getResultAsString();
 
         assertEquals("[1, 2, 3]", stringified);
     }
-
 
 }

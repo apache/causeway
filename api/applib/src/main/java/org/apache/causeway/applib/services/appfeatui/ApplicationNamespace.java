@@ -84,5 +84,4 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
         return getSort() != ApplicationFeatureSort.NAMESPACE;
     }
 
-
 }

@@ -18,78 +18,147 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
 
-import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
+import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.Allow;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.experimental.Delegate;
+/**
+ * Implementations are implementing {@link HasObjectAction} and delegating to {@link #mixedInAction()}.
+ */
+public sealed interface CompositeValueUpdater extends HasObjectAction
+permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class CompositeValueUpdater {
+    MixedInAction mixedInAction();
+    ObjectSpecification returnType();
+    ManagedObject map(final ManagedObject valueType);
 
-    static interface X {
-        Identifier getFeatureIdentifier();
-        ObjectSpecification getReturnType();
-        ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-                final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException;
-        ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-                final InteractionInitiatedBy interactionInitiatedBy);
+    // HasObjectAction
+    @Override default ObjectAction getObjectAction() { return mixedInAction(); }
+
+    // makes sure PromptStyle is always INLINE_AS_IF_EDIT
+    default CompositeValueUpdater overrideFacets() {
+        FacetUtil.computeIfAbsentExact(mixedInAction().facetHolder(),
+            PromptStyleFacet.class,
+            PromptStyleFacet.class,
+            Precedence.HIGH,
+            PromptStyleFacet::compositeValueEdit);
+        return this;
     }
 
+    // -- OBJECT ACTION MOCKUP
 
-    @Delegate(excludes=X.class)
-    private final ObjectActionMixedIn delegate;
+    @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
+    @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
+    @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
+    @Override default SemanticsOf getSemantics() { return SemanticsOf.SAFE; }
 
-    public abstract ObjectSpecification getReturnType();
-    protected abstract ManagedObject map(final ManagedObject valueType);
-
-    public Identifier getFeatureIdentifier() {
-        val id = delegate.getFeatureIdentifier();
-        return Identifier
-                .actionIdentifier(
-                        id.getLogicalType(),
-                        id.getMemberLogicalName(),
-                        id.getMemberParameterClassNames());
-    }
-
-    public ManagedObject executeWithRuleChecking(
-            final InteractionHead head, final Can<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy, final Where where)
-                    throws AuthorizationException {
-        return map(simpleExecute(head, parameters));
-    }
-
-    public ManagedObject execute(
+    @Override default ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return map(simpleExecute(head, parameters));
     }
+    @Override default ManagedObject executeWithRuleChecking(
+        final InteractionHead head, final Can<ManagedObject> parameters,
+        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
+        return execute(head, parameters, interactionInitiatedBy);
+    }
+
+    // -- IMPLEMENTATIONS
+
+    record CompositeValueUpdaterForParameter(
+        ParameterNegotiationModel parameterNegotiationModel,
+        int paramIndex,
+        MixedInAction mixedInAction) implements CompositeValueUpdater {
+
+        @Override
+        public ObjectSpecification returnType() {
+            return parameterNegotiationModel.getParamMetamodel(paramIndex).getElementType();
+        }
+
+        @Override
+        public ManagedObject map(final ManagedObject newParamValue) {
+            parameterNegotiationModel.setParamValue(paramIndex, newParamValue);
+            return newParamValue;
+        }
+
+    }
+
+    record CompositeValueUpdaterForProperty(
+        ManagedProperty managedProperty,
+        MixedInAction mixedInAction
+        ) implements CompositeValueUpdater {
+
+        @Override
+        public ObjectSpecification returnType() {
+            return managedProperty.getElementType();
+        }
+
+        @Override
+        public ManagedObject map(final ManagedObject valueType) {
+            var propNeg = managedProperty.startNegotiation();
+            propNeg.getValue().setValue(valueType);
+            propNeg.submit();
+            return managedProperty.getOwner();
+        }
+
+    }
+
+    // -- FACTORIES
+
+    static ObjectAction createDelegatorForParameter(
+        final ParameterNegotiationModel parameterNegotiationModel,
+        final int paramIndex,
+        final MixedInAction mixedInAction) {
+        return new CompositeValueUpdaterForParameter(parameterNegotiationModel, paramIndex, mixedInAction)
+            .overrideFacets();
+    }
+
+    static ObjectAction createDelegatorForProperty(
+        final ManagedProperty managedProperty,
+        final MixedInAction mixedInAction) {
+        return new CompositeValueUpdaterForProperty(managedProperty, mixedInAction)
+            .overrideFacets();
+    }
+
+    // -- HELPER
 
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
+
+        var methodFacade = mixedInAction() instanceof HasFacetedMethod facetedMethodHolder
+            ? facetedMethodHolder.getFacetedMethod().methodFacade()
+            : null;
+        if(methodFacade==null) return ManagedObject.empty(mixedInAction().getReturnType()); // unsupported MixedInAction
+
+        var method = methodFacade.asMethodForIntrospection();
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
-        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
-
-        val methodFacade = delegate.getFacetedMethod().getMethod();
-        val method = methodFacade.asMethodForIntrospection();
-
-        val resultPojo = CanonicalInvoker
-                .invokeWithConvertedArgs(method.method(), targetPojo, 
+        final Object targetPojo = MmUnwrapUtils.single(head.target());
+        var resultPojo = CanonicalInvoker
+                .invokeWithConvertedArgs(method.method(), targetPojo,
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 
-        return ManagedObject.value(delegate.getReturnType(), resultPojo);
+        return ManagedObject.value(mixedInAction().getReturnType(), resultPojo);
     }
 
 }

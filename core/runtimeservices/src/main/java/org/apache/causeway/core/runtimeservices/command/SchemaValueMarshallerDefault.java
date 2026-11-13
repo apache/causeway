@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
+import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshallerAbstract;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.common.v2.CollectionDto;
@@ -43,11 +44,11 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
+ * Default implementation of {@link SchemaValueMarshaller}.
  *
  * @since 2.0 {@index}
  */
@@ -70,12 +71,12 @@ extends SchemaValueMarshallerAbstract {
             final ValueWithTypeDto valueDto,
             final ManagedObject value) {
 
-        valueDto.setType(context.getSchemaValueType());
-        if (value.getSpecialization().isEmpty()) {
+        valueDto.setType(context.schemaValueType());
+        if (value.specialization().isEmpty()) {
             valueDto.setNull(true);
         }
 
-        switch (context.getSchemaValueType()) {
+        switch (context.schemaValueType()) {
         case COMPOSITE:
             valueDto.setComposite(toTypedTuple(context, _Casts.<T>uncheckedCast(value.getPojo())));
             return valueDto;
@@ -92,9 +93,9 @@ extends SchemaValueMarshallerAbstract {
             break;
         }
 
-        val decomposedValueDto = context.getSemantics()
+        var decomposedValueDto = context.semantics()
                 .decompose(_Casts.uncheckedCast(value.getPojo()))
-                .leftIfAny();
+                .fundamental();
 
         // copy the decomposedValueDto into valueDto
         CommonDtoUtils.copy(decomposedValueDto, valueDto);
@@ -118,13 +119,13 @@ extends SchemaValueMarshallerAbstract {
             final Context<T> context,
             final Can<ManagedObject> values) {
 
-        val elementValueType = context.getSchemaValueType();
-        val collectionDto = new CollectionDto();
+        var elementValueType = context.schemaValueType();
+        var collectionDto = new CollectionDto();
         collectionDto.setType(elementValueType);
 
         values.stream()
         .forEach(element->{
-            val valueDto = new ValueWithTypeDto();
+            var valueDto = new ValueWithTypeDto();
             valueDto.setType(elementValueType);
             collectionDto.getValue().add(valueDto);
             recordValue(context, valueDto, element);
@@ -135,9 +136,9 @@ extends SchemaValueMarshallerAbstract {
 
     private <T> TypedTupleDto toTypedTuple(final Context<T> context, final T valuePojo) {
         return valuePojo!=null
-                ? context.getSemantics()
+                ? context.semantics()
                         .decompose(valuePojo)
-                        .rightIfAny()
+                        .composite()
                 : null;
     }
 
@@ -145,24 +146,23 @@ extends SchemaValueMarshallerAbstract {
 
     @Override
     protected ManagedObject recoverScalarValue(
-            @NonNull final Context<?> context,
-            @NonNull final ValueWithTypeDto valueDto) {
+            final @NonNull Context<?> context,
+            final @NonNull ValueWithTypeDto valueDto) {
 
-        val elementSpec = context.getElementType();
+        var elementSpec = context.getElementType();
 
-        val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
+        var recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
                 ? fromTypedTuple(context, valueDto.getComposite())
-                : context.getSemantics().compose(ValueDecomposition.ofFundamental(valueDto));
+                : context.semantics().compose(ValueDecomposition.ofFundamental(valueDto));
 
-        val recoveredValue = ManagedObject.value(elementSpec, recoveredValueAsPojo);
+        var recoveredValue = ManagedObject.value(elementSpec, recoveredValueAsPojo);
         return recoveredValue;
     }
 
     private <T> T fromTypedTuple(final Context<T> context, final TypedTupleDto typedTupleDto) {
-        if(typedTupleDto==null) {
-            return null;
-        }
-        return context.getSemantics()
+        if(typedTupleDto==null) return null;
+
+        return context.semantics()
                 .compose(ValueDecomposition.ofComposite(typedTupleDto));
     }
 

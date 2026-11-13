@@ -24,7 +24,7 @@ import org.springframework.util.function.ThrowingSupplier;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * package private implementation of _Lazy

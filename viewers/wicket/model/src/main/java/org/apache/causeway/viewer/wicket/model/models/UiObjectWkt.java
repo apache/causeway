@@ -18,52 +18,47 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ResourceReference;
-
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
-import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 import org.apache.causeway.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.wicket.Component;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.Synchronized;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Backing model to represent a domain object as {@link ManagedObject}.
  */
-@Log4j2
+@Slf4j
 public class UiObjectWkt
 extends HasBookmarkedOwnerAbstract<ManagedObject>
 implements
@@ -78,7 +73,7 @@ implements
 
     public static UiObjectWkt ofPageParameters(
             final PageParameters pageParameters) {
-        val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
+        var bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
         return ofBookmark(bookmark);
     }
 
@@ -90,11 +85,10 @@ implements
 
     public static UiObjectWkt ofAdapterForCollection(
             final ManagedObject adapter,
-            final @NonNull EntityCollectionModel.Variant variant) {
+            final CollectionModel.@NonNull Variant variant) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
-                ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
+                ViewOrEditMode.VIEWING, variant.titleColumnRenderingHint());
     }
-
 
     public static UiObjectWkt ofBookmark(
             final @Nullable Bookmark bookmark) {
@@ -155,14 +149,13 @@ implements
     private ViewOrEditMode viewOrEditMode;
 
     @Getter(onMethod = @__(@Override))
-    private RenderingHint renderingHint;
+    private final RenderingHint renderingHint;
 
     @Override
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getMetaModelContext(), component, keyName);
-        if(componentHintKey != null) {
+        if(componentHintKey != null)
             return componentHintKey.get(getOwnerBookmark());
-        }
         return null;
     }
 
@@ -185,14 +178,8 @@ implements
     }
 
     @Override
-    public Either<ObjectIcon, FontAwesomeLayers> getIcon() {
-        return getManagedObject().eitherIconOrFaLayers();
-    }
-
-    public Either<ResourceReference, FontAwesomeLayers> getIconAsResourceReference() {
-        return getIcon()
-                .mapLeft(objectIcon->
-                    imageResourceCache().resourceReferenceForObjectIcon(objectIcon));
+    public ObjectIcon getIcon(final IconSize iconSize) {
+        return getManagedObject().getIcon(iconSize);
     }
 
     @Override
@@ -202,23 +189,23 @@ implements
 
     // -- PROPERTY MODELS (CHILDREN)
 
-    private transient Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels;
-    private Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels() {
-        if(propertyScalarModels==null) {
-            propertyScalarModels = _Maps.<PropertyMemento, ScalarPropertyModel>newHashMap();
+    private transient Map<Identifier, PropertyModel> propertyModels;
+    private Map<Identifier, PropertyModel> propertyModels() {
+        if(propertyModels==null) {
+            propertyModels = new HashMap<>();
         }
-        return propertyScalarModels;
+        return propertyModels;
     }
 
     /**
      * Lazily populates with the current value of each property.
      */
-    public ScalarModel getPropertyModel(
+    public UiAttributeWkt getPropertyModel(
             final OneToOneAssociation property,
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
 
-        val bookmarkedObjectModel = bookmarkedObjectModel();
+        var bookmarkedObjectModel = bookmarkedObjectModel();
 
         //[CAUSEWAY-3532] guard against (owner entity) object deleted/not-found
         //
@@ -226,49 +213,46 @@ implements
         // (that is loading entities only if required),
         // this guard only triggers, once the first property model gets looked up;
         // in other words: this guard only works if every entity has at least a property
-        val ownerPojo = bookmarkedObjectModel.asManagedObject()
+        var ownerPojo = bookmarkedObjectModel.managedObject()
                 .getPojo();
-        if(ownerPojo==null) {
-            throw new ObjectNotFoundException(
-                    bookmarkedObjectModel.getBookmark().getIdentifier());
-        }
+        if(ownerPojo==null)
+            throw new ObjectNotFoundException(bookmarkedObjectModel.bookmark());
 
-        val pm = property.getMemento();
-        val propertyScalarModels = propertyScalarModels();
-        final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
-        if (existingScalarModel != null) {
-            return existingScalarModel;
-        }
+        var propIdentifier = property.getFeatureIdentifier();
+        var propertyModels = propertyModels();
+        final UiAttributeWkt existingPropertyModel = propertyModels.get(propIdentifier);
+        if (existingPropertyModel != null)
+            return existingPropertyModel;
 
-        val propertyInteractionModel = new PropertyInteractionWkt(
+        var propertyInteractionModel = new PropertyInteractionWkt(
                 bookmarkedObjectModel,
-                pm.getIdentifier().getMemberLogicalName(),
+                propIdentifier.memberLogicalName(),
                 renderingHint.asWhere());
 
         final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
-        .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
-        .peek(scalarModel->log.debug("adding: {}", scalarModel))
-        .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
+        .map(uiModel->PropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
+        .peek(propertyModel->log.debug("adding: {}", propertyModel))
+        .filter(propertyModel->propertyModels.put(propIdentifier, propertyModel)==null)
         .count(); // consume the stream
 
         // future extensions might allow to add multiple UI models per single property model (typed tuple support)
         _Assert.assertEquals(1L, modelsAdded, ()->
-            String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
+            String.format("unexpected number of propertyModels added %d", modelsAdded));
 
-        return propertyScalarModels.get(pm);
+        return propertyModels.get(propIdentifier);
     }
 
     @Override
     public Stream<Bookmark> streamPropertyBookmarks() {
-        val candidateAdapter = this.getObject();
+        var candidateAdapter = this.getObject();
 
-        return candidateAdapter.getSpecification()
+        return candidateAdapter.objSpec()
         .streamProperties(MixedIn.EXCLUDED)
         .map(prop->
             ManagedObjects.bookmark(prop.get(candidateAdapter, InteractionInitiatedBy.PASS_THROUGH))
             .orElse(null)
         )
-        .filter(_NullSafe::isPresent);
+        .filter(Objects::nonNull);
     }
 
     // -- VIEW OR EDIT
@@ -289,10 +273,10 @@ implements
 
     @Override
     protected void onDetach() {
-        propertyScalarModels().values()
-            .forEach(ScalarPropertyModel::detach);
+        propertyModels().values()
+            .forEach(PropertyModel::detach);
         super.onDetach();
-        propertyScalarModels = null;
+        propertyModels = null;
     }
 
     // -- TAB AND COLUMN (metadata if any)
@@ -305,8 +289,7 @@ implements
     public boolean isContextAdapter(final ManagedObject other) {
         return contextBookmarkIfAny==null
                 ? false
-                : Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))
-                ;
+                : Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null));
     }
 
     // -- HELPER
@@ -315,12 +298,5 @@ implements
     private HintStore hintStore() {
         return hintStore = getMetaModelContext().loadServiceIfAbsent(HintStore.class, hintStore);
     }
-
-    private transient ImageResourceCache imageResourceCache;
-    private ImageResourceCache imageResourceCache() {
-        return imageResourceCache = getMetaModelContext().loadServiceIfAbsent(ImageResourceCache.class, imageResourceCache);
-    }
-
-
 
 }

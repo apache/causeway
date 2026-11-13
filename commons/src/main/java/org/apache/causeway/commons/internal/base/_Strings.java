@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
@@ -57,9 +57,8 @@ import static org.apache.causeway.commons.internal.base._NullSafe.size;
 import static org.apache.causeway.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -88,14 +87,15 @@ public final class _Strings {
      */
     public static final String[] emptyArray = new String[0];
 
-
     // -- PAIR OF STRINGS
 
-    public static interface KeyValuePair extends Map.Entry<String, String> {
+    public static interface KeyValuePair {
+        String key();
+        String value();
     }
 
     public static KeyValuePair pair(final String key, final String value){
-        return _Strings_KeyValuePair.of(key, value);
+        return new _Strings_KeyValuePair(key, value);
     }
 
     /**
@@ -191,7 +191,6 @@ public final class _Strings {
         return x==null || x.length()==0;
     }
 
-
     /**
      *
      * @param x
@@ -247,7 +246,6 @@ public final class _Strings {
         }
         return input;
     }
-
 
     /**
      * Trims the input.
@@ -345,8 +343,8 @@ public final class _Strings {
             return true;
         }
         try {
-            val testDummyUri = new URI("http://localhost/?" + input);
-            val asQuery = testDummyUri.getQuery();
+            var testDummyUri = new URI("http://localhost/?" + input);
+            var asQuery = testDummyUri.getQuery();
             return input.equals(asQuery);
         } catch (Exception e) {
             // ignore
@@ -464,7 +462,6 @@ public final class _Strings {
         }
         return left + delimiter + right;
     }
-
 
     // -- PADDING
 
@@ -636,7 +633,6 @@ public final class _Strings {
                 rhs->onSplit.accept(null, rhs));
     }
 
-
     public static Stream<String> grep(final @Nullable String input, @Nullable Predicate<String> matcher){
         matcher = matcher!=null ? matcher : _Predicates.alwaysTrue();
         return splitThenStream(input, "\n")
@@ -745,7 +741,7 @@ public final class _Strings {
     public static String print(
             final @NonNull Consumer<PrintStream> printer,
             final @NonNull Charset charset) {
-        val baos = new ByteArrayOutputStream();
+        var baos = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baos, true, charset)) {
             printer.accept(ps);
         }
@@ -759,7 +755,6 @@ public final class _Strings {
             final @NonNull Consumer<PrintStream> printer) {
         return print(printer, StandardCharsets.UTF_8);
     }
-
 
     // -- BYTE ARRAY CONVERSION
 
@@ -939,20 +934,19 @@ public final class _Strings {
      *
      */
     public static String baseName(final @NonNull String methodName) {
-        val asPrefixDropped = isNotEmpty(methodName)
+        var asPrefixDropped = isNotEmpty(methodName)
                 ? ofCodePoints(
                         methodName.codePoints()
                             .dropWhile(c->c != '_' && Character.isLowerCase(c)))
                 : "";
-        val baseName = asPrefixDropped.isEmpty()
+        var baseName = asPrefixDropped.isEmpty()
                 ? methodName
                 : asPrefixDropped;
-        val javaBaseName = _Strings.capitalize(baseName.trim());
+        var javaBaseName = _Strings.capitalize(baseName.trim());
         _Assert.assertNotEmpty(javaBaseName,
                 ()->String.format("framework bug: could not create a base name from '%s'", methodName));
         return javaBaseName;
     }
-
 
     /**
      * Within given string, converts any special UTF-8 variants of the space ' ' character to the regular one.

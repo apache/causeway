@@ -29,29 +29,24 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -60,7 +55,6 @@ import lombok.val;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaBootstrappingTest",//;TRACE_LEVEL_SYSTEM_OUT=3",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 // @DirtiesContext // doesn't seem to tidy up correctly ... I see InteractionService still injected into entities in the _next_ tests run (JpaExceptionTranslationTest_usingTransactional)
 class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
@@ -88,10 +82,10 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
 
-            val txDef = new DefaultTransactionDefinition();
+            var txDef = new DefaultTransactionDefinition();
             txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
 
-            val txStatus = ptm.getTransaction(txDef);
+            var txStatus = ptm.getTransaction(txDef);
 
             assertNotNull(txStatus);
             assertFalse(txStatus.isCompleted());
@@ -101,11 +95,11 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Test @Order(0)
     void jpaEntities_shouldBeRecognisedAsSuch() {
-        val productSpec = specLoader.loadSpecification(JpaProduct.class);
+        var productSpec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(productSpec.isEntity());
         assertNotNull(productSpec.entityFacetElseFail());
 
-        val inventorySpec = specLoader.loadSpecification(JpaInventory.class);
+        var inventorySpec = specLoader.loadSpecification(JpaInventory.class);
         assertTrue(inventorySpec.isEntity());
         assertNotNull(inventorySpec.entityFacetElseFail());
     }
@@ -120,22 +114,22 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repositoryService.allInstances(JpaInventory.class);
+        var inventories = repositoryService.allInstances(JpaInventory.class);
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
 
-        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+        var expectedBookTitles = JpaTestFixtures.expectedBookTitles();
 
-        val multipleBooks = Can.ofCollection(inventory.getProducts())
+        var multipleBooks = Can.ofCollection(inventory.getProducts())
                 .filter(book->expectedBookTitles.contains(book.getName()));
 
         assertEquals(3, multipleBooks.size());
 
-        val firstProduct = inventory.getProducts().iterator().next();
+        var firstProduct = inventory.getProducts().iterator().next();
 
         testFixtures.assertHasPersistenceId(firstProduct);
     }
@@ -144,6 +138,5 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
     }
-
 
 }

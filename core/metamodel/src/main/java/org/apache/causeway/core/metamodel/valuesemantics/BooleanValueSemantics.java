@@ -38,8 +38,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.val;
-
 /**
  * due to auto-boxing also handles the primitive variant
  */
@@ -102,7 +100,7 @@ implements
 
     @Override
     public Boolean parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }
@@ -131,8 +129,7 @@ implements
     }
 
     //XXX not localized yet - maybe can be done at a more fundamental level - or replace with universal symbols
-//  return BooleanModel.forScalarModel(scalarModel())
+//  return BooleanModel.forAttributeModel(attributeModel())
 //          .asStringModel("(not set)", "Yes", "No");
-
 
 }

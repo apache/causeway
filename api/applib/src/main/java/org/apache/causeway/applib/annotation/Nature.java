@@ -39,8 +39,9 @@ public enum Nature {
     NOT_SPECIFIED,
 
     /**
-     * A domain entity whose persistence is managed internally by Causeway,
-     * using JPA or JDO as the persistence implementation.
+     * A domain entity whose persistence is managed by Causeway using the configured object store,
+     * eg JPA/EclipseLink.
+     *
      * <p>
      * Domain entities are considered to be part of the domain model layer.
      * <p>

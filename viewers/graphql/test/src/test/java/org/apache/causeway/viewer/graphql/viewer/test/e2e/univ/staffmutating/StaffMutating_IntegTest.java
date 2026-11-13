@@ -33,9 +33,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
 
-import lombok.val;
-
-
 // NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(130)
 @ActiveProfiles("test")
@@ -44,7 +41,22 @@ public class StaffMutating_IntegTest extends Abstract_IntegTest {
     @Test
     @UseReporter(DiffReporter.class)
     void staff_member_edit_name() throws Exception {
+        Approvals.verify(submitForJohnGartner(), jsonOptions());
+    }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void staff_member_edit_resources() throws Exception {
+        Approvals.verify(submitForJohnGartner(), jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    void staff_member_rejects_unaccepted_resource() throws Exception {
+        Approvals.verify(submitForJohnGartner(), jsonOptions());
+    }
+
+    private String submitForJohnGartner() throws Exception {
         final Bookmark bookmark =
                 transactionService.callTransactional(
                         Propagation.REQUIRED,
@@ -54,9 +66,6 @@ public class StaffMutating_IntegTest extends Abstract_IntegTest {
                         }
                 ).valueAsNonNullElseFail();
 
-        val response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
-
-        // then payload
-        Approvals.verify(response, jsonOptions());
+        return submit(_Maps.unmodifiable("$staffMemberId", bookmark.identifier()));
     }
 }

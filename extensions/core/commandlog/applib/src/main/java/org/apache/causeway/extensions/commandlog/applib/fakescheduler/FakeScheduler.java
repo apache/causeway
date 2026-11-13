@@ -19,32 +19,27 @@
 package org.apache.causeway.extensions.commandlog.applib.fakescheduler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
-import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
-import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
-
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-
 import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import jakarta.inject.Inject;
 import lombok.Builder;
-import lombok.val;
-import lombok.experimental.Accessors;
 
 /**
  * Intended to support integration testing which uses the
@@ -73,19 +68,18 @@ public class FakeScheduler {
         STRICT;
     }
 
-    /** record candidate */
-    @lombok.Value @Builder @Accessors(fluent=true)
-    public static class CommandBulkExecutionResult {
+    @Builder
+    public record CommandBulkExecutionResult(
+            @Nullable Throwable failure,
+            boolean hasTimedOut,
+            /** Number of commands still to be processed.
+             * This will generally be 0 (in the happy case),
+             * but could be non-zero if not enough time was provided to wait. */
+            int remainingCommandsToProcessCount) {
         static CommandBulkExecutionResult happyCase() {
             return CommandBulkExecutionResult.builder()
                     .build();
         }
-        private final @Nullable Throwable failure;
-        private final boolean hasTimedOut;
-        /** Number of commands still to be processed.
-         * This will generally be 0 (in the happy case),
-         * but could be non-zero if not enough time was provided to wait. */
-        private final int remainingCommandsToProcessCount;
     }
 
     /**
@@ -103,27 +97,25 @@ public class FakeScheduler {
         List<CommandDto> commandDtos = pendingCommandDtos();
 
         if(commandDtos.isEmpty()) {
-            switch (noCommandsPolicy) {
-                case STRICT:
-                    return CommandBulkExecutionResult.builder()
-                            .failure(new IllegalStateException(
-                                    "There are no background commands to be started"))
-                            .build();
-                case RELAXED:
-                default:
-                    return CommandBulkExecutionResult.happyCase();
-            }
+            return switch (noCommandsPolicy) {
+			case STRICT -> CommandBulkExecutionResult.builder()
+			                            .failure(new IllegalStateException(
+			                                    "There are no background commands to be started"))
+			                            .build();
+			case RELAXED -> CommandBulkExecutionResult.happyCase();
+			default -> CommandBulkExecutionResult.happyCase();
+			};
         }
 
         transactionService.flushTransaction();
 
         final _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Execute Command DTOs");
         tasks.addRunnable("Bulk run all pending CommandDtos then call listeners", () ->{
-            for (val commandDto : commandDtos) {
+            for (var commandDto : commandDtos) {
                 executeCommandWithinTransaction(commandDto);
             }
 
-            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            var interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
             listeners.forEach(listener -> {
                 invokeListenerCallbackWithinTransaction(listener, interactionIds);
             });
@@ -131,14 +123,14 @@ public class FakeScheduler {
         });
 
         tasks.submit(_ConcurrentContext.singleThreaded());
-        val hasTimedOut = !tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
+        var hasTimedOut = !tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
 
         return CommandBulkExecutionResult.builder()
                 .hasTimedOut(hasTimedOut)
 
                 .failure(tasks.getTasks().stream()
                         .map(_ConcurrentTask::getFailedWith)
-                        .filter(_NullSafe::isPresent)
+                        .filter(Objects::nonNull)
                         .findAny()
                         .orElse(null))
                 .remainingCommandsToProcessCount(
@@ -158,7 +150,7 @@ public class FakeScheduler {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRED, () -> {
                     // look up the CommandLogEntry again because we are within a new transaction.
-                    val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                    var commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                     commandLogEntryIfAny.ifPresent(commandLogEntry ->
                             commandExecutorService.executeCommand(
@@ -169,14 +161,13 @@ public class FakeScheduler {
         );
     }
 
-    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds) {
+    private void invokeListenerCallbackWithinTransaction(final RunBackgroundCommandsJobListener listener, final List<String> interactionIds) {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRED, () -> {
                 listener.executed(interactionIds);
             });
         });
     }
-
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Inject CommandLogEntryRepository commandLogEntryRepository;

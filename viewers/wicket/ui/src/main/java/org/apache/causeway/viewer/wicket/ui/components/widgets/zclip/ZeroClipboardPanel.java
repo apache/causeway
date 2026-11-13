@@ -43,8 +43,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private AjaxLink<Void> copyLink;
     private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
-    public ZeroClipboardPanel(final String id, final ObjectAdapterModel entityModel) {
-        super(id, entityModel);
+    public ZeroClipboardPanel(final String id, final ObjectAdapterModel objectModel) {
+        super(id, objectModel);
     }
 
     @Override
@@ -85,8 +85,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
                     final Class pageClass = ZeroClipboardPanel.this.getPage().getPageClass();
 
-                    final ObjectAdapterModel entityModel = ZeroClipboardPanel.this.getModel();
-                    final PageParameters pageParameters = entityModel.getPageParameters();
+                    final ObjectAdapterModel objectModel = ZeroClipboardPanel.this.getModel();
+                    final PageParameters pageParameters = objectModel.getPageParameters();
 
                     final CharSequence urlFor = getRequestCycle().urlFor(pageClass, pageParameters);
                     return getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlFor));

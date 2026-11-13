@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.actions.validate.method;
 
 import java.util.EnumSet;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -30,7 +28,7 @@ import org.apache.causeway.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Sets up {@link ActionParameterValidationFacetViaMethod}.
@@ -48,19 +46,19 @@ extends MemberSupportFacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
+        var searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .methodFinder(methodFinder)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
 
         ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
-            val validateMethod = searchResult.getSupportingMethod();
+            var validateMethod = searchResult.supportingMethod();
             processMethodContext.removeMethod(validateMethod);
-            val patConstructor = searchResult.getPatConstructor();
-            addFacet(
-                    new ActionValidationFacetViaMethod(
-                            validateMethod, patConstructor, processMethodContext.getFacetHolder()));
+            var patConstructor = searchResult.patConstructor();
+
+            new ActionValidationFacetViaMethod(
+                    validateMethod, patConstructor, processMethodContext.facetHolder());
         });
 
     }

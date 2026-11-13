@@ -18,21 +18,22 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import jakarta.ws.rs.core.Response;
+import java.util.Optional;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+
+import org.springframework.http.ResponseEntity;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _EndpointLogging {
-
 
     /**
      * Returns given {@code stringResponse} untampered.
@@ -51,10 +52,10 @@ class _EndpointLogging {
     /**
      * Returns given {@code Response} untampered.
      */
-    Response response(
+    <T> ResponseEntity<T> response(
             final Logger log,
             final String format,
-            final Response response) {
+            final ResponseEntity<T> response) {
         if(log.isDebugEnabled()) {
             logRequest(log, format);
             logResponse(log, response);
@@ -65,11 +66,11 @@ class _EndpointLogging {
     /**
      * Returns given {@code Response} untampered.
      */
-    Response response(
+    <T> ResponseEntity<T> response(
             final Logger log,
             final String format,
             final String arg0,
-            final Response response) {
+            final ResponseEntity<T> response) {
         if(log.isDebugEnabled()) {
             logRequest(log, format, arg0);
             logResponse(log, response);
@@ -80,12 +81,12 @@ class _EndpointLogging {
     /**
      * Returns given {@code Response} untampered.
      */
-    Response response(
+    <T> ResponseEntity<T> response(
             final Logger log,
             final String format,
             final String arg0,
             final String arg1,
-            final Response response) {
+            final ResponseEntity<T> response) {
         if(log.isDebugEnabled()) {
             logRequest(log, format, arg0, arg1);
             logResponse(log, response);
@@ -96,13 +97,13 @@ class _EndpointLogging {
     /**
      * Returns given {@code Response} untampered.
      */
-    Response response(
+    <T> ResponseEntity<T> response(
             final Logger log,
             final String format,
             final String arg0,
             final String arg1,
             final String arg2,
-            final Response response) {
+            final ResponseEntity<T> response) {
         if(log.isDebugEnabled()) {
             logRequest(log, format, arg0, arg1, arg2);
             logResponse(log, response);
@@ -179,20 +180,21 @@ class _EndpointLogging {
         log.debug(format, args);
     }
 
-    private void logResponse(final Logger log, final Response response) {
+    private <T> void logResponse(final Logger log, final ResponseEntity<T> response) {
         log.debug("<<< RESPONSE");
 
-        val dto = response.getEntity();
-        if(dto==null
-                || dto instanceof String) {
-            log.debug(dto);
+        var dto = response.getBody();
+        if(dto==null) {
+            log.debug("null");
+        } else if(dto instanceof String string) {
+            log.debug(string);
         } else if(_Collections.isAnyCollectionOrArrayType(dto.getClass())){
             log.debug("non-scalar content of type {}", dto.getClass());
         } else {
             Try.call(()->JaxbUtils.toStringUtf8(dto, opts->opts
                     .useContextCache(true)
                     .formattedOutput(true)))
-            .ifSuccess(xml->log.debug(xml))
+            .ifSuccess(xml->log.debug(xml.orElse("null")))
             .ifFailure(toXmlConversionError->
                 log
                 .debug("could not convert response content to XML for logging: {}",
@@ -211,7 +213,7 @@ class _EndpointLogging {
 
     private void logError(final Logger log, final RestfulObjectsApplicationException roException) {
         log.debug("<<< ERROR");
-        log.debug(roException.getBody());
+        log.debug(Optional.ofNullable(roException.body()).map(JsonRepresentation::toString).orElse("null"));
         log.debug("--- END ERROR");
     }
 

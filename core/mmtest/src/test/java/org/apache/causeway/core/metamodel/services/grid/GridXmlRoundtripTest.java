@@ -1,0 +1,152 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.services.grid;
+
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.FieldSet;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
+import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.testing._DocumentTester;
+import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+
+class GridXmlRoundtripTest
+extends MetaModelTestAbstract {
+
+    private JaxbService jaxbService;
+    private GridServiceDefault gridServiceDefault;
+
+    @Override
+    protected void afterSetUp() {
+        jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+        gridServiceDefault = (GridServiceDefault)getServiceRegistry().lookupServiceElseFail(GridService.class);
+    }
+
+    @Test
+    void happy_case() throws Exception {
+
+        final BSGrid bsGrid = new BSGrid();
+        bsGrid.layoutKey(new LayoutKey(Object.class));
+
+        // header
+        final BSRow headerRow = new BSRow();
+        bsGrid.getRows().add(headerRow);
+        final BSCol headerCol = new BSCol();
+        headerRow.getRowContents().add(headerCol);
+        headerCol.setSpan(12);
+
+        final DomainObjectLayoutData objectLayoutData = new DomainObjectLayoutData();
+        headerCol.setDomainObject(objectLayoutData);
+
+        final ActionLayoutData deleteActionLayoutData = new ActionLayoutData();
+        deleteActionLayoutData.setId("delete");
+        headerCol.getActions().add(deleteActionLayoutData);
+
+        // content
+        final BSRow contentRow = new BSRow();
+        bsGrid.getRows().add(contentRow);
+
+        final BSCol contentCol = new BSCol();
+        contentRow.getRowContents().add(contentCol);
+        contentCol.setSpan(12);
+
+        // a tabgroup containing a 'Common' tab
+        final BSTabGroup tabGroup = new BSTabGroup();
+        contentCol.getTabGroups().add(tabGroup);
+        BSTab bsTab = new BSTab();
+        tabGroup.getTabs().add(bsTab);
+        bsTab.setName("Common");
+
+        // with a left col...
+        final BSRow tabRow = new BSRow();
+        bsTab.getRows().add(tabRow);
+        final BSCol tabLeftCol = new BSCol();
+        tabRow.getRowContents().add(tabLeftCol);
+        tabLeftCol.setSpan(6);
+
+        // containing a fieldset
+        final FieldSet leftPropGroup = new FieldSet("General");
+        tabLeftCol.getFieldSets().add(leftPropGroup);
+        leftPropGroup.setName("General");
+
+        // with a single property
+        final PropertyLayoutData namePropertyLayoutData = new PropertyLayoutData();
+        leftPropGroup.getProperties().add(namePropertyLayoutData);
+        namePropertyLayoutData.setNamed("name");
+
+        // and its associated action
+        final ActionLayoutData updateNameActionLayoutData = new ActionLayoutData();
+        updateNameActionLayoutData.setId("updateName");
+        namePropertyLayoutData.getActions().add(updateNameActionLayoutData);
+
+        // and the tab also has a right col...
+        final BSCol tabRightCol = new BSCol();
+        tabRow.getRowContents().add(tabRightCol);
+        tabRightCol.setSpan(6);
+
+        // containing a collection
+        final CollectionLayoutData similarToColl = new CollectionLayoutData();
+        tabRightCol.getCollections().add(similarToColl);
+        similarToColl.setId("similarTo");
+
+        var xmlMarshaller = gridServiceDefault.marshaller(CommonMimeType.XML).orElseThrow();
+
+        String xml = xmlMarshaller.marshal(bsGrid, CommonMimeType.XML);
+
+        println(xml);
+
+        BSGrid bsGridRoundtripped = xmlMarshaller.unmarshal(new LayoutKey(Object.class), xml, CommonMimeType.XML)
+            .valueAsNonNullElseFail();
+
+        String xmlRoundtripped = xmlMarshaller.marshal(bsGridRoundtripped, CommonMimeType.XML);
+
+        _DocumentTester.assertXmlEqualsIgnoreOrder(xml, xmlRoundtripped);
+
+        println("==========");
+
+        dumpXsd(bsGrid);
+    }
+
+    protected void dumpXsd(final BSGrid bsPage) {
+        Map<String, String> schemas = jaxbService.toXsd(bsPage, CausewaySchemas.INCLUDE);
+        for (Map.Entry<String, String> entry : schemas.entrySet()) {
+            println(entry.getKey() + ":");
+            println(entry.getValue());
+        }
+    }
+
+    private void println(final String string) {
+        //for test debugging only
+    }
+
+}

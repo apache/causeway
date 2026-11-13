@@ -25,12 +25,8 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
  * Indicates that a bookmark cannot be found.
  *
  * @since 2.1, 3.1 {@index}
- *
  */
 public class BookmarkNotFoundException extends UnrecoverableException {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public BookmarkNotFoundException(final String msg) {

@@ -25,12 +25,15 @@ module org.apache.causeway.persistence.jpa.applib {
     requires jakarta.activation;
     requires jakarta.inject;
     requires jakarta.persistence;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires org.eclipse.persistence.core;
     requires spring.context;
+    requires transitive spring.boot.persistence;
+    requires java.compiler;
+    requires com.querydsl.core;
 }

@@ -38,7 +38,7 @@ extends
                 && getInlinePromptContext() != null;
     }
 
-    default Optional<ScalarParameterModel> getAssociatedParameter() {
+    default Optional<ParameterModel> getAssociatedParameter() {
         return Optional.empty();
     }
 

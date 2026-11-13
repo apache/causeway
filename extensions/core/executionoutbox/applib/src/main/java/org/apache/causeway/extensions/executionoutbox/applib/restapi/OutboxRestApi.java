@@ -21,7 +21,6 @@ package org.apache.causeway.extensions.executionoutbox.applib.restapi;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -35,9 +34,6 @@ import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutbox
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 /**
  * Provides a server-side REST API for the <i>outbox rest client</i> to call, to first obtain {@link #pending() pending}
  * {@link ExecutionOutboxEntry outbox entries} to be processed, and then later to request them to be
@@ -47,12 +43,11 @@ import lombok.val;
  */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)
 @DomainService
-@RequiredArgsConstructor
-public class OutboxRestApi  {
+public record OutboxRestApi(
+        FactoryService factoryService,
+        ExecutionOutboxEntryRepository executionOutboxEntryRepository)  {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxRestApi";
-
-    final @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
 
     /**
      * This action is intended to be invoked with <code>Accept</code> header set to
@@ -68,7 +63,7 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public OutboxEvents pending() {
-        val outboxEvents = factoryService.viewModel(new OutboxEvents());
+        var outboxEvents = factoryService.viewModel(new OutboxEvents());
         List<? extends ExecutionOutboxEntry> entries = executionOutboxEntryRepository.findOldest();
         outboxEvents.getExecutions().addAll(entries);
         return outboxEvents;
@@ -89,15 +84,13 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public void deleteMany(final String interactionsDtoXml) {
-        val interactionsDto = InteractionsDtoUtils.dtoMapper().read(interactionsDtoXml);
+        var interactionsDto = InteractionsDtoUtils.dtoMapper().read(interactionsDtoXml);
         interactionsDto.getInteractionDto().
                 forEach(interactionType -> {
-                    val interactionId = interactionType.getInteractionId();
-                    val sequence = interactionType.getExecution().getSequence();
+                    var interactionId = interactionType.getInteractionId();
+                    var sequence = interactionType.getExecution().getSequence();
                     executionOutboxEntryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
                 });
     }
-
-    @Inject FactoryService factoryService;
 
 }

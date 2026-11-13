@@ -29,16 +29,16 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public class TypeListReprRenderer
-extends ReprRendererAbstract<Can<ObjectSpecification>> {
+extends ReprRendererAbstract<Can<? extends ObjectSpecification>> {
 
-    private Can<ObjectSpecification> specifications;
+    private Can<? extends ObjectSpecification> specifications;
 
     public TypeListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.TYPE_LIST, representation);
     }
 
     @Override
-    public TypeListReprRenderer with(final Can<ObjectSpecification> specifications) {
+    public TypeListReprRenderer with(final Can<? extends ObjectSpecification> specifications) {
         this.specifications = specifications;
         return this;
     }
@@ -53,7 +53,7 @@ extends ReprRendererAbstract<Can<ObjectSpecification>> {
 
         final JsonRepresentation specList = JsonRepresentation.newArray();
         for (final ObjectSpecification objectSpec : specifications) {
-            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.getLogicalTypeName());
+            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.logicalTypeName());
             specList.arrayAdd(linkBuilder.build());
         }
 

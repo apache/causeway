@@ -22,6 +22,7 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -46,6 +47,36 @@ extends ActionInvocationFacetAbstract {
         super(domainEventHolder, method, declaringType, returnType, holder);
     }
 
+    /**
+     * Creates a mixee-specific (object-type-specific) invocation facet bound to the given mixee-specific
+     * domain-event holder, so that a mixed-in action executed on this mixee posts the mixee's domain-event
+     * type. The facet is {@link org.apache.causeway.core.metamodel.facetapi.Facet#isObjectTypeSpecific()
+     * object-type-specific} so it is installed on the mixed-in member's local facet holder.
+     */
+    public static ActionInvocationFacetForAction createObjectTypeSpecific(
+            final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
+            final MethodFacade method,
+            final ObjectSpecification declaringType,
+            final ObjectSpecification returnType,
+            final FacetHolder holder) {
+        return new ObjectTypeSpecific(domainEventHolder, method, declaringType, returnType, holder);
+    }
+
+    private static class ObjectTypeSpecific extends ActionInvocationFacetForAction {
+        protected ObjectTypeSpecific(
+                final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
+                final MethodFacade method,
+                final ObjectSpecification declaringType,
+                final ObjectSpecification returnType,
+                final FacetHolder holder) {
+            super(domainEventHolder, method, declaringType, returnType, holder);
+        }
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     @Override
     public ManagedObject invoke(
             final ObjectAction owningAction,
@@ -53,8 +84,11 @@ extends ActionInvocationFacetAbstract {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return memberExecutorService.invokeAction(getFacetHolder(), interactionInitiatedBy,
-                head, argumentAdapters, owningAction, this);
+    	var executor = ActionExecutor.forAction(
+    			facetHolder(), interactionInitiatedBy, head,
+    			argumentAdapters, owningAction, this);
+    	
+        return memberExecutorService.invokeAction(executor);
     }
 
 }

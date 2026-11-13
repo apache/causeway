@@ -48,7 +48,7 @@ class ApplicationFeatureIdTransformerV1Compatibility_Test {
         transformer = new ApplicationFeatureIdTransformerV1Compatibility(mockSpecificationLoader);
 
         lenient().when(mockSpecificationLoader.specForLogicalTypeName("customer.Customer")).thenReturn(Optional.of(mockSpecificationForCustomerClass));
-        lenient().when(mockSpecificationForCustomerClass.getCorrespondingClass()).then(__ -> Customer.class);
+        lenient().when(mockSpecificationForCustomerClass.correspondingClass()).then(__ -> Customer.class);
     }
 
     @Test
@@ -80,7 +80,6 @@ class ApplicationFeatureIdTransformerV1Compatibility_Test {
         assertThat(transformed.getLogicalTypeName()).isEqualTo(Customer.class.getName());
         assertThat(transformed.getLogicalMemberName()).isNull();
     }
-
 
     @Test
     void type_when_does_not_exist() {

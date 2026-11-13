@@ -41,7 +41,7 @@ public enum PageType {
     HOME(PageRenderSubscriber.PageType.OTHER),
     HOME_AFTER_PAGETIMEOUT(PageRenderSubscriber.PageType.OTHER),
     ABOUT(PageRenderSubscriber.PageType.OTHER),
-    ENTITY(PageRenderSubscriber.PageType.DOMAIN_OBJECT),
+    DOMAIN_OBJECT(PageRenderSubscriber.PageType.DOMAIN_OBJECT),
     STANDALONE_COLLECTION(PageRenderSubscriber.PageType.COLLECTION),
     VALUE(PageRenderSubscriber.PageType.VALUE),
     VOID_RETURN(PageRenderSubscriber.PageType.OTHER);

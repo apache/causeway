@@ -21,23 +21,24 @@ package org.apache.causeway.core.metamodel.consent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-import lombok.NonNull;
-import lombok.experimental.Accessors;
+public sealed interface Consent
+permits Consent.Allow, Consent.Veto {
 
-public interface Consent {
-
-    //XXX record candidate
-    @lombok.Value @Accessors(fluent=true)
-    public static class VetoReason implements Serializable {
-        private static final long serialVersionUID = 1L;
+    public record VetoReason(
+            VetoOriging vetoOriging,
+            UiHint uiHint,
+            @NonNull String string) implements Serializable {
 
         /**
          * Introduced to help pick a winner when merging 2 {@link VetoReason}(s).
@@ -87,9 +88,7 @@ public interface Consent {
                 return b.ordinal()>a.ordinal() ? b : a;
             }
         }
-        private final VetoOriging vetoOriging;
-        private final UiHint uiHint;
-        private final @NonNull String string;
+
         private static VetoReason of(
                 final @NonNull VetoOriging vetoOriging,
                 final @NonNull UiHint uiHint,
@@ -107,7 +106,7 @@ public interface Consent {
             return of(VetoOriging.PROGRAMMING_MODEL, UiHint.NO_ICON_UNLESS_PROTOTYPING, reason);
         }
 
-        VetoReason withAdvisorAsDiagnostic(Object advisor) {
+        VetoReason withAdvisorAsDiagnostic(final Object advisor) {
             return new VetoReason(this.vetoOriging, this.uiHint, this.string + " {" + advisor.getClass().getSimpleName() + "} ");
         }
 
@@ -173,11 +172,10 @@ public interface Consent {
         public static VetoReason immutableIfNoReasonGivenByImmutableFacet() {
             return inferred("Immutable, no reason given by ImmutableFacet.");
         }
-        public static VetoReason delegatedTo(@NonNull final Class<? extends ImmutableFacet> cls) {
+        public static VetoReason delegatedTo(final @NonNull Class<? extends ImmutableFacet> cls) {
             return inferred("Calculated at runtime, delegating to ImmutableFacet " + cls + ".");
         }
     }
-
 
     /**
      * Returns true if this object is giving permission.
@@ -191,44 +189,77 @@ public interface Consent {
 
     /**
      * Optionally the {@link VetoReason}, why consent is being vetoed, based on whether not allowed.
-     * <p>
-     * Will correspond to the {@link InteractionResult#getReason() reason} in
+     *
+     * <p>Will correspond to the {@link InteractionResult#getReason() reason} in
      * the contained {@link #getInteractionResult() InteractionResult} (if one
      * was specified).
      */
-    Optional<VetoReason> getReason();
+    Optional<VetoReason> reason();
 
     /**
      * Optionally the {@link VetoReason} as String, why consent is being vetoed, based on whether not allowed.
      */
-    default Optional<String> getReasonAsString() {
-        return getReason().map(VetoReason::string);
+    default Optional<String> reasonAsString() {
+        return reason().map(VetoReason::string);
     }
 
+    /**
+     * Optionally the The {@link InteractionResult} that created this {@link Consent}.
+     */
+    Optional<InteractionResult> interactionResult();
 
     /**
-     * Description of the interaction that this consent represents.
-     *
-     * <p>
-     * May be <tt>null</tt>.
+     * An instance of this type is used to allow something.
      */
-    String getDescription();
+    public record Allow(
+            Optional<InteractionResult> interactionResult
+            ) implements Consent {
 
-    /**
-     * Allows the description of the interaction to which this consent relates
-     * to be specified or refined.
-     *
-     * @param description
-     * @return this consent
-     */
-    Consent setDescription(String description);
+        public static final Allow DEFAULT = new Allow(Optional.empty());
 
-    /**
-     * The {@link InteractionResult} that created this {@link Consent}.
-     *
-     * @return - may be <tt>null</tt> if created as a legacy {@link Consent}.
-     *
-     */
-    public InteractionResult getInteractionResult();
+        public Allow {
+            interactionResult = interactionResult!=null
+                    ? interactionResult
+                    : Optional.empty();
+        }
+
+        @Override public boolean isAllowed() { return true; }
+        @Override public boolean isVetoed() { return false; }
+        @Override public Optional<VetoReason> reason() { return Optional.empty(); }
+
+        @Override public String toString() {
+            return "ALLOWED";
+        }
+    }
+
+    public record Veto(
+            Optional<InteractionResult> interactionResult,
+            VetoReason vetoReason
+            ) implements Consent {
+
+        public static final Veto DEFAULT = new Veto("Vetoed by default");
+
+        public Veto {
+            interactionResult = interactionResult!=null
+                    ? interactionResult
+                    : Optional.empty();
+            Objects.requireNonNull(vetoReason);
+        }
+
+        public Veto(final String reasonVetoed) {
+            this(Optional.empty(), VetoReason.explicit(_Strings.requireNonEmpty(reasonVetoed, "Reason Vetoed")));
+        }
+
+        @Override public boolean isAllowed() { return false; }
+        @Override public boolean isVetoed() { return true; }
+
+        @Override public Optional<VetoReason> reason() {
+            return Optional.of(this.vetoReason);
+        }
+
+        @Override public String toString() {
+            return "VETOED, reason=" + vetoReason;
+        }
+    }
 
 }

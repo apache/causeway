@@ -43,10 +43,9 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
- *
+ * Implementation of {@link TranslationService} that uses <code>.po</code>po file format.
  * @since 2.0 {@index}
  */
 @Service
@@ -71,7 +70,7 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init() {
 
-        final Mode translationMode = configuration.getCore().getRuntimeServices().getTranslation().getPo().getMode();
+        final Mode translationMode = configuration.core().runtimeServices().translation().po().mode();
 
         if(translationMode == Mode.DISABLED) {
             // switch to disabled mode
@@ -98,7 +97,6 @@ public class TranslationServicePo implements TranslationService {
             onShutdown = po::logTranslations;
         }
     }
-
 
     @PreDestroy
     public void shutdown() {
@@ -130,11 +128,10 @@ public class TranslationServicePo implements TranslationService {
         if (!getMode().isWrite()) {
             return Optional.empty();
         }
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
         ((PoWriter)po).toPot(buf);
         return Optional.of(buf.toString());
     }
-
 
     /**
      * Not API

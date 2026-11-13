@@ -1,0 +1,213 @@
+= Object Specification Loading
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== Participants
+
+- SpecificationLoader
+- ObjectSpecification
+- FacetedMethodsBuilder
+- FacetProcessor
+- PostProcessor
+- ClassSubstitutorRegistry/ClassSubstitutor
+
+== SpecificationLoader
+
+This class acts as the primary engine for constructing the system's metadata (the "Metamodel"):
+
+- *Orchestration*: It integrates various subsystems, such as class substitution, mix-in processing and post-processing.
+- *Configuration*: It handles different operational modes (EAGER vs. LAZY) to determine how much of the metamodel is explored upfront versus on-the-fly.
+- *Lifecycle & Reloading*: It manages the complexity of "reloading" specifications while ensuring that shared references do not cause consistency issues.
+
+[source,java]
+.SpecificationLoader
+----
+ObjectSpecification loadSpecification(Class<?> cls) 
+----
+
+== ObjectSpecification
+
+This is the core data structure representing a class's meta data within the _Metamodel_.
+
+- *Stateful Wrapper*: It is designed as a wrapper around internal, potentially mutable data. This allows the system to maintain consistent references even when underlying information is refreshed or updated.
+- *FacetHolder*: It holds various `Facet`(s) of the class definition
+- *ObjectActionContainer* and *ObjectAssociationContainer* hold class member meta data. Members are either _regular_, _mixed-in_ or _synthetic_.
+
+Multiple lifecycle states can be identified for an `ObjectSpecification` during _Metamodel_ initialization:
+
+. REGISTERED: We have an `ObjectSpecification` that at least has an identity to be shared, but is not yet populated with meta-data.
+. TYPE-ONLY: The `ObjectSpecification` has its type specific _Facets_ (really?) and its super _Spec_ and interface _Spec_ references populated, 
+while those super types don't require to be introspected yet, just registered so we have stable references.
+. FULLY-INTROSPECTED: _Facets_ as well as regular and mixed-in _Members_ were added to the _Spec_.
+
+[source,java]
+.ObjectSpecification
+----
+// inherited from Hierarchical ...
+ObjectSpecification superclass();
+Can<ObjectSpecification> interfaces(); 
+
+FacetHolder getFacetHolder(); // inherited from HasFacetHolder
+FeatureType getFeatureType(); // inherited from Specification
+LogicalType logicalType(); // inherited from HasLogicalType
+ObjectActionContainer objectActionContainer(); // inherited from HasObjectActionContainer
+ObjectAssociationContainer objectAssociationContainer(); // inherited from HasObjectAssociationContainer
+----
+
+== Building the Metamodel
+
+=== Requirements
+
+Given categories of classes (mixins, values, entities, viewmodels, ...) 
+the _Metamodel_ is bootstrapped.
+
+. List of Mixin classes must be final once the Metamodel introspection starts. 
+For any mixin discovered later, we log a warning.
+. Mixins shall support class inheritance, but any _Interfaces_ a Mixin inherits are ignored. 
+Meaning since _Interfaces_ are allowed to be _Mixees_, we are not fully introspecting those during Mixin
+introspection phase.
+. The Spec Loader is required to mix in members from above list to all Specs, 
+except Value-, Abstract-types and Mixins.
+. Mixins that apply to java.lang.Object are not mixed in to service-types
+. Mixin introspection must not as a side-effect fully introspect other types. 
+However TYPE_ONLY introspection is allowed.
+. The Spec Loader shall support 2 modes of operation
+ .. EAGER - fully introspect all types, starting with those discovered up front, 
+ then include those discovered during introspection. Then lock down the Metamodel - make it unmodifiable.
+ .. LAZY - only fully introspect Mixins, introspect the rest on the fly.
+. The Spec Loader shall support Specification reloading. (Simply evicting a Spec from the cache might not work, 
+because we cannot be sure that none of the other Specs still holds a reference to the evicted Spec.)
+
+
+[plantuml,fig-introspection-participants,svg]
+.Introspection Participants
+----
+@startuml
+
+object ObjectSpecification {
+    facets
+    regular members
+    mixed-in members
+}
+
+class SpecificationLoader <<Service>> {
+    loadSpecification(Class): ObjectSpecification
+}
+
+hide empty members
+
+@enduml
+----
+
+=== Component Architecture
+
+[plantuml,fig-component-architecture,svg]
+.Component Architecture
+----
+@startuml
+
+package "Bootstrap & Lifecycle Orchestrator" {
+  [SpecificationLoader] as Loader
+  [SpecCache\nConcurrentMap<Class, Facade>] as Cache
+  [IntrospectionStateTracker] as Tracker
+  [FacetProcessingPipeline] as Pipeline
+}
+
+package "Facet Creation" {
+  [Partial Introspection] as Partial
+  [Ordered Facet Factories] as Factories
+  [PostProcessors] as PostProcs
+  [ObjectMetaDataHandle] as Handle
+  
+  note left of Handle
+    Callers only ever have access to a Handle, 
+    because, it is given to them via a 
+    context, that is associated 
+    with the class that is under introspection. 
+    Creating an introspection context is the 
+    responsibility of the Spec Loader, 
+    which must not be exposed as API. 
+  end note
+}
+
+package "Specification Implementation" {
+  [ObjectSpecification\nInterface] as Spec
+  [ObjectSpecificationFacade] as Facade
+  [ObjectMetaData\nSealed Interface] as Delegate
+  [ObjectMetaDataInitial] as Initial
+  [ObjectMetaDataTypeOnly] as TypeOnly
+  [ObjectMetaDataFull] as Full
+  
+  note bottom of Spec
+    exposes only read access to Facets
+  end note
+  
+  note right of Delegate
+    Introspection state is reflected
+    by one of 3 permitted types.
+  end note
+}
+
+Loader --> Cache : manages\n & populates
+Loader --> Tracker : drives\n transitions
+Loader --> Pipeline : triggers\n on FULL phase
+Pipeline --> Partial : runs on\nTYPE_ONLY
+Pipeline --> Factories : runs on\nFULL
+Pipeline --> PostProcs : runs after\n Facet factories
+Facade --> Delegate : delegates\n (swappable on reload)
+Loader --> Facade : creates & caches
+
+Partial --> Handle: modifies\nFacets via
+Factories --> Handle: modifies\nFacets via
+PostProcs --> Handle: modifies\nFacets via
+
+Handle --> Delegate: has\nwrite access\nto Facets
+
+Facade -|> Spec 
+
+Delegate <|--- Initial 
+Delegate <|--- TypeOnly
+Delegate <|--- Full
+
+@enduml
+----
+
+=== Introspection State Machine
+
+[plantuml,fig-introspection-state-machine,svg]
+.Introspection State Machine
+----
+@startuml
+state "REGISTER\n(Type registered,\nempty spec)" as S1
+state "TYPE_ONLY\n(Hierarchy resolved,\nno members)" as S2
+state "FULLY_INTROSPECTED\n(All facets, associations,\nactions built.\nFor non-mixins and non-values,\n mixins added.)" as S3
+state "SEALED\n(Object Metadata locked,\nunmodifiable)" as S4
+
+S1 --> S2 : Loader.introspectTypeOnly()
+S2 --> S3 : Loader.introspectFully()
+S3 --> S4 : Loader.lockMetamodel()
+
+note right of S1
+  Cache reference stays constant 
+  even when reloading.
+end note
+
+note right of S2
+  Mixin phase enforces
+  TYPE_ONLY on non-mixins.
+  Interface inheritance ignored.
+end note
+
+note right of S3
+  As a side-effect all member's 
+  element types are fully 
+  introspected. Same for 
+  any action params.
+end note
+
+note right of S4
+  Reloading swaps delegate
+  & resets tracker to REGISTER.
+end note
+@enduml
+----

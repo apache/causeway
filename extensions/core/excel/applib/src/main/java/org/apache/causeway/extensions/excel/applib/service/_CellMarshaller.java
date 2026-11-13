@@ -20,6 +20,12 @@ package org.apache.causeway.extensions.excel.applib.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
@@ -36,10 +42,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFHyperlink;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -132,6 +134,10 @@ final class _CellMarshaller {
 
     }
 
+    private static ZoneOffset zoneOffsetForLocalTemporals() {
+        return ZoneOffset.UTC;
+    }
+
     private boolean setCellValue(final Cell cell, final Object valueAsObj) {
         if(valueAsObj == null) {
             cell.setBlank();
@@ -160,33 +166,26 @@ final class _CellMarshaller {
             setCellValueForDate(cell, value, dateCellStyle);
             return true;
         }
-//        if(valueAsObj instanceof org.apache.causeway.applib.value.Date) {
-//            org.apache.causeway.applib.value.Date value = (org.apache.causeway.applib.value.Date) valueAsObj;
-//            Date dateValue = value.dateValue();
-//            setCellValueForDate(cell, dateValue, dateCellStyle);
-//            return true;
-//        }
-//        if(valueAsObj instanceof org.apache.causeway.applib.value.DateTime) {
-//            org.apache.causeway.applib.value.DateTime value = (org.apache.causeway.applib.value.DateTime) valueAsObj;
-//            Date dateValue = value.dateValue();
-//            setCellValueForDate(cell, dateValue, dateCellStyle);
-//            return true;
-//        }
-        if(valueAsObj instanceof LocalDate) {
-            LocalDate value = (LocalDate) valueAsObj;
-            Date date = value.toDateTimeAtStartOfDay().toDate();
+
+        // -- TO DATE CONVERSION
+
+        if(valueAsObj instanceof LocalDate value) {
+            Date date = new java.util.Date(value.atStartOfDay().toInstant(zoneOffsetForLocalTemporals()).toEpochMilli());
             setCellValueForDate(cell, date, dateCellStyle);
             return true;
         }
-        if(valueAsObj instanceof LocalDateTime) {
-            LocalDateTime value = (LocalDateTime) valueAsObj;
-            Date date = value.toDate();
+        if(valueAsObj instanceof LocalDateTime value) {
+            Date date = new java.util.Date(value.toInstant(zoneOffsetForLocalTemporals()).toEpochMilli());
             setCellValueForDate(cell, date, dateCellStyle);
             return true;
         }
-        if(valueAsObj instanceof DateTime) {
-            DateTime value = (DateTime) valueAsObj;
-            Date date = value.toDate();
+        if(valueAsObj instanceof ZonedDateTime value) {
+            Date date = new java.util.Date(value.toInstant().toEpochMilli());
+            setCellValueForDate(cell, date, dateCellStyle);
+            return true;
+        }
+        if(valueAsObj instanceof OffsetDateTime value) {
+            Date date = new java.util.Date(value.toInstant().toEpochMilli());
             setCellValueForDate(cell, date, dateCellStyle);
             return true;
         }
@@ -310,7 +309,7 @@ final class _CellMarshaller {
         }
 
         final ObjectSpecification propertySpec = otoa.getElementType();
-        Class<?> requiredType = propertySpec.getCorrespondingClass();
+        Class<?> requiredType = propertySpec.correspondingClass();
 
         // value types
         if(propertySpec.isValue()) {
@@ -352,31 +351,33 @@ final class _CellMarshaller {
             return (T) dateCellValue;
         }
 
-//        if(requiredType == org.apache.causeway.applib.value.Date.class) {
-//            java.util.Date dateCellValue = cell.getDateCellValue();
-//            return (T)new org.apache.causeway.applib.value.Date(dateCellValue);
-//        }
-
-//        if(requiredType == org.apache.causeway.applib.value.DateTime.class) {
-//            java.util.Date dateCellValue = cell.getDateCellValue();
-//            return (T)new org.apache.causeway.applib.value.DateTime(dateCellValue);
-//        }
-
         if(requiredType == LocalDate.class) {
             java.util.Date dateCellValue = cell.getDateCellValue();
-            return (T) new LocalDate(dateCellValue.getTime());
+            var instant = java.time.Instant.ofEpochMilli(dateCellValue.getTime());
+            // time zone when reading is assumed to be the same as when writing, though impossible to predict
+            return (T) LocalDateTime.ofInstant(instant, zoneOffsetForLocalTemporals()).toLocalDate();
         }
 
         if(requiredType == LocalDateTime.class) {
             java.util.Date dateCellValue = cell.getDateCellValue();
-            return (T) new LocalDateTime(dateCellValue.getTime());
+            var instant = java.time.Instant.ofEpochMilli(dateCellValue.getTime());
+            // time zone when reading is assumed to be the same as when writing, though impossible to predict
+            return (T) LocalDateTime.ofInstant(instant, zoneOffsetForLocalTemporals());
         }
 
-        if(requiredType == DateTime.class) {
+        if(requiredType == ZonedDateTime.class) {
             java.util.Date dateCellValue = cell.getDateCellValue();
-            return (T) new DateTime(dateCellValue.getTime());
+            var instant = java.time.Instant.ofEpochMilli(dateCellValue.getTime());
+            // time zone information is lost, best we can do is to translate to server time
+            return (T) ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
         }
 
+        if(requiredType == OffsetDateTime.class) {
+            java.util.Date dateCellValue = cell.getDateCellValue();
+            var instant = java.time.Instant.ofEpochMilli(dateCellValue.getTime());
+            // time zone information is lost, best we can do is to translate to server time
+            return (T) OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
+        }
 
         // number
         if(requiredType == double.class || requiredType == Double.class) {
@@ -482,7 +483,6 @@ final class _CellMarshaller {
         return null;
     }
 
-
     private Object getCellComment(final Cell cell, final Class<?> requiredType) {
         final Comment comment = cell.getCellComment();
         if(comment == null) {
@@ -496,6 +496,5 @@ final class _CellMarshaller {
         final Bookmark bookmark = Bookmark.parse(bookmarkStr).orElse(null);
         return bookmarkService.lookup(bookmark, requiredType).orElse(null);
     }
-
 
 }

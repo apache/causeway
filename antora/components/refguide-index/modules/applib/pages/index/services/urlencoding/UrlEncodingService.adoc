@@ -23,12 +23,12 @@ interface UrlEncodingService {
 <.> xref:#encode_byte[encode(byte)]
 +
 --
-Converts the string (eg view model memento) into a string safe for use within an URL
+Converts given data bytes (eg view model memento) into a string safe for use within an URL
 --
 <.> xref:#decode_String[decode(String)]
 +
 --
-Unconverts the string from its URL form into its original form URL.
+Converts the plain URL safe string back to its original data bytes.
 --
 <.> xref:#forTesting_[forTesting()]
 +
@@ -46,14 +46,14 @@ Uses base64 without compression.
 [#encode_byte]
 === encode(byte)
 
-Converts the string (eg view model memento) into a string safe for use within an URL
+Converts given data bytes (eg view model memento) into a string safe for use within an URL
 
 [#decode_String]
 === decode(String)
 
-Unconverts the string from its URL form into its original form URL.
+Converts the plain URL safe string back to its original data bytes.
 
-Reciprocal of _#encode(byte[])_ .
+Inverse of _#encode(byte[])_ .
 
 [#forTesting_]
 === forTesting()

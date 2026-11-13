@@ -20,7 +20,7 @@
 /**
  * The {@link org.apache.causeway.applib.services.repository.RepositoryService} collects together methods for creating,
  * persisting and searching for entities from the underlying persistence store. It acts as an abstraction over the
- * JDO/DataNucleus objectstore.
+ * underlying objectstore.
  *
  *
  */

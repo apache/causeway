@@ -29,14 +29,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.NoPermissionChecks;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -58,7 +56,7 @@ class CustomContextWithNoPermissionChecksTest extends CausewayIntegrationTestAbs
     @Test
     void shouldRunWithDefaultContext() {
 
-        val iaCtx = interactionService.currentInteractionContextElseFail();
+        var iaCtx = interactionService.currentInteractionContextElseFail();
         assertThat(iaCtx.getUser().hasSudoAccessAllRole()).isTrue();
     }
 

@@ -63,7 +63,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an
@@ -82,7 +81,6 @@ public class UserPermissionViewModel implements ViewModel {
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".UserPermissionViewModel";
 
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<UserPermissionViewModel, T> {}
-
 
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject FactoryService factory;
@@ -103,7 +101,6 @@ public class UserPermissionViewModel implements ViewModel {
         setFeatureId(ApplicationFeatureId.NAMESPACE_DEFAULT);
     }
 
-
     // -- identification
 
     @ObjectSupport public String title() {
@@ -118,7 +115,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     @Inject
     public UserPermissionViewModel(final String memento) {
-        val payload = _Serializables.read(String[].class,
+        var payload = _Serializables.read(String[].class,
                 _Bytes.ofUrlBase64.apply(memento.getBytes(StandardCharsets.US_ASCII)));
         parse(payload);
     }
@@ -146,7 +143,7 @@ public class UserPermissionViewModel implements ViewModel {
                 ? changingEvaluationCause.getFeatureId()
                 : null;
 
-        val payload = new String[] {
+        var payload = new String[] {
             username,
 
             ""+viewingEvaluation.isGranted(),
@@ -187,7 +184,6 @@ public class UserPermissionViewModel implements ViewModel {
         this.viewingRule = !viewingEvaluationCauseRule.isEmpty()? ApplicationPermissionRule.valueOf(viewingEvaluationCauseRule): null;
         final String viewingEvaluationCauseMode = iterator.next();
         this.viewingMode = !viewingEvaluationCauseMode.isEmpty()? ApplicationPermissionMode.valueOf(viewingEvaluationCauseMode): null;
-
 
         this.changingGranted = Boolean.parseBoolean(iterator.next());
         final String changingEvaluationCauseFeatureIdType = iterator.next();
@@ -389,9 +385,9 @@ public class UserPermissionViewModel implements ViewModel {
             final FactoryService factoryService) {
 
         return (final ApplicationFeatureId featureId) -> {
-            val permissionSet = user.getPermissionSet();
-            val changingEvaluation = permissionSet.evaluate(featureId, ApplicationPermissionMode.CHANGING);
-            val viewingEvaluation = permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING);
+            var permissionSet = user.getPermissionSet();
+            var changingEvaluation = permissionSet.evaluate(featureId, ApplicationPermissionMode.CHANGING);
+            var viewingEvaluation = permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING);
             return factoryService.viewModel(new UserPermissionViewModel(memento(
                     featureId,
                     user,

@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.param.parameter.mandatory;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
@@ -33,9 +32,8 @@ extends MandatoryFacetAbstract {
             final Class<?> parameterType,
             final FacetHolder holder) {
 
-        if (parameterType.isPrimitive()) {
-            return java.util.Optional.of(new MandatoryFacetForParameterAnnotation.Primitive(holder));
-        }
+        if (parameterType.isPrimitive())
+			return java.util.Optional.of(new MandatoryFacetForParameterAnnotation.Primitive(holder));
 
         return parameterIfAny
         .map(Parameter::optionality)
@@ -59,11 +57,6 @@ extends MandatoryFacetAbstract {
         super(semantics, holder);
     }
 
-    protected MandatoryFacetForParameterAnnotation(
-            final Semantics semantics, final FacetHolder holder, final Facet.Precedence precedence) {
-        super(semantics, holder, precedence);
-    }
-
     @Override
     public final String summarize() {
         return MandatoryFacetForParameterAnnotation.class.getSimpleName() + "." + super.summarize();
@@ -79,7 +72,12 @@ extends MandatoryFacetAbstract {
 
     public static class Required extends MandatoryFacetForParameterAnnotation {
         public Required(final FacetHolder holder) {
-            super(Semantics.REQUIRED, holder, Precedence.HIGH); // allow UI to be more strict than data/store
+            super(Semantics.REQUIRED, holder);
+        }
+        @Override
+        public Precedence precedence() {
+        	// allow UI to be more strict than data/store
+        	return Precedence.HIGH;
         }
     }
 

@@ -33,14 +33,7 @@ public class Order {
 The rules of precedence are:
 
 . `@DomainObject#logicalTypeName`
-. ORM-specific:
-
-.. JDO: xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable], if at least the `schema` attribute is defined.
-+
-If both `schema` and `table` are defined, then the value is "`schema.table`".
-If only `schema` is defined, then the value is "`schema.className`".
-
-.. (JPA) `@Table#schema()`.
+. ORM-specific, `@Table#schema()`.
 
 . Fully qualified class name of the entity.
 

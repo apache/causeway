@@ -19,5 +19,12 @@
 module org.apache.causeway.viewer.commons.prism {
     exports org.apache.causeway.viewer.commons.prism;
 
-    requires lombok;
+    requires static lombok;
+    requires org.jspecify;
+    requires org.slf4j;
+
+    requires spring.core;
+    requires org.jsoup;
+    requires org.graalvm.polyglot;
+    requires org.apache.causeway.commons;
 }

@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * @since 2.0
  */
 public class TotalRecordsToolbar extends AbstractToolbar
-implements HasCommonContext {
+implements HasMetaModelContext {
     private static final long serialVersionUID = 1L;
     private static final String ID_NAVIGATOR_CONTAINER = "navigatorContainer";
     private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";

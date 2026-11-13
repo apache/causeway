@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.jpa.tenancy.dom;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -46,7 +47,6 @@ import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityList
 
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @Table(
@@ -78,23 +78,19 @@ import lombok.Setter;
 @Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationTenancyRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationTenancy
-    extends org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
+    implements org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
     @Version
     private Long version;
-
 
     @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
     @Name
     @Getter @Setter
     private String name;
-
 
     @Id
     @Column(nullable = Path.NULLABLE, length = Path.MAX_LENGTH)
@@ -102,17 +98,30 @@ public class ApplicationTenancy
     @Getter @Setter
     private String path;
 
-
     @ManyToOne
     @JoinColumn(name=Parent.NAME, nullable = Parent.NULLABLE)
     @Parent
     @Getter
     private ApplicationTenancy parent;
     @Override
-    public void setParent(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
-        this.parent = _Casts.uncheckedCast(parent);
+    public void setParent(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
+        final ApplicationTenancy newParent = _Casts.uncheckedCast(parent);
+        if(Objects.equals(this.parent, newParent)) {
+            this.parent = newParent;
+            if(newParent != null) {
+                newParent.children.add(this);
+            }
+            return;
+        }
+        final ApplicationTenancy previousParent = this.parent;
+        this.parent = newParent;
+        if(previousParent != null) {
+            previousParent.children.remove(this);
+        }
+        if(newParent != null) {
+            newParent.children.add(this);
+        }
     }
-
 
     @OneToMany(mappedBy = Children.MAPPED_BY)
     @Children
@@ -123,12 +132,36 @@ public class ApplicationTenancy
         return _Casts.uncheckedCast(children);
     }
     public void setChildren(final Set<org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
-        this.children = _Casts.uncheckedCast(children);
+        final Set<ApplicationTenancy> replacement = _Casts.uncheckedCast(children);
+        new TreeSet<>(this.children).stream()
+                .filter(child -> !replacement.contains(child))
+                .forEach(child -> child.setParent(null));
+        new TreeSet<>(replacement)
+                .forEach(child -> child.setParent(this));
     }
     // necessary for integration tests
     public void removeFromChildren(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy applicationTenancy) {
-        getChildren().remove(applicationTenancy);
+        final ApplicationTenancy child = _Casts.uncheckedCast(applicationTenancy);
+        if(Objects.equals(child.getParent(), this)) {
+            child.setParent(null);
+        } else {
+            children.remove(child);
+        }
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        return EQUALITY.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HASHING.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return TOSTRING.toString(this);
+    }
 
 }

@@ -20,9 +20,12 @@ package org.apache.causeway.applib.layout.component;
 
 import java.util.List;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+
 /**
  * @since 1.x {@index}
  */
-public interface FieldSetOwner extends MemberRegionOwner {
+public sealed interface FieldSetOwner extends MemberRegionOwner
+permits BSCol {
     List<FieldSet> getFieldSets();
 }

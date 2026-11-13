@@ -20,6 +20,9 @@
 
 package org.apache.causeway.extensions.commandlog.applib.integtest.model;
 
+import java.util.concurrent.TimeUnit;
+
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -28,6 +31,7 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
 
 @Named("commandlog.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
@@ -59,6 +63,18 @@ public abstract class Counter implements Comparable<Counter> {
     public Counter bumpUsingDeclaredActionWithCommandPublishingDisabled() {
         return doBump();
     }
+
+    @Action(commandPublishing = Publishing.ENABLED)
+    public Counter scheduleBumpInBackground() {
+        backgroundService.execute(this)
+                .acceptAsync(Counter::bumpUsingDeclaredAction)
+                .tryGet(5, TimeUnit.SECONDS)
+                .ifFailureFail();
+        return this;
+    }
+
+    @Inject
+    private transient BackgroundService backgroundService;
 
     Counter doBump() {
         if (getNum() == null) {

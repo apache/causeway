@@ -16,17 +16,16 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetForUiEvent;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class DomainObjectLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -38,60 +37,45 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
+        var facetHolder = processClassContext.facetHolder();
+        var domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
+        var metamodelEventService = this.metamodelEventService.get();
 
-        val facetHolder = processClassContext.getFacetHolder();
-        val domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
-        val metamodelEventService = this.metamodelEventService.get();
+        TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
+            .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(
-                TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+            .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(
-                IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
+            .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(
-                CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        LayoutPrefixFacetForUiEvent
+        	.create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(
-                LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        CssClassFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                CssClassFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        FaFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                FaFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        ObjectDescribedFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                ObjectDescribedFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        ObjectNamedFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                ObjectNamedFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        TableDecoratorFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                TableDecoratorFacetForDomainObjectLayoutAnnotation
-                        .create(domainObjectLayoutIfAny, facetHolder));
+        PagedFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                PagedFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
-
-        addFacetIfPresent(
-                BookmarkPolicyFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
-
-        return;
+        BookmarkPolicyFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
     }
 
     private final _Lazy<MetamodelEventService> metamodelEventService = _Lazy.threadSafe(()->
         getServiceRegistry().lookupServiceElseFail(MetamodelEventService.class));
-
 
 }

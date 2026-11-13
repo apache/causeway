@@ -23,25 +23,26 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 abstract class ScalarPanelAbstractLegacy
-extends PanelAbstract<ManagedObject, ScalarModel> {
+extends PanelAbstract<ManagedObject, UiAttributeWkt>
+implements HasAttributeModel {
 
     private static final long serialVersionUID = 1L;
 
     protected Component compactFrame;
     private Component regularFrame;
 
-    public ScalarPanelAbstractLegacy(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    public ScalarPanelAbstractLegacy(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
-    protected final ScalarModel scalarModel() {
+    @Override
+    public final UiAttributeWkt attributeModel() {
         return super.getModel();
     }
 
@@ -55,7 +56,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private void buildGui() {
 
-        if(scalarModel().getRenderingHint().isInTable()) {
+        if(attributeModel().getRenderingHint().isInTable()) {
             regularFrame = createShallowRegularFrame();
             compactFrame = createCompactFrame();
             regularFrame.setVisible(false);
@@ -73,11 +74,11 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     }
 
     private void addCssFromMetaModel() {
-        val scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        Wkt.cssAppend(this, scalarModel.getCssClass());
+        Wkt.cssAppend(this, attributeModel.getCssClass());
 
-        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(attributeModel.getMetaModel(), attributeModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }

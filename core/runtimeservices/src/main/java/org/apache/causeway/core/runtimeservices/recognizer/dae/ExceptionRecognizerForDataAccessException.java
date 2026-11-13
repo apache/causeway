@@ -42,7 +42,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Translates {@link DataAccessException}(s) to {@link Recognition}(s),
@@ -64,8 +63,8 @@ implements ExceptionRecognizer {
 
     @Inject
     public ExceptionRecognizerForDataAccessException(final CausewayConfiguration conf) {
-        this.disabled = conf.getCore().getRuntimeServices()
-              .getExceptionRecognizer().getDae().isDisable();
+        this.disabled = conf.core().runtimeServices()
+              .exceptionRecognizer().dae().disable();
     }
 
     @Override
@@ -105,13 +104,13 @@ implements ExceptionRecognizer {
     }
 
     private Optional<Recognition> recognitionOf(final Category category, final DataAccessException ex) {
-        val causeMessage = _Strings.nullToEmpty(ex.getMostSpecificCause().getMessage()).trim();
+        var causeMessage = _Strings.nullToEmpty(ex.getMostSpecificCause().getMessage()).trim();
 
-        val exceptionFriendlyName = _Strings.asNaturalName
+        var exceptionFriendlyName = _Strings.asNaturalName
                 .apply(ex.getClass().getSimpleName())
                 .toLowerCase();
 
-        val friendlyMessage = String.format("%s (%s): %s",
+        var friendlyMessage = String.format("%s (%s): %s",
                 category.getFriendlyName(),
                 exceptionFriendlyName,
                 _Strings.isEmpty(causeMessage)
@@ -120,6 +119,5 @@ implements ExceptionRecognizer {
 
         return Recognition.of(category, friendlyMessage);
     }
-
 
 }

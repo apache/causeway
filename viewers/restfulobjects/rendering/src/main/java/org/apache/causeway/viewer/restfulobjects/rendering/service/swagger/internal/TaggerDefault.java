@@ -122,7 +122,6 @@ public class TaggerDefault implements Tagger {
         return fallback != null? fallback: logicalTypeName;
     }
 
-
     private static Stream<String> partsOf(final String logicalTypeName) {
         return _Strings.splitThenStream(logicalTypeName, ".");
     }

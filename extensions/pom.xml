@@ -23,10 +23,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-parent</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.extensions</groupId>
@@ -41,36 +41,9 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.extensions</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/extensions</git-plugin.propertiesDir>
-		
-		<!-- override surefire defaults from bom, as this is not a Java module yet -->
-		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
 	</properties>
 
 	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.zip</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
 		<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

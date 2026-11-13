@@ -1,0 +1,69 @@
+[[r3.2.0]]
+= 3.2.0
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Improved UI Table Search/Filter Bar and Row Selection Handling:
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3837[CAUSEWAY-3837] - [Programming Model] Java built-in Map Type to support Collection Semantics
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3836[CAUSEWAY-3836] - [Programming Model] Infer Tree Structure from Annotations
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3819[CAUSEWAY-3819] - Allow Wicket's implementation of HintStore to be overridden.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3815[CAUSEWAY-3815] - [Wicket Viewer] Support for Actions in Collection View
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3813[CAUSEWAY-3813] - Allow multiple impls of HealthCheckService, provide default that checks MM validation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3803[CAUSEWAY-3803] - Allow the display format of dates and times to be specified as a pattern.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3703[CAUSEWAY-3703] - Bring in QueryDSL and @AutoComplete support
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3838[CAUSEWAY-3838] - [Prototyping] Metamodel Introspection View is slow
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3835[CAUSEWAY-3835] - [Commons] Internal _DocumentFactories has unnecessary String to Bytes Conversion Step
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3833[CAUSEWAY-3833] - [Wicket Viewer] conditional visibility for select-operation dropdown entries
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3832[CAUSEWAY-3832] - [Wicket Viewer] Table Filterbar to support ENTER keystroke
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3830[CAUSEWAY-3830] - [Wicket Viewer] Scope of toggle all select should be limited to filtered rows
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3829[CAUSEWAY-3829] - [Wicket Viewer] Table Search via explicit Button + new Clear Button
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3825[CAUSEWAY-3825] - Tabular SPI leaks Metamodel Types, which are not part of the formal API yet
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3824[CAUSEWAY-3824] - [Wicket Viewer] Indicate Actions in the UI that are dialog-bound
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3822[CAUSEWAY-3822] - [Commons] Graph<T> support filtering and fix inconsistent API in GraphBuilder<T>
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3821[CAUSEWAY-3821] - [Commons] Can<T> fix inconsistent API
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3818[CAUSEWAY-3818] - [Commons] Can<T> to support zipStream, collect and join
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3816[CAUSEWAY-3816] - TableColumnOrderServiceUsingTxtFile should ignore whitespaces from columnOrder.txt files
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3812[CAUSEWAY-3812] - [Commons] GraphUtils to support weighted graph edges
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3809[CAUSEWAY-3809] - [Commons] Can<T> to support Map creation (convenience)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3808[CAUSEWAY-3808] - [Wicket Viewer] Paged table view to support toggle selection of the current page rows
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3806[CAUSEWAY-3806] - [Commons] DataSource support for description and access to underlying file
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3804[CAUSEWAY-3804] - Honour bigdecimal editing config for grouping separator when render bigdecimal to be edited; config param to preserveScale if req'd
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3839[CAUSEWAY-3839] - Upgrade Spring Boot 3.4.0 -> 3.4.1 causes DN exception translation issues (v3 only)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3831[CAUSEWAY-3831] - [Wicket Viewer] filtered table with empty result will hide searchbar after page reload
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3828[CAUSEWAY-3828] - Invalid file extension inferred from CommonMimeType._7z
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3814[CAUSEWAY-3814] - [Validation] potential false positive with check explicit-logical-type-names
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3810[CAUSEWAY-3810] - InteractionInitiatedBy.PASS_THROUGH potentiallly not honored for visibility/usability checks.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3805[CAUSEWAY-3805] - [Commons] ZipUtils can fail with 'Only DEFLATED entries can have EXT descriptor'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3802[CAUSEWAY-3802] - Excel download does not honour whether a property is invisible
+
+
+== Dependency Updates
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3807[CAUSEWAY-3807] - Migrate Asciidoctorj from 2.5.13 to 3.0.0
+
+
+== Tasks
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3800[CAUSEWAY-3800] - Release activities3.2.0
+
+
+== Duplicates
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3284[CAUSEWAY-3284] - [DUPLICATE] Support for Action Columns in Collection View
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3477[CAUSEWAY-3477] - [DUPLICATE] Show actions in a collection (new column) in Wicket viewer
+
+

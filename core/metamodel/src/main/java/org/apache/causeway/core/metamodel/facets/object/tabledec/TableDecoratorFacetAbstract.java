@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.tabledec;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
@@ -31,13 +30,6 @@ implements TableDecoratorFacet {
 
     public static final Class<TableDecoratorFacet> type() {
         return TableDecoratorFacet.class;
-    }
-
-    protected TableDecoratorFacetAbstract(
-            final Class<? extends TableDecorator> value,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), value, holder, precedence);
     }
 
     protected TableDecoratorFacetAbstract(

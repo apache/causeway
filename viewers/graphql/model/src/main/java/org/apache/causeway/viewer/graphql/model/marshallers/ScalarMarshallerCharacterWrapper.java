@@ -29,14 +29,13 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 import graphql.scalars.ExtendedScalars;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerCharacterWrapper extends ScalarMarshallerAbstract<Character> {
 
     @Inject
     public ScalarMarshallerCharacterWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Character.class, ExtendedScalars.GraphQLChar, causewayConfiguration);
+        super(Character.class, ExtendedScalars.GraphQLChar, causewayConfiguration, true);
     }
 
     @Override

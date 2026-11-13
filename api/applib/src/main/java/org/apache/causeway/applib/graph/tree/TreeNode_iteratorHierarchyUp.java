@@ -21,7 +21,7 @@ package org.apache.causeway.applib.graph.tree;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
 

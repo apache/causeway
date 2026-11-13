@@ -24,18 +24,16 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * All Causeway-related events subclass from this, and fall into two categories.
- *
+ * All Causeway-related events subclass from this and fall into two categories.
  * <p>
- * Components that are raising events should create a subclass of {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract} (the letter)
- * and then {@link org.apache.wicket.Component#send(org.apache.wicket.event.IEventSink, org.apache.wicket.event.Broadcast, Object) send} as a
- * {@link org.apache.wicket.event.Broadcast#EXACT exact} message to <tt>PageAbstract</tt>.
- * </p>
- *
+ * Components that are raising events should create a subclass of
+ * {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract} (the letter)
+ * and then {@link org.apache.wicket.Component#send(org.apache.wicket.event.IEventSink, org.apache.wicket.event.Broadcast, Object)}
+ * as a {@link org.apache.wicket.event.Broadcast#EXACT} message to <tt>PageAbstract</tt>.
  * <p>
- * Then, <tt>PageAbstract</tt> will wrap the letter into the {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent} (envelope) and
- * send as a {@link org.apache.wicket.event.Broadcast#BREADTH down} to all its components.
- * </p>
+ * Then <tt>PageAbstract</tt> will wrap the letter into the
+ * {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent} (envelope) and
+ * send as a {@link org.apache.wicket.event.Broadcast#BREADTH} to all its components.
  */
 @RequiredArgsConstructor
 public abstract class CausewayEventAbstract {

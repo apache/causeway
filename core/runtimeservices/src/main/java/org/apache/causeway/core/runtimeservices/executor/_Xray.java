@@ -20,12 +20,13 @@ package org.apache.causeway.core.runtimeservices.executor;
 
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
@@ -34,14 +35,11 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 
-import lombok.NonNull;
-import lombok.val;
-
 final class _Xray {
 
     static SequenceHandle enterActionInvocation(
             final @NonNull InteractionLayerTracker iaTracker,
-            final @NonNull InteractionInternal interaction,
+            final @NonNull InteractionCarrier interactionCarrier,
             final @NonNull ObjectAction owningAction,
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters) {
@@ -50,8 +48,8 @@ final class _Xray {
             return null;
         }
 
-        val participantLabel = owningAction.getFeatureIdentifier().getLogicalIdentityString("\n#");
-        val enteringLabel = argumentAdapters.isEmpty()
+        var participantLabel = owningAction.getFeatureIdentifier().getLogicalIdentityString("\n#");
+        var enteringLabel = argumentAdapters.isEmpty()
                 ? "action invocation (no args)"
                 : String.format("action invocation w/ %d args:\n  %s",
                         argumentAdapters.size(),
@@ -60,12 +58,12 @@ final class _Xray {
                         .map(obj->"" + obj)
                         .collect(Collectors.joining(",\n  ")));
 
-        return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
+        return enterInvocation(iaTracker, interactionCarrier, participantLabel, enteringLabel);
     }
 
     public static SequenceHandle enterPropertyEdit(
             final @NonNull InteractionLayerTracker iaTracker,
-            final @NonNull InteractionInternal interaction,
+            final @NonNull InteractionCarrier interactionCarrier,
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head,
             final @NonNull ManagedObject newValueAdapter) {
@@ -74,32 +72,32 @@ final class _Xray {
             return null;
         }
 
-        val participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
-        val enteringLabel = String.format("property edit -> '%s'",
+        var participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
+        var enteringLabel = String.format("property edit -> '%s'",
                 MmUnwrapUtils.single(newValueAdapter));
 
-        return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
+        return enterInvocation(iaTracker, interactionCarrier, participantLabel, enteringLabel);
     }
 
     private static SequenceHandle enterInvocation(
             final @NonNull InteractionLayerTracker iaTracker,
-            final InteractionInternal interaction,
+            final InteractionCarrier interactionCarrier,
             final String participantLabel,
             final String enteringLabel) {
 
-        // val execution = interaction.getCurrentExecution(); // XXX why not populated?
+        // var execution = interaction.getCurrentExecution(); // XXX why not populated?
 
-        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
+        var handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
         handleIfAny.ifPresent(handle->{
 
             handle.submit(sequenceData->{
 
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
 
-                val callee1 = handle.getCallees().getFirstElseFail();
-                val callee2 = handle.getCallees().getLastElseFail();
+                var callee1 = handle.callees().getFirstElseFail();
+                var callee2 = handle.callees().getLastElseFail();
 
-                sequenceData.enter(handle.getCaller(), callee1);
+                sequenceData.enter(handle.caller(), callee1);
                 sequenceData.activate(callee1);
 
                 sequenceData.enter(callee1, callee2, enteringLabel);
@@ -119,13 +117,13 @@ final class _Xray {
 
         handle.submit(sequenceData->{
 
-            val callee1 = handle.getCallees().getFirstElseFail();
-            val callee2 = handle.getCallees().getLastElseFail();
+            var callee1 = handle.callees().getFirstElseFail();
+            var callee2 = handle.callees().getLastElseFail();
 
             sequenceData.exit(callee2, callee1);
             sequenceData.deactivate(callee2);
 
-            sequenceData.exit(callee1, handle.getCaller());
+            sequenceData.exit(callee1, handle.caller());
             sequenceData.deactivate(callee1);
 
         });

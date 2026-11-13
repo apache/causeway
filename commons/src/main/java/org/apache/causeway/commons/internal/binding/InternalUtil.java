@@ -22,13 +22,13 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.binding.ChangeListener;
 import org.apache.causeway.commons.binding.InvalidationListener;
 import org.apache.causeway.commons.binding.Observable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 abstract class InternalUtil<T> {
 
@@ -86,7 +86,6 @@ abstract class InternalUtil<T> {
             }
         }
     }
-
 
     // -- LISTENER ADD/REMOVE
 

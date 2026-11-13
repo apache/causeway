@@ -24,6 +24,7 @@ import java.util.function.Function;
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -33,37 +34,44 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
-
 public abstract class RichPropertyGetBlobAbstract extends Element {
 
     final MemberInteractor<OneToOneAssociation> memberInteractor;
 
     public RichPropertyGetBlobAbstract(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
-            final Context context, String name) {
+            final Context context,
+            final String name) {
+        this(memberInteractor, context, name, Scalars.GraphQLString);
+    }
+
+    protected RichPropertyGetBlobAbstract(
+            final MemberInteractor<OneToOneAssociation> memberInteractor,
+            final Context context,
+            final String name,
+            final GraphQLOutputType outputType) {
         super(context);
         this.memberInteractor = memberInteractor;
 
         setField(GraphQLFieldDefinition.newFieldDefinition()
                     .name(name)
-                    .type(Scalars.GraphQLString)
+                    .type(outputType)
                     .build());
     }
 
     protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        val association = memberInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
+        var association = memberInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var resultManagedObject = association.get(managedObject);
 
         return Optional.ofNullable(resultManagedObject)
                 .map(ManagedObject::getPojo)

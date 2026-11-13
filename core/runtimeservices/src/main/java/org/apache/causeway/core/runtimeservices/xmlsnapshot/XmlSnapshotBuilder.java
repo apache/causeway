@@ -18,17 +18,16 @@
  */
 package org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSnapshot;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -64,7 +63,7 @@ public class XmlSnapshotBuilder {
         private final String annotation;
     }
 
-    private final List<XmlSnapshotBuilder.PathAndAnnotation> paths = _Lists.newArrayList();
+    private final List<XmlSnapshotBuilder.PathAndAnnotation> paths = new ArrayList<>();
 
     public XmlSnapshotBuilder usingSchema(final XmlSchema schema) {
         this.schema = schema;
@@ -94,6 +93,5 @@ public class XmlSnapshotBuilder {
         }
         return snapshot;
     }
-
 
 }

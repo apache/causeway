@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.menu;
 
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.layout.LayoutService;
-import org.apache.causeway.applib.services.marshal.MarshallerService;
+import org.apache.causeway.applib.services.marshal.Marshaller;
 
 /**
  * Supports {@link MenuBars} marshaling and unmarshaling.
@@ -31,5 +31,5 @@ import org.apache.causeway.applib.services.marshal.MarshallerService;
  * @since 2.0 {@index}
  */
 public interface MenuBarsMarshallerService<T extends MenuBars>
-extends MarshallerService<T> {
+extends Marshaller<T> {
 }

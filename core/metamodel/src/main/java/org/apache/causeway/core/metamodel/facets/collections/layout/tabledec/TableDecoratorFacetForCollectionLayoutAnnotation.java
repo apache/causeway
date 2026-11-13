@@ -50,7 +50,7 @@ extends TableDecoratorFacetAbstract {
         })
         ,
         () -> new TableDecoratorFacetFromConfiguration(
-                holder.getConfiguration().getApplib().getAnnotation().getCollectionLayout().getTableDecorator(), holder));
+                holder.getConfiguration().applib().annotation().collectionLayout().tableDecorator(), holder));
 
     }
 }

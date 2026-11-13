@@ -31,28 +31,24 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.query.Query;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -61,7 +57,6 @@ import lombok.val;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaQueryTest",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
 class JpaQueryTest extends CausewayIntegrationTestAbstract {
@@ -99,13 +94,13 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
 
         // when
 
-        val inventories = repositoryService.allInstances(JpaInventory.class);
+        var inventories = repositoryService.allInstances(JpaInventory.class);
 
         // then - expected post condition: ONE inventory with 3 books
 
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
@@ -143,23 +138,23 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
     @Test @Order(4)
     void sampleInventory_shouldSupportNamedQueries() {
 
-        val query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
+        var query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
                 .withParameter("priceUpperBound", 60.);
 
-        val affordableBooks = repositoryService.allMatches(query);
+        var affordableBooks = repositoryService.allMatches(query);
         testFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
     }
 
     @Test @Order(5)
     void sampleInventory_shouldSupportJpaCriteria() {
 
-        val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+        var em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
-        val cb = em.getCriteriaBuilder();
-        val cr = cb.createQuery(JpaBook.class);
-        val root = cr.from(JpaBook.class);
+        var cb = em.getCriteriaBuilder();
+        var cr = cb.createQuery(JpaBook.class);
+        var root = cr.from(JpaBook.class);
 
-        val affordableBooks = em
+        var affordableBooks = em
                 .createQuery(cr.select(root).where(cb.between(root.get("price"), 0., 60. )))
                 .getResultList();
 
@@ -171,6 +166,5 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
         assertEquals(0, repositoryService.allInstances(JpaInventory.class).size());
         assertEquals(0, repositoryService.allInstances(JpaProduct.class).size());
     }
-
 
 }

@@ -18,41 +18,31 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.home;
 
-import lombok.val;
-
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.Response;
-
-import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
+import lombok.extern.slf4j.Slf4j;
 
-public class HomePage_IntegTest extends Abstract_IntegTest {
+@Slf4j
+class HomePage_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    public void homePage() {
+    void homePage() {
 
         // given
-        Invocation.Builder request = restfulClient.request("/");
+        var response = restGetJson("/", log);
 
         // when
-        val response = request.get();
+        var entity = response
+            .body(String.class);
 
         // then
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
-
-        val entity = response.readEntity(String.class);
-
         Approvals.verify(entity, jsonOptions());
-
     }
+
 }

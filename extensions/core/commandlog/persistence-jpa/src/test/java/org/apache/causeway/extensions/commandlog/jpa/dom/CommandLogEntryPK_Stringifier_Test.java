@@ -29,8 +29,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import lombok.val;
-
 class CommandLogEntryPK_Stringifier_Test {
 
     public static Stream<Arguments> roundtrip() {
@@ -46,10 +44,10 @@ class CommandLogEntryPK_Stringifier_Test {
     void roundtrip(final UUID uuid) {
         CommandLogEntryPK value = new CommandLogEntryPK(uuid);
 
-        val stringifier = new CommandLogEntryPK.Semantics();
+        var stringifier = new CommandLogEntryPK.Semantics();
 
         String stringified = stringifier.enstring(value);
-        val parse = stringifier.destring(stringified);
+        var parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(value);
     }

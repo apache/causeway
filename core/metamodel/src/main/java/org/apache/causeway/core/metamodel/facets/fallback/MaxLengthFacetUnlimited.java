@@ -21,14 +21,19 @@ package org.apache.causeway.core.metamodel.facets.fallback;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
 public class MaxLengthFacetUnlimited
 extends MaxLengthFacetAbstract
 implements HasSemanticEqualityByClass {
 
     public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);
+        super(Integer.MAX_VALUE, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     /**

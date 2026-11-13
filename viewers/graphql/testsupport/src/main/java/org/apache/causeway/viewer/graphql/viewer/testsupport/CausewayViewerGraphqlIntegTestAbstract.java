@@ -36,12 +36,12 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.integrations.junit5.JupiterApprovals;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -51,7 +51,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureHttpGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -59,7 +59,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
-import org.springframework.lang.Nullable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -79,8 +78,6 @@ import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCau
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.SneakyThrows;
-import lombok.Value;
-import lombok.val;
 
 /**
  * Intended as a base class for integration testing.
@@ -151,7 +148,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.UseLog4j2Test),
             @PropertySource(CausewayPresets.SilenceMetaModel),
             @PropertySource(CausewayPresets.SilenceProgrammingModel),
     })
@@ -177,13 +173,10 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         assertNotNull(executionGraphQlServiceForCauseway);
     }
 
-
     /**
      * Populated automatically by JUnit5
      */
     protected TestInfo testInfo;
-
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     protected HttpGraphQlTester graphQlTester() {
         WebTestClient client =
@@ -193,13 +186,12 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         return HttpGraphQlTester.create(client);
     }
 
-
     /**
      * Builds an HTTP request based on the current {@link TestInfo}, with suffix <code>.submit.gql</code>,
-     * and unmarshalls the response as a string
+     * and unmarshalls the response as a string.
+     * (throws an exception if an error occurs during the submission)
      *
      * @return the response body as a string
-     * @throws Exception if an error occurs during the submission
      */
     protected String submit() {
         return submit(Collections.emptyMap());
@@ -207,7 +199,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     @SneakyThrows
     protected String submit(final Map<String,String> replacements) {
-        val httpRequest = buildRequest(testInfo, suffix, replacements);
+        var httpRequest = buildRequest(testInfo, suffix, replacements);
         return submitRequest(httpRequest);
     }
 
@@ -217,19 +209,17 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     @SneakyThrows
     protected String submit(final String variant, final Map<String,String> replacements) {
-        val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
+        var httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
         return submitRequest(httpRequest);
     }
 
     @SneakyThrows
     protected String submitFileNamed(final String fileName) {
-        val httpRequest = buildRequest(fileName, Collections.emptyMap());
+        var httpRequest = buildRequest(fileName, Collections.emptyMap());
         return submitRequest(httpRequest);
     }
 
-    @Value
-    protected static class GqlBody {
-        String query;
+    protected record GqlBody(String query) {
     }
 
     @SneakyThrows
@@ -238,8 +228,8 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
             final String resourceSuffix,
             final Map<String, String> replacements) {
 
-        val testMethodName = testInfo.getTestMethod().map(Method::getName).get();
-        val resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
+        var testMethodName = testInfo.getTestMethod().map(Method::getName).get();
+        var resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
         return buildRequest(resourceName, replacements);
     }
 
@@ -248,11 +238,11 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         String resourceContents = readResource(resourceName);
         String resourceContent = replace(resourceContents, replacements);
 
-        val uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
+        var uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
 
-        val gqlBody = new GqlBody(resourceContent);
-        val gqlBodyStr = objectMapper.writeValueAsString(gqlBody);
-        val bodyPublisher = HttpRequest.BodyPublishers.ofString(gqlBodyStr);
+        var gqlBody = new GqlBody(resourceContent);
+        var gqlBodyStr = new ObjectMapper().writeValueAsString(gqlBody);
+        var bodyPublisher = HttpRequest.BodyPublishers.ofString(gqlBodyStr);
 
         return HttpRequest.newBuilder().
                 uri(uri).
@@ -262,7 +252,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     private static String replace(final String str, final Map<String, String> replacements) {
-        val builder = new StringBuilder(str);
+        var builder = new StringBuilder(str);
         replacements.forEach((key, value) -> {
             int index;
             int numMatches = 0;
@@ -278,9 +268,9 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     private String submitRequest(final HttpRequest request) throws IOException, InterruptedException {
-        val responseBodyHandler = HttpResponse.BodyHandlers.ofString();
-        val httpClient = HttpClient.newBuilder().build();
-        val httpResponse = httpClient.send(request, responseBodyHandler);
+        var responseBodyHandler = HttpResponse.BodyHandlers.ofString();
+        var httpClient = HttpClient.newBuilder().build();
+        var httpResponse = httpClient.send(request, responseBodyHandler);
         return httpResponse.body();
     }
 
@@ -311,25 +301,21 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
             options = new Options();
         }
         return options.withScrubber(s -> {
-                    try {
-                        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
-                        if (bookmarkOptions == BookmarkOptions.SCRUB) {
-                            prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
-                        }
-                        return prettyJson;
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                    String prettyJson = org.apache.causeway.testing.unittestsupport.applib.util.ApprovalUtils
+                        .jsonPropertiesSortedWhenParentedBy(parentKey->"locations".equals(parentKey))
+                        .scrub(s);
+                    if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                        prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
                     }
+                    return prettyJson;
                 })
                 .forFile().withExtension(".json");
     }
 
-
-
     protected Iterable<DynamicTest> each() throws IOException, URISyntaxException {
 
-        val integClassName = getClass().getSimpleName();
-        val classUrl = getClass().getResource(integClassName + ".class");
+        var integClassName = getClass().getSimpleName();
+        var classUrl = getClass().getResource(integClassName + ".class");
         Path classPath = Paths.get(classUrl.toURI());
         Path directoryPath = classPath.getParent();
 
@@ -361,7 +347,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     protected void afterEach() {}
 
     protected Blob asPdfBlob(final String fileName) {
-        val bytes = toBytes(fileName);
+        var bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 
@@ -379,6 +365,5 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
         return buffer.toByteArray();
     }
-
 
 }

@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -34,9 +35,7 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessResourceException;
 
 import org.apache.causeway.applib.services.exceprecog.Category;
-import org.apache.causeway.core.config.CausewayConfiguration;
-
-import lombok.val;
+import org.apache.causeway.core.mmtestsupport.ConfigurationTester;
 
 class ExceptionRecognizerForDataAccessExceptionTest {
 
@@ -44,7 +43,8 @@ class ExceptionRecognizerForDataAccessExceptionTest {
 
     @BeforeEach
     public void setUp() {
-        val conf = CausewayConfiguration.builder().build();
+        var conf = new ConfigurationTester(TestPropertyValues.empty())
+            .causewayConfiguration();
         recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);
     }
 
@@ -72,11 +72,11 @@ class ExceptionRecognizerForDataAccessExceptionTest {
             Category category,
             DataAccessException dae) {
 
-        val recognized = recognizerForDae.recognize(dae).orElse(null);
+        var recognized = recognizerForDae.recognize(dae).orElse(null);
         assertNotNull(recognized);
-        assertNotNull(recognized.getReason());
-        assertTrue(recognized.getReason().length()>10);
-        assertEquals(category, recognized.getCategory());
+        assertNotNull(recognized.reason());
+        assertTrue(recognized.reason().length()>10);
+        assertEquals(category, recognized.category());
     }
 
 }

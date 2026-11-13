@@ -65,15 +65,15 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract imp
             for (PdfJsViewerAdvisor advisor : advisors) {
                 final PdfJsViewerAdvisor.Advice advice = advisor.advise(instanceKey);
                 if(advice != null) {
-                    final Integer pageNum = advice.getPageNum();
+                    final Integer pageNum = advice.pageNum();
                     if(pageNum != null) {
                         config = config.withInitialPage(pageNum);
                     }
-                    final Scale scale = advice.getScale();
+                    final Scale scale = advice.scale();
                     if(scale != null) {
                         config = config.withInitialScale(scale);
                     }
-                    final Integer height = advice.getHeight();
+                    final Integer height = advice.height();
                     if(height != null) {
                         config = config.withInitialHeight(height);
                     }

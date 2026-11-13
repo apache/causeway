@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 
 public interface ExceptionWithHttpStatusCode {
 
-    HttpStatusCode getHttpStatusCode();
+    HttpStatus httpStatus();
 }

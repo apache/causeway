@@ -18,29 +18,27 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -49,13 +47,21 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.MergedAnnotations;
+import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -75,18 +81,33 @@ import lombok.val;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _ClassCache implements AutoCloseable {
 
+    public enum Attribute {
+        /**
+         * Corresponds to the bean name of Spring managed beans.
+         */
+        SPRING_NAMED,
+        /**
+         * Corresponds to the bean qualifier of Spring managed beans.
+         */
+        SPRING_QUALIFIED,
+        /**
+         * Corresponds to DomainObject#mixinMethod().
+         */
+        MIXIN_MAIN_METHOD_NAME;
+    }
+
+    @Nullable private final ClassLoader classLoader;
+    private static _ClassCache defaultInstance() { return new _ClassCache(_Context.getDefaultClassLoader()); }
     public static _ClassCache getInstance() {
-        return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(_Context.getDefaultClassLoader()));
+        return _Context.computeIfAbsent(_ClassCache.class, (@NonNull Supplier<_ClassCache>) _ClassCache::defaultInstance);
     }
 
     /**
      * JUnit support.
      */
     public static void invalidate() {
-        _Context.put(_ClassCache.class, new _ClassCache(_Context.getDefaultClassLoader()), true);
+        _Context.put(_ClassCache.class, defaultInstance(), true);
     }
-
-    private final @Nullable ClassLoader classLoader;
 
     public void add(final Class<?> type) {
         classModel(type);
@@ -94,18 +115,42 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- TYPE SPECIFIC SEMANTICS
 
-    public boolean hasJaxbRootElementSemantics(final Class<?> type) {
-        return classModel(type).hasJaxbRootElementSemantics;
+    /**
+     * whether type is explicitly named with {@link Named} or similar
+     */
+    public boolean isNamed(final Class<?> type) {
+        return classModel(type).head().named()!=null;
+    }
+
+    public void setSpringNamed(final Class<?> beanClass, final String beanDefinitionName) {
+        _Assert.assertNotEmpty(beanDefinitionName);
+        head(beanClass).putAttribute(Attribute.SPRING_NAMED, beanDefinitionName);
+    }
+
+    public String getLogicalName(final Class<?> type) {
+        var head = head(type);
+        return head.getAttribute(Attribute.SPRING_NAMED)
+            .or(()->Optional.ofNullable(head.named()))
+            .or(()->Optional.ofNullable(type.getCanonicalName()))
+            .orElseGet(type::getName);
+    }
+
+    public ClassModelHead head(final Class<?> type) {
+        return classModel(type).head();
+    }
+
+    private ClassModelBody body(final Class<?> type) {
+        return classModel(type).body();
     }
 
     // -- CONSTRUCTOR SEMANTICS
 
     public <T> Stream<ResolvedConstructor> streamPublicConstructors(final Class<T> type) {
-        return _Casts.uncheckedCast(classModel(type).publicConstructorsByKey.values().stream());
+        return _Casts.uncheckedCast(body(type).publicConstructorsByKey.values().stream());
     }
 
     public <T> Stream<ResolvedConstructor> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
-        return _Casts.uncheckedCast(classModel(type).constructorsWithInjectSemanticsByKey.values().stream());
+        return _Casts.uncheckedCast(body(type).constructorsWithInjectSemanticsByKey.values().stream());
     }
 
     public Optional<ResolvedConstructor> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
@@ -115,7 +160,7 @@ public final class _ClassCache implements AutoCloseable {
     // -- POST CONSTRUCT SEMANTICS
 
     public Stream<Method> streamPostConstructMethods(final Class<?> type) {
-        return classModel(type).postConstructMethodsByKey.values().stream()
+        return body(type).postConstructMethodsByKey.values().stream()
                 .map(ResolvedMethod::method);
     }
 
@@ -149,46 +194,42 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     public Stream<ResolvedMethod> streamPublicMethods(final Class<?> type) {
-        return classModel(type).publicMethodsByKey.values().stream();
+        return body(type).publicMethodsByKey.values().stream();
     }
 
     public Stream<ResolvedMethod> streamResolvedMethods(final Class<?> type) {
-        return classModel(type).resolvedMethodsByKey.values().stream();
+        return body(type).resolvedMethodsByKey.values().stream();
     }
 
     @SneakyThrows
     public ResolvedMethod findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
-        val matchingMethods = streamResolvedMethods(type)
-                .filter(method->method.name().equals(methodName))
-                .collect(Can.toCan());
+        var matchingMethods = streamResolvedMethods(type)
+            .filter(method->method.name().equals(methodName))
+            .collect(Can.toCan());
         return matchingMethods.isCardinalityMultiple()
-                ? matchingMethods.reduce(ResolvedMethod::mostSpecific)
-                        .getSingleton()
-                        .orElseThrow(()->_Exceptions.illegalState("unable to determine most specific of methods %s", matchingMethods))
-                : matchingMethods.getSingleton()
-                    .orElseThrow(()->_Exceptions.noSuchMethodException(type, methodName));
+            ? matchingMethods.reduce(ResolvedMethod::mostSpecific)
+                    .getSingleton()
+                    .orElseThrow(()->_Exceptions.illegalState("unable to determine most specific of methods %s", matchingMethods))
+            : matchingMethods.getSingleton()
+                .orElseThrow(()->_Exceptions.noSuchMethodException(type, methodName));
     }
 
     // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
-        return classModel(type).declaredFields.stream();
+        return body(type).declaredFields.stream();
     }
 
     // -- FIELD vs GETTER
 
     public Optional<ResolvedMethod> getterForField(final Class<?> type, final Field field) {
-        val capitalizedFieldName = _Strings.capitalize(field.getName());
+        var capitalizedFieldName = _Strings.capitalize(field.getName());
         return Stream.of("get", "is")
-        .map(prefix->prefix + capitalizedFieldName)
-        .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
-        .filter(_NullSafe::isPresent)
-        .filter(resolvedMethod->AccessorSemantics.isGetter(resolvedMethod))
-        .findFirst();
-    }
-
-    public Optional<Field> fieldForGetter(final Class<?> type, final Method getterCandidate) {
-        return Optional.ofNullable(findFieldForGetter(getterCandidate));
+            .map(prefix->prefix + capitalizedFieldName)
+            .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
+            .filter(Objects::nonNull)
+            .filter(AccessorSemantics::isGetter)
+            .findFirst();
     }
 
     // -- METHOD STREAMS
@@ -206,75 +247,229 @@ public final class _ClassCache implements AutoCloseable {
             final String attributeName,
             final Predicate<ResolvedMethod> filter) {
 
-        val classModel = classModel(type);
+        var classModel = classModel(type);
 
-        synchronized(classModel.declaredMethodsByAttribute) {
-            return classModel.declaredMethodsByAttribute
-            .computeIfAbsent(attributeName, key->classModel
-                    .resolvedMethodsByKey.values().stream()
-                    .filter(filter)
-                    .collect(Can.toCan()))
-            .stream();
+        synchronized(classModel.body().declaredMethodsByAttribute) {
+            return classModel.body().declaredMethodsByAttribute
+                .computeIfAbsent(attributeName, key->classModel.body()
+                        .resolvedMethodsByKey.values().stream()
+                        .filter(filter)
+                        .collect(Can.toCan()))
+                .stream();
         }
     }
-    
-    // -- ATTRIBUTES
-    
-    public _ClassCache setAttribute(
-            final Class<?> type,
-            final String attributeName,
-            final String value) {
-        val classModel = classModel(type);
-        classModel.attributeMap.put(attributeName, value);
-        return this;
-    }
-    
-    public Optional<String> lookupAttribute(
-            final Class<?> type,
-            final String attributeName) {
-        val classModel = classModel(type);
-        return Optional.ofNullable(classModel.attributeMap.get(attributeName));
+
+    // not memoized, as only used for debugging and MetamodelInspectView (UI)
+    public boolean isByteCodeEnhanced(final Class<?> type) {
+        return Stream.of(type.getDeclaredMethods())
+            .filter(_ClassCache::isByteCodeEnhanced)
+            .findAny()
+            .isPresent();
     }
 
     // -- IMPLEMENATION DETAILS
 
-    @RequiredArgsConstructor
-    private static class ClassModel {
-        private final Can<Field> declaredFields;
+    public record ClassModelHead(
+            MergedAnnotations mergedAnnotations,
+            /** explicit name if any */
+            @Nullable String named,
+            /**
+             * implemented as cache (supports computeIfAbsent)
+             */
+            Map<Attribute, Optional<String>> attributeMap) {
 
-        private final Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey = new HashMap<>();
-        private final Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey = new HashMap<>();
+        static ClassModelHead create(final Class<?> type) {
+            var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
+            return new ClassModelHead(mergedAnnotations,
+                    _ClassCacheUtil.inferName(type, mergedAnnotations),
+                    new ConcurrentHashMap<>());
+        }
 
-        private final Map<MethodKey, ResolvedMethod> resolvedMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, ResolvedMethod> publicMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, ResolvedMethod> postConstructMethodsByKey = new HashMap<>();
+        public <A extends Annotation> Optional<A> annotation(final Class<A> annotationType) {
+            return _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                    .createProxy(mergedAnnotations, Optional.empty(), annotationType);
+        }
 
-        private final Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute = new HashMap<>();
-        private final Map<String, String> attributeMap = new ConcurrentHashMap<>();
-        private final boolean hasJaxbRootElementSemantics;
+        /**
+         * whether type is annotated with annotationType
+         */
+        public boolean hasAnnotation(final Class<? extends Annotation> annotationType) {
+            return mergedAnnotations.get(annotationType).isPresent();
+        }
+
+        /**
+         * whether type is annotated with {@link XmlRootElement}
+         */
+        public boolean hasJaxbRootElementSemantics() {
+            return hasAnnotation(XmlRootElement.class);
+        }
+
+        public Can<String> springProfiles() {
+            var profileAnnot = mergedAnnotations.get(Profile.class);
+            return profileAnnot.isPresent()
+                ? Can.ofArray(profileAnnot.getStringArray("value"))
+                : Can.empty();
+        }
+
+        /**
+         * Optionally the type's qualifier as specified via {@link Qualifier} annotation.
+         */
+        public Optional<String> qualifier() {
+            return attributeMap.computeIfAbsent(Attribute.SPRING_QUALIFIED, it->{
+                var qualifierAnnot = mergedAnnotations.get(Qualifier.class);
+                return qualifierAnnot.isPresent()
+                    ? Optional.ofNullable(qualifierAnnot.getString("value"))
+                    : Optional.empty();
+            });
+        }
+
+        public Optional<String> getAttribute(final Attribute attribute) {
+            var opt = attributeMap.get(attribute);
+            return opt!=null
+                ? opt
+                : Optional.empty();
+        }
+
+        public ClassModelHead putAttribute(final Attribute attribute, @Nullable final String value) {
+            attributeMap().put(attribute, Optional.ofNullable(value));
+            return this;
+        }
+
+    }
+
+    private record ClassModelBody(
+            Can<Field> declaredFields,
+            /**
+             * For Java Record types, those include all declared constructors, that are not private.
+             */
+            Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey,
+            Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey,
+
+            Map<MethodKey, ResolvedMethod> resolvedMethodsByKey,
+            Map<MethodKey, ResolvedMethod> publicMethodsByKey,
+            Map<MethodKey, ResolvedMethod> postConstructMethodsByKey,
+
+            Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute) {
+
+        ClassModelBody(final Can<Field> declaredFields) {
+            this(declaredFields,
+                    new HashMap<>(), new HashMap<>(), new HashMap<>(),
+                    new HashMap<>(), new HashMap<>(), new HashMap<>());
+        }
+
+//        private static ClassModelBody EMPTY = new ClassModelBody(
+//                Can.empty(),
+//                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
+//                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
+
+        private static ClassModelBody create(final Class<?> type, final ClassModelHead head) {
+
+            var body = new ClassModelBody(Can.ofArray(type.getDeclaredFields()));
+
+            if(type.isRecord()) {
+                // process declared constructors, that are not private
+                var declaredConstr = type.getDeclaredConstructors();
+                for(var constr : declaredConstr) {
+                    if(Modifier.isPrivate(constr.getModifiers())) {
+                        continue;
+                    }
+                    var key = new ConstructorKey(type, constr);
+                    var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+                    // collect non-private constructors
+                    body.publicConstructorsByKey.put(key, resolvedConstr);
+                    // collect non-private constructors with inject semantics
+                    if(isInjectSemantics(constr)) {
+                        body.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
+                    }
+                }
+            } else {
+                // process public constructors
+                var publicConstr = type.getConstructors();
+                for(var constr : publicConstr) {
+                    var key = new ConstructorKey(type, constr);
+                    var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+                    // collect public constructors
+                    body.publicConstructorsByKey.put(key, resolvedConstr);
+                    // collect public constructors with inject semantics
+                    if(isInjectSemantics(constr)) {
+                        body.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
+                    }
+                }
+            }
+
+            // process all methods (public and non-public and inherited)
+            _Reflect.streamAllMethods(type, true)
+                .filter(_ClassCache::methodIncludeFilter)
+                .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+                .filter(Objects::nonNull)
+                .forEach(resolved->{
+                    var key = new MethodKey(type, resolved.method());
+                    var methodToKeep =
+                            putIntoMapHonoringOverridingRelation(body.resolvedMethodsByKey, key, resolved);
+                    // collect post-construct methods
+                    if(isPostConstruct(methodToKeep.method())) {
+                        body.postConstructMethodsByKey.put(key, methodToKeep);
+                    }
+                });
+
+            // process public methods
+            _NullSafe.stream(type.getMethods())
+                .filter(_ClassCache::methodIncludeFilter)
+                .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+                .filter(Objects::nonNull)
+                .forEach(resolved->{
+                    var key = new MethodKey(type, resolved.method());
+                    putIntoMapHonoringOverridingRelation(body.publicMethodsByKey, key, resolved);
+                });
+
+            return body;
+        }
+
+    }
+
+    private record ClassModel(
+            ClassModelHead head,
+            _Lazy<ClassModelBody> lazyBody) {
+        ClassModelBody body() {
+            return lazyBody.get();
+        }
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
 
-    @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
-    private static final class ConstructorKey {
-        private final Class<?> type; // constructors's declaring class
-        private final @Nullable Class<?>[] paramTypes;
-
-        public static ConstructorKey of(final Class<?> type, final Constructor<?> constructor) {
-            return ConstructorKey.of(type, _Arrays.emptyToNull(constructor.getParameterTypes()));
+    private record ConstructorKey(
+            Class<?> type, // constructors's declaring class
+            @Nullable Class<?>[] paramTypes) {
+        ConstructorKey(final Class<?> type, final Class<?>[] paramTypes) {
+            this.type = type;
+            this.paramTypes = _Arrays.emptyToNull(paramTypes);
+        }
+        ConstructorKey(final Class<?> type, final Constructor<?> constructor) {
+            this(type, constructor.getParameterTypes());
+        }
+        // java puzzler, why do we need to explicitly declare equals and hash code here?
+        @Override public int hashCode() { return type.hashCode(); }
+        @Override public final boolean equals(final Object o) {
+            return o instanceof ConstructorKey other
+                    ? this.type.equals(other.type)
+                            && Arrays.equals(this.paramTypes, other.paramTypes())
+                    : false;
         }
     }
 
-    @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
-    private static final class MethodKey {
+    private record MethodKey(
         /** Method's implementing class (not necessary the same as its declaring class) */
-        private final Class<?> implementingClass;
+        Class<?> implementingClass,
         /** Method's name */
-        private final String name;
-        private final @Nullable Class<?>[] paramTypes;
-        public static MethodKey of(final Class<?> type, final Method method) {
-            return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
+        String name,
+        @Nullable Class<?>[] paramTypes) {
+        MethodKey(final Class<?> implementingClass, final String name, final Class<?>[] paramTypes) {
+            this.implementingClass = implementingClass;
+            this.name = name;
+            this.paramTypes = _Arrays.emptyToNull(paramTypes);
+        }
+        MethodKey(final Class<?> type, final Method method) {
+            this(type, method.getName(), method.getParameterTypes());
         }
     }
 
@@ -288,7 +483,10 @@ public final class _ClassCache implements AutoCloseable {
     // -- UTILITY
 
     public static boolean methodExcludeFilter(final Method method) {
-        return method.isBridge()
+        return isByteCodeEnhanced(method)
+                || (method.isSynthetic() // exclude private synthetic
+                        && Modifier.isPrivate(method.getModifiers()))
+        		|| method.isBridge()
                 || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)
                 || (_Reflect.isNonFinalObjectMethod(method)
@@ -324,63 +522,9 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     private ClassModel inspectType(final Class<?> _type) {
-
         final Class<?> type = reloadType(_type);
-
-        //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
-//                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
-//                    .filter(cls->cls.equals(Object.class))
-//                    .flatMap(cls->{
-//                        return cls.equals(type)
-//                            ? _NullSafe.stream(cls.getDeclaredMethods())
-//                                .filter(_ClassCache::methodIncludeFilter)
-//                            : inspectType(cls).declaredMethods.stream();
-//                    })
-//                    .collect(Can.toCan());
-
-        val model = new ClassModel(
-                Can.ofArray(type.getDeclaredFields()),
-                _Annotations.isPresent(type, XmlRootElement.class));
-
-        // process public constructors
-        val publicConstr = type.getConstructors();
-        for(val constr : publicConstr) {
-            val key = ConstructorKey.of(type, constr);
-            val resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
-            // collect public constructors
-            model.publicConstructorsByKey.put(key, resolvedConstr);
-            // collect public constructors with inject semantics
-            if(isInjectSemantics(constr)) {
-                model.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
-            }
-        }
-
-        // process all methods (public and non-public and inherited)
-        _Reflect.streamAllMethods(type, true)
-        .filter(_ClassCache::methodIncludeFilter)
-        .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-        .filter(_NullSafe::isPresent)
-        .forEach(resolved->{
-            val key = MethodKey.of(type, resolved.method());
-            val methodToKeep =
-                    putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
-            // collect post-construct methods
-            if(isPostConstruct(methodToKeep.method())) {
-                model.postConstructMethodsByKey.put(key, methodToKeep);
-            }
-        });
-
-        // process public methods
-        _NullSafe.stream(type.getMethods())
-        .filter(_ClassCache::methodIncludeFilter)
-        .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-        .filter(_NullSafe::isPresent)
-        .forEach(resolved->{
-            val key = MethodKey.of(type, resolved.method());
-            putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
-        });
-
-        return model;
+        var head = ClassModelHead.create(type);
+        return new ClassModel(head, _Lazy.threadSafe(()->ClassModelBody.create(type, head)));
     }
 
     /**
@@ -389,15 +533,15 @@ public final class _ClassCache implements AutoCloseable {
      */
     private static ResolvedMethod putIntoMapHonoringOverridingRelation(
             final Map<MethodKey, ResolvedMethod> map, final MethodKey key, final ResolvedMethod method) {
-        val methodWithSameKey = map.get(key); // in case the map is already populated
-        val methodToKeep = methodWithSameKey==null
+        var methodWithSameKey = map.get(key); // in case the map is already populated
+        var methodToKeep = methodWithSameKey==null
             ? method
             /* key-clash originating from one method overriding the other
              * we need to keep the most specific one */
             : methodWithSameKey.mostSpecific(method);
         map.put(key, methodToKeep);
 
-        val weaklySame = map.values().stream()
+        var weaklySame = map.values().stream()
             .filter(m->ResolvedMethod.methodsWeaklySame(methodToKeep, m))
             .collect(Can.toCan());
 
@@ -405,9 +549,9 @@ public final class _ClassCache implements AutoCloseable {
 
             map.values().removeIf(weaklySame::contains);
 
-            val winner = weaklySame.reduce(ResolvedMethod::mostSpecific)
+            var winner = weaklySame.reduce(ResolvedMethod::mostSpecific)
                     .getSingletonOrFail();
-            val winnerKey = MethodKey.of(winner.implementationClass(), winner.method());
+            var winnerKey = new MethodKey(winner.implementationClass(), winner.method());
             map.put(winnerKey, winner);
             return winner;
         }
@@ -419,9 +563,9 @@ public final class _ClassCache implements AutoCloseable {
      * signature: any
      * access: public and non-public
      */
-    private boolean isInjectSemantics(final Constructor<?> con) {
+    private static boolean isInjectSemantics(final Constructor<?> con) {
         return _Annotations.synthesize(con, Inject.class).isPresent()
-                || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false);
+                || _Annotations.synthesize(con, Autowired.class).map(Autowired::required).orElse(false);
     }
 
     /**
@@ -429,7 +573,7 @@ public final class _ClassCache implements AutoCloseable {
      * signature: no args
      * access: public and non-public
      */
-    private boolean isPostConstruct(final Method method) {
+    private static boolean isPostConstruct(final Method method) {
         return void.class.equals(method.getReturnType())
                 && method.getParameterCount()==0
                 ? _Annotations.synthesize(method, PostConstruct.class).isPresent()
@@ -441,10 +585,10 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?> type,
             final Class<?>[] paramTypes) {
 
-        val model = classModel(type);
-        val key = ConstructorKey.of(type, _Arrays.emptyToNull(paramTypes));
+        var model = classModel(type);
+        var key = new ConstructorKey(type, paramTypes);
 
-        val publicConstructor = model.publicConstructorsByKey.get(key);
+        var publicConstructor = model.body().publicConstructorsByKey.get(key);
         return publicConstructor;
     }
 
@@ -457,19 +601,18 @@ public final class _ClassCache implements AutoCloseable {
 
         // we need to lookup by name then find first (weak) match
 
-        val model = classModel(type);
+        var model = classModel(type);
 
-        val publicMethod = model.publicMethodsByKey.values().stream()
+        var publicMethod = model.body().publicMethodsByKey.values().stream()
                 .filter(m->m.name().equals(name))
                 .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
                 .findFirst()
                 .orElse(null);
-        if(publicMethod!=null) {
+        if(publicMethod!=null)
             return publicMethod;
-        }
 
         if(includeDeclaredMethods) {
-            val resolvedMethod = model.resolvedMethodsByKey.values().stream()
+            var resolvedMethod = model.body().resolvedMethodsByKey.values().stream()
                 .filter(m->m.name().equals(name))
                 .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
                 .findFirst()
@@ -479,38 +622,8 @@ public final class _ClassCache implements AutoCloseable {
         return null;
     }
 
-    // -- HELPER - FIELD FOR GETTER
-
-    private static Field findFieldForGetter(final Method getterCandidate) {
-        if(ReflectionUtils.isObjectMethod(getterCandidate)) {
-            return null;
-        }
-        val fieldNameCandidate = fieldNameForGetter(getterCandidate);
-        if(fieldNameCandidate==null) {
-            return null;
-        }
-        val declaringClass = getterCandidate.getDeclaringClass();
-        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
+    private static boolean isByteCodeEnhanced(final Method method) {
+        return method.getName().startsWith("_persistence_"); // EclispeLink static weaving
     }
-
-    private static String fieldNameForGetter(final Method getter) {
-        if(getter.getParameterCount()>0) {
-            return null;
-        }
-        if(getter.getReturnType()==void.class) {
-            return null;
-        }
-        val methodName = getter.getName();
-        String fieldName = null;
-        if(methodName.startsWith("is") &&  methodName.length() > 2) {
-            fieldName = methodName.substring(2);
-        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
-            fieldName = methodName.substring(3);
-        } else {
-            return null;
-        }
-        return _Strings.decapitalize(fieldName);
-    }
-
 
 }

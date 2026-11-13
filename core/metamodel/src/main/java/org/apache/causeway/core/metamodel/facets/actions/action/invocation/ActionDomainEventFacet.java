@@ -35,19 +35,17 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
-import org.apache.causeway.core.metamodel.interactions.ActionValidityContext;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionDomainEventFacet
 extends DomainEventFacetAbstract<ActionDomainEvent<?>>
@@ -73,7 +71,7 @@ implements
             final @NonNull ObjectSpecification typeSpec,
             final @NonNull FacetHolder facetHolder){
 
-        val actionDomainEventFacet =
+        var actionDomainEventFacet =
                 actionIfAny
                 .map(Action::domainEvent)
                 .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
@@ -81,8 +79,9 @@ implements
                         new ActionDomainEventFacet(domainEvent, EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
                 .orElseGet(()->{
 
-                    val typeFromDomainObject = typeSpec
-                            .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                    var typeFromDomainObject = typeSpec
+                            .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                            .orElse(null);
 
                     return typeFromDomainObject != null
                             ? new ActionDomainEventFacet(
@@ -93,6 +92,36 @@ implements
                                     EventTypeOrigin.DEFAULT, facetHolder);
                 });
         return actionDomainEventFacet;
+    }
+
+    /**
+     * Creates a mixee-specific (object-type-specific) overlay facet for a mixed-in action, honoring the
+     * mixee's {@code @DomainObject} action domain-event default. Returns empty when the mixee declares no
+     * such default. The overlay is {@link Facet#isObjectTypeSpecific() object-type-specific} so it is
+     * installed on the mixed-in member's local facet holder rather than the shared mixin facet holder.
+     */
+    public static Optional<ActionDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        facetHolder));
+    }
+
+    private static class ObjectTypeSpecific extends ActionDomainEventFacet {
+        protected ObjectTypeSpecific(
+                final Class<? extends ActionDomainEvent<?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, holder);
+        }
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
     }
 
     // -- CONSTRUCTION
@@ -131,16 +160,16 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
-                        actionFrom(ic), getFacetHolder(),
-                        ic.getHead(),
+                        actionFrom(ic),
+                        facetHolder(),
+                        ic.head(),
                         // corresponds to programming model 'hidePlaceOrder()',
                         // which does no longer consider args
                         Can.empty(),
                         // result pojo n/a
                         null);
-        if (event != null && event.isHidden()) {
-            return "Hidden by subscriber";
-        }
+        if (event != null && event.isHidden())
+			return "Hidden by subscriber";
         return null;
     }
 
@@ -152,8 +181,9 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
-                        actionFrom(ic), getFacetHolder(),
-                        ic.getHead(),
+                        actionFrom(ic),
+                        facetHolder(),
+                        ic.head(),
                         // corresponds to programming model 'disablePlaceOrder()',
                         // which does no longer consider args
                         Can.empty(),
@@ -165,9 +195,7 @@ implements
                     ? reasonTranslatable.translate(translationService, translationContext)
                     : event.getDisabledReason();
 
-            if(reasonString!=null) {
-                return VetoReason.explicit(reasonString).toOptional();
-            }
+            if(reasonString!=null) return VetoReason.explicit(reasonString).toOptional();
         }
         return Optional.empty();
     }
@@ -177,21 +205,21 @@ implements
         if(!isPostable()) return null; // bale out
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
-            String.format("expecting an action context but got %s", ic.getIdentifier()));
+            String.format("expecting an action context but got %s", ic.identifier()));
 
         final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
-                        actionFrom(ic), getFacetHolder(),
-                        ic.getHead(), aic.getArgs(),
+                        actionFrom(ic),
+                        facetHolder(),
+                        ic.head(), aic.args(),
                         null);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
+            if(reasonTranslatable != null)
+				return reasonTranslatable.translate(translationService, translationContext);
             return event.getInvalidityReason();
         }
 
@@ -201,11 +229,10 @@ implements
     // -- HELPER
 
     private static ObjectAction actionFrom(final InteractionContext ic) {
-        if(!(ic instanceof ActionInteractionContext)) {
-            throw new IllegalStateException(
+        if(!(ic instanceof ActionInteractionContext))
+			throw new IllegalStateException(
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
-        }
-        return ((ActionInteractionContext) ic).getObjectAction();
+        return ((ActionInteractionContext) ic).objectAction();
     }
 
 }

@@ -19,7 +19,6 @@
 module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config;
     exports org.apache.causeway.core.config.applib;
-    exports org.apache.causeway.core.config.beans.aoppatch;
     exports org.apache.causeway.core.config.beans;
     exports org.apache.causeway.core.config.converters;
     exports org.apache.causeway.core.config.datasources;
@@ -28,6 +27,7 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.metamodel.facets;
     exports org.apache.causeway.core.config.metamodel.services;
     exports org.apache.causeway.core.config.metamodel.specloader;
+    exports org.apache.causeway.core.config.observation;
     exports org.apache.causeway.core.config.presets;
     exports org.apache.causeway.core.config.progmodel;
     exports org.apache.causeway.core.config.util;
@@ -35,6 +35,8 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.viewer.web;
 
     requires static lombok;
+    requires static micrometer.tracing.bridge.otel;
+    requires static io.opentelemetry.api;
 
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
@@ -43,20 +45,21 @@ module org.apache.causeway.core.config {
     requires jakarta.persistence;
     requires java.sql;
     requires jakarta.validation;
-    requires jakarta.ws.rs;
     requires jakarta.inject;
-    requires org.apache.logging.log4j;
-    //requires org.eclipse.persistence.core;
     requires org.hibernate.validator;
+    requires transitive micrometer.commons;
+    requires transitive micrometer.observation;
+    requires transitive micrometer.tracing;
+    requires transitive spring.boot;
     requires spring.aop;
     requires spring.beans;
-    requires transitive spring.boot;
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires spring.boot.autoconfigure;
+    requires org.slf4j;
 
-    uses org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
-
+    opens org.apache.causeway.core.config.observation to spring.core;
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
     opens org.apache.causeway.core.config.environment to spring.core;
 }

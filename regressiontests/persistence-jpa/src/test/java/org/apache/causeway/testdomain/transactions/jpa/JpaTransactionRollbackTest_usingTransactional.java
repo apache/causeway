@@ -29,13 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
@@ -56,7 +54,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG"
         })
 @Transactional
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaTransactionRollbackTest_usingTransactional
 extends CausewayIntegrationTestAbstract
@@ -91,6 +88,5 @@ extends CausewayIntegrationTestAbstract
         // expected condition
         assertEquals(0, repository.allInstances(JpaBook.class).size());
     }
-
 
 }

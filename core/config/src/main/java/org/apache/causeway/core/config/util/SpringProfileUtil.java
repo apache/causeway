@@ -20,12 +20,11 @@ package org.apache.causeway.core.config.util;
 
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -34,13 +33,13 @@ public class SpringProfileUtil {
     private final String SPRING_PROFILES = "spring.profiles.active";
 
     public void addActiveProfile(final @Nullable String profile) {
-        val profileIfAny = _Strings.blankToNullOrTrim(profile);
+        var profileIfAny = _Strings.blankToNullOrTrim(profile);
         System.setProperty(SPRING_PROFILES,
                 stringify(currentActiveProfiles().add(profileIfAny)));
     }
 
     public void removeActiveProfile(final @Nullable String profile) {
-        val profileIfAny = _Strings.blankToNullOrTrim(profile);
+        var profileIfAny = _Strings.blankToNullOrTrim(profile);
         System.setProperty(SPRING_PROFILES,
                 stringify(currentActiveProfiles().remove(profileIfAny)));
     }

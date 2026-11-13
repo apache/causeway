@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.asciidoc.ui.wkt {
     exports org.apache.causeway.valuetypes.asciidoc.ui.wkt;
     exports org.apache.causeway.valuetypes.asciidoc.ui.wkt.components;
 
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;

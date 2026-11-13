@@ -18,9 +18,13 @@
  */
 package org.apache.causeway.core.interaction.scope;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.causeway.applib.services.iactn.InteractionService;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -28,19 +32,13 @@ import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import lombok.Data;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0
  */
-@Log4j2
+@Slf4j
 class InteractionScope
 implements
     Scope,
@@ -75,7 +73,7 @@ implements
      * {@link InteractionScopeLifecycleHandler#onTopLevelInteractionPreDestroy()}), not any of the stacked.
      * </p>
      */
-    private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
+    private final ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(HashMap::new);
 
     /**
     * @return an instance of the single bean matching the required type (InteractionService)
@@ -100,14 +98,13 @@ implements
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!interactionService.isInInteraction()) {
-            throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
+        if(!interactionService.isInInteraction())
+			throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
                     + "... @Inject Provider<MyScopedBean> provider ...", name, _Probe.currentThreadId());
-        }
 
-        val existingScopedObject = scopedObjects.get().get(name);
+        var existingScopedObject = scopedObjects.get().get(name);
         if(existingScopedObject!=null) {
 
             if(log.isDebugEnabled()) {
@@ -120,7 +117,7 @@ implements
             return existingScopedObject.getInstance();
         }
 
-        val newScopedObject = ScopedObject.of(name);
+        var newScopedObject = ScopedObject.of(name);
         scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
 
         log.debug("create new causeway-interaction scoped {}", name);
@@ -143,7 +140,7 @@ implements
 
     @Override
     public void registerDestructionCallback(final String name, final Runnable callback) {
-        val scopedObject = scopedObjects.get().get(name);
+        var scopedObject = scopedObjects.get().get(name);
         if(scopedObject!=null) {
             scopedObject.setDestructionCallback(callback);
         }
@@ -178,7 +175,7 @@ implements
             try {
                 scopedObject.preDestroy();
             } catch (Exception e) {
-                log.error(e);
+                log.error("failure", e);
             }
         });
     }

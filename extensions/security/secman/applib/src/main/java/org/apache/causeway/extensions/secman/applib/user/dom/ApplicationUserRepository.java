@@ -22,13 +22,13 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -67,32 +67,32 @@ public interface ApplicationUserRepository {
     ApplicationUser newUser(String username, AccountType accountType, Consumer<ApplicationUser> beforePersist);
 
     default ApplicationUser upsertLocal(
-            @NonNull String username,
-            @Nullable Password password,
-            @NonNull ApplicationUserStatus status) {
+            @NonNull final String username,
+            @Nullable final Password password,
+            @NonNull final ApplicationUserStatus status) {
         return findByUsername(username)
                 .orElseGet(() -> newLocalUser(username, password, status));
     }
 
     default ApplicationUser newLocalUser(
-            @NonNull String username,
-            @Nullable Password password,
-            @NonNull ApplicationUserStatus status) {
+            @NonNull final String username,
+            @Nullable final Password password,
+            @NonNull final ApplicationUserStatus status) {
 
         return newUser(username, AccountType.LOCAL, user->{
 
             user.setStatus(status);
 
             if (password != null) {
-                updatePassword(user, password.getPassword());
+                updatePassword(user, password.password());
             }
 
         });
     }
 
     default ApplicationUser newDelegateUser(
-            String username,
-            ApplicationUserStatus status) {
+            final String username,
+            final ApplicationUserStatus status) {
 
         return newUser(username, AccountType.DELEGATED, user->{
             user.setStatus(status);

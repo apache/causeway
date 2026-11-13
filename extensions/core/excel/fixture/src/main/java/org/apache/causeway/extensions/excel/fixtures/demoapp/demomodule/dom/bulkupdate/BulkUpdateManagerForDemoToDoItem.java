@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -38,6 +38,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -60,11 +61,11 @@ import static org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.d
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 @Named("libExcelFixture.BulkUpdateManagerForDemoToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @DomainObjectLayout(
         named ="Import/export manager",
         bookmarking = BookmarkPolicy.AS_ROOT
@@ -103,7 +104,6 @@ public class BulkUpdateManagerForDemoToDoItem {
     @Getter @Setter @Nullable
     private boolean complete;
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public BulkUpdateManagerForDemoToDoItem changeFileName(final String fileName) {
         setFileName(fileName);
@@ -112,7 +112,6 @@ public class BulkUpdateManagerForDemoToDoItem {
     @MemberSupport public String default0ChangeFileName() {
         return getFileName();
     }
-
 
     @Action
     public BulkUpdateManagerForDemoToDoItem select(
@@ -158,7 +157,6 @@ public class BulkUpdateManagerForDemoToDoItem {
                 thoseCompleted(isComplete()).and(thoseCategorised(getCategory(), getSubcategory())));
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     public Blob export() {
         final String fileName = withExtension(getFileName(), ".xlsx");
@@ -174,7 +172,7 @@ public class BulkUpdateManagerForDemoToDoItem {
     }
 
     private Blob toExcel(final String fileName, final List<ExcelDemoToDoItem> items) {
-        val toDoItemViewModels = items.stream()
+        var toDoItemViewModels = items.stream()
                 .map(BulkUpdateLineItemForDemoToDoItem::new)
                 .collect(Collectors.toList());
         return excelService.toExcel(new WorksheetContent(toDoItemViewModels, WORKSHEET_SPEC), fileName);

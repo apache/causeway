@@ -22,6 +22,7 @@ module org.apache.causeway.core.webapp {
     exports org.apache.causeway.core.webapp.health;
     exports org.apache.causeway.core.webapp.keyvaluestore;
     exports org.apache.causeway.core.webapp.modules;
+    exports org.apache.causeway.core.webapp.modules.observation;
     exports org.apache.causeway.core.webapp.modules.logonlog;
     exports org.apache.causeway.core.webapp.modules.templresources;
     exports org.apache.causeway.core.webapp.routing;
@@ -30,7 +31,7 @@ module org.apache.causeway.core.webapp {
     requires jakarta.annotation;
     requires jakarta.inject;
     requires jakarta.servlet;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
@@ -38,11 +39,12 @@ module org.apache.causeway.core.webapp {
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.boot;
     requires spring.boot.actuator;
     requires spring.context;
     requires spring.core;
     requires spring.web;
+    requires spring.boot.health;
 }

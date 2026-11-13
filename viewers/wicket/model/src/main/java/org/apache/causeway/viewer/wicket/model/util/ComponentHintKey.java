@@ -41,20 +41,20 @@ public class ComponentHintKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static ComponentHintKey create(
-            final MetaModelContext commonContext,
+            final MetaModelContext mmc,
             final SerializableSupplier<Component> componentProvider,
             final String key) {
         return new ComponentHintKey(
-                commonContext.lookupServiceElseFail(HintStore.class),
+                mmc.lookupServiceElseFail(HintStore.class),
                 componentProvider, null, key, null);
     }
 
     public static ComponentHintKey create(
-            final MetaModelContext commonContext,
+            final MetaModelContext mmc,
             final Component path,
             final String key) {
         return new ComponentHintKey(
-                commonContext.lookupServiceElseFail(HintStore.class),
+                mmc.lookupServiceElseFail(HintStore.class),
                 null, path, key, null);
     }
 
@@ -91,9 +91,8 @@ public class ComponentHintKey implements Serializable {
     }
 
     public void set(final Bookmark bookmark, final String value) {
-        if(bookmark == null) {
-            return;
-        }
+        if(bookmark == null) return;
+
         if(value != null) {
             getHintStore().set(bookmark, getKey(), value);
         } else {
@@ -102,17 +101,14 @@ public class ComponentHintKey implements Serializable {
     }
 
     public String get(final Bookmark bookmark) {
-        if(bookmark == null) {
-            return null;
-        }
+        if(bookmark == null) return null;
+
         return getHintStore().get(bookmark, getKey());
     }
 
-
     public void remove(final Bookmark bookmark) {
-        if(bookmark == null) {
-            return;
-        }
+        if(bookmark == null) return;
+
         final String key = getKey();
         getHintStore().remove(bookmark, key);
     }
@@ -122,13 +118,11 @@ public class ComponentHintKey implements Serializable {
             final PageParameters pageParameters,
             final String prefix) {
         Serializable value = get(bookmark);
-        if(value == null) {
-            return;
-        }
+        if(value == null) return;
+
         final String prefixedKey = prefix + getKey();
         pageParameters.add(prefixedKey, value);
     }
-
 
     public static ComponentHintKey noop() {
         return new ComponentHintKey(null, null, null, null, null) {

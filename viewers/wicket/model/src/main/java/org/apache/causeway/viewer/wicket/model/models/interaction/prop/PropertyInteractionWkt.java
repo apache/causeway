@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.val;
-
 /**
  * The parent (container) model of multiple <i>property models</i> which implement
  * {@link ChainingModel}.
@@ -80,8 +78,8 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     }
 
     @Override
-    public void detach() {
-        super.detach();
+    public void onDetachAlways() {
+        super.onDetachAlways();
         propertyNegotiationModel.clear();
     }
 
@@ -113,8 +111,8 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     }
 
     private Optional<PropertyNegotiationModel> startPropertyNegotiation() {
-        val propIa = propertyInteraction();
-        val prop = propIa.getManagedProperty().orElseThrow();
+        var propIa = propertyInteraction();
+        var prop = propIa.getManagedProperty().orElseThrow();
         ManagedObjects.refreshViewmodel(prop.getOwner(), /* bookmark provider*/ null);
         return propIa.startPropertyNegotiation();
     }
@@ -124,7 +122,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
             ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
             .orElseThrow(()->_Exceptions.noSuchElement("property '%s' in %s",
                     memberId,
-                    getBookmarkedOwner().getSpecification())));
+                    getBookmarkedOwner().objSpec())));
     }
 
     /**

@@ -23,17 +23,13 @@ import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Mechanism for determining whether this object is should be hidden.
+ * Mechanism for determining whether an object should be hidden.
  *
- * <p>
- * Even though all the properties of an object may themselves be visible, there
+ * <p>Even though all the properties of an object may themselves be visible, there
  * could be reasons to hide the object.
- * </p>
  *
- * <p>
- * In the standard Apache Causeway Programming Model, typically corresponds to the
+ * <p>In the standard Apache Causeway Programming Model, typically corresponds to the
  * <tt>hidden</tt> method.
- * </p>
  *
  * @see HiddenFacet
  * @see HiddenObjectFacet

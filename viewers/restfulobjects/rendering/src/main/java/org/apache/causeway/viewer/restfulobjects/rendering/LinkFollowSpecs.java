@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
 
@@ -65,16 +64,14 @@ public final class LinkFollowSpecs {
      */
     public LinkFollowSpecs follow(final String pathTemplate, final Object... args) {
         final String path = String.format(pathTemplate, args);
-        if (path == null) {
-            return terminated();
-        }
-        if (mode == Mode.TERMINATED) {
-            return terminated();
-        }
+        if (path == null)
+			return terminated();
+        if (mode == Mode.TERMINATED)
+			return terminated();
         final PathNode candidate = PathNode.parse(path);
         if (mode == Mode.FOLLOWING) {
-            List<List<PathNode>> remainingPathSpecs = _Lists.newArrayList();
-            List<PathNode> firstSpecs = _Lists.newArrayList();
+            List<List<PathNode>> remainingPathSpecs = new ArrayList<>();
+            List<PathNode> firstSpecs = new ArrayList<>();
             for(List<PathNode> spec: pathSpecs) {
                 if(spec.isEmpty()) {
                     continue;
@@ -86,9 +83,8 @@ public final class LinkFollowSpecs {
                     remainingPathSpecs.add(remaining);
                 }
             }
-            if(!remainingPathSpecs.isEmpty()) {
-                return new LinkFollowSpecs(remainingPathSpecs, Mode.FOLLOWING, firstSpecs);
-            }
+            if(!remainingPathSpecs.isEmpty())
+				return new LinkFollowSpecs(remainingPathSpecs, Mode.FOLLOWING, firstSpecs);
             return terminated();
         }
         return terminated();
@@ -117,16 +113,13 @@ public final class LinkFollowSpecs {
      * {@link #follow(String, Object...)} call).
      */
     public boolean matches(final JsonRepresentation jsonRepr) {
-        if (!isFollowing()) {
-            return false;
-        }
-        if(criteriaSpecs == null) {
-            return true;
-        }
+        if (!isFollowing())
+			return false;
+        if(criteriaSpecs == null)
+			return true;
         for (PathNode criteriaSpec : criteriaSpecs) {
-            if(criteriaSpec.matches(jsonRepr)) {
-                return true;
-            }
+            if(criteriaSpec.matches(jsonRepr))
+				return true;
         }
         return false;
     }

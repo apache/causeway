@@ -22,23 +22,17 @@ import java.util.Objects;
 
 import jakarta.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.dto.BookDto;
-import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJdoForTesting;
-import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
+import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
-import lombok.val;
 
 public abstract class LifecycleEventPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -50,10 +44,14 @@ extends PublishingTestAbstract {
         return changeScenario.isSupportsProgrammatic();
     }
 
+    protected abstract void clearPublishedEvents(final KVStoreForTesting kvStore);
+    protected abstract Can<BookDto> getPublishedEvents(
+            KVStoreForTesting kvStore,
+            Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass);
+    
     @Override
     protected void given() {
-        LifecycleEventSubscriberJdoForTesting.clearPublishedEvents(kvStore);
-        LifecycleEventSubscriberJpaForTesting.clearPublishedEvents(kvStore);
+        clearPublishedEvents(kvStore);
     }
 
     @Override
@@ -61,18 +59,18 @@ extends PublishingTestAbstract {
             final ChangeScenario changeScenario,
             final VerificationStage verificationStage) {
 
-        val defaultSample = BookDto.sample();
+        var defaultSample = BookDto.sample();
 
-        val bookSamplesForCreate = Can.of(
+        var bookSamplesForCreate = Can.of(
                 defaultSample,
                 BookDto.builder().build()); // empty-defaults
-        val bookSample1 = Can.of( // initial
+        var bookSample1 = Can.of( // initial
                 defaultSample);
-        val bookSample2 = Can.of( // after property update
+        var bookSample2 = Can.of( // after property update
                 defaultSample.asBuilder()
                 .name("Book #2")
                 .build());
-        val bookSample3 = Can.of( // after action invocation
+        var bookSample3 = Can.of( // after action invocation
                 defaultSample.asBuilder()
                 .price(defaultSample.getPrice()*2.)
                 .build());
@@ -109,7 +107,7 @@ extends PublishingTestAbstract {
             case PROPERTY_UPDATE: // update the book's name -> "Book #2"
 
                 //XXX if we want to trigger callback events before PRE_COMMIT then changes need to be flushed .eg
-                //val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+                //var em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
                 //em.flush(); // in effect makes changes visible during PRE_COMMIT
                 //assertHasUpdatingLifecycleEvents(bookSample2);
 
@@ -168,7 +166,6 @@ extends PublishingTestAbstract {
                 assertHasRemovingLifecycleEvents(Can.empty());
                 return;
 
-
             case PROPERTY_UPDATE: // update the book's name -> "Book #2"
 
                 assertHasCreatedLifecycleEvents(Can.empty());
@@ -206,7 +203,6 @@ extends PublishingTestAbstract {
                 throw _Exceptions.unmatchedCase(changeScenario);
             }
 
-
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for
             fail(String.format("internal error, stage not verified: %s", verificationStage));
@@ -218,71 +214,54 @@ extends PublishingTestAbstract {
     // these events are emitted by the FactoryService only!
     private void assertHasCreatedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.CreatedLifecycleEvent.class,
-                JpaBook.CreatedLifecycleEvent.class,
+                IBook.CreatedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasLoadedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.LoadedLifecycleEvent.class,
-                JpaBook.LoadedLifecycleEvent.class,
+                IBook.LoadedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasPersistingLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.PersistingLifecycleEvent.class,
-                JpaBook.PersistingLifecycleEvent.class,
+                IBook.PersistingLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasPersistedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.PersistedLifecycleEvent.class,
-                JpaBook.PersistedLifecycleEvent.class,
+                IBook.PersistedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasUpdatingLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.UpdatingLifecycleEvent.class,
-                JpaBook.UpdatingLifecycleEvent.class,
+                IBook.UpdatingLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasUpdatedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.UpdatedLifecycleEvent.class,
-                JpaBook.UpdatedLifecycleEvent.class,
+                IBook.UpdatedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasRemovingLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.RemovingLifecycleEvent.class,
-                JpaBook.RemovingLifecycleEvent.class,
+                IBook.RemovingLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasLifecycleEvents(
-            final Class<? extends AbstractLifecycleEvent<JdoBook>> eventClassWhenJdo,
-            final Class<? extends AbstractLifecycleEvent<JpaBook>> eventClassWhenJpa,
+            final Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass,
             final Can<BookDto> expectedBooks) {
 
-        val jdoBooks = LifecycleEventSubscriberJdoForTesting
-                .getPublishedEventsJdo(kvStore, eventClassWhenJdo);
-        val jpaBooks = LifecycleEventSubscriberJpaForTesting
-                .getPublishedEventsJpa(kvStore, eventClassWhenJpa);
-
-        assertEquals(0, jdoBooks.size() * jpaBooks.size()); // its either JDO or JPA, cannot be both
-
-        val actualBooks = jdoBooks.isEmpty()
-                ? jpaBooks
-                : jdoBooks;
+        var books = getPublishedEvents(kvStore, eventClass);
 
         CollectionAssertions.assertComponentWiseEquals(
-                expectedBooks, actualBooks, this::bookDifference);
+                expectedBooks, books, this::bookDifference);
     }
 
     private String bookDifference(final BookDto a, final BookDto b) {
@@ -292,6 +271,5 @@ extends PublishingTestAbstract {
         }
         return null; // no difference
     }
-
 
 }

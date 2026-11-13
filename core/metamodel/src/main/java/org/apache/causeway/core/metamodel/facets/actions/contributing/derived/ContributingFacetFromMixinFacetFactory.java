@@ -18,18 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.contributing.derived;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class ContributingFacetFromMixinFacetFactory
 extends FacetFactoryAbstract {
@@ -42,30 +39,28 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        if(!processMethodContext.isMixinMain()) {
-            // skip processing if not mixin main
+        if(!processMethodContext.isMixinMain())
+			// skip processing if not mixin main
             return;
-        }
 
-        val method = processMethodContext.getMethod();
-        val declaringClass = method.getDeclaringClass();
-        val spec = getSpecificationLoader().loadSpecification(declaringClass);
+        var method = processMethodContext.methodFacade();
+        var declaringClass = method.getDeclaringClass();
+        var spec = processMethodContext.loadSpecificationTypeOnly(declaringClass);
 
-        if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent()) {
-            return;
-        }
+        if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent())
+			return;
 
-        val facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
 
         //[1998] if @Action or @ActionLayout detected on type level infer:
         //@ActionLayout(contributed=ACTION)
-        val isForceContributedAsAction =
+        var isForceContributedAsAction =
                 // not reporting ambiguity here, this is done else where
                 processMethodContext.synthesizeOnMethodOrMixinType(Action.class, ()->{}).isPresent()
                 || processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class, ()->{}).isPresent();
 
         if(isForceContributedAsAction) {
-            FacetUtil.addFacet(ContributingFacetAbstract.createAsAction(facetedMethod));
+            ContributingFacetAbstract.createAsAction(facetedMethod);
         }
 
     }

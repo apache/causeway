@@ -63,7 +63,7 @@ public class ApplicationUser_resetPassword {
             final Password newPassword,
             final Password repeatPassword) {
 
-        applicationUserRepository.updatePassword(target, newPassword.getPassword());
+        applicationUserRepository.updatePassword(target, newPassword.password());
         return target;
     }
 
@@ -85,6 +85,5 @@ public class ApplicationUser_resetPassword {
 
         return null;
     }
-
 
 }

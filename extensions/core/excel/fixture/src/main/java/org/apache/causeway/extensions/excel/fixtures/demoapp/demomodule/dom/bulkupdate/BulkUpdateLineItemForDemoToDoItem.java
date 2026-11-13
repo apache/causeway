@@ -21,10 +21,9 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bul
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.jdo.annotations.Column;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.Column;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -36,6 +35,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -54,7 +54,8 @@ import lombok.Setter;
 
 @Named("libExcelFixture.BulkUpdateLineItemForDemoToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @DomainObjectLayout(
         named = "Bulk update line item",
         bookmarking = BookmarkPolicy.AS_ROOT
@@ -83,9 +84,8 @@ public class BulkUpdateLineItemForDemoToDoItem
 
     @ObjectSupport public String title() {
         final ExcelDemoToDoItem existingItem = getToDoItem();
-        if(existingItem != null) {
+        if(existingItem != null)
             return "EXISTING: " + titleService.titleOf(existingItem);
-        }
         return "NEW: " + getDescription();
     }
 
@@ -103,7 +103,6 @@ public class BulkUpdateLineItemForDemoToDoItem
         setNotes(toDoItem.getNotes());
         setOwnedBy(toDoItem.getOwnedBy());
     }
-
 
     @Getter @Setter
     private String description;
@@ -129,7 +128,6 @@ public class BulkUpdateLineItemForDemoToDoItem
 
     @Getter @Setter
     private String notes;
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public ExcelDemoToDoItem apply() {
@@ -166,7 +164,6 @@ public class BulkUpdateLineItemForDemoToDoItem
     public int compareTo(final BulkUpdateLineItemForDemoToDoItem other) {
         return this.toDoItem.compareTo(other.toDoItem);
     }
-
 
     @XmlTransient @Inject BulkUpdateMenuForDemoToDoItem toDoItemExportImportService;
     @XmlTransient @Inject ExcelDemoToDoItemMenu toDoItems;

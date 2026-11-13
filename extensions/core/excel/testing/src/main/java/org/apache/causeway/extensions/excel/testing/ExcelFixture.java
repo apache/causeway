@@ -20,14 +20,14 @@ package org.apache.causeway.extensions.excel.testing;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -36,9 +36,6 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
@@ -48,9 +45,10 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  *
@@ -64,11 +62,9 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
 
     private final List<Class<?>> classes;
 
-
     @Inject SpecificationLoader specLoader;
     @Inject ExcelService excelService;
     @Inject RepositoryService repositoryService;
-
 
     public ExcelFixture(final URL excelResource, final Class<?>... classes) {
         this(excelResource, Arrays.asList(classes));
@@ -91,21 +87,19 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     private ExcelFixture(final List<Class<?>> classes) {
         for (Class<?> cls : classes) {
 
-            val beanSort = Optional.ofNullable(specLoader)
+            var beanSort = Optional.ofNullable(specLoader)
             .flatMap(sl->sl.specForType(cls))
-            .filter(_NullSafe::isPresent)
-            .map(ObjectSpecification::getBeanSort)
+            .filter(Objects::nonNull)
+            .map(ObjectSpecification::beanSort)
             .orElse(BeanSort.UNKNOWN);
 
-            if (!beanSort.isViewModel() && !beanSort.isEntity()) {
-                throw new IllegalArgumentException(String.format(
+            if (!beanSort.isViewModel() && !beanSort.isEntity())
+				throw new IllegalArgumentException(String.format(
                         "Class '%s' does not implement '%s', nor is it persistable",
                         cls.getSimpleName(), ExcelFixtureRowHandler.class.getSimpleName()));
-            }
         }
         this.classes = classes;
     }
-
 
     /**
      * Input, optional: defines the name of the resource, used as a suffix to override {@link #getQualifiedName()}
@@ -122,7 +116,6 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
         return super.getQualifiedName() + (getExcelResourceName() != null ? "-" + getExcelResourceName() : "");
     }
 
-
     /**
      * Input, mandatory ... the Excel spreadsheet to read.
      */
@@ -130,28 +123,24 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     @PropertyLayout(sequence = "1.2")
     private URL excelResource;
 
-
     /**
      * Input, mandatory ... the Excel spreadsheet to read.
      */
     @Getter @Setter
     private Blob blob;
 
-
     /**
      * Output: all the objects created by this fixture.
      */
-    @Getter
-    private final List objects = _Lists.newArrayList();
+    @SuppressWarnings("rawtypes")
+	@Getter
+    private final List objects = new ArrayList();
 
     /**
      * Output: the objects created by this fixture, for a specific persistable/row handler class.
      */
     @Getter
-    private final Map<Class<?>, List<Object>> objectsByClass = _Maps.newHashMap();
-
-
-
+    private final Map<Class<?>, List<Object>> objectsByClass = new HashMap<>();
 
     @Override
     protected void execute(final ExecutionContext ec) {
@@ -179,10 +168,9 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
             final Object rowObj,
             final ExecutionContext ec,
             final Object previousRow) {
-        if (rowObj instanceof ExcelFixtureRowHandler) {
-            final ExcelFixtureRowHandler rowHandler = (ExcelFixtureRowHandler) rowObj;
-            return rowHandler.handleRow(ec, this, previousRow);
-        } else {
+        if (rowObj instanceof final ExcelFixtureRowHandler rowHandler)
+			return rowHandler.handleRow(ec, this, previousRow);
+		else {
             repositoryService.persist(rowObj);
             ec.addResult(this, rowObj);
             return Collections.singletonList(rowObj);
@@ -192,23 +180,22 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     private void addToMap(final Class<?> cls, final List<Object> createdObjects) {
         List<Object> objectList = objectsByClass.get(cls);
         if (objectList == null) {
-            objectList = _Lists.newArrayList();
+            objectList = new ArrayList<>();
             this.objectsByClass.put(cls, objectList);
         }
         objectList.addAll(createdObjects);
     }
 
-    private void addToCombined(final List<Object> createdObjects) {
+    @SuppressWarnings("unchecked")
+	private void addToCombined(final List<Object> createdObjects) {
         this.objects.addAll(createdObjects);
     }
-
-
 
     private byte[] bytes;
     private byte[] getBytes() {
         if (bytes == null) {
             if (blob != null){
-                bytes = blob.getBytes();
+                bytes = blob.bytes();
             } else {
                 bytes = readBytes();
             }
@@ -246,7 +233,5 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     public int hashCode() {
         return Arrays.hashCode(getBytes());
     }
-
-
 
 }

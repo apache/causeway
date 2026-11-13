@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,6 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.DtoMapper;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
@@ -54,7 +54,7 @@ public final class InteractionDtoUtils {
         dtoMapper.get();
     }
 
-    private _Lazy<DtoMapper<InteractionDto>> dtoMapper = _Lazy.threadSafe(
+    private final _Lazy<DtoMapper<InteractionDto>> dtoMapper = _Lazy.threadSafe(
             ()->JaxbUtils.mapperFor(InteractionDto.class));
 
     public DtoMapper<InteractionDto> dtoMapper() {
@@ -102,7 +102,6 @@ public final class InteractionDtoUtils {
                 return MemberExecutionDtoUtils.dtoMapper(memberExecutionDto.getClass()).clone(memberExecutionDto);
             }
         };
-
 
         public abstract MemberExecutionDto dtoFor(final Execution<?, ?> execution);
 
@@ -234,7 +233,7 @@ public final class InteractionDtoUtils {
     }
 
     static String deriveLogicalMemberId(final Bookmark bookmark, final String memberId) {
-        final String logicalTypeName = bookmark.getLogicalTypeName();
+        final String logicalTypeName = bookmark.logicalTypeName();
         final int hashAt = memberId.lastIndexOf("#");
         final String localMemberId = hashAt >= 0 && hashAt < memberId.length()
                 ? memberId.substring(hashAt + 1)
@@ -257,12 +256,11 @@ public final class InteractionDtoUtils {
         return parametersFor(invocationDto).getParameter();
     }
 
-
     // -- getParameters, getParameterNames, getParameterTypes
     public List<ParamDto> getParameters(final ActionInvocationDto ai) {
         final List<ParamDto> params = parameterListFor(ai);
         final int parameterNumber = getNumberOfParameters(ai);
-        final List<ParamDto> paramDtos = _Lists.newArrayList();
+        final List<ParamDto> paramDtos = new ArrayList<>();
         for (int i = 0; i < parameterNumber; i++) {
             final ParamDto paramDto = params.get(i);
             paramDtos.add(paramDto);
@@ -294,9 +292,8 @@ public final class InteractionDtoUtils {
 
     public ParamDto getParameter(final ActionInvocationDto ai, final int paramNum) {
         final int parameterNumber = getNumberOfParameters(ai);
-        if(paramNum > parameterNumber) {
-            throw new IllegalArgumentException(String.format("No such parameter %d (the memento has %d parameters)", paramNum, parameterNumber));
-        }
+        if(paramNum > parameterNumber)
+			throw new IllegalArgumentException(String.format("No such parameter %d (the memento has %d parameters)", paramNum, parameterNumber));
         final List<ParamDto> parameters = getParameters(ai);
         return parameters.get(paramNum);
     }

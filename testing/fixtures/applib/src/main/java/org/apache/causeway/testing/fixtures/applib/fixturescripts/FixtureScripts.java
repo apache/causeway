@@ -27,11 +27,6 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.context.annotation.Import;
-
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -46,25 +41,24 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstallingEvent;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
+import org.springframework.context.annotation.Import;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
-import lombok.val;
-
 
 /**
  * Provides the mechanism to execute {@link FixtureScript}s from the UI of
@@ -88,7 +82,6 @@ public class FixtureScripts {
     public static final String LOGICAL_TYPE_NAME = CausewayModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
     @Inject private TitleService titleService;
-    @Inject private JaxbService jaxbService;
     @Inject private ServiceInjector serviceInjector;
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
@@ -96,7 +89,6 @@ public class FixtureScripts {
     @Inject private InteractionService interactionService;
 
     @Inject private EventBusService eventBusService;
-
 
     // -- Specification, nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
@@ -198,7 +190,6 @@ public class FixtureScripts {
 
     // -- constructor, init
 
-
     /**
      * Used to configure the UI menu actions, namely {@link #runFixtureScript(String, String)} and
      * {@link #recreateObjectsAndReturnFirst()}.
@@ -255,7 +246,6 @@ public class FixtureScripts {
     @Getter
     private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
 
-
     @Inject
     public FixtureScripts(
             final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
@@ -265,7 +255,7 @@ public class FixtureScripts {
         this.nonPersistedObjectsStrategy = specification.getNonPersistedObjectsStrategy();
         this.multipleExecutionStrategy = specification.getMultipleExecutionStrategy();
 
-        val packagePrefix = specification.getPackagePrefix();
+        var packagePrefix = specification.getPackagePrefix();
         this.fixtureScriptByFriendlyName =
                 packagePrefix != null
                     ? serviceRegistry.select(FixtureScript.class).stream()
@@ -276,11 +266,8 @@ public class FixtureScripts {
                                     throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));
                                 },
                                 TreeMap::new))
-                    : _Maps.newTreeMap();
+                    : new TreeMap<>();
     }
-
-
-
 
     // -- runFixtureScript (using choices as the drop-down policy)
 
@@ -348,11 +335,10 @@ public class FixtureScripts {
                 : null;
     }
     @MemberSupport public String default0RunFixtureScript() {
-        val defaultFixtureScript = defaultFromFixtureScriptsSpecification();
-        if(defaultFixtureScript != null) {
-            return defaultFixtureScript;
-        }
-        val choices = choices0RunFixtureScript();
+        var defaultFixtureScript = defaultFromFixtureScriptsSpecification();
+        if(defaultFixtureScript != null)
+			return defaultFixtureScript;
+        var choices = choices0RunFixtureScript();
         return choices.size() == 1
                 ? choices.iterator().next()
                 : null;
@@ -380,10 +366,6 @@ public class FixtureScripts {
         return fixtureScript.run(parameters, this);
     }
 
-
-
-
-
     // -- recreateObjectsAndReturnFirst
 
     /**
@@ -398,23 +380,18 @@ public class FixtureScripts {
             cssClassFa="fa fa-sync",
             sequence="20")
     public Object recreateObjectsAndReturnFirst() {
-        val recreateScriptClass =  getSpecification().getRecreateScriptClass();
-        val recreateScript = findFixtureScriptNameFor(recreateScriptClass);
-        if(recreateScript == null) {
-            return null;
-        }
+        var recreateScriptClass =  getSpecification().getRecreateScriptClass();
+        var recreateScript = findFixtureScriptNameFor(recreateScriptClass);
+        if(recreateScript == null)
+			return null;
         final List<FixtureResult> results = runScript(recreateScript, null);
-        if(results.isEmpty()) {
-            return null;
-        }
+        if(results.isEmpty())
+			return null;
         return results.get(0).getObject();
     }
     @MemberSupport public boolean hideRecreateObjectsAndReturnFirst() {
         return specification == null || specification.getRecreateScriptClass() == null;
     }
-
-
-
 
     // -- programmatic API
 
@@ -448,7 +425,7 @@ public class FixtureScripts {
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
 
-    	val singleScript = toSingleScript(fixtureScriptList);
+    	var singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
 
     	interactionService.runAnonymous(()->{
@@ -495,8 +472,8 @@ public class FixtureScripts {
                 runFixtureScript(new FixtureScript() {
                     @Override
                     protected void execute(final ExecutionContext executionContext) {
-                        for (val personaWithBuilderScript : personas) {
-                            val fixtureScript = personaWithBuilderScript.builder();
+                        for (var personaWithBuilderScript : personas) {
+                            var fixtureScript = personaWithBuilderScript.builder();
                             executionContext.executeChild(this, fixtureScript);
                         }
                     }
@@ -505,7 +482,6 @@ public class FixtureScripts {
         )
         .ifFailureFail();
     }
-
 
     /**
      * Runs the provided {@link PersonaWithBuilderScript persona fixture script}, using
@@ -530,7 +506,7 @@ public class FixtureScripts {
      */
     @Programmatic
     public <T> T runPersona(final PersonaWithBuilderScript<T,? extends BuilderScriptAbstract<? extends T>> persona) {
-        val fixtureScript = persona.builder();
+        var fixtureScript = persona.builder();
         return runBuilder(fixtureScript);
     }
 
@@ -593,11 +569,10 @@ public class FixtureScripts {
 
     @Programmatic
     protected String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass) {
-        val fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
+        var fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
         for (final Map.Entry<String,FixtureScript> fs : fixtureScripts) {
-            if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass())) {
-                return fs.getKey();
-            }
+            if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass()))
+				return fs.getKey();
         }
         return null;
     }
@@ -614,34 +589,28 @@ public class FixtureScripts {
      */
     @Programmatic
     protected FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
-        val executionParameters = executionParametersService.newExecutionParameters(parameters);
+        var executionParameters = executionParametersService.newExecutionParameters(parameters);
         return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
-
-
-
 
     // -- helpers (package level)
 
     @Programmatic
     FixtureResult newFixtureResult(final FixtureScript script, final String subkey, final Object object, final boolean firstTime) {
-        if(object == null) {
-            return null;
-        }
+        if(object == null)
+			return null;
 
         if (object instanceof ViewModel
                 || repositoryService.getEntityState(object).isAttachedOrRemoved()) {
             // continue
         } else {
-            switch(getNonPersistedObjectsStrategy()) {
-            case PERSIST:
-                transactionService.flushTransaction();
-                break;
-            case IGNORE:
-                return null;
-            default:
-                throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
-            }
+            switch (getNonPersistedObjectsStrategy()) {
+			case PERSIST -> transactionService.flushTransaction();
+			case IGNORE -> {
+				return null;
+			}
+			default -> throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
+			}
         }
         final FixtureResult fixtureResult = serviceInjector.injectServicesInto(
                                                                 new FixtureResult());
@@ -662,9 +631,8 @@ public class FixtureScripts {
 
     private static FixtureScript toSingleScript(final FixtureScript[] fixtureScriptList) {
 
-        if (fixtureScriptList.length == 1) {
-            return fixtureScriptList[0];
-        }
+        if (fixtureScriptList.length == 1)
+			return fixtureScriptList[0];
 
         return new FixtureScript() {
             @Override
@@ -676,6 +644,5 @@ public class FixtureScripts {
         };
 
     }
-
 
 }

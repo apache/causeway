@@ -18,15 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -43,13 +36,13 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichAction
         extends RichMember<ObjectAction, ObjectInteractor>
         implements ActionInteractor,
@@ -94,20 +87,17 @@ public class RichAction
         buildObjectTypeAndField(objectAction.asciiId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
-    private boolean isInvokeAllowed(ObjectAction objectAction) {
-        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        switch (apiVariant) {
-            case QUERY_ONLY:
-            case QUERY_AND_MUTATIONS:
-                return objectAction.getSemantics().isSafeInNature();
-            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
-                return true;
-            default:
-                // shouldn't happen
-                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
-        }
+    private boolean isInvokeAllowed(final ObjectAction objectAction) {
+        var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
+        return switch (apiVariant) {
+		case QUERY_ONLY, QUERY_AND_MUTATIONS -> objectAction.getSemantics().isSafeInNature();
+		case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT -> true;
+		default -> // shouldn't happen
+		throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
+		};
     }
 
+    @Override
     public Can<ManagedObject> argumentManagedObjectsFor(
             final Environment dataFetchingEnvironment,
             final ObjectAction objectAction,
@@ -116,143 +106,22 @@ public class RichAction
         return argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
 
-    /**
-     *
-     * @param environment
-     * @param objectAction
-     * @param context
-     * @return
-     */
     public static Can<ManagedObject> argumentManagedObjectsFor(
             final Environment environment,
             final ObjectAction objectAction,
             final Context context) {
-        Map<String, Object> argumentPojos = environment.getArguments();
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-        return parameters
-                .map(oap -> {
-                    final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(oap.asciiId());
-                    Object pojoOrPojoList;
-
-                    switch (elementType.getBeanSort()) {
-
-                        case VALUE:
-                            return adaptValue(oap, argumentValue, context);
-
-                        case ENTITY:
-                        case VIEW_MODEL:
-                            if (argumentValue == null) {
-                                return ManagedObject.empty(elementType);
-                            }
-                            // fall through
-
-                        case ABSTRACT:
-                            // if the parameter is abstract, we still attempt to figure out the arguments.
-                            // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
-                            if (argumentValue instanceof List) {
-                                val argumentValueList = (List<Object>) argumentValue;
-                                pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(oap.getElementType(), value, environment, context))
-                                        .filter(Optional::isPresent)
-                                        .map(Optional::get)
-                                        .collect(Collectors.toList());
-                            } else {
-                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, environment, context).orElse(null);
-                            }
-                            return ManagedObject.adaptParameter(oap, pojoOrPojoList);
-
-                        case COLLECTION:
-                        case MANAGED_BEAN_CONTRIBUTING:
-                        case VETOED:
-                        case MANAGED_BEAN_NOT_CONTRIBUTING:
-                        case MIXIN:
-                        case UNKNOWN:
-                        default:
-                            throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
-                    }
-                });
+        return ObjectFeatureUtils.argumentManagedObjectsFor(environment, objectAction, context);
     }
 
-    private static ManagedObject adaptValue(
-            final ObjectActionParameter oap,
-            final Object argumentValue,
-            final Context context) {
-
-        val elementType = oap.getElementType();
-        if (argumentValue == null) {
-            return ManagedObject.empty(elementType);
-        }
-
-        val argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
-        return ManagedObject.adaptParameter(oap, argPojo);
-    }
-
-
-    public static Optional<Object> asPojo(
-            final ObjectSpecification elementType,
-            final Object argumentValueObj,
-            final Environment environment,
-            final Context context
-    ) {
-        val argumentValue = (Map<String, ?>) argumentValueObj;
-
-        val refValue = (String)argumentValue.get("ref");
-        if (refValue != null) {
-            String key = ObjectFeatureUtils.keyFor(refValue);
-            BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
-            if (bookmarkedPojo == null) {
-                throw new IllegalArgumentException(String.format(
-                    "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
-            }
-            val targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
-            val targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
-            if (targetPojoSpec == null) {
-                throw new IllegalArgumentException(String.format(
-                    "The object referenced '%s' is not part of the metamodel (has class '%s')",
-                    refValue, targetPojoClass.getCanonicalName()));
-            }
-            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
-                throw new IllegalArgumentException(String.format(
-                    "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
-                    refValue, targetPojoSpec.getLogicalTypeName(), elementType.getLogicalTypeName()));
-            }
-            return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
-        }
-
-        val idValue = (String)argumentValue.get("id");
-        if (idValue != null) {
-            Class<?> paramClass = elementType.getCorrespondingClass();
-            Optional<Bookmark> bookmarkIfAny;
-            if(elementType.isAbstract()) {
-                val objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
-                if (objectSpecArg == null) {
-                    throw new IllegalArgumentException(String.format(
-                            "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
-                            elementType.getLogicalTypeName()));
-                }
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
-            } else {
-                bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
-            }
-            return bookmarkIfAny
-                    .map(context.bookmarkService::lookup)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get);
-        }
-        throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-    }
-
-
+    @Override
     public void addGqlArguments(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition.Builder builder,
             final TypeMapper.InputContext inputContext,
             final int upTo) {
 
-        val parameters = objectAction.getParameters();
-        val arguments = parameters.stream()
+        var parameters = objectAction.getParameters();
+        var arguments = parameters.stream()
                 .limit(upTo)
                 .map(objectActionParameter -> gqlArgumentFor(objectActionParameter, inputContext))
                 .collect(Collectors.toList());
@@ -292,9 +161,9 @@ public class RichAction
 
     @Override
     protected void addDataFetchersForChildren() {
-        if(hidden == null) {
-            return;
-        }
+        addMemberMetadataDataFetchers();
+        if(hidden == null)
+			return;
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         validate.addDataFetcher(this);

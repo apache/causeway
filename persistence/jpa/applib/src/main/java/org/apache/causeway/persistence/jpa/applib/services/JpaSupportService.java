@@ -22,7 +22,7 @@ import jakarta.persistence.EntityManager;
 
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides access to the current interaction's {@link EntityManager}(s)

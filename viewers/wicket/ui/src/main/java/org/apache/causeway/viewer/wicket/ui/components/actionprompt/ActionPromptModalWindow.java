@@ -68,7 +68,6 @@ implements ActionPromptWithExtraContent {
         return super.appendShowDialogJavaScript(target);
     }
 
-
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
@@ -79,7 +78,6 @@ implements ActionPromptWithExtraContent {
     public String getExtraContentId() {
         return ID_EXTRA_CONTENT;
     }
-
 
     @Override
     public void setExtraContentPanel(final Component extraContentComponent, final AjaxRequestTarget target) {

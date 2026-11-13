@@ -21,22 +21,22 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
-import lombok.val;
-
-public final class CollectionInteraction
-extends MemberInteraction<ManagedCollection, CollectionInteraction> {
+public record CollectionInteraction(
+        @NonNull InteractionRailway<ManagedCollection> railway)
+implements MemberInteraction<ManagedCollection, CollectionInteraction> {
 
     public static final CollectionInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
+        var managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
 
         final InteractionRailway<ManagedCollection> railway = managedCollection.isPresent()
                 ? InteractionRailway.success(managedCollection.get())
@@ -45,27 +45,21 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
         return new CollectionInteraction(railway);
     }
 
-    CollectionInteraction(@NonNull final InteractionRailway<ManagedCollection> railway) {
-        super(railway);
-    }
-
     /**
      * @return optionally the ManagedCollection based on whether there
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedCollection> getManagedCollection() {
-        return super.getManagedMember().getSuccess();
+        return railway.getSuccess();
     }
 
     /**
      * @return this Interaction's ManagedCollection
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable>
-    ManagedCollection getManagedCollectionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return super.getManagedMemberElseThrow(onFailure);
+    public <X extends Throwable> ManagedCollection getManagedCollectionElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return getManagedMemberElseThrow(onFailure);
     }
 
-
 }
-

@@ -42,9 +42,10 @@ public class SchemaStrategyRich implements SchemaStrategy {
 
     @Override
     public String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration) {
-        return graphqlConfiguration.getSchema().getRich().getTopLevelFieldName();
+        return graphqlConfiguration.schema().rich().topLevelFieldName();
     }
 
+    @Override
     public ElementCustom newProperty(
             final ObjectInteractor holder,
             final OneToOneAssociation otoa,
@@ -52,6 +53,7 @@ public class SchemaStrategyRich implements SchemaStrategy {
     ) {
         return new RichProperty(holder, otoa, context);
     }
+    @Override
     public ElementCustom newCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
@@ -59,6 +61,7 @@ public class SchemaStrategyRich implements SchemaStrategy {
     ) {
         return new RichCollection(holder, otma, context);
     }
+    @Override
     public ElementCustom newAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,

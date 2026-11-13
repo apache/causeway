@@ -15,10 +15,10 @@ The table below lists the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] annotations
 |Layer
 |Applies to
 
-
-|xref:refguide:applib-ant:Entity.adoc[@javax.persistence. +
+|xref:refguide:applib-ant:Entity.adoc[@jakarta. +
+persistence. +
 Entity]
-|Flags that the class is an entity, creating an abstraction layer through which the Causeway framework interacts with the underlying persistent domain object.
+|Indicates that the class is a entity, mapping to a (usually updateable) table or view in the underlying RDBMS.
 
 |Domain / persistence
 |Class
@@ -39,19 +39,31 @@ Causeway also parses the following JPA annotations, but the metadata is currentl
 |Layer
 |Applies to
 
+|xref:refguide:applib-ant:Embeddable.adoc[@jakarta. +
+persistence. +
+Embeddable]
+|Indicates that the class is an embeddable object, stored in-line with a containing entity (which uses the `@Embedded` annotation to do so).
 
-|`@javax.persistence. +
-Transient`
-|Unused
-|Persistence
-|Property
 
-|`@javax.persistence. +
-Table`
-|Unused
+|Domain / persistence
+|Class
+
+
+
+|xref:refguide:applib-ant:Embeddable.adoc[@jakarta. +
+persistence. +
+Table]
+|Indicates the schema and table to which the entity is mapped.
+If not specified, then the default schema is used and the class name is used as the table.
 |Persistence
 |Class
 
+|xref:refguide:applib-ant:Embeddable.adoc[@jakarta. +
+persistence. +
+Transient]
+|Indicates that the property should _not_ be persisted as a column in the mapped table.
+|Persistence
+|Property
 
 |===
 

@@ -20,11 +20,11 @@ package org.apache.causeway.commons.collections;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -33,28 +33,21 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Objects;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
-@RequiredArgsConstructor(staticName="of")
-final class Can_Singleton<T> implements Can<T> {
-
-    private static final long serialVersionUID = 1L;
-
-    private final T element;
+record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Optional<T> getSingleton() {
@@ -151,9 +144,8 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
-        if(predicate==null) {
-            return this; // identity
-        }
+        if(predicate==null)
+			return this; // identity
         return predicate.test(element)
                 ? this // identity
                 : Can.empty();
@@ -166,7 +158,18 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public <R, Z> Can<R> zipMap(final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
-        return Can_Singleton.of(mapper.apply(element, zippedIn.iterator().next()));
+        var next = mapper.apply(element, zippedIn.iterator().next());
+        return next!=null
+                ? new Can_Singleton<>(next)
+                : Can.empty();
+    }
+
+    @Override
+    public <R, Z> Stream<R> zipStream(final @NonNull Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
+        var next = mapper.apply(element, zippedIn.iterator().next());
+        return next!=null
+                ? Stream.of(next)
+                : Stream.empty();
     }
 
     @Override
@@ -179,13 +182,11 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Can<T> addAll(final @Nullable Can<T> other) {
         if(other==null
-                || other.isEmpty()) {
-            return this;
-        }
-        if(other.isCardinalityOne()) {
-            return add(other.getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach));
-        }
-        val newElements = new ArrayList<T>(other.size()+1);
+                || other.isEmpty())
+			return this;
+        if(other.isCardinalityOne())
+			return add(other.getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach));
+        var newElements = new ArrayList<T>(other.size()+1);
         newElements.add(element);
         other.forEach(newElements::add);
         return _CanFactory.ofNonNullElements(newElements);
@@ -193,25 +194,21 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public Can<T> add(final int index, final @Nullable T element) {
-        if(element==null) {
-            return this; // no-op
-        }
-        if(index==0) {
-            return Can.ofStream(Stream.of(element, this.element)); // insert before
-        }
-        if(index==1) {
-            return Can.ofStream(Stream.of(this.element, element)); // append
-        }
+        if(element==null)
+			return this; // no-op
+        if(index==0)
+			return Can.ofStream(Stream.of(element, this.element)); // insert before
+        if(index==1)
+			return Can.ofStream(Stream.of(this.element, element)); // append
         throw new IndexOutOfBoundsException(
                 "cannot add to singleton with index other than 0 or 1; got " + index);
     }
 
     @Override
     public Can<T> replace(final int index, final @Nullable T element) {
-        if(index!=0) {
-            throw new IndexOutOfBoundsException(
+        if(index!=0)
+			throw new IndexOutOfBoundsException(
                 "cannot replace on singleton with index other than 0; got " + index);
-        }
         return element!=null
                 ? Can.ofSingleton(element)
                 : Can.empty();
@@ -219,40 +216,35 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public Can<T> remove(final int index) {
-        if(index==0) {
-            return Can.empty();
-        }
+        if(index==0)
+			return Can.empty();
         throw new IndexOutOfBoundsException(
                 "cannot remove from singleton with index other than 0; got " + index);
     }
 
     @Override
     public Can<T> remove(final @Nullable T element) {
-        if(this.element.equals(element)) {
-            return Can.empty();
-        }
+        if(this.element.equals(element))
+			return Can.empty();
         return this;
     }
 
     @Override
     public Can<T> pickByIndex(final @Nullable int... indices) {
         if(indices==null
-                ||indices.length==0) {
-            return Can.empty();
-        }
+                ||indices.length==0)
+			return Can.empty();
         int pickCount = 0; // actual size of the returned Can<T>
         for(int index:indices) {
             if(index==0) {
                 ++pickCount;
             }
         }
-        if(pickCount==0) {
-            return Can.empty();
-        }
-        if(pickCount==1) {
-            return this;
-        }
-        val newElements = new ArrayList<T>(pickCount);
+        if(pickCount==0)
+			return Can.empty();
+        if(pickCount==1)
+			return this;
+        var newElements = new ArrayList<T>(pickCount);
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
         }
@@ -261,21 +253,17 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public Can<T> pickByIndex(final @Nullable IntStream intStream) {
-        if(intStream==null) {
-            return Can.empty();
-        }
+        if(intStream==null)
+			return Can.empty();
         final long pickCountL = intStream.filter(index->index==0).count();
-        if(pickCountL==0L) {
-            return Can.empty();
-        }
-        if(pickCountL==1L) {
-            return this;
-        }
-        if(pickCountL>Integer.MAX_VALUE) {
-            throw _Exceptions.illegalArgument("pickCount %d is too large to fit into an int", pickCountL);
-        }
+        if(pickCountL==0L)
+			return Can.empty();
+        if(pickCountL==1L)
+			return this;
+        if(pickCountL>Integer.MAX_VALUE)
+			throw _Exceptions.illegalArgument("pickCount %d is too large to fit into an int", pickCountL);
         final int pickCount = (int) pickCountL;
-        val newElements = new ArrayList<T>(pickCount);
+        var newElements = new ArrayList<T>(pickCount);
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
         }
@@ -291,9 +279,8 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public Can<T> subCan(final int startInclusive, final int endExclusive) {
-        if (startInclusive >= endExclusive) {
-            return Can.empty();
-        }
+        if (startInclusive >= endExclusive)
+			return Can.empty();
         return (startInclusive<=0
                     && endExclusive>0)
                 ? this
@@ -302,18 +289,16 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
-        if(maxInnerSize<1) {
-            throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
-        }
+        if(maxInnerSize<1)
+			throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
         // a singular always fits into a single slot
         return Can.of(this);
     }
 
     @Override
     public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
-        if(outerSizeYield<1) {
-            throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
-        }
+        if(outerSizeYield<1)
+			throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
         // a singular always fits into a single slot
         return Can.of(this);
     }
@@ -324,15 +309,23 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
+    public boolean anyMatch(final Predicate<? super T> predicate) {
+        return predicate.test(element);
+    }
+    @Override
+    public boolean allMatch(final Predicate<? super T> predicate) {
+        return predicate.test(element);
+    }
+
+    @Override
     public String toString() {
         return "Can["+element+"]";
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if(obj instanceof Can) {
-            return ((Can<?>) obj).isEqualTo(this);
-        }
+        if(obj instanceof Can)
+			return ((Can<?>) obj).isEqualTo(this);
         return false;
     }
 
@@ -347,16 +340,14 @@ final class Can_Singleton<T> implements Can<T> {
         // -1 ... this (singleton) is before other
         // +1 ... this (singleton) is after other
         if(other==null
-                || other.isEmpty()) {
-            return 1; // all empty Cans are same and come first
-        }
+                || other.isEmpty())
+			return 1; // all empty Cans are same and come first
         final int firstElementComparison = _Objects.compareNonNull(
                 this.element,
                 other.getFirstElseFail());
         if(firstElementComparison!=0
-                || other.isCardinalityOne()) {
-            return firstElementComparison; // when both Cans are singletons, just compare by their contained values
-        }
+                || other.isCardinalityOne())
+			return firstElementComparison; // when both Cans are singletons, just compare by their contained values
         // at this point firstElementComparison is 0 and other is of cardinality MULTIPLE
         return -1; // singletons come before multi-cans
     }
@@ -368,7 +359,7 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public List<T> toArrayList() {
-        val list = _Lists.<T>newArrayList();
+        var list = new ArrayList<T>();
         list.add(element);
         return list;
     }
@@ -384,20 +375,66 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(final @NonNull Supplier<C> collectionFactory) {
-        val collection = collectionFactory.get();
-        collection.add(element);
-        return collection;
-    }
-
-    @Override
     public T[] toArray(final @NonNull Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
+        var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
         array[0] = element;
         return array;
     }
 
+    @Override
+	public T[] toArray(final IntFunction<T[]> generator) {
+    	var array = generator.apply(1);
+    	array[0] = element;
+        return array;
+    }
 
+    @Override
+    public <K> Map<K, T> toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
+        return Map.of(keyExtractor.apply(element), element);
+    }
+    @Override
+    public <K, M extends Map<K, T>> Map<K, T> toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
+        return toMap(keyExtractor);
+    }
 
+    @Override
+    public <R, A> R collect(final @NonNull Collector<? super T, A, R> collector) {
+        var container = collector.supplier().get();
+        collector.accumulator().accept(container, element);
+        return collector.finisher().apply(container);
+    }
+
+    @Override
+    public <K> Map<K, Can<T>> groupBy(
+            final @NonNull Function<? super T, ? extends K> classifier) {
+        return Map.of(classifier.apply(element), this);
+    }
+
+    @Override
+    public <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
+            final @NonNull Function<? super T, ? extends K> classifier,
+            final @NonNull Supplier<M> mapFactory) {
+        return groupBy(classifier);
+    }
+
+    @Override
+    public String join(final @NonNull String delimiter) {
+        var str = element.toString();
+        return str!=null
+                ? str
+                : "";
+    }
+
+    @Override
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
+        var str = toStringFunction.apply(element);
+        return str!=null
+                ? str
+                : "";
+    }
 
 }

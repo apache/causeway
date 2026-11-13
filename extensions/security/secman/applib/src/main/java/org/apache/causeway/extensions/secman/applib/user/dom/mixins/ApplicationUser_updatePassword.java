@@ -38,7 +38,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  *
@@ -70,7 +69,7 @@ public class ApplicationUser_updatePassword {
             final Password newPassword,
             final Password repeatNewPassword) {
 
-        applicationUserRepository.updatePassword(target, newPassword.getPassword());
+        applicationUserRepository.updatePassword(target, newPassword.password());
         return target;
     }
 
@@ -97,10 +96,10 @@ public class ApplicationUser_updatePassword {
 
         Objects.requireNonNull(passwordEncoder);
 
-        val encryptedPassword = target.getEncryptedPassword();
+        var encryptedPassword = target.getEncryptedPassword();
 
         if(target.getEncryptedPassword() != null) {
-            if (!passwordEncoder.matches(existingPassword.getPassword(), encryptedPassword)) {
+            if (!passwordEncoder.matches(existingPassword.password(), encryptedPassword)) {
                 return "Existing password is incorrect";
             }
         }

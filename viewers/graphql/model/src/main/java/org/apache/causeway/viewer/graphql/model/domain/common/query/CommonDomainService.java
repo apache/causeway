@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain.common.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphql.schema.DataFetchingEnvironment;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -34,8 +32,8 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -55,7 +53,7 @@ public class CommonDomainService
 
     private final List<Element> actions = new ArrayList<>();
 
-    public static String typeNameFor(SchemaStrategy schemaStrategy, ObjectSpecification objectSpecification) {
+    public static String typeNameFor(final SchemaStrategy schemaStrategy, final ObjectSpecification objectSpecification) {
         return TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType());
     }
 
@@ -71,9 +69,8 @@ public class CommonDomainService
         this.objectSpecification = objectSpecification;
         this.servicePojo = servicePojo;
 
-        if(isBuilt()) {
-            return;
-        }
+        if(isBuilt())
+			return;
 
         addActions();
 
@@ -87,9 +84,7 @@ public class CommonDomainService
     }
 
     private void addActions() {
-
-        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        val apiScope = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .filter(this::inApiScope)
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
@@ -97,7 +92,6 @@ public class CommonDomainService
                 )
                 .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
     }
-
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -107,13 +101,13 @@ public class CommonDomainService
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment environment) {
+    protected Object fetchData(final DataFetchingEnvironment environment) {
         return getServicePojo();
     }
 
     @Override
     public String toString() {
-        return objectSpecification.getLogicalTypeName();
+        return objectSpecification.logicalTypeName();
     }
 
 }

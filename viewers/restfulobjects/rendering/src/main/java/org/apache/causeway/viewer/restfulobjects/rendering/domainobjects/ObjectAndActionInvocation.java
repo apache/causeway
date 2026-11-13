@@ -36,23 +36,22 @@ import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.ActionResu
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectAndActionInvocation {
 
     public static ObjectAndActionInvocation of(
-            @NonNull final ActionInteraction.Result actionInteractionResult,
-            @NonNull final JsonRepresentation argsJsonRepr,
-            @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
+            final ActionInteraction.@NonNull Result actionInteractionResult,
+            final @NonNull JsonRepresentation argsJsonRepr,
+            final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
         return new ObjectAndActionInvocation(
-                actionInteractionResult.getManagedAction().getOwner(),
-                actionInteractionResult.getManagedAction().getAction(),
+                actionInteractionResult.managedAction().getOwner(),
+                actionInteractionResult.managedAction().getAction(),
                 argsJsonRepr,
-                actionInteractionResult.getParameterList(),
-                actionInteractionResult.getActionReturnedObject(),
+                actionInteractionResult.parameterList(),
+                actionInteractionResult.actionReturnedObject(),
                 selfLink);
     }
 
@@ -63,29 +62,28 @@ public class ObjectAndActionInvocation {
     @Getter private final ManagedObject returnedAdapter;
     @Getter private final ActionResultReprRenderer.SelfLink selfLink;
 
-
     /**
      * not API
      */
     public ActionResultRepresentation.ResultType determineResultType() {
 
-        val returnTypeSpec = this.action.getReturnType();
+        var returnTypeSpec = this.action.getReturnType();
 
-        if (returnTypeSpec.getCorrespondingClass() == void.class) {
+        if (returnTypeSpec.correspondingClass() == void.class) {
             return ActionResultRepresentation.ResultType.VOID;
         }
 
         //FIXME following decision tree should not depend on the returned runtime types
         // but on the returnTypeSpec,
         // which is introspected eagerly on application start and should be the binding contract
-        val actualReturnTypeSpec = returnedAdapter.getSpecification();
+        var actualReturnTypeSpec = returnedAdapter.objSpec();
 
         if (ManagedObjects.isPacked(returnedAdapter)
                 || isVector(actualReturnTypeSpec)) {
 
             // though not strictly required, try to be consistent:  empty list vs populated list
             if(elementAdapters.get().isEmpty()) {
-                val isElementTypeAScalarValue = returnTypeSpec.getElementSpecification()
+                var isElementTypeAScalarValue = returnTypeSpec.explicitElementSpec()
                 .map(elementSpec->isScalarValue(elementSpec))
                 .orElse(false);
                 return isElementTypeAScalarValue
@@ -94,8 +92,8 @@ public class ObjectAndActionInvocation {
             }
 
             // inspect the collection's elements
-            val isListOfDomainObjects = streamElementAdapters()
-                    .allMatch(elementAdapter->!isScalarValue(elementAdapter.getSpecification()));
+            var isListOfDomainObjects = streamElementAdapters()
+                    .allMatch(elementAdapter->!isScalarValue(elementAdapter.objSpec()));
 
             return isListOfDomainObjects
                     ? ActionResultRepresentation.ResultType.LIST
@@ -154,6 +152,5 @@ public class ObjectAndActionInvocation {
     private static boolean isVector(final @NonNull ObjectSpecification spec) {
         return Facets.collectionIsPresent(spec);
     }
-
 
 }

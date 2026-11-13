@@ -19,11 +19,18 @@
 package org.apache.causeway.commons.handler;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
- * Building blocks for the <em>Chain of Responsibility</em> design pattern.
+ * Implements the <em>Chain of Responsibility</em> design pattern.
  * <p>
  * <em>Chain of Responsibility</em> allows passing requests along the chain of handlers,
  * until one of them handles the request.
@@ -33,15 +40,9 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
  * @param <X> request type
  * @param <R> response type
  */
-public interface ChainOfResponsibility<X, R> {
-
-    /**
-     * The {@code request} is passed along the chain of handlers, until one of them handles the request.
-     * @param request
-     * @return response of the first handler that handled the request wrapped in an Optional,
-     * or an empty Optional, if no handler handled the request
-     */
-    R handle(X request);
+public record ChainOfResponsibility<X, R>(
+        String name,
+        Can<? extends Handler<X, R>> handlers) {
 
     /**
      * A chain of responsibility is made up of handlers, that are asked in sequence,
@@ -52,49 +53,60 @@ public interface ChainOfResponsibility<X, R> {
      * @param <X> request type
      * @param <R> response type
      */
-    static interface Handler<X, R> {
+    public static interface Handler<X, R> {
         boolean isHandling(X request);
         R handle(X request);
     }
 
-    /**
-     * Creates a {@link ChainOfResponsibility} for given {@code chainOfHandlers}
-     */
-    static <X, R> ChainOfResponsibility<X, R>
-    of(final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
+    public ChainOfResponsibility(final @Nullable String name, final @Nullable Can<? extends Handler<X, R>> handlers) {
+        this.name = _Strings.nonEmpty(name).orElse("unnamed chain");
+        this.handlers = handlers!=null
+                ? handlers
+                : Can.empty();
+    }
 
-        return new ChainOfResponsibility<X, R>(){
-            @Override
-            public R handle(final X request) {
-                return chainOfHandlers.stream()
-                    .filter(h -> h.isHandling(request))
-                    .findFirst()
-                    .orElseThrow(()->
-                        _Exceptions.noSuchElement("no handler found for request %s", request))
-                    .handle(request);
-            }
-        };
+    // could be widened to SequencedCollection once available
+    public ChainOfResponsibility(final String name, final @Nullable List<? extends Handler<X, R>> handlers) {
+        this(name, Can.ofCollection(handlers));
+    }
+
+    public ChainOfResponsibility(final String name, final @Nullable Handler<X, R>[] handlers) {
+        this(name, Can.ofArray(handlers));
     }
 
     /**
-     * Creates a named {@link ChainOfResponsibility} for given {@code chainOfHandlers}
+     * The {@code request} is passed along the chain of handlers, until one of them handles the request.
+     * <p>
+     * Strict variant of {@link #handle(Object)}.
+     * @return response of the first handler that handled the request (returning {@code null} is NOT allowed),
+     * or throws {@link NoSuchElementException}, if no handler handled the request
+     * @throws NoSuchElementException
+     * @see #handle(Object)
      */
-    static <X, R> ChainOfResponsibility<X, R>
-    named(  final String name,
-            final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
-
-    return new ChainOfResponsibility<X, R>(){
-        @Override
-        public R handle(final X request) {
-            return chainOfHandlers.stream()
-                .filter(h -> h.isHandling(request))
-                .findFirst()
-                .orElseThrow(()->
-                    _Exceptions.noSuchElement("no %s handler found for request %s", name, request))
-                .handle(request);
+    public R handleElseFail(final X request) {
+        for(var handler : handlers) {
+            if(!handler.isHandling(request)) continue;
+            return Objects.requireNonNull(handler.handle(request), ()->
+                "a handler returend null for request %s".formatted(request));
         }
-    };
-}
+        throw _Exceptions.noSuchElement("no handler found for request %s", request);
+    }
 
+    /**
+     * The {@code request} is passed along the chain of handlers, until one of them handles the request.
+     * <p>
+     * Permissive variant of {@link #handleElseFail(Object)}.
+     * @return response of the first handler that handled the request (returning {@code null} is allowed)
+     * wrapped in an Optional,
+     * or an empty Optional, if no handler handled the request
+     * @see #handleElseFail(Object)
+     */
+    public Optional<R> handle(final X request) {
+        for(var handler : handlers) {
+            if(!handler.isHandling(request)) continue;
+            return Optional.ofNullable(handler.handle(request));
+        }
+        return Optional.empty();
+    }
 
 }

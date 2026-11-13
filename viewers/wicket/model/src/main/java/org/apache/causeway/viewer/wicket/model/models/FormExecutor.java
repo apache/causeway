@@ -24,11 +24,33 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
 /**
- * Passed through the {@link ActionModelImpl} or {@link ScalarModel}, allowing
+ * Passed through the {@link ActionModel} or {@link UiAttributeWkt}, allowing
  * two different Wicket UI components (eg owning <code>ActionPanel</code> and
  * <code>ActionParametersFormPanel</code> to interact.
  */
 public interface FormExecutor extends Serializable {
+
+    enum ActionResultResponseType {
+        OBJECT,
+        COLLECTION,
+        /**
+         * Renders the value-type in its own <i>Standalone Value Page</i>.
+         */
+        VALUE,
+        VALUE_CLOB,
+        VALUE_BLOB,
+        VALUE_LOCALRESPATH_AJAX,
+        VALUE_LOCALRESPATH_NOAJAX,
+        VALUE_URL_AJAX,
+        VALUE_URL_NOAJAX,
+        /** render the 'empty page' */
+        VOID_AS_EMPTY,
+        /**
+         * Issues a (current) page reload.
+         */
+        RELOAD,
+        SIGN_IN;
+    }
 
     enum FormExecutionOutcome {
 

@@ -22,7 +22,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,7 +33,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 
 public final class ClassExtensions {
-
 
     private ClassExtensions() {
     }
@@ -122,8 +120,7 @@ public final class ClassExtensions {
     }
 
     public static boolean exists(final Class<?> cls, final String resourceName) {
-        final URL url = _Resources.getResourceUrl(cls, resourceName);
-        return url != null;
+        return _Resources.lookupResourceUrl(cls, resourceName).isPresent();
     }
 
     static Class<?> asWrapped(final Class<?> primitiveClassExtendee) {

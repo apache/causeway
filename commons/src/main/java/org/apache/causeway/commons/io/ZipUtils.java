@@ -38,23 +38,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.Value;
-import lombok.val;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -65,37 +59,38 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ZipUtils {
 
-    //XXX record candidate
-    @Builder
-    @Value @Accessors(fluent=true)
-    public static class ZipOptions {
-        @Builder.Default
-        private final int bufferSize = 64*1024; // 64k
-        /**
-         * The {@link java.nio.charset.Charset charset} to be
-         *        used to decode the ZIP entry name (ignored if the
-         *        <a href="package-summary.html#lang_encoding"> language
-         *        encoding bit</a> of the ZIP entry's general purpose bit
-         *        flag is set).
-         */
-        @Builder.Default @NonNull
-        private final Charset zipEntryCharset = StandardCharsets.UTF_8;
+    @Builder()
+    public record ZipOptions(int bufferSize,
+            /**
+             * The {@link java.nio.charset.Charset charset} to be
+             *        used to decode the ZIP entry name (ignored if the
+             *        <a href="package-summary.html#lang_encoding"> language
+             *        encoding bit</a> of the ZIP entry's general purpose bit
+             *        flag is set).
+             */
+            @NonNull Charset zipEntryCharset,
+            @NonNull Predicate<ZipEntry> zipEntryFilter
+            ) {
 
-        @Builder.Default @NonNull
-        private final Predicate<ZipEntry> zipEntryFilter = _Predicates.alwaysTrue();
+        // canonical constructor
+        public ZipOptions(
+                final int bufferSize,
+                final Charset zipEntryCharset,
+                final Predicate<ZipEntry> zipEntryFilter) {
+            this.bufferSize = bufferSize>0 ? bufferSize : 64*1024; // 64k
+            this.zipEntryCharset = zipEntryCharset!=null ? zipEntryCharset : StandardCharsets.UTF_8;
+            this.zipEntryFilter = zipEntryFilter!=null ? zipEntryFilter : _Predicates.alwaysTrue();
+        }
     }
 
-    //XXX record candidate
-    @RequiredArgsConstructor
-    public static class ZipEntryDataSource implements DataSource {
-        @Getter @Accessors(fluent=true)
-        private final ZipEntry zipEntry;
-        private final byte[] bytes;
+    public record ZipEntryDataSource(
+            ZipEntry zipEntry,
+            byte[] bytes) implements DataSource {
 
         @Override
-        public <T> Try<T> tryReadAll(@NonNull final Function<InputStream, Try<T>> consumingMapper) {
+        public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
             try {
-                try(val bis = new ByteArrayInputStream(bytes)){
+                try(var bis = new ByteArrayInputStream(bytes)){
                     return consumingMapper.apply(bis);
                 }
             } catch (Throwable e) {
@@ -139,10 +134,10 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
-        
+        var zipEntryDataSources = new ArrayList<ZipEntryDataSource>();
+
         zippedSource.consumeAsFile(zipFile->{
-            try (FileSystem fs = FileSystems.newFileSystem(zipFile.toPath(), null)) {
+            try (FileSystem fs = FileSystems.newFileSystem(zipFile.toPath())) {
                 try (Stream<Path> entries = Files.walk(fs.getPath("/"))) {
                     final List<Path> filesInZip = entries.filter(Files::isRegularFile).collect(Collectors.toList());
                     for(Path path : filesInZip) {
@@ -154,7 +149,7 @@ public class ZipUtils {
                 }
             }
         });
-        
+
         return zipEntryDataSources.stream();
     }
 
@@ -168,7 +163,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
+        var zipEntryDataSources = _Lists.<ZipEntryDataSource>new ArrayList<XXX>();
 
         zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(
@@ -190,7 +185,6 @@ public class ZipUtils {
         return zipEntryDataSources.stream();
     }*/
 
-
     /**
      * Shortcut for {@code streamZipEntries(zippedSource, ZipOptions.builder().build())}
      * @see #streamZipEntries(DataSource, ZipOptions)
@@ -207,7 +201,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList(1);
+        var zipEntryDataSources = new ArrayList<ZipEntryDataSource>(1);
 
         zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(
@@ -216,7 +210,9 @@ public class ZipUtils {
 
                 ZipEntry zipEntry;
                 while((zipEntry = in.getNextEntry())!=null) {
-                    if(zipEntry.isDirectory()) continue;
+                    if(zipEntry.isDirectory()) {
+						continue;
+					}
                     if(zipOptions.zipEntryFilter().test(zipEntry)) {
                         zipEntryDataSources.add(
                                 new ZipEntryDataSource(zipEntry, _Bytes.ofKeepOpen(in)));
@@ -242,7 +238,7 @@ public class ZipUtils {
     // -- WRITING
 
     public static byte[] zipToBytes(final @NonNull Stream<ZipEntryDataSource> entryStream) {
-        val buffer = DataPeer.inMemory(16*1024); // 16k default
+        var buffer = DataPeer.inMemory(16*1024); // 16k default
         writeTo(entryStream, buffer);
         return buffer.bytes();
     }
@@ -250,7 +246,7 @@ public class ZipUtils {
     @SneakyThrows
     public static void writeTo(final @NonNull Stream<ZipEntryDataSource> entryStream, final @NonNull DataSink dataSink) {
         dataSink.writeAll(os->{
-            try(val zos = new ZipOutputStream(os)) {
+            try(var zos = new ZipOutputStream(os)) {
                 entryStream.forEach(entry->entry.writeTo(zos));
             }
         });

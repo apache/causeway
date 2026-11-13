@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 
 /**
  * @since 2.0 {@index}
  */
 public interface HasBookmarking {
-    @XmlAttribute(required = false)
+
     BookmarkPolicy getBookmarking();
     void setBookmarking(BookmarkPolicy bookmarking);
 }

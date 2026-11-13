@@ -33,19 +33,17 @@ import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtEx
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-
 @Service
 @Named(ExecutionSubscriberForExecutionOutbox.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Outbox")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
-
+@Slf4j
 public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionSubscriberForExecutionOutbox";
@@ -55,11 +53,11 @@ public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscribe
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getExecutionOutbox().getPersist().isEnabled();
+        return causewayConfiguration.extensions().executionOutbox().persist().isEnabled();
     }
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public void onExecution(final Execution<?, ?> execution) {
         if (!isEnabled()) {
             return;
         }

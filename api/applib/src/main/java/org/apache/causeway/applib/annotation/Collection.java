@@ -40,9 +40,9 @@ import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 @Target({
         ElementType.METHOD,
         ElementType.FIELD,
+        ElementType.RECORD_COMPONENT,
         ElementType.TYPE,
-        ElementType.ANNOTATION_TYPE
-})
+        ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation

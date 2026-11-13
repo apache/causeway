@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
-
 public class RichPropertyAutoComplete extends Element {
 
     private static final String SEARCH_PARAM_NAME = "search";
@@ -50,10 +48,10 @@ public class RichPropertyAutoComplete extends Element {
         super(context);
         this.memberInteractor = memberInteractor;
 
-        val otoa = memberInteractor.getObjectMember();
+        var otoa = memberInteractor.getObjectMember();
         if (otoa.hasAutoComplete()) {
-            val elementType = otoa.getElementType();
-            val fieldBuilder = newFieldDefinition()
+            var elementType = otoa.getElementType();
+            var fieldBuilder = newFieldDefinition()
                     .name("autoComplete")
                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, SchemaType.RICH)));
             fieldBuilder.argument(GraphQLArgument.newArgument()
@@ -69,18 +67,18 @@ public class RichPropertyAutoComplete extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
             return null;
         }
 
-        val association = memberInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var association = memberInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
-        val autoCompleteManagedObjects = association.getAutoComplete(managedObject, searchArg, InteractionInitiatedBy.USER);
+        var searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
+        var autoCompleteManagedObjects = association.getAutoComplete(managedObject, searchArg, InteractionInitiatedBy.USER);
 
         return autoCompleteManagedObjects.stream()
                 .map(ManagedObject::getPojo)

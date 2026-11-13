@@ -23,13 +23,12 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class DisabledFacetOnPropertyFromImmutable
 extends DisabledFacetAbstract {
@@ -61,12 +60,10 @@ extends DisabledFacetAbstract {
 
     @Override
     public Optional<VetoReason> disabledReason(final ManagedObject target) {
-        val reason = reasonProvidingImmutableFacet.disabledReason(target);
+        var reason = reasonProvidingImmutableFacet.disabledReason(target);
         // ensure non empty reason
         return reason
                 .or(()->VetoReason.immutableIfNoReasonGivenByImmutableFacet().toOptional());
     }
-
-
 
 }

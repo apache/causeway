@@ -18,11 +18,6 @@
  */
 package org.apache.causeway.commons.internal.resources;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +30,6 @@ import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.YamlUtils;
 
 import lombok.Data;
-import lombok.val;
 
 class JsonYamlReaderTest {
 
@@ -55,8 +49,8 @@ class JsonYamlReaderTest {
     }
 
     @Test
-    void loadCustomerFromJson() throws JsonParseException, JsonMappingException, IOException {
-        val customer = JsonUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.json"))
+    void loadCustomerFromJson() {
+        var customer = JsonUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.json"))
                 .ifFailureFail()
                 .getValue()
                 .orElse(null);
@@ -65,7 +59,7 @@ class JsonYamlReaderTest {
 
     @Test
     void loadCustomerFromYaml() {
-        val customer = YamlUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.yml"))
+        var customer = YamlUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.yml"))
                 .ifFailureFail()
                 .getValue()
                 .orElse(null);

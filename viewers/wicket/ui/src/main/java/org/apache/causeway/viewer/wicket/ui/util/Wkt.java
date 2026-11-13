@@ -20,8 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -44,6 +46,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -63,8 +66,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.NonCachingImage;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -92,8 +98,8 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
@@ -105,14 +111,15 @@ import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
+import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowToggleWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;
@@ -120,8 +127,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoP
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -132,6 +137,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
+import de.agilecoders.wicket.jquery.IKey;
 import de.agilecoders.wicket.jquery.Key;
 
 /**
@@ -195,9 +201,8 @@ public class Wkt {
             final @Nullable String attributeName,
             final @Nullable String attributeValue) {
         if(component==null
-                || _Strings.isEmpty(attributeName)) {
+                || _Strings.isEmpty(attributeName))
             return component;
-        }
         if(_Strings.isEmpty(attributeValue)) {
             component.add(AttributeModifier.remove(attributeName));
             return component;
@@ -265,9 +270,8 @@ public class Wkt {
         private static final long serialVersionUID = 1L;
         @Override public void onComponentTag(final Component component, final ComponentTag tag) {
             super.onComponentTag(component, tag);
-            if(component.isEnabled()) {
+            if(component.isEnabled())
                 return;
-            }
             tag.remove("disabled");
             tag.put("readonly","readonly");
         }
@@ -300,9 +304,8 @@ public class Wkt {
     }
 
     public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
-        if(component==null) {
+        if(component==null)
             return;
-        }
         if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
             component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
         }
@@ -316,7 +319,7 @@ public class Wkt {
             final PageParameters pageParameters,
             final SerializableBooleanSupplier dynamicVisibility) {
 
-        return new BookmarkablePageLink<Void>(
+        return new BookmarkablePageLink<>(
                 id, pageClass, pageParameters) {
 
             private static final long serialVersionUID = 1L;
@@ -364,9 +367,9 @@ public class Wkt {
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
 
         // be aware: settings is not Serializable
-        val isPreventDoubleClickForFormSubmit = settings.isPreventDoubleClickForFormSubmit();
+        var isPreventDoubleClickForFormSubmit = settings.preventDoubleClickForFormSubmit();
 
-        return settings.isUseIndicatorForFormSubmit()
+        return settings.useIndicatorForFormSubmit()
         ? new IndicatingAjaxButton(id, labelModel) {
             private static final long serialVersionUID = 1L;
             @Override public void onSubmit(final AjaxRequestTarget target) {
@@ -523,17 +526,14 @@ public class Wkt {
              * Whether it is safe (free of side-effects) to load/access given model's object.
              * <p>
              * As of [CAUSEWAY-3658], don't call
-             * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
+             * {@link org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt#getObject()},
              * when the model's object is not transiently already loaded, because otherwise it would
              * enforce a page-reload as side-effect.
              */
             private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
-                if(model instanceof DataRowToggleWkt) {
-                    var chainedModel = ((DataRowToggleWkt)model).getChainedModel();
-                    if(chainedModel instanceof DataRowWkt) {
-                        final DataRowWkt dataRowWkt = (DataRowWkt)chainedModel;
-                        return dataRowWkt.hasMemoizedDataRow();
-                    }
+                if(model instanceof DataRowToggleWkt dataRowToggleWkt) {
+                    if(dataRowToggleWkt.delegate() instanceof DataRowWkt dataRowWkt)
+                        return dataRowWkt.isTableDataLoaded();
                 }
                 return false;
             }
@@ -615,18 +615,18 @@ public class Wkt {
     }
 
     public static String cssNormalize(final Identifier identifier) {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("causeway-");
-        sb.append(identifier.getLogicalType().getLogicalTypeName());
-        if(_Strings.isNullOrEmpty(identifier.getMemberLogicalName())) {
+        sb.append(identifier.logicalType().logicalName());
+        if(_Strings.isNullOrEmpty(identifier.memberLogicalName())) {
             sb.append("-");
-            sb.append(identifier.getMemberLogicalName());
+            sb.append(identifier.memberLogicalName());
         }
         return cssNormalize(sb.toString());
     }
 
     public static String cssNormalize(final String cssClass) {
-        val trimmed = _Strings.blankToNullOrTrim(cssClass);
+        var trimmed = _Strings.blankToNullOrTrim(cssClass);
         return _Strings.isNullOrEmpty(trimmed)
                 ? null
                 : cssClass.replaceAll("\\.", "-").replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
@@ -643,7 +643,7 @@ public class Wkt {
     public <T extends Serializable> DropDownChoice<T> dropDownChoice(final String id,
             final IModel<T> model,
             final List<? extends T> choices) {
-        return new DropDownChoice<T>(id, model, choices);
+        return new DropDownChoice<>(id, model, choices);
     }
 
     public <T extends Serializable> DropDownChoice<T> dropDownChoiceWithAjaxUpdate(final String id,
@@ -671,11 +671,11 @@ public class Wkt {
      */
     public void fileDownloadClickHandler(final IModel<File> model, final CommonMimeType mime, final String fileName) {
         final File file = model.getObject();
-        if (file == null) {
+        if (file == null)
             throw _Exceptions.illegalState("Failed to retrieve a File object from model %s", model.getClass().getName());
-        }
         RequestCycle.get().scheduleRequestHandlerAfterCurrent(
                 Wkt.fileResourceStreamRequestHandler(file, mime)
+                .setCacheDuration(Duration.ZERO)
                 .setFileName(fileName)
                 .setContentDisposition(ContentDisposition.ATTACHMENT));
     }
@@ -694,7 +694,7 @@ public class Wkt {
                 new org.apache.wicket.util.file.File(file)) {
             private static final long serialVersionUID = 1L;
             @Override public String getContentType() {
-                return mime.getBaseType();
+                return mime.baseType();
             }
         };
     }
@@ -704,17 +704,43 @@ public class Wkt {
     public FileUploadField fileUploadField(
             final String id,
             final String initialCaption,
+            final Wicket settings,
             final IModel<List<FileUpload>> model) {
-        val fileUploadField = new FileUploadFieldWithNestingFix(
+        var fileUploadField = new FileUploadFieldWithNestingFix(
                 id,
                 model,
-                new FileInputConfig()
-                    .maxFileCount(1)
-                    .mainClass("input-group-sm")
-                    .initialCaption(initialCaption)
-                    .captionClass("form-control-sm")
-                    .showUpload(false));
+                createFileInputConfig(initialCaption, settings.fileUpload()));
         return fileUploadField;
+    }
+    
+    /**
+     * @see https://plugins.krajee.com/file-input/plugin-options
+     */
+    static final class FileInputConfigWithPreviewControl extends FileInputConfig {
+		private static final long serialVersionUID = 1L;
+	    static final IKey<List<String>> DisabledPreviewTypes = newKey("disabledPreviewTypes", null);
+	    static final IKey<List<String>> DisabledPreviewMimeTypes = newKey("disabledPreviewMimeTypes", null);
+	    
+	    public FileInputConfigWithPreviewControl disabledPreviewTypes(List<String> disabledPreviewTypes) {
+	        put(DisabledPreviewTypes, disabledPreviewTypes);
+	        return this;
+	    }
+	    public FileInputConfigWithPreviewControl disabledPreviewMimeTypes(List<String> disabledPreviewMimeTypes) {
+	        put(DisabledPreviewMimeTypes, disabledPreviewMimeTypes);
+	        return this;
+	    }
+    }
+    
+    private FileInputConfig createFileInputConfig(final String initialCaption, final Wicket.FileUpload fileUploadSettings) {
+    	return new FileInputConfigWithPreviewControl()
+    			.disabledPreviewTypes(fileUploadSettings.disabledPreviewTypes())
+    			.disabledPreviewMimeTypes(fileUploadSettings.disabledPreviewMimeTypes())
+                .maxFileCount(1)
+                .mainClass("input-group-sm")
+                .initialCaption(initialCaption)
+                .captionClass("form-control-sm")
+                .showUpload(false)
+                .showPreview(fileUploadSettings.showPreview());
     }
 
     // -- FONT AWESOME
@@ -799,7 +825,7 @@ public class Wkt {
     // -- FORM
 
     public static Form<Object> form(final String id) {
-        return new Form<Object>(id);
+        return new Form<>(id);
     }
 
     public static Form<Object> formAdd(final MarkupContainer container, final String id) {
@@ -808,6 +834,17 @@ public class Wkt {
 
     // -- IMAGE
 
+    public Image imageNonCaching(final String id, final BufferedImage buffImg) {
+        var imageResource = new BufferedDynamicImageResource();
+        imageResource.setImage(buffImg);
+
+        var thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
+
+        var wicketImage = new NonCachingImage(id, thumbnailImageResource);
+        wicketImage.setOutputMarkupId(true);
+        return wicketImage;
+    }
+
     public Image imageCachable(final String id, final ResourceReference imageResource) {
         return new Image(id, imageResource) {
             private static final long serialVersionUID = 1L;
@@ -815,8 +852,22 @@ public class Wkt {
         };
     }
 
+    public Image imageEmbedded(final String id, final DataUri dataUri) {
+        return new Image(id, "embedded") {
+            private static final long serialVersionUID = 1L;
+            @Override protected boolean shouldAddAntiCacheParameter() { return false; }
+            @Override protected String buildSrcAttribute(final ComponentTag tag) {
+                return dataUri.toExternalForm();
+            }
+        };
+    }
+
     public Image imageAddCachable(final MarkupContainer container, final String id, final ResourceReference imageResource) {
         return add(container, imageCachable(id, imageResource));
+    }
+
+    public Image imageAddEmbedded(final MarkupContainer container, final String id, final DataUri imageResource) {
+        return add(container, imageEmbedded(id, imageResource));
     }
 
     // -- LABEL
@@ -834,7 +885,7 @@ public class Wkt {
      *  is dynamically based on the provided {@link UiString}.
      */
     public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<UiString> labelModel) {
-        val label = new Label(id, ()->labelModel.get().getString()) {
+        var label = new Label(id, labelModel.get()::string) {
             private static final long serialVersionUID = 1L;
             // we are using this method as a hook to update the ESCAPE flag before rendering
             @Override public <C> IConverter<C> getConverter(final Class<C> type) {
@@ -887,6 +938,12 @@ public class Wkt {
 
     // -- LINK
 
+    public ResourceLink<Void> link(final String id, final BufferedImage buffImg) {
+        var imageResource = new BufferedDynamicImageResource();
+        imageResource.setImage(buffImg);
+        return new ResourceLink<>(id, imageResource);
+    }
+
     public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
         return new AjaxLinkNoPropagate(id, onClick);
     }
@@ -931,7 +988,7 @@ public class Wkt {
             final String id,
             final List<T> list,
             final SerializableConsumer<ListItem<T>> itemPopulator) {
-        return new ListView<T>(id, list) {
+        return new ListView<>(id, list) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
                 itemPopulator.accept(item);
@@ -943,7 +1000,7 @@ public class Wkt {
             final String id,
             final IModel<? extends List<T>> listModel,
             final SerializableConsumer<ListItem<T>> itemPopulator) {
-        return new ListView<T>(id, listModel) {
+        return new ListView<>(id, listModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
                 itemPopulator.accept(item);
@@ -1000,10 +1057,10 @@ public class Wkt {
             final String id,
             final Stream<T> elementStream,
             final BiConsumer<WebMarkupContainer, T> itemPopulator) {
-        val repeatingView = add(container, repeatingView(id));
+        var repeatingView = add(container, repeatingView(id));
         elementStream
         .forEach(t->{
-            val innerContainer = Wkt.container(repeatingView.newChildId());
+            var innerContainer = Wkt.container(repeatingView.newChildId());
             repeatingView.add(innerContainer);
             itemPopulator.accept(innerContainer, t);
         });
@@ -1016,7 +1073,7 @@ public class Wkt {
             final String id, final int index, final IModel<T> model,
             final SerializableFunction<T, String> cssClassProvider) {
 
-        return new OddEvenItem<T>(id, index, model) {
+        return new OddEvenItem<>(id, index, model) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -1030,11 +1087,11 @@ public class Wkt {
     // -- TEXT AREA
 
     public TextArea<String> textArea(final String id, final IModel<String> textModel) {
-        return new TextArea<String>(id, textModel);
+        return new TextArea<>(id, textModel);
     }
 
     public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
-        return new TextArea<String>(id, textModel) {
+        return new TextArea<>(id, textModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
@@ -1056,7 +1113,7 @@ public class Wkt {
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
             final @NonNull Optional<IConverter<T>> converter) {
-        return new TextAreaWithConverter<T>(id, model, type, converter);
+        return new TextAreaWithConverter<>(id, model, type, converter);
     }
 
     // -- TEXT FIELD
@@ -1069,7 +1126,7 @@ public class Wkt {
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
             final @NonNull Optional<IConverter<T>> converter) {
-        return new TextFieldWithConverter<T>(id, model, type, converter);
+        return new TextFieldWithConverter<>(id, model, type, converter);
     }
 
     public <T> TextField<T> passwordFieldWithConverter(
@@ -1077,7 +1134,7 @@ public class Wkt {
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
             final @NonNull Optional<IConverter<T>> converter) {
-        return new TextFieldWithConverter<T>(id, model, type, converter) {
+        return new TextFieldWithConverter<>(id, model, type, converter) {
             private static final long serialVersionUID = 2L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
@@ -1157,11 +1214,10 @@ public class Wkt {
             final @Nullable FormComponent<?> formComponent,
             final @Nullable IValidationError error) {
         if(formComponent==null
-                || error==null) {
+                || error==null)
             return true;
-        }
         if(error instanceof ValidationError) {
-            val message = ((ValidationError)error).getMessage();
+            var message = ((ValidationError)error).getMessage();
             // use plain error message from ConversionException, circumventing resource bundles.
             if(_Strings.isNotEmpty(message)) {
                 formComponent.error(message);

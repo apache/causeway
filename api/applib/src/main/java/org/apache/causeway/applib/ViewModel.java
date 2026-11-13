@@ -27,10 +27,10 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 /**
  * Indicates that an object belongs to the UI/application layer and is intended to be used as a view-model.
- * <p>
- * Instances of {@link ViewModel} must include (at least) one public constructor.
- * <p>
- * Contract:
+ *
+ * <p> Instances of {@link ViewModel} must include (at least) one public constructor.
+ *
+ * <p> Contract:
  * <ul>
  * <li>there is either exactly one public constructor or if there are more than one,
  * then only one of these is annotated with any of {@code @Inject} or {@code @Autowired(required=true)}
@@ -44,8 +44,8 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
  * Naturally this also allows for the idiom of passing in the {@link ServiceInjector} as an argument
  * and programmatically resolve any field-style injection points via {@link ServiceInjector#injectServicesInto(Object)},
  * that is, if already required during <i>construction</i>.
- * <p>
- * After a view-model got new-ed up by the framework (or programmatically via the {@link FactoryService}),
+ *
+ * <p> After a view-model got new-ed up by the framework (or programmatically via the {@link FactoryService}),
  * {@link ServiceInjector#injectServicesInto(Object)} is called on the viewmodel instance,
  * regardless of what happened during <i>construction</i>.
  *
@@ -55,13 +55,12 @@ public interface ViewModel {
 
     /**
      * Obtain a memento of the view-model. (Optional)
-     * <p>
-     * Captures the state of this view-model as {@link String},
+     *
+     * <p> Captures the state of this view-model as {@link String},
      * which can be passed in to this view-model's constructor for later re-construction.
-     * <p>
-     * The framework automatically takes care of non-URL-safe strings,
-     * by passing them through {@link java.net.URLEncoder}/
-     * {@link java.net.URLDecoder} for encoding and decoding respectively.
+     *
+     * <p> The framework automatically takes care of non-URL-safe strings, null and the empty String.
+     * Those view-model mementos are also digitally signed, before the are handed out to clients.
      */
     @Programmatic
     String viewModelMemento();

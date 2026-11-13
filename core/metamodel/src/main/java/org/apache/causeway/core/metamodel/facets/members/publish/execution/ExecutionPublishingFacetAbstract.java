@@ -30,13 +30,8 @@ implements ExecutionPublishingFacet {
         return ExecutionPublishingFacet.class;
     }
 
-    public ExecutionPublishingFacetAbstract(final FacetHolder holder) {
+    protected ExecutionPublishingFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 
-    public ExecutionPublishingFacetAbstract(
-            final FacetHolder facetHolder,
-            final Precedence precedence) {
-        super(type(), facetHolder, precedence);
-    }
 }

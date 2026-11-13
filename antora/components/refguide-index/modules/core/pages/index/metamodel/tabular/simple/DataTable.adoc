@@ -1,4 +1,4 @@
-= DataTable
+= DataTable _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents a collection of domain objects (typically entity instances).
@@ -8,7 +8,7 @@ Represents a collection of domain objects (typically entity instances).
 [source,java]
 .DataTable.java
 ----
-class DataTable {
+record DataTable {
   DataTable(ObjectSpecification elementType)     // <.>
   DataTable(ObjectSpecification elementType, Predicate<ObjectAssociation> columnFilter)     // <.>
   DataTable(ObjectSpecification elementType, Can<? extends ObjectAssociation> dataColumns)     // <.>
@@ -18,14 +18,15 @@ class DataTable {
   String getLogicalName()     // <.>
   int getElementCount()     // <.>
   Stream<ManagedObject> streamDataElements()
-  DataTable addDataElementsFrom(DataTable otherTable)     // <.>
-  DataTable setDataElements(Iterable<ManagedObject> dataElements)     // <.>
-  void setDataElementPojos(Iterable<?> dataElementPojos)     // <.>
-  DataTable populateEntities()     // <.>
-  DataTable populateEntities(Query<?> query)     // <.>
+  DataTable withDataElementsFrom(DataTable otherTable)     // <.>
+  DataTable withDataElements(Iterable<ManagedObject> dataElements)     // <.>
+  DataTable withDataElementPojos(Iterable<?> dataElementPojos)     // <.>
+  DataTable withEntities()     // <.>
+  DataTable withEntities(Query<?> query)     // <.>
   DataTable visit(CellVisitor visitor)
   DataTable visit(CellVisitor visitor, Predicate<DataColumn> columnFilter)
-  Blob exportToBlob(CollectionContentsExporter exporter)     // <.>
+  TabularSheet toTabularSheet(AccessMode accessMode)
+  Blob exportToBlob(TabularExporter exporter, AccessMode accessMode)     // <.>
   Predicate<ObjectAssociation> columnFilterIncluding(Where whereToInclude)
   Predicate<ObjectAssociation> columnFilterExcludingMixins()
   Predicate<ObjectAssociation> columnFilterIncludingEnabledForSnapshot()
@@ -67,32 +68,32 @@ Unique within application scope, can act as an id.
 --
 Count data rows.
 --
-<.> xref:#addDataElementsFrom_DataTable[addDataElementsFrom(DataTable)]
+<.> xref:#withDataElementsFrom_DataTable[withDataElementsFrom(DataTable)]
 +
 --
-Adds all data-elements from the other table to this table.
+Returns a new table, populated from this and the other table.
 --
-<.> xref:#setDataElements_Iterable[setDataElements(Iterable)]
+<.> xref:#withDataElements_Iterable[withDataElements(Iterable)]
 +
 --
-Sets the data-elements of this table, which make up the rows of this table.
+Returns a new table instance with the data-elements, which make up the rows of the new table.
 --
-<.> xref:#setDataElementPojos_Iterable[setDataElementPojos(Iterable)]
+<.> xref:#withDataElementPojos_Iterable[withDataElementPojos(Iterable)]
 +
 --
-Sets the data-elements of this table from given pojos, that are adapted to xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] (s).
+Returns a new table instance with data-elements from given pojos, that are adapted to xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] (s)..
 --
-<.> xref:#populateEntities_[populateEntities()]
+<.> xref:#withEntities_[withEntities()]
 +
 --
-Populates this table from the underlying (default) persistence layer.
+Returns a new table, populated from the underlying (default) persistence layer.
 --
-<.> xref:#populateEntities_Query[populateEntities(Query)]
+<.> xref:#withEntities_Query[withEntities(Query)]
 +
 --
-Populates this table from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
+Returns a new table, populated from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
 --
-<.> xref:#exportToBlob_CollectionContentsExporter[exportToBlob(CollectionContentsExporter)]
+<.> xref:#exportToBlob_TabularExporter_AccessMode[exportToBlob(TabularExporter, AccessMode)]
 +
 --
 Typical use-case:
@@ -105,35 +106,35 @@ Typical use-case:
 
 Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all properties as columns, excluding mixed-in ones. (For more control on which columns to include, consider a different constructor.)
 
-The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+The table can be populated later on using _DataTable#withDataElements(Iterable)_ or _#withDataElementPojos(Iterable)_ .
 
 [#DataTable_ObjectSpecification_Predicate]
 === DataTable(ObjectSpecification, Predicate)
 
 Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all (including mixed-in) associations as columns, that pass given _columnFilter_ . If the filter is _null_ it acts as a pass-through.
 
-The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+The table can be populated later on using _DataTable#withDataElements(Iterable)_ or _#withDataElementPojos(Iterable)_ .
 
 [#DataTable_ObjectSpecification_Can]
 === DataTable(ObjectSpecification, Can)
 
 Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type.
 
-The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+The table can be populated later on using _DataTable#withDataElements(Iterable)_ or _#withDataElementPojos(Iterable)_ .
 
 [#forDomainType_Class]
 === forDomainType(Class)
 
 Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all properties as columns, excluding mixed-in ones. (For more control on which columns to include, consider _#forDomainType(Class, Predicate)_ or a constructor that fits.)
 
-The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+The table can be populated later on using _DataTable#withDataElements(Iterable)_ or _#withDataElementPojos(Iterable)_ .
 
 [#forDomainType_Class_Predicate]
 === forDomainType(Class, Predicate)
 
 Returns an empty xref:refguide:core:index/metamodel/tabular/simple/DataTable.adoc[DataTable] for given domain object type, with all (including mixed-in) associations as columns, that pass given _columnFilter_ . If the filter is _null_ it acts as a pass-through.
 
-The table can be populated later on using _DataTable#setDataElements(Iterable)_ or _#setDataElementPojos(Iterable)_ .
+The table can be populated later on using _DataTable#withDataElements(Iterable)_ or _#withDataElementPojos(Iterable)_ .
 
 [#getLogicalName_]
 === getLogicalName()
@@ -145,36 +146,42 @@ Unique within application scope, can act as an id.
 
 Count data rows.
 
-[#addDataElementsFrom_DataTable]
-=== addDataElementsFrom(DataTable)
+[#withDataElementsFrom_DataTable]
+=== withDataElementsFrom(DataTable)
 
-Adds all data-elements from the other table to this table.
+Returns a new table, populated from this and the other table.
 
-[#setDataElements_Iterable]
-=== setDataElements(Iterable)
+[#withDataElements_Iterable]
+=== withDataElements(Iterable)
 
-Sets the data-elements of this table, which make up the rows of this table.
+Returns a new table instance with the data-elements, which make up the rows of the new table.
 
-[#setDataElementPojos_Iterable]
-=== setDataElementPojos(Iterable)
+[#withDataElementPojos_Iterable]
+=== withDataElementPojos(Iterable)
 
-Sets the data-elements of this table from given pojos, that are adapted to xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] (s).
+Returns a new table instance with data-elements from given pojos, that are adapted to xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] (s)..
 
-[#populateEntities_]
-=== populateEntities()
+[#withEntities_]
+=== withEntities()
 
-Populates this table from the underlying (default) persistence layer.
+Returns a new table, populated from the underlying (default) persistence layer.
 
-[#populateEntities_Query]
-=== populateEntities(Query)
+[#withEntities_Query]
+=== withEntities(Query)
 
-Populates this table from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
+Returns a new table, populated from the underlying (default) persistence layer, using given xref:refguide:applib:index/query/Query.adoc[Query] to refine the result.
 
-[#exportToBlob_CollectionContentsExporter]
-=== exportToBlob(CollectionContentsExporter)
+[#exportToBlob_TabularExporter_AccessMode]
+=== exportToBlob(TabularExporter, AccessMode)
 
 Typical use-case:
 
 ----
-{@code
+@Inject TabularExcelExporter excelExporter;
+
+Blob exportToBlob(List<MyDomainObject> myDomainObjects) {
+    var dataTable = DataTable.forDomainType(MyDomainObject.class);
+    dataTable.setDataElementPojos(myDomainObjects);
+    return dataTable.exportToBlob(excelExporter, AccessMode.USER);
+}
 ----

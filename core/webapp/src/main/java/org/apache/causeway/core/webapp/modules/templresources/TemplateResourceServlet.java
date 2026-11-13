@@ -34,33 +34,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.commons.InputStreamExtensions;
 import org.apache.causeway.core.metamodel.commons.ResourceUtil;
 
 import static org.apache.causeway.commons.internal.base._Strings.pair;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handles HTML-templates, where template's placeholders get replaced by their values.
  */
-@Log4j2
+@Slf4j
 public class TemplateResourceServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private _StringInterpolation templateVariables;
 
-    @Autowired private RestEasyConfiguration restEasyConfiguration;
+    @Autowired private RestfulPathProvider restfulPathProvider;
     @Autowired private WebAppContextPath webAppContextPath;
 
     @Override
     public void init(final ServletConfig config) throws ServletException {
         super.init(config);
 
-        final String restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath();
+        final String restfulPath = restfulPathProvider.getRestfulPath().orElse("");
         final String restfulBase = webAppContextPath.prependContextPath(restfulPath);
         templateVariables = new _StringInterpolation(pair("restful-base", restfulBase));
     }
@@ -81,7 +80,7 @@ public class TemplateResourceServlet extends HttpServlet {
         final String servletPath = _Strings.removePrefix(request.getServletPath(), "/");
         log.debug("request: {}", servletPath);
 
-        val resourceInputStream = Optional
+        var resourceInputStream = Optional
                 .ofNullable(loadFromFileSystem(request)) // try to load from file-system first
                 .orElseGet(()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path
 
@@ -105,10 +104,10 @@ public class TemplateResourceServlet extends HttpServlet {
     }
 
     private InputStream loadFromFileSystem(final HttpServletRequest request) {
-        val inputStream = _Util.getResourceAsStream(request);
+        var inputStream = _Util.getResourceAsStream(request);
 
         if(log.isDebugEnabled()) {
-            val realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
+            var realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
             if(inputStream!=null) {
                 log.debug("request: {} loaded from fileSystem {}", request.getServletPath(), realPath);
             } else {
@@ -120,7 +119,7 @@ public class TemplateResourceServlet extends HttpServlet {
     }
 
     private InputStream loadFromClassPath(final String path) {
-        val inputStream = ResourceUtil.getResourceAsStream(path);
+        var inputStream = ResourceUtil.getResourceAsStream(path);
         if(log.isDebugEnabled()) {
             if(inputStream!=null) {
                 log.debug("request: {} loaded from classpath", path);

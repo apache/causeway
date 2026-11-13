@@ -68,5 +68,4 @@ public class HasUsername_associatedUser {
         return target == null || target.getUsername() == null ? TranslatableString.tr("No username") : null;
     }
 
-
 }

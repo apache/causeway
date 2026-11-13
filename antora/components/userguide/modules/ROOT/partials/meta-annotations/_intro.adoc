@@ -6,7 +6,7 @@
 
 
 
-Apache Causeway supports the use of meta-annotations, as does Spring Boot and the ORM (xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] from Eclipse 2.7 supporting JPA 2.2, xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] for DN 6.x).
+Apache Causeway supports the use of meta-annotations, as does Spring Boot and the ORM (xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] from Eclipse 2.7 supporting JPA 2.2.
 
 This allows you to define custom annotations that are more descriptive of your domain model, and meta-annotate your custom annotations with those of Apache Causeway, Spring or the ORM.
 In your domain model, you can just use the custom annotation.

@@ -23,16 +23,14 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.extensions.sse.metamodel.facets.SseObserveFacet;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupAttributePanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
- * {@link MarkupPanelFactories}, but specific to
+ * {@link MarkupAttributePanelFactories}, but specific to
  * the {@link Markup} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
@@ -41,16 +39,15 @@ public class ListeningMarkupPanelFactoriesForWicket {
     // -- PARENTED
 
     @Component
-    public static class Parented extends MarkupPanelFactories.ParentedAbstract<Markup> {
+    public static class Parented extends MarkupAttributePanelFactories.ParentedAbstract<Markup> {
 
         public Parented() {
             super(Markup.class);
         }
 
-
         @Override
-        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
-            val markupComponent = new ListeningMarkupComponent(
+        protected MarkupComponent newMarkupComponent(final String id, final UiAttributeWkt model) {
+            var markupComponent = new ListeningMarkupComponent(
                     id, model, getEventStreamResource(model));
             markupComponent.setEnabled(false);
             return getMetaModelContext().getServiceInjector().injectServicesInto(markupComponent);
@@ -58,8 +55,8 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
         // -- HELPER
 
-        private LocalResourcePath getEventStreamResource(final ScalarModel scalarModel) {
-            val observeFacet  = scalarModel.getMetaModel().getFacet(SseObserveFacet.class);
+        private LocalResourcePath getEventStreamResource(final UiAttributeWkt attributeModel) {
+            var observeFacet  = attributeModel.getMetaModel().lookupFacet(SseObserveFacet.class).orElse(null);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
                     : null;
@@ -70,7 +67,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
     // -- STANDALONE
 
     @Component
-    public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Markup> {
+    public static class Standalone extends MarkupAttributePanelFactories.StandaloneAbstract<Markup> {
 
         public Standalone() {
             super(Markup.class);
@@ -84,6 +81,5 @@ public class ListeningMarkupPanelFactoriesForWicket {
         }
 
     }
-
 
 }

@@ -25,6 +25,7 @@ import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXml;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.causeway.applib.mixins.layout.Object_downloadLayout;
+import org.apache.causeway.applib.mixins.layout.Object_patchLayout;
 import org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
@@ -39,6 +40,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip;
+import org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.causeway.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
@@ -110,7 +112,9 @@ import org.apache.causeway.schema.CausewayModuleSchema;
     Dto_downloadXml.class,
     Dto_downloadXsd.class,
     Object_downloadColumnOrderTxtFilesAsZip.class,
+    Object_patchColumnOrder.class,
     Object_downloadLayout.class,
+    Object_patchLayout.class,
     Object_downloadMetamodelXml.class,
     Object_openRestApi.class,
     Object_rebuildMetamodel.class,
@@ -147,6 +151,5 @@ public class CausewayModuleApplib {
 
     public abstract static class PropertyDomainEvent<S,T>
     extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> {}
-
 
 }

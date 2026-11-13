@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.consent.Consent.Allow;
+
 public class InteractionResultSet {
 
-    private final List<InteractionResult> results = new ArrayList<InteractionResult>();
+    private final List<InteractionResult> results = new ArrayList<>();
     private InteractionResult firstResult = null;
 
     public InteractionResultSet() {
@@ -39,9 +41,8 @@ public class InteractionResultSet {
     }
 
     /**
-     * Empty only if all the {@link #add(InteractionResult) contained}
-     * {@link InteractionResult}s are also
-     * {@link InteractionResult#isNotVetoing() empty}.
+     * Allowing only if all the {@link #add(InteractionResult) contained}
+     * {@link InteractionResult}s are also {@link InteractionResult#isAllowing()}.
      */
     public boolean isAllowed() {
         return !isVetoed();
@@ -54,9 +55,7 @@ public class InteractionResultSet {
      */
     public boolean isVetoed() {
         for (final InteractionResult result : results) {
-            if (result.isVetoing()) {
-                return true;
-            }
+            if (result.isVetoing()) return true;
         }
         return false;
     }
@@ -68,9 +67,8 @@ public class InteractionResultSet {
      */
     public Consent createConsent() {
         final InteractionResult interactionResult = getInteractionResult();
-        if (interactionResult == null) {
+        if (interactionResult == null)
             return Allow.DEFAULT;
-        }
         return interactionResult.createConsent();
     }
 
@@ -84,9 +82,7 @@ public class InteractionResultSet {
      */
     public InteractionResult getInteractionResult() {
         for (final InteractionResult result : results) {
-            if (!result.isNotVetoing()) {
-                return result;
-            }
+            if (!result.isAllowing()) return result;
         }
         return firstResult != null ? firstResult : null;
     }

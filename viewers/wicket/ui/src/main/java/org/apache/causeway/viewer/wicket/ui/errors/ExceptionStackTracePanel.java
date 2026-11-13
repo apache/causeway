@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.errors;
 
-import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -33,8 +34,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
+import org.springframework.util.StringUtils;
+
+import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.Ticket;
+import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -45,22 +52,18 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.val;
-
 public class ExceptionStackTracePanel
-extends PanelBase<List<StackTraceDetail>> {
+extends PanelBase<ExceptionModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_MAIN_MESSAGE = "mainMessage";
     private static final String ID_EXCEPTION_DETAIL_DIV = "exceptionDetailDiv";
     private static final String ID_TICKET_MARKUP = "ticketMarkup";
-    private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
-    private static final String ID_LINE = "stackTraceElementLine";
+    private static final String ID_STACKTRACE_MARKUP = "stackTraceMarkup";
 
     private static final JavaScriptResourceReference DIV_TOGGLE_JS =
             new JavaScriptResourceReference(ExceptionStackTracePanel.class, "div-toggle.js");
-
 
     public class ExternalImageUrl extends WebComponent {
 
@@ -84,16 +87,24 @@ extends PanelBase<List<StackTraceDetail>> {
             final String id,
             final ExceptionModel exceptionModel) {
 
-        super(id, exceptionModel);
+        super(id, Model.of(exceptionModel));
 
-        val ticketIfAny = exceptionModel.getTicket();
+        final boolean unautorizedOrRecognized =
+            exceptionModel.isAuthorizationException()
+            || exceptionModel.isRecognized();
 
-        val mainMessage = ticketIfAny
+        var ticketOpt = unautorizedOrRecognized
+            ? Optional.<Ticket>empty()
+            : lookupService(ErrorReportingService.class)
+                .map(errorReportingService->
+                    errorReportingService.reportError(exceptionModel.asErrorDetails()));
+
+        var mainMessage = ticketOpt
             .map(Ticket::getUserMessage)
             .orElseGet(exceptionModel::getMainMessage);
         Wkt.labelAdd(this, ID_MAIN_MESSAGE, mainMessage);
 
-        ticketIfAny
+        ticketOpt
             .map(Ticket::getMarkup)
             .ifPresentOrElse(ticketMarkup->{
                 Wkt.markupAdd(this, ID_TICKET_MARKUP, ticketMarkup);
@@ -101,10 +112,8 @@ extends PanelBase<List<StackTraceDetail>> {
                 WktComponents.permanentlyHide(this, ID_TICKET_MARKUP);
             });
 
-        final boolean suppressExceptionDetail =
-                exceptionModel.isAuthorizationException()
-                || exceptionModel.isRecognized()
-                || ticketIfAny
+        final boolean suppressExceptionDetail = unautorizedOrRecognized
+                || ticketOpt
                     .map(Ticket::getStackTracePolicy)
                     .map(Ticket.StackTracePolicy.HIDE::equals)
                     .orElse(false);
@@ -112,29 +121,25 @@ extends PanelBase<List<StackTraceDetail>> {
         if(suppressExceptionDetail) {
             WktComponents.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
         } else {
-            MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
+            var container = Wkt.add(this, new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
                 private static final long serialVersionUID = 1L;
                 @Override
                 public void renderHead(final IHeaderResponse response) {
                     response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
                 }
-            };
-            container.add(new StackTraceListView(
-                    ID_STACK_TRACE_ELEMENT,
-                    ExceptionStackTracePanel.ID_LINE,
-                    exceptionModel.getStackTrace()));
-            add(container);
+            });
+            Wkt.markupAdd(container, ID_STACKTRACE_MARKUP, convertToHtml(exceptionModel));
         }
 
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        final UiObjectWkt entityModel = breadcrumbModel.getMostRecentlyVisited();
+        final UiObjectWkt objectModel = breadcrumbModel.getMostRecentlyVisited();
 
         final Class<? extends Page> pageClass;
         final PageParameters pageParameters;
-        if (entityModel != null) {
-            pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
-            pageParameters = Try.call(()->entityModel.getPageParameters())
+        if (objectModel != null) {
+            pageClass = pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT);
+            pageParameters = Try.call(()->objectModel.getPageParameters())
                     .getValue()
                     // silently ignore, if we fail to generate a 'continue' button target
                     // (eg. because object was deleted)
@@ -146,6 +151,39 @@ extends PanelBase<List<StackTraceDetail>> {
 
         final AbstractLink link = WktLinks.newBookmarkablePageLink("continueButton", pageParameters, pageClass);
         add(link);
+    }
+
+    // -- HELPER
+
+    private static String convertToHtml(final ExceptionModel exceptionModel) {
+        var html = new StringBuilder();
+        _NullSafe.stream(exceptionModel.causalChain())
+            .filter(Objects::nonNull)
+            .forEach(IndexedConsumer.zeroBased((i, cause)->{
+                if(i>0) html.append("<hr>");
+                html.append("<div>%s<b>%s</b>: %s</div>".formatted(
+                    i>0 ? "Caused by: " : "",
+                    cause.getClass().getName(),
+                    convertMessageToHtml(cause)));
+
+                Stream.of(cause.getStackTrace()).forEach(el->{
+                    html.append("""
+                        <div style="margin-left: 1rem">at %s#%s(%s:%d)</div>"""
+                        .formatted(
+                            el.getClassName(),
+                            el.getMethodName(),
+                            el.getFileName(),
+                            el.getLineNumber()));
+                });
+
+            }));
+        return html.toString();
+    }
+
+    private static String convertMessageToHtml(final Throwable cause) {
+        return StringUtils.hasLength(cause.getMessage())
+            ? org.springframework.web.util.HtmlUtils.htmlEscape(cause.getMessage().replace("\n", "<br>"))
+            : "";
     }
 
 }

@@ -18,7 +18,7 @@
  */
 
 /**
- * This package defines an additional set of
+ * This package defines a set of
  * {@link org.apache.causeway.applib.annotation.Value} types, supported in addition
  * to the usual JDK ones (of {@link java.lang.String}, {@link java.lang.Integer}, {@link java.math.BigDecimal}, {@link java.util.Date}
  * etc and the primitives).

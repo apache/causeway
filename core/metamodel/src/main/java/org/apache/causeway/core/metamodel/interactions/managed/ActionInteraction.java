@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -34,167 +36,56 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
+public record ActionInteraction(
+        String memberId,
+        /**
+         * optionally the action's metamodel, based on whether was found by actionId
+         */
+        @NonNull Optional<ObjectAction> objectAction,
+        @NonNull InteractionRailway<ManagedAction> railway)
+implements MemberInteraction<ManagedAction, ActionInteraction> {
 
-public final class ActionInteraction
-extends MemberInteraction<ManagedAction, ActionInteraction> {
-
-    public static enum SemanticConstraint {
+    public enum SemanticConstraint {
         NONE,
         IDEMPOTENT,
         SAFE
     }
 
-    @Value(staticConstructor = "of")
-    public static class Result {
-        private final ManagedAction managedAction;
-        private final Can<ManagedObject> parameterList;
-        private final ManagedObject actionReturnedObject;
-    }
-
-    public static final ActionInteraction start(
-            final @NonNull ManagedObject owner,
-            final @NonNull String memberId,
-            final @NonNull Where where) {
-        return startWithMultiselect(owner, memberId, where, Can::empty);
-    }
-
-    public static final ActionInteraction startWithMultiselect(
-            final @NonNull ManagedObject owner,
-            final @NonNull String memberId,
-            final @NonNull Where where,
-            final @NonNull MultiselectChoices multiselectChoices) {
-
-        val managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
-
-        final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
-                ? InteractionRailway.success(managedAction.get())
-                : InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, memberId));
-
-        return new ActionInteraction(
-                managedAction.map(ManagedAction::getAction),
-                railway);
-    }
-
-    public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
-        return new ActionInteraction(
-                Optional.of(managedAction.getAction()),
-                InteractionRailway.success(managedAction));
-    }
-
-    public static ActionInteraction empty(final String actionId) {
-        return new ActionInteraction(
-                Optional.empty(),
-                InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId)));
-    }
-
-    ActionInteraction(
-            final @NonNull Optional<ObjectAction> metamodel,
-            final @NonNull InteractionRailway<ManagedAction> railway) {
-        super(railway);
-        this.metamodel = metamodel;
-    }
-
-    /**
-     * optionally the action's metamodel, based on whether even exists (eg. was found by memberId)
-     */
-    @Getter
-    private final Optional<ObjectAction> metamodel;
-    
-    public final Optional<Identifier> getFeatureIdentifier() {
-        return metamodel.map(ObjectAction::getFeatureIdentifier);
-    }
-
-    public ActionInteraction checkSemanticConstraint(@NonNull final SemanticConstraint semanticConstraint) {
-
-        railway = railway.chain(action->{
-
-            val actionSemantics = action.getAction().getSemantics();
-
-            switch(semanticConstraint) {
-            case NONE:
-                return railway;
-
-            case IDEMPOTENT:
-                return actionSemantics.isIdempotentInNature()
-                        ? railway
-                        : vetoRailway(InteractionVeto.actionNotIdempotent(action)) ;
-            case SAFE:
-                return actionSemantics.isSafeInNature()
-                        ? railway
-                        : vetoRailway(InteractionVeto.actionNotSafe(action));
-            default:
-                throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
-            }
-
-        });
-
-        return this;
-    }
-
-    public Optional<ParameterNegotiationModel> startParameterNegotiation() {
-        return getManagedAction()
-            .map(ManagedAction::startParameterNegotiation);
+    public record Result(
+            ManagedAction managedAction,
+            Can<ManagedObject> parameterList,
+            ManagedObject actionReturnedObject) {
     }
 
     public static interface ParameterInvalidCallback {
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
 
-    public Railway<InteractionVeto, ManagedObject> invokeWith(final ParameterNegotiationModel pendingArgs) {
-        pendingArgs.activateValidationFeedback();
-        val veto = validate(pendingArgs);
-        if(veto.isPresent()) {
-            return Railway.failure(veto.get());
-        }
-        val action = railway.getSuccessElseFail();
-        val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
-        return actionResultOrVeto;
+    // -- FACTORIES
+
+    public static ActionInteraction start(
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
+        return startWithMultiselect(owner, memberId, where, Can::empty);
     }
 
-    public final ManagedObject invokeWithRuleChecking(
-            final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
-        val action = railway.getSuccessElseFail();
-        return action.invokeWithRuleChecking(pendingArgs.getParamValues());
-    }
+    public static ActionInteraction startWithMultiselect(
+            final @NonNull ManagedObject owner,
+            final @NonNull String actionId,
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
 
-    public Optional<InteractionVeto> validate(
-            final @NonNull ParameterNegotiationModel pendingArgs) {
+        var managedAction = ManagedAction.lookupActionWithMultiselect(owner, actionId, where, multiselectChoices);
 
-        if(railway.isFailure()) {
-            return railway.getFailure();
-        }
-        val validityConsent = pendingArgs.validateParameterSet(); // full validation
-        if(validityConsent!=null && validityConsent.isVetoed()) {
-            return Optional.of(InteractionVeto.actionParamInvalid(validityConsent));
-        }
-        return Optional.empty();
-    }
+        final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
+                ? InteractionRailway.success(managedAction.get())
+                : InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId));
 
-    /**
-     * @return optionally the ManagedAction based on whether there
-     * was no interaction veto within the originating chain
-     */
-    public Optional<ManagedAction> getManagedAction() {
-        return super.getManagedMember().getSuccess();
-    }
-
-    /**
-     * @return this Interaction's ManagedAction
-     * @throws X if there was any interaction veto within the originating chain
-     */
-    public <X extends Throwable>
-    ManagedAction getManagedActionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return super.getManagedMemberElseThrow(onFailure);
-    }
-
-    public <X extends Throwable>
-    ManagedAction getManagedActionElseFail() {
-        return getManagedActionElseThrow(veto->
-            _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
+        return new ActionInteraction(
+                actionId,
+                managedAction.map(x->x.getAction()),
+                railway);
     }
 
     /** Supports composite-value-types via mixin (in case detected). */
@@ -202,11 +93,11 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final ManagedProperty associatedWithProperty,
             final String memberId,
             final Where where) {
-        val propertyOwner = associatedWithProperty.getOwner();
-        val prop = associatedWithProperty.getMetaModel();
-        val elementType = prop.getElementType();
+        var propertyOwner = associatedWithProperty.getOwner();
+        var prop = associatedWithProperty.getMetaModel();
+        var elementType = prop.getElementType();
 
-        val valueFacet = elementType.isValue()
+        var valueFacet = elementType.isValue()
                 ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
                 : null;
 
@@ -215,18 +106,18 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
-                && propertyOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                && propertyOwner.objSpec().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
-            val compositeValueNullable = prop.get(propertyOwner);
-            val compositeValue =
+            var compositeValueNullable = prop.get(propertyOwner);
+            var compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultsProviderForProperty(prop)
+                        valueFacet.selectDefaultsProviderForAttribute(prop)
                             .orElseThrow(()->onMissingDefaultsProvider(prop))
                             .getDefaultValue());
 
-            val mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
+            var mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
             if(mixinAction.isPresent()) {
-                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
                 return ActionInteraction.wrap(managedAction);
             }
         }
@@ -241,11 +132,11 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final String memberId,
             final Where where) {
 
-        val actionOwner = parameterNegotiationModel.getActionTarget();
-        val param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
-        val elementType = param.getMetaModel().getElementType();
+        var actionOwner = parameterNegotiationModel.getActionTarget();
+        var param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
+        var elementType = param.getMetaModel().getElementType();
 
-        val valueFacet = elementType.isValue()
+        var valueFacet = elementType.isValue()
                 ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
                 : null;
         if(valueFacet!=null
@@ -253,28 +144,118 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
-                && actionOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                && actionOwner.objSpec().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
-            val compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
-            val compositeValue =
+            var compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
+            var compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultsProviderForParameter(param.getMetaModel())
+                        valueFacet.selectDefaultsProviderForAttribute(param.getMetaModel())
                             .orElseThrow(()->onMissingDefaultsProvider(param.getMetaModel()))
                             .getDefaultValue());
 
-            val mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
+            var mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
             if(mixinAction.isPresent()) {
-                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
                 return ActionInteraction.wrap(managedAction);
             }
         }
 
-        //XXX[CAUSEWAY-3080] prior to this fix we returned... (which I'm not sure why - makes no sense to me)
-        //val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
-        //return ActionInteraction.start(paramValue, memberId, where);
-
         // else if not a composite value
         return ActionInteraction.start(actionOwner, memberId, where);
+    }
+
+    public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
+        var action = managedAction.getAction();
+        return new ActionInteraction(
+                action.getId(),
+                Optional.of(action),
+                InteractionRailway.success(managedAction));
+    }
+
+    public static ActionInteraction empty(final String actionId) {
+        return new ActionInteraction(
+                actionId,
+                Optional.empty(),
+                InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId)));
+    }
+
+    // -- METHODS
+
+    public ObjectAction getObjectActionElseFail() {
+        return objectAction.orElseThrow(()->_Exceptions
+                .noSuchElement("could not resolve action by memberId '%s'", memberId));
+    }
+
+    public Optional<Identifier> getFeatureIdentifier() {
+        return objectAction.map(ObjectAction::getFeatureIdentifier);
+    }
+
+    public ActionInteraction checkSemanticConstraint(final @NonNull SemanticConstraint semanticConstraint) {
+        railway.update(action -> switch(semanticConstraint) {
+                case NONE -> Optional.empty();
+                case IDEMPOTENT -> action.getAction().getSemantics().isIdempotentInNature()
+                            ? Optional.empty()
+                            : Optional.of(InteractionVeto.actionNotIdempotent(action));
+                case SAFE -> action.getAction().getSemantics().isSafeInNature()
+                            ? Optional.empty()
+                            : Optional.of(InteractionVeto.actionNotSafe(action));
+            }
+        );
+        return this;
+    }
+
+    public Optional<ParameterNegotiationModel> startParameterNegotiation() {
+        return getManagedAction()
+            .map(ManagedAction::startParameterNegotiation);
+    }
+
+    public Railway<InteractionVeto, ManagedObject> invokeWith(final ParameterNegotiationModel pendingArgs) {
+        pendingArgs.activateValidationFeedback();
+        var veto = validate(pendingArgs);
+        if(veto.isPresent()) return Railway.failure(veto.get());
+
+        var action = railway.getSuccessElseFail();
+        var actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
+        return actionResultOrVeto;
+    }
+
+    public ManagedObject invokeWithRuleChecking(
+            final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
+        var action = railway.getSuccessElseFail();
+        return action.invokeWithRuleChecking(pendingArgs.getParamValues());
+    }
+
+    public Optional<InteractionVeto> validate(
+            final @NonNull ParameterNegotiationModel pendingArgs) {
+        if(railway.isVeto()) return railway.getVeto();
+
+        var validityConsent = pendingArgs.validateParameterSet(); // full validation
+        return validityConsent!=null
+                && validityConsent.isVetoed()
+            ? Optional.of(InteractionVeto.actionParamInvalid(validityConsent))
+            : Optional.empty();
+    }
+
+    /**
+     * @return optionally the ManagedAction based on whether there
+     * was no interaction veto within the originating chain
+     */
+    public Optional<ManagedAction> getManagedAction() {
+        return railway.getSuccess();
+    }
+
+    /**
+     * @return this Interaction's ManagedAction
+     * @throws X if there was any interaction veto within the originating chain
+     */
+    public <X extends Throwable> ManagedAction getManagedActionElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return getManagedMemberElseThrow(onFailure);
+    }
+
+    public <X extends Throwable> ManagedAction getManagedActionElseFail() {
+        return getManagedActionElseThrow(veto->
+            _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
 
     // -- HELPER
@@ -283,6 +264,5 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         return _Exceptions.unrecoverable("Could not find a DefaultsProvider for ObjectFeature %s",
                 feature.getFeatureIdentifier());
     }
-
 
 }

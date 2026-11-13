@@ -24,31 +24,29 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ResourcePath;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
-
-import lombok.val;
 
 public class RichPropertyGetClobChars extends RichPropertyGetClobAbstract {
 
-    private final String graphqlPath;
+    private final ResourcePath resourcePath;
 
     public RichPropertyGetClobChars(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
         super(memberInteractor, context, "chars");
 
-        this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
+        this.resourcePath = ResourcePath.from(context.causewayConfiguration);
     }
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
+        var bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> {
             final ObjectFeature objectFeature = holder.getObjectMember();
-            return String.format(
-                    "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), objectFeature.asciiId());
+            return resourcePath.property(x, objectFeature.asciiId(), "clobChars");
         }).orElse(null);
 
     }

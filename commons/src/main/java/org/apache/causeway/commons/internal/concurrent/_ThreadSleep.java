@@ -19,7 +19,7 @@
 package org.apache.causeway.commons.internal.concurrent;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>- internal use only -</h1>
@@ -34,14 +34,14 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @UtilityClass
-@Log4j2
+@Slf4j
 public class _ThreadSleep {
 
     /**
      * Suspends the current thread for given milliseconds of time.
      * @param millis
      */
-    public static void millis(long millis) {
+    public static void millis(final long millis) {
 
         try {
             Thread.sleep(millis);

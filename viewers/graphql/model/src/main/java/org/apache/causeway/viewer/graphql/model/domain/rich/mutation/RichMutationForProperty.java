@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.mutation;
 
-import java.util.Map;
-import java.util.Optional;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
@@ -29,7 +26,6 @@ import graphql.schema.GraphQLOutputType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -43,15 +39,11 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatur
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-
-//@Log4j2
+//@Slf4j
 public class RichMutationForProperty extends Element {
-
-    private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;
 
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
@@ -65,11 +57,11 @@ public class RichMutationForProperty extends Element {
         this.objectSpec = objectSpec;
         this.oneToOneAssociation = oneToOneAssociation;
 
-        this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        this.argumentName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
 
         GraphQLOutputType type = context.typeMapper.outputTypeFor(objectSpec, SchemaType.RICH);  // setter returns void, so will return target instead.
         if (type != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name(fieldName(objectSpec, oneToOneAssociation))
                     .type(type);
             addGqlArguments(fieldBuilder);
@@ -88,69 +80,48 @@ public class RichMutationForProperty extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
+        var environment = new Environment.For(dataFetchingEnvironment);
+        var target = dataFetchingEnvironment.getArgument(argumentName);
+        var sourcePojo = ObjectFeatureUtils.requirePojo(objectSpec, target, environment, context);
+        var managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
-        Object target = dataFetchingEnvironment.getArgument(argumentName);
-        Optional<Object> result;
-        final Environment environment = new Environment.For(dataFetchingEnvironment);
-        val argumentValue1 = (Map<String, ?>) target;
-        val idValue = (String)argumentValue1.get("id");
-        if (idValue != null) {
-            val objectSpecArg = (ObjectSpecification) argumentValue1.get("logicalTypeName");
-            Optional<Bookmark> bookmarkIfAny;
-            if (objectSpecArg != null) {
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
-            } else {
-                Class<?> paramClass = objectSpec.getCorrespondingClass();
-                bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
-            }
-            result = bookmarkIfAny
-                    .map(context.bookmarkService::lookup)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get);
-        } else {
-            val refValue = (String)argumentValue1.get("ref");
-            if (refValue != null) {
-                val key = ObjectFeatureUtils.keyFor(refValue);
-                BookmarkedPojo value = environment.getGraphQlContext().get(key);
-                result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-            } else {
-                throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-            }
-        }
-        Object sourcePojo = result
-                    .orElseThrow(); // TODO: better error handling if no such object found.
-
-        val managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
-
-        Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-        Object argumentValue = arguments.get(oneToOneAssociation.asciiId());
-        ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
-
-        val visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
         }
 
-        val usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usableConsent.isVetoed()) {
             throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
         }
 
-        val validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        var argumentValue = dataFetchingEnvironment.getArgument(oneToOneAssociation.asciiId());
+        var argumentPojo = ObjectFeatureUtils.unmarshalValue(
+                oneToOneAssociation.getElementType(),
+                argumentValue,
+                environment,
+                context);
+        ResourceValueTypes.validateFileAccept(oneToOneAssociation, argumentPojo);
+        if (!oneToOneAssociation.getElementType().isPojoCompatible(argumentPojo)) {
+            throw new IllegalArgumentException(
+                    "GraphQL input cannot be converted to the declared property type.");
+        }
+        var argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentPojo);
+
+        var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new InvalidException(validityConsent);
         }
 
         oneToOneAssociation.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
 
-        return managedObject; // return the original object because setters return void
+        return managedObject.getPojo(); // setters return void, so return authoritative post-mutation state
     }
-
 
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
         // add target
-        val targetArgName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        var targetArgName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
                         .name(targetArgName)

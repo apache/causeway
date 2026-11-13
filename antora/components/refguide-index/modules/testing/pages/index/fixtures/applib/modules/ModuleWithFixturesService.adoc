@@ -10,7 +10,7 @@ class ModuleWithFixturesService {
   FixtureScript getRefDataSetupFixture()
   FixtureScript getTeardownFixture()
   List<ModuleWithFixturesDescriptor> modules()
-  List<ModuleWithFixturesDescriptor> modulesWithin(Map<String, ContextBeans> beans)
+  List<ModuleWithFixturesDescriptor> modulesWithin(Iterable<Map.Entry<String, ContextBeans>> beans)
   void visitImportAnnotation(Import importAnnot, Class<T> requiredType, ConfigurableApplicationContext springContext, BiConsumer<String, T> visitor)
   List<ModuleWithFixturesDescriptor> sequenced(List<ModuleWithFixturesDescriptor> modules)
   List<String> beanNamesOf(ArrayList<ModuleWithFixturesDescriptor> result)

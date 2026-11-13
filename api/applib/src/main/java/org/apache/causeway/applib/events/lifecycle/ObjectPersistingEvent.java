@@ -51,12 +51,10 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
      */
     public static class Doop extends ObjectPersistingEvent<Object> {}
 
-
     public ObjectPersistingEvent() {
     }
     public ObjectPersistingEvent(final S source) {
         super(source);
     }
-
 
 }

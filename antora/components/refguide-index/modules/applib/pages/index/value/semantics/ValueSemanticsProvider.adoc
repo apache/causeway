@@ -24,6 +24,8 @@ interface ValueSemanticsProvider<T> {
   DefaultsProvider<T> getDefaultsProvider()     // <.>
   IdStringifier<T> getIdStringifier()     // <.>
   ValueSemanticsProvider<X> castTo(Class<X> cls)
+  UserLocale getUserLocale(ValueSemanticsProvider.@Nullable Context context)     // <.>
+  Function<T, String> pipe(Function<T, String> toString, UnaryOperator<String> postprocessor)     // <.>
   boolean isEnumType()
   boolean isNumberType()
   boolean isTemporalType()
@@ -76,6 +78,12 @@ The xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsPro
 --
 The xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] , if any.
 --
+<.> xref:#getUserLocale_ValueSemanticsProvider_Context[getUserLocale(ValueSemanticsProvider_Context)]
+<.> xref:#pipe_Function_UnaryOperator[pipe(Function, UnaryOperator)]
++
+--
+function composition
+--
 
 == Members
 
@@ -125,3 +133,11 @@ If not `null` , implies that the value has (or may have) a default.
 === getIdStringifier()
 
 The xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] , if any.
+
+[#getUserLocale_ValueSemanticsProvider_Context]
+=== getUserLocale(ValueSemanticsProvider_Context)
+
+[#pipe_Function_UnaryOperator]
+=== pipe(Function, UnaryOperator)
+
+function composition

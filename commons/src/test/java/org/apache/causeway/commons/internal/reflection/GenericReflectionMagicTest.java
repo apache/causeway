@@ -27,38 +27,36 @@ import org.springframework.core.MethodParameter;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.val;
-
 class GenericReflectionMagicTest {
 
     @Test
     void resolveGenericReturnTypeAndParameterType() {
-        val declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
+        var declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
                 .filter(m->m.getName().equals("sampleAction4"));
         //debug
         //declaredMethodsMatching.forEach(m->System.err.printf("%s (%s)%n", _Util.methodSummary(m), m));
 
         assertEquals(1, declaredMethodsMatching.size());
 
-        val sampleAction = declaredMethodsMatching.getFirstElseFail();
+        var sampleAction = declaredMethodsMatching.getFirstElseFail();
 
-        val returnType = GenericTypeResolver.resolveReturnType(sampleAction, _GenericAbstractImpl.class);
+        var returnType = GenericTypeResolver.resolveReturnType(sampleAction, _GenericAbstractImpl.class);
         assertEquals(String.class, returnType);
 
         @SuppressWarnings("deprecation") // proposed alternative is not publicly visible
-        val param0Type = GenericTypeResolver.resolveParameterType(new MethodParameter(sampleAction, 0), _GenericAbstractImpl.class);
+        var param0Type = GenericTypeResolver.resolveParameterType(new MethodParameter(sampleAction, 0), _GenericAbstractImpl.class);
         assertEquals(String.class, param0Type);
     }
 
     @Test
     void mostSpecificMethodFind() {
-        val declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
+        var declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
                 .filter(m->m.getName().equals("sampleAction2"));
         assertEquals(3, declaredMethodsMatching.size());
         //debug
         //declaredMethodsMatching.forEach(m->System.err.printf("+ %s bridge->%b%n", m, m.isBridge()));
 
-        val mostSpecific = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(_GenericAbstractImpl.class, "sampleAction2");
+        var mostSpecific = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(_GenericAbstractImpl.class, "sampleAction2");
         assertEquals(String.class, mostSpecific.paramType(0));
         assertEquals(String.class, mostSpecific.returnType());
     }
@@ -66,7 +64,7 @@ class GenericReflectionMagicTest {
     @Test
     void detectMethodOverride() {
 
-        val declaredMethodsMatching = _ClassCache.getInstance().streamResolvedMethods(_GenericAbstractImpl.class)
+        var declaredMethodsMatching = _ClassCache.getInstance().streamResolvedMethods(_GenericAbstractImpl.class)
                 .filter(m->m.name().equals("sampleAction2"))
                 .collect(Can.toCan());
         //debug
@@ -74,7 +72,7 @@ class GenericReflectionMagicTest {
 
         assertEquals(1, declaredMethodsMatching.size());
 
-        val mostSpecific = declaredMethodsMatching.getFirstElseFail();
+        var mostSpecific = declaredMethodsMatching.getFirstElseFail();
         assertEquals(String.class, mostSpecific.paramType(0));
         assertEquals(String.class, mostSpecific.returnType());
     }

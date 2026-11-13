@@ -20,15 +20,12 @@ package org.apache.causeway.extensions.executionoutbox.jpa.integtests;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.ExecutionOutbox_IntegTestAbstract;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.ExecutionOutboxTestDomainModel;
@@ -49,20 +46,14 @@ public class ExecutionOutbox_IntegTest extends ExecutionOutbox_IntegTestAbstract
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
     })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, ExecutionOutboxTestDomainModel.class})
     public static class AppManifest {
     }
 
-
     @Override
     protected org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
-
-
 
 }

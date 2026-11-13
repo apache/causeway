@@ -7,14 +7,19 @@
 .HasLogicalType.java
 ----
 interface HasLogicalType {
-  LogicalType getLogicalType()
-  String getLogicalTypeName()     // <.>
+  LogicalType logicalType()
+  String logicalTypeName()     // <.>
+  String className()     // <.>
 }
 ----
 
-<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
+<.> xref:#logicalTypeName_[logicalTypeName()]
+<.> xref:#className_[className()]
 
 == Members
 
-[#getLogicalTypeName_]
-=== getLogicalTypeName()
+[#logicalTypeName_]
+=== logicalTypeName()
+
+[#className_]
+=== className()

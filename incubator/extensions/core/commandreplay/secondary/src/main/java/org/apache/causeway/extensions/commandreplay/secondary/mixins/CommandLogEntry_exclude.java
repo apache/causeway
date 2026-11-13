@@ -34,7 +34,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryCo
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * @since 2.0 {@index}
  */
@@ -46,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(associateWith = "executeIn", sequence = "2")
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class CommandLogEntry_exclude {
 
     public static class ActionDomainEvent

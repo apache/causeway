@@ -24,32 +24,37 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class FaFacetForActionLayoutXml
-extends FaStaticFacetAbstract {
+extends FaStaticFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<FaFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(actionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(actionLayout == null)
             return Optional.empty();
-        }
         final String cssClassFa = _Strings.emptyToNull(actionLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = actionLayout.getCssClassFaPosition();
         return cssClassFa != null
-                ? Optional.of(new FaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new FaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
     private FaFacetForActionLayoutXml(
             final String value,
             final CssClassFaPosition position,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(value, position, holder, precedence);
+            final FacetHolder holder) {
+        super(value, position, holder);
     }
 
     @Override

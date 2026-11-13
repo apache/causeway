@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.core</groupId>
         <artifactId>causeway-core</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
@@ -39,34 +39,6 @@
         <jar-plugin.automaticModuleName>org.apache.causeway.applib</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/applib</git-plugin.propertiesDir>
     </properties>
-
-    <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </testResource>
-        </testResources>
-    </build>
 
     <dependencies>
 
@@ -85,7 +57,7 @@
 		<dependency>
 		    <groupId>jakarta.persistence</groupId>
 		    <artifactId>jakarta.persistence-api</artifactId>
-	    </dependency>        
+	    </dependency>
      	<!-- provides @Digits -->
 		<dependency>
 		    <groupId>jakarta.validation</groupId>
@@ -93,15 +65,9 @@
 	    </dependency>
 	    <!-- provides MediaType for content negotiation -->
 	    <dependency>
-		    <groupId>jakarta.ws.rs</groupId>
-		    <artifactId>jakarta.ws.rs-api</artifactId>
-		</dependency>
-
-        <!-- marked for deprecation -->
-    	<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
+	        <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
 
         <!-- TEST -->
 
@@ -110,7 +76,6 @@
 			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
-
     </dependencies>
 
 </project>

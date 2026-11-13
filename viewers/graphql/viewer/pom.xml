@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-graphql</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-graphql-viewer</artifactId>
@@ -37,14 +37,6 @@
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/viewer</git-plugin.propertiesDir>
 	</properties>
 
-	<build>
-		<testResources>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
 	<dependencies>
 
         <dependency>
@@ -64,13 +56,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-graphql</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>

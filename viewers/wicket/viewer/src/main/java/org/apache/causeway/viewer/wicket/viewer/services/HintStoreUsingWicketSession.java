@@ -22,27 +22,42 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.inject.Named;
-
-import org.apache.wicket.Session;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+import org.apache.wicket.Session;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
-import lombok.extern.log4j.Log4j2;
+import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 
-@Service
-@Named("causeway.viewer.wicket.HintStoreUsingWicketSession")
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-@Qualifier("Wicket")
-@Log4j2
+/**
+ * Wicket-specific implementation of {@link HintStore}.
+ *
+ * @since 2.0 {@index}
+ */
+@Slf4j
 public class HintStoreUsingWicketSession implements HintStore {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleViewerWicketViewer.NAMESPACE + ".HintStoreUsingWicketSession";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @ConditionalOnMissingBean(HintStore.class)
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.EARLY)
+        @Qualifier("Wicket")
+        public HintStoreUsingWicketSession hintStoreUsingWicketSession() {
+            return new HintStoreUsingWicketSession();
+        }
+    }
 
     @Override
     public String get(final Bookmark bookmark, final String key) {
@@ -90,13 +105,12 @@ public class HintStoreUsingWicketSession implements HintStore {
         Session.get().removeAttribute(sessionAttribute);
     }
 
-
     protected Map<String, String> hintsFor(final Bookmark bookmark) {
         final String sessionAttribute = sessionAttributeFor(bookmark);
         LinkedHashMap<String, String> hints =
                 _Casts.uncheckedCast(Session.get().getAttribute(sessionAttribute));
         if(hints == null) {
-            hints = _Maps.newLinkedHashMap();
+            hints = new LinkedHashMap<>();
             Session.get().setAttribute(sessionAttribute, hints);
         }
         return hints;

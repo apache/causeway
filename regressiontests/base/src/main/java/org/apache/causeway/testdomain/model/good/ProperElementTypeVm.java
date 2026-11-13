@@ -84,5 +84,4 @@ extends ProperElementTypeVmAbstract {
     public void act(final ImmutableCollection<ElementTypeInterface> coll) {
     }
 
-
 }

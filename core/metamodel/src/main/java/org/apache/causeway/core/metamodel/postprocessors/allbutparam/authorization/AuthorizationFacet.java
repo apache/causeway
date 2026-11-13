@@ -18,23 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.interactions.ActionVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.CollectionVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.PropertyVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ActionVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.CollectionVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.PropertyVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Optionally hide or disable an object, property, collection or action
@@ -50,11 +50,11 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
         return property.lookupFacet(AuthorizationFacet.class)
                 .map(facet->facet.hides(
                         new PropertyVisibilityContext(
-                                vc.getHead(),
+                                vc.head(),
                                 property.getFeatureIdentifier(),
-                                vc.getInitiatedBy(),
-                                vc.getWhere(),
-                                vc.getRenderPolicy())) != null)
+                                vc.initiatedBy(),
+                                vc.where(),
+                                vc.renderPolicy())) != null)
                 .orElse(false);
     }
 
@@ -65,11 +65,11 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
         return collection.lookupFacet(AuthorizationFacet.class)
                 .map(facet->facet.hides(
                         new CollectionVisibilityContext(
-                                vc.getHead(),
+                                vc.head(),
                                 collection.getFeatureIdentifier(),
-                                vc.getInitiatedBy(),
-                                vc.getWhere(),
-                                vc.getRenderPolicy())) != null)
+                                vc.initiatedBy(),
+                                vc.where(),
+                                vc.renderPolicy())) != null)
                 .orElse(false);
     }
 
@@ -80,12 +80,12 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
         return action.lookupFacet(AuthorizationFacet.class)
                 .map(facet->facet.hides(
                         new ActionVisibilityContext(
-                                vc.getHead(),
+                                vc.head(),
                                 action,
                                 action.getFeatureIdentifier(),
-                                vc.getInitiatedBy(),
-                                vc.getWhere(),
-                                vc.getRenderPolicy())) != null)
+                                vc.initiatedBy(),
+                                vc.where(),
+                                vc.renderPolicy())) != null)
                 .orElse(false);
     }
 

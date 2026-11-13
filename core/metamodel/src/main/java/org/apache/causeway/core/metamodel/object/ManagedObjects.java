@@ -23,26 +23,23 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A collection of utilities for {@link ManagedObject}.
@@ -50,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @UtilityClass
-@Log4j2
+@Slf4j
 public final class ManagedObjects {
 
     // -- CATEGORISATION
@@ -59,8 +56,8 @@ public final class ManagedObjects {
     public boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
         if(adapter==null
                 || adapter==ManagedObject.unspecified()
-                || adapter.getSpecialization()==null
-                || adapter.getSpecialization().isEmpty()) {
+                || adapter.specialization()==null
+                || adapter.specialization().isEmpty()) {
             return true;
         }
         if(adapter instanceof PackedManagedObject) {
@@ -84,6 +81,13 @@ public final class ManagedObjects {
                 && adapter!=ManagedObject.unspecified();
     }
 
+    /** Optionally the corresponding class, based on whether is specified. */
+    public Optional<Class<?>> correspondingClass(final @Nullable ManagedObject adapter) {
+        return isSpecified(adapter)
+                ? Optional.ofNullable(adapter.getCorrespondingClass()) // null is not expected here, but just in case
+                : Optional.empty();
+    }
+
     /**
      * Optionally given adapter, based on whether it is specified
      * (even if empty, that is, representing null.)
@@ -102,7 +106,7 @@ public final class ManagedObjects {
      */
     public Optional<ManagedObject> asScalar(final @Nullable ManagedObject adapter) {
         return asSpecified(adapter)
-                .filter(obj->!obj.getSpecialization().isPacked());
+                .filter(obj->!obj.specialization().isPacked());
     }
 
     /**
@@ -112,7 +116,7 @@ public final class ManagedObjects {
      */
     public Optional<ManagedObject> asScalarNonEmpty(final @Nullable ManagedObject adapter) {
         return asScalar(adapter)
-                .filter(obj->!obj.getSpecialization().isEmpty());
+                .filter(obj->!obj.specialization().isEmpty());
     }
 
     /**
@@ -143,7 +147,7 @@ public final class ManagedObjects {
 
     public Optional<String> getDomainType(final ManagedObject managedObject) {
         return spec(managedObject)
-                .map(ObjectSpecification::getLogicalTypeName);
+                .map(ObjectSpecification::logicalTypeName);
     }
 
     // -- INSTANCE-OF CHECKS
@@ -158,7 +162,7 @@ public final class ManagedObjects {
     public boolean isInstanceOf(
             final @Nullable ManagedObject object,
             final @NonNull ObjectSpecification elementType) {
-        val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
+        var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.correspondingClass());
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
             return true;
         }
@@ -166,14 +170,14 @@ public final class ManagedObjects {
             return ((PackedManagedObject)object).unpack().stream()
             .allMatch(element->isInstanceOf(element, elementType));
         }
-        val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+        var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().correspondingClass());
         return upperBound.isAssignableFrom(objectActualType);
     }
 
     // -- IDENTIFICATION
 
     public Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
-        return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
+        return isSpecified(managedObject) ? Optional.of(managedObject.objSpec()) : Optional.empty();
     }
 
     public Optional<Bookmark> bookmark(final @Nullable ManagedObject managedObject) {
@@ -208,7 +212,6 @@ public final class ManagedObjects {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
-
     /**
      *
      * @param managedObject
@@ -220,7 +223,7 @@ public final class ManagedObjects {
             final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return bookmark(managedObject)
-                .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
+                .map(oid->oid.logicalTypeName() + separator + oid.identifier());
     }
 
     public String stringifyElseFail(
@@ -235,10 +238,9 @@ public final class ManagedObjects {
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseGet(()->isSpecified(managedObject)
-                        ? managedObject.getSpecification().getLogicalTypeName() + separator + "?"
+                        ? managedObject.objSpec().logicalTypeName() + separator + "?"
                         : "?" + separator + "?");
     }
-
 
     // -- PACKING
 
@@ -289,19 +291,19 @@ public final class ManagedObjects {
     public Object peekAtPojoOf(final @Nullable ManagedObject obj) {
         return isNullOrUnspecifiedOrEmpty(obj)
                 ? null
-                : (obj instanceof _Refetchable)
-                    ? ((_Refetchable)obj).peekAtPojo()
+                : (obj instanceof ManagedObjectEntity entity)
+                    ? entity.peekAtPojo()
                     : obj.getPojo();
     }
 
     // -- EQUALITY
 
     public boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
-        val aPojo = MmUnwrapUtils.single(a);
-        val bPojo = MmUnwrapUtils.single(b);
+        var aPojo = MmUnwrapUtils.single(a);
+        var bPojo = MmUnwrapUtils.single(b);
         return Objects.equals(aPojo, bPojo);
     }
-    
+
     // -- DEFAULTS UTILITIES
 
     public ManagedObject nullToEmpty(
@@ -345,7 +347,7 @@ public final class ManagedObjects {
         // 1) if primitive, then don't return null
         // 2) if boxed boolean, that is MANDATORY, then don't return null
 
-        val expectedType = elementSpec.getCorrespondingClass();
+        var expectedType = elementSpec.correspondingClass();
         if(expectedType.isPrimitive()) {
             return ManagedObject.value(elementSpec, ClassExtensions.toDefault(expectedType));
         }
@@ -392,9 +394,9 @@ public final class ManagedObjects {
             return Try.success(null);
         }
 
-        val mmc = object.getSpecification().getMetaModelContext();
+        var mmc = object.objSpec().getMetaModelContext();
 
-        val result =  Try.call(()->{
+        var result =  Try.call(()->{
             final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), object);
             if(returnValue instanceof String) {
                 return (String) returnValue;
@@ -407,7 +409,7 @@ public final class ManagedObjects {
         });
 
         if(result.isFailure()) {
-            val isUnitTesting = mmc.getSystemEnvironment().isUnitTesting();
+            var isUnitTesting = mmc.getSystemEnvironment().isUnitTesting();
             if(!isUnitTesting) {
                 log.warn("imperative text failure (context: {})", translationContext, result.getFailure().get());
             }
@@ -419,12 +421,20 @@ public final class ManagedObjects {
     // -- VIEWMODEL UTILITIES
 
     public void refreshViewmodel(
-            final @Nullable ManagedObject viewmodel,
+            final @Nullable ManagedObject mo,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
 
-        _Casts.castTo(_RefreshableViewmodel.class, viewmodel)
-        .ifPresent(refreshableViewmodel->
-            refreshableViewmodel.refreshViewmodel(bookmarkSupplier));
+        if(mo instanceof ManagedObjectViewmodel viewmodel) {
+            viewmodel.refreshViewmodel(bookmarkSupplier);
+        }
+    }
+    
+    public void refreshEntity(
+            final @Nullable ManagedObject mo) {
+        if(mo instanceof ManagedObjectEntity entity) {
+        	// call to getPojo as a side-effect makes the entity managed (JPA terminology), if not already
+        	mo.getRepositoryService().refresh(entity.getPojo());
+        }
     }
 
 }

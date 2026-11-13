@@ -18,19 +18,19 @@
  */
 module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model;
-    exports org.apache.causeway.viewer.commons.model.action.decorator;
-    exports org.apache.causeway.viewer.commons.model.layout;
-    exports org.apache.causeway.viewer.commons.model.components;
-    exports org.apache.causeway.viewer.commons.model.binding;
-    exports org.apache.causeway.viewer.commons.model.mixin;
-    exports org.apache.causeway.viewer.commons.model.mock;
-    exports org.apache.causeway.viewer.commons.model.object;
+    exports org.apache.causeway.viewer.commons.model.about;
     exports org.apache.causeway.viewer.commons.model.action;
+    exports org.apache.causeway.viewer.commons.model.attrib;
     exports org.apache.causeway.viewer.commons.model.decorators;
-    exports org.apache.causeway.viewer.commons.model.scalar;
+    exports org.apache.causeway.viewer.commons.model.error;
+    exports org.apache.causeway.viewer.commons.model.components;
     exports org.apache.causeway.viewer.commons.model.hints;
+    exports org.apache.causeway.viewer.commons.model.layout;
+    exports org.apache.causeway.viewer.commons.model.mixin;
+    exports org.apache.causeway.viewer.commons.model.object;
+    exports org.apache.causeway.viewer.commons.model.webjar;
 
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;
@@ -38,4 +38,6 @@ module org.apache.causeway.viewer.commons.model {
     requires spring.core;
     requires org.apache.causeway.viewer.commons.applib;
     requires org.apache.causeway.core.runtime;
+    requires webjars.locator.core; //unstable automatic module name
+	requires io.github.classgraph;
 }

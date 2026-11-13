@@ -24,7 +24,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -44,8 +46,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.Data;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * In-memory model of users, roles and permissions.
@@ -59,7 +60,7 @@ public class ApplicationSecurityDto {
     public static class PermissionDto {
 
         static PermissionDto from(final ApplicationPermission permission) {
-            val permissionDto = new PermissionDto();
+            var permissionDto = new PermissionDto();
             permissionDto.setFeatureFqn(permission.getFeatureFqn());
             permissionDto.setFeatureSort(permission.getFeatureSort());
             permissionDto.setMode(permission.getMode());
@@ -77,8 +78,8 @@ public class ApplicationSecurityDto {
     public static class RoleDto {
 
         static RoleDto from(final ApplicationRole role) {
-            val roleDto = new RoleDto();
-            roleDto.set__name(role.getName());
+            var roleDto = new RoleDto();
+            roleDto.setName(role.getName());
             roleDto.setDescription(role.getDescription());
             role.getPermissions().stream()
             .map(PermissionDto::from)
@@ -86,7 +87,7 @@ public class ApplicationSecurityDto {
             return roleDto;
         }
 
-        String __name; // secondary key - ensure earliest alphabetic order
+        @JsonProperty("__name") String name; // secondary key - ensure earliest alphabetic order 
         String description;
         List<PermissionDto> permissions = new ArrayList<>();
     }
@@ -95,8 +96,8 @@ public class ApplicationSecurityDto {
     public static class UserDto {
 
         static UserDto from(final ApplicationUser user, Function<Locale, String> localeStringifier) {
-            val userDto = new UserDto();
-            userDto.set__username(user.getUsername());
+            var userDto = new UserDto();
+            userDto.setUsername(user.getUsername());
             userDto.setEncryptedPassword(user.getEncryptedPassword());
             userDto.setAccountType(user.getAccountType());
             
@@ -119,7 +120,7 @@ public class ApplicationSecurityDto {
             return userDto;
         }
 
-        String __username; // secondary key - ensure earliest alphabetic order
+        @JsonProperty("__username") String username; // secondary key - ensure earliest alphabetic order
         String encryptedPassword;
         AccountType accountType;
         
@@ -142,8 +143,8 @@ public class ApplicationSecurityDto {
     public static class TenancyDto {
 
         static TenancyDto from(final ApplicationTenancy tenancy) {
-            val tenancyDto = new TenancyDto();
-            tenancyDto.set__name(tenancy.getName());
+            var tenancyDto = new TenancyDto();
+            tenancyDto.setName(tenancy.getName());
             tenancyDto.setPath(tenancy.getPath());
 
             Optional.ofNullable(tenancy.getParent())
@@ -152,7 +153,7 @@ public class ApplicationSecurityDto {
             return tenancyDto;
         }
 
-        String __name; // secondary key - ensure earliest alphabetic order
+        @JsonProperty("__name") String name; // secondary key - ensure earliest alphabetic order
         String path;
         @Nullable String parentPath;
     }
@@ -162,7 +163,7 @@ public class ApplicationSecurityDto {
             final @NonNull ApplicationUserRepository applicationUserRepository,
             final @NonNull ApplicationTenancyRepository applicationTenancyRepository,
             final @NonNull ValueSemanticsProvider<Locale> localeSemantics) {
-        val model = new ApplicationSecurityDto();
+        var model = new ApplicationSecurityDto();
 
         applicationRoleRepository.allRoles().stream()
         .map(RoleDto::from)

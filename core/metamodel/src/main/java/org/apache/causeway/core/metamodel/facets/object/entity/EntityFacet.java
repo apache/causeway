@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.query.Query;
@@ -32,14 +32,14 @@ import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmSpecUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Indicates that this class is managed by a persistence context.
@@ -47,22 +47,21 @@ import lombok.NonNull;
  */
 public interface EntityFacet extends Facet {
 
-    @lombok.Value(staticConstructor = "of")
-    static class PrimaryKeyType<T> {
-        private final @NonNull Class<?> owningEntityClass;
-        private final @NonNull IdStringifier<T> idStringifier;
-        private final @NonNull Class<T> primaryKeyClass;
+    record PrimaryKeyType<T>(
+            @NonNull Class<?> owningEntityClass,
+            @NonNull IdStringifier<T> idStringifier,
+            @NonNull Class<T> primaryKeyClass) {
+
         public String enstring(final T primaryKey) {
             return idStringifier.enstring(primaryKey);
         }
         public String enstringWithCast(final Object primaryKey) {
             return _Casts.castTo(primaryKeyClass, primaryKey)
-            .map(idStringifier::enstring)
-            .orElseThrow(()->_Exceptions.illegalArgument(
-                    "failed to cast primary-key '%s' to expected type %s",
-                        ""+primaryKey,
-                        primaryKeyClass.getName()))
-            ;
+                .map(idStringifier::enstring)
+                .orElseThrow(()->_Exceptions.illegalArgument(
+                        "failed to cast primary-key '%s' to expected type %s",
+                            ""+primaryKey,
+                            primaryKeyClass.getName()));
         }
         public T destring(final String stringifiedPrimaryKey) {
             return idStringifier.destring(owningEntityClass, stringifiedPrimaryKey);
@@ -77,7 +76,7 @@ public interface EntityFacet extends Facet {
                 final @NonNull Class<?> owningEntityClass,
                 final @NonNull Function<Class<T>, IdStringifier<T>> stringifierLookup,
                 final @NonNull Class<T> primaryKeyClass){
-            return of(
+            return new PrimaryKeyType<>(
                     owningEntityClass,
                     stringifierLookup.apply(primaryKeyClass),
                     _Casts.uncheckedCast(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyClass)));
@@ -89,7 +88,7 @@ public interface EntityFacet extends Facet {
      * facet is associated with.
      */
     default ObjectSpecification getEntitySpecification() {
-        return (ObjectSpecification)getFacetHolder();
+        return (ObjectSpecification)facetHolder();
     }
 
     /**
@@ -125,16 +124,15 @@ public interface EntityFacet extends Facet {
                         MmSpecUtils.quicklyResolveObjectSpecification(
                                 getEntitySpecification(),
                                 pojo.getClass())
-                        .getLogicalType(),
+                        .logicalType(),
                         id));
     }
 
     default Bookmark bookmarkForElseFail(final @Nullable Object pojo) {
         return bookmarkFor(pojo)
                 .orElseThrow(()->_Exceptions.noSuchElement("entity has no OID: %s",
-                        getEntitySpecification().getLogicalType()));
+                        getEntitySpecification().logicalType()));
     }
-
 
     /**
      * Optionally the entity pojo corresponding to given {@link Bookmark},
@@ -146,7 +144,7 @@ public interface EntityFacet extends Facet {
 
     void persist(Object pojo);
 
-    void refresh(Object pojo);
+    @Nullable <T> T refresh(@Nullable T pojo);
 
     void delete(Object pojo);
 
@@ -160,7 +158,7 @@ public interface EntityFacet extends Facet {
      */
     boolean isProxyEnhancement(Method method);
 
-    <T> T detach(T pojo);
+    @Nullable <T> T detach(@Nullable T pojo);
 
     PersistenceStack getPersistenceStack();
 
@@ -176,7 +174,5 @@ public interface EntityFacet extends Facet {
             final FacetHolder facetHolder) {
         return new _EntityFacetForTesting(persistenceStandard, facetHolder);
     }
-
-
 
 }

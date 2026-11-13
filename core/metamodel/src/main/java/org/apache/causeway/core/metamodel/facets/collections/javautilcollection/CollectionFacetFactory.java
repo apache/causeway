@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.javautilcollection;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class CollectionFacetFactory
 extends FacetFactoryAbstract {
@@ -39,17 +37,17 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.cls();
 
         CollectionSemantics.valueOf(cls)
-        .ifPresent(collectionType->{
-            val facetHolder = processClassContext.getFacetHolder();
-            if (collectionType.isArray()) {
-                addFacet(new JavaArrayFacet(facetHolder));
-            }
-            addFacet(new JavaCollectionFacet(facetHolder));
-            addFacetIfPresent(TypeOfFacet.inferFromPluralType(collectionType, cls, facetHolder));
-        });
+	        .ifPresent(collectionType->{
+	            var facetHolder = processClassContext.facetHolder();
+	            if (collectionType.isArray()) {
+	                new JavaArrayFacet(facetHolder);
+	            }
+	            new JavaCollectionFacet(facetHolder);
+	            TypeOfFacet.inferFromPluralType(collectionType, cls, facetHolder);
+	        });
     }
 
 }

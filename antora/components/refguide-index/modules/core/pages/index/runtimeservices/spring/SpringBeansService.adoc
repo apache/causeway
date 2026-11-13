@@ -9,8 +9,8 @@ Borrowed from BeansEndpoint.
 .SpringBeansService.java
 ----
 class SpringBeansService {
-  SpringBeansService(ConfigurableApplicationContext context)
-  Map<String, ContextBeans> beans()
+  Map<String, ContextBeans> beansByContextId()
+  ConfigurableApplicationContext getConfigurableParent(ConfigurableApplicationContext context)
 }
 ----
 

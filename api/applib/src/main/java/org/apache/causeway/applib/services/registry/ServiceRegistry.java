@@ -29,9 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
-
-import lombok.val;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 
 /**
  * Collects together methods for injecting or looking up domain services
@@ -59,14 +57,13 @@ public interface ServiceRegistry {
      * @return non-null
      */
     default <T> Can<T> select(final Class<T> type){
-
         return select(type, _Constants.emptyAnnotations);
     }
 
     /**
      * Streams all registered bean adapters implementing the requested type.
      */
-    default Stream<_SingletonBeanProvider> streamRegisteredBeansOfType(final Class<?> requiredType) {
+    default Stream<SingletonBeanProvider> streamRegisteredBeansOfType(final Class<?> requiredType) {
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.isCandidateFor(requiredType));
     }
@@ -74,21 +71,21 @@ public interface ServiceRegistry {
     /**
      * Returns all bean adapters that have been registered.
      */
-    Stream<_SingletonBeanProvider> streamRegisteredBeans();
+    Stream<SingletonBeanProvider> streamRegisteredBeans();
 
     /**
      * Returns a registered bean of given {@code name}.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    Optional<_SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id);
+    Optional<SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id);
 
     /**
      * Returns a registered bean of given {@code name}, or throws when no such bean.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    default _SingletonBeanProvider lookupRegisteredBeanByIdElseFail(final LogicalType id) {
+    default SingletonBeanProvider lookupRegisteredBeanByIdElseFail(final LogicalType id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'"));
@@ -98,11 +95,9 @@ public interface ServiceRegistry {
 
     /**
      * Returns a domain service implementing the requested type.
-     *
      * <p>
      * If this lookup is ambiguous, the service annotated with highest priority is returned.
-     * see {@link Priority}
-     * </p>
+     * see {@link jakarta.annotation.Priority}
      */
     default <T> Optional<T> lookupService(final Class<T> serviceClass) {
         final Comparator<Object> comparator = InstanceByPriorityComparator.instance();
@@ -111,22 +106,17 @@ public interface ServiceRegistry {
 
     /**
      * Returns a domain service implementing the requested type.
-     *
      * <p>
      * If this lookup is ambiguous, then the provided comparator is used.
-     * </p>
      */
     default <T> Optional<T> lookupService(final Class<T> serviceClass, final Comparator<Object> comparator) {
-        val bin = select(serviceClass);
-        if(bin.isEmpty()) {
-            return Optional.empty();
-        }
-        if(bin.isCardinalityOne()) {
-            return bin.getSingleton();
-        }
-        // dealing with ambiguity, get the one, with highest priority annotated
+        var bin = select(serviceClass);
+        if(bin.isEmpty())
+			return Optional.empty();
+        if(bin.isCardinalityOne())
+		 return bin.getSingleton();
 
-        val toComparatorReduction =
+        var toComparatorReduction =
                 //TODO [2033] not tested yet, whether the 'direction' is correct < vs >
                 _Reduction.<T>of((max, next)-> {
                     final boolean b = comparator.compare(next, max) > 0;
@@ -154,8 +144,9 @@ public interface ServiceRegistry {
 
     /**
      * Invalidates any cached service adapters that might hold a reference to
-     * the current {@link SpecificationLoader}. Particularly useful when discarding
-     * a meta-model instance, that is, purging the {@link ObjectSpecification} cache.
+     * the current {@link org.apache.causeway.core.metamodel.specloader.SpecificationLoader}.
+     * Particularly useful when discarding
+     * a meta-model instance, that is, purging the {@link org.apache.causeway.core.metamodel.spec.ObjectSpecification} cache.
      */
     void clearRegisteredBeans();
 

@@ -3,36 +3,17 @@
 
 This is the top-level for rendering the domain object's properties, collections and actions. It simply consists of a number of rows.
 
-The element is rendered as a <div class="...">
-
 == API
 
 [source,java]
 .BSGrid.java
 ----
 class BSGrid {
-  String getCssClass()
-  void setCssClass(String cssClass)
-  List<BSRow> getRows()
-  void setRows(List<BSRow> rows)
-  List<String> getMetadataErrors()     // <.>
-  void setMetadataErrors(List<String> metadataErrors)
-  void visit(Grid.Visitor visitor)
-  LinkedHashMap<String, BSTab> getAllTabsByName()
-  LinkedHashMap<String, HasCssId> getAllCssId()
-  BSGrid getGrid()
+  Class<?> domainClass()
+  void visit(BSElementVisitor visitor)
+  Stream<PropertyLayoutData> streamPropertyLayoutData()
+  Stream<CollectionLayoutData> streamCollectionLayoutData()
+  Stream<ActionLayoutData> streamActionLayoutData()
 }
 ----
 
-<.> xref:#getMetadataErrors_[getMetadataErrors()]
-+
---
-For diagnostics; populated by the framework if and only if a metadata error.
---
-
-== Members
-
-[#getMetadataErrors_]
-=== getMetadataErrors()
-
-For diagnostics; populated by the framework if and only if a metadata error.

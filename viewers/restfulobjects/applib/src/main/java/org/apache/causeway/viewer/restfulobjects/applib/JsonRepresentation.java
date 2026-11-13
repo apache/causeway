@@ -18,47 +18,42 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.POJONode;
-
-import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JsonUtils;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonNodeUtils;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
-import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
-import lombok.val;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.POJONode;
 
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
@@ -68,8 +63,9 @@ import lombok.val;
  */
 public class JsonRepresentation {
 
-    private static final Pattern FORMAT_BIG_DECIMAL = Pattern.compile("big-decimal\\((\\d+),(\\d+)\\)");
-    private static final Pattern FORMAT_BIG_INTEGER = Pattern.compile("big-integer\\((\\d+)\\)");
+    private final static Pattern FORMAT_BIG_DECIMAL = Pattern.compile("big-decimal\\((\\d+),(\\d+)\\)");
+    private final static Pattern FORMAT_BIG_INTEGER = Pattern.compile("big-integer\\((\\d+)\\)");
+    private final static Map<Class<?>, Function<JsonNode, ?>> REPRESENTATION_INSTANTIATORS = initRepresentationInstantiators();
 
     public interface HasLinkToSelf {
         public LinkRepresentation getSelf();
@@ -87,35 +83,19 @@ public class JsonRepresentation {
         public JsonRepresentation getExtensions();
     }
 
-    private static Map<Class<?>, Function<JsonNode, ?>> REPRESENTATION_INSTANTIATORS = _Maps.newHashMap();
-    static {
-        REPRESENTATION_INSTANTIATORS.put(String.class, input -> {
-            if (!input.isTextual()) {
-                throw new IllegalStateException("found node that is not a string " + input.toString());
+    @SuppressWarnings("unchecked")
+    private static <T> Function<JsonNode, T> representationInstantiatorFor(final Class<T> representationType) {
+        return (Function<JsonNode, T>) REPRESENTATION_INSTANTIATORS.computeIfAbsent(representationType, __->t -> {
+            try {
+                return representationType.getConstructor(JsonNode.class).newInstance(t);
+            } catch (final Exception e) {
+                throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
             }
-            return input.textValue();
         });
-        REPRESENTATION_INSTANTIATORS.put(JsonNode.class, input -> input);
-    }
-
-    private static <T> Function<JsonNode, ?> representationInstantiatorFor(final Class<T> representationType) {
-        Function<JsonNode, ?> transformer = REPRESENTATION_INSTANTIATORS.get(representationType);
-        if (transformer == null) {
-            transformer = input -> {
-                try {
-                    final Constructor<T> constructor = representationType.getConstructor(JsonNode.class);
-                    return constructor.newInstance(input);
-                } catch (final Exception e) {
-                    throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
-                }
-            };
-            REPRESENTATION_INSTANTIATORS.put(representationType, transformer);
-        }
-        return transformer;
     }
 
     public static JsonRepresentation jsonAsMap(final @Nullable String keyValuePairsAsJson) {
-        val repr = JsonRepresentation.newMap();
+        var repr = JsonRepresentation.newMap();
         if(_Strings.isNotEmpty(keyValuePairsAsJson)) {
             final Map<Object, Object> keyValuePairs = _Casts.uncheckedCast(
                     JsonUtils.tryRead(Map.class, keyValuePairsAsJson)
@@ -182,25 +162,18 @@ public class JsonRepresentation {
         return jsonNode.isValueNode();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // getRepresentation
-    // ///////////////////////////////////////////////////////////////////////
+    // -- REPRESENTATION
 
     public JsonRepresentation getRepresentation(final String pathTemplate, final Object... args) {
         final String pathStr = String.format(pathTemplate, args);
-
         final JsonNode node = getNode(pathStr);
 
-        if (representsNull(node)) {
-            return null;
-        }
-
-        return new JsonRepresentation(node);
+        return representsNull(node)
+            ? null
+            : new JsonRepresentation(node);
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isArray, getArray, asArray
-    // ///////////////////////////////////////////////////////////////////////
+    // -- ARRAY
 
     public boolean isArray(final String path) {
         return isArray(getNode(path));
@@ -223,9 +196,7 @@ public class JsonRepresentation {
     }
 
     private JsonRepresentation getArray(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
 
         if (!isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an array"));
@@ -238,15 +209,12 @@ public class JsonRepresentation {
     }
 
     private JsonRepresentation getArrayEnsured(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         return new JsonRepresentation(node).ensureArray();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isMap, getMap, asMap
-    // ///////////////////////////////////////////////////////////////////////
+    // -- MAP
 
     public boolean isMap(final String path) {
         return isMap(getNode(path));
@@ -269,18 +237,15 @@ public class JsonRepresentation {
     }
 
     private JsonRepresentation getMap(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         if (isArray(node) || node.isValueNode()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a map"));
         }
         return new JsonRepresentation(node);
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isNumber
-    // ///////////////////////////////////////////////////////////////////////
+    // -- NUMBER
 
     public boolean isNumber(final String path) {
         return isNumber(getNode(path));
@@ -309,10 +274,7 @@ public class JsonRepresentation {
         return node.numberValue();
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isIntegralNumber, getIntegralNumber, asIntegralNumber
-    // ///////////////////////////////////////////////////////////////////////
+    // -- INTEGRALNUMBER
 
     /**
      * Is a long, an int or a {@link BigInteger}.
@@ -332,89 +294,7 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && node.isIntegralNumber();
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // getDate, asDate
-    // ///////////////////////////////////////////////////////////////////////
-
-    public static final DateTimeFormatter yyyyMMdd = ISODateTimeFormat.date().withZoneUTC();
-
-    public java.util.Date getDate(final String path) {
-        return getDate(path, getNode(path));
-    }
-
-    public java.util.Date asDate() {
-        return getDate(null, asJsonNode());
-    }
-
-    private java.util.Date getDate(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a date");
-        if (!node.isTextual()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a date"));
-        }
-        final String textValue = node.textValue();
-        return new java.util.Date(yyyyMMdd.parseMillis(textValue));
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // getDateTime, asDateTime
-    // ///////////////////////////////////////////////////////////////////////
-
-    public static final DateTimeFormatter yyyyMMddTHHmmssZ = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
-
-    public java.util.Date getDateTime(final String path) {
-        return getDateTime(path, getNode(path));
-    }
-
-    public java.util.Date asDateTime() {
-        return getDateTime(null, asJsonNode());
-    }
-
-    private java.util.Date getDateTime(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a date-time");
-        if (!node.isTextual()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a date-time"));
-        }
-        final String textValue = node.textValue();
-        return new java.util.Date(yyyyMMddTHHmmssZ.parseMillis(textValue));
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // getTime, asTime
-    // ///////////////////////////////////////////////////////////////////////
-
-    public static final DateTimeFormatter _HHmmss = ISODateTimeFormat.timeNoMillis().withZoneUTC();
-
-    public java.util.Date getTime(final String path) {
-        return getTime(path, getNode(path));
-    }
-
-    public java.util.Date asTime() {
-        return getTime(null, asJsonNode());
-    }
-
-    private java.util.Date getTime(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a time");
-        if (!node.isTextual()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a time"));
-        }
-        final String textValue = node.textValue();
-        final LocalTime localTime = _HHmmss.parseLocalTime(textValue + "Z");
-        return new java.util.Date(localTime.getMillisOfDay());
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isBoolean, getBoolean, asBoolean
-    // ///////////////////////////////////////////////////////////////////////
+    // -- BOOLEAN
 
     public boolean isBoolean(final String path) {
         return isBoolean(getNode(path));
@@ -443,9 +323,8 @@ public class JsonRepresentation {
     }
 
     private Boolean getBoolean(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         checkValue(path, node, "a boolean");
         if (!node.isBoolean()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a boolean"));
@@ -453,9 +332,7 @@ public class JsonRepresentation {
         return node.booleanValue();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isByte, getByte, asByte
-    // ///////////////////////////////////////////////////////////////////////
+    // -- BYTE
 
     /**
      * Use {@link #isIntegralNumber(String)} to test if number (it is not possible to check if a byte, however).
@@ -473,9 +350,8 @@ public class JsonRepresentation {
     }
 
     private Byte getByte(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         checkValue(path, node, "an byte");
         if (!node.isNumber()) {
             // there is no node.isByte()
@@ -484,9 +360,7 @@ public class JsonRepresentation {
         return node.numberValue().byteValue();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // getShort, asShort
-    // ///////////////////////////////////////////////////////////////////////
+    // -- SHORT
 
     /**
      * Use {@link #isIntegralNumber(String)} to check if number (it is not possible to check if a short, however).
@@ -515,10 +389,7 @@ public class JsonRepresentation {
         return node.shortValue();
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // getChar, asChar
-    // ///////////////////////////////////////////////////////////////////////
+    // -- CHAR
 
     /**
      * Use {@link #isString(String)} to check if string (it is not possible to check if a character, however).
@@ -536,24 +407,20 @@ public class JsonRepresentation {
     }
 
     private Character getChar(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         checkValue(path, node, "an short");
-        if (!node.isTextual()) {
+        if (!node.isString()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not textual"));
         }
-        final String textValue = node.textValue();
+        final String textValue = node.stringValue();
         if(textValue == null || textValue.length() == 0) {
             return null;
         }
         return textValue.charAt(0);
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isInt, getInt, asInt
-    // ///////////////////////////////////////////////////////////////////////
+    // -- INT
 
     public boolean isInt(final String path) {
         return isInt(getNode(path));
@@ -583,9 +450,8 @@ public class JsonRepresentation {
     }
 
     private Integer getInt(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "an int");
         if (!node.isInt()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an int"));
@@ -593,10 +459,7 @@ public class JsonRepresentation {
         return node.intValue();
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isLong, getLong, asLong
-    // ///////////////////////////////////////////////////////////////////////
+    // -- LONG
 
     public boolean isLong(final String path) {
         return isLong(getNode(path));
@@ -626,9 +489,8 @@ public class JsonRepresentation {
     }
 
     private Long getLong(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a long");
         if(node.isInt()) {
             return Long.valueOf(node.intValue());
@@ -639,9 +501,7 @@ public class JsonRepresentation {
         throw new IllegalArgumentException(formatExMsg(path, "is not a long"));
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // getFloat, asFloat
-    // ///////////////////////////////////////////////////////////////////////
+    // -- FLOAT
 
     /**
      * Use {@link #isDecimal(String)} to test if a decimal value
@@ -659,9 +519,8 @@ public class JsonRepresentation {
     }
 
     private Float getFloat(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a float");
         if (!node.isNumber()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
@@ -669,10 +528,7 @@ public class JsonRepresentation {
         return node.floatValue();
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isDecimal, isDouble, getDouble, asDouble
-    // ///////////////////////////////////////////////////////////////////////
+    // -- DECIMAL
 
     public boolean isDecimal(final String path) {
         return isDecimal(getNode(path));
@@ -702,9 +558,8 @@ public class JsonRepresentation {
     }
 
     private Double getDouble(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a double");
         if (!node.isDouble()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a double"));
@@ -712,9 +567,7 @@ public class JsonRepresentation {
         return node.doubleValue();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isBigInteger, getBigInteger, asBigInteger
-    // ///////////////////////////////////////////////////////////////////////
+    // -- BIGINTEGER
 
     public boolean isBigInteger(final String path) {
         return isBigInteger(getNode(path));
@@ -725,7 +578,7 @@ public class JsonRepresentation {
     }
 
     private boolean isBigInteger(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && (node.isBigInteger() || node.isLong() || node.isInt() || node.isTextual() && parseableAsBigInteger(node.textValue()));
+        return !representsNull(node) && node.isValueNode() && (node.isBigInteger() || node.isLong() || node.isInt() || node.isString() && parseableAsBigInteger(node.stringValue()));
     }
 
     private static boolean parseableAsBigInteger(final String str) {
@@ -799,8 +652,8 @@ public class JsonRepresentation {
         if (node.isBigInteger()) {
             return node.bigIntegerValue();
         }
-        if (node.isTextual()) {
-            return new BigInteger(node.textValue());
+        if (node.isString()) {
+            return new BigInteger(node.stringValue());
         }
         if (node.isLong()) {
             return BigInteger.valueOf(node.longValue());
@@ -811,9 +664,7 @@ public class JsonRepresentation {
         throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger, is not any other integral number, is not text parseable as a biginteger"));
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isBigDecimal, getBigDecimal, asBigDecimal
-    // ///////////////////////////////////////////////////////////////////////
+    // -- BIGDECIMAL
 
     public boolean isBigDecimal(final String path) {
         return isBigDecimal(getNode(path));
@@ -824,7 +675,7 @@ public class JsonRepresentation {
     }
 
     private boolean isBigDecimal(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger() || node.isTextual() && parseableAsBigDecimal(node.textValue()));
+        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger() || node.isString() && parseableAsBigDecimal(node.stringValue()));
     }
 
     private static boolean parseableAsBigDecimal(final String str) {
@@ -875,9 +726,8 @@ public class JsonRepresentation {
     }
 
     private BigDecimal getBigDecimal(final String path, final String format, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         final String requiredType = "a bigdecimal";
         if(!isBigDecimal(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is not " + requiredType));
@@ -903,8 +753,8 @@ public class JsonRepresentation {
         if (node.isBigDecimal()) {
             return node.decimalValue();
         }
-        if (node.isTextual()) {
-            return new BigDecimal(node.textValue());
+        if (node.isString()) {
+            return new BigDecimal(node.stringValue());
         }
         if (node.isLong()) {
             return new BigDecimal(node.longValue());
@@ -922,10 +772,7 @@ public class JsonRepresentation {
         throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal, is not any other numeric, is not text parseable as a bigdecimal"));
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // getString, isString, asString
-    // ///////////////////////////////////////////////////////////////////////
+    // -- STRING
 
     public boolean isString(final String path) {
         return isString(getNode(path));
@@ -936,7 +783,7 @@ public class JsonRepresentation {
     }
 
     private boolean isString(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isTextual();
+        return !representsNull(node) && node.isValueNode() && node.isString();
     }
 
     /**
@@ -955,27 +802,24 @@ public class JsonRepresentation {
     }
 
     private String getString(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a string");
-        if (!node.isTextual()) {
+        if (!node.isString()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a string"));
         }
-        return node.textValue();
+        return node.stringValue();
     }
 
     public String asArg() {
         if (isValue()) {
-            return asJsonNode().asText();
+            return asJsonNode().asString();
         } else {
             return asJsonNode().toString();
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isLink, getLink, asLink
-    // ///////////////////////////////////////////////////////////////////////
+    // -- LINK
 
     public boolean isLink() {
         return isLink(asJsonNode());
@@ -990,11 +834,7 @@ public class JsonRepresentation {
             return false;
         }
 
-        final LinkRepresentation link = new LinkRepresentation(node);
-        if (link.getHref() == null) {
-            return false;
-        }
-        return true;
+        return new LinkRepresentation(node).getHref() != null;
     }
 
     /**
@@ -1012,9 +852,7 @@ public class JsonRepresentation {
     }
 
     private LinkRepresentation getLink(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
 
         if (isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is an array that does not represent a link"));
@@ -1030,9 +868,7 @@ public class JsonRepresentation {
         return link;
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // getNull, isNull
-    // ///////////////////////////////////////////////////////////////////////
+    // -- NULL
 
     public boolean isNull() {
         return isNull(asJsonNode());
@@ -1061,8 +897,7 @@ public class JsonRepresentation {
      * {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there
      * was no node with the provided path.
      *
-     * <p>
-     * Use {@link #isNull(String)} to check first, if required.
+     * <p>Use {@link #isNull(String)} to check first, if required.
      */
     public JsonRepresentation getNull(final String path) {
         return getNull(path, getNode(path));
@@ -1074,8 +909,7 @@ public class JsonRepresentation {
      * {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there
      * was no node with the provided path.
      *
-     * <p>
-     * Use {@link #isNull()} to check first, if required.
+     * <p>Use {@link #isNull()} to check first, if required.
      */
     public JsonRepresentation asNull() {
         return getNull(null, asJsonNode());
@@ -1093,10 +927,6 @@ public class JsonRepresentation {
         return new JsonRepresentation(node);
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // mapValueAsLink
-    // ///////////////////////////////////////////////////////////////////////
-
     /**
      * Convert a representation that contains a single node representing a link
      * into a {@link LinkRepresentation}.
@@ -1105,21 +935,16 @@ public class JsonRepresentation {
         if (asJsonNode().size() != 1) {
             throw new IllegalStateException("does not represent link");
         }
-        final String linkPropertyName = asJsonNode().fieldNames().next();
+        final String linkPropertyName = asJsonNode().propertyNames().iterator().next();
         return getLink(linkPropertyName);
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // asInputStream
-    // ///////////////////////////////////////////////////////////////////////
-
+    /**
+     * Returns the underlying JSON (UTF-8 String) as {@link ByteArrayInputStream}.
+     */
     public InputStream asInputStream() {
-        return JsonNodeUtils.asInputStream(jsonNode);
+        return new ByteArrayInputStream(jsonNode.toString().getBytes(StandardCharsets.UTF_8));
     }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // asArrayNode, asObjectNode
-    // ///////////////////////////////////////////////////////////////////////
 
     /**
      * Convert underlying representation into an array.
@@ -1141,15 +966,10 @@ public class JsonRepresentation {
         return (ObjectNode) asJsonNode();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // asT
-    // ///////////////////////////////////////////////////////////////////////
-
     /**
-     * Convenience to simply &quot;downcast&quot;.
+     * Convenience to simply 'downcast'.
      *
-     * <p>
-     * In fact, the method creates a new instance of the specified type, which
+     * <p>In fact, the method creates a new instance of the specified type, which
      * shares the underlying {@link #jsonNode jsonNode}.
      */
     public <T extends JsonRepresentation> T as(final Class<T> cls) {
@@ -1161,17 +981,11 @@ public class JsonRepresentation {
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // asUrlEncoded
-    // ///////////////////////////////////////////////////////////////////////
-
     public String asUrlEncoded() {
-        return UrlEncodingUtils.urlEncode(asJsonNode());
+        return UrlUtils.urlEncodeUtf8(asJsonNode().toString());
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // mutable (array)
-    // ///////////////////////////////////////////////////////////////////////
+    // -- MUTABLE (ARRAY)
 
     public JsonRepresentation arrayAdd(final Object value) {
         if (!isArray()) {
@@ -1251,50 +1065,8 @@ public class JsonRepresentation {
 
     public <T> Stream<T> streamArrayElements(final Class<T> requiredType) {
         ensureIsAnArrayAtLeastAsLargeAs(0);
-        final Function<JsonNode, ?> transformer = representationInstantiatorFor(requiredType);
-        final ArrayNode arrayNode = (ArrayNode) jsonNode;
-        final Iterator<JsonNode> iterator = arrayNode.iterator();
-        // necessary to do in two steps
-        final Function<JsonNode, T> typedTransformer = asT(transformer);
-        return _NullSafe.stream(iterator)
-                .map(typedTransformer);
-    }
-
-
-    //[ahuber] replaced by streamArrayElements
-    //    public Iterable<JsonRepresentation> arrayIterable() {
-    //        return arrayIterable(JsonRepresentation.class);
-    //    }
-
-    //[ahuber] replaced by streamArrayElements
-    //    public <T> Iterable<T> arrayIterable(final Class<T> requiredType) {
-    //        return new Iterable<T>() {
-    //            @Override
-    //            public Iterator<T> iterator() {
-    //                return arrayIterator(requiredType);
-    //            }
-    //        };
-    //    }
-
-    //[ahuber] replaced by streamArrayElements
-    //    public Iterator<JsonRepresentation> arrayIterator() {
-    //        return arrayIterator(JsonRepresentation.class);
-    //    }
-
-    //[ahuber] replaced by streamArrayElements
-    //    public <T> Iterator<T> arrayIterator(final Class<T> requiredType) {
-    //        ensureIsAnArrayAtLeastAsLargeAs(0);
-    //        final Function<JsonNode, ?> transformer = representationInstantiatorFor(requiredType);
-    //        final ArrayNode arrayNode = (ArrayNode) jsonNode;
-    //        final Iterator<JsonNode> iterator = arrayNode.iterator();
-    //        // necessary to do in two steps
-    //        final Function<JsonNode, T> typedTransformer = asT(transformer);
-    //        return Iterators.transform(iterator, typedTransformer);
-    //    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> Function<JsonNode, T> asT(final Function<JsonNode, ?> transformer) {
-        return (Function<JsonNode, T>) transformer;
+        return _NullSafe.stream(jsonNode.iterator())
+                .map(representationInstantiatorFor(requiredType));
     }
 
     public JsonRepresentation arrayGet(final int i) {
@@ -1322,9 +1094,7 @@ public class JsonRepresentation {
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // mutable (map)
-    // ///////////////////////////////////////////////////////////////////////
+    // -- MUTABLE (MAP)
 
     public boolean mapHas(final String key) {
         if (!isMap()) {
@@ -1355,9 +1125,8 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null)  return this;
+
         final JsonRepresentation array = JsonRepresentation.newArray();
         for (final Object v : value) {
             array.arrayAdd(v);
@@ -1371,8 +1140,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.set(path.getTail(), value != null ? new POJONode(value) : NullNode.getInstance());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.set(path.tail(), value != null ? new POJONode(value) : NullNode.getInstance());
         return this;
     }
 
@@ -1380,12 +1149,11 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null) return this;
+
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.set(path.getTail(), value.asJsonNode());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.set(path.tail(), value.asJsonNode());
         return this;
     }
 
@@ -1393,12 +1161,11 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null) return this;
+
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1406,12 +1173,11 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null) return this;
+
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.set(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.set(path.tail(), value);
         return this;
     }
 
@@ -1436,8 +1202,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1450,8 +1216,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1464,8 +1230,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1478,8 +1244,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1492,8 +1258,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1514,11 +1280,11 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
         if (value != null) {
-            node.put(path.getTail(), value.toString());
+            node.put(path.tail(), value.toString());
         } else {
-            node.set(path.getTail(), NullNode.getInstance());
+            node.set(path.tail(), NullNode.getInstance());
         }
         return this;
     }
@@ -1540,11 +1306,11 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
         if (value != null) {
-            node.put(path.getTail(), value.toString());
+            node.put(path.tail(), value.toString());
         } else {
-            node.set(path.getTail(), NullNode.getInstance());
+            node.set(path.tail(), NullNode.getInstance());
         }
         return this;
     }
@@ -1567,21 +1333,13 @@ public class JsonRepresentation {
 
     // -- PATH
 
-    private static class Path {
-        private final List<String> head;
-        private final String tail;
+    private record Path(
+        List<String> head,
+        String tail) {
 
         private Path(final List<String> head, final String tail) {
             this.head = Collections.unmodifiableList(head);
             this.tail = tail;
-        }
-
-        public List<String> getHead() {
-            return head;
-        }
-
-        public String getTail() {
-            return tail;
         }
 
         public static Path parse(final String pathStr) {
@@ -1594,31 +1352,11 @@ public class JsonRepresentation {
         }
     }
 
-
     public Stream<Map.Entry<String, JsonRepresentation>> streamMapEntries() {
         ensureIsAMap();
-        return _NullSafe.stream(jsonNode.fields())
+        return _NullSafe.stream(jsonNode.properties())
                 .map(MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
     }
-
-
-    // [ahuber] replaced by streamMapEntries
-    //	public Iterable<Map.Entry<String, JsonRepresentation>> mapIterable() {
-    //		ensureIsAMap();
-    //		return new Iterable<Map.Entry<String, JsonRepresentation>>() {
-    //
-    //			@Override
-    //			public Iterator<Entry<String, JsonRepresentation>> iterator() {
-    //				return mapIterator();
-    //			}
-    //		};
-    //	}
-
-    //[ahuber] replaced by streamMapEntries
-    //	public Iterator<Map.Entry<String, JsonRepresentation>> mapIterator() {
-    //		ensureIsAMap();
-    //		return Iterators.transform(jsonNode.fields(), MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
-    //	}
 
     private void ensureIsAMap() {
         if (!jsonNode.isObject()) {
@@ -1645,9 +1383,7 @@ public class JsonRepresentation {
         }
     };
 
-    // ///////////////////////////////////////////////////////////////////////
-    // helpers
-    // ///////////////////////////////////////////////////////////////////////
+    // -- HELPERS
 
     /**
      * A reciprocal of the behaviour of the automatic dereferencing of arrays
@@ -1686,10 +1422,10 @@ public class JsonRepresentation {
         String format = null;
         for (final String key : keys) {
             final PathNode pathNode = PathNode.parse(key);
-            if (!pathNode.getKey().isEmpty()) {
+            if (!pathNode.key().isEmpty()) {
                 // grab format (if present) before moving down the path
                 format = getFormatValueIfAnyFrom(jsonNode);
-                jsonNode = jsonNode.path(pathNode.getKey());
+                jsonNode = jsonNode.path(pathNode.key());
             } else {
                 // pathNode is criteria only; don't change jsonNode
             }
@@ -1715,7 +1451,7 @@ public class JsonRepresentation {
     private String getFormatValueIfAnyFrom(final JsonNode jsonNode) {
         String format;
         final JsonNode formatNode = jsonNode.get("format");
-        format = formatNode != null && formatNode.isTextual()? formatNode.textValue(): null;
+        format = formatNode != null && formatNode.isString()? formatNode.stringValue(): null;
         return format;
     }
 
@@ -1761,7 +1497,6 @@ public class JsonRepresentation {
         return buf.toString();
     }
 
-
     // -- OBJECT CONTRACT (NO SEMANTIC EQUALITY) ... use toString() to check for semantic equality
 
     @Override
@@ -1774,12 +1509,9 @@ public class JsonRepresentation {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         JsonRepresentation other = (JsonRepresentation) obj;
         if (jsonNode == null) {
             if (other.jsonNode != null)
@@ -1789,13 +1521,59 @@ public class JsonRepresentation {
         return true;
     }
 
-
     @Override
     public String toString() {
         return jsonNode.toString();
     }
 
+    // -- HELPER
 
+    private static Map<Class<?>, Function<JsonNode, ?>> initRepresentationInstantiators() {
+        var map = new ConcurrentHashMap<Class<?>, Function<JsonNode, ?>>();
+
+        map.put(String.class, input -> {
+            if (!input.isString()) {
+                throw new IllegalStateException("found node that is not a string " + input.toString());
+            }
+            return input.stringValue();
+        });
+        map.put(JsonNode.class, input -> input);
+
+        return map;
+    }
+
+    /**
+     * Walks the path, ensuring keys exist and are maps, or creating required
+     * maps as it goes.
+     *
+     * <p>For example, if given a list ("a", "b", "c") and starting with an empty
+     * map, then will create:
+     *
+     * <pre>
+     * {
+     *   "a": {
+     *     "b: {
+     *       "c": {
+     *       }
+     *     }
+     *   }
+     * }
+     * </pre>
+     */
+    private static ObjectNode walkNodeUpTo(ObjectNode node, final List<String> keys) {
+        for (final String key : keys) {
+            JsonNode jsonNode = node.get(key);
+            if (jsonNode == null) {
+                jsonNode = new ObjectNode(JsonNodeFactory.instance);
+                node.set(key, jsonNode);
+            } else {
+                if (!jsonNode.isObject()) {
+                    throw _Exceptions.illegalArgument("walking path: '%s', existing key '%s' is not a map", keys, key);
+                }
+            }
+            node = (ObjectNode) jsonNode;
+        }
+        return node;
+    }
 
 }
-

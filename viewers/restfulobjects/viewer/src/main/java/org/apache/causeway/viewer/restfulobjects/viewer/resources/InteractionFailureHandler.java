@@ -18,57 +18,38 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.HttpStatus;
 
 public class InteractionFailureHandler {
 
     public static RestfulObjectsApplicationException onFailure(
             final @Nullable InteractionVeto veto) {
 
-        if(veto==null) {
-            return RestfulObjectsApplicationException
-                    .createWithMessage(RestfulResponse.HttpStatusCode.INTERNAL_SERVER_ERROR,
+        if(veto==null)
+			return RestfulObjectsApplicationException
+                    .createWithMessage(HttpStatus.INTERNAL_SERVER_ERROR,
                             "unexpected empty failure holder");
-        }
 
-        switch(veto.getVetoType()) {
-        case NOT_FOUND:
-        case HIDDEN:
-            return RestfulObjectsApplicationException
-                    .createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND,
-                            veto.getReasonAsString().orElse(null));
-
-        case READONLY:
-        case INVALID:
-            return RestfulObjectsApplicationException
-                    .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
-                            veto.getReasonAsString().orElse(null));
-
-        case ACTION_NOT_SAFE:
-        case ACTION_NOT_IDEMPOTENT:
-            return RestfulObjectsApplicationException
-                    .createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
-                            veto.getReasonAsString().orElse(null));
-
-        case ACTION_PARAM_INVALID:
-            return RestfulObjectsApplicationException
-                    .createWithMessage(RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
-                            veto.getReasonAsString().orElse(null));
-        }
-
-        return RestfulObjectsApplicationException
-                .createWithMessage(RestfulResponse.HttpStatusCode.INTERNAL_SERVER_ERROR,
-                        "unmatched veto type " + veto.getVetoType());
-
+        return switch (veto.vetoType()) {
+			case NOT_FOUND, HIDDEN -> RestfulObjectsApplicationException
+			                    .createWithMessage(HttpStatus.NOT_FOUND,
+			                            veto.getReasonAsString().orElse(null));
+			case READONLY, INVALID -> RestfulObjectsApplicationException
+			                    .createWithMessage(HttpStatus.FORBIDDEN,
+			                            veto.getReasonAsString().orElse(null));
+			case ACTION_NOT_SAFE, ACTION_NOT_IDEMPOTENT -> RestfulObjectsApplicationException
+			                    .createWithMessage(HttpStatus.METHOD_NOT_ALLOWED,
+			                            veto.getReasonAsString().orElse(null));
+			case ACTION_PARAM_INVALID -> RestfulObjectsApplicationException
+			                    .createWithMessage(HttpStatus.UNPROCESSABLE_CONTENT,
+			                            veto.getReasonAsString().orElse(null));
+		};
     }
 
     public static RestfulObjectsApplicationException onParameterListInvalid(
@@ -79,7 +60,7 @@ public class InteractionFailureHandler {
             arguments.mapPutString("x-ro-invalidReason", veto.getReasonAsString().orElse(null));
         }
         return RestfulObjectsApplicationException
-                .createWithBody(RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
+                .createWithBody(HttpStatus.UNPROCESSABLE_CONTENT,
                         arguments,
                         "Validation failed, see body for details");
     }
@@ -90,11 +71,9 @@ public class InteractionFailureHandler {
             final @NonNull InteractionVeto veto,
             final @NonNull JsonRepresentation arguments) {
 
-        val paramId = paramMeta.getId();
-        val argRepr = arguments.getRepresentation(paramId);
+        var paramId = paramMeta.getId();
+        var argRepr = arguments.getRepresentation(paramId);
         argRepr.mapPutString("invalidReason", veto.getReasonAsString().orElse(null));
     }
-
-
 
 }

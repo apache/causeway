@@ -68,5 +68,4 @@ public class Object_rebuildMetamodel {
 
     @Inject MetaModelService metaModelService;
 
-
 }

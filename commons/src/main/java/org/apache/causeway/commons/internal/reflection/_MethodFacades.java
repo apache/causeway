@@ -24,19 +24,17 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -73,6 +71,20 @@ public class _MethodFacades {
         return new RegularMethod(method);
     }
 
+    public MethodFacade virtual(
+            final @NonNull Class<?> declaringClass,
+            final @NonNull String name,
+            final @NonNull Class<?> returnType,
+            final @Nullable Class<?>[] parameterTypes,
+            final @Nullable String[] parameterNames) {
+        return new VirtualMethod(
+                declaringClass,
+                name,
+                returnType,
+                parameterTypes != null ? parameterTypes : _Constants.emptyClasses,
+                parameterNames != null ? parameterNames : new String[0]);
+    }
+
     /**
      * JUnit
      */
@@ -94,7 +106,7 @@ public class _MethodFacades {
          * Replaces {@code parameterValue} (if required) to be conform with the {@code parameterType}.
          */
         <T> T convert(final Class<T> parameterType, Object parameterValue);
-        
+
         // -- UTILITY
 
         default Object[] convertAll(
@@ -104,17 +116,18 @@ public class _MethodFacades {
             if(paramCount==0) {
                 return _Constants.emptyObjects;
             }
-            val parameterTypes = executable.getParameterTypes();
-            val adaptedExecutionParameters = new Object[paramCount];
+            var parameterTypes = executable.getParameterTypes();
+            var adaptedExecutionParameters = new Object[paramCount];
             for(int i=0; i<paramCount; ++i) {
-                val origParam = _Arrays.get(executionParameters, i).orElse(null);
+                var origParam = _Arrays.get(executionParameters, i).orElse(null);
                 adaptedExecutionParameters[i] = convert(parameterTypes[i], origParam);
             }
             return adaptedExecutionParameters;
         }
     }
-    
-    public static interface MethodFacade {
+
+    public static sealed interface MethodFacade
+    permits ParamsAsTupleMethod, RegularMethod, VirtualMethod {
 
         Class<?>[] getParameterTypes();
         Class<?> getParameterType(int paramNum);
@@ -165,7 +178,7 @@ public class _MethodFacades {
         }
 
         default ResolvedType resolveParameter(final int paramIndex) {
-            val executable = this.asExecutable();
+            var executable = this.asExecutable();
             if(executable instanceof Method) {
                 return _GenericResolver.forMethodParameter(this.asMethodForIntrospection(), paramIndex);
             }
@@ -176,13 +189,78 @@ public class _MethodFacades {
         }
     }
 
+    private record VirtualMethod(
+            Class<?> declaringClass,
+            String name,
+            Class<?> returnType,
+            Class<?>[] parameterTypes,
+            String[] parameterNames) implements MethodFacade {
+
+        @Override public Class<?> getDeclaringClass() { return declaringClass; }
+        @Override public int getParameterCount() { return parameterTypes.length; }
+        @Override public Class<?>[] getParameterTypes() { return parameterTypes; }
+        @Override public Class<?> getParameterType(final int paramNum) { return parameterTypes[paramNum]; }
+        @Override public String getName() { return name; }
+        @Override public Class<?> getReturnType() { return returnType; }
+        @Override public Optional<ResolvedMethod> asMethod() { return Optional.of(asMethodForIntrospection()); }
+        @Override public Optional<ResolvedConstructor> asConstructor() { return Optional.empty(); }
+        @Override public Executable asExecutable() { return virtualMethodForIntrospection(); }
+        @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
+            return Optional.empty();
+        }
+        @Override public ResolvedMethod asMethodForIntrospection() {
+            return new ResolvedMethod() {
+                @Override public Method method() { return virtualMethodForIntrospection(); }
+                @Override public java.util.stream.Stream<Annotation> streamAnnotations() {
+                    return java.util.stream.Stream.empty();
+                }
+                @Override public Class<?> implementationClass() { return declaringClass; }
+                @Override public Class<?> returnType() { return returnType; }
+                @Override public Class<?>[] paramTypes() { return parameterTypes; }
+                @Override public String name() { return name; }
+                @Override public int paramCount() { return parameterTypes.length; }
+                @Override public Class<?> paramType(final int paramIndex) { return parameterTypes[paramIndex]; }
+                @Override public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+                    return Object.class;
+                }
+                @Override public Class<?> resolveGenericTypeArgumentOnMethodReturn(final int argumentIndex) {
+                    return Object.class;
+                }
+            };
+        }
+        @Override public String getParameterName(final int paramNum) {
+            return paramNum < parameterNames.length && parameterNames[paramNum] != null
+                    ? parameterNames[paramNum]
+                    : "param" + paramNum;
+        }
+        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(
+                final Class<A> annotationType, final int paramNum) {
+            return Optional.empty();
+        }
+        @Override public Object[] getArguments(
+                final Object[] executionParameters, final ParameterConverter converter) {
+            return executionParameters;
+        }
+        @Override public boolean isAnnotatedAsNullable() { return false; }
+        @Override public ResolvedType resolveMethodReturn() { return ResolvedType.singular(returnType); }
+        @Override public ResolvedType resolveParameter(final int paramIndex) {
+            return ResolvedType.singular(parameterTypes[paramIndex]);
+        }
+    }
+
+    @SneakyThrows
+    private static Method virtualMethodForIntrospection() {
+        return _MethodFacades.class.getDeclaredMethod("virtualMethod");
+    }
+
+    @SuppressWarnings("unused")
+    private static void virtualMethod() {
+    }
+
     /**
      * Wraps a {@link Method}, implemented as a transparent pass through.
      */
-    @lombok.Value
-    private final static class RegularMethod implements MethodFacade {
-
-        private final ResolvedMethod method;
+    private record RegularMethod(ResolvedMethod method) implements MethodFacade {
 
         @Override public Class<?> getDeclaringClass() {
             return method.method().getDeclaringClass();
@@ -225,25 +303,22 @@ public class _MethodFacades {
                 final Class<A> annotationType, final int paramNum) {
             return _Annotations.synthesize(method.method().getParameters()[paramNum], annotationType);
         }
-        @Override public Object[] getArguments(final Object[] executionParameters, ParameterConverter converter) {
+        @Override public Object[] getArguments(final Object[] executionParameters, final ParameterConverter converter) {
             return converter.convertAll(method.method(), executionParameters);
         }
         @Override public boolean isAnnotatedAsNullable() {
-            return _NullSafe.stream(method.method().getAnnotations())
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
+            return method.streamAnnotations()
+                .map(annot->annot.annotationType().getSimpleName())
+                .anyMatch(name->name.equals("Nullable"));
         }
         @Override public String toString() {
             return method.method().toString();
         }
     }
 
-
-    @lombok.Value
-    private final static class ParamsAsTupleMethod implements MethodFacade {
-
-        private final ResolvedConstructor patConstructor;
-        private final ResolvedMethod method;
+    private record ParamsAsTupleMethod(
+            ResolvedConstructor patConstructor,
+            ResolvedMethod method) implements MethodFacade {
 
         @Override public Class<?>[] getParameterTypes() {
             return patConstructor.paramTypes();
@@ -281,7 +356,7 @@ public class _MethodFacades {
             return patConstructor.constructor();
         }
         @Override @SneakyThrows
-        public Object[] getArguments(final Object[] executionParameters, ParameterConverter converter) {
+        public Object[] getArguments(final Object[] executionParameters, final ParameterConverter converter) {
             var convertedArgs = converter.convertAll(patConstructor.constructor(), executionParameters);
             // converts input args into a single arg tuple type (PAT semantics)
             return new Object[] {patConstructor.constructor().newInstance(convertedArgs)};
@@ -293,9 +368,9 @@ public class _MethodFacades {
             return _Annotations.synthesize(patConstructor.constructor().getParameters()[paramNum], annotationType);
         }
         @Override public boolean isAnnotatedAsNullable() {
-            return _NullSafe.stream(method.method().getAnnotations())
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
+            return method.streamAnnotations()
+                .map(annot->annot.annotationType().getSimpleName())
+                .anyMatch(name->name.equals("Nullable"));
         }
         @Override public String toString() {
             return method.method().toString();

@@ -17,17 +17,14 @@
  *  under the License.
  */
 package org.apache.causeway.viewer.commons.model.decorators;
-
-import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 
-import lombok.NonNull;
-import lombok.Value;
+import org.jspecify.annotations.NonNull;
 
 @FunctionalInterface
 public interface TooltipDecorator<T> {
@@ -36,26 +33,22 @@ public interface TooltipDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Value(staticConstructor = "of")
-    public static class TooltipDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        final @NonNull UiPlacementDirection placementDirection;
-        final @NonNull Optional<String> title;
-        final @NonNull String body;
+    public record TooltipDecorationModel(
+            @NonNull UiPlacementDirection placementDirection,
+            @NonNull Optional<String> title,
+            @NonNull String body) {
 
         public static TooltipDecorationModel ofBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String body) {
-            return of(uiPlacementDirection, Optional.empty(), _Strings.nonEmpty(body).orElse(""));
+            return new TooltipDecorationModel(uiPlacementDirection, Optional.empty(), _Strings.nonEmpty(body).orElse(""));
         }
 
         public static TooltipDecorationModel ofTitleAndBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String title,
                 final @Nullable String body) {
-            return of(uiPlacementDirection, _Strings.nonEmpty(title), _Strings.nonEmpty(body).orElse(""));
+            return new TooltipDecorationModel(uiPlacementDirection, _Strings.nonEmpty(title), _Strings.nonEmpty(body).orElse(""));
         }
 
         public static TooltipDecorationModel empty() {

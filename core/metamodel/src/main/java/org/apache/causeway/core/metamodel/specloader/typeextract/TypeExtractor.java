@@ -19,14 +19,13 @@
 package org.apache.causeway.core.metamodel.specloader.typeextract;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Generics;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -54,9 +53,9 @@ public class TypeExtractor {
      */
     public static Stream<Class<?>> streamMethodParameters(final Method ...methods) {
 
-        val set = _Sets.<Class<?>>newHashSet();
+        var set = new HashSet<Class<?>>();
 
-        for(val method : methods) {
+        for(var method : methods) {
             if(method==null) {
                 continue;
             }
@@ -84,10 +83,9 @@ public class TypeExtractor {
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
     public static Stream<Class<?>> streamMethodReturn(final ResolvedMethod ...methods) {
+        var set = new HashSet<Class<?>>();
 
-        val set = _Sets.<Class<?>>newHashSet();
-
-        for(val method : methods) {
+        for(var method : methods) {
             if(method==null) {
                 continue;
             }
@@ -102,9 +100,9 @@ public class TypeExtractor {
     // -- VARIANTS
 
     public static Stream<Class<?>> streamMethodReturn(final Iterable<ResolvedMethod> methods) {
-        val set = _Sets.<Class<?>>newHashSet();
+    	var set = new HashSet<Class<?>>();
 
-        for(val method : methods) {
+        for(var method : methods) {
             if(method==null) {
                 continue;
             }
@@ -122,7 +120,7 @@ public class TypeExtractor {
             final Consumer<Class<?>> onClass,
             final Class<?>... classes) {
 
-        for (val cls : classes) {
+        for (var cls : classes) {
             if(cls != void.class
                     && cls != Void.class) {
                 onClass.accept(cls);

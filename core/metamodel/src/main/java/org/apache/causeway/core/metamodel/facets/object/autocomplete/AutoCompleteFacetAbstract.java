@@ -33,10 +33,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public abstract class AutoCompleteFacetAbstract
 extends FacetAbstract
 implements AutoCompleteFacet {
@@ -73,7 +72,7 @@ implements AutoCompleteFacet {
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val resultAdapter = executionPublisher()
+        var resultAdapter = executionPublisher()
         .withPublishingSuppressed(()->{
                 final Object list = _Reflect.invokeMethodOn(repositoryMethod.method(), getRepository(), search)
                         .ifFailure(e->log.warn("failure while executing auto-complete", e))
@@ -93,7 +92,6 @@ implements AutoCompleteFacet {
     private ExecutionPublisher executionPublisher() {
         return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
-
 
     @Override
     public int getMinLength() {

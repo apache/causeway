@@ -39,28 +39,23 @@ usage() {
  echo "  -y skip clear project site             " >&2
  echo "  -z skip cache (template)               " >&2
  echo ""                                          >&2
- echo "  -f antora/playbooks/site-xxx.yml       " >&2
+ echo "  -p publish, using antora/playbooks/site.CURR.yml" >&2
+ echo ""                                          >&2
+ echo "  -f antora/playbooks/site.XXX.yml       " >&2
  exit 1
 }
 
 export ANTORA_CACHE_DIR=.antora-cache-dir
 export ANTORA_TARGET_SITE=antora/target/site
 
-#
-# for now, we disable index generation, because (a) java 11 dependency,
-# probably not available on CI build server, and (b) need to build tooling.
-#
-# nevertheless, a committer can use this script to easily regenerate the
-# index (only) using the -I flag.
-#
-PLAYBOOK_FILE=antora/playbooks/site.yml
+PLAYBOOK_FILE="antora/playbooks/site.yml"
 
 BRANCH=$(git branch --show-current)
 DATE=$(date +%Y%m%d-%H%M)
 export REVISION="${BRANCH}.${DATE}"
 
 
-while getopts 'bBECDAKSLecdakszylhf:' opt
+while getopts 'bBECDAKSLecdakszylhpf:' opt
 do
   case $opt in
     E) export EXAMPLES=exec
@@ -97,6 +92,7 @@ do
     z) export CLEAR_CACHE=skip ;;
     y) export CLEAR_PREVIOUS=skip ;;
 
+    p) PLAYBOOK_FILE="antora/playbooks/site.CURR.yml" ;;
     f) PLAYBOOK_FILE=$OPTARG ;;
     h) usage
        exit 1

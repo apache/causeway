@@ -39,47 +39,50 @@ extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
-
     private static final String ID_ROW_CONTENTS = "rowContents";
 
-    private final BSRow bsRow;
+    private boolean visible = false;
 
     public Row(
             final String id,
-            final UiObjectWkt entityModel,
+            final UiObjectWkt objectModel,
             final BSRow bsRow) {
-
-        super(id, entityModel);
-
-        this.bsRow = bsRow;
-
-        buildGui();
+        super(id, objectModel);
+        buildGui(bsRow);
     }
 
-    private void buildGui() {
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return visible; //FIXME never reassessed, visibility need assessment during onConfigure
+    }
+
+    private void buildGui(final BSRow bsRow) {
 
         final RepeatingViewWithDynamicallyVisibleContent rv =
                 new RepeatingViewWithDynamicallyVisibleContent(ID_ROW_CONTENTS);
 
-        for(final BSRowContent bsRowContent: bsRow.getCols()) {
+        for(final BSRowContent bsRowContent: bsRow.getRowContents()) {
 
             final String id = rv.newChildId();
 
             final WebMarkupContainer rowContent;
-            if(bsRowContent instanceof BSCol) {
+            if(bsRowContent instanceof BSCol bsCol) {
 
-                final BSCol bsCol = (BSCol) bsRowContent;
                 final Col col = new Col(id, getModel(), bsCol);
 
-                visible = visible || col.isVisible();
+                this.visible = visible || col.isVisible();
                 rowContent = col;
 
-            } else if (bsRowContent instanceof BSClearFix) {
-                final BSClearFix bsClearFix = (BSClearFix) bsRowContent;
+            } else if (bsRowContent instanceof final BSClearFix bsClearFix) {
                 rowContent = new ClearFix(id, getModel(), bsClearFix);
-            } else {
+            } else
                 throw new IllegalStateException("Unrecognized implementation of BSRowContent");
-            }
 
             rv.add(rowContent);
         }
@@ -94,13 +97,5 @@ implements HasDynamicallyVisibleContent {
         }
 
     }
-
-
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
-    }
-
 
 }

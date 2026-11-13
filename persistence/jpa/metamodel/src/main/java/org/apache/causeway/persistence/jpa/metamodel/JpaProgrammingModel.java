@@ -29,8 +29,6 @@ import org.apache.causeway.persistence.jpa.metamodel.facets.prop.column.MaxLengt
 import org.apache.causeway.persistence.jpa.metamodel.facets.prop.transients.JpaTransientAnnotationFacetFactory;
 import org.apache.causeway.persistence.jpa.metamodel.object.table.JpaTableAnnotationFacetFactory;
 
-import lombok.val;
-
 @Component
 public class JpaProgrammingModel implements MetaModelRefiner {
 
@@ -39,8 +37,8 @@ public class JpaProgrammingModel implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {
 
-        val step = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
-        val mmc = pm.getMetaModelContext();
+        var step = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        var mmc = pm.getMetaModelContext();
 
         pm.addFactory(step, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
         pm.addFactory(step, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);

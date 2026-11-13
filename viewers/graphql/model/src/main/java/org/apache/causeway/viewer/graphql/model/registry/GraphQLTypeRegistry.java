@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.registry;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,37 +28,47 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLNamedType;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLTypeReference;
+import graphql.schema.GraphQLUnionType;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
-import graphql.schema.GraphQLEnumType;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLNamedType;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLType;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class GraphQLTypeRegistry {
 
     private final Provider<Context> contextProvider;
 
     Set<GraphQLType> graphQLTypes = new HashSet<>();
 
-    public Set<GraphQLType> getGraphQLTypes() {
-        return Collections.unmodifiableSet(graphQLTypes);
+    public synchronized Set<GraphQLType> getGraphQLTypes() {
+        return Collections.unmodifiableSet(new HashSet<>(graphQLTypes));
     }
 
+    public synchronized Set<GraphQLNamedType> getGraphQLNamedTypes() {
+        return graphQLTypes.stream()
+                .filter(GraphQLNamedType.class::isInstance)
+                .map(GraphQLNamedType.class::cast)
+                .collect(Collectors.toUnmodifiableSet());
+    }
 
-    void addTypeIfNotAlreadyPresent(
+    synchronized void addTypeIfNotAlreadyPresent(
             final GraphQLObjectType typeToAdd,
             final String logicalTypeName){
 
@@ -73,20 +80,18 @@ public class GraphQLTypeRegistry {
         graphQLTypes.add(typeToAdd);
     }
 
-
-    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
-            final Class<?> typeToAdd,
+    public synchronized GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
+            final Class<? extends Enum<?>> typeToAdd,
             final SchemaType schemaType) {
-        val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
-        val typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
-        val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
+        var objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
+        var typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
+        var enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
 
-        if (enumTypeIfAny.isPresent()) {
-            return enumTypeIfAny.get();
-        }
+        if (enumTypeIfAny.isPresent())
+			return enumTypeIfAny.get();
 
-        val enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
-        val enumType = newEnum()
+        var enumTypeToAdd = typeToAdd;
+        var enumType = newEnum()
                 .name(typeName)
                 .values(Stream.of(enumTypeToAdd.getEnumConstants())
                         .map(enumValue -> newEnumValueDefinition()
@@ -99,8 +104,7 @@ public class GraphQLTypeRegistry {
         return enumType;
     }
 
-
-    public void addTypeIfNotAlreadyPresent(final GraphQLType typeToAdd) {
+    public synchronized void addTypeIfNotAlreadyPresent(final GraphQLType typeToAdd) {
 
         if (typeToAdd instanceof GraphQLEnumType) {
             addTypeIfNotAlreadyPresent((GraphQLEnumType) typeToAdd);
@@ -117,11 +121,15 @@ public class GraphQLTypeRegistry {
             return;
         }
 
+        if (typeToAdd instanceof GraphQLUnionType) {
+            addUnionTypeIfNotAlreadyPresent((GraphQLUnionType) typeToAdd);
+            return;
+        }
+
         // TODO: none of these types yet handled
         // GraphQLTypeReference
         // GraphQLScalarType
         // GraphQLCompositeType
-        // GraphQLUnionType
         // GraphQLEnumType
         // GraphQLInterfaceType
         // GraphQLList
@@ -129,7 +137,7 @@ public class GraphQLTypeRegistry {
         log.warn("GraphQLType {} not yet implemented", typeToAdd.getClass().getName());
     }
 
-    void addTypeIfNotAlreadyPresent(final GraphQLEnumType typeToAdd){
+    synchronized void addTypeIfNotAlreadyPresent(final GraphQLEnumType typeToAdd){
         if (isPresent(typeToAdd, GraphQLEnumType.class)){
             // For now we just log and skip
             log.debug("GraphQLEnumType for {} already present", typeToAdd.getName());
@@ -138,7 +146,7 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
-    void addTypeIfNotAlreadyPresent(final GraphQLObjectType typeToAdd){
+    synchronized void addTypeIfNotAlreadyPresent(final GraphQLObjectType typeToAdd){
         if (isPresent(typeToAdd, GraphQLObjectType.class)){
             // For now we just log and skip
             log.debug("GraphQLObjectType for {} already present", typeToAdd.getName());
@@ -147,8 +155,7 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
-
-    void addTypeIfNotAlreadyPresent(final GraphQLInputObjectType typeToAdd) {
+    synchronized void addTypeIfNotAlreadyPresent(final GraphQLInputObjectType typeToAdd) {
         if (isPresent(typeToAdd, GraphQLInputObjectType.class)){
             // For now we just log and skip
             log.debug("GraphQLInputObjectType for {} already present", typeToAdd.getName());
@@ -157,25 +164,47 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
+    public synchronized GraphQLUnionType addUnionTypeIfNotAlreadyPresent(final GraphQLUnionType typeToAdd) {
+        var existing = lookup(typeToAdd.getName(), GraphQLUnionType.class);
+        if (existing.isPresent()) {
+            var existingType = existing.get();
+            var mergedType = existingType.transform(builder -> typeToAdd.getTypes().forEach(type -> {
+                if (type instanceof GraphQLObjectType objectType) {
+                    builder.possibleType(objectType);
+                } else if (type instanceof GraphQLTypeReference typeReference) {
+                    builder.possibleType(typeReference);
+                }
+            }));
+            if (mergedType.getTypes().size() != existingType.getTypes().size()) {
+                graphQLTypes.remove(existingType);
+                graphQLTypes.add(mergedType);
+                log.debug("Merged GraphQLUnionType {} from {} to {} possible types",
+                        typeToAdd.getName(), existingType.getTypes().size(), mergedType.getTypes().size());
+            }
+            return mergedType;
+        }
+        add(typeToAdd);
+        return typeToAdd;
+    }
+
     private boolean isPresent(
             final GraphQLNamedType typeToAdd,
             final Class<? extends GraphQLNamedType> cls) {
         return graphQLTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .filter(cls::isInstance)
                 .map(cls::cast)
                 .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
     }
 
-    public <T extends GraphQLNamedType> Optional<T> lookup(
+    public synchronized <T extends GraphQLNamedType> Optional<T> lookup(
             final String typeName,
             final Class<T> cls) {
         return graphQLTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .filter(cls::isInstance)
                 .map(cls::cast)
                 .filter(ot -> ot.getName().equals(typeName))
                 .findFirst();
     }
-
 
     private void add(final GraphQLType typeToAdd) {
         graphQLTypes.add(typeToAdd);

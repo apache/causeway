@@ -1,0 +1,18 @@
+{
+  "name": "causeway-vaadin-reference-widgets",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audit": "npm audit --omit=dev",
+    "build": "node build.mjs",
+    "update-policy": "node build.mjs --write-policy",
+    "verify": "node verify.mjs"
+  },
+  "dependencies": {
+    "@vaadin/combo-box": "25.2.8",
+    "@vaadin/multi-select-combo-box": "25.2.8"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.4"
+  }
+}

@@ -38,8 +38,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -50,9 +48,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -103,33 +101,30 @@ public interface CollectionFacet extends Facet {
 
     // -- UTILS
 
-    public static Optional<CollectionFacet> lookup(@Nullable final ManagedObject container) {
-        if(container==null) {
-            return Optional.empty();
-        }
-        return container.getSpecification().lookupFacet(CollectionFacet.class);
+    public static Optional<CollectionFacet> lookup(final @Nullable ManagedObject container) {
+        return container!=null
+            ? container.objSpec().lookupFacet(CollectionFacet.class)
+            : Optional.empty();
     }
 
-    public static int elementCount(@Nullable final ManagedObject container) {
-        if(container instanceof PackedManagedObject) {
-            return ((PackedManagedObject)container).unpack().size();
-        }
-        return lookup(container)
+    public static int elementCount(final @Nullable ManagedObject container) {
+        return container instanceof PackedManagedObject packedManagedObject
+            ? packedManagedObject.unpack().size()
+            : lookup(container)
                 .map(collectionFacet->collectionFacet.size(container))
                 .orElse(0);
     }
 
-    public static Stream<ManagedObject> streamAdapters(@Nullable final ManagedObject container) {
-        if(container instanceof PackedManagedObject) {
-            return ((PackedManagedObject)container).unpack().stream();
-        }
-        return lookup(container)
+    public static Stream<ManagedObject> streamAdapters(final @Nullable ManagedObject container) {
+        return container instanceof PackedManagedObject packedManagedObject
+            ? packedManagedObject.unpack().stream()
+            : lookup(container)
                 .map(collectionFacet->collectionFacet.stream(container))
                 .orElse(Stream.empty());
     }
 
-    public static Object[] toArrayOfPojos(@Nullable final ManagedObject container) {
-        val elementAdapters = streamAdapters(container)
+    public static Object[] toArrayOfPojos(final @Nullable ManagedObject container) {
+        var elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
         return MmUnwrapUtils.multipleAsArray(elementAdapters);
     }
@@ -147,7 +142,7 @@ public interface CollectionFacet extends Facet {
 
             Stream rawStream = stream;
 
-            val factoryIfAny = factoriesByType.get(requiredType);
+            var factoryIfAny = factoriesByType.get(requiredType);
             if(factoryIfAny!=null) {
                 Supplier rawFactory = factoryIfAny;
                 Collector rawCollector = Collectors.toCollection(rawFactory);
@@ -161,9 +156,8 @@ public interface CollectionFacet extends Facet {
             }
 
             // Can
-            if (Can.class.equals(requiredType)) {
-                return rawStream.collect(Can.toCan());
-            }
+            if (Can.class.equals(requiredType))
+				return rawStream.collect(Can.toCan());
 
             // not recognized
             return null;
@@ -174,27 +168,26 @@ public interface CollectionFacet extends Facet {
 
         private static final Map<Class<?>, Supplier<Collection<?>>> factoriesByType = Map.ofEntries(
 
-                    // specific list implementations
+                // specific list implementations
                 Map.entry(CopyOnWriteArrayList.class, _Lists::newConcurrentList),
-                Map.entry(LinkedList.class, _Lists::newLinkedList),
-                Map.entry(ArrayList.class, _Lists::newArrayList),
-                Map.entry(AbstractList.class, _Lists::newArrayList),
+                Map.entry(LinkedList.class, LinkedList::new),
+                Map.entry(ArrayList.class, ArrayList::new),
+                Map.entry(AbstractList.class, ArrayList::new),
 
-                    // specific set implementations
+                // specific set implementations
                 Map.entry(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet),
-                Map.entry(LinkedHashSet.class, _Sets::newLinkedHashSet),
-                Map.entry(HashSet.class, _Sets::newHashSet),
-                Map.entry(TreeSet.class, _Sets::newTreeSet),
-                Map.entry(AbstractSet.class, _Sets::newLinkedHashSet),
+                Map.entry(LinkedHashSet.class, LinkedHashSet::new),
+                Map.entry(HashSet.class, HashSet::new),
+                Map.entry(TreeSet.class, TreeSet::new),
+                Map.entry(AbstractSet.class, LinkedHashSet::new),
 
-                    // interfaces
-                Map.entry(List.class, _Lists::newArrayList),
-                Map.entry(SortedSet.class, _Sets::newTreeSet),
-                Map.entry(Set.class, _Sets::newLinkedHashSet),
-                Map.entry(Collection.class, _Lists::newArrayList)
-                );
+                // interfaces
+                Map.entry(List.class, ArrayList::new),
+                Map.entry(SortedSet.class, TreeSet::new),
+                Map.entry(Set.class, LinkedHashSet::new),
+                Map.entry(Collection.class, ArrayList::new)
+            );
 
     }
-
 
 }

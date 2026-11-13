@@ -18,17 +18,16 @@
  */
 package org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.testing.fakedata.applib.services.FakeDataService;
 import org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 import org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,7 +40,7 @@ public class FakeDataDemoObjectWithAll_create3 extends FixtureScript {
     private Boolean withFakeData;
 
     @Getter(onMethod = @__( @Programmatic ))
-    private List<FakeDataDemoObjectWithAll> demoObjects = _Lists.newArrayList();
+    private final List<FakeDataDemoObjectWithAll> demoObjects = new ArrayList<>();
 
     @Override
     protected void execute(final ExecutionContext executionContext) {

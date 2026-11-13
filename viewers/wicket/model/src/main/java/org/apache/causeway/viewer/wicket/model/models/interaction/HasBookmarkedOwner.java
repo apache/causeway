@@ -23,7 +23,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public interface HasBookmarkedOwner {
 
-    Bookmark getOwnerBookmark();
-    ManagedObject getBookmarkedOwner();
+    BookmarkedObjectWkt bookmarkedObjectModel();
+
+    default Bookmark getOwnerBookmark() {
+        return bookmarkedObjectModel().bookmark();
+    }
+
+    default ManagedObject getBookmarkedOwner() {
+        return bookmarkedObjectModel().managedObject();
+    }
 
 }

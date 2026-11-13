@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.services.publishing;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 
-import lombok.NonNull;
-
 /**
  * Notifies {@link CommandSubscriber}s.
+ *
  * @since 2.0 {@index}
  */
 public interface CommandPublisher {

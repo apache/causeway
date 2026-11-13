@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.param;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -48,14 +47,13 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Does post-processing of
  * {@link ActionParameterDefaultsFacet} and {@link ActionParameterChoicesFacet},
  * as well as
  * {@link PropertyDefaultFacet} and {@link PropertyChoicesFacet}.
- *
  */
 public class ChoicesAndDefaultsPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -76,50 +74,36 @@ extends MetaModelPostProcessorAbstract {
         //  eg to emit an outbox event for integration)
         if (Facets.hiddenWhere(objectAction)
                   .filter(where -> where == Where.EVERYWHERE)
-                  .isPresent()) {
-            return;
-        }
+                  .isPresent())
+			return;
 
         if(!hasChoicesOrAutoComplete(param)) {
-
-            if(FacetUtil
-                    .addFacetIfPresent(
-                        ActionParameterChoicesFacetFromAction
-                            .create(objectAction, objectSpecification, param))
-                    .isPresent()) {
-
-                /* ActionParameterChoicesFacetFromAction has precedence over
+            if(ActionParameterChoicesFacetFromAction
+	                .create(objectAction, objectSpecification, param)
+	                .isPresent())
+				/* ActionParameterChoicesFacetFromAction has precedence over
                  * ActionParameterChoicesFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
-            }
 
-            if(FacetUtil
-                    .addFacetIfPresent(
-                        ActionParameterChoicesFacetFromElementType
-                            .create(param))
-                    .isPresent()) {
-
-                /* ActionParameterChoicesFacetFromElementType has precedence over
+            if(ActionParameterChoicesFacetFromElementType
+                    .create(param)
+                    .isPresent())
+				/* ActionParameterChoicesFacetFromElementType has precedence over
                  * ActionParameterAutoCompleteFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
-            }
 
-            if(FacetUtil
-                    .addFacetIfPresent(
-                            ActionParameterAutoCompleteFacetFromElementType
-                                .create(param))
-                    .isPresent()) {
-
-                /* skips validation below */
+            if(ActionParameterAutoCompleteFacetFromElementType
+                    .create(param)
+                    .isPresent())
+				/* skips validation below */
                 return;
-            }
-
         }
 
         if(MetaModelVisitor.SKIP_ABSTRACT.test(objectSpecification)) {
             checkParamHasChoicesOrAutoCompleteWhenRequired(param);
+            checkActionParameterHasSupporedCollectionTypeWhenPlural(objectSpecification, objectAction, param);
         }
 
     }
@@ -132,17 +116,16 @@ extends MetaModelPostProcessorAbstract {
         if(!hasMemberLevelDefaults(prop)) {
             prop.getElementType()
             .lookupNonFallbackFacet(DefaultedFacet.class)
-            .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
-                                        specFacet, facetedMethodFor(prop))));
+            .ifPresent(specFacet -> new PropertyDefaultFacetFromDefaultedFacet(
+                                        specFacet, facetedMethodFor(prop)));
         }
         if(!hasChoicesOrAutoComplete(prop)) {
 
-            val choicesFacetIfAny = prop.getElementType()
+            var choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
 
-            FacetUtil.addFacetIfPresent(
-                    PropertyChoicesFacetFromChoicesFacet
-                    .create(choicesFacetIfAny, facetedMethodFor(prop)));
+            PropertyChoicesFacetFromChoicesFacet
+                .create(choicesFacetIfAny, facetedMethodFor(prop));
         }
     }
 
@@ -157,10 +140,10 @@ extends MetaModelPostProcessorAbstract {
         //
 
         // setting up filters ...
-        val elementType = coll.getElementType();
-        val whetherCollectionParamOfType =
+        var elementType = coll.getElementType();
+        var whetherCollectionParamOfType =
                 new ObjectActionParameter.Predicates.CollectionParameter(elementType);
-        val whetherScalarParamOfType =
+        var whetherScalarParamOfType =
                 new ObjectActionParameter.Predicates.ScalarParameter(elementType);
 
         // processing actions ...
@@ -168,10 +151,10 @@ extends MetaModelPostProcessorAbstract {
         .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(coll))
         .forEach(action->{
 
-            val parameters = action.getParameters();
+            var parameters = action.getParameters();
 
-            val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
-            val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
+            var compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
+            var compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
 
             // for collection parameters, install a defaults facet (if there isn't one already)
             // this will cause the UI to render the collection with toggleboxes
@@ -216,9 +199,8 @@ extends MetaModelPostProcessorAbstract {
     private static void addCollectionParamDefaultsFacetIfNoneAlready(
             final ObjectActionParameter collectionParam) {
         if(!hasMemberLevelDefaults(collectionParam)) {
-            FacetUtil.addFacet(
-                    ActionParameterDefaultsFacetFromAssociatedCollection
-                    .create(collectionParam));
+            ActionParameterDefaultsFacetFromAssociatedCollection
+                    .create(collectionParam);
         }
     }
 
@@ -226,20 +208,16 @@ extends MetaModelPostProcessorAbstract {
             final OneToManyAssociation coll,
             final ObjectActionParameter param) {
         if(!hasChoicesOrAutoComplete(param)) {
-            FacetUtil.addFacet(
-                    new ActionParameterChoicesFacetFromParentedCollection(param, coll));
+            new ActionParameterChoicesFacetFromParentedCollection(param, coll);
         }
     }
 
     private void checkParamHasChoicesOrAutoCompleteWhenRequired(final ObjectActionParameter param) {
-        val elementType = param.getElementType();
+        var elementType = param.getElementType();
         if(elementType == null
-                || elementType.getBeanSort().isManagedBeanAny()
-                || elementType.getBeanSort().isMixin()
-                || elementType.getBeanSort().isVetoed()) {
-            // ignore, as these cases are covered later by meta-model validation
+                || !elementType.beanSort().policy().isAllowedAsMemberElementType())
+			// ignore, as these cases are covered later by meta-model validation
             return;
-        }
         if(elementType.isEntityOrViewModel()
                 || param.isPlural()) {
             if(!hasChoicesOrAutoComplete(param)) {
@@ -250,6 +228,44 @@ extends MetaModelPostProcessorAbstract {
                             .buildMessage());
             }
         }
+    }
+
+    private static void checkActionParameterHasSupporedCollectionTypeWhenPlural(
+            final ObjectSpecification objectSpec,
+            final ObjectAction objectAction,
+            final ObjectActionParameter param) {
+
+        if(param.isSingular()) return;
+
+        param.lookupFacet(TypeOfFacet.class)
+        .ifPresentOrElse(typeOfFacet->{
+
+            // Violation if there are action parameter types that are assignable
+            // from java.util.Collection but are not of
+            // exact type List, Set, SortedSet or Collection.
+            if(!typeOfFacet.value().isSupportedForActionParameter()) {
+
+                ValidationFailure.raiseFormatted(param,
+                        ProgrammingModelConstants.MessageTemplate.PARAMETER_HAS_UNSUPPORTED_COLLECTION_TYPE.builder()
+                            .addVariable("type", objectSpec.fullIdentifier())
+                            .addVariable("action", objectAction.getId())
+                            .addVariable("paramIndex", param.getParameterIndex())
+                            .buildMessage());
+            }
+
+        },()->{
+
+            var messageFormat = "framework bug: plural action parameter found,"
+                    + " that has no TypeOfFacet"
+                    + "Class: %s action: %s parameter %d";
+
+            throw _Exceptions.unrecoverable(
+                            messageFormat,
+                            objectSpec.fullIdentifier(),
+                            objectAction.getId(),
+                            param.getParameterIndex());
+
+        });
     }
 
 }

@@ -27,15 +27,14 @@ import org.quartz.PersistJobDataAfterExecution;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -43,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
-@Log4j2
+@Slf4j
 public class ReplicateAndReplayJob implements Job {
 
     @Inject SecondaryConfig secondaryConfig;
@@ -57,7 +56,7 @@ public class ReplicateAndReplayJob implements Job {
         new SecondaryStatusData(quartzContext);
 
         if(secondaryConfig.isConfigured()) {
-            val user = UserMemento.ofNameAndRoleNames(
+            var user = UserMemento.ofNameAndRoleNames(
                     secondaryConfig.getPrimaryUser(),
                     secondaryConfig.getQuartzRoles().stream());
 
@@ -70,12 +69,12 @@ public class ReplicateAndReplayJob implements Job {
 
     private void exec(final JobExecutionContext quartzContext) {
 
-        val ssh = new SecondaryStatusData(quartzContext);
-        val secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
+        var ssh = new SecondaryStatusData(quartzContext);
+        var secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
 
         switch (secondaryStatus) {
             case OK:
-                val newStatus =
+                var newStatus =
                         interactionService.call(authentication, new ReplicateAndRunCommands());
 
                 if(newStatus != null) {
@@ -93,6 +92,4 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-
 }
-

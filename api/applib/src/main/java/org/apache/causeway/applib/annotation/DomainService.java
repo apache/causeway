@@ -63,15 +63,4 @@ public @interface DomainService {
      * @see Named
      */
     String[] aliased() default {};
-
-    /**
-     * The nature of this service, either in the UI or REST only
-     *
-     * @see DomainObject#nature()
-     * @deprecated has no scope limiting effect any longer, see [CAUSEWAY-3697]
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-RC4")
-    NatureOfService nature()
-            default NatureOfService.VIEW;
-
 }

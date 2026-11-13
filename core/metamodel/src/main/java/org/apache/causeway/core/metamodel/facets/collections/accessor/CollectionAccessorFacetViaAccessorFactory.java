@@ -18,23 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
-import java.util.List;
-
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
-import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
-import org.apache.causeway.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel.facets.AccessorFacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionAccessorFacetViaAccessorFactory
-extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
+extends AccessorFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.empty();
 
@@ -44,64 +42,16 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        attachAccessorFacetForAccessorMethod(processMethodContext);
-    }
-
-    private void attachAccessorFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        val accessorMethod = processMethodContext.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
-        processMethodContext.removeMethod(accessorMethod);
-
-        val cls = processMethodContext.getCls();
-        val typeSpec = getSpecificationLoader().loadSpecification(cls);
-        val facetHolder = processMethodContext.getFacetHolder();
-
-        addFacet(
-                new CollectionAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, facetHolder));
-    }
-
-
-    // ///////////////////////////////////////////////////////////////
-    // PropertyOrCollectionIdentifyingFacetFactory impl.
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
-        return AccessorSemantics.GET.isPrefixOf(method.name());
+    public boolean isAssociationAccessor(final ResolvedMethod method) {
+        return AccessorSemantics.isCollectionAccessor(method, Collection.class);
     }
 
     @Override
-    public boolean isCollectionAccessor(final ResolvedMethod method) {
-        if (!isPropertyOrCollectionGetterCandidate(method)) {
-            return false;
-        }
-        final Class<?> methodReturnType = method.returnType();
-        return isNonScalar(methodReturnType);
-    }
-
-    /**
-     * The method way well represent a reference property, but this facet
-     * factory does not have any opinion on the matter.
-     */
-    @Override
-    public boolean isPropertyAccessor(final ResolvedMethod method) {
-        return false;
-    }
-
-    @Override
-    public void findAndRemoveCollectionAccessors(
-            final MethodRemover methodRemover,
-            final List<ResolvedMethod> methodListToAppendTo) {
-        methodRemover.removeMethods(
-                MethodUtil.Predicates.supportedNonScalarMethodReturnType(),
-                methodListToAppendTo::add);
-    }
-
-    @Override
-    public void findAndRemovePropertyAccessors(
-            final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
-        // does nothing
+    protected PropertyOrCollectionAccessorFacet createFacet(
+            final ObjectSpecification typeSpec,
+            final ResolvedMethod accessorMethod,
+            final FacetedMethod facetHolder) {
+        return new CollectionAccessorFacetViaAccessor(typeSpec, accessorMethod, facetHolder);
     }
 
 }

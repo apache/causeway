@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0.
+-->
+<mb:menuBars
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:mb="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mb:primary>
+        <mb:menu cssClassFa="fa-cubes">
+            <mb:named>Samples</mb:named>
+            <mb:section>
+                <mb:named>Explore</mb:named>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="welcomeMessage">
+                    <cpt:named>Welcome Message</cpt:named>
+                </mb:serviceAction>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="greet">
+                    <cpt:named>Personal Greeting</cpt:named>
+                </mb:serviceAction>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="findSample"/>
+            </mb:section>
+        </mb:menu>
+        <mb:menu unreferencedActions="true">
+            <mb:named>System</mb:named>
+        </mb:menu>
+    </mb:primary>
+    <mb:secondary>
+        <mb:menu cssClassFa="fa-list">
+            <mb:named>Data</mb:named>
+            <mb:section>
+                <mb:named>Browse</mb:named>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="findRelatedObjects"/>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="statusMessage"/>
+            </mb:section>
+        </mb:menu>
+    </mb:secondary>
+    <mb:tertiary>
+        <mb:menu cssClassFa="fa-wrench">
+            <mb:named>Administration</mb:named>
+            <mb:section>
+                <mb:named>Maintenance</mb:named>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="clearSampleNotes"/>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="disabledAction"/>
+            </mb:section>
+            <mb:section>
+                <mb:named>Filtered Entries</mb:named>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="hiddenAction"/>
+                <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="missingAction"/>
+            </mb:section>
+        </mb:menu>
+    </mb:tertiary>
+</mb:menuBars>

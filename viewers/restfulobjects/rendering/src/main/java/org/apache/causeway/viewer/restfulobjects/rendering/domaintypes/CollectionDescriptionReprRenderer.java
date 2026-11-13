@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-import lombok.val;
-
 public class CollectionDescriptionReprRenderer
 extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
 
@@ -37,7 +35,7 @@ extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final OneToManyAssociation collection) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final String collectionId = collection.getId();
         final String url = "domain-types/" + domainType + "/collections/" + collectionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.COLLECTION_DESCRIPTION, url);
@@ -64,7 +62,7 @@ extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
     // -- HELPER
 
     private void addLinkToElementTypeIfAny() {
-        val elementTypeSpec = getObjectFeature().getElementType();
+        var elementTypeSpec = getObjectFeature().getElementType();
         if (elementTypeSpec == null) {
             return;
         }

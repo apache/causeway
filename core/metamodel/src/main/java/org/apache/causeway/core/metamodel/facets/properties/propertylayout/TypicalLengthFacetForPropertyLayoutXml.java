@@ -22,29 +22,36 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class TypicalLengthFacetForPropertyLayoutXml
-extends TypicalLengthFacetAbstract {
+extends TypicalLengthFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<TypicalLengthFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(propertyLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(propertyLayout == null)
             return Optional.empty();
-        }
         final Integer typicalLength = propertyLayout.getTypicalLength();
         return typicalLength != null
                 && typicalLength != -1
-                    ? Optional.of(new TypicalLengthFacetForPropertyLayoutXml(typicalLength, holder, precedence))
-                    : Optional.empty();
+            ? Optional.of(new TypicalLengthFacetForPropertyLayoutXml(typicalLength, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
     private TypicalLengthFacetForPropertyLayoutXml(
-            final int typicalLength, final FacetHolder holder, final Precedence precedence) {
-        super(typicalLength, holder, precedence);
+            final int typicalLength,
+            final FacetHolder holder) {
+        super(typicalLength, holder);
     }
 
     @Override

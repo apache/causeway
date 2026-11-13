@@ -25,36 +25,41 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
+import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationNaming;
+import org.apache.causeway.core.config.observation.CausewaySemanticTraceNamer;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -64,7 +69,6 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
@@ -75,160 +79,222 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import io.micrometer.observation.Observation;
+
 import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
+ * Default implementation of {@link MemberExecutorService}.
+ *
  * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class MemberExecutorServiceDefault
 implements MemberExecutorService {
 
-    private final @Getter InteractionLayerTracker interactionLayerTracker;
-    private final @Getter CausewayConfiguration configuration;
-    private final @Getter ObjectManager objectManager;
-    private final @Getter ClockService clockService;
-    private final @Getter DeadlockRecognizer deadlockRecognizer;
-    private final @Getter ServiceInjector serviceInjector;
-    private final @Getter Provider<MetricsService> metricsServiceProvider;
-    private final @Getter InteractionDtoFactory interactionDtoFactory;
-    private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
-    private final @Getter MetamodelEventService metamodelEventService;
-    private final @Getter TransactionService transactionService;
+    private final InteractionLayerTracker interactionLayerTracker;
+    private final CausewayConfiguration configuration;
+    private final ObjectManager objectManager;
+    private final InteractionDtoFactory interactionDtoFactory;
+    private final Provider<ExecutionPublisher> executionPublisherProvider;
+    private final TransactionService transactionService;
     private final Provider<CommandPublisher> commandPublisherProvider;
+    private final ObservationProvider observationProvider;
 
-    private MetricsService metricsService() {
-        return metricsServiceProvider.get();
+    @Inject
+    MemberExecutorServiceDefault(final InteractionLayerTracker interactionLayerTracker,
+            final CausewayConfiguration configuration,
+            final ObjectManager objectManager,
+            final InteractionDtoFactory interactionDtoFactory,
+            final Provider<ExecutionPublisher> executionPublisherProvider,
+            final TransactionService transactionService,
+            final Provider<CommandPublisher> commandPublisherProvider,
+            final CausewayObservationIntegration observationIntegration) {
+        this.interactionLayerTracker = interactionLayerTracker;
+        this.configuration = configuration;
+        this.objectManager = objectManager;
+        this.interactionDtoFactory = interactionDtoFactory;
+        this.executionPublisherProvider = executionPublisherProvider;
+        this.transactionService = transactionService;
+        this.commandPublisherProvider = commandPublisherProvider;
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
 
-    private ExecutionPublisher executionPublisher() {
-        return executionPublisherProvider.get();
-    }
-
-    @Override
-    public Optional<InteractionInternal> getInteraction() {
-        return interactionLayerTracker.currentInteraction()
-                .map(InteractionInternal.class::cast);
+    private Observation memberObservation(final String operation,
+            final String label, final Identifier memberId) {
+        var observation = observationProvider.get(operation).contextualName(label);
+        // A missing static identifier must not trigger a fallback to runtime object data.
+        return memberId == null ? observation : observation
+                .contextualName(label + " " + memberId)
+                .lowCardinalityKeyValue("causeway.member.id", memberId.toString());
     }
 
     @Override
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+        var executionResult = semanticMemberObservation(actionExecutor)
+            .observe(()->
+                actionExecutor.interactionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     invokeActionInternally(actionExecutor))
-                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
-                    invokeActionInternally(actionExecutor));
+                : transactionService.callWithinCurrentTransactionElseCreateNew(()->
+                    invokeActionInternally(actionExecutor)));
 
         return executionResult
                 .valueAsNullableElseFail();
     }
 
+    private Observation semanticMemberObservation(final ActionExecutor executor) {
+        var invokedId = executor.owningAction().getFeatureIdentifier();
+        var association = executor.mixedInAssociation();
+        var domainId = association.map(member -> member.getFeatureIdentifier())
+                .orElseGet(() -> invokedId == null ? null : domainFacingActionIdentifier(executor.head(), executor.owningAction()));
+        var property = association.map(member -> member.isSingular()).orElse(false);
+        var operation = association.isEmpty() ? "causeway.member.action"
+                : property ? "causeway.property.access" : "causeway.collection.access";
+        var prefix = association.isEmpty() ? "act" : property ? "prop" : "coll";
+        var identityKey = association.isEmpty() ? "causeway.action.id"
+                : property ? "causeway.property.id" : "causeway.collection.id";
+        var observation = observationProvider.get(operation).contextualName(prefix)
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", executor.interactionInitiatedBy().name());
+        // Generic metadata retains the physical identity for existing consumers.
+        // The semantic key carries the complete domain identity, independently
+        // of the compact display name and without runtime values or arguments.
+        if (invokedId != null) {
+            observation.lowCardinalityKeyValue("causeway.member.id", invokedId.toString());
+        }
+        if (domainId != null) {
+            observation.contextualName(CausewayObservationNaming.forMember(
+                    prefix, domainId.logicalTypeName(), domainId.memberLogicalName()))
+                    .lowCardinalityKeyValue(identityKey, domainId.getLogicalIdentityString("#"));
+        }
+        return observation;
+    }
+
     private ManagedObject invokeActionInternally(
             final ActionExecutor actionExecutor) {
 
-        final ObjectAction owningAction = actionExecutor.getOwningAction();
-        final InteractionHead head = actionExecutor.getHead();
-        final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
-        final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
-        //            final MethodFacade methodFacade,
-        //            final ActionExecutorFactory actionExecutorFactory,
-        final FacetHolder facetHolder = actionExecutor.getFacetHolder();
+        final ObjectAction owningAction = actionExecutor.owningAction();
+        final InteractionHead head = actionExecutor.head();
 
+        final Can<ManagedObject> argumentAdapters = actionExecutor.arguments();
+        final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.interactionInitiatedBy();
+        final FacetHolder facetHolder = actionExecutor.facetHolder();
 
         if(interactionInitiatedBy.isPassThrough()) {
-            val resultPojo = invokeMethodPassThrough(actionExecutor.getMethod(), head, argumentAdapters);
+            var resultPojo = invokeMethodPassThrough(actionExecutor.method(), head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
-        val interaction = getInteractionElseFail();
+        var interactionCarrier = interactionCarrierElseFail();
 
-        prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
+        prepareCommandForPublishing(interactionCarrier.command(), head, owningAction, facetHolder);
 
-        val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
+        // Only the command's requested action is the HTTP request outcome.
+        // Association access and unmatched nested work retain their own spans.
+        nominateSemanticTraceActionIfEligible(
+                actionExecutor.actionInvocationFacetAbstract() instanceof ActionInvocationFacetForMixedInPropertyOrCollection,
+                head.isCommandForMember(interactionCarrier.command(), owningAction),
+                domainFacingActionIdentifier(head, owningAction));
 
-        val actionId = owningAction.getFeatureIdentifier();
+        var xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interactionCarrier, owningAction, head, argumentAdapters);
+
+        var actionId = owningAction.getFeatureIdentifier();
         log.debug("about to invoke action {}", actionId);
 
-        val targetAdapter = head.getTarget();
-        val targetPojo = MmUnwrapUtils.single(targetAdapter);
+        var targetAdapter = head.target();
+        var targetPojo = MmUnwrapUtils.single(targetAdapter);
 
-        val argumentPojos = argumentAdapters.stream()
+        var argumentPojos = argumentAdapters.stream()
                 .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val actionInvocation = new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos);
+        var actionInvocation = new ActionInvocation(
+                interactionCarrier.interaction(), actionId, domainFacingActionIdentifier(head, owningAction),
+                targetPojo, argumentPojos, interactionInitiatedBy.isUser()
+                        ? ActionInvocation.RuleChecking.CHECKED
+                        : ActionInvocation.RuleChecking.SKIPPED);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
+        execute(interactionCarrier, actionExecutor, actionInvocation);
 
-        // handle any exceptions
-        val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
+        final var priorExecution = interactionCarrier.interaction().getPriorExecution();
 
-        val returnedPojo = priorExecution.getReturned();
-        val returnedAdapter = objectManager.adapt(
+        // throws if there was any exception in prior execution
+        var executionExceptionIfAny = priorExecution.getThrew();
+        if(executionExceptionIfAny != null) {
+        	actionInvocation.setThrew(executionExceptionIfAny);
+			throw executionExceptionIfAny instanceof RuntimeException rex
+                ? rex
+                : new RuntimeException(executionExceptionIfAny);
+        }
+
+        var returnedPojo = priorExecution.getReturned();
+        var returnedAdapter = objectManager.adapt(
                 returnedPojo, owningAction::getElementType);
 
         // assert has bookmark, unless non-scalar
         ManagedObjects.asScalarNonEmpty(returnedAdapter)
-        .filter(scalarNonEmpty->!scalarNonEmpty.getSpecialization().isOther()) // don't care
-        // if its a transient entity, flush the current transaction, so we get an OID
-        .filter(scalarNonEmpty->{
-            MmEntityUtils.ifHasNoOidThenFlush(scalarNonEmpty);
-            return true;
-        })
-        .ifPresent(scalarNonEmpty->{
-            _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
-                var returnTypeSpec = scalarNonEmpty.getSpecification();
-                var violation = returnTypeSpec.isEntity()
-                        ? MessageTemplate.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
-                        : MessageTemplate.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;
-                return violation.builder()
-                    .addVariablesFor(actionId)
-                    .addVariable("returnTypeSpec", returnTypeSpec.toString())
-                    .buildMessage();
+            .filter(scalarNonEmpty->!scalarNonEmpty.specialization().isOther()) // don't care
+            // if its a transient entity, flush the current transaction, so we get an OID
+            .filter(scalarNonEmpty->{
+                MmEntityUtils.ifHasNoOidThenFlush(scalarNonEmpty);
+                return true;
+            })
+            .ifPresent(scalarNonEmpty->{
+                _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
+                    var returnTypeSpec = scalarNonEmpty.objSpec();
+                    var violation = returnTypeSpec.isEntity()
+                            ? MessageTemplate.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
+                            : MessageTemplate.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;
+                    return violation.builder()
+                        .addVariablesFor(actionId)
+                        .addVariable("returnTypeSpec", returnTypeSpec.toString())
+                        .buildMessage();
+                });
             });
-        });
 
         // sync DTO with result
         interactionDtoFactory
-        .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
+            .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
-        setCommandResultIfEntity(interaction.getCommand(), returnedAdapter);
+        setCommandResultIfEntity(interactionCarrier.command(), returnedAdapter);
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {
             executionPublisher().publishActionInvocation(priorExecution);
         }
 
-        val result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
+        var result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
 
-    @Override
+	@Override
     public ManagedObject setOrClearProperty(
             final @NonNull PropertyModifier propertyExecutor) {
 
-        val executionResult = propertyExecutor.getInteractionInitiatedBy().isPassThrough()
+        var executionResult = memberObservation("causeway.member.property-update", "Property Update",
+                propertyExecutor.owningProperty().getFeatureIdentifier())
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", propertyExecutor.interactionInitiatedBy().name())
+                //could also add property's old and new value as tags (but potentially sensitive)
+                //(we do this with Xray, but that is local for debugging only)
+            .observe(()->
+                propertyExecutor.interactionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     setOrClearPropertyInternally(propertyExecutor))
-                : getTransactionService()
+                : transactionService
                     .callWithinCurrentTransactionElseCreateNew(() ->
-                        setOrClearPropertyInternally(propertyExecutor));
+                        setOrClearPropertyInternally(propertyExecutor)));
 
         return executionResult
                 .valueAsNullableElseFail();
@@ -237,124 +303,183 @@ implements MemberExecutorService {
     private ManagedObject setOrClearPropertyInternally(
             final @NonNull PropertyModifier propertyModifier) {
 
-        final InteractionHead head = propertyModifier.getHead();
+        final InteractionHead head = propertyModifier.head();
 
-        val domainObject = head.getTarget();
+        var domainObject = head.target();
 
-        if(propertyModifier.getInteractionInitiatedBy().isPassThrough()) {
+        if(propertyModifier.interactionInitiatedBy().isPassThrough()) {
             /* directly access property setter to prevent triggering of domain events
              * or change tracking, eg. when called in the context of serialization */
-            propertyModifier.executeClearOrSetWithoutEvents(propertyModifier.getNewValue());
+            propertyModifier.executeClearOrSetWithoutEvents(propertyModifier.newValue());
             return domainObject;
         }
 
-        val interaction = getInteractionElseFail();
-        val command = interaction.getCommand();
-        if( command==null ) {
-            return domainObject;
-        }
+        var interactionCarrier = interactionCarrierElseFail();
+        var command = interactionCarrier.command();
 
-        val owningProperty = propertyModifier.getOwningProperty();
+        var owningProperty = propertyModifier.owningProperty();
 
-        prepareCommandForPublishing(command, head, owningProperty, propertyModifier.getFacetHolder());
+        prepareCommandForPublishing(command, head, owningProperty, propertyModifier.facetHolder());
 
-        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.getNewValue());
+        var xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interactionCarrier, owningProperty, head, propertyModifier.newValue());
 
-        val propertyId = owningProperty.getFeatureIdentifier();
+        var propertyId = owningProperty.getFeatureIdentifier();
 
-        val targetManagedObject = head.getTarget();
-        val target = MmUnwrapUtils.single(targetManagedObject);
-        val argValuePojo = MmUnwrapUtils.single(propertyModifier.getNewValue());
+        var targetManagedObject = head.target();
+        var target = MmUnwrapUtils.single(targetManagedObject);
+        var argValuePojo = MmUnwrapUtils.single(propertyModifier.newValue());
 
-        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
+        var propertyEdit = new PropertyEdit(interactionCarrier.interaction(), propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(propertyModifier, propertyEdit,
-                InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
+        var targetPojo = execute(interactionCarrier, propertyModifier, propertyEdit);
 
         // handle any exceptions
-        final Execution<?, ?> priorExecution = interaction.getPriorExecution();
-
-        // TODO: should also sync DTO's 'threw' attribute here...?
-
-        val executionExceptionIfAny = priorExecution.getThrew();
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-                ? ((RuntimeException)executionExceptionIfAny)
+        var priorExecution = interactionCarrier.interaction().getPriorExecution();
+        var executionExceptionIfAny = priorExecution.getThrew();
+        if(executionExceptionIfAny != null)
+            throw executionExceptionIfAny instanceof RuntimeException rex
+                ? rex
                 : new RuntimeException(executionExceptionIfAny);
-        }
 
         // publish (if not a contributed association, query-only mixin)
-        if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.getFacetHolder())) {
+        if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.facetHolder())) {
             executionPublisher().publishPropertyEdit(priorExecution);
         }
 
-        val result = getObjectManager().adapt(targetPojo);
+        var result = objectManager.adapt(targetPojo);
         _Xray.exitInvocation(xrayHandle);
         return result;
-
     }
 
     // -- HELPER
 
-    @SneakyThrows
+    /**
+     * Use the provided {@link ActionExecutor} to invoke an action, with the provided
+     * {@link ActionInvocation} capturing the details of said action.
+     *
+     * <p> Because this both pushes an {@link Execution} to
+     * represent the action invocation and then pops it, that completed
+     * execution is accessible at {@link Interaction#getPriorExecution()}.
+     */
+    private void execute(
+    		final InteractionCarrier carrier,
+    		final ActionExecutor actionExecutor,
+    		final ActionInvocation actionInvocation) {
+        observationProvider.get("Execute Action Invocation")
+  	      .observe(()->
+  	          carrier.execute(actionInvocation, ()->
+  	              actionExecutor.executeWithExecutingEvents(
+  	            		  carrier.nextExecutionSequence(),
+  	            		  actionInvocation)));
+    }
+
+    /**
+     * Use the provided {@link PropertyModifier} to edit a property, with the provided
+     * {@link PropertyEdit} capturing the details of said property edit.
+     *
+     * <p> Because this both pushes an {@link Execution} to
+     * represent the property edit and then pops it, that completed
+     * execution is accessible at {@link Interaction#getPriorExecution()}.
+     */
+    private Object execute(
+    		final InteractionCarrier carrier,
+    		final PropertyModifier propertyModifier,
+			final PropertyEdit propertyEdit) {
+
+      return observationProvider.get("Execute Property Edit")
+	      .observe(()->
+	      	  carrier.execute(propertyEdit, ()->
+	          	propertyModifier.executeWithExecutingEvents(
+	          			carrier.nextExecutionSequence(),
+	          			propertyEdit)));
+	}
+
+	@SneakyThrows
     private Object invokeMethodPassThrough(
             final MethodFacade methodFacade,
             final InteractionHead head,
             final Can<ManagedObject> arguments) {
 
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
-        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
+        final Object targetPojo = MmUnwrapUtils.single(head.target());
         return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 
-    private void setCommandResultIfEntity(
+    void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
         if(command.getResult() != null) {
             // don't trample over any existing result, eg subsequent mixins.
             return;
         }
+        singletonResultCandidate(resultAdapter)
+                .ifPresent(candidate -> setCommandResultIfEntityScalar(command, candidate));
+    }
+
+    private Optional<ManagedObject> singletonResultCandidate(final ManagedObject resultAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return;
+            return Optional.empty();
         }
-        val entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable()) {
-            return;
+        if(resultAdapter instanceof PackedManagedObject packedManagedObject) {
+            var unpacked = packedManagedObject.unpack();
+            return unpacked.size() == 1
+                    ? unpacked.getSingleton()
+                            .filter(candidate -> !ManagedObjects.isNullOrUnspecifiedOrEmpty(candidate))
+                    : Optional.empty();
         }
-        if(entityState.isHollow()
-                || entityState.isDetached()) {
+        return Optional.of(resultAdapter);
+    }
+
+    private void setCommandResultIfEntityScalar(
+            final Command command,
+            final ManagedObject resultAdapter) {
+        var entityState = resultAdapter.getEntityState();
+        if(entityState.isPersistable()
+                && (!entityState.hasOid() || entityState.isDetached())) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
-            getTransactionService().flushTransaction();
+            transactionService.flushTransaction();
         }
-        // re-evaluate
-        if(!resultAdapter.getEntityState().hasOid()) {
-            log.warn("was unable to get a bookmark for the command result, "
-                    + "which is an entity: {}", resultAdapter);
-            return;
+        resultAdapter.getBookmark()
+                .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
+    }
+
+    static void nominateSemanticTraceActionIfEligible(final boolean mixedInAssociation,
+            final boolean matchesCommand, final Identifier domainId) {
+        if (!mixedInAssociation && matchesCommand && domainId != null) {
+            CausewaySemanticTraceNamer.nominateAction(domainId.getLogicalIdentityString("#"));
         }
-        val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
-        command.updater().setResult(Try.success(bookmark));
+    }
+
+    /** Keeps physical invocation identity intact while exposing a contributed action's name. */
+    static Identifier domainFacingActionIdentifier(final InteractionHead head, final ObjectAction owningAction) {
+        var invokedId = owningAction.getFeatureIdentifier();
+        if (!owningAction.isDeclaredOnMixin()) {
+            return invokedId;
+        }
+        // Main carries the mixee/mixin pair instead of maintenance's managed
+        // action head. Use the strategy that constructs contributed members.
+        var contributedName = owningAction.getProgrammingModel().mixinNamingStrategy()
+                .memberId(invokedId.logicalType().correspondingClass());
+        return Identifier.actionIdentifier(head.owner().objSpec().logicalType(),
+                contributedName, invokedId.memberParameterClassNames());
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
             return resultAdapter;
-        }
 
-        if (!getConfiguration().getCore().getMetaModel().isFilterVisibility()
-                || resultAdapter instanceof PackedManagedObject) {
+        if (!configuration.core().metaModel().filterVisibility()
+                || resultAdapter instanceof PackedManagedObject)
             return resultAdapter;
-        }
 
         return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
                 : null;
     }
-
 
     /**
      * Will set the command's CommandPublishingPhase to READY,
@@ -367,12 +492,38 @@ implements MemberExecutorService {
             final @NonNull ObjectMember objectMember,
             final @NonNull FacetHolder facetHolder) {
 
-        if(IdentifierUtil.isCommandForMember(command, interactionHead, objectMember)
+        if(targetSuppressesCommandRecording(interactionHead))
+            return;
+
+        if(interactionHead.isCommandForMember(command, objectMember)
                 && isPublishingEnabled(facetHolder)) {
             command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
         }
 
-        commandPublisherProvider.get().ready(command);
+        commandPublisher().ready(command);
     }
 
+    private boolean targetSuppressesCommandRecording(final InteractionHead interactionHead) {
+        var ownerPojo = MmUnwrapUtils.single(interactionHead.owner());
+        var targetPojo = MmUnwrapUtils.single(interactionHead.target());
+        return ownerPojo instanceof CommandRecordingSuppressed
+                || targetPojo instanceof CommandRecordingSuppressed;
+    }
+
+    private CommandPublisher commandPublisher() {
+    	return commandPublisherProvider.get();
+    }
+
+    private ExecutionPublisher executionPublisher() {
+    	return executionPublisherProvider.get();
+    }
+
+    private Optional<InteractionCarrier> interactionCarrier() {
+    	return interactionLayerTracker.currentInteractionCarrier();
+    }
+
+    private InteractionCarrier interactionCarrierElseFail() {
+    	return interactionCarrier().orElseThrow(()->_Exceptions
+    			.unrecoverable("needs an InteractionSession on current thread"));
+    }
 }

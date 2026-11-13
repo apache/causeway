@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.defaults.fromtype;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import jakarta.inject.Inject;
 
 public class PropertyDefaultFacetFromTypeFactory
 extends FacetFactoryAbstract {
@@ -44,26 +42,18 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         // don't overwrite any defaults that might already picked up
-        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder()
+        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.facetHolder()
                 .lookupNonFallbackFacet(PropertyDefaultFacet.class)
                 .orElse(null);
-        if (existingDefaultFacet != null) {
-            return;
-        }
+        if (existingDefaultFacet != null)
+			return;
 
         // try to infer defaults from the underlying return type
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
-        if (returnTypeDefaultedFacet != null) {
-            FacetUtil.addFacet(
-                    new PropertyDefaultFacetFromDefaultedFacet(
-                            returnTypeDefaultedFacet, processMethodContext.getFacetHolder()));
-        }
-    }
-
-    private DefaultedFacet getDefaultedFacet(final Class<?> paramType) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(paramType);
-        return paramTypeSpec.getFacet(DefaultedFacet.class);
+        processMethodContext.loadSpecificationTypeOnly(processMethodContext.methodFacade().getReturnType())
+        	.lookupFacet(DefaultedFacet.class)
+	        .ifPresent(returnTypeDefaultedFacet->
+                new PropertyDefaultFacetFromDefaultedFacet(
+                        returnTypeDefaultedFacet, processMethodContext.facetHolder()));
     }
 
 }

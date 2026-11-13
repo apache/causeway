@@ -46,7 +46,6 @@ class _ExcelServiceHelper {
 
     private final ExcelFileBlobConverter excelFileBlobConverter = new ExcelFileBlobConverter();
 
-
     /**
      * Creates a Blob holding a single-sheet spreadsheet of the domain objects.
      *
@@ -173,8 +172,6 @@ class _ExcelServiceHelper {
         }
     }
 
-
-
     /**
      * Returns a list of objects for each line in the spreadsheet, of the specified type.  The objects are read
      * from a sheet taken as the simple name of the class.
@@ -214,7 +211,7 @@ class _ExcelServiceHelper {
             final Blob excelBlob,
             final List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception {
         try {
-            return newExcelConverter().fromBytes(worksheetSpecs, excelBlob.getBytes());
+            return newExcelConverter().fromBytes(worksheetSpecs, excelBlob.bytes());
         } catch (final IOException | InvalidFormatException e) {
             throw new ExcelServiceDefault.Exception(e);
         }

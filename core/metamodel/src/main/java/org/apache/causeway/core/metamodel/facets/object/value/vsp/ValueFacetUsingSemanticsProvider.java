@@ -30,14 +30,14 @@ extends ValueFacetAbstract<T> {
             final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder) {
-        return new ValueFacetUsingSemanticsProvider<T>(valueClass, valueSemantics, holder);
+        return new ValueFacetUsingSemanticsProvider<>(valueClass, valueSemantics, holder);
     }
 
     protected ValueFacetUsingSemanticsProvider(
             final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder) {
-        super(valueClass, valueSemantics, holder, Precedence.DEFAULT);
+        super(valueClass, valueSemantics, holder);
     }
 
 }

@@ -102,8 +102,6 @@ class SpecloaderPerformanceTest {
     @Test @Tag("LongRunning")
     void repeatedConcurrentSpecloading_shouldNotDeadlock() {
 
-
-
         val timeOutMillis = ITERATIONS * EXPECTED_MILLIS_PER_ITERATION;
         val goodUntilMillis = System.currentTimeMillis() + timeOutMillis;
 
@@ -122,6 +120,5 @@ class SpecloaderPerformanceTest {
 
         _Timing.runVerbose(log, "Repeated Concurrent Specloading", repeatedRun);
     }
-
 
 }

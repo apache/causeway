@@ -42,8 +42,6 @@ import static org.apache.causeway.applib.services.appfeat.ApplicationFeatureId.n
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode.CHANGING;
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule.ALLOW;
 
-import lombok.val;
-
 public abstract class ApplicationPermissionRepositoryIntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     protected ApplicationUser maryUser, mungoUser, midgeUser;
@@ -93,7 +91,7 @@ public abstract class ApplicationPermissionRepositoryIntegTestAbstract extends C
     void end_to_end() {
 
         // when
-        val maryPermissions = permissionRepository.findByUser(maryUser);
+        var maryPermissions = permissionRepository.findByUser(maryUser);
 
         // then
         Assertions.assertThat(maryPermissions).containsExactlyInAnyOrder(liftButtonForGirlRolePerm, rideLiftForGirlRolePerm);

@@ -32,9 +32,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.ToString;
-import lombok.val;
 
 @EqualsAndHashCode(of = {"id"})
 @ToString(of = {"id"})
@@ -47,7 +46,6 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     public OneToOneAssociation getProperty() {return id.getProperty();}
     public Bookmark getBookmark() {return id.getBookmark();}
     public String getPropertyId() {return id.getPropertyId();}
-
 
     public static PropertyChangeRecord ofNew(
             final @NonNull PropertyChangeRecordId pcrId) {
@@ -82,9 +80,9 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     }
 
     public String getLogicalMemberIdentifier() {
-        val target = getBookmark();
-        val propertyId = getPropertyId();
-        return target.getLogicalTypeName() + "#" + propertyId;
+        var target = getBookmark();
+        var propertyId = getPropertyId();
+        return target.logicalTypeName() + "#" + propertyId;
     }
 
     public PropertyChangeRecord withPreValueSetToCurrentElseUnknown(DeadlockRecognizer deadlockRecognizer) {
@@ -139,7 +137,6 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
         return this;
     }
 
-
     // -- UTILITY
 
     public EntityPropertyChange toEntityPropertyChange(
@@ -147,12 +144,12 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
             final String username,
             final TransactionId txId) {
 
-        val target = getBookmark();
-        val propertyId = getPropertyId();
-        val preValue = getPreAndPostValue().getPreString();
-        val postValue = getPreAndPostValue().getPostString();
-        val interactionId = txId.getInteractionId();
-        val sequence = txId.getSequence();
+        var target = getBookmark();
+        var propertyId = getPropertyId();
+        var preValue = getPreAndPostValue().getPreString();
+        var postValue = getPreAndPostValue().getPostString();
+        var interactionId = txId.getInteractionId();
+        var sequence = txId.getSequence();
 
         String logicalMemberId = getLogicalMemberIdentifier();
         return EntityPropertyChange.of(
@@ -165,10 +162,9 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     // -- HELPER
 
     private Object getPropertyValue() {
-        val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.PASS_THROUGH);
+        var referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.PASS_THROUGH);
         return MmUnwrapUtils.single(referencedAdapter);
     }
-
 
     @Override
     public int compareTo(PropertyChangeRecord o) {
@@ -177,4 +173,3 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
                 .compare(this, o);
     }
 }
-

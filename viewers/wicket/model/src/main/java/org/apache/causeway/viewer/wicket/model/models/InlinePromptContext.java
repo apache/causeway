@@ -27,41 +27,27 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.functions._Functions;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
-@RequiredArgsConstructor
-public class InlinePromptContext implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final ScalarModel scalarModel;
-
-    @Getter
-    private final MarkupContainer scalarTypeContainer;
-
-    private final Component scalarIfRegular;
-    private final WebMarkupContainer scalarIfRegularInlinePromptForm;
+public record InlinePromptContext(
+        UiAttributeWkt attributeModel,
+        MarkupContainer scalarTypeContainer,
+        Component scalarIfRegular,
+        WebMarkupContainer scalarIfRegularInlinePromptForm) implements Serializable {
 
     public void onPrompt() {
         scalarIfRegular.setVisible(false);
         scalarIfRegularInlinePromptForm.setVisible(true);
     }
 
-    public void onCancel(final Either<ActionModel, ScalarPropertyModel> memberModel) {
-
+    public void onCancel(final Either<ActionModel, PropertyModel> memberModel) {
         memberModel
-        .accept(_Functions.noopConsumer(), prop->{
-            // reset the UI form input field to the untouched property value
-            val untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
-            scalarModel.setObject(untouchedPropertyValue);
-        });
+            .accept(_Functions.noopConsumer(), prop->{
+                // reset the UI form input field to the untouched property value
+                var untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
+                attributeModel.setObject(untouchedPropertyValue);
+            });
 
         scalarIfRegular.setVisible(true);
         scalarIfRegularInlinePromptForm.setVisible(false);
-
     }
-
 
 }

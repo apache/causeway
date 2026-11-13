@@ -19,11 +19,12 @@
 package org.apache.causeway.commons.collections;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -31,27 +32,20 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-
-@Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class Can_Empty<T> implements Can<T> {
-
-    private static final long serialVersionUID = 1L;
+record Can_Empty<T>() implements Can<T> {
 
     static final Can_Empty<?> INSTANCE = new Can_Empty<>();
 
@@ -160,6 +154,11 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public <R, Z> Stream<R> zipStream(final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
+        return Stream.empty();
+    }
+
+    @Override
     public Can<T> add(final @Nullable T element) {
         return element != null
                 ? Can.ofSingleton(element)
@@ -180,10 +179,9 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public Can<T> add(final int index, final @Nullable T element) {
-        if(index!=0) {
-            throw new IndexOutOfBoundsException(
+        if(index!=0)
+			throw new IndexOutOfBoundsException(
                     "cannot add to empty can with index other than 0; got " + index);
-        }
         return add(element);
     }
 
@@ -238,15 +236,23 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public boolean anyMatch(final Predicate<? super T> predicate) {
+        return false;
+    }
+    @Override
+    public boolean allMatch(final Predicate<? super T> predicate) {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Can[]";
     }
 
     @Override
     public boolean equals(final @Nullable Object obj) {
-        if(INSTANCE == obj) {
-            return true; // optimization not strictly necessary
-        }
+        if(INSTANCE == obj)
+			return true; // optimization not strictly necessary
         return (obj instanceof Can)
                 ? ((Can<?>)obj).isEmpty()
                 : false;
@@ -259,9 +265,8 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public int compareTo(final @Nullable Can<T> other) {
-        if(other==null) {
-            return 0;
-        }
+        if(other==null)
+			return 0;
         // when returning
         // -1 ... this is before other
         // +1 ... this is after other
@@ -275,7 +280,7 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public List<T> toArrayList() {
-        return _Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -289,15 +294,55 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(final @NonNull Supplier<C> collectionFactory) {
-        return collectionFactory.get();
-    }
-
-    @Override
     public T[] toArray(final @NonNull Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
+        var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
 
+    @Override
+	public T[] toArray(final IntFunction<T[]> generator) {
+    	return generator.apply(0);
+    }
+
+    @Override
+    public <K> Map<K, T> toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
+       return Collections.emptyMap();
+    }
+    @Override
+    public <K, M extends Map<K, T>> Map<K, T> toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public <R, A> R collect(final @NonNull Collector<? super T, A, R> collector) {
+        return collector.finisher().apply(collector.supplier().get());
+    }
+
+    @Override
+    public <K> Map<K, Can<T>> groupBy(
+            final @NonNull Function<? super T, ? extends K> classifier) {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
+            final @NonNull Function<? super T, ? extends K> classifier,
+            final @NonNull Supplier<M> mapFactory) {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public String join(final @NonNull String delimiter) {
+        return "";
+    }
+
+    @Override
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
+        return "";
+    }
 
 }

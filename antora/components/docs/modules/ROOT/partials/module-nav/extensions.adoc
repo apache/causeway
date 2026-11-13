@@ -25,6 +25,10 @@
 *** xref:security:sessionlog:about.adoc[]
 
 
+** Persistence
+
+*** xref:querydsl:ROOT:about.adoc[]
+
 
 ** _Web UI (Wicket viewer)_
 

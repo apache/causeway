@@ -24,12 +24,11 @@ import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NoArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -167,7 +166,7 @@ public class _PrimitiveCollections {
             final int n = _NullSafe.size(indexes);
             if(n==0) return new int[0];
 
-            val newElements = new int[n];
+            var newElements = new int[n];
             final int maxIndex = size()-1;
             int elementCount = 0;
             for(int index : indexes) {

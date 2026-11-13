@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.OptionalLong;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -60,7 +59,7 @@ public class _OsUtil {
         public boolean isLinux() { return this==LINUX; }
         public boolean isMacOs() { return this==MAC_OS; }
         public static OS current() {
-            val osName = System.getProperty("os.name").toLowerCase();
+            var osName = System.getProperty("os.name").toLowerCase();
             if (osName.startsWith("windows")) {
                 return OS.WINDOWS;
             }
@@ -100,7 +99,7 @@ public class _OsUtil {
         }
 
         final long newPid = ProcessHandle.current().pid();
-        try(val fw = new FileWriter(pidFile, StandardCharsets.UTF_8)) {
+        try(var fw = new FileWriter(pidFile, StandardCharsets.UTF_8)) {
             fw.write("" + newPid);
         }
     }
@@ -121,19 +120,20 @@ public class _OsUtil {
 
     @SneakyThrows
     public void terminateProcessByPid(final @Nullable String pid) {
-        val pidTrimmed = _Strings.blankToNullOrTrim(pid);
+        var pidTrimmed = _Strings.blankToNullOrTrim(pid);
         if(pidTrimmed==null) {
             return; // do nothing
         }
-        val rt = Runtime.getRuntime();
-        val os = OS.current();
+        var rt = Runtime.getRuntime();
+        var os = OS.current();
         final String[] cmd;
         switch(os) {
         case WINDOWS:
             cmd = new String[] {"taskkill.exe", "/F", "/PID", pidTrimmed, "/T"};
             break;
         case LINUX:
-            //XXX implement eventually
+            cmd = new String[] {"kill", "-SIGTERM", pidTrimmed};
+            break;
         case MAC_OS:
             //XXX implement eventually
         default:
@@ -155,7 +155,7 @@ public class _OsUtil {
             boolean valid = false;
 
             for (NetworkInterface netint : Collections.list(NetworkInterface.getNetworkInterfaces())) {
-                val hwAddr = netint.getHardwareAddress();
+                var hwAddr = netint.getHardwareAddress();
                 if(_NullSafe.size(hwAddr)<6) {
                     continue;
                 }

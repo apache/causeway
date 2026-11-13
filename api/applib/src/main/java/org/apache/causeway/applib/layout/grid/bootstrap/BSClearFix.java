@@ -21,7 +21,8 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 /**
  * @since 1.x {@index}
  */
-public abstract class BSClearFix extends BSRowContent {
+public sealed abstract class BSClearFix extends BSRowContent
+permits BSClearFixHidden, BSClearFixVisible {
 
     private static final long serialVersionUID = 1L;
 

@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The _Command Log_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
+The _Command Log_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] object store.
 
 One use case is to combine with the xref:security:audittrail:about.adoc[] extension.
 The _Command Log_ module logs the action invocations or property edits that the end-user makes, while the _audit trail_ logs the resultant changes in state to domain objects.
@@ -32,7 +32,7 @@ Add an entry for the _Command Log_ module's own BOM:
             <artifactId>causeway-extensions-commandlog</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv3}</version>
+            <version>{page-causewayreleaseversion}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -41,7 +41,7 @@ Add an entry for the _Command Log_ module's own BOM:
 [#dependencies]
 === Dependencies / Imports
 
-In the webapp module of your application, add the following dependency:
+In the webapp module of your application, add the following dependency for the xref:pjpa::about.adoc[] object store:
 
 [source,xml]
 .pom.xml
@@ -49,33 +49,26 @@ In the webapp module of your application, add the following dependency:
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-commandlog-persistence-XXX</artifactId>    <!--.-->
+        <artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
     </dependency>
 </dependencies>
 ----
-<.> either:
-** `causeway-extensions-commandlog-persistence-jpa` (xref:pjpa::about.adoc[]), or
-** `causeway-extensions-commandlog-persistence-jdo` (xref:pjdo::about.adoc[]).
 
 
 In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the CommandLog modules.
-The exact modules to use will depend upon the persistence mechanism in use:
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism, use:
 
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
-        ...
-        CausewayModuleExtCommandLogPersistenceXxx.class,        // <.>
-        ...
+        CausewayModuleExtCommandLogPersistenceJpa.class,
+        // ...
 })
 public class AppManifest {
 }
 ----
-<.> either
-** `CausewayModuleExtCommandLogPersistenceJpa` (xref:pjpa::about.adoc[]),or
-** `CausewayModuleExtCommandLogPersistenceJdo`, (xref:pjdo::about.adoc[])
 
 If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
 
@@ -102,13 +95,94 @@ Optionally, modify the configuration properties for the _Command Log_ module its
 causeway:
   extensions:
     command-log:
-      publish-policy: "always"    # <.>
+      publish-policy: "always"       # <.>
+      recording-support: "ENABLED"  # <.>
 ----
 
 
 <.> the alternative is `"only-if-system-changed"`, which suppresses the persisting of `CommandLogEntry`s for commands where no other system state was changed (for example a finder action with safe semantics).
 +
 See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.publish-policy[causeway.extensions.command-log.publish-policy] configuration property for more details.
+
+<.> enables command recording and replay support; it is `DISABLED` by default.
++
+See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.recording-support[causeway.extensions.command-log.recording-support] configuration property for more details.
+
+=== Persistent Replay-result Mappings
+
+Command replay can observe that an object recorded with one bookmark on the source system was created with another bookmark locally.
+By default these replay-result mappings are held in memory for the lifetime of the application instance.
+To retain mappings across restarts, select persistent storage:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  extensions:
+    command-log:
+      replay-result-mapping:
+        storage-strategy: PERSISTENT
+        on-conflict-policy: THROW_EXCEPTION
+----
+
+Persistent mapping requires the `causeway-extensions-commandlog-persistence-jpa` dependency and its additive `CommandReplayResultMapping` database table.
+Causeway 4's commandlog persistence adapter is JPA-only; the JDO adapter removed for Causeway 4 is not restored by this feature.
+
+The first observed mapping for a recorded bookmark is authoritative.
+Repeated observations of the same actual bookmark are idempotent and retain the original command interaction id.
+A different later result either fails and rolls back replay (`THROW_EXCEPTION`) or is logged and ignored (`LOG_AND_CONTINUE`).
+Identity mappings are stored as well as changed mappings.
+
+When the repository is available, the commandlog menu provides prototyping actions to list all or changed mappings, find mappings by recorded or actual bookmark, and delete all mappings.
+Each mapping can also be inspected and deleted individually.
+An application-defined `CommandReplayMappingListener` bean remains authoritative and causes both built-in listeners to back off.
+
+=== Replayable Command Projections
+
+The export and replay managers wrap command-log entries as `ReplayableCommand` view models.
+Each command reports whether it has a recorded result and derives a Participants collection from its command data:
+
+* `TARGET` rows represent recorded target bookmarks;
+* `PARAMETER` rows represent reference-valued action parameters and include the parameter name (scalar parameters are omitted); and
+* `RESULT` represents the recorded result bookmark, when present.
+
+Participants show the recorded bookmark even when the referenced object is unavailable locally.
+Their actual bookmark comes from the configured replay-mapping service.
+For target and parameter rows an explicit mapping is visible in any replay state; after a successful (`OK`) replay, an unmapped bookmark falls back to the recorded value.
+A result row exposes its actual bookmark only after successful replay, using an explicit mapping when available and otherwise the recorded value.
+The optional target, argument, and result object links resolve only the actual bookmark and remain empty if that object is not available locally; bookmark audit data remains visible.
+
+Participant view-model mementos contain identity rather than bookmark state: the owning interaction id followed by `--target`, `--parameter--<name>`, or `--result`.
+Opening such a memento re-derives the participant from the current command and current replay mappings.
+
+General command projections include state-changing commands, safe commands with a recorded result, and commands whose semantics cannot be resolved.
+They omit resultless safe actions without deleting or changing the underlying command-log entries.
+The pending-or-failed replay collection is intentionally exempt so that all imported replay work remains reviewable.
+The safe Previous and Next actions navigate foreground commands in command-log order, skipping entries that are ineligible under this general rule.
+
+The `CommandManager` view model is the forward sequence-management surface for export, import, exclusion, movement, restoration, deletion, and replay workflows.
+The older `CommandExportManager` and `CommandReplayManager` view models remain available as compatibility surfaces.
+
+=== Recording and Replay with Background Commands
+
+Recording and replay use a global, conservative definition of pending background work: any persisted command with `ExecuteIn.BACKGROUND` and no `startedAt` timestamp is pending.
+This reuses the existing command-log repository query; it is not limited by user, tenant, parent interaction, or replay-manager baseline.
+
+When `recording-support` is `ENABLED`, the foreground command that schedules background work is allowed to complete.
+While that work remains pending, an attempt to create a later recorded foreground command fails with a message instructing the user to wait until pending background commands have executed and committed.
+The command can be retried after the background job commits.
+The gate does not apply when recording support is disabled or command recording is paused.
+
+Replay entry points apply the same wait condition, including an individual `ReplayableCommand`, the unified manager, and the retained legacy replay manager.
+The unified manager contributes `replayOrRetryNext` and `replayOrRetryMultiple` to its `pendingOrFailed` collection.
+Replay-next acts on the oldest eligible command.
+Replay-multiple supports bounds of 5, 10, 20, 40, 80, 160, 320, or all, and defaults to 10.
+It stops after the first replay failure or as soon as a replay schedules new pending background work, preserving completed replay states.
+After the background work executes and commits, invoke replay again to continue with the remaining pending or failed commands.
+The replay controls never poll for, wait on, or execute background work themselves.
+
+This Causeway 4 behavior uses the existing JPA commandlog adapter and named query, and requires no datastore migration or additional configuration.
+No commandlog JDO adapter is provided for Causeway 4.
 
 
 [#menubar-layout-xml]
@@ -197,7 +271,8 @@ Assuming that the `exportInvoices()` action is a regular action on the `Supplier
 ----
 @Action
 public void exportInvoices(Supplier supplier) {
-    backgroundService.execute(supplier).exportInvoices();
+    backgroundService.execute(supplier)
+        .acceptAsync(Supplier::exportInvoices);
 }
 ----
 
@@ -208,7 +283,8 @@ If instead this functionality is implemented as a mixin, we would use something 
 ----
 @Action
 public void exportInvoices(Supplier supplier) {
-    backgroundService.executeMixin(Supplier_exportInvoices.class, supplier).act();
+    backgroundService.executeMixin(Supplier_exportInvoices.class, supplier)
+        .acceptAsync(Supplier_exportInvoices::act);
 }
 ----
 
@@ -219,9 +295,7 @@ By default all the usual hide/disable/validate rules will be checked, but there 
 
 Behind the scenes this service uses xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap(...)] using xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc#with_ExecutorService[AsyncControl#with(ExecutorService)] to pass an implementation of `ExecutorService` that persists the command as a `CommandLogEntry` instance.
 
-If you require more fine-grained control, you can always just use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] async method yourself.
-The `ExecutorService` to use is xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService].
-This is a Spring `@Service` and so can be obtained through injection.
+If you require more fine-grained control, you can always just use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] async method yourself, specifying an implementation of the xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl.CommandListener].
 
 === Executing Actions using the Quartz scheduler
 
@@ -308,4 +382,3 @@ include::partial$commandsubscriber-vs-executionsubscriber.adoc[]
 * xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI
 * xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI
 * xref:executionlog:about.adoc[] extension
-

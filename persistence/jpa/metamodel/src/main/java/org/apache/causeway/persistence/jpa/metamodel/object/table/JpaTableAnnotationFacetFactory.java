@@ -18,19 +18,15 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.object.table;
 
-
-import jakarta.inject.Inject;
-import jakarta.persistence.Table;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.persistence.Table;
 
 /**
  * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
@@ -46,12 +42,11 @@ implements ObjectTypeFacetFactory {
 
     @Override
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
+        final Class<?> cls = processClassContext.cls();
 
         final Table annotation = processClassContext.synthesizeOnType(Table.class).orElse(null);
-        if (annotation == null) {
-            return;
-        }
+        if (annotation == null)
+			return;
         String annotationSchemaAttribute = annotation.schema();
         if(_Strings.isNullOrEmpty(annotationSchemaAttribute)) {
             annotationSchemaAttribute = null;
@@ -61,14 +56,11 @@ implements ObjectTypeFacetFactory {
             annotationTableAttribute = cls.getSimpleName();
         }
 
-        val facetHolder = processClassContext.getFacetHolder();
-
-        FacetUtil.addFacet(
-                new JpaTableFacetAnnotationImpl(
-                    annotationSchemaAttribute,
-                    annotationTableAttribute,
-                    facetHolder));
+        var facetHolder = processClassContext.facetHolder();
+        new JpaTableFacetAnnotationImpl(
+                annotationSchemaAttribute,
+                annotationTableAttribute,
+                facetHolder);
     }
-
 
 }

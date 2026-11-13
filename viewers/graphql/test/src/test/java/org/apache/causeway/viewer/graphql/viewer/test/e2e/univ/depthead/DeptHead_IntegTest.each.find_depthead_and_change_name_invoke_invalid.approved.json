@@ -2,8 +2,8 @@
   "errors" : [ {
     "message" : "Exception while fetching data (/rich/university_dept_DeptHeads/findHeadByName/invoke/results/changeName/invokeIdempotent/results) : Name cannot contain '!' character",
     "locations" : [ {
-      "line" : 9,
-      "column" : 17
+      "column" : 17,
+      "line" : 9
     } ],
     "path" : [ "rich", "university_dept_DeptHeads", "findHeadByName", "invoke", "results", "changeName", "invokeIdempotent", "results" ],
     "extensions" : {

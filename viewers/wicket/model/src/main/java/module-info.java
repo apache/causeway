@@ -17,26 +17,25 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.wicket.model {
-    exports org.apache.causeway.viewer.wicket.model.value;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.prop;
-    exports org.apache.causeway.viewer.wicket.model.modelhelpers;
+    exports org.apache.causeway.viewer.wicket.model;
+    exports org.apache.causeway.viewer.wicket.model.causeway;
     exports org.apache.causeway.viewer.wicket.model.hints;
     exports org.apache.causeway.viewer.wicket.model.itemreuse;
-    exports org.apache.causeway.viewer.wicket.model.models;
-    exports org.apache.causeway.viewer.wicket.model.models.binding;
-    exports org.apache.causeway.viewer.wicket.model;
     exports org.apache.causeway.viewer.wicket.model.links;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.act;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction;
-    exports org.apache.causeway.viewer.wicket.model.tableoption;
-    exports org.apache.causeway.viewer.wicket.model.util;
     exports org.apache.causeway.viewer.wicket.model.mementos;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.coll;
-    exports org.apache.causeway.viewer.wicket.model.causeway;
+    exports org.apache.causeway.viewer.wicket.model.models.coll;
+    exports org.apache.causeway.viewer.wicket.model.models.interaction.act;
+    exports org.apache.causeway.viewer.wicket.model.models.interaction.prop;
+    exports org.apache.causeway.viewer.wicket.model.models.interaction;
+    exports org.apache.causeway.viewer.wicket.model.models;
+    exports org.apache.causeway.viewer.wicket.model.tableoption;
     exports org.apache.causeway.viewer.wicket.model.timetaken;
+    exports org.apache.causeway.viewer.wicket.model.util;
+    exports org.apache.causeway.viewer.wicket.model.value;
+    exports org.apache.causeway.viewer.wicket.model.whereAmI;
 
     requires jakarta.activation;
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;
@@ -44,13 +43,12 @@ module org.apache.causeway.viewer.wicket.model {
     requires org.apache.causeway.core.webapp;
     requires transitive org.apache.causeway.viewer.commons.applib;
     requires transitive org.apache.causeway.viewer.commons.model;
-    requires org.apache.logging.log4j;
-    requires org.danekja.jdk.serializable.functional;
     requires org.slf4j;
+    requires org.danekja.jdk.serializable.functional;
     requires spring.context;
     requires spring.core;
-    //as of 9.11.0 only works when used as automatic named modules ...
     requires transitive org.apache.wicket.core;
-    requires org.apache.wicket.request;
+    requires transitive org.apache.wicket.request;
     requires org.apache.wicket.util;
+    requires org.apache.causeway.security.api;
 }

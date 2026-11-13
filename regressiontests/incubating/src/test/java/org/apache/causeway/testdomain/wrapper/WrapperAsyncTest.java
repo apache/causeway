@@ -141,7 +141,6 @@ class WrapperAsyncTest extends CausewayIntegrationTestAbstract {
         assertEquals(123d, productRefreshed.getPrice(), 1E-6);
     }
 
-
     @Service
     public static class ActionDomainEventListener {
 
@@ -154,6 +153,5 @@ class WrapperAsyncTest extends CausewayIntegrationTestAbstract {
         }
 
     }
-
 
 }

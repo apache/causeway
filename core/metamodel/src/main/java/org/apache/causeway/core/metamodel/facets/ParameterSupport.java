@@ -34,49 +34,45 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Retur
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
 
 /**
- *
  * @since 2.0
- *
  */
-public final class ParameterSupport {
+public record ParameterSupport() {
 
-    @Value @Builder
-    public static class ParamSupportingMethodSearchRequest {
+    @Builder(builderMethodName = "builderInternal")
+    public record ParamSupportingMethodSearchRequest(
+            FacetFactory.@NonNull ProcessMethodContext processMethodContext,
+            @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders,
+            @NonNull Can<SearchAlgorithm> searchAlgorithms,
+            @NonNull ReturnTypePattern returnTypePattern,
+            @NonNull Can<Class<?>> additionalParamTypes) {
 
-        @NonNull FacetFactory.ProcessMethodContext processMethodContext;
-        @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
-        @NonNull Can<SearchAlgorithm> searchAlgorithms;
-        @NonNull ReturnTypePattern returnTypePattern;
-
-        @Builder.Default
-        final @NonNull Can<Class<?>> additionalParamTypes = Can.empty();
-
-        @Getter(lazy = true) Class<?>[] paramTypes =
-                getProcessMethodContext().getMethod().getParameterTypes();
-
-        Can<String> getSupporingMethodNameCandidates(final int paramNr) {
-            return getParamIndexToMethodNameProviders()
-                    .map(provider->provider.apply(paramNr));
+        public static ParamSupportingMethodSearchRequestBuilder builder() {
+            return builderInternal()
+                    .additionalParamTypes(Can.empty());
         }
 
+        public Class<?>[] paramTypes() {
+            return processMethodContext().methodFacade().getParameterTypes();
+        }
+
+        private Can<String> getSupporingMethodNameCandidates(final int paramIndex) {
+            return paramIndexToMethodNameProviders()
+                    .map(provider->provider.apply(paramIndex));
+        }
     }
 
-    @Value(staticConstructor = "of")
-    public static class ParamSupportingMethodSearchResult {
-        int paramIndex;
-        Class<?> paramType;
-        ResolvedMethod supportingMethod;
-        Optional<ResolvedConstructor> patConstructor;
-        ResolvedType paramSupportReturnType;
+    public record ParamSupportingMethodSearchResult(
+            int paramIndex,
+            Class<?> paramType,
+            ResolvedMethod supportingMethod,
+            Optional<ResolvedConstructor> patConstructor,
+            ResolvedType paramSupportReturnType) {
     }
 
     @FunctionalInterface
@@ -95,8 +91,8 @@ public final class ParameterSupport {
         /** Starting with all-args working its way down to no-arg.*/
         SWEEP(ParameterSupport::findParamSupportingMethod),
         /** Argument matches return type.*/
-        SINGLEARG_BEING_PARAMTYPE(ParameterSupport::singleArgBeingParamType)
-        ;
+        SINGLEARG_BEING_PARAMTYPE(ParameterSupport::singleArgBeingParamType);
+
         private final SearchFunction searchFunction;
         @Override
         public void search(
@@ -111,16 +107,15 @@ public final class ParameterSupport {
             final ParamSupportingMethodSearchRequest searchRequest,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        val actionMethod = searchRequest.getProcessMethodContext().getMethod();
-        val paramCount = actionMethod.getParameterCount();
+        var actionMethod = searchRequest.processMethodContext().methodFacade();
+        var paramCount = actionMethod.getParameterCount();
 
         for (int i = 0; i < paramCount; i++) {
-            for (val searchAlgorithm : searchRequest.searchAlgorithms) {
-                val paramNum = i;
+            for (var searchAlgorithm : searchRequest.searchAlgorithms) {
+                var paramNum = i;
                 searchAlgorithm.search(searchRequest, paramNum, onMethodFound);
             }
         }
-
     }
 
     private static void findParamSupportingMethodWithPATArg(
@@ -128,20 +123,20 @@ public final class ParameterSupport {
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        val processMethodContext = searchRequest.getProcessMethodContext();
-        val type = processMethodContext.getCls();
-        val paramTypes = searchRequest.getParamTypes();
-        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+        var processMethodContext = searchRequest.processMethodContext();
+        var type = processMethodContext.cls();
+        var paramTypes = searchRequest.paramTypes();
+        var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
 
-        val paramType = paramTypes[paramIndex];
+        var paramType = paramTypes[paramIndex];
 
         MethodFinderPAT
         .findMethodWithPATArg(
                 MethodFinder
-                .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
-                .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType)),
+                .memberSupport(type, methodNames, processMethodContext.introspectionPolicy())
+                .withReturnTypeAnyOf(searchRequest.returnTypePattern().matchingTypes(paramType)),
                 paramTypes,
-                searchRequest.getAdditionalParamTypes())
+                searchRequest.additionalParamTypes())
         .map(methodAndPatConstructor->toSearchResult(type, paramIndex, paramType, methodAndPatConstructor))
         .forEach(onMethodFound);
     }
@@ -151,12 +146,11 @@ public final class ParameterSupport {
             final int paramIndex,
             final Class<?> paramType,
             final MethodAndPatConstructor supportingMethodAndPatConstructor) {
-        return ParamSupportingMethodSearchResult
-                .of(paramIndex, paramType,
-                    supportingMethodAndPatConstructor.getSupportingMethod(),
-                    Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
+        return new ParamSupportingMethodSearchResult(paramIndex, paramType,
+                    supportingMethodAndPatConstructor.supportingMethod(),
+                    Optional.of(supportingMethodAndPatConstructor.patConstructor()),
                     _GenericResolver.forMethodReturn(
-                            supportingMethodAndPatConstructor.getSupportingMethod()));
+                            supportingMethodAndPatConstructor.supportingMethod()));
     }
 
     private static void singleArgBeingParamType(
@@ -164,19 +158,19 @@ public final class ParameterSupport {
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        val processMethodContext = searchRequest.getProcessMethodContext();
-        val type = processMethodContext.getCls();
-        val paramTypes = searchRequest.getParamTypes();
-        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
-        val paramType = paramTypes[paramIndex];
-        val signature = new Class<?>[]{paramType};
+        var processMethodContext = searchRequest.processMethodContext();
+        var type = processMethodContext.cls();
+        var paramTypes = searchRequest.paramTypes();
+        var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+        var paramType = paramTypes[paramIndex];
+        var signature = new Class<?>[]{paramType};
 
         MethodFinder
-        .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
-        .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
-        .streamMethodsMatchingSignature(signature)
-        .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
-        .forEach(onMethodFound);
+            .memberSupport(type, methodNames, processMethodContext.introspectionPolicy())
+            .withReturnTypeAnyOf(searchRequest.returnTypePattern().matchingTypes(paramType))
+            .streamMethodsMatchingSignature(signature)
+            .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+            .forEach(onMethodFound);
     }
 
     /*
@@ -187,20 +181,20 @@ public final class ParameterSupport {
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        val processMethodContext = searchRequest.getProcessMethodContext();
-        val type = processMethodContext.getCls();
-        val paramTypes = searchRequest.getParamTypes();
-        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
-        val paramType = paramTypes[paramIndex];
-        val additionalParamTypes = searchRequest.getAdditionalParamTypes();
+        var processMethodContext = searchRequest.processMethodContext();
+        var type = processMethodContext.cls();
+        var paramTypes = searchRequest.paramTypes();
+        var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+        var paramType = paramTypes[paramIndex];
+        var additionalParamTypes = searchRequest.additionalParamTypes();
 
         //limit: [0 .. paramIndex + 1]
         for(int limit = paramIndex + 1; limit>=0; --limit) {
-            val signature = concat(paramTypes, limit, additionalParamTypes);
-            val supportingMethod =
+            var signature = concat(paramTypes, limit, additionalParamTypes);
+            var supportingMethod =
                     MethodFinder
-                    .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
-                    .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
+                    .memberSupport(type, methodNames, processMethodContext.introspectionPolicy())
+                    .withReturnTypeAnyOf(searchRequest.returnTypePattern().matchingTypes(paramType))
                     .streamMethodsMatchingSignature(signature)
                     .findFirst()
                     .orElse(null);
@@ -215,8 +209,7 @@ public final class ParameterSupport {
             final int paramIndex,
             final Class<?> paramType,
             final ResolvedMethod supportingMethod) {
-        return ParamSupportingMethodSearchResult
-                .of(paramIndex, paramType,
+        return new ParamSupportingMethodSearchResult(paramIndex, paramType,
                     supportingMethod,
                     Optional.empty(),
                     _GenericResolver.forMethodReturn(supportingMethod));
@@ -233,16 +226,16 @@ public final class ParameterSupport {
             final Can<Class<?>> additionalParamTypes) {
 
         if(limit>paramTypes.length) {
-            val msg = String.format("limit %d exceeds size of paramTypes %d",
+            var msg = String.format("limit %d exceeds size of paramTypes %d",
                     limit, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
 
-        val paramTypesConsidered = limit<paramTypes.length
+        var paramTypesConsidered = limit<paramTypes.length
                 ? Arrays.copyOf(paramTypes, limit)
                 : paramTypes;
 
-        val withAdditional = additionalParamTypes.isNotEmpty()
+        var withAdditional = additionalParamTypes.isNotEmpty()
                 ? _Arrays.combine(paramTypesConsidered, additionalParamTypes.toArray(_Constants.emptyClasses))
                 : paramTypesConsidered;
 

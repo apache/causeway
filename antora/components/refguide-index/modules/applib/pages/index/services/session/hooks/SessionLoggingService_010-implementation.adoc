@@ -3,9 +3,21 @@
 
 
 
-== Implementation
+== Implementations
 
+This is an SPI, and the framework provides several implementations.
+
+NOTE: The framework allows multiple implementations of this service to be registered; all will be called.
+
+=== Applib (Log4j2)
+
+The applib provides a simple implementation, xref:refguide:applib:index/services/session/SessionLogger.adoc[], that just logs events as they are received.
 
 The framework provides a default implementation, `o.a.c.applib.services.session.SessionLoggingServiceLogging` that logs using log4j2.
 
-//The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s sessionlogger module provides an implementation that logs each session as a JDO entity.
+
+=== Session Log
+
+The xref:security:sessionlog:about.adoc[] module also provides an implementation, xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionSubscriberForSessionLog.adoc[].
+This implementation persists an instance of the xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntry.adoc[] entity for each event.
+

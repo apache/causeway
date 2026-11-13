@@ -18,38 +18,34 @@
  */
 package org.apache.causeway.core.metamodel;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
+import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
-import org.apache.causeway.core.metamodel.inspect.model.ActionNode;
-import org.apache.causeway.core.metamodel.inspect.model.CollectionNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetAttrNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetGroupNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetNode;
-import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
-import org.apache.causeway.core.metamodel.inspect.model.MemberNode;
-import org.apache.causeway.core.metamodel.inspect.model.ParameterNode;
-import org.apache.causeway.core.metamodel.inspect.model.PropertyNode;
-import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManagerDefault;
+import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectMenu;
+import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectView;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.services.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.causeway.core.metamodel.services.priming.PrimingRegistryDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForDomainObjects;
@@ -57,20 +53,20 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.columnorder.ColumnOrderTxtFileServiceDefault;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
+import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.apache.causeway.core.metamodel.services.init.MetamodelInitializer;
+import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
-import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
-import org.apache.causeway.core.metamodel.specloader.ProgrammingModelServiceDefault;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigIntegerValueSemantics;
@@ -85,7 +81,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.ClobValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.FloatValueSemantics;
-import org.apache.causeway.core.metamodel.valuesemantics.IdStringifierForSerializable;
+import org.apache.causeway.core.metamodel.valuesemantics.IdentifierValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
@@ -100,6 +96,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.TreeNodeValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
@@ -112,10 +109,16 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSql
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
+import org.jspecify.annotations.NonNull;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 
-import lombok.NonNull;
+import jakarta.inject.Provider;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleApplib.class,
@@ -123,8 +126,9 @@ import lombok.NonNull;
         CausewayModuleCoreSecurity.class,
 
         // @Configuration's
-        MetaModelContextFactory.class,
         CausewayModuleCoreMetamodelMixins.class,
+        CausewayModuleCoreMetamodelConfigurationDefault.class,
+        MetaModelContextFactory.class,
 
         // @Component's
         ProgrammingModelInitFilterDefault.class,
@@ -176,28 +180,23 @@ import lombok.NonNull;
         JavaUtilDateValueSemantics.class,
         // Value Semantics (meta-model)
         ApplicationFeatureIdValueSemantics.class,
-        // fallback IdStringifier
-        IdStringifierForSerializable.class,
+        IdentifierValueSemantics.class,
 
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
-        GridLoaderServiceDefault.class,
-        GridMarshallerServiceBootstrap.class,
+        ExecutionContext.class,
+        GridMarshallerXml.class,
         GridServiceDefault.class,
-        GridSystemServiceBootstrap.class,
         IdStringifierLookupService.class,
         LayoutResourceLoaderDefault.class,
         LayoutServiceDefault.class,
         MetamodelEventService.class,
         MetaModelServiceDefault.class,
-        ObjectManagerDefault.class,
-        ProgrammingModelServiceDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
-        SpecificationLoaderDefault.class,
-        TableColumnOrderServiceDefault.class,
-        TableColumnOrderServiceUsingTxtFile.class,
+        PrimingRegistryDefault.class,
+        // TableColumnOrderServiceUsingTxtFile.class, NOT here ... use @ComponentScan instead, see below
         TitleServiceDefault.class,
 
         // @Repository's
@@ -205,7 +204,15 @@ import lombok.NonNull;
 
         // standalone validators
         LogicalTypeMalformedValidator.class,
+
+        // menubar contributions
+        MetamodelInspectMenu.class,
+
+        //last
+        MetamodelInitializer.class
 })
+// in order for Spring to honor service precedence, services need to be autodetected
+@ComponentScan(basePackageClasses = { TableColumnOrderServiceUsingTxtFile.class })
 public class CausewayModuleCoreMetamodel {
 
     public static final String NAMESPACE = "causeway.metamodel";
@@ -214,6 +221,18 @@ public class CausewayModuleCoreMetamodel {
     @FunctionalInterface
     public static interface PreloadableTypes {
         @NonNull Stream<Class<?>> stream();
+    }
+
+    @Bean
+    public GridLoadingContext gridLoadingContext(
+        final CausewaySystemEnvironment causewaySystemEnvironment,
+        final CausewayConfiguration causewayConfiguration,
+        final MessageService messageService,
+        final Provider<SpecificationLoader> specLoaderProvider,
+        final List<GridMarshaller> marshallers,
+        final List<LayoutResourceLoader> layoutResourceLoaders) {
+        return GridLoadingContext.create(causewaySystemEnvironment, causewayConfiguration, messageService,
+            specLoaderProvider, marshallers, layoutResourceLoaders);
     }
 
     @Bean
@@ -234,23 +253,21 @@ public class CausewayModuleCoreMetamodel {
 
     @Bean
     public PreloadableTypes treeAdapterTypes() {
-        return ()->Stream.of(
-                TreeAdapter.class);
+        return ()->Stream.of(TreeAdapter.class);
     }
 
     @Bean
     public PreloadableTypes metamodelViewTypes() {
-        return ()->Stream.of(
-                MMTreeAdapter.class,
-                MemberNode.class,
-                ActionNode.class,
-                CollectionNode.class,
-                FacetAttrNode.class,
-                FacetGroupNode.class,
-                FacetNode.class,
-                ParameterNode.class,
-                PropertyNode.class,
-                TypeNode.class);
+        return ()->Stream.of(MetamodelInspectView.class);
+    }
+
+    @Bean
+    public ValueCodec valueCodec(
+            final BookmarkService bookmarkService,
+            final Provider<ValueSemanticsResolver> valueSemanticsResolverProvider) {
+        Objects.requireNonNull(bookmarkService);
+        Objects.requireNonNull(valueSemanticsResolverProvider);
+        return new ValueCodec(bookmarkService, valueSemanticsResolverProvider);
     }
 
 }

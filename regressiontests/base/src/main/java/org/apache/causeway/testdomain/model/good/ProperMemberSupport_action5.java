@@ -47,5 +47,4 @@ public class ProperMemberSupport_action5 {
         return "described-imperative[action5]";
     }
 
-
 }

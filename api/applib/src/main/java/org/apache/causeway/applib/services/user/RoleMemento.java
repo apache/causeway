@@ -19,8 +19,11 @@
 package org.apache.causeway.applib.services.user;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.inject.Named;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -28,16 +31,12 @@ import org.springframework.core.annotation.Order;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.
@@ -46,18 +45,32 @@ import lombok.val;
  */
 @Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @DomainObjectLayout(
         titleUiEvent = RoleMemento.TitleUiEvent.class
 )
-@Value
-public class RoleMemento implements Serializable {
+@Builder
+public record RoleMemento(
+    @PropertyLayout(fieldSetId = "identity", sequence = "1")
+    @NonNull String name,
+    @PropertyLayout(fieldSetId = "details", sequence = "1")
+    @NonNull String description
+    ) implements Serializable {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".RoleMemento";
 
-    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<RoleMemento> {}
+    public static class UiSubscriber {
+        @Order(PriorityPrecedence.LATE)
+        @EventListener(RoleMemento.TitleUiEvent.class)
+        public void on(final RoleMemento.TitleUiEvent ev) {
+            var roleMemento = ev.getSource();
+            assert roleMemento != null;
+            ev.setTitle(roleMemento.name());
+        }
+    }
 
-    private static final long serialVersionUID = -3876856609238378274L;
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<RoleMemento> {}
 
     /**
      * Creates a new role with the specified name. Description is left blank.
@@ -69,7 +82,7 @@ public class RoleMemento implements Serializable {
     /**
      * Creates a new role with the specified name and description.
      */
-    @Builder
+    // canonical constructor
     public RoleMemento(
             final @NonNull String name,
             final String description) {
@@ -77,26 +90,18 @@ public class RoleMemento implements Serializable {
         this.description = description == null ? "" : description;
     }
 
-    public static class UiSubscriber {
-        @Order(PriorityPrecedence.LATE)
-        @EventListener(RoleMemento.TitleUiEvent.class)
-        public void on(final RoleMemento.TitleUiEvent ev) {
-            val roleMemento = ev.getSource();
-            assert roleMemento != null;
-            ev.setTitle(roleMemento.getName());
-        }
+    // -- OBJECT CONTRACT
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return (obj instanceof RoleMemento other)
+            ? name.equals(other.name)
+            : false;
     }
 
-    @PropertyLayout(fieldSetId = "identity", sequence = "1")
-    @Getter
-    String name;
-
-    /**
-     * Excluded from {@link #equals(Object) equality} checks.
-     */
-    @EqualsAndHashCode.Exclude
-    @PropertyLayout(fieldSetId = "details", sequence = "1")
-    @Getter
-    String description;
+    @Override
+    public final int hashCode() {
+        return Objects.hashCode(name);
+    }
 
 }

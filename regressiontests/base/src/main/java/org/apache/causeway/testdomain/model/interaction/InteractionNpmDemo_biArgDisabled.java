@@ -22,8 +22,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Action
 @RequiredArgsConstructor
@@ -32,13 +30,9 @@ public class InteractionNpmDemo_biArgDisabled {
     @SuppressWarnings("unused")
     private final InteractionNpmDemo holder;
 
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        int a;
-        int b;
-    }
+    public record Parameters(int a, int b) {}
 
-    @MemberSupport public int act(int a, int b) {
+    @MemberSupport public int act(final int a, final int b) {
         return a + b;
     }
 
@@ -50,7 +44,7 @@ public class InteractionNpmDemo_biArgDisabled {
         return "Disabled for demonstration.";
     }
 
-    @MemberSupport public String validate(Parameters params) {
+    @MemberSupport public String validate(final Parameters params) {
         return "Never valid for demonstration.";
     }
 
@@ -58,18 +52,18 @@ public class InteractionNpmDemo_biArgDisabled {
 
     // testing whether all of these get picked up by the meta-model
 
-    @MemberSupport public boolean hideA(Parameters params) { return false; }
-    @MemberSupport public String disableA(Parameters params) { return null; }
-    @MemberSupport public String validateA(Parameters params) { return null; }
-    @MemberSupport public int[] choicesA(Parameters params) { return null; }
-    @MemberSupport public int[] autoCompleteA(Parameters params, String search) { return null; }
-    @MemberSupport public int defaultA(Parameters params) { return 0; }
+    @MemberSupport public boolean hideA(final Parameters params) { return false; }
+    @MemberSupport public String disableA(final Parameters params) { return null; }
+    @MemberSupport public String validateA(final Parameters params) { return null; }
+    @MemberSupport public int[] choicesA(final Parameters params) { return null; }
+    @MemberSupport public int[] autoCompleteA(final Parameters params, final String search) { return null; }
+    @MemberSupport public int defaultA(final Parameters params) { return 0; }
 
-    @MemberSupport public boolean hideB(Parameters params) { return false; }
-    @MemberSupport public String disableB(Parameters params) { return null; }
-    @MemberSupport public String validateB(Parameters params) { return null; }
-    @MemberSupport public int[] choicesB(Parameters params) { return null; }
-    @MemberSupport public int[] autoCompleteB(Parameters params, String search) { return null; }
-    @MemberSupport public int defaultB(Parameters params) { return 0; }
+    @MemberSupport public boolean hideB(final Parameters params) { return false; }
+    @MemberSupport public String disableB(final Parameters params) { return null; }
+    @MemberSupport public String validateB(final Parameters params) { return null; }
+    @MemberSupport public int[] choicesB(final Parameters params) { return null; }
+    @MemberSupport public int[] autoCompleteB(final Parameters params, final String search) { return null; }
+    @MemberSupport public int defaultB(final Parameters params) { return 0; }
 
 }

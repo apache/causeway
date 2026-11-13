@@ -18,16 +18,20 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
@@ -51,41 +55,39 @@ public interface CommandLogEntryRepository {
     }
 
     CommandLogEntry createEntryAndPersist(
-            final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
+            Command command, UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
 
-    Optional<CommandLogEntry> findByInteractionId(final UUID interactionId);
+    Optional<CommandLogEntry> findByInteractionId(UUID interactionId);
 
-    List<CommandLogEntry> findByParent(final CommandLogEntry parent);
+    List<CommandLogEntry> findByParent(CommandLogEntry parent);
 
-    List<CommandLogEntry> findByParentInteractionId(final UUID parentInteractionId);
+    List<CommandLogEntry> findByParentInteractionId(UUID parentInteractionId);
 
     List<CommandLogEntry> findByFromAndTo(
-            final @Nullable LocalDate from,
-            final @Nullable LocalDate to);
+            @Nullable LocalDate from,
+            @Nullable LocalDate to);
 
+    /**
+     * Still running, not completed yet.
+     */
     List<CommandLogEntry> findCurrent();
 
     List<CommandLogEntry> findCompleted();
 
-
     List<CommandLogEntry> findByTargetAndFromAndTo(
-            final Bookmark target,
-            final @Nullable LocalDate from,
-            final @Nullable LocalDate to);
-
+            Bookmark target,
+            @Nullable LocalDate from,
+            @Nullable LocalDate to);
 
     List<CommandLogEntry> findMostRecent();
 
-    List<CommandLogEntry> findMostRecent(final int limit);
+    List<CommandLogEntry> findMostRecent(int limit);
 
+    List<CommandLogEntry> findRecentByUsername(String username);
 
-    List<CommandLogEntry> findRecentByUsername(final String username);
+    List<CommandLogEntry> findRecentByTarget(Bookmark target);
 
-
-    List<CommandLogEntry> findRecentByTarget(final Bookmark target);
-
-    List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult);
-
+    List<CommandLogEntry> findRecentByTargetOrResult(Bookmark targetOrResult);
 
     /**
      * Intended to support the replay of commands on a secondary instance of
@@ -117,7 +119,33 @@ public interface CommandLogEntryRepository {
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
      */
-    List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
+    List<CommandLogEntry> findSince(UUID interactionId, Integer batchSize);
+
+    default List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since) {
+        return findForegroundSinceTimestamp(since, null);
+    }
+
+    List<CommandLogEntry> findForegroundSinceTimestamp(Timestamp since, @Nullable Integer limitIfAny);
+
+    List<CommandLogEntry> findForegroundBeforeTimestamp(Timestamp before, @Nullable Integer limitIfAny);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(Timestamp since);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(Timestamp since);
+
+    /**
+     * Command Replay feature: Can replay or retry.
+     */
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(Timestamp since);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(Timestamp since);
+
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since);
 
     /**
      * Returns any persisted commands that have not yet started.
@@ -131,8 +159,7 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findBackgroundAndNotYetStarted();
 
-    List<CommandLogEntry> findRecentBackgroundByTarget(final Bookmark target);
-
+    List<CommandLogEntry> findRecentBackgroundByTarget(Bookmark target);
 
     /**
      * The most recent replayed command previously replicated from primary to
@@ -158,37 +185,39 @@ public interface CommandLogEntryRepository {
      */
     Optional<CommandLogEntry> findMostRecentCompleted();
 
-    List<CommandLogEntry> findNotYetReplayed();
+    CommandLogEntry saveForReplay(CommandDto dto);
 
+    default List<CommandLogEntry> saveForReplay(@Nullable final List<CommandDto> commandDtoList) {
+        return _NullSafe.stream(commandDtoList)
+            .map(this::saveForReplay)
+            .collect(Collectors.toList());
+    }
 
-    CommandLogEntry saveForReplay(final CommandDto dto);
+    default List<CommandLogEntry> saveForReplay(@Nullable final CommandsDto commandsDto) {
+        var commandDtoList = Optional.ofNullable(commandsDto)
+            .map(CommandsDto::getCommandDto)
+            .orElseGet(Collections::emptyList);
+        return saveForReplay(commandDtoList);
+    }
 
-
-    List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto);
-
-
-    void persist(final CommandLogEntry commandLogEntry);
+    void persist(CommandLogEntry commandLogEntry);
 
     void truncateLog();
 
     // --
 
-
     List<CommandLogEntry> findCommandsOnPrimaryElseFail(
-            final @Nullable UUID interactionId,
-            final @Nullable Integer batchSize) throws NotFoundException;
-
+            @Nullable UUID interactionId,
+            @Nullable Integer batchSize) throws NotFoundException;
 
     /**
      * intended for testing purposes only
      */
     List<CommandLogEntry> findAll();
 
-
     /**
      * intended for testing purposes only
      */
     void removeAll();
-
 
 }

@@ -31,6 +31,8 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link EventBusService}.
+ *
  * @since 2.0 {@index}
  */
 @Service

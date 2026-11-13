@@ -1,0 +1,152 @@
+{
+  "data" : {
+    "rich" : {
+      "university_calc_Calculator" : {
+        "echoLocalDateTime" : {
+          "invoke" : {
+            "args" : {
+              "value" : "2026-08-18T09:10:11.123456789"
+            },
+            "results" : "2026-08-18T09:10:11.123456789"
+          }
+        },
+        "optionalLocalDateTime" : {
+          "invoke" : {
+            "args" : {
+              "value" : null
+            },
+            "results" : null
+          }
+        },
+        "echoUrl" : {
+          "invoke" : {
+            "args" : {
+              "value" : "https://causeway.apache.org/docs/index.html?x=1"
+            },
+            "results" : "https://causeway.apache.org/docs/index.html?x=1"
+          }
+        },
+        "echoJavaUtilDate" : {
+          "invoke" : {
+            "args" : {
+              "value" : "2026-08-18T08:10:11.123Z"
+            },
+            "results" : "2026-08-18T08:10:11.123Z"
+          }
+        },
+        "echoJavaSqlDate" : {
+          "invoke" : {
+            "args" : {
+              "value" : "2026-08-18"
+            },
+            "results" : "2026-08-18"
+          }
+        },
+        "echoJavaSqlTimestamp" : {
+          "invoke" : {
+            "args" : {
+              "value" : "2026-08-18T09:10:11.123456789"
+            },
+            "results" : "2026-08-18T09:10:11.123456789"
+          }
+        },
+        "positiveComplexNumber" : {
+          "invoke" : {
+            "args" : {
+              "value" : "3+4i"
+            },
+            "results" : "3+4i"
+          }
+        },
+        "negativeComplexNumber" : {
+          "invoke" : {
+            "args" : {
+              "value" : "1.25-2.500i"
+            },
+            "results" : "1.25-2.500i"
+          }
+        },
+        "echoBlob" : {
+          "params" : {
+            "value" : {
+              "datatype" : "rich__causeway_applib_value_Blob",
+              "fileAccept" : "text/plain",
+              "inlineInputMaxBytes" : 1048576,
+              "resourceInputMode" : "STRUCTURED_INLINE"
+            }
+          },
+          "invoke" : {
+            "args" : {
+              "value" : {
+                "name" : "hello.txt",
+                "mimeType" : "text/plain",
+                "byteLength" : 5,
+                "transferMode" : "INLINE",
+                "inlineOutputMaxBytes" : 1048576,
+                "base64" : "aGVsbG8="
+              }
+            },
+            "results" : {
+              "name" : "hello.txt",
+              "mimeType" : "text/plain",
+              "byteLength" : 5,
+              "transferMode" : "INLINE",
+              "inlineOutputMaxBytes" : 1048576,
+              "base64" : "aGVsbG8="
+            }
+          }
+        },
+        "optionalBlob" : {
+          "invoke" : {
+            "args" : {
+              "value" : null
+            },
+            "results" : null
+          }
+        },
+        "echoClob" : {
+          "params" : {
+            "value" : {
+              "datatype" : "rich__causeway_applib_value_Clob",
+              "fileAccept" : "text/plain",
+              "inlineInputMaxBytes" : 1048576,
+              "resourceInputMode" : "STRUCTURED_INLINE"
+            }
+          },
+          "invoke" : {
+            "args" : {
+              "value" : {
+                "name" : "hello.txt",
+                "mimeType" : "text/plain",
+                "byteLength" : 6,
+                "characterLength" : 5,
+                "transferMode" : "INLINE",
+                "inlineOutputMaxBytes" : 1048576,
+                "chars" : "héllo"
+              }
+            },
+            "results" : {
+              "name" : "hello.txt",
+              "mimeType" : "text/plain",
+              "byteLength" : 6,
+              "characterLength" : 5,
+              "transferMode" : "INLINE",
+              "inlineOutputMaxBytes" : 1048576,
+              "chars" : "héllo"
+            }
+          }
+        },
+        "someLocale" : {
+          "invoke" : {
+            "results" : "en-GB"
+          }
+        },
+        "secretPassword" : {
+          "invoke" : {
+            "results" : "suppressed"
+          }
+        }
+      }
+    }
+  }
+}

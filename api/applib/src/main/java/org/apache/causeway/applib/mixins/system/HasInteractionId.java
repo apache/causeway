@@ -52,7 +52,6 @@ public interface HasInteractionId {
         int MAX_LENGTH = 36;
     }
 
-
     /**
      * A unique identifier (a GUID).
      */

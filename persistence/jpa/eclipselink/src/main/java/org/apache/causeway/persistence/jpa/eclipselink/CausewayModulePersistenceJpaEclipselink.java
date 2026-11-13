@@ -20,15 +20,19 @@ package org.apache.causeway.persistence.jpa.eclipselink;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.sql.DataSource;
 
-import jakarta.inject.Inject;
-
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
+import org.apache.causeway.persistence.jpa.eclipselink.metamodel.EclipseLinkMetadataService;
+import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jpa.autoconfigure.JpaBaseConfiguration;
+import org.springframework.boot.jpa.autoconfigure.JpaProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
@@ -41,15 +45,9 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
-import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
-
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * EclipseLink integration.
@@ -63,14 +61,16 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration
 @Import({
-    CausewayModulePersistenceJpaIntegration.class
+    CausewayModulePersistenceJpaIntegration.class,
+    EclipseLinkMetadataService.class
 })
 @EnableConfigurationProperties(ElSettings.class)
-@Log4j2
+@Slf4j
 public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguration {
 
     @Inject private ElSettings elSettings;
 
+    @Inject
     protected CausewayModulePersistenceJpaEclipselink(
             final CausewayConfiguration causewayConfiguration,
             final DataSource dataSource,
@@ -97,7 +97,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     }
 
     @Override
-    protected Map<String, Object> getVendorProperties() {
+    protected Map<String, Object> getVendorProperties(final DataSource dataSource) {
         return elSettings.asMap();
     }
 
@@ -109,18 +109,18 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             final DataSource dataSource,
             final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.persistence().schema();
 
-        if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
+        if(!persistenceSchemaConf.autoCreateSchemas().isEmpty()) {
 
-            log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
+            log.info("about to create db schema(s) {}", persistenceSchemaConf.autoCreateSchemas());
 
-            try(val con = dataSource.getConnection()){
+            try(var con = dataSource.getConnection()){
 
-                val s = con.createStatement();
+                var s = con.createStatement();
 
-                for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
-                    s.execute(String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema));
+                for(var schema : persistenceSchemaConf.autoCreateSchemas()) {
+                    s.execute(persistenceSchemaConf.createSchemaSqlTemplate().formatted(schema));
                 }
 
             }
@@ -136,11 +136,11 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             final JpaProperties properties,
             final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.persistence().schema();
 
-        persistenceSchemaConf.getAdditionalOrmFiles()
-        .forEach(schema->properties.getMappingResources()
-                .add(String.format("META-INF/orm-%s.xml", schema)));
+        persistenceSchemaConf.additionalOrmFiles()
+            .forEach(schema->properties.getMappingResources()
+                .add("META-INF/orm-%s.xml".formatted(schema)));
 
         if(!properties.getMappingResources().isEmpty()) {
             log.info("using mapping-resources {}", properties.getMappingResources());
@@ -151,42 +151,37 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
 
     // --
 
-    @SuppressWarnings("serial")
     private EclipseLinkJpaDialect eclipselinkJpaDialect() {
 
-        val jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());
+        var jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());
 
         return new EclipseLinkJpaDialect() {
 
             @Override
             public DataAccessException translateExceptionIfPossible(final RuntimeException ex) {
 
-                if(ex instanceof DataAccessException) {
-                    return (DataAccessException)ex; // has already been translated to Spring's hierarchy
-                }
+                // has already been translated to Spring's hierarchy
+                if(ex instanceof DataAccessException dataAccessException) return dataAccessException;
 
                 // if its eg. a DatabaseException, it might wrap a java.sql.SQLException
                 if(getJdbcExceptionTranslator() != null
-                        && ex.getCause() instanceof SQLException) {
+                        && ex.getCause() instanceof SQLException sqlException) {
 
                     //converts SQL exceptions to Spring's hierarchy
-                    val translatedEx = getJdbcExceptionTranslator()
+                    var translatedEx = getJdbcExceptionTranslator()
                             .translate(
                                     "JPA operation: " + ex.getMessage(),
                                     extractSqlStringFromException(ex),
-                                    (SQLException) ex.getCause());
+                                    sqlException);
 
-                    if(translatedEx!=null) {
-                        return translatedEx;
-                    }
-
+                    if(translatedEx!=null) return translatedEx;
                 }
 
-                /* (null-able) converts javax.persistence exceptions to Spring's hierarchy
+                /* (null-able) converts jakarta.persistence exceptions to Spring's hierarchy
                  * However, don't let
                  * org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(RuntimeException)
                  * translate those 2 generic ones ... */
-                val translatedEx = (ex instanceof IllegalStateException
+                var translatedEx = (ex instanceof IllegalStateException
                         || ex instanceof IllegalArgumentException)
                         ? null
                         : super.translateExceptionIfPossible(ex);
@@ -196,28 +191,24 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                         || JpaSystemException.class.equals(translatedEx.getClass()))
                         && getJdbcExceptionTranslator() != null) {
 
-                    val translatedSqlEx = _Exceptions.streamCausalChain(ex)
-                    .filter(nextEx->nextEx instanceof SQLException)
-                    .map(SQLException.class::cast)
-                    //converts SQL exceptions to Spring's hierarchy
-                    .map(nextEx->getJdbcExceptionTranslator()
-                            .translate(
-                                    "JPA operation: " + nextEx.getMessage(),
-                                    extractSqlStringFromException(nextEx),
-                                    nextEx))
-                    .filter(_NullSafe::isPresent) //CAUSEWAY-3282
-                    .findFirst()
-                    .orElse(null);
+                    var translatedSqlEx = _Exceptions.streamCausalChain(ex)
+                        .filter(SQLException.class::isInstance)
+                        .map(SQLException.class::cast)
+                        //converts SQL exceptions to Spring's hierarchy
+                        .map(nextEx->getJdbcExceptionTranslator()
+                                .translate(
+                                        "JPA operation: " + nextEx.getMessage(),
+                                        extractSqlStringFromException(nextEx),
+                                        nextEx))
+                        .filter(Objects::nonNull) //CAUSEWAY-3282
+                        .findFirst()
+                        .orElse(null);
 
-                    if(translatedSqlEx!=null) {
-                        return translatedSqlEx;
-                    }
-
+                    if(translatedSqlEx!=null) return translatedSqlEx;
                 }
 
                 // (null-able)
                 return translatedEx;
-
             }
 
             // -- HELPER
@@ -226,7 +217,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
              * Template method for extracting a SQL String from the given exception.
              * <p>Default implementation always returns {@code null}. Can be overridden in
              * subclasses to extract SQL Strings for vendor-specific exception classes.
-             * @param ex the JDOException, containing a SQLException
+             * @param ex the throwable to be processed, typically containing some sort of SQL Exception
              * @return the SQL String, or {@code null} if none found
              */
             private String extractSqlStringFromException(final Throwable ex) {
@@ -236,7 +227,6 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             private SQLExceptionTranslator getJdbcExceptionTranslator() {
                 return jdbcExceptionTranslator;
             }
-
 
         };
     }
@@ -253,12 +243,9 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
      */
     private static SQLExceptionTranslator newJdbcExceptionTranslator(final Object connectionFactory) {
         // Check for PersistenceManagerFactory's DataSource.
-        if (connectionFactory instanceof DataSource) {
-            return new SQLErrorCodeSQLExceptionTranslator((DataSource) connectionFactory);
-        }
-        else {
-            return new SQLStateSQLExceptionTranslator();
-        }
+        return connectionFactory instanceof DataSource dataSource
+            ? new SQLErrorCodeSQLExceptionTranslator(dataSource)
+            : new SQLStateSQLExceptionTranslator();
     }
 
 }

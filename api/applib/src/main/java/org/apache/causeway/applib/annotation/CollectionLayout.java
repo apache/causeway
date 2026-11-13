@@ -39,9 +39,9 @@ import java.util.Comparator;
 @Target({
         ElementType.METHOD,
         ElementType.FIELD,
+        ElementType.RECORD_COMPONENT,
         ElementType.TYPE,
-        ElementType.ANNOTATION_TYPE
-})
+        ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation
@@ -58,7 +58,6 @@ public @interface CollectionLayout {
      */
     String cssClass()
             default "";
-
 
     /**
      * Indicates which view is used by default to render the collection.
@@ -89,11 +88,6 @@ public @interface CollectionLayout {
 
     /**
      * Indicates where in the UI the collection should <i>not</i>not be visible.
-     *
-     * <p>
-     *      Only {@link Where#NOWHERE NOWHERE} or {@link Where#EVERYWHERE EVERYWHERE}/{@link Where#ANYWHERE ANYWHERE}
-     *      apply for collections.
-     * </p>
      */
     Where hidden()
             default Where.NOT_SPECIFIED;
@@ -115,6 +109,17 @@ public @interface CollectionLayout {
      */
     String named()
             default "";
+
+    /**
+     * When set, identifies logical children, that are navigable via the UI.
+     * <p>
+     * The order of appearance of this tree branch in the UI relative to other branches of the same tree node,
+     * is given in <i>Dewey-decimal</i> notation.
+     *
+     * @see PropertyLayout#navigableSubtree()
+     */
+    String navigableSubtree()
+        default "";
 
     /**
      * The page size for instances of this class when rendered within
@@ -157,7 +162,7 @@ public @interface CollectionLayout {
      *
      * <p>
      * Whenever there is a collection of type {@link java.util.SortedSet}, the domain entity referenced
-     * is expected to implement {@link Comparable}, ie to have a natural ordering.  In effect tis
+     * is expected to implement {@link Comparable}, ie to have a natural ordering. In effect this
      * means that all domain entities should provide a natural ordering.
      *
      * <p>

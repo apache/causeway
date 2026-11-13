@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.EnumSet;
+import java.util.Optional;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -30,182 +29,139 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.grid.GridLoaderService;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridSystemService;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Default implementation of {@link GridService}.
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class GridServiceDefault implements GridService {
+@Slf4j
+public record GridServiceDefault(
+    GridLoadingContext context,
+    LayoutResourceLookup layoutLookup,
+    GridLoader loader,
+    FallbackGridProvider fallback,
+    ObjectMemberResolverForGrid memberResolver,
+    GridCache cache) implements GridService {
 
-    public static final String COMPONENT_TNS = "https://causeway.apache.org/applib/layout/component";
-    public static final String COMPONENT_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/component/component.xsd";
+    @Inject
+    public GridServiceDefault(
+            final GridLoadingContext gridLoadingContext) {
+        this(gridLoadingContext,
+            new LayoutResourceLookup(gridLoadingContext.layoutResourceLoaders()),
+            new GridLoader(gridLoadingContext),
+            new FallbackGridProvider(gridLoadingContext),
+            new ObjectMemberResolverForGrid(gridLoadingContext),
+            new GridCache(gridLoadingContext));
+    }
 
-    public static final String LINKS_TNS = "https://causeway.apache.org/applib/layout/links";
-    public static final String LINKS_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/links/links.xsd";
+    @Override
+    public EnumSet<CommonMimeType> supportedFormats() {
+        return context.supportedFormats();
+    }
 
-    private final GridLoaderService gridLoaderService;
-    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
-    private final GridMarshallerService<? extends Grid> marshaller;
-    private final List<GridSystemService<? extends Grid>> gridSystemServices;
-
-    // //////////////////////////////////////
+    @Override
+    public Optional<GridMarshaller> marshaller(final CommonMimeType format) {
+        return context.gridMarshaller(format);
+    }
 
     @Override
     public boolean supportsReloading() {
-        return gridLoaderService.supportsReloading();
+        return context.supportsReloading();
     }
 
+    // e.g. triggered by {@link Object_rebuildMetamodel} mixin action
     @Override
-    public void remove(final Class<?> domainClass) {
-        gridLoaderService.remove(domainClass);
-    }
-
-    @Override
-    public boolean existsFor(final Class<?> domainClass) {
-        return gridLoaderService.existsFor(domainClass, marshaller.supportedFormats());
-    }
-
-    @Override
-    public Grid load(final Class<?> domainClass) {
-        return gridLoaderService.load(domainClass, marshaller).orElse(null);
-    }
-
-    @Override
-    public Grid load(final Class<?> domainClass, final String layout) {
-        return gridLoaderService.load(domainClass, layout, marshaller).orElse(null);
-    }
-
-    // //////////////////////////////////////
-
-    @Override
-    public Grid defaultGridFor(final Class<?> domainClass) {
-        for (val gridSystemService : gridSystemServices()) {
-            val grid = gridSystemService.defaultGrid(domainClass);
-            if(grid != null) {
-                return grid;
-            }
+    public void invalidate(final Class<?> domainClass) {
+        if(supportsReloading()) {
+            layoutLookup.unmarkInvalid(domainClass);
+            cache.remove(domainClass);
         }
-        throw new IllegalStateException(
-                "No GridSystemService available to create grid for '" + domainClass.getName() + "'");
     }
 
     @Override
-    public Grid normalize(final Grid grid) {
+    public void clearCache() {
+        cache.clear();
+    }
 
-        if(grid.isNormalized()) {
-            return grid;
-        }
-
-        val domainClass = grid.getDomainClass();
-
-        for (val gridSystemService : gridSystemServices()) {
-            gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
-        }
-
-        final String tnsAndSchemaLocation = tnsAndSchemaLocation(grid);
-        grid.setTnsAndSchemaLocation(tnsAndSchemaLocation);
-
-        grid.setNormalized(true);
-
+    @Override
+    public BSGrid load(final LayoutKey layoutKey) {
+        var grid = cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
+            .valueAsNonNullElseFail(); // at least we should have a fallback, otherwise there is some serious issue
         return grid;
     }
-
+    
     @Override
-    public Grid complete(final Grid grid) {
-
-        val domainClass = grid.getDomainClass();
-        for (val gridSystemService : gridSystemServices()) {
-            gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
-        }
-
-        return grid;
+    public void addPatchedLayout(LayoutKey layoutKey, LayoutResource layoutResource) {
+    	layoutLookup.addPatchedLayout(layoutKey, layoutResource);
+    	// from 2nd level cache removes the grid that is associated with given layoutKey
+    	cache.gridsByKey().map().remove(layoutKey); 
+    	// purge 1st level cache as well
+    	context.specLoaderProvider().get().specForType(layoutKey.domainClass())
+    		.ifPresent(spec->spec.lookupFacet(GridFacet.class)
+                .ifPresent(GridFacet::clearCache));
     }
 
-    @Override
-    public Grid minimal(final Grid grid) {
+    // -- HELPER
 
-        val domainClass = grid.getDomainClass();
-        for (val gridSystemService : gridSystemServices()) {
-            gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
-        }
-
-        return grid;
+    private Try<BSGrid> tryLoadNoCache(final LayoutKey layoutKey) {
+        return Try.call(()->layoutLookup.lookupLayoutResource(layoutKey, context.supportedFormats()).orElse(null))
+            // on the success rail we optionally have a LayoutResource
+            .flatMapSuccessWhenPresent(layoutResource->loader.tryLoad(layoutKey, layoutResource)
+                .ifFailure(ex->onFailureWhileLoadingResource(layoutKey, layoutResource, ex)))
+            // on the success rail we optionally have a raw BSGrid (not yet validated), if present validate
+            .mapSuccessWhenPresent(grid->memberResolver.resolve(layoutKey, grid)
+                .<BSGrid>fold(a->a, b->{ onValidationFailure(layoutKey, b); return null; }))
+            // on the success rail we optionally have a valid BSGrid, if absent use fallback and validate
+            .mapSuccess(gridOpt->gridOpt.orElseGet(()->memberResolver.resolve(
+                    layoutKey,
+                    fallback.defaultGrid(layoutKey))
+                .<BSGrid>fold(a->a, b->{ onFallbackValidationFailure(b); return null; })));
     }
 
-    /**
-     * Not public API, exposed only for testing.
-     */
-    public String tnsAndSchemaLocation(final Grid grid) {
-        val parts = _Lists.<String>newArrayList();
-
-        parts.add(COMPONENT_TNS);
-        parts.add(COMPONENT_SCHEMA_LOCATION);
-
-        parts.add(LINKS_TNS);
-        parts.add(LINKS_SCHEMA_LOCATION);
-
-        for (val gridSystemService : getGridSystemServices()) {
-            val gridImpl = gridSystemService.gridImplementation();
-            if(gridImpl.isAssignableFrom(grid.getClass())) {
-                parts.add(gridSystemService.tns());
-                parts.add(gridSystemService.schemaLocation());
-            }
+    private void onFailureWhileLoadingResource(
+            final LayoutKey layoutKey,
+            final LayoutResource layoutResource,
+            final Throwable ex) {
+        layoutLookup.markInvalid(layoutKey);
+        final String message = "Failed to parse %s, cause (%s)"
+            .formatted(layoutResource.resourceName(), ex.getMessage());
+        if(context.causewaySystemEnvironment().isPrototyping()) {
+            context.messageService().warnUser(message);
         }
-        return parts.stream()
-                .collect(Collectors.joining(" "));
+        log.warn(message);
     }
 
-    ////////////////////////////////////////////////////////
-
-    private List<GridSystemService<? extends Grid>> filteredGridSystemServices;
-
-    /**
-     * For all of the {@link GridSystemService}s available, return only the first one for any that
-     * are for the same grid implementation.
-     *
-     * <p>
-     *   This allows default implementations (eg for bootstrap3) to be overridden while also allowing for the more
-     *   general idea of multiple implementations.
-     * </p>
-     */
-    protected List<GridSystemService<? extends Grid>> gridSystemServices() {
-
-        if (filteredGridSystemServices == null) {
-
-            val gridImplementations = _Sets.<Class<?>>newHashSet();
-
-            filteredGridSystemServices = getGridSystemServices()
-                    .stream()
-                    // true only if gridImplementations did not already contain the specified element
-                    .filter(gridService->gridImplementations.add(gridService.gridImplementation()))
-                    .collect(Collectors.toList());
-
+    private void onValidationFailure(final LayoutKey layoutKey, final BSGrid bsGrid) {
+        layoutLookup.markInvalid(layoutKey);
+        if(context.causewaySystemEnvironment().isPrototyping()) {
+            context.messageService().warnUser("Grid metadata errors for " + bsGrid.domainClass().getName() + "; check the error log");
         }
-        return filteredGridSystemServices;
+        log.error("Grid metadata errors in {}:\n\n{}\n\n", bsGrid.domainClass().getName(), toXml(bsGrid));
     }
 
-    // -- poor man's testing support
+    private void onFallbackValidationFailure(final BSGrid bsGrid) {
+        if(context.causewaySystemEnvironment().isPrototyping()) {
+            context.messageService().warnUser("Grid metadata errors for " + bsGrid.domainClass().getName() + "; check the error log");
+        }
+        log.error("Grid metadata errors in {}:\n\n{}\n\n", bsGrid.domainClass().getName(), toXml(bsGrid));
+    }
 
-    List<GridSystemService<? extends Grid>> gridSystemServicesForTest;
-    Collection<GridSystemService<? extends Grid>> getGridSystemServices() {
-        return gridSystemServices!=null
-                ? gridSystemServices
-                : gridSystemServicesForTest;
+    private String toXml(final BSGrid grid) {
+        return context().gridMarshaller(CommonMimeType.XML).orElseThrow()
+            .marshal(grid, CommonMimeType.XML);
     }
 
 }

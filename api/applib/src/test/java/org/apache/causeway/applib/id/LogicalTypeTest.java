@@ -26,52 +26,30 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.causeway.applib.SomeDomainClass;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
-import lombok.val;
-
 class LogicalTypeTest {
 
     @Test
     void eager() {
-        
-        val original = LogicalType.fqcn(SomeDomainClass.class);
+        var original = LogicalType.fqcn(SomeDomainClass.class);
         
         _SerializationTester.assertEqualsOnRoundtrip(original);
         
         assertEquals(
-                original.getLogicalTypeName(),
+                original.logicalName(),
                 SomeDomainClass.class.getName());
         
         assertEquals(
-                _SerializationTester.roundtrip(original).getLogicalTypeName(), 
-                original.getLogicalTypeName());
-    }
-    
-    @Test
-    void lazy() {
-        
-        val original = LogicalType.lazy(SomeDomainClass.class, ()->"hello");
-        
-        _SerializationTester.assertEqualsOnRoundtrip(original);
-        
-        assertEquals(
-                original.getLogicalTypeName(),
-                "hello");
-        
-        assertEquals(
-                _SerializationTester.roundtrip(original).getLogicalTypeName(), 
-                original.getLogicalTypeName());
+                _SerializationTester.roundtrip(original).logicalName(), 
+                original.logicalName());
     }
     
     @Test
     void cannotBeEmpty() throws Exception {
         assertThrows(IllegalArgumentException.class, ()->LogicalType.eager(Object.class, ""));
-        assertThrows(IllegalArgumentException.class, ()->LogicalType.lazy(Object.class, ()->"").getLogicalTypeName());
     }
 
     @Test
     void cannotBeNull()  {
-        assertThrows(NullPointerException.class, ()->LogicalType.lazy(null, ()->"x"));
-        assertThrows(NullPointerException.class, ()->LogicalType.lazy(Object.class, null));
         assertThrows(NullPointerException.class, ()->LogicalType.eager(null, "x"));
         assertThrows(IllegalArgumentException.class, ()->LogicalType.eager(Object.class, null));
     }

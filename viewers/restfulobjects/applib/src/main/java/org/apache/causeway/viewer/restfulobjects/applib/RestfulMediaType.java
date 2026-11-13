@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Media types including the <tt>profile</tt> parameter.
  *
- * <p>
- * Because these values are used in the <tt>@Produces</tt> annotation on the jax-rs
- * resources, they must be constants and must be strings.
+ * <p> Because these values are used with {@link RequestMapping} annotations, they must be constant strings.
  *
  * @see <a href="http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html">buzzword.org.uk</a>
  *
@@ -69,7 +68,6 @@ public final class RestfulMediaType {
 
     public static final String APPLICATION_JSON_LAYOUT_MENUBARS = JSON_BASE + "layout-menubars" + DQ;
     public static final String APPLICATION_XML_LAYOUT_MENUBARS = XML_BASE + "layout-menubars" + DQ;
-
 
     // currently only support a subset of representations in XML format
 

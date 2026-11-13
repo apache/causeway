@@ -18,60 +18,63 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 /**
  * @since 1.x {@index}
  */
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
+    @Autowired protected ResponseFactory responseFactory;
+
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
         return null;
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty)  {
         return null;
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedCollection objectAndCollection) {
         return null;
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedAction objectAndAction)  {
         return null;
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return null;
@@ -96,25 +99,23 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         try {
             domainType = _InstanceUtil.loadClass(cls);
         }catch (final Exception ex) {
-            throw RestfulObjectsApplicationException.createWithCause(RestfulResponse.HttpStatusCode.BAD_REQUEST, ex);
+            throw RestfulObjectsApplicationException.createWithCause(HttpStatus.BAD_REQUEST, ex);
         }
 
         return domainType;
     }
 
     protected void ensureJaxbAnnotated(final Class<?> domainType) {
-        if(!_ClassCache.getInstance().hasJaxbRootElementSemantics(domainType)) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Requested domain Type '" + domainType.getName() + "' is not annotated with JAXB @XmlRootElement annotation");
-        }
+        if(!_ClassCache.getInstance().head(domainType).hasJaxbRootElementSemantics())
+			throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST, "Requested domain Type '" + domainType.getName() + "' is not annotated with JAXB @XmlRootElement annotation");
     }
 
     protected void ensureDomainObjectAssignable(final String xRoDomainType, final Class<?> domainType, final Object domainObject) {
-        if(!domainType.isAssignableFrom(domainObject.getClass())) {
-            throw RestfulObjectsApplicationException.createWithMessage(
-                    RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE,
-                    "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')",
-                    xRoDomainType, domainObject.getClass().getName());
-        }
+        if(!domainType.isAssignableFrom(domainObject.getClass()))
+			throw RestfulObjectsApplicationException.createWithMessage(
+                HttpStatus.NOT_ACCEPTABLE,
+                    "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')"
+                .formatted(xRoDomainType, domainObject.getClass().getName()));
     }
 
     protected boolean mediaTypeParameterMatches(
@@ -122,9 +123,8 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
             final String parameter, final String parameterValue) {
         for (MediaType mediaType : acceptableMediaTypes) {
             final String paramValue = sanitize(mediaType.getParameters().get(parameter));
-            if (Objects.equals(paramValue, parameterValue)) {
-                return true;
-            }
+            if (Objects.equals(paramValue, parameterValue))
+				return true;
         }
         return false;
     }
@@ -132,7 +132,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     protected List<String> mediaTypeParameterList(
             final List<MediaType> acceptableMediaTypes,
             final String parameter) {
-        final List<String> paramList = _Lists.newArrayList();
+        final List<String> paramList = new ArrayList<>();
         for (MediaType mediaType : acceptableMediaTypes) {
             final String paramValue = sanitize(mediaType.getParameters().get(parameter));
             _Strings.splitThenStream(paramValue, ",")
@@ -142,19 +142,19 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return paramList;
     }
 
-
     /**
      * Remove any single quotes.
      */
     private String sanitize(String mediaParam) {
-        if (mediaParam == null) {
-            return null;
-        }
+        if (mediaParam == null) return null;
+
         mediaParam = mediaParam.trim();
-        if(mediaParam.startsWith("'")) {
+        while(mediaParam.startsWith("'")
+                || mediaParam.startsWith("\"")) {
             mediaParam = mediaParam.substring(1);
         }
-        if(mediaParam.endsWith("'")) {
+        while(mediaParam.endsWith("'")
+            || mediaParam.endsWith("\"")) {
             mediaParam = mediaParam.substring(0, mediaParam.length()-1);
         }
         return mediaParam;

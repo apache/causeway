@@ -29,6 +29,8 @@ import javax.sql.DataSource;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -38,11 +40,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * For a given <i>Spring</i> context, makes information about configured data-sources available.
@@ -56,15 +55,13 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreConfig.NAMESPACE + "..DataSourceIntrospectionService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class DataSourceIntrospectionService {
 
     @Autowired(required = false)
     private List<DataSource> dataSources;
 
-    @Value
-    public static class DataSourceInfo {
-        private final String jdbcUrl;
+    public record DataSourceInfo(String jdbcUrl) {
 
         @SneakyThrows
         private static DataSourceInfo fromMetaData(final @NonNull DatabaseMetaData databaseMetaData) {
@@ -83,10 +80,12 @@ public class DataSourceIntrospectionService {
 
     private Stream<DataSourceInfo> streamDataSourceInfos() {
 
-        val registeredDataSources = Can.ofCollection(dataSources);
+        var registeredDataSources = Can.ofCollection(dataSources);
 
-        log.debug("about to introspect data-sources: {}",
-                ()->registeredDataSources.map(ds->ds.getClass().getName()));
+        if(log.isDebugEnabled()) {
+            log.debug("about to introspect data-sources: {}",
+                    registeredDataSources.map(ds->ds.getClass().getName()));
+        }
 
         return registeredDataSources
                 .stream()
@@ -99,7 +98,7 @@ public class DataSourceIntrospectionService {
             final @NonNull DataSource dataSource) {
 
         // make sure we close any connection after having consumed the meta-data
-        try(val connection = dataSource.getConnection()){
+        try(var connection = dataSource.getConnection()){
             return Optional.ofNullable(connection.getMetaData())
                     .map(DataSourceInfo::fromMetaData);
         } catch (SQLException e) {
@@ -108,6 +107,5 @@ public class DataSourceIntrospectionService {
         }
         return Optional.empty();
     }
-
 
 }

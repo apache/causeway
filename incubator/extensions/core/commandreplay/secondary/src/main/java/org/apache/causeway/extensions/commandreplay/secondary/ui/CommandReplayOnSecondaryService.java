@@ -41,7 +41,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -54,7 +53,7 @@ import lombok.val;
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class CommandReplayOnSecondaryService {
 
     @Inject CommandLogEntryRepository commandLogEntryRepository;
@@ -78,7 +77,6 @@ public class CommandReplayOnSecondaryService {
         }
     }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = uploadCommands.ActionDomainEvent.class,
@@ -91,15 +89,15 @@ public class CommandReplayOnSecondaryService {
         public class ActionDomainEvent extends CommandReplayOnSecondaryService.ActionDomainEvent<uploadCommands> { }
 
         @MemberSupport public void act(final Clob commandsDtoAsXml) {
-            val chars = commandsDtoAsXml.getChars();
+            var chars = commandsDtoAsXml.chars();
             List<CommandDto> commandDtoList;
 
             try {
-                val commandsDto = jaxbService.fromXml(CommandsDto.class, chars.toString());
+                var commandsDto = jaxbService.fromXml(CommandsDto.class, chars.toString());
                 commandDtoList = commandsDto.getCommandDto();
 
             } catch(Exception ex) {
-                val commandDto = jaxbService.fromXml(CommandDto.class, chars.toString());
+                var commandDto = jaxbService.fromXml(CommandDto.class, chars.toString());
                 commandDtoList = Collections.singletonList(commandDto);
             }
 
@@ -111,4 +109,3 @@ public class CommandReplayOnSecondaryService {
     }
 
 }
-

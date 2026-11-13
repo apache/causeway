@@ -26,10 +26,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class ForwardingServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -47,7 +46,7 @@ public class ForwardingServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
-        val requestDispatcher = request.getRequestDispatcher(forwardTo);
+        var requestDispatcher = request.getRequestDispatcher(forwardTo);
 
         try {
             requestDispatcher.forward(request, response);

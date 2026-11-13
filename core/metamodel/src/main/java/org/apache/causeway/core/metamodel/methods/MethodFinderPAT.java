@@ -30,9 +30,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -43,10 +41,9 @@ public final class MethodFinderPAT {
 
     // -- PAT SUPPORT
 
-    @Value(staticConstructor = "of")
-    public static class MethodAndPatConstructor {
-        @NonNull ResolvedMethod supportingMethod;
-        @NonNull ResolvedConstructor patConstructor;
+    public record MethodAndPatConstructor(
+        @NonNull ResolvedMethod supportingMethod,
+        @NonNull ResolvedConstructor patConstructor) {
     }
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PAT)
@@ -69,7 +66,7 @@ public final class MethodFinderPAT {
             final ResolvedMethod supportingMethod,
             final Class<?>[] signature) {
 
-        val patCandidate = supportingMethod.paramType(0);
+        var patCandidate = supportingMethod.paramType(0);
 
         // just an optimization, not strictly required
         if(ClassUtils.isPrimitiveOrWrapper(patCandidate)
@@ -77,12 +74,11 @@ public final class MethodFinderPAT {
             return Optional.empty();
         }
 
-        val classCache = _ClassCache.getInstance();
+        var classCache = _ClassCache.getInstance();
 
         return classCache
                 .lookupPublicConstructor(patCandidate, signature)
-                .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor));
+                .map(constructor->new MethodAndPatConstructor(supportingMethod, constructor));
     }
-
 
 }

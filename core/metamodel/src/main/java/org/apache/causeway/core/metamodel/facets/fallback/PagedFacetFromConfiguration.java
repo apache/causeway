@@ -24,6 +24,11 @@ import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract
 public class PagedFacetFromConfiguration extends PagedFacetAbstract {
 
     public PagedFacetFromConfiguration(final int value, final FacetHolder holder) {
-        super(value, holder, Precedence.INFERRED);
+        super(value, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 }

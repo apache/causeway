@@ -19,13 +19,18 @@
 package org.apache.causeway.applib.value.semantics;
 
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.Temporal;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
@@ -57,31 +62,25 @@ extends
         public boolean isOutput() {return this == OUTPUT;}
     }
 
-
-    @Data
-    public static class TemporalDisplayPattern {
-
+    public record TemporalDisplayPattern(
         /**
          * The locale-independent (canonical) pattern used for displaying dates in the UI.
          *
-         * <p>
-         *     By default, a locale-specific date pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format).
-         * </p>
+         * <p>By default, a locale-specific date pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format).
          */
-        private String datePattern;
-
+        String datePattern,
         /**
          * The locale-independent (canonical) pattern used for displaying date/times in the UI.
          *
-         * <p>
-         *     By default, a locale-specific date/time pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format) for both the date and time parts.
-         * </p>
+         * <p>By default, a locale-specific date/time pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format)
+         * for both the date and time parts.
          */
-        private String dateTimePattern;
+        String dateTimePattern
+        ) {
+
     }
 
-
-    @Data
+    @Getter @Accessors(fluent=true)
     public static class TemporalEditingPattern {
 
         /**
@@ -248,50 +247,45 @@ extends
                 final @NonNull TimePrecision timePrecision,
                 final @NonNull EditingFormatDirection direction) {
 
-            switch (temporalCharacteristic) {
-            case DATE_TIME:
+            return switch (temporalCharacteristic) {
+            case DATE_TIME -> {
                 var dateTimePattern =
-                    String.format(getDateTimeJoiningPattern(),
-                            getDatePattern(),
+                    String.format(dateTimeJoiningPattern(),
+                            datePattern(),
                             timePattern(timePrecision, direction));
-                return offsetCharacteristic.isLocal()
-                        ? dateTimePattern
-                        : String.format(getZoneJoiningPattern(),
-                                dateTimePattern,
-                                zonePattern(offsetCharacteristic, direction));
-            case DATE_ONLY:
-                return offsetCharacteristic.isLocal()
-                        ? getDatePattern()
-                        : String.format(getZoneJoiningPattern(),
-                                getDatePattern(),
-                                zonePattern(offsetCharacteristic,direction));
-            case TIME_ONLY:
-                return offsetCharacteristic.isLocal()
-                        ? timePattern(timePrecision, direction)
-                        : String.format(getZoneJoiningPattern(),
-                                timePattern(timePrecision, direction),
-                                zonePattern(offsetCharacteristic, direction));
-            default:
-                throw _Exceptions.unmatchedCase(temporalCharacteristic);
+                yield offsetCharacteristic.isLocal()
+                                        ? dateTimePattern
+                                        : String.format(zoneJoiningPattern(),
+                                                dateTimePattern,
+                                                zonePattern(offsetCharacteristic, direction));
             }
+            case DATE_ONLY -> offsetCharacteristic.isLocal()
+                                    ? datePattern()
+                                    : String.format(zoneJoiningPattern(),
+                                            datePattern(),
+                                            zonePattern(offsetCharacteristic,direction));
+            case TIME_ONLY -> offsetCharacteristic.isLocal()
+                                    ? timePattern(timePrecision, direction)
+                                    : String.format(zoneJoiningPattern(),
+                                            timePattern(timePrecision, direction),
+                                            zonePattern(offsetCharacteristic, direction));
+            default -> throw _Exceptions.unmatchedCase(temporalCharacteristic);
+            };
         }
 
         private String zonePattern(
                 final @NonNull OffsetCharacteristic offsetCharacteristic,
                 final @NonNull EditingFormatDirection direction) {
 
-            switch(offsetCharacteristic) {
-            case OFFSET:
-                return direction.isInput()
-                        ? getOffsetPatternForInput()
-                        : getOffsetPatternForOutput();
-            case ZONED:
-                return direction.isInput()
-                        ? getZoneIdPatternForInput()
-                        : getZoneIdPatternForOutput();
-            default:
-                throw _Exceptions.unexpectedCodeReach();
-            }
+            return switch (offsetCharacteristic) {
+            case OFFSET -> direction.isInput()
+                                    ? offsetPatternForInput()
+                                    : offsetPatternForOutput();
+            case ZONED -> direction.isInput()
+                                    ? zoneIdPatternForInput()
+                                    : zoneIdPatternForOutput();
+            default -> throw _Exceptions.unexpectedCodeReach();
+            };
         }
 
         // -- HELPER
@@ -299,35 +293,56 @@ extends
         private String timePattern(
                 final @NonNull TimePrecision timePrecision,
                 final @NonNull EditingFormatDirection direction) {
-            switch (direction) {
-            case INPUT:
-                return timePattern(timePrecision);
-            case OUTPUT:
-                return timePattern(timePrecision)
-                        .replace("[", "").replace("]", ""); // remove brackets for optional temporal parts
-            }
-            throw _Exceptions.unmatchedCase(direction);
+            return switch (direction) {
+                case INPUT -> timePattern(timePrecision);
+                case OUTPUT -> timePattern(timePrecision)
+                                        .replace("[", "").replace("]", ""); // remove brackets for optional temporal parts
+            };
         }
 
         private String timePattern(final @NonNull TimePrecision timePrecision) {
-            switch (timePrecision) {
-            case NANO_SECOND:
-                return getTimePatternNanoSecond();
-            case MICRO_SECOND:
-                return getTimePatternMicroSecond();
-            case MILLI_SECOND:
-                return getTimePatternMilliSecond();
-            case UNSPECIFIED:
-            case SECOND:
-                return getTimePatternSecond();
-            case MINUTE:
-                return getTimePatternMinute();
-            case HOUR:
-                return getTimePatternHour();
-            }
-            throw _Exceptions.unmatchedCase(timePrecision);
+            return switch (timePrecision) {
+                case NANO_SECOND -> timePatternNanoSecond();
+                case MICRO_SECOND -> timePatternMicroSecond();
+                case MILLI_SECOND -> timePatternMilliSecond();
+                case UNSPECIFIED, SECOND -> timePatternSecond();
+                case MINUTE -> timePatternMinute();
+                case HOUR -> timePatternHour();
+            };
         }
 
+    }
+
+    default DateTimeFormatter getTemporalEditingFormat(
+            final ValueSemanticsProvider.@Nullable Context context,
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
+            final @NonNull TimePrecision timePrecision,
+            final @NonNull EditingFormatDirection direction,
+            final @NonNull TemporalEditingPattern editingPattern) {
+
+        return new DateTimeFormatterBuilder()
+                .appendPattern(editingPattern
+                        .getEditingFormatAsPattern(
+                                temporalCharacteristic, offsetCharacteristic, timePrecision, direction))
+                .toFormatter(ValueSemanticsProvider.getUserLocale(context).timeFormatLocale());
+    }
+
+    default DateTimeFormatter getTemporalIsoFormat(
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
+
+        return switch (temporalCharacteristic) {
+            case DATE_TIME -> offsetCharacteristic.isLocal()
+                            ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                            : DateTimeFormatter.ISO_DATE_TIME;
+            case DATE_ONLY -> offsetCharacteristic.isLocal()
+                            ? DateTimeFormatter.ISO_LOCAL_DATE
+                            : DateTimeFormatter.ISO_DATE;
+            case TIME_ONLY -> offsetCharacteristic.isLocal()
+                            ? DateTimeFormatter.ISO_LOCAL_TIME
+                            : DateTimeFormatter.ISO_TIME;
+        };
     }
 
 }

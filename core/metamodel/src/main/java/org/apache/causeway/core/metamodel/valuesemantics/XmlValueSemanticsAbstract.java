@@ -26,8 +26,7 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public abstract class XmlValueSemanticsAbstract<T>
 extends ValueSemanticsAbstract<T>
@@ -57,8 +56,8 @@ implements
                         ? -1
                         : 1;
         }
-        val _a = toXml(a);
-        val _b = toXml(b);
+        var _a = toXml(a);
+        var _b = toXml(b);
         return _a.compareTo(_b);
     }
 
@@ -68,8 +67,8 @@ implements
                 || b==null) {
             return Objects.equals(a, b);
         }
-        val _a = toXml(a);
-        val _b = toXml(b);
+        var _a = toXml(a);
+        var _b = toXml(b);
         return _a.equals(_b);
     }
 

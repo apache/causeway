@@ -18,21 +18,93 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides a (simple) list of {@link Facet}s.
  */
-final class FacetHolderSimple
-extends FacetHolderAbstract {
+record FacetHolderSimple(
+    MetaModelContext metaModelContext,
+    Identifier featureIdentifier,
+    Map<Class<? extends Facet>, FacetRanking> rankingByType)
+implements FacetHolderInternal {
 
     public FacetHolderSimple(
             final @NonNull MetaModelContext metaModelContext,
             final Identifier featureIdentifier) {
-        super(metaModelContext, featureIdentifier);
+        this(metaModelContext, featureIdentifier, new ConcurrentHashMap<>());
+    }
+
+    // -- FIELDS
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return metaModelContext;
+    }
+
+    @Override
+    public Identifier getFeatureIdentifier() {
+        return featureIdentifier;
+    }
+
+    @Override
+    public boolean containsFacet(final Class<? extends Facet> facetType) {
+        return lookupFacet(facetType).isPresent();
+    }
+
+    @Override
+    public void addFacet(final @Nullable Facet facet) {
+    	if(facet==null)
+    		return;
+        rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new)
+            .add(facet);
+    }
+
+    @SuppressWarnings("deprecation")
+	@Override
+    public void removeFacet(@Nullable final Facet facet) {
+    	if(facet==null)
+    		return;
+    	lookupFacetRanking(facet.facetType())
+    		.ifPresent(ranking->ranking.remove(facet));
+    }
+
+    @Override
+    public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
+        return lookupFacetRanking(facetType)
+            .flatMap(facetRanking->facetRanking.getWinner(facetType));
+    }
+
+    @Override
+    public Stream<Facet> streamFacets() {
+        return streamFacetRankings()
+            .flatMap(facetRanking->facetRanking.getWinner(facetRanking.facetType())
+                    .stream());
+    }
+
+    @Override
+    public int getFacetCount() {
+        return Math.toIntExact(streamFacets().count());
+    }
+
+    // -- VALIDATION SUPPORT
+
+    @Override
+    public Stream<FacetRanking> streamFacetRankings() {
+        return rankingByType.values().stream();
+    }
+
+    @Override
+    public Optional<FacetRanking> lookupFacetRanking(final Class<? extends Facet> facetType) {
+        return Optional.ofNullable(rankingByType.get(facetType));
     }
 
 }

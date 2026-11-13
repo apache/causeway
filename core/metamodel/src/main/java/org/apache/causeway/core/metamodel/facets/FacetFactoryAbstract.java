@@ -18,21 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.util.Optional;
-
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.jspecify.annotations.NonNull;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 
 public abstract class FacetFactoryAbstract
 implements FacetFactory, HasMetaModelContext {
@@ -63,29 +58,10 @@ implements FacetFactory, HasMetaModelContext {
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
 
-    // -- FACET UTILITIES
-
-    /**
-     * Shortcut to {@link FacetUtil#addFacet}.
-     * @param facet - non-null
-     * @return the argument as is
-     */
-    public <F extends Facet> F addFacet(final @NonNull F facet) {
-        return FacetUtil.addFacet(facet);
-    }
-
-    /**
-     * Shortcut to {@link FacetUtil#addFacetIfPresent}. Acts as a no-op if facet is <tt>null</tt>.
-     * @param facetIfAny - null-able
-     * @return the argument as is - or just in case if null converted to an Optional.empty()
-     */
-    public <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
-        return FacetUtil.addFacetIfPresent(facetIfAny);
-    }
-
     // -- METHOD UTILITITES
 
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
+    protected static final Class<?>[] ICON_WHERE_ARG = new Class<?>[] {ObjectSupport.IconSize.class};
 
 }

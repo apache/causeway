@@ -26,12 +26,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
@@ -39,9 +41,9 @@ import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
+import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
@@ -49,19 +51,19 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
-import org.apache.causeway.core.metamodel.tabular.internal._FilterUtils.FilterHandler;
+import org.apache.causeway.core.metamodel.tabular.internal.FilterUtils.FilterHandler;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import lombok.experimental.Accessors;
 
 public class DataTableInternal
 implements DataTableInteractive {
@@ -87,11 +89,10 @@ implements DataTableInteractive {
         if(actionResult==null) {
             new DataTableInternal(managedAction, managedAction.getWhere(), Can.empty());
         }
-        if(!(actionResult instanceof PackedManagedObject)) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        if(!(actionResult instanceof PackedManagedObject))
+			throw _Exceptions.unexpectedCodeReach();
 
-        val elements = ((PackedManagedObject)actionResult).unpack();
+        var elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
 
         return new DataTableInternal(managedAction, managedAction.getWhere(), elements);
@@ -103,17 +104,29 @@ implements DataTableInteractive {
     final @NonNull ManagedMember managedMember;
     final @NonNull Where where;
 
-    @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElements;
-    @Getter private final @NonNull _BindableAbstract<String> searchArgument; // filter the data rows
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElementsObservable;
 
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRows;
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSorted;
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
-    @Getter private final _BindableAbstract<Boolean> selectAllToggle;
-    @Getter private final _BindableAbstract<ColumnSort> columnSort;
+    @Accessors(fluent=true)
+    @Getter private final @NonNull _BindableAbstract<String> searchArgumentBindable; // filter the data rows
 
-    @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
-    @Getter private final @NonNull LazyObservable<String> title;
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSortedObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelectedObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final _BindableAbstract<ColumnSort> columnSortBindable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumnsObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<String> titleObservable;
 
     private final Optional<FilterHandler> filterHandler;
 
@@ -130,66 +143,50 @@ implements DataTableInteractive {
             final Where where,
             final Can<ManagedObject> elements) {
 
-        val elementType = managedMember.getElementType();
-        //val mmc = elementType.getMetaModelContext();
-
         this.managedMember = managedMember;
         this.where = where;
-        this.filterHandler = _FilterUtils.createFilterHandler(elementType);
+        this.filterHandler = FilterUtils.createFilterHandler(managedMember.getElementType());
 
-        this.searchArgument = _Bindables.forValue("");
-        this.columnSort = _Bindables.forValue(null);
+        this.searchArgumentBindable = _Bindables.forValue("");
+        this.columnSortBindable = _Bindables.forValue(null);
 
-        this.dataElements = _Observables.lazy(()->elements
-                //.map(mmc::injectServicesInto) // I believe is redundant, has major performance impact
-                //.filter(this::ignoreHidden) // I believe is redundant, has major performance impact
-                );
+        this.dataElementsObservable = _Observables.lazy(()->elements);
 
-        this.dataRows = _Observables.lazy(()->
-            dataElements.getValue().stream()
+        this.dataRowsObservable = _Observables.lazy(()->
+            dataElementsObservable.getValue().stream()
                 .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRowInternal(rowIndex, this, element, tokens(element))))
                 .collect(Can.toCan()));
 
-        this.dataRowsFilteredAndSorted = _Observables.lazy(()->
-            dataRows.getValue().stream()
-                .filter(adaptSearchPredicate())
-                .sorted(sortingComparator()
-                        .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
+        this.dataRowsFilteredAndSortedObservable = _Observables.lazy(()->
+            _Streams.sortConditionally(
+                dataRowsObservable.getValue().stream().filter(adaptSearchPredicate()),
+                    sortingComparator().orElse(null))
                 .collect(Can.toCan()));
 
-        this.dataRowsSelected = _Observables.lazy(()->
-            dataRows.getValue().stream()
-                .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
+        this.dataRowsSelectedObservable = _Observables.lazy(()->
+            dataRowsObservable.getValue().stream()
+                .filter(dataRow->dataRow.selectToggleBindable().getValue().booleanValue())
                 .collect(Can.toCan()));
 
         this.selectionChanges = _Bindables.forValue(Boolean.FALSE);
-        this.selectAllToggle = _Bindables.forValue(Boolean.FALSE);
-        this.selectAllToggle.addListener((e,o,isAllOn)->{
-            //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
-            if(isClearToggleAllEvent.get()) return;
 
-            doProgrammaticToggle(()->{
-                dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
-            });
+        this.searchArgumentBindable.addListener((e,o,n)->{
+            dataRowsFilteredAndSortedObservable.invalidate();
         });
 
-        this.searchArgument.addListener((e,o,n)->{
-            dataRowsFilteredAndSorted.invalidate();
+        this.columnSortBindable.addListener((e,o,n)->{
+            dataRowsFilteredAndSortedObservable.invalidate();
         });
 
-        this.columnSort.addListener((e,o,n)->{
-            dataRowsFilteredAndSorted.invalidate();
-        });
-
-        this.dataColumns = _Observables.lazy(()->
+        this.dataColumnsObservable = _Observables.lazy(()->
             managedMember.getElementType()
-            .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
-            .map(assoc->new DataColumnInternal(this, assoc))
-            .collect(Can.toCan()));
+                .streamAssociationsForColumnRendering(new ColumnQuery(managedMember, AssociationsLookup.ENABLED))
+                .map(assoc->new DataColumnInternal(this, assoc))
+                .collect(Can.toCan()));
 
         //XXX future extension: the title could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
-        this.title = _Observables.lazy(()->
+        this.titleObservable = _Observables.lazy(()->
             managedMember
             .getFriendlyName());
     }
@@ -213,7 +210,7 @@ implements DataTableInteractive {
      * Count all data rows (the user is allowed to see).
      */
     public int getVisibleElementCount() {
-        return dataElements.getValue().size();
+        return dataElementsObservable.getValue().size();
     }
 
     /**
@@ -221,7 +218,7 @@ implements DataTableInteractive {
      */
     @Override
     public int getFilteredElementCount() {
-        return dataRowsFilteredAndSorted.getValue().size();
+        return dataRowsFilteredAndSortedObservable.getValue().size();
     }
 
     @Override
@@ -235,7 +232,7 @@ implements DataTableInteractive {
 
     @Override
     public Optional<DataRow> lookupDataRow(final int rowIndex) {
-        return getDataRows().getValue().get(rowIndex)
+        return dataRowsObservable().getValue().get(rowIndex)
                 .map(DataRow.class::cast);
     }
 
@@ -243,7 +240,7 @@ implements DataTableInteractive {
 
     @Override
     public String getSearchPromptPlaceholderText() {
-        return filterHandler.map(handler->handler.searchPromptPlaceholderText)
+        return filterHandler.map(FilterHandler::searchPromptPlaceholderText)
                 .orElse("");
     }
 
@@ -251,37 +248,27 @@ implements DataTableInteractive {
         return filterHandler.isEmpty()
                 ? dataRow->true
                 : dataRow->filterHandler.get().getDataRowFilter()
-                    .test(dataRow, searchArgument.getValue());
+                    .test(dataRow, searchArgumentBindable.getValue());
     }
 
-    @Nullable
-    private CollectionFilterService.Tokens tokens(final ManagedObject element){
+    private CollectionFilterService.@Nullable Tokens tokens(final ManagedObject element){
         return filterHandler.isEmpty()
                 ? null
-                : filterHandler.get().tokenizer.apply(element.getPojo());
+                : filterHandler.get().tokenizer().apply(element.getPojo());
     }
 
     // -- SORTING
 
     private Optional<Comparator<DataRow>> sortingComparator() {
-        return Optional.ofNullable(columnSort.getValue())
-                .flatMap(sort->sort.asComparator(dataColumns.getValue()))
+        return Optional.ofNullable(columnSortBindable.getValue())
+                .flatMap(sort->sort.asComparator(dataColumnsObservable.getValue()))
                 .or(()->managedMember.getMetaModel().getElementComparator())
-                .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.getRowElement(), rowB.getRowElement()));
+                .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.rowElement(), rowB.rowElement()));
     }
 
     // -- TOGGLE ALL
 
     private final AtomicBoolean isProgrammaticToggle = new AtomicBoolean();
-    private final AtomicBoolean isClearToggleAllEvent = new AtomicBoolean();
-    public void clearToggleAll() {
-        try {
-            isClearToggleAllEvent.set(true);
-            selectAllToggle.setValue(Boolean.FALSE);
-        } finally {
-            isClearToggleAllEvent.set(false);
-        }
-    }
 
     @Override
     public void doProgrammaticToggle(final @NonNull Runnable runnable) {
@@ -298,24 +285,42 @@ implements DataTableInteractive {
 
     void handleRowSelectToggle() {
         if(isProgrammaticToggle.get()) return;
-        // in any case, if we have a toggle state change, clear the toggle all bindable
-        clearToggleAll();
         invalidateSelectionThenNotifyListeners();
     }
 
     private void invalidateSelectionThenNotifyListeners() {
-        dataRowsSelected.invalidate();
+        dataRowsSelectedObservable.invalidate();
         // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
     }
 
     @Override
+    public void selectAll(final boolean select) {
+        doProgrammaticToggle(()->{
+            dataRowsObservable.getValue()
+                .forEach(dataRow->{
+                    dataRow.selectToggleBindable().setValue(select);
+                });
+        });
+    }
+
+    @Override
+    public void selectAllFiltered(final boolean select) {
+        doProgrammaticToggle(()->{
+            dataRowsFilteredAndSortedObservable.getValue()
+                .forEach(dataRow->{
+                    dataRow.selectToggleBindable().setValue(select);
+                });
+        });
+    }
+
+    @Override
     public void selectRangeOfRowsByIndex(final IntStream range, final boolean select) {
         doProgrammaticToggle(()->{
-            dataRowsFilteredAndSorted.getValue()
+            dataRowsFilteredAndSortedObservable.getValue()
                 .pickByIndex(range)
                 .forEach(dataRow->{
-                    dataRow.getSelectToggle().setValue(select);
+                    dataRow.selectToggleBindable().setValue(select);
                 });
         });
     }
@@ -339,28 +344,32 @@ implements DataTableInteractive {
 
     @Override
     public Can<ManagedObject> getSelected() {
-        return dataRowsSelected.getValue()
-            .map(DataRow::getRowElement);
+        return dataRowsSelectedObservable.getValue()
+            .map(DataRow::rowElement);
     }
 
     @Override
     public Set<Integer> getSelectedRowIndexes() {
-        return dataRowsSelected.getValue()
+        return dataRowsSelectedObservable.getValue()
             .stream()
-            .map(DataRow::getRowIndex)
+            .map(DataRow::rowIndex)
             .collect(Collectors.toSet());
     }
 
     @Override
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
-        val featureId = managedMember.getIdentifier();
-        if(!featureId.getType().isPropertyOrCollection()) {
-            return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
+
+        if(managedMember.getOwner().specialization().isEmpty()
+            || managedMember.getOwner().getEntityState().isTransientOrRemoved())
+			throw _Exceptions.illegalArgument("cannot start action interaction on missing or deleted action owner");
+
+        var featureId = managedMember.getIdentifier();
+        if(!featureId.type().isPropertyOrCollection())
+			return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
                     + "(while searching for an associated action %s)]",
                     featureId,
-                    featureId.getType(),
+                    featureId.type(),
                     actionId));
-        }
         return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
     }
 
@@ -370,12 +379,12 @@ implements DataTableInteractive {
     public DataTable export() {
         return new DataTable(
                 getElementType(),
-                getTitle().getValue(),
-                getDataColumns().getValue()
-                    .map(DataColumn::getAssociationMetaModel),
-                getDataRowsFilteredAndSorted().getValue()
+                titleObservable().getValue(),
+                dataColumnsObservable().getValue()
+                    .map(DataColumn::associationMetaModel),
+                dataRowsFilteredAndSortedObservable().getValue()
                     .stream()
-                    .map(dr->dr.getRowElement())
+                    .map(DataRow::rowElement)
                     .collect(Can.toCan()));
     }
 
@@ -383,10 +392,10 @@ implements DataTableInteractive {
     private DataTable exportAll() {
         return new DataTable(
                 getElementType(),
-                getTitle().getValue(),
-                getDataColumns().getValue()
-                    .map(DataColumn::getAssociationMetaModel),
-                getDataElements().getValue());
+                titleObservable().getValue(),
+                dataColumnsObservable().getValue()
+                    .map(DataColumn::associationMetaModel),
+                dataElementsObservable().getValue());
     }
 
     // -- MEMENTO
@@ -402,6 +411,10 @@ implements DataTableInteractive {
      * Either originates from a <i>Collection</i> or an <i>Action</i>'s
      * non-scalar result.
      * <p>
+     * Corner case of owner (if entity) having been deleted, must be handled successfully,
+     * that is an owner's action result is still semantically valid, even if it was deleted in the process.
+     * (e.g. SecMan's {@code ApplicationUser_delete} returning a list of all remaining users)
+     * <p>
      * Responsibility for recreation of the owner is with the caller
      * to allow for simpler object graph reconstruction (shared owner).
      */
@@ -416,9 +429,9 @@ implements DataTableInteractive {
                     tableInteractive.managedMember.getIdentifier(),
                     tableInteractive.where,
                     tableInteractive.exportAll(),
-                    tableInteractive.searchArgument.getValue(),
+                    tableInteractive.searchArgumentBindable.getValue(),
                     tableInteractive.getSelectedRowIndexes(),
-                    tableInteractive.getColumnSort().getValue());
+                    tableInteractive.columnSortBindable().getValue());
         }
 
         private final @NonNull Identifier featureId;
@@ -427,28 +440,22 @@ implements DataTableInteractive {
 
         private @Nullable String searchArgument;
         private @NonNull Set<Integer> selectedRowIndexes;
-        private @Nullable DataTableInteractive.ColumnSort columnSort;
+        private DataTableInteractive.@Nullable ColumnSort columnSort;
 
         @Override
-        public DataTableInternal getDataTableModel(final ManagedObject owner) {
+        public DataTableInternal recreateDataTableModel(final ManagedObject owner) {
+            var memberId = featureId.memberLogicalName();
 
-            if(owner.getPojo()==null) {
-                // owner (if entity) might have been deleted
-                throw _Exceptions.illegalArgument("cannot recreate from memento for deleted object");
-            }
-
-            val memberId = featureId.getMemberLogicalName();
-
-            final ManagedMember managedMember = featureId.getType().isPropertyOrCollection()
-                    ? CollectionInteraction.start(owner, memberId, where)
-                        .getManagedCollection().orElseThrow()
-                    : ActionInteraction.start(owner, memberId, where)
-                        .getManagedActionElseFail();
+            final ManagedMember managedMember = featureId.type().isPropertyOrCollection()
+                    ? ManagedCollection.lookupCollection(owner, memberId, where)
+                        .orElseThrow()
+                    : ManagedAction.lookupAction(owner, memberId, where)
+                        .orElseThrow();
 
             var dataTableInteractive = new DataTableInternal(managedMember, where,
                     dataTable.streamDataElements()
                     .peek(obj->{
-                        if(obj.getSpecialization().isViewmodel()) {
+                        if(obj.specialization().isViewmodel()) {
                             // make sure any referenced entities are made live if currently hollow
                             ManagedObjects.refreshViewmodel(obj, /*bookmark supplier*/ null);
                         }
@@ -456,25 +463,32 @@ implements DataTableInteractive {
                     .collect(Can.toCan()));
 
             if(columnSort!=null)  {
-                dataTableInteractive.columnSort.setValue(columnSort);
+                dataTableInteractive.columnSortBindable.setValue(columnSort);
             }
-            dataTableInteractive.searchArgument.setValue(searchArgument);
+            dataTableInteractive.searchArgumentBindable.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{
-                dataTableInteractive.dataRows.getValue().stream()
-                    .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
-                    .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
+                dataTableInteractive.dataRowsObservable.getValue().stream()
+                    .filter(dataRow->selectedRowIndexes.contains(dataRow.rowIndex()))
+                    .forEach(dataRow->dataRow.selectToggleBindable().setValue(true));
             });
             return dataTableInteractive;
         }
 
         @Override
         public void setupBindings(final DataTableInteractive tableInteractive) {
-            tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
+            tableInteractive.searchArgumentBindable().addListener((e, o, searchArg)->{
                 this.searchArgument = searchArg;
             });
             ((DataTableInternal)tableInteractive).selectionChanges.addListener((e, o, n)->{
                 this.selectedRowIndexes = tableInteractive.getSelectedRowIndexes();
             });
+        }
+
+        @Override
+        public String toString() {
+        	return "Memento[featureId=%s,dataTable.rowCount=%d]".formatted(
+        			featureId.memberLogicalName(),
+        			dataTable.dataRows().size());
         }
 
     }

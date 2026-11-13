@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.InteractionAdvisorFacet;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can
@@ -55,12 +55,12 @@ public interface InteractionAdvisor {
             }
 
             @Override
-            public FacetHolder getFacetHolder() {
+            public FacetHolder facetHolder() {
                 return null;
             }
 
             @Override
-            public Precedence getPrecedence() {
+            public Precedence precedence() {
                 return Facet.Precedence.FALLBACK;
             }
 

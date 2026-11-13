@@ -1,0 +1,12 @@
+{
+  "errors" : [ {
+    "message" : "Validation error (WrongType@[rich/university_calc_Calculator/echoLocalDateTime/invoke]) : argument 'value' with value 'StringValue{value='not-a-date'}' is not a valid 'LocalDateTime' - Invalid LocalDateTime value",
+    "locations" : [ {
+      "column" : 16,
+      "line" : 5
+    } ],
+    "extensions" : {
+      "classification" : "ValidationError"
+    }
+  } ]
+}

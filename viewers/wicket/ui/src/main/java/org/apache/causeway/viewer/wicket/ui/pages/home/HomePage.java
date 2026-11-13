@@ -28,10 +28,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-
-import lombok.val;
 
 /**
  * Web page representing the home page (showing a welcome message).
@@ -57,22 +55,20 @@ public class HomePage extends PageAbstract {
             .informUser("Page timeout");
         }
 
-        val homePageAdapter = super.getMetaModelContext().getHomePageAdapter();
+        var homePageAdapter = super.getMetaModelContext().getHomePageAdapter();
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(homePageAdapter)) {
             WktComponents.permanentlyHide(themeDiv, UiComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, UiComponentType.WELCOME, null);
         } else {
-            val requestCycle = RequestCycle.get();
-            val page = EntityPage.forAdapter(homePageAdapter);
+            var requestCycle = RequestCycle.get();
+            var page = DomainObjectPage.forAdapter(homePageAdapter);
             requestCycle.setResponsePage(page);
         }
 
-        val breadcrumbModelProvider = (BreadcrumbModelProvider) getSession();
-        val breadcrumbModel = breadcrumbModelProvider.getBreadcrumbModel();
+        var breadcrumbModelProvider = (BreadcrumbModelProvider) getSession();
+        var breadcrumbModel = breadcrumbModelProvider.getBreadcrumbModel();
         breadcrumbModel.visitedHomePage();
     }
-
-
 
 }

@@ -22,7 +22,7 @@ Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Causeway Core release {page-causewayrelv2}
+[RESULT] [VOTE] Apache Causeway release {page-causewayreleaseversion}
 ----
 
 using the body (alter last line as appropriate):
@@ -60,7 +60,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-causewayrelv2}                           # <.>
+export CAUSEWAYREL={page-causewayreleaseversion}                           # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -140,7 +140,7 @@ sh scripts/jira-release-notes.sh CAUSEWAY $CAUSEWAYREL > /tmp/$CAUSEWAYREL.adoc
 +
 [NOTE]
 ====
-This script uses 'jq' to parse JSON.
+This script uses `jq` to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
@@ -167,7 +167,7 @@ Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the link:https://github.com/apache/causeway/blob/master/STATUS[STATUS] file (in root of Apache Causeway' source) should be updated with details of the new release.
+* Update the link:https://github.com/apache/causeway/blob/main/STATUS[STATUS] file (in root of Apache Causeway' source) should be updated with details of the new release.
 
 * commit the changes
 +
@@ -214,7 +214,7 @@ if [ $# -lt 1 ]; then
 fi
 
 # constants
-fullname="causeway-bom"
+fullname="causeway-all"
 repo_root=https://repository.apache.org/content/repositories/releases/org/apache/causeway
 
 # file suffices
@@ -234,7 +234,7 @@ done
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh {page-causewayrelv2}
+sh upd.sh {page-causewayreleaseversion}
 ----
 
 The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.
@@ -293,10 +293,10 @@ We are now ready to xref:#generate-website[generate the website].
 [#generate-website]
 == Generate website
 
-We use Antora to generate the site, setting up a document maintenance branches `{page-causewayrelv2}` and `{page-causewayrelv3}`.
-These mirror the "rel/causeway-{page-causewayrelv2}" and "rel/causeway-{page-causewayrelv3}" (immutable) release tags, but are branches because they allow us to update the docs outside of formal releases.
+We use Antora to generate the site, setting up a document maintenance branch `{page-causewayreleaseversion}`.
+This mirrors the "rel/causeway-{page-causewayreleaseversion}" (immutable) release tag, but is a branch because it allows us to update the docs outside formal releases.
 
-The `site.yml` (which can be in any branch) references these documentation branches, but uses the link:https://docs.antora.org/antora/latest/playbook/urls-latest-version-segment/[latest version] support of Antora 3.x to reference the `{page-causewayrelv3}` version as "latest":
+The `site.yml` (which can be in any branch) references these documentation branches, but uses the link:https://docs.antora.org/antora/latest/playbook/urls-latest-version-segment/[latest version] support of Antora 3.x to reference the `{page-causewayreleaseversion}` version as "latest":
 
 [source,yml]
 .site.yml
@@ -309,22 +309,22 @@ This approach also means that the top-level `index.html` (from the Antora templa
 To avoid duplicates in the Algolia search index, we also only index the "latest" directory.
 
 
-[#create-2.x.0-doc-branch]
-=== Create 2.x.0 doc branch
+[#create-doc-branch]
+=== Create the doc branch
 
-* We create the `{page-causewayrelv2}` branch, at the rel/causeway-{page-causewayrelv2} release tag.
+* We create the `{page-causewayreleaseversion}` branch, at the rel/causeway-{page-causewayreleaseversion} release tag.
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout -b {page-causewayrelv2}
-git reset --hard rel/causeway-{page-causewayrelv2}
+git checkout -b {page-causewayreleaseversion}
+git reset --hard rel/causeway-{page-causewayreleaseversion}
 ----
 
-* update all `antora.yml` files to use the latest branch ({page-causewayrelv2}):
+* update all `antora.yml` files to use the latest branch ({page-causewayreleaseversion}):
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv2}/g' {} \;
+find . -name antora.yml -exec sh -c 'sed "s/latest/{page-causewayreleaseversion}/g" "$1" > "$1.tmp" && mv "$1.tmp" "$1"' _ {} \;
 ----
 
 
@@ -335,34 +335,8 @@ find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv2}/g' {} \;
 ----
 asciidoc:
   attributes:
-    tag-version: '{page-causewayrelv2}'
-    jdk-version: '{page-causewayjdkv2}'
-----
-
-* build framework
-+
-[source,bash,subs="attributes+"]
-----
-pushd bom
-mvnd clean install -T1C -DskipTests -Dgithub
-popd
-----
-
-* build and link to the module tooling jar, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process
-
-* generate the website:
-+
-[source,bash,subs="attributes+"]
-----
-sh preview.sh
-----
-
-* if any files have changed, then commit:
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
+    tag-version: '{page-causewayreleaseversion}'
+    jdk-version: '{page-causewayjdkversion}'
 ----
 
 * Commit all these changes:
@@ -373,51 +347,11 @@ git add .
 git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 ----
 
-* Push the documentation branch:
-+
-[source,bash,subs="attributes+"]
-----
-git push origin {page-causewayrelv2} -u
-----
-
-
-[#create-3.x.0-doc-branch]
-=== Create 3.x.0 doc branch
-
-* We create the `{page-causewayrelv3}` branch, at the rel/causeway-{page-causewayrelv3} release tag.
-+
-[source,bash,subs="attributes+"]
-----
-git checkout -b {page-causewayrelv3}
-git reset --hard rel/causeway-{page-causewayrelv3}
-----
-
-* update all `antora.yml` files to use the latest branch ({page-causewayrelv3}):
-+
-[source,bash,subs="attributes+"]
-----
-find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv3}/g' {} \;
-----
-
-
-* update the version for the petclinic tutorial:
-+
-[source,bash,subs="attributes+"]
-.antora/components/tutorials/antora.yml
-----
-asciidoc:
-  attributes:
-    tag-version: '{page-causewayrelv3}'
-    jdk-version: '{page-causewayjdkv3}'
-----
-
 * build framework
 +
 [source,bash,subs="attributes+"]
 ----
-pushd bom
-mvnd clean install -T1C -DskipTests -Dgithub
-popd
+mvnd clean install -DskipTests -Dgithub
 ----
 
 * build and link to the module tooling jar, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process
@@ -426,7 +360,7 @@ popd
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+./preview.sh
 ----
 
 * if any files have changed, then commit:
@@ -437,19 +371,12 @@ git add .
 git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
 ----
 
-* Commit all these changes:
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
-----
 
 * Push the documentation branch:
 +
 [source,bash,subs="attributes+"]
 ----
-git push origin {page-causewayrelv3} -u
+git push origin {page-causewayreleaseversion} -u
 ----
 
 
@@ -460,12 +387,12 @@ git push origin {page-causewayrelv3} -u
 
 To build the site, we need to update the `site.yml`.
 
-This can be done from any branch, normally the release branch (`$CAUSEWAYBRANCH`) or `master`.
+This can be done from any branch, normally the release branch (`$CAUSEWAYBRANCH`) or `main`.
 
 NOTE: All that will be picked up from this branch is the `supplementary-ui` files (top-level index) and the `site.yml` playbook that identifies which branch(es) to include in the website.
 
 
-* Update `site.yml` using `site.NEXT.yml`:
+Update `site.yml` using `site.NEXT.yml`:
 
 * move `site.yml` to one side, and replace with `site.NEXT.yml`:
 +
@@ -486,13 +413,13 @@ content:
   sources:
     - url: .
       start_path: antora/components/docs # docs
-      branches: [{page-causewayrelv2}, {page-causewayrelv3}]
+      branches: [..., {page-causewayreleaseversion}]  # <.>
       # ...
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [{page-causewayrelv2}, {page-causewayrelv3}]
+      branches: [..., {page-causewayreleaseversion}]  # <1>
 ----
-
+<.> comma-separated list of all branches to include.
 
 * check that the attributes are correct.
 +
@@ -501,15 +428,9 @@ content:
 ----
 asciidoc:
   attributes:
-    page-causewayprevv2: "..."    #<.>
-    page-causewayprevv3: "..."    #<.>
-    page-causewayrelv2: "..."     #<.>
-    page-causewayrelv3: "..."     #<.>
+    page-causewayreleaseversion: "..."    #<.>
 ----
-<.> needs to be (the current) `{page-causewayrelv2}`
-<.> needs to be (the current) `{page-causewayrelv3}`
-<.> needs to be set to the _next_ likely release version for v2.
-<.> needs to be set to the _next_ likely release version for v3 branch
+<.> needs to be the next likely `{page-causewayreleaseversion}`
 
 * commit the changes
 +
@@ -525,7 +446,7 @@ git commit -m "$CAUSEWAYJIRA: updates site.yml in readiness for website generati
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh -AS
+./preview.sh -AS
 ----
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
@@ -542,23 +463,32 @@ include::partial$publish-and-index-website.adoc[]
 
 == Merge in release branch
 
-Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
+Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `main` branch.
 
 In the `causeway` repo:
 
 [source,bash,subs="attributes+"]
 ----
 RC=RC1                                                <.>
-git checkout master
+git checkout main
 git pull
-git merge release-{page-causewayrelv2}-$RC
-git push origin master
-git branch -d release-{page-causewayrelv2}-$RC
-git push origin release-{page-causewayrelv2}-$RC --delete
+git merge release-{page-causewayreleaseversion}-$RC
+git push origin main
+git branch -d release-{page-causewayreleaseversion}-$RC
+git push origin release-{page-causewayreleaseversion}-$RC --delete
 ----
 <.> adjust RC number as required
 
 == Bump baselines for nightly/weekly builds
+
+Nightly builds of the framework's packages are available in two different locations:
+
+* First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
+
+* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
+
+Bump the `BASELINE` variables for each, as explained below.
+
 
 === Main repo (weekly builds)
 
@@ -573,8 +503,9 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayrelv2}
+      BASELINE: {page-causewayreleaseversion}   # <.>
 ----
+<.> adjust as necessary
 
 * in `ci-build-site-no-push.yml`:
 +
@@ -585,8 +516,9 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayrelv2}
+      BASELINE: {page-causewayreleaseversion}   # <.>
 ----
+<.> adjust as necessary
 
 * commit and push:
 +
@@ -606,7 +538,7 @@ In the `apache-causeway-committers/causeway-nightly` repo, similarly bump the ve
 [source,bash,subs="attributes+"]
 ----
 git fetch
-git reset --hard origin/master
+git reset --hard origin/main
 ----
 
 * update the `apache-causeway-ci-nightly.yml` file:
@@ -620,9 +552,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE_MAIN: {page-causewayrelv2}
-      BASELINE_EDGE: {page-causewayrelv3}
+      BASELINE_MAIN: {page-causewayreleaseversion}      # <.>
+      BASELINE_EDGE: {page-causewayreleaseversion}      # <1>
 ----
+<.> adjust as necessary
 
 * update any other CI scripts that might exist there.
 
@@ -636,26 +569,74 @@ git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
 
 == Update starter projects
 
-As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain eight (!) branches:
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain two branches:
 
-* `v2-jpa`; `v2-jdo`; `v3-jpa`; `v3-jdo`
+* `{page-causewaycurrmajorversion}-jpa`
 +
-These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
-These are the branches referenced from the home page and getting started pages of the website.
+This branch is intended to reference the _most recently released_ version, and is referenced from the home page and getting started pages of the website.
 
-* `v2-jpa-SNAPSHOT`; `v2-jdo-SNAPSHOT`; `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`
+* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`
 +
-These reference the most current snapshot nightly build.
+This branch is intended to reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `v2-jpa` to `v2-jpa-SNAPSHOT` and similarly moves `v2-jdo` up to `v2-jdo-SNAPSHOT`, and then repeat the process for v3.
-The non-SNAPSHOT builds should always reference the most recently release of v2 or v3.
+The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+The non-SNAPSHOT builds should always reference the most recently release.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo` (where `$CAUSEWAYBRANCH` is "release-2.0.0-RC1", or "release-3.0.0-RC1" etc).
+In order that we don't break the starter apps while a release is being voted on, we do the changes in a work branch, `$CAUSEWAYBRANCH-jpa`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
-IMPORTANT: The `v{2,3}-{jpa,jdo}` branches should always work against the most recent release, whereas the `v{2,3}-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
+IMPORTANT: The `vN-jpa` branch should always work against the most recent release, whereas the `vN-jpa-SNAPSHOT` reference more recent nightly builds if necessary.
 
+
+== Update the petclinic app
+
+The link:https://github.com/apache/causeway-app-petclinic[petclinic tutorial app] should be updated with example tags for each of its exercises.
+
+* Checkout the repo
+
+* Create a new branch
++
+[source,bash,subs="attributes+"]
+----
+git checkout -b {page-causewayreleaseversion}
+----
+
+* Reset to the `v3` branch, which contains the scripts required to create the new tags.
++
+[source,bash,subs="attributes+"]
+----
+git reset --hard origin/v3
+----
+
+* Create the new tags using `tagger.sh`:
++
+[source,bash,subs="attributes+"]
+----
+PREV_VERSION=...                                                  # <.>
+./tagger.sh -p $PREV_VERSION -v {page-causewayreleaseversion} -y  # <.>
+----
+<.> adjust as necessary; should be the immediately previous version.
+<.> omit `-y` flag for a dry run.
+
+* confirm that the last tag builds and runs ok.
++
+If it doesn't, identify where the problem arises, and fix it.
++
+[TIP]
+====
+The 05-01 tag is broken due to mvn versions not set at that point; but 05-02 should work.
+====
+
+* Push the tags:
++
+[source,bash,subs="attributes+"]
+----
+for a in `git tag -l | grep {page-causewayreleaseversion}`
+do
+    git push origin $a
+done
+----
 
 == Update the reference app
 
@@ -676,14 +657,14 @@ For example, for a release of Apache Causeway Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Causeway version {page-causewayrelv2} Released
+[ANN] Apache Causeway version {page-causewayreleaseversion} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrelv2}.
+The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayreleaseversion}.
 
 New features in this release include:
 
@@ -733,14 +714,3 @@ Announce the release using the `@ApacheCauseway` Twitter account.
 
 
 
-== Update BASELINE for the (non-ASF) nightly builds
-
-Nightly builds of the framework's packages are available in two different locations:
-
-* First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
-+
-Bump the `BASELINE` variable in link:https://github.com/apache/causeway/blob/master/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
-
-* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
-+
-Bump the `BASELINE` variable in link:https://github.com/apache-causeway-committers/causeway-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-causeway-ci-nightly.yml#L15[apache-causeway-ci-nightly.yml] (workflow file).

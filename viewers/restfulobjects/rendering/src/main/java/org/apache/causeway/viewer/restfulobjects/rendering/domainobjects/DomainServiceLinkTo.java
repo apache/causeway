@@ -28,7 +28,7 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
 
     @Override
     public ObjectAdapterLinkTo with(final ManagedObject objectAdapter) {
-        serviceId = objectAdapter.getSpecification().getLogicalTypeName();
+        serviceId = objectAdapter.objSpec().logicalTypeName();
         return super.with(objectAdapter);
     }
 
@@ -42,7 +42,6 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
         return linkBuilder;
     }
 
-
     @Override
     protected StringBuilder linkRef(final StringBuilder buf) {
         return buf.append("services/").append(serviceId);
@@ -52,6 +51,5 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     protected Rel defaultRel() {
         return Rel.SERVICE;
     }
-
 
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.client;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -33,25 +32,16 @@ class RestfulRequest_RequestParameterTest_valueOf_xrodomainmodel {
 
     private final RequestParameter<DomainModel> requestParameter = RestfulRequest.RequestParameter.DOMAIN_MODEL;
 
-    private JsonRepresentation repr;
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        repr = JsonRepresentation.newMap();
-    }
+    private JsonRepresentation repr = JsonRepresentation.newMap();
 
     @Test
-    public void simple() {
+    void simple() {
         repr.mapPutString("x-ro-domain-model", "simple");
-        final DomainModel valueOf = requestParameter.valueOf(repr);
-
-        assertThat(valueOf, is(DomainModel.SIMPLE));
+        assertThat(requestParameter.valueOf(repr), is(DomainModel.SIMPLE));
     }
 
     @Test
-    public void whenNone() {
-        final DomainModel valueOf = requestParameter.valueOf(repr);
-
-        assertThat(valueOf, is(DomainModel.FORMAL));
+    void whenNone() {
+        assertThat(requestParameter.valueOf(repr), is(DomainModel.FORMAL));
     }
 }

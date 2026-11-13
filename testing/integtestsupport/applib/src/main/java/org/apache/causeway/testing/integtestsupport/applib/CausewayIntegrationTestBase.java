@@ -23,7 +23,7 @@ import jakarta.inject.Inject;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
  * {@link CausewayIntegrationGwtAbstract}.
  */
 abstract class CausewayIntegrationTestBase {
-
 
     /**
      * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}
@@ -90,14 +89,12 @@ abstract class CausewayIntegrationTestBase {
         return wrapperFactory.unwrap(obj);
     }
 
-
     /**
      * Get the current {@link EntityState} of given pojo.
      */
     protected EntityState entityState(final Object obj) {
         return objectManager.adapt(obj).getEntityState();
     }
-
 
     // -- DEPENDENCIES
 

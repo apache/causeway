@@ -198,7 +198,8 @@ import lombok.Setter;
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE (cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK OR cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED) "
+                  + " WHERE (cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK"
+                  + " OR cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED) "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
             name  = Nq.FIND_MOST_RECENT_COMPLETED,
@@ -208,11 +209,43 @@ import lombok.Setter;
                   + "   AND cl.completedAt is not null "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
-            name  = Nq.FIND_BY_REPLAY_STATE,
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER,
             query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.replayState = :replayState "
-                  + " ORDER BY cl.timestamp ASC"), // programmatic LIMIT 10
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp >= :from "
+                  + " ORDER BY cl.timestamp ASC"),
+    @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp < :to "
+                  + " ORDER BY cl.timestamp DESC"),
+    @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp >= :from "
+                  + "   AND cl.replayState = :replayState "
+                  + " ORDER BY cl.timestamp ASC"),
+    @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp >= :from "
+                  + "   AND (cl.replayState = :replayState1 OR cl.replayState = :replayState2) "
+                  + " ORDER BY cl.timestamp ASC"),
+    @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_THREE_REPLAY_STATES,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp >= :from "
+                  + "   AND (cl.replayState = :replayState1 OR cl.replayState = :replayState2 OR cl.replayState = :replayState3) "
+                  + " ORDER BY cl.timestamp ASC"),
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -222,7 +255,7 @@ import lombok.Setter;
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(CausewayEntityListener.class)
 @NoArgsConstructor
-public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
+public class CommandLogEntry implements org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
 
     /**
      * Intended for use on secondary (replay) system.
@@ -235,13 +268,11 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
             final CommandDto commandDto,
             final org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState,
             final int targetIndex) {
-        super(commandDto, replayState, targetIndex);
+        init(commandDto, replayState, targetIndex);
     }
-
 
     @EmbeddedId
     private CommandLogEntryPK pk;
-
 
     @Transient
     @InteractionId
@@ -251,22 +282,19 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     }
     @Transient
     @Override
-    public void setInteractionId(UUID interactionId) {
+    public void setInteractionId(final UUID interactionId) {
         this.pk = new CommandLogEntryPK(interactionId);
     }
-
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
 
-
     @Column(nullable = Timestamp.NULLABLE)
     @Timestamp
     @Getter @Setter
     private java.sql.Timestamp timestamp;
-
 
     @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
@@ -274,13 +302,11 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private Bookmark target;
 
-
     @Column(nullable = ExecuteIn.NULLABLE, length = ExecuteIn.MAX_LENGTH)
     @Enumerated(EnumType.STRING)
     @ExecuteIn
     @Getter @Setter
     private org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn executeIn;
-
 
     @Convert(converter = JavaUtilUuidConverter.class)
     @Domain.Exclude
@@ -288,12 +314,10 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private UUID parentInteractionId;
 
-
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
     @Getter @Setter
     private String logicalMemberIdentifier;
-
 
     @Convert(converter = CausewayCommandDtoConverter.class)
     @Lob @Basic(fetch = FetchType.LAZY)
@@ -302,18 +326,15 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private CommandDto commandDto;
 
-
     @Column(nullable = StartedAt.NULLABLE)
     @StartedAt
     @Getter @Setter
     private java.sql.Timestamp startedAt;
 
-
     @Column(nullable = CompletedAt.NULLABLE)
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
-
 
     @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Result.NULLABLE, length = Result.MAX_LENGTH)
@@ -321,13 +342,11 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private Bookmark result;
 
-
     @Lob @Basic(fetch = FetchType.LAZY)
     @Column(nullable = Exception.NULLABLE, columnDefinition = "CLOB")
     @Exception
     @Getter @Setter
     private String exception;
-
 
     @Column(nullable = ReplayState.NULLABLE, length = ReplayState.MAX_LENGTH)
     @Enumerated(EnumType.STRING)
@@ -335,10 +354,14 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState;
 
-
     @Column(nullable = ReplayStateFailureReason.NULLABLE, length = ReplayStateFailureReason.MAX_LENGTH)
     @ReplayStateFailureReason
     @Getter @Setter
     private String replayStateFailureReason;
+
+    @Override
+    public String toString() {
+        return TOSTRING.toString(this);
+    }
 
 }

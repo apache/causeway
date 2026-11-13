@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.extensions</groupId>
 		<artifactId>causeway-extensions-pdfjs-wicket</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
@@ -52,8 +52,7 @@
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>pdfjs-dist</artifactId>
-		    <!--  keep in sync with o.a.i.extensions.pdfjs.wkt.integration.PdfJsVersion -->
-		    <version>4.4.168</version>
+		    <version>5.4.624</version>
 		</dependency>
 
 	</dependencies>

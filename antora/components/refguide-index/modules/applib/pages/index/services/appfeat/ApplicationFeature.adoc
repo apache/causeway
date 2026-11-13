@@ -85,3 +85,5 @@ Returns optionally the property's semantics, based on whether this feature is of
 === getPropertyMaxLength()
 
 Returns optionally the property's max-length constraint, based on whether this feature is of sorts _ApplicationFeatureSort#MEMBER member_ and _ApplicationMemberSort#PROPERTY property_ .
+
+include::hooks/ApplicationFeature_010-implementation.adoc[]

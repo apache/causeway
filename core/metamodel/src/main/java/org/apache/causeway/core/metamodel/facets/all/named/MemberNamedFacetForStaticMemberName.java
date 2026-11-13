@@ -26,14 +26,7 @@ extends MemberNamedFacetWithStaticTextAbstract {
     public MemberNamedFacetForStaticMemberName(
             final String memberName,
             final FacetHolder holder) {
-        super(memberName, holder, Precedence.DEFAULT);
-    }
-
-    public MemberNamedFacetForStaticMemberName(
-            final String memberName,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(memberName, holder, precedence);
+        super(memberName, holder);
     }
 
 }

@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.Specification;
 
-import lombok.val;
-
 /**
  * A specification representing a non-{@link FeatureType#OBJECT object}, that
  * therefore has an underlying type (the type of the property, collection)
@@ -62,6 +60,9 @@ public interface ObjectFeature extends Specification {
      * @see #getFeatureIdentifier()
      */
     String getFriendlyName(Supplier<ManagedObject> domainObjectProvider);
+    default String getFriendlyName(final ManagedObject domainObject) {
+        return getFriendlyName(()->domainObject);
+    }
 
     /**
      * Optionally returns the (translated friendly) name for this member -
@@ -93,7 +94,7 @@ public interface ObjectFeature extends Specification {
      * @since 2.0
      */
     default Either<String, String> getStaticOrCanonicalFriendlyName() {
-        val staticFriendlyName = getStaticFriendlyName();
+        var staticFriendlyName = getStaticFriendlyName();
         return staticFriendlyName.isPresent()
                 ? Either.left(staticFriendlyName.get())
                 : Either.right(getCanonicalFriendlyName());
@@ -109,6 +110,9 @@ public interface ObjectFeature extends Specification {
      *
      */
     Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider);
+    default Optional<String> getDescription(final ManagedObject domainObject) {
+        return getDescription(()->domainObject);
+    }
 
     /**
      * Optionally returns the (translated) description of how the member is used,
@@ -139,7 +143,7 @@ public interface ObjectFeature extends Specification {
      * @since 2.0
      */
     default Optional<Either<String, String>> getStaticOrCanonicalDescription() {
-        val staticDescription = getStaticDescription();
+        var staticDescription = getStaticDescription();
         return staticDescription.isPresent()
                 ? Optional.of(Either.left(staticDescription.get()))
                 : getCanonicalDescription()
@@ -160,7 +164,6 @@ public interface ObjectFeature extends Specification {
      * @since 2.0
      */
     ObjectSpecification getElementType();
-
 
     /**
      * Returns a flag indicating if it can be left unset when the action can be

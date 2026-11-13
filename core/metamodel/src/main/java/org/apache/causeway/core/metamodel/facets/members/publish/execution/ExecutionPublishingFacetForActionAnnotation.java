@@ -25,9 +25,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class ExecutionPublishingFacetForActionAnnotation extends ExecutionPublishingFacetAbstract {
 
@@ -58,41 +56,26 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        val publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
+        var publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
 
-        return
-        actionsIfAny
-                .filter(action -> action.executionPublishing() != Publishing.NOT_SPECIFIED)
-                .map(Action::executionPublishing)
-                .<ExecutionPublishingFacet>map(publishing -> {
-                    switch (publishing) {
-                        case AS_CONFIGURED:
-                            switch (publishingPolicy) {
-                                case NONE:
-                                    return new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
-                                case IGNORE_QUERY_ONLY:
-                                case IGNORE_SAFE:
-                                    return hasSafeSemantics(holder)
-                                            ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
-                                            : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
-                                case ALL:
-                                    return new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
-                                default:
-                                    throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
-                                }
-                        case DISABLED:
-                            return new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
-                        case ENABLED:
-                            return new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
-                        default:
-                            throw new IllegalStateException(String.format("@Action#executionPublishing '%s' not recognised", publishing));
-                    }
-                });
-    }
-
-    static boolean hasSafeSemantics(final FacetHolder holder) {
-        val actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
+        return actionsIfAny
+            .filter(action -> action.executionPublishing() != Publishing.NOT_SPECIFIED)
+            .map(Action::executionPublishing)
+            .<ExecutionPublishingFacet>map(publishing -> (switch (publishing) {
+                case AS_CONFIGURED -> switch (publishingPolicy) {
+                    case NONE -> new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
+                    case IGNORE_QUERY_ONLY, IGNORE_SAFE -> Facets.hasSafeSemantics(holder)
+                        ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
+                        : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
+                    case ALL -> new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
+                    default -> throw new IllegalStateException(
+                            String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
+                };
+                case DISABLED -> new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
+                case ENABLED, ENABLED_FOR_UPDATES_ONLY -> new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
+                default -> throw new IllegalStateException(
+                        String.format("@Action#executionPublishing '%s' not recognised", publishing));
+            }));
     }
 
     ExecutionPublishingFacetForActionAnnotation(final FacetHolder holder) {

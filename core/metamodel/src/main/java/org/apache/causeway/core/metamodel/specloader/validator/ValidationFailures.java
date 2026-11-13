@@ -27,22 +27,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-
-import lombok.val;
 
 public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     private final Set<ValidationFailure> failures = _Sets.newConcurrentHashSet();
 
     public void add(final Identifier origin, final String pattern, final Object... arguments) {
-        val message = String.format(pattern, arguments);
-        failures.add(ValidationFailure.of(origin, message));
+        var message = String.format(pattern, arguments);
+        failures.add(new ValidationFailure(origin, message));
     }
 
     public void addAll(final Iterable<ValidationFailure> failures) {
-        for (val failure : failures) {
+        for (var failure : failures) {
             this.failures.add(failure);
         }
     }
@@ -60,8 +57,8 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     }
 
     public ArrayList<String> getMessages() { // <-- ensure serializable result
-        val messages = failures.stream() // already sorted
-        .map(ValidationFailure::getMessage)
+        var messages = failures.stream() // already sorted
+        .map(ValidationFailure::message)
         .collect(Collectors.toCollection(ArrayList::new));
         return messages;
     }
@@ -70,9 +67,9 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
      * @param messageFormat to include {@code %d} for the message-index and {@code %s} for the message-string
      */
     public ArrayList<String> getMessages(final String messageFormat) { // <-- ensure serializable result
-        val messages = _Lists.<String>newArrayList();
+        var messages = new ArrayList<String>();
         failures.stream() // already sorted
-        .map(ValidationFailure::getMessage)
+        .map(ValidationFailure::message)
         .map(msg->String.format(messageFormat, messages.size()+1, msg))
         .forEach(messages::add);
         return messages;
@@ -92,18 +89,17 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     }
 
     public Optional<String> getAsLineNumberedString() {
-        if (!hasFailures()) {
-            return Optional.empty();
-        }
+        if (!hasFailures())
+			return Optional.empty();
         return Optional.of(toLineNumberedString(getMessages()));
     }
 
     // -- HELPER
 
     private static String toLineNumberedString(final Collection<String> messages) {
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
         int i=0;
-        for (val message : messages) {
+        for (var message : messages) {
             buf.append(++i).append(": ").append(message).append("\n");
         }
         return buf.toString();

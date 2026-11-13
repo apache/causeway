@@ -23,8 +23,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
@@ -36,6 +34,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.settings.DebugSettings.ClassOutputStrategy;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 
@@ -53,23 +52,21 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
-import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FieldFrame;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.RegularFrame;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketAjaxRequestListenerUtil;
+import org.apache.causeway.viewer.wicket.viewer.integration.RehydrationHandler;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.core.Bootstrap;
@@ -79,55 +76,37 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 @Configuration
 @Import({
     CausewayModuleViewerWicketViewer.class,
-    Configuration_usingWicket.WicketViewerOutputMarkupContainerClassNameEnable.class
 })
 public class Configuration_usingWicket {
 
-    @Configuration
-    public class WicketViewerOutputMarkupContainerClassNameEnable
-    implements WicketApplicationInitializer {
-
-        @Override
-        public void init(final WebApplication webApplication) {
-            webApplication.getDebugSettings()
-                .setComponentPathAttributeName("wicket-tester-path")
-                .setOutputMarkupContainerClassName(true);
-        }
+    @Bean
+    public WicketTesterFactory wicketTesterFactory(final MetaModelContext mmc) {
+        return new WicketTesterFactory(mmc);
     }
 
-    public static class EntityPageTester
+    public static class DomainObjectPageTester
     extends WicketTester
     implements HasMetaModelContext {
 
         // -- HOMEPAGE (TEST APP)
 
-        public static final String OPEN_SAMPLE_ACTION = "theme:entityPageContainer:entity:rows:1"
+        public static final String OPEN_SAMPLE_ACTION = "theme:domainObjectContainer:domainObject:rows:1"
                 + ":rowContents:1"
-                + ":col:entityHeaderPanel:entityActions:additionalLinkList:additionalLinkItem:1"
-                + ":additionalLink";
+                + ":col:objectHeaderPanel:objectActions:additionalLinkList:additionalLinkItem:1"
+                + ":actionLink";
 
         public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
                 + ":additionalLinkTitle";
 
         // -- BOOK PAGE
 
-        /** strange asymmetry with JPA, to investigate another day */
-        public static final String BOOK_DELETE_ACTION_JDO = "theme:entityPageContainer:entity:rows:2"
+        public static final String BOOK_DELETE_ACTION_JPA = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
-                + ":col:rows:1:rowContents:1:col:tabGroups:1"
-                + ":panel:tabPanel"
-                + ":rows:1:rowContents:1"
+                + ":col:rows:1:rowContents:1:col:rows:1"
+                + ":rowContents:1"
                 + ":col:fieldSets:1:memberGroup"
                 + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
-
-        /** strange asymmetry with JDO, to investigate another day */
-        public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
-                + ":rowContents:1"
-                + ":col:rows:1:rowContents:1:col:tabGroups:1:1:rowContents:1"
-                + ":col:fieldSets:1:memberGroup"
-                + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+                + ":additionalLinkList:additionalLinkItem:0:actionLink";
 
         // -- GENERIC STANDALONE COLLECTION
 
@@ -137,7 +116,7 @@ public class Configuration_usingWicket {
 
         // -- INVENTORY JAXB VM
 
-        public static final String FAVORITE_BOOK_SCALAR = "theme:entityPageContainer:entity:rows:2"
+        public static final String FAVORITE_BOOK_SCALAR = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
                 + ":memberGroup:properties:2"
@@ -147,28 +126,22 @@ public class Configuration_usingWicket {
                 + ":scalarNameBeforeValue";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
-                + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:entityLink"
-                + ":entityIconAndTitle:entityLinkWrapper:entityLink";
+                + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:objectLink"
+                + ":objectIconAndTitle:objectLinkWrapper:objectLink";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
-                + ":entityTitle";
+                + ":objectTitle";
 
         @RequiredArgsConstructor
         public static enum SimulatedProperties implements SimulatedProperty {
-            INVENTORY_NAME("theme:entityPageContainer:entity:rows:2"
+            INVENTORY_NAME("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1"
                     + ":col:fieldSets:1"
                     + ":memberGroup:properties:1"
                     + ":property"),
-            JDO_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+            JPA_BOOK_ISBN("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1:col:rows:1:rowContents:1"
-                    + ":col:tabGroups:1:panel:tabPanel:rows:1:rowContents:1:col"
-                    + ":fieldSets:1"
-                    + ":memberGroup:properties:3"
-                    + ":property"),
-            JPA_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
-                    + ":rowContents:1:col:rows:1:rowContents:1"
-                    + ":col:tabGroups:1:1"
+                    + ":col:rows:1"
                     + ":rowContents:1:col"
                     + ":fieldSets:1"
                     + ":memberGroup:properties:4"
@@ -187,7 +160,7 @@ public class Configuration_usingWicket {
                 return id() + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
             }
             default String scalarField() {
-                return "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
+                return "property:attributeNameAndValue:scalarTypeContainer:scalarIfRegular:"
                     + RegularFrame.FIELD.getContainerId() + ":"
                     + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
             }
@@ -205,18 +178,13 @@ public class Configuration_usingWicket {
 
         // --
 
-        @Getter
-        private final MetaModelContext metaModelContext;
         private final Function<BookDto, IBook> bookFactory;
 
-        public EntityPageTester(
-                final MetaModelContext metaModelContext,
+        public DomainObjectPageTester(
+                final MetaModelContext mmc,
                 final Function<BookDto, IBook> bookFactory) {
-            super(newWicketApplication(metaModelContext));
-            this.metaModelContext = metaModelContext;
-            metaModelContext.injectServicesInto(this);
+            super(newWicketApplication(mmc));
             this.bookFactory = bookFactory;
-
         }
 
         public PageParameters createPageParameters(final Object entityOrVm) {
@@ -243,7 +211,7 @@ public class Configuration_usingWicket {
             assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
             assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
 
-            val expectedLinkTitle = bookFactory.apply(bookDto).title();
+            var expectedLinkTitle = bookFactory.apply(bookDto).title();
             assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
         }
 
@@ -257,7 +225,7 @@ public class Configuration_usingWicket {
             getLastRenderedPage().visitChildren((component, visit) -> {
                 if(filter.test(component)) {
 
-                    val inversePath = new ArrayList<String>();
+                    var inversePath = new ArrayList<String>();
                     var comp = component;
 
                     while(comp!=null) {
@@ -265,7 +233,7 @@ public class Configuration_usingWicket {
                         comp = comp.getParent();
                     }
 
-                    val path = Can.ofCollection(inversePath)
+                    var path = Can.ofCollection(inversePath)
                     .reverse()
                     .stream()
                     .skip(1L)
@@ -279,13 +247,13 @@ public class Configuration_usingWicket {
         }
 
         /**
-         * Renders the {@link EntityPage}.
+         * Renders the {@link DomainObjectPage}.
          * @see #startPage(IPageProvider)
          */
-        public EntityPage startEntityPage(final PageParameters pageParameters) {
-            val entityPage = EntityPage.forPageParameters(pageParameters);
-            val startedPage = startPage(entityPage);
-            assertRenderedPage(EntityPage.class);
+        public DomainObjectPage startDomainObjectPage(final PageParameters pageParameters) {
+            var domainObjectPage = DomainObjectPage.forPageParameters(pageParameters);
+            var startedPage = startPage(domainObjectPage);
+            assertRenderedPage(DomainObjectPage.class);
             return startedPage;
         }
 
@@ -293,23 +261,16 @@ public class Configuration_usingWicket {
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class WicketTesterFactory {
-
-        private final MetaModelContext commonContext;
-
-        public EntityPageTester createTester(final Function<BookDto, IBook> bookFactory) {
-            return new EntityPageTester(commonContext, bookFactory);
+        private final MetaModelContext mmc;
+        public DomainObjectPageTester createTester(final Function<BookDto, IBook> bookFactory) {
+            return new DomainObjectPageTester(mmc, bookFactory);
         }
-    }
-
-    @Bean @Inject
-    public WicketTesterFactory wicketTesterFactory(final MetaModelContext commonContext) {
-        return new WicketTesterFactory(commonContext);
     }
 
     // -- HELPER -- APPLICATION (WICKET)
 
-    private static WebApplication newWicketApplication(final MetaModelContext commonContext) {
-        val wicketApplication = new WicketApplication_forTesting(commonContext);
+    private static WebApplication newWicketApplication(final MetaModelContext mmc) {
+        var wicketApplication = new WicketApplication_forTesting(mmc);
         ThreadContext.setApplication(wicketApplication);
         return wicketApplication;
     }
@@ -317,30 +278,26 @@ public class Configuration_usingWicket {
     @RequiredArgsConstructor
     private static class PageFactory_forTesting implements IPageFactory {
 
-        private final WicketApplication_forTesting holder;
         private final IPageFactory delegate;
 
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
-            if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.forPageParameters(parameters));
-            }
+            if(DomainObjectPage.class.equals(pageClass))
+                return _Casts.uncheckedCast(DomainObjectPage.forPageParameters(parameters));
             return delegate.newPage(pageClass, parameters);
         }
 
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
-            if(EntityPage.class.equals(pageClass)) {
-                throw _Exceptions.illegalArgument("cannot instantiate EntityPage without PageParameters");
-            }
+            if(DomainObjectPage.class.equals(pageClass))
+                throw _Exceptions.illegalArgument("cannot instantiate DomainObjectPage without PageParameters");
             return delegate.newPage(pageClass);
         }
 
         @Override
         public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
-            if(EntityPage.class.equals(pageClass)) {
+            if(DomainObjectPage.class.equals(pageClass))
                 return true;
-            }
             return delegate.isBookmarkable(pageClass);
         }
     }
@@ -349,8 +306,7 @@ public class Configuration_usingWicket {
     static class WicketApplication_forTesting
     extends WebApplication
     implements
-        HasComponentFactoryRegistry,
-        HasMetaModelContext {
+        HasComponentFactoryRegistry{
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -364,6 +320,9 @@ public class Configuration_usingWicket {
                 new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS")));
             //XXX set to false for less strict testing
             getDebugSettings().setComponentUseCheck(false);
+            getDebugSettings()
+		        .setComponentPathAttributeName("wicket-tester-path")
+		        .setOutputMarkupContainerClassNameStrategy(ClassOutputStrategy.HTML_COMMENT);
         }
 
         @Getter
@@ -371,11 +330,11 @@ public class Configuration_usingWicket {
 
         @Getter(lazy=true)
         private final ComponentFactoryRegistry componentFactoryRegistry =
-                lookupServiceElseFail(ComponentFactoryRegistry.class);
+                metaModelContext.lookupServiceElseFail(ComponentFactoryRegistry.class);
 
         @Getter(lazy=true)
         private final PageClassRegistry pageClassRegistry =
-                lookupServiceElseFail(PageClassRegistry.class);
+                metaModelContext.lookupServiceElseFail(PageClassRegistry.class);
 
         @Override
         public Class<? extends Page> getHomePage() {
@@ -384,76 +343,15 @@ public class Configuration_usingWicket {
 
         @Override
         protected IPageFactory newPageFactory() {
-            return new PageFactory_forTesting(this, super.newPageFactory());
+            return new PageFactory_forTesting(super.newPageFactory());
         }
 
         @Override
         protected void internalInit() {
             super.internalInit();
-            // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-            CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
+            getRequestCycleListeners().add(new RehydrationHandler());
         }
 
     }
-
-
-    // --
-
-//  @Bean
-//  public RequestCycleFactory requestCycleFactory() {
-//      return new RequestCycleFactory();
-//  }
-//
-//    private static class WicketApplication_forTesting
-//    extends MockApplication
-//    implements HasCommonContext {
-//
-//        @Inject MetaModelContext mmc;
-//
-//        private MetaModelContext commonContext;
-//
-//        public WicketApplication_forTesting() {
-//            setRootRequestMapper(new SystemMapper(this));
-//        }
-//
-//        @Override
-//        public MetaModelContext getCommonContext() {
-//            if(commonContext==null) {
-//                commonContext = MetaModelContext.of(mmc);
-//            }
-//            return commonContext;
-//        }
-//
-//    }
-
-    // -- HELPER -- REQUEST CYCLE (WICKET)
-
-//    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-//    public static class RequestCycleFactory {
-//
-//        public void newRequestCycle(
-//                final Class<? extends IRequestablePage> pageClass,
-//                final PageParameters pageParameters) {
-//
-//            val url = Application.get().getRootRequestMapper().mapHandler(
-//                    new BookmarkablePageRequestHandler(new PageProvider(pageClass, pageParameters)));
-//
-//            final HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
-//            final ServletWebRequest servletWebRequest =
-//                    new ServletWebRequest(mockHttpServletRequest, "", url);//Url.parse("/wicket"));
-//            final MockWebResponse mockWebResponse = new MockWebResponse();
-//
-//            ThreadContext.setRequestCycle(new RequestCycle(new RequestCycleContext(
-//                    servletWebRequest,
-//                    mockWebResponse,
-//                    Mockito.mock(IRequestMapper.class),
-//                    Mockito.mock(IExceptionMapper.class))));
-//        }
-//
-//        public void clearRequestCycle() {
-//            ThreadContext.setRequestCycle(null);
-//        }
-//
-//    }
 
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.excel.applib;
 
-
 /**
  * @since 2.0 {@index}
  */

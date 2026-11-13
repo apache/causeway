@@ -26,21 +26,21 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Allows the domain object to obtain the identity of the user interacting with
@@ -60,12 +60,12 @@ import lombok.val;
  * http session. It's important to note that under these circumstances the user
  * reported by this service (the &quot;effective&quot; user) will <i>not</i> be
  * the same as the user held in the {@link InteractionContext}, as obtained by
- * {@link InteractionLayerTracker#currentInteractionContext()
+ * {@link InteractionProvider#currentInteractionContext()
  * InteractionLayerTracker} (the &quot;real&quot; user).
  * </p>
  *
- * @see org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker
- * @see org.apache.causeway.applib.services.iactnlayer.InteractionContext
+ * @see org.apache.causeway.applib.services.iactnlayer.InteractionProvider
+ * @see org.apache.causeway.applib.services.iactn.InteractionContext
  * @see SudoService
  * @see ImpersonateMenu
  *
@@ -87,7 +87,8 @@ public class UserService {
 
     private static final String SESSION_KEY_IMPERSONATED_USER = UserService.class.getName() + "#sudo";
 
-    private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
+    private final Provider<InteractionProvider> interactionProviderProvider;
+    
     private final Optional<KeyValueSessionStore> keyValueSessionStore;
 
     /**
@@ -97,7 +98,7 @@ public class UserService {
      * {@link InteractionContext} of the current thread).
      */
     public Optional<UserMemento> currentUser() {
-        val currentUser = interactionLayerTrackerProvider.get()
+        var currentUser = interactionProviderProvider.get()
                     .currentInteractionContext()
                     .map(InteractionContext::getUser);
 
@@ -144,7 +145,7 @@ public class UserService {
      * {@link UserMemento}.
      */
     public Optional<String> currentUserName() {
-        return currentUser().map(UserMemento::getName);
+        return currentUser().map(UserMemento::name);
     }
 
     /**

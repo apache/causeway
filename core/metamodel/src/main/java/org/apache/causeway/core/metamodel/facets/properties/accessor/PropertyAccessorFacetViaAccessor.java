@@ -33,13 +33,11 @@ import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
 implements ImperativeFacet {
-
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
@@ -58,24 +56,18 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getProperty(
+    public Object getAssociationValueAsPojo(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object referencedObject = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
+        if(referencedObject == null) return null;
 
-        if(referencedObject == null) {
-            return null;
-        }
-
-        boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
-        if(filterForVisibility) {
+        if(isConfiguredToFilterForVisibility()) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
             final boolean visible = MmVisibilityUtils
                     .isVisible(referencedAdapter, interactionInitiatedBy);
-            if (!visible) {
-                return null;
-            }
+            if (!visible) return null;
         }
         return referencedObject;
     }
@@ -85,6 +77,5 @@ implements ImperativeFacet {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
     }
-
 
 }

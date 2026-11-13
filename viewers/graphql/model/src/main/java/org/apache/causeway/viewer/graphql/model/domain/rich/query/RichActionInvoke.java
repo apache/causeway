@@ -30,10 +30,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionInvoke
         extends ElementCustom {
 
@@ -57,16 +56,16 @@ public class RichActionInvoke
         addChildFieldFor(this.args = new RichActionInvokeArgs(actionInteractor, context));
         addChildFieldFor(this.result = new RichActionInvokeResult(actionInteractor, context));
 
-        val gqlObjectType = buildObjectType();
-        val objectAction = actionInteractor.getObjectMember();
-        val fieldBuilder = newFieldDefinition()
+        var gqlObjectType = buildObjectType();
+        var objectAction = actionInteractor.getObjectMember();
+        var fieldBuilder = newFieldDefinition()
                 .name(fieldNameForSemanticsOf(objectAction))
                 .type(gqlObjectType);
         actionInteractor.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());
         setField(fieldBuilder.build());
     }
 
-    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
+    private static String fieldNameForSemanticsOf(final ObjectAction objectAction) {
         switch (objectAction.getSemantics()) {
             case SAFE_AND_REQUEST_CACHEABLE:
             case SAFE:
@@ -81,7 +80,6 @@ public class RichActionInvoke
                 return "invokeNonIdempotent";
         }
     }
-
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {

@@ -27,7 +27,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -47,10 +46,10 @@ public class _Swt {
      */
     public void prompt(final String message) {
 
-        val awaitableLatch = new CountDownLatch(1);
+        var awaitableLatch = new CountDownLatch(1);
 
         SwingUtilities.invokeLater(()->{
-            val frame = new JFrame();
+            var frame = new JFrame();
             frame.getContentPane().setLayout(new FlowLayout());
             frame.getContentPane().add(new JLabel(message));
             frame.pack();

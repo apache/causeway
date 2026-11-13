@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -45,20 +42,20 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an {@link ApplicationFeature}.
@@ -78,55 +75,27 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
 
-
     // -- constructors
 
     public static ApplicationFeatureViewModel newViewModel(
             final ApplicationFeatureId featureId,
             final ApplicationFeatureRepository applicationFeatureRepository,
             final FactoryService factoryService) {
-        final Class<? extends ApplicationFeatureViewModel> vmClass =
-                viewModelClassFor(featureId, applicationFeatureRepository);
 
-        if(featureId.getSort().isNamespace()) {
-            _Assert.assertEquals(vmClass, ApplicationNamespace.class);
-            return factoryService.viewModel(new ApplicationNamespace(featureId));
-        }
-
-        return factoryService.viewModel(vmClass,
-                Bookmark.forLogicalTypeNameAndIdentifier(
-                        featureId.getLogicalTypeName(),
-                        featureId.asEncodedString()));
-    }
-
-    private static Class<? extends ApplicationFeatureViewModel> viewModelClassFor(
-            final ApplicationFeatureId featureId,
-            final ApplicationFeatureRepository applicationFeatureRepository) {
-        switch (featureId.getSort()) {
-        case NAMESPACE:
-            return ApplicationNamespace.class;
-        case TYPE:
-            return ApplicationType.class;
-        case MEMBER:
-
-            val memberSort =
-            Optional.ofNullable(applicationFeatureRepository.findFeature(featureId))
-                .flatMap(ApplicationFeature::getMemberSort)
-                .orElse(null);
-
-            if(memberSort != null) {
-                switch(memberSort) {
-                case PROPERTY:
-                    return ApplicationTypeProperty.class;
-                case COLLECTION:
-                    return ApplicationTypeCollection.class;
-                case ACTION:
-                    return ApplicationTypeAction.class;
-                }
-            }
-
-        }
-        throw new IllegalArgumentException("could not determine feature type; featureId = " + featureId);
+        return switch (featureId.getSort()) {
+            case NAMESPACE->factoryService.viewModel(new ApplicationNamespace(featureId));
+            case TYPE->factoryService.viewModel(new ApplicationType(featureId));
+            case MEMBER->
+                Optional.ofNullable(applicationFeatureRepository.findFeature(featureId))
+                    .flatMap(ApplicationFeature::getMemberSort)
+                    .map(memberSort->switch (memberSort) {
+                        case PROPERTY -> factoryService.viewModel(new ApplicationTypeProperty(featureId));
+                        case COLLECTION -> factoryService.viewModel(new ApplicationTypeCollection(featureId));
+                        case ACTION -> factoryService.viewModel(new ApplicationTypeAction(featureId));
+                    })
+                    .orElseThrow(()->_Exceptions
+                            .illegalArgument("could not map feature-id '%s' to a view-model", featureId));
+        };
     }
 
     public ApplicationFeatureViewModel() {
@@ -137,7 +106,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         setFeatureId(featureId);
     }
 
-
     // -- identification
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
@@ -146,8 +114,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @ObjectSupport public String title() {
         return getFullyQualifiedName();
     }
-    @ObjectSupport public String iconName() {
-        return "applicationFeature";
+    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
+        return new ObjectSupport.ClassPathIconResource("applicationFeature");
     }
 
     // -- VIEWMODEL CONTRACT
@@ -167,8 +135,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Setter
     private ApplicationFeatureId featureId;
 
-
-
     // -- feature (property, programmatic)
 
     @Programmatic
@@ -176,13 +142,11 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return featureRepository.findFeature(getFeatureId());
     }
 
-
     // -- fullyQualifiedName (property, programmatic)
     @Programmatic // in the title
     public String getFullyQualifiedName() {
         return getFeatureId().getFullyQualifiedName();
     }
-
 
     // -- type (programmatic)
     @Programmatic
@@ -261,7 +225,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return getSort().isNamespace();
     }
 
-
     // -- memberName
 
     @Property(
@@ -290,7 +253,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
     }
 
-
     /**
      * For packages and class names, will be null.
      */
@@ -301,8 +263,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @MemberSupport public boolean hideMemberName() {
         return !getSort().isMember();
     }
-
-
 
     // -- parent (property)
 
@@ -337,14 +297,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         if (feature == null) {
             return null;
         }
-        final Class<? extends ApplicationFeatureViewModel> cls =
-                viewModelClassFor(parentId, featureRepository);
-        return factory.viewModel(cls,
-                Bookmark.forLogicalTypeNameAndIdentifier(
-                        ApplicationFeatureViewModel.LOGICAL_TYPE_NAME,
-                        parentId.asEncodedString()));
+        return newViewModel(parentId, featureRepository, factory);
     }
-
 
     // -- parentPackage (property, programmatic, for packages & classes only)
 
@@ -357,7 +311,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         .newViewModel(getFeatureId().getParentNamespaceFeatureId(), featureRepository, factory);
     }
 
-
     // -- equals, hashCode, toString
 
     private static final Equality<ApplicationFeatureViewModel> equality =
@@ -368,7 +321,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     private static final ToString<ApplicationFeatureViewModel> toString =
             ObjectContracts.toString("featureId", ApplicationFeatureViewModel::getFeatureId);
-
 
     @Override
     public boolean equals(final Object obj) {
@@ -384,7 +336,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String toString() {
         return toString.toString(this);
     }
-
 
     // -- FACTORY
 

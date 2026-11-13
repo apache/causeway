@@ -18,9 +18,17 @@
  */
 package org.apache.causeway.applib.layout.component;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSRowContentOwner;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSRowOwner;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroupOwner;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSTabOwner;
+
 /**
  * @since 1.x {@index}
  */
-public interface Owner {
+public sealed interface Owner
+permits ActionLayoutDataOwner, BSRowContentOwner, BSRowOwner, BSTabGroupOwner,
+BSTabOwner, DomainObjectLayoutDataOwner, MemberRegionOwner,
+ServiceActionLayoutDataOwner {
 
 }

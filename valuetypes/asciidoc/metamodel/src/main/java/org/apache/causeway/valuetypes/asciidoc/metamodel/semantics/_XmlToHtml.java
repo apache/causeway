@@ -20,7 +20,6 @@ package org.apache.causeway.valuetypes.asciidoc.metamodel.semantics;
 
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -31,7 +30,7 @@ class _XmlToHtml {
     }
 
     private AsciiDoc asAdoc(final String xml) {
-        val adoc = "[source,xml]\n----\n" + xml + "\n----";
+        var adoc = "[source,xml]\n----\n" + xml + "\n----";
         return AsciiDoc.valueOf(adoc);
     }
 

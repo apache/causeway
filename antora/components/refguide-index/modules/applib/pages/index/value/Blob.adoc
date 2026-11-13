@@ -1,4 +1,4 @@
-= Blob
+= Blob _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents a binary large object.
@@ -14,20 +14,19 @@ Conceptually you can consider it as a set of bytes (a picture, a video etc), tho
 [source,java]
 .Blob.java
 ----
-class Blob {
+record Blob {
   Blob(String name, String primaryType, String subtype, byte[] bytes)
   Blob(String name, String mimeTypeBase, byte[] bytes)
   Blob(String name, MimeType mimeType, byte[] bytes)
   Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, File file)     // <.>
-  String getName()
-  MimeType getMimeType()
-  byte[] getBytes()
   Clob toClob(Charset charset)     // <.>
+  Clob toClobUtf8()     // <.>
   void writeBytesTo(OutputStream os)     // <.>
   void writeTo(File file)     // <.>
   DataSource asDataSource()     // <.>
+  Blob flatMap(UnaryOperator<Blob> mapper)     // <.>
   Blob zip()     // <.>
   Blob zip(String zipEntryNameIfAny)     // <.>
   Blob unZip(CommonMimeType resultingMimeType)
@@ -62,6 +61,11 @@ Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
 --
 Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using given _Charset_ for the underlying byte[] to String conversion.
 --
+<.> xref:#toClobUtf8_[toClobUtf8()]
++
+--
+Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using UTF-8 for the underlying byte[] to String conversion.
+--
 <.> xref:#writeBytesTo_OutputStream[writeBytesTo(OutputStream)]
 +
 --
@@ -76,6 +80,11 @@ Writes this xref:refguide:applib:index/value/Blob.adoc[Blob] to the file represe
 +
 --
 Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] for underlying byte array.
+--
+<.> xref:#flatMap_UnaryOperator[flatMap(UnaryOperator)]
++
+--
+Allows fluent chaining of xref:refguide:applib:index/value/Blob.adoc[Blob] operators.
 --
 <.> xref:#zip_[zip()]
 +
@@ -119,6 +128,11 @@ Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
 
 Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using given _Charset_ for the underlying byte[] to String conversion.
 
+[#toClobUtf8_]
+=== toClobUtf8()
+
+Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using UTF-8 for the underlying byte[] to String conversion.
+
 [#writeBytesTo_OutputStream]
 === writeBytesTo(OutputStream)
 
@@ -135,6 +149,11 @@ If the file exists but is a directory rather than a regular file, does not exist
 === asDataSource()
 
 Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] for underlying byte array.
+
+[#flatMap_UnaryOperator]
+=== flatMap(UnaryOperator)
+
+Allows fluent chaining of xref:refguide:applib:index/value/Blob.adoc[Blob] operators.
 
 [#zip_]
 === zip()

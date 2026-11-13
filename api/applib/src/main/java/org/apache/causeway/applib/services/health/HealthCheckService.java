@@ -42,5 +42,3 @@ public interface HealthCheckService {
 
     Health check();
 }
-
-

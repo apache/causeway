@@ -19,21 +19,18 @@
 package org.apache.causeway.viewer.restfulobjects.client;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.ws.rs.core.MediaType;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.MediaType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public enum RestfulClientMediaType {
@@ -71,9 +68,9 @@ public enum RestfulClientMediaType {
             final String urn,
             final Class<?> dtoClass,
             final EnumSet<SuppressionType> suppressionTypes) {
-        val headerMap = _Maps.<String, String>newHashMap();
+        var headerMap = new HashMap<String, String>();
 
-        headerMap.put("profile", "urn:" + urn);
+        headerMap.put("profile", "\"urn:" + urn + "\"");
 
         toSuppressionLiteral(suppressionTypes)
         .ifPresent(suppress->headerMap.put("suppress", suppress));
@@ -93,4 +90,3 @@ public enum RestfulClientMediaType {
     }
 
 }
-

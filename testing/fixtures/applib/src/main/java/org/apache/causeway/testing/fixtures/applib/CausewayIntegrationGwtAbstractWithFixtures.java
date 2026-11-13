@@ -68,5 +68,4 @@ public abstract class CausewayIntegrationGwtAbstractWithFixtures extends Causewa
 
     @Inject protected FixtureScripts fixtureScripts;
 
-
 }

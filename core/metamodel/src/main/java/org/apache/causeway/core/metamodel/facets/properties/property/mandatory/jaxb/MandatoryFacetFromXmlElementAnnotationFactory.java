@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.mandatory.jaxb;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.XmlElement;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlElement;
 
 public class MandatoryFacetFromXmlElementAnnotationFactory
 extends FacetFactoryAbstract {
@@ -37,16 +35,14 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        if(processMethodContext.isMixinMain()) {
-            return; // shortcut just in case
-        }
+        if(processMethodContext.isMixinMain())
+			return; // shortcut just in case
 
-        val xmlElementIfAny = processMethodContext.synthesizeOnMethod(XmlElement.class);
-        val facetHolder = processMethodContext.getFacetHolder();
+        var xmlElementIfAny = processMethodContext.synthesizeOnMethod(XmlElement.class);
+        var facetHolder = processMethodContext.facetHolder();
 
         // search for @XmlElement(required=...)
-        addFacetIfPresent(
-                MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder));
+        MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder);
     }
 
 }

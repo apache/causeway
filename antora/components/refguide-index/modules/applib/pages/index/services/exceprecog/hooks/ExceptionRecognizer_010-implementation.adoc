@@ -5,13 +5,14 @@
 
 == Implementation
 
-The framework provides a number of default implementations for JPA and JDO, to recognise:
+The framework provides a number of default implementations for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], to recognise:
 
 * data already exists (uniqueness constraints)
 * object not found
 * related data exists (foreign key constraints preventing change)
 * unable to save data (foreign key constraints not met)
-* other data access problem.
+* other data access problem based on a particular type that they throw, xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[] and its subclass in turn, xref:refguide:core:index/metamodel/services/exceprecog/ExceptionRecognizerForRecoverableException.adoc[]
+
 
 
 === Configuration Properties
@@ -31,7 +32,7 @@ The following configuration property is relevant:
 (`false`)
 |whether any `DataAccessException` exceptions should be recognized.+
 
-If Spring encounters a data access problem (either JPA or JDO) then it will throw a subclass of `DataAccessException`.
+If Spring encounters a data access problem then it will throw a subclass of `DataAccessException`.
 
 This recogniser catches this exception class and throws a suitable recognition based on the subtype.
 

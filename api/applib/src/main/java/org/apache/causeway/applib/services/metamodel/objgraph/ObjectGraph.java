@@ -29,7 +29,8 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -42,60 +43,62 @@ import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.io.DataSink;
 import org.apache.causeway.commons.io.DataSource;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.With;
-import lombok.val;
-import lombok.experimental.Accessors;
-import lombok.experimental.UtilityClass;
+import lombok.Builder;
 
 /**
  * Can be used to create diagrams (e.g. Plantuml)
  *
  * @since 2.0 {@index}
  */
-@lombok.Value @Accessors(fluent=true)
-public class ObjectGraph {
+public record ObjectGraph(
+        List<ObjectGraph.Object> objects,
+        List<ObjectGraph.Relation> relations) {
 
-    @lombok.Value @Accessors(fluent=true)
-    public static class Object {
-        private final @With @NonNull String id;
-        private final @With @NonNull String packageName;
-        private final @With @NonNull String name;
-        private final @With @NonNull Optional<String> stereotype;
-        private final @With @NonNull Optional<String> description;
-        private final @With List<ObjectGraph.Field> fields;
+    @Builder
+    public record Object(
+            @NonNull String id,
+            @NonNull String packageName,
+            @NonNull String name,
+            @NonNull Optional<String> stereotype,
+            @NonNull Optional<String> description,
+            List<ObjectGraph.Field> fields) {
         /** @return {@code packageName + "." + name} */
         public String fqName() {
             return packageName + "." + name;
         }
+        public ObjectBuilder asBuilder() {
+            return builder().id(id).packageName(packageName).name(name).stereotype(stereotype).description(description)
+                    .fields(fields.stream()
+                            .map(Field::copy)
+                            .collect(Collectors.toCollection(ArrayList::new)));
+        }
         public Object copy() {
-            return withFields(
-                    fields.stream()
-                        .map(Field::copy)
-                        .collect(Collectors.toCollection(ArrayList::new)));
+            return asBuilder().build();
         }
     }
 
-    @lombok.Value @Accessors(fluent=true)
-    public static class Field {
-        private final @With @NonNull String name;
-        private final @With @NonNull String elementTypeShortName;
-        private final @With boolean isPlural;
-        private final @With @NonNull Optional<String> description;
+    @Builder
+    public record Field(
+            @NonNull String name,
+            @NonNull String elementTypeShortName,
+            boolean isPlural,
+            @NonNull Optional<String> description) {
+        public FieldBuilder asBuilder() {
+            return builder().name(name).elementTypeShortName(elementTypeShortName).isPlural(isPlural).description(description);
+        }
         public Field copy() {
-            return withName(name);
+            return asBuilder().build();
         }
     }
 
-    @lombok.Value @Accessors(fluent=true)
-    public static class Relation {
-        private final @With @NonNull RelationType relationType;
-        private final @With @NonNull ObjectGraph.Object from;
-        private final @With @NonNull ObjectGraph.Object to;
-        private final @With @NonNull String description; // usually the middle label
-        private final @With @NonNull String nearLabel;
-        private final @With @NonNull String farLabel;
+    @Builder
+    public record Relation(
+            @NonNull RelationType relationType,
+            ObjectGraph.@NonNull Object from,
+            ObjectGraph.@NonNull Object to,
+            @NonNull String description, // usually the middle label
+            @NonNull String nearLabel,
+            @NonNull String farLabel) {
         public String fromId() { return from.id(); }
         public String toId() { return to.id(); }
         public boolean isAssociation() { return relationType.isAssociationAny(); }
@@ -107,9 +110,19 @@ public class ObjectGraph {
         public String descriptionFormatted() {
             return multiplicityNotation().apply(description);
         }
+        public RelationBuilder asBuilder() {
+            return builder().relationType(relationType)
+                    .from(from)
+                    .to(to)
+                    .description(description)
+                    .nearLabel(nearLabel)
+                    .farLabel(farLabel);
+        }
         public Relation copy(final Map<String, ObjectGraph.Object> objectById) {
-            return withFrom(objectById.get(fromId()))
-                    .withTo(objectById.get(toId()));
+            return asBuilder()
+                    .from(objectById.get(fromId()))
+                    .to(objectById.get(toId()))
+                    .build();
         }
     }
 
@@ -142,12 +155,10 @@ public class ObjectGraph {
     /**
      * Factory providing built in {@link Transformer}(s).
      */
-    @UtilityClass
-    public static class Transformers {
-        @Getter(lazy = true)
-        private final Transformer relationMerger = new _ObjectGraphRelationMerger();
-        public Transformer objectModifier(final @NonNull UnaryOperator<ObjectGraph.Object> modifier) {
-            return new _ObjectGraphObjectModifier(modifier);
+    public record Transformers() {
+        public static Transformer relationMerger() { return new ObjectGraphRelationMerger(); }
+        public static Transformer objectModifier(final @NonNull UnaryOperator<ObjectGraph.Object> modifier) {
+            return new ObjectGraphObjectModifier(modifier);
         }
     }
 
@@ -155,10 +166,11 @@ public class ObjectGraph {
         void render(StringBuilder sb, ObjectGraph objGraph);
     }
 
-    private final List<ObjectGraph.Object> objects = new ArrayList<>();
-    private final List<ObjectGraph.Relation> relations = new ArrayList<>();
+    public ObjectGraph() {
+        this(new ArrayList<>(), new ArrayList<>());
+    }
 
-    public static ObjectGraph create(final @NonNull ObjectGraph.Factory factory) {
+    public static ObjectGraph create(final ObjectGraph.@NonNull Factory factory) {
         return factory.create();
     }
 
@@ -168,31 +180,31 @@ public class ObjectGraph {
      * <p>
      * Hence transformers are not required to create defensive copies.
      */
-    public ObjectGraph transform(final @Nullable ObjectGraph.Transformer transfomer) {
+    public ObjectGraph transform(final ObjectGraph.@Nullable Transformer transfomer) {
         return transfomer!=null
                 ? transfomer.transform(this.copy())
                 : this;
     }
 
-    public String render(final @Nullable ObjectGraph.Renderer renderer) {
+    public String render(final ObjectGraph.@Nullable Renderer renderer) {
         if(renderer==null) return "";
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         renderer.render(sb, this);
         return sb.toString();
     }
-    public DataSource asDiagramDslSource(final @Nullable ObjectGraph.Renderer renderer) {
+    public DataSource asDiagramDslSource(final ObjectGraph.@Nullable Renderer renderer) {
         var dsl = render(renderer);
         return dsl==null
                 ? DataSource.empty()
                 : DataSource.ofStringUtf8(dsl);
     }
-    public void writeDiagramDsl(final @Nullable ObjectGraph.Renderer renderer, final DataSink sink) {
+    public void writeDiagramDsl(final ObjectGraph.@Nullable Renderer renderer, final DataSink sink) {
         var dsl = render(renderer);
         if(dsl==null) return;
         sink.writeAll(os->
             os.write(dsl.getBytes(StandardCharsets.UTF_8)));
     }
-    public void writeDiagramDsl(final @Nullable ObjectGraph.Renderer renderer, final File destinationDslFile) {
+    public void writeDiagramDsl(final ObjectGraph.@Nullable Renderer renderer, final File destinationDslFile) {
         var dsl = render(renderer);
         if(dsl==null) return;
         DataSink.ofFile(destinationDslFile)

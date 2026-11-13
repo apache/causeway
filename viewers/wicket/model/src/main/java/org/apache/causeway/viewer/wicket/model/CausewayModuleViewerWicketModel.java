@@ -26,10 +26,11 @@ import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleCoreWebapp.class,
 })
 public class CausewayModuleViewerWicketModel {
+
 }

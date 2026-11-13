@@ -74,7 +74,6 @@ class StringsTest {
                 is("12abc"));
     }
 
-
     @Test
     void upperWithNull() throws Exception {
         assertThat(
@@ -364,7 +363,6 @@ class StringsTest {
         return _Strings.asNaturalName.apply(string);
     }
 
-
     @Test
     void asCamelCase() {
         assertThat(asCamelCase("An Upper Case"), is("AnUpperCase"));
@@ -422,6 +420,5 @@ class StringsTest {
     private static String stripLeadingSlash(final String input) {
         return _Strings.removePrefix(input, "/");
     }
-
 
 }

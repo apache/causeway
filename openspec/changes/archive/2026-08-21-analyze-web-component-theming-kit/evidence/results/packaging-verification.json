@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-08-20",
+  "command": "mvn -f evidence/packaging/pom.xml package",
+  "buildResult": "success",
+  "jar": "evidence/packaging/target/causeway-theming-candidate-assets-1.0.0-analysis.jar",
+  "jarBytes": 226029,
+  "entryCount": 26,
+  "packagedFiles": {
+    "META-INF/resources/causeway-toolkit/bootstrap/": 2,
+    "META-INF/resources/causeway-toolkit/webawesome/": 2,
+    "META-INF/resources/causeway-toolkit/open-props/": 3,
+    "META-INF/licenses/": 3
+  },
+  "interpretation": "All frozen candidates can be packaged offline in a standard Maven JAR after pinned npm acquisition. Web Awesome is represented by reproducible selective JavaScript and CSS bundles rather than its complete browser distribution."
+}

@@ -30,12 +30,11 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * A custom type that has children.
@@ -72,7 +71,7 @@ public abstract class ElementCustom
         super(context);
         this.typeName = typeName;
 
-        val typeIfAny = context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
+        var typeIfAny = context.graphQLTypeRegistry.lookup(typeName, GraphQLObjectType.class);
         if(typeIfAny.isPresent()) {
             this.gqlObjectType = typeIfAny.get();
             this.gqlObjectTypeBuilder = null;
@@ -158,20 +157,19 @@ public abstract class ElementCustom
     }
 
     protected boolean inApiScope(ObjectAction act) {
-        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
+        if (graphqlConfiguration.apiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
             return true;
         }
-        val returnType = act.getElementType();
+        var returnType = act.getElementType();
         return returnType.isViewModelOrValueOrVoid() &&
                 act.getParameterTypes().stream().allMatch(ObjectSpecification::isViewModelOrValue);
     }
 
     protected boolean inApiScope(final ObjectAssociation objAssoc) {
-        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
+        if (graphqlConfiguration.apiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
             return true;
         }
         return objAssoc.getElementType().isViewModelOrValue();
     }
-
 
 }

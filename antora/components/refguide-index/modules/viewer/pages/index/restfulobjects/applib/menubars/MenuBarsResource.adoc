@@ -9,10 +9,10 @@ Not part of the Restful Objects spec.
 .MenuBarsResource.java
 ----
 interface MenuBarsResource {
-  Response menuBars()     // <.>
-  Response deleteMenuBarsNotAllowed()     // <.>
-  Response putMenuBarsNotAllowed()     // <.>
-  Response postMenuBarsNotAllowed()     // <.>
+  ResponseEntity<Object> menuBars()     // <.>
+  ResponseEntity<Object> deleteMenuBarsNotAllowed()     // <.>
+  ResponseEntity<Object> putMenuBarsNotAllowed()     // <.>
+  ResponseEntity<Object> postMenuBarsNotAllowed()     // <.>
 }
 ----
 

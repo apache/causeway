@@ -25,17 +25,14 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
-import lombok.val;
-
 @Component
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".RegexReplacer")
 public class RegexReplacer implements org.apache.causeway.extensions.secman.applib.util.RegexReplacer {
 
     @Override
     public String asRegex(String str) {
-        val search = _Strings.nullToEmpty(str).replace("*", "%").replace("?", "_");
+        var search = _Strings.nullToEmpty(str).replace("*", "%").replace("?", "_");
         return _Strings.suffix(_Strings.prefix(search, "%"), "%");
     }
-
 
 }

@@ -20,13 +20,10 @@ package org.apache.causeway.extensions.commandlog.jpa.integtests;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
 import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
@@ -40,9 +37,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
         CausewayModuleSecurityBypass.class,
         CausewayModuleExtCommandLogPersistenceJpa.class,
 
-})
-@PropertySources({
-        @PropertySource(CausewayPresets.UseLog4j2Test)
 })
 @EntityScan(basePackageClasses = {Counter.class})
 @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class})

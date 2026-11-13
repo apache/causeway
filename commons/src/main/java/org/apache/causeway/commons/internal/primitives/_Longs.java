@@ -21,14 +21,13 @@ package org.apache.causeway.commons.internal.primitives;
 import java.util.OptionalLong;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.primitives._Ints.BiIntConsumer;
+import org.apache.causeway.commons.internal.primitives._Ints.BiIntFunction;
 
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -42,36 +41,32 @@ import lombok.experimental.UtilityClass;
  *
  * @since 2.0
  */
-@UtilityClass
-public class _Longs {
+public record _Longs() {
 
     // -- RANGE
 
-    @Value(staticConstructor = "of")
-    public static class Bound {
-        long value;
-        boolean inclusive;
-        public static @NonNull Bound inclusive(final long value) { return of(value, true); }
-        public static @NonNull Bound exclusive(final long value) { return of(value, true); }
+    public record Bound(
+            long value,
+            boolean isInclusive) {
+        public static @NonNull Bound inclusive(final long value) { return new Bound(value, true); }
+        public static @NonNull Bound exclusive(final long value) { return new Bound(value, true); }
     }
 
-    @Value(staticConstructor = "of")
-    public static class Range {
-        @NonNull Bound lowerBound;
-        @NonNull Bound upperBound;
+    public record Range(
+            @NonNull Bound lowerBound,
+            @NonNull Bound upperBound) {
+
         public boolean contains(final long value) {
-            val isBelowLower = lowerBound.isInclusive()
-                    ? value < lowerBound.getValue()
-                    : value <= lowerBound.getValue();
-            if(isBelowLower) {
-                return false;
-            }
-            val isAboveUpper = upperBound.isInclusive()
-                    ? value > upperBound.getValue()
-                    : value >= upperBound.getValue();
-            if(isAboveUpper) {
-                return false;
-            }
+            var isBelowLower = lowerBound.isInclusive()
+                    ? value < lowerBound.value()
+                    : value <= lowerBound.value();
+            if(isBelowLower) return false;
+
+            var isAboveUpper = upperBound.isInclusive()
+                    ? value > upperBound.value()
+                    : value >= upperBound.value();
+            if(isAboveUpper) return false;
+
             return true;
         }
         /**
@@ -93,17 +88,17 @@ public class _Longs {
         }
         private long nearestToLower() {
             //if(empty) throw _Exceptions.unsupportedOperation();
-            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;
+            return lowerBound.isInclusive() ? lowerBound.value() : lowerBound.value()+1;
         }
         private long nearestToUpper() {
             //if(empty) throw _Exceptions.unsupportedOperation();
-            return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
+            return upperBound.isInclusive() ? upperBound.value() : upperBound.value()-1;
         }
         @Override
         public String toString() {
             return String.format("%s%d,%d%S",
-                    lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
-                    upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
+                    lowerBound.isInclusive() ? '[' : '(', lowerBound.value(),
+                    upperBound.value(), upperBound.isInclusive() ? ']' : ')');
         }
     }
 
@@ -116,7 +111,7 @@ public class _Longs {
         if(a>b) {
             throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
         }
-        return Range.of(Bound.inclusive(a), Bound.inclusive(b));
+        return new Range(Bound.inclusive(a), Bound.inclusive(b));
     }
 
     /**
@@ -130,7 +125,7 @@ public class _Longs {
         if(a>=b) {
             throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
         }
-        return Range.of(Bound.inclusive(a), Bound.exclusive(b));
+        return new Range(Bound.inclusive(a), Bound.exclusive(b));
     }
 
     // -- PARSING
@@ -169,7 +164,7 @@ public class _Longs {
      * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
-    public OptionalLong parseLong(final @Nullable String s, final int radix, final @NonNull Consumer<String> onFailure) {
+    public static OptionalLong parseLong(final @Nullable String s, final int radix, final @NonNull Consumer<String> onFailure) {
 
         if (s == null) {
             onFailure.accept("null");
@@ -234,15 +229,33 @@ public class _Longs {
         return OptionalLong.of(negative ? result : -result);
     }
 
+    // -- INT PACKING
+
+    /**
+     * For reference see <a href="http://stackoverflow.com/questions/12772939/java-storing-two-ints-in-a-long">link</a>.
+     * @param lower
+     * @param upper
+     */
+    public static long pack(final int lower, final int upper) {
+        return (((long)upper) << 32) | (lower & 0xffffffffL);
+    }
+
+    public static void unpackAndAccept(final long x, final BiIntConsumer consumer) {
+        consumer.accept((int)x,(int)(x>>>32));
+    }
+
+    public static <X> X unpackAndApply(final long x, final BiIntFunction<X> function) {
+        return function.apply((int)x,(int)(x>>>32));
+    }
+
     // -- SHORTCUTS
 
-    public OptionalLong parseLong(final String s, final int radix) {
+    public static OptionalLong parseLong(final String s, final int radix) {
         return parseLong(s, radix, IGNORE_ERRORS);
     }
 
     // -- HELPER
 
     private static final Consumer<String> IGNORE_ERRORS = t->{};
-
 
 }

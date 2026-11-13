@@ -28,26 +28,17 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
-import lombok.val;
-//import org.springframework.beans.factory.annotation.Autowired;
-//
-//import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType;
-//import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
-//import org.apache.causeway.commons.collections.Can;
-//
-//import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simply logs the URL of any request that causes an exception to be thrown (but will swallow any
  * ClientAbortExceptions, as these represent the end user navigating away without waiting for a response)
  */
-@Log4j2
+@Slf4j
 public class CausewayLogOnExceptionFilter implements Filter {
 
-
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
     }
 
     @Override
@@ -75,7 +66,7 @@ public class CausewayLogOnExceptionFilter implements Filter {
      * </pre>
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         try {
             chain.doFilter(request, response);
         } catch (Exception ex) {
@@ -86,7 +77,7 @@ public class CausewayLogOnExceptionFilter implements Filter {
             }
 
             if(ex instanceof IOException) {
-                val url = ((HttpServletRequest) request).getRequestURL().toString();
+                var url = ((HttpServletRequest) request).getRequestURL().toString();
                 if(url.endsWith(".css")
                         || url.endsWith(".js")
                         || url.endsWith(".woff2")) {
@@ -106,7 +97,7 @@ public class CausewayLogOnExceptionFilter implements Filter {
 
     // -- HELPER
 
-    private static void logRequestUrl(ServletRequest request, Exception e) {
+    private static void logRequestUrl(final ServletRequest request, final Exception e) {
         if(!(request instanceof HttpServletRequest)) {
             return;
         }

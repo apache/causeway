@@ -26,17 +26,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -46,8 +44,9 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
-import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNoun;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
@@ -55,8 +54,7 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
@@ -66,54 +64,60 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
-import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
- * Represents an entity or value (cf {@link java.lang.Class}) within the
- * metamodel.
- *
+ * Represents any domain object, abstract type, bean or value,
+ * and uniquely corresponds to a {@link java.lang.Class}).
  * <p>
- * As specifications are cyclic (specifically a class will reference its
+ * As specifications are potentially cyclic (specifically a class will reference its
  * subclasses, which in turn reference their superclass) they need be created
  * first, and then later work out its internals. Hence we create
- * {@link ObjectSpecification}s as we need them, and then introspect them later.
+ * {@link ObjectSpecification}(s) as we need them, then introspect them later.
  */
 public interface ObjectSpecification
 extends
     Specification,
+    HasLogicalType,
+    HasFacetHolder,
+    Hierarchical,
     ObjectActionContainer,
     ObjectAssociationContainer,
-    Hierarchical,
-    HasLogicalType,
     Comparable<ObjectSpecification> {
 
     @UtilityClass
     class Comparators{
 
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
-                Comparator.comparing(ObjectSpecification::getBeanSort)
-                    .thenComparing(ObjectSpecification::getLogicalType);
+                Comparator.comparing(ObjectSpecification::beanSort)
+                    .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
-                Comparator.comparing(ObjectSpecification::getFullIdentifier);
+                Comparator.comparing(ObjectSpecification::fullIdentifier);
 
         public final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE =
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
-            s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+            s1.shortIdentifier().compareToIgnoreCase(s2.shortIdentifier());
     }
+
+    @Override default FeatureType featureType() { return FeatureType.OBJECT; }
+
+    IntrospectionPolicy introspectionPolicy();
 
     /**
      * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}.
@@ -128,11 +132,11 @@ extends
      * @return optionally the ObjectMember associated with given {@code memberId},
      * based on whether given memberId exists
      */
-    Optional<? extends ObjectMember> getMember(String memberId);
+    Optional<? extends ObjectMember> lookupMember(String memberId);
 
     default ObjectMember getMemberElseFail(final String memberId) {
-        return getMember(memberId).orElseThrow(()->{
-            val msg = "Member '" + memberId + "' does not correspond "
+        return lookupMember(memberId).orElseThrow(()->{
+            var msg = "Member '" + memberId + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);
         });
@@ -143,12 +147,12 @@ extends
      * @return optionally the ObjectMember associated with given {@code method},
      * based on whether such an association exists
      */
-    Optional<? extends ObjectMember> getMember(ResolvedMethod method);
+    Optional<? extends ObjectMember> lookupMember(ResolvedMethod method);
 
     default ObjectMember getMemberElseFail(final @NonNull ResolvedMethod method) {
-        return getMember(method).orElseThrow(()->{
-            val methodName = method.name();
-            val msg = "Method '" + methodName + "' does not correspond "
+        return lookupMember(method).orElseThrow(()->{
+            var methodName = method.name();
+            var msg = "Method '" + methodName + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);
         });
@@ -157,7 +161,7 @@ extends
     /**
      * @since 2.0
      */
-    public default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
+    default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
         return Stream.concat(
                 streamAnyActions(MixedIn.INCLUDED),
                 streamAssociations(MixedIn.INCLUDED))
@@ -170,20 +174,18 @@ extends
     /**
      * @since 2.0
      */
-    public default Optional<ObjectActionMixedIn> lookupMixedInAction(final ObjectSpecification mixinSpec) {
-        return
-                streamAnyActions(MixedIn.INCLUDED)
-                .filter(ObjectActionMixedIn.class::isInstance)
-                .map(ObjectActionMixedIn.class::cast)
-                .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
-                .findAny();
+    default Optional<MixedInAction> lookupMixedInAction(final ObjectSpecification mixinSpec) {
+        return streamAnyActions(MixedIn.INCLUDED)
+            .filter(MixedInAction.class::isInstance)
+            .map(MixedInAction.class::cast)
+            .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
+            .findAny();
     }
-
 
     /**
      * @return Java class this specification is associated with
      */
-    Class<?> getCorrespondingClass();
+    Class<?> correspondingClass();
 
     /**
      * Returns an (immutable) "full" identifier for this specification.
@@ -191,7 +193,7 @@ extends
      * This will be the fully qualified name of the Class object that this
      * object represents (i.e. it includes the package name).
      */
-    String getFullIdentifier();
+    String fullIdentifier();
 
     /**
      * Returns an (immutable) "short" identifier for this specification.
@@ -199,7 +201,7 @@ extends
      * This will be the class name without the package; any text up to and
      * including the last period is removed.
      */
-    String getShortIdentifier();
+    String shortIdentifier();
 
     /**
      * Immutable set of {@link LogicalType} aliases for corresponding
@@ -208,7 +210,7 @@ extends
      * Corresponds to {@link DomainService#aliased()} and
      * {@link DomainObject#aliased()}.
      */
-    Can<LogicalType> getAliases();
+    Can<LogicalType> aliases();
 
     /**
      * Returns the (singular) name for objects of this specification.
@@ -221,7 +223,6 @@ extends
 
     /**
      * Returns the description, if any, of the specification.
-     *
      * <p>
      * Corresponds to the {@link HasStaticText#translated() value} of
      * {@link ObjectDescribedFacet}; is not necessarily immutable.
@@ -229,33 +230,21 @@ extends
     String getDescription();
 
     /**
-     * Returns a help string or lookup reference, if any, of the specification.
-     *
-     * <p>
-     * Corresponds to the {@link HelpFacet#value() value} of {@link HelpFacet};
-     * is not necessarily immutable.
-     */
-    String getHelp();
-
-    /**
      * Returns the title to display of target adapter, rendered within the context
      * of some other adapter (if any).
      *
-     * <p>
      * @see TitleFacet#title(TitleRenderRequest)
      */
     String getTitle(TitleRenderRequest titleRenderRequest);
 
     /**
-     * Returns the name of an icon to use for the specified object.
+     * Optionally returns the resource definition of an icon to use for the specified object.
      *
-     * <p>
-     * Corresponds to the {@link IconFacet#iconName(ManagedObject) icon name}
-     * returned by the {@link IconFacet}; is not necessarily immutable.
+     * <p>Corresponds to the icon(...) object support method.
+     * @see ObjectIconService
+     * @since 4.0
      */
-    String getIconName(ManagedObject object);
-
-    ObjectIcon getIcon(ManagedObject object);
+    Optional<ObjectSupport.IconResource> getIcon(ManagedObject object, ObjectSupport.IconSize iconSize);
 
     /**
      * Returns this object's navigable parent, if any.
@@ -266,7 +255,6 @@ extends
 
     /**
      * Returns the CSS class name to use for the specified object.
-     *
      * <p>
      * Corresponds to the {@link CssClassFacet#cssClass(ManagedObject)} value}
      * returned by the {@link CssClassFacet}.
@@ -275,68 +263,72 @@ extends
      */
     String getCssClass(ManagedObject domainObject);
 
-    Optional<FontAwesomeLayers> getFaLayers(ManagedObject domainObject);
-
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet
      * @since 2.0
      */
-    Optional<ObjectSpecification> getElementSpecification();
+    Optional<ObjectSpecification> explicitElementSpec();
 
     /**
      * @since 2.0
      */
-    BeanSort getBeanSort();
+    BeanSort beanSort();
 
     /**
-     * Optionally the mixin sort {@link Contributing},
-     * based on whether the corresponding class is a mixin type.
+     * Optionally how the Mixin is {@link Contributing} (as Action, Property or Collection),
+     * based on whether the corresponding class is a Mixin type.
      * @since 2.0
      */
     Optional<Contributing> contributing();
 
-
-    // //////////////////////////////////////////////////////////////
-    // TitleContext
-    // //////////////////////////////////////////////////////////////
+    // -- TITLE CONTEXT
 
     /**
      * Create an {@link InteractionContext} representing an attempt to read the
      * object's title.
      */
-    ObjectTitleContext createTitleInteractionContext(
-            ManagedObject targetObjectAdapter,
-            InteractionInitiatedBy invocationMethod);
+    default ObjectTitleContext createTitleInteractionContext(
+            final ManagedObject targetObjectAdapter,
+            final InteractionInitiatedBy invocationMethod) {
+    	return new ObjectTitleContext(getFeatureIdentifier(), targetObjectAdapter, invocationMethod);
+    }
 
-    // //////////////////////////////////////////////////////////////
-    // ValidityContext, Validity
-    // //////////////////////////////////////////////////////////////
+    // -- VALIDITY
 
     // internal API
-    ObjectValidityContext createValidityInteractionContext(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    /**
+     * Create an {@link InteractionContext} representing an attempt to save the
+     * object.
+     */
+    default ObjectValidityContext createValidityInteractionContext(
+    		final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    	return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
+    }
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link Consent}.
      */
-    Consent isValid(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    default Consent isValid(
+    		final ManagedObject targetAdapter,
+    		final InteractionInitiatedBy interactionInitiatedBy) {
+    	return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
+    }
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link InteractionResult}.
      */
-    InteractionResult isValidResult(
+    default InteractionResult isValidResult(
             final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        var validityContext =
+                createValidityInteractionContext(
+                        targetAdapter, interactionInitiatedBy);
+        return InteractionUtils.isValidResult(this, validityContext);
+    }
 
-    // //////////////////////////////////////////////////////////////
-    // Facets
-    // //////////////////////////////////////////////////////////////
-
+    // -- FACETS
 
     /**
      * Determines if the object represents an value or object.
@@ -361,7 +353,7 @@ extends
      * @see #isSingular()
      */
     default boolean isPlural() {
-        return getBeanSort().isCollection();
+        return beanSort().isCollection();
     }
 
     /**
@@ -371,7 +363,7 @@ extends
      * In effect, means has got {@link ValueFacet}.
      */
     default boolean isValue() {
-        return getBeanSort().isValue()
+        return beanSort().isValue()
                 || valueFacet().isPresent();
     }
 
@@ -379,7 +371,7 @@ extends
      * Whether objects of this type are composite values.
      */
     default boolean isCompositeValue() {
-        return getBeanSort().isValue()
+        return beanSort().isValue()
                 && valueFacet().map(ValueFacet::isCompositeValueType).orElse(false);
     }
 
@@ -427,43 +419,43 @@ extends
     boolean isDomainService();
 
     default boolean isMixin() {
-        return getBeanSort().isMixin();
+        return beanSort().isMixin();
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is {@link Void} or {@code void}.
+     * Whether {@link #correspondingClass()} is {@link Void} or {@code void}.
      */
     default boolean isVoid() {
-        return getCorrespondingClass()==void.class
-                || getCorrespondingClass()==Void.class;
+        return correspondingClass()==void.class
+                || correspondingClass()==Void.class;
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is {@code void} (but not {@link Void}).
+     * Whether {@link #correspondingClass()} is {@code void} (but not {@link Void}).
      */
     default boolean isVoidPrimitive() {
-        return getCorrespondingClass()==void.class;
+        return correspondingClass()==void.class;
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is a primitive type,
+     * Whether {@link #correspondingClass()} is a primitive type,
      * but not {@link Void} or {@code void}.
      */
     default boolean isPrimitive() {
         return !isVoid()
-                && getCorrespondingClass().isPrimitive();
+                && correspondingClass().isPrimitive();
     }
 
     default boolean isAbstract() {
-        return getBeanSort().isAbstract();
+        return beanSort().isAbstract();
     }
 
     /**
-    * Whether {@link #getCorrespondingClass()} implements {@link Comparable}
+    * Whether {@link #correspondingClass()} implements {@link Comparable}
     * or has ordering (primitives, strings and enums).
     */
     default boolean isComparableOrOrdered() {
-        var cls = getCorrespondingClass();
+        var cls = correspondingClass();
         return Comparable.class.isAssignableFrom(cls)
                 || cls.isPrimitive()
                 || cls.equals(String.class)
@@ -474,8 +466,8 @@ extends
      * Includes abstract types that have {@link EntityFacet}.
      */
     default boolean isEntity() {
-        return getBeanSort().isEntity()
-                || (getBeanSort().isAbstract()
+        return beanSort().isEntity()
+                || (beanSort().isAbstract()
                         && entityFacet().isPresent());
     }
 
@@ -483,8 +475,8 @@ extends
      * Includes abstract types that have {@link ViewModelFacet}.
      */
     default boolean isViewModel() {
-        return getBeanSort().isViewModel()
-                || (getBeanSort().isAbstract()
+        return beanSort().isViewModel()
+                || (beanSort().isAbstract()
                         && viewmodelFacet().isPresent());
     }
 
@@ -517,34 +509,32 @@ extends
     }
 
     /**
-     * @see #getBeanSort()
+     * @see #beanSort()
      */
     default boolean isEntityOrViewModelOrAbstract() {
         // optimized, no need to check facets
-        return getBeanSort().isViewModel()
-                || getBeanSort().isEntity()
-                || getBeanSort().isAbstract();
+        return beanSort().isViewModel()
+                || beanSort().isEntity()
+                || beanSort().isAbstract();
     }
 
     /**
      * @since 2.0
      */
     default Object instantiatePojo() {
-        final Class<?> correspondingClass = getCorrespondingClass();
-        if (correspondingClass.isArray()) {
+        final Class<?> correspondingClass = correspondingClass();
+        if (correspondingClass.isArray())
             return Array.newInstance(correspondingClass.getComponentType(), 0);
-        }
 
         final Class<?> cls = correspondingClass;
-        if (Modifier.isAbstract(cls.getModifiers())) {
+        if (Modifier.isAbstract(cls.getModifiers()))
             throw new UnrecoverableException("Cannot create an instance of an abstract class: " + cls);
-        }
 
         final Object newInstance;
         try {
             newInstance = cls.getDeclaredConstructor().newInstance();
         } catch (final Throwable e) {
-            throw new UnrecoverableException("Failed to create instance of type " + getFullIdentifier(), e);
+            throw new UnrecoverableException("Failed to create instance of type " + fullIdentifier(), e);
         }
 
         return newInstance;
@@ -555,23 +545,17 @@ extends
      * @since 2.0
      */
     default Stream<FacetHolder> streamFacetHolders(){
-        val self = Stream.of(this);
-        val actions = streamAnyActions(MixedIn.EXCLUDED);
-        val actionParameters = streamAnyActions(MixedIn.EXCLUDED)
+        var self = Stream.of(this);
+        var actions = streamAnyActions(MixedIn.EXCLUDED);
+        var actionParameters = streamAnyActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
                         : Stream.empty());
-        val properties = streamProperties(MixedIn.EXCLUDED);
-        val collections = streamCollections(MixedIn.EXCLUDED);
+        var properties = streamProperties(MixedIn.EXCLUDED);
+        var collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
     }
-
-    /**
-     * Introspecting up to the level required.
-     * @since 2.0
-     */
-    void introspectUpTo(IntrospectionState upTo);
 
     /**
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
@@ -587,7 +571,7 @@ extends
      * @since 2.0
      */
     default ManagedObject createObject() {
-        val managedObject = getObjectManager().createObject(this);
+        var managedObject = getObjectManager().createObject(this);
         return managedObject;
     }
 
@@ -596,12 +580,10 @@ extends
     default public void assertPojoCompatible(final @Nullable Object pojo) {
 
         // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo==null) {
-            return;
-        }
+        if(pojo==null) return;
 
         if(!isPojoCompatible(pojo)) {
-            val expectedType = getCorrespondingClass();
+            var expectedType = correspondingClass();
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
                     "objectSpec.correspondingClass = %s, " +
@@ -612,29 +594,24 @@ extends
     }
 
     default public boolean isAssignableFrom(final Class<?> actualType) {
-        val expectedType = getCorrespondingClass();
+        var expectedType = correspondingClass();
         if(expectedType.isAssignableFrom(actualType)
-                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
             return true;
-        }
         return false;
     }
 
     default public boolean isPojoCompatible(final Object pojo) {
+        if(pojo==null)  return true;
 
-        if(pojo==null) {
-            return true;
-        }
-
-        val expectedType = getCorrespondingClass();
-        val actualType = pojo.getClass();
+        var expectedType = correspondingClass();
+        var actualType = pojo.getClass();
 
         if(expectedType.isAssignableFrom(actualType)
-                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
             return true;
-        }
 
-        val elementSpec = getElementSpecification()
+        var elementSpec = explicitElementSpec()
                 .orElse(this);
         return _NullSafe.streamAutodetect(pojo)
                 .filter(element->!Objects.equals(element, pojo)) // to prevent infinite recursion depth
@@ -649,17 +626,56 @@ extends
      * @since 2.0.0
      */
     default boolean isSerializable() {
-        return Serializable.class.isAssignableFrom(getCorrespondingClass());
+        return Serializable.class.isAssignableFrom(correspondingClass());
     }
 
     default String fqcn() {
-        return getCorrespondingClass().getName();
+        return correspondingClass().getName();
     }
 
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with self.
+     * @since 2.0
+     */
     default Stream<ObjectSpecification> streamTypeHierarchy() {
-        return superclass()!=null
-                ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
-                : Stream.of(this);
+        return Stream.concat(Stream.of(this), Hierarchical.super.streamSuperTypeHierarchy());
+    }
+
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with self,
+     * then includes all (collected) interfaces at the end.
+     * @since 4.0
+     */
+    default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
+    	return Stream.concat(streamTypeHierarchy(), interfaceSpecs().stream());
+    }
+
+    /**
+     * Whether <code>this</code> specification represents the same specification,
+     * or a subclass of the specified <code>other</code> specification.
+     * <p>
+     * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
+     * {@link Class#isAssignableFrom(Class) Java's}
+     * <tt>superType.isAssignableFrom(subType)</tt>.
+     * @return whether <code>this</code> is <b>instanceof</b> <code>other</code>
+     */
+    default boolean isOfType(final ObjectSpecification other) {
+    	var thisClass = this.correspondingClass();
+    	var otherClass = other.correspondingClass();
+
+    	return thisClass == otherClass
+    			|| otherClass.isAssignableFrom(thisClass);
+    }
+
+    /**
+     * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
+     */
+    default boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
+        var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.correspondingClass());
+        var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.correspondingClass());
+
+        return thisClass == otherClass
+                || otherClass.isAssignableFrom(thisClass);
     }
 
     // -- COMMON SUPER TYPE FINDER
@@ -671,28 +687,24 @@ extends
             final @NonNull ObjectSpecification a,
             final @NonNull ObjectSpecification b) {
 
-        val cls_a = a.getCorrespondingClass();
-        val cls_b = b.getCorrespondingClass();
-        if(cls_a.isAssignableFrom(cls_b)) {
+        var cls_a = a.correspondingClass();
+        var cls_b = b.correspondingClass();
+        if(cls_a.isAssignableFrom(cls_b))
             return a;
-        }
-        if(cls_b.isAssignableFrom(cls_a)) {
+        if(cls_b.isAssignableFrom(cls_a))
             return b;
-        }
         // assuming the algorithm is correct: if non of the above is true,
         // we must be able to walk up the tree on both branches
-        _Assert.assertNotNull(a.superclass());
-        _Assert.assertNotNull(b.superclass());
-        return commonSuperType(a.superclass(), b.superclass());
+        var superA = a.superSpec().orElseThrow();
+        var superB = b.superSpec().orElseThrow();
+        return commonSuperType(superA, superB);
     }
 
     // -- VALUE SEMANTICS SUPPORT
 
     /** introduced for lookup optimization / allow memoization */
-    @SuppressWarnings("rawtypes")
-    Optional<ValueFacet> valueFacet();
-    @SuppressWarnings("rawtypes")
-    default ValueFacet valueFacetElseFail() {
+    Optional<ValueFacet<?>> valueFacet();
+    default ValueFacet<?> valueFacetElseFail() {
         return valueFacet().orElseThrow(()->
             _Exceptions.unrecoverable("Value type %s must have a ValueFacet", toString()));
     }

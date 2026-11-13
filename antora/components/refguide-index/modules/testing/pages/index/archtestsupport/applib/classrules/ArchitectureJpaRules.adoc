@@ -37,12 +37,12 @@ This rule requires that classes annotated with the JPA _Entity_ annotation must 
 <.> xref:#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter_[every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway _jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
 --
 <.> xref:#every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener_[every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _jakarta.persistence.EntityListeners_ annotation that includes a value of `org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class` .
 --
 <.> xref:#every_jpa_Entity_must_implement_Comparable_[every_jpa_Entity_must_implement_Comparable()]
 +
@@ -62,7 +62,7 @@ This rule requires that classes annotated with the JPA _Entity_ annotation must 
 <.> xref:#every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING_[every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()]
 +
 --
-This rule requires that enum fields in classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Enumerated_ annotation indicating that they should be persisted as _javax.persistence.EnumType#STRING string_ s (rather than ordinal numbers).
+This rule requires that enum fields in classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Enumerated_ annotation indicating that they should be persisted as _jakarta.persistence.EnumType#STRING string_ s (rather than ordinal numbers).
 --
 <.> xref:#every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient_[every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()]
 +
@@ -77,7 +77,7 @@ This rule requires that classes annotated with the JPA _Entity_ annotation must 
 <.> xref:#every_jpa_Entity_must_have_a_version_field_[every_jpa_Entity_must_have_a_version_field()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must contain a `version` field that is itself annotated with _javax.persistence.Version_ .
+This rule requires that classes annotated with the JPA _Entity_ annotation must contain a `version` field that is itself annotated with _jakarta.persistence.Version_ .
 --
 <.> xref:#every_jpa_Entity_must_have_protected_no_arg_constructor_[every_jpa_Entity_must_have_protected_no_arg_constructor()]
 +
@@ -95,14 +95,14 @@ This rule requires that classes annotated with the JPA _Entity_ annotation must 
 [#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter_]
 === every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway _jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
 
 Tnis is so that entities can be transparently referenced from XML-style view models.
 
 [#every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener_]
 === every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _jakarta.persistence.EntityListeners_ annotation that includes a value of `org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class` .
 
 Tnis is so that entities can be transparently referenced from XML-style view models.
 
@@ -130,7 +130,7 @@ This is so that entity tables are organised into an appropriate structure (ideal
 [#every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING_]
 === every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()
 
-This rule requires that enum fields in classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Enumerated_ annotation indicating that they should be persisted as _javax.persistence.EnumType#STRING string_ s (rather than ordinal numbers).
+This rule requires that enum fields in classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Enumerated_ annotation indicating that they should be persisted as _jakarta.persistence.EnumType#STRING string_ s (rather than ordinal numbers).
 
 The rationale here is that a string is (arguably) more stable than an ordinal number, and is certainly easier to work with when querying the database. The downside is slightly more space to persist the data, and slightly less performant (not that it would be noticeable).
 
@@ -151,7 +151,7 @@ This is part of the standard contract for JPA entities.
 [#every_jpa_Entity_must_have_a_version_field_]
 === every_jpa_Entity_must_have_a_version_field()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must contain a `version` field that is itself annotated with _javax.persistence.Version_ .
+This rule requires that classes annotated with the JPA _Entity_ annotation must contain a `version` field that is itself annotated with _jakarta.persistence.Version_ .
 
 This is good practice for JPA entities to implement optimistic locking
 

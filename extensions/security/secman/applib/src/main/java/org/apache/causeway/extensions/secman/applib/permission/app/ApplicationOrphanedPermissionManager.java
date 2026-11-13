@@ -50,7 +50,6 @@ public class ApplicationOrphanedPermissionManager {
         return "Manage Orphaned Permissions";
     }
 
-
     // orphaned permissions
 
     public static class OrphanedPermissionsEvent extends CollectionDomainEvent<ApplicationPermission>{}

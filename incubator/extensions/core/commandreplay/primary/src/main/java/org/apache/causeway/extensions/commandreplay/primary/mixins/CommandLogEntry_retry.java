@@ -56,5 +56,4 @@ public class CommandLogEntry_retry {
         return commandLogEntry;
     }
 
-
 }

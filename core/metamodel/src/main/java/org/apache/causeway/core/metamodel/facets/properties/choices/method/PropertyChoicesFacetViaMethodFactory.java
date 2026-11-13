@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.choices.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class PropertyChoicesFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -41,18 +39,15 @@ extends MemberSupportFacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        val getterOrMixinMain = processMethodContext.getMethod();
-        val getterType = getterOrMixinMain.getReturnType();
+        var getterOrMixinMain = processMethodContext.methodFacade();
+        var getterType = getterOrMixinMain.getReturnType();
 
         methodFinder
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processMethodContext::removeMethod)
-        .forEach(choicesMethod->{
-            addFacet(
-                    new PropertyChoicesFacetViaMethod(
-                            choicesMethod, getterType, processMethodContext.getFacetHolder()));
-        });
-
+	        .streamMethodsMatchingSignature(NO_ARG)
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(choicesMethod->
+	        	new PropertyChoicesFacetViaMethod(
+	        			choicesMethod, getterType, processMethodContext.facetHolder()));
     }
 
 }

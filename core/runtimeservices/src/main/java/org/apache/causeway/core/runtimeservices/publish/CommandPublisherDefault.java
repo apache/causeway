@@ -25,24 +25,25 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Default implementation of {@link CommandPublisher}.
  *
  * @since 2.0 {@index}
  */
@@ -50,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class CommandPublisherDefault implements CommandPublisher {
 
     final List<CommandSubscriber> subscribers;
@@ -70,9 +71,9 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void ready(@NonNull final Command command) {
+    public void ready(final @NonNull Command command) {
 
-        val handle = _Xray.enterCommandReadyPublishing(
+        var handle = _Xray.enterCommandReadyPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
@@ -87,9 +88,9 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void start(@NonNull final Command command) {
+    public void start(final @NonNull Command command) {
 
-        val handle = _Xray.enterCommandStartedPublishing(
+        var handle = _Xray.enterCommandStartedPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
@@ -106,7 +107,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     @Override
     public void complete(final @NonNull Command command) {
 
-        val handle = _Xray.enterCommandCompletedPublishing(
+        var handle = _Xray.enterCommandCompletedPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,

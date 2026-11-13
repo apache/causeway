@@ -20,27 +20,36 @@ package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
 import java.util.Optional;
 
-import jakarta.persistence.Column;
-
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-public class MinFractionalDigitsFacetFromJpaColumnAnnotation
-extends MinFractionalDigitsFacetAbstract {
+import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-     public static Optional<MinFractionalDigitsFacet> create(
-             final Optional<Column> columnIfAny,
-             final FacetHolder holder) {
+final class MinFractionalDigitsFacetFromJpaColumnAnnotation
+extends FacetAbstract
+implements MinFractionalDigitsFacet {
 
-         return columnIfAny
-         .filter(column->column.scale()>=0)
-         .map(column-> new MinFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
+    static Optional<MinFractionalDigitsFacet> create(
+            final Optional<Column> columnOpt,
+            final FacetHolder holder) {
+        return columnOpt
+            .filter(column->column.scale()>=0)
+            .map(column-> new MinFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
     }
+
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int minFractionalDigits;
 
     private MinFractionalDigitsFacetFromJpaColumnAnnotation(
-            final int scale, final FacetHolder holder) {
-        super(scale, holder);
+            final int minFractionalDigits,
+            final FacetHolder facetHolder) {
+    	super(MinFractionalDigitsFacet.class, facetHolder);
+    	this.minFractionalDigits = minFractionalDigits;
     }
+
+    @Override public Precedence precedence() { return Precedence.LOW; } // LOW so can be overridden via @ValueSemantics
 
 }

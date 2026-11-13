@@ -23,32 +23,28 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.testdomain.wrapperfactory.Counter;
 import org.apache.causeway.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
-/**
- * Run "sh enhance.sh -w" first, to enhance the test JDO entities.
- */
 class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstract {
 
     @Inject WrapperFactory wrapperFactory;
@@ -57,7 +53,6 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
 
     Bookmark bookmark;
 
-    @BeforeEach
     void setup_counter() {
 
         runWithNewTransaction(() -> {
@@ -71,7 +66,7 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         // given
         assertThat(bookmark).isNotNull();
 
-        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+        var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
         assertThat(counter.getNum()).isNull();
     }
 
@@ -80,45 +75,62 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
     @MethodSource("executorServices")
     void async_using_default_executor_service(final String displayName, final ExecutorService executorService) {
 
+        setup_counter();
+
+        final AtomicReference<AsyncProxy<Counter>> asyncProxyUnderTest1 = new AtomicReference<>();
+        final AtomicReference<AsyncProxy<Counter_bumpUsingMixin>> asyncProxyUnderTest2 = new AtomicReference<>();
+
         // when - executing regular action
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            val asyncControl = AsyncControl.returning(Counter.class)
+            var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
-            wrapperFactory.asyncWrap(counter, asyncControl).increment();
-
-            // let's wait max 5 sec to allow executor to complete before continuing
-            asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
-            assertTrue(asyncControl.getFuture().isDone()); // verify execution finished
+            // store the async proxy for later use below
+            asyncProxyUnderTest1.set(wrapperFactory.asyncWrap(counter, asyncControl));
         });
+
+        // execute async and wait till done
+        {
+            asyncProxyUnderTest1.get()
+                .applyAsync(Counter::increment)
+                // let's wait max 5 sec to allow executor to complete before continuing
+                .tryGet(5, TimeUnit.SECONDS);
+        }
 
         // then
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
         });
 
         // when - executing mixed-in action
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
 
-            val asyncControl = AsyncControl.returning(Counter.class)
+            var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
-            // when
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl).act();
-
-            // let's wait max 5 sec to allow executor to complete before continuing
-            asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
-            assertTrue(asyncControl.getFuture().isDone()); // verify execution finished
+            // store the async proxy for later use below
+            asyncProxyUnderTest2.set(wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl));
         });
+
+        // execute async and wait till done
+        {
+            // returns the detached counter entity, so we can immediately check whether the action was executed
+            var counter = asyncProxyUnderTest2.get()
+                    .applyAsync(Counter_bumpUsingMixin::act)
+                    // let's wait max 5 sec to allow executor to complete before continuing
+                    .tryGet(5, TimeUnit.SECONDS)
+                    .valueAsNonNullElseFail();
+            assertThat(counter.getNum()).isEqualTo(2L);
+        }
 
         // then
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter).isNotNull();
             assertThat(counter.getNum()).isEqualTo(2L);
         });

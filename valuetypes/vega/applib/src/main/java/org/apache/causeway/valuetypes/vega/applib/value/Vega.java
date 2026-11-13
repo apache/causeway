@@ -25,16 +25,15 @@ import java.util.Objects;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.jaxb.VegaJaxbAdapter;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -47,17 +46,14 @@ import lombok.experimental.Accessors;
  */
 @Named(CausewayModuleValVegaApplib.NAMESPACE + ".Vega")
 @org.apache.causeway.applib.annotation.Value
-@EqualsAndHashCode
 @XmlJavaTypeAdapter(VegaJaxbAdapter.class)  // for JAXB view model support
-public final class Vega implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public record Vega(Schema schema, String json) implements Serializable {
 
     @RequiredArgsConstructor
     public static enum Schema {
         NONE(null),
-        VEGA("https://vega.github.io/schema/vega/v5.json"),
-        VEGA_LITE("https://vega.github.io/schema/vega-lite/v5.json");
+        VEGA("https://vega.github.io/schema/vega/v6.json"),
+        VEGA_LITE("https://vega.github.io/schema/vega-lite/v6.json");
 
         public boolean isNone() {return this==NONE;}
         public boolean isVega() {return this==VEGA;}
@@ -78,9 +74,8 @@ public final class Vega implements Serializable {
             .map(map->map.get(key()))
             .map(schemaValue->{
                 for(var schema:Schema.values()) {
-                    if(schemaValue.equals(schema.value())) {
-                        return schema;
-                    }
+                    if(schemaValue.equals(schema.value()))
+						return schema;
                 }
                 return null;
             })
@@ -92,22 +87,18 @@ public final class Vega implements Serializable {
         return new Vega(Schema.valueOfJson(json), json);
     }
 
-    @Getter private final Schema schema;
-    @Getter private final String json;
-
     public Vega() {
         this(Schema.NONE, null);
     }
 
-    public Vega(final @NonNull Schema schema, final @Nullable String json) {
-        this.schema = schema;
-        this.json = _Strings.isNotEmpty(json)
-                ? json
-                : schema.asEmptyJson();
+    public Vega {
+        schema = Objects.requireNonNull(schema);
+        json = _Hardening.toSafeJson(json) // disallow unsafe Vega instances
+    		.orElseGet(schema::asEmptyJson);
     }
 
     public boolean isEqualTo(final Vega other) {
-        return Objects.equals(this.getJson(), other!=null ? other.getJson() : null);
+        return Objects.equals(this.json(), other!=null ? other.json() : null);
     }
 
     @Override
@@ -115,6 +106,24 @@ public final class Vega implements Serializable {
         return String.format("Vega[schema=%s,length=%d]",
                 schema.name(),
                 json.length());
+    }
+
+    // -- DEPRECATIONS
+
+    /**
+     * @deprecated use {@link #schema()} instead.
+     */
+    @Deprecated
+    public Schema getSchema() {
+    	return schema();
+    }
+
+    /**
+     * @deprecated use {@link #json()} instead.
+     */
+    @Deprecated
+    public String getJson() {
+    	return json();
     }
 
 }

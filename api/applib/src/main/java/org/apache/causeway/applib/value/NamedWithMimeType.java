@@ -25,41 +25,39 @@ import java.util.stream.Stream;
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
-import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * @since 1.x {@index}
  */
-public interface NamedWithMimeType
+public sealed interface NamedWithMimeType
 extends
     Serializable,
-    Comparable<NamedWithMimeType> {
+    Comparable<NamedWithMimeType>
+permits Blob, Clob {
 
-    String getName();
-
-    MimeType getMimeType();
+    String name();
+    MimeType mimeType();
 
     @Override
     default int compareTo(final NamedWithMimeType o) {
         int c = _Strings.compareNullsFirst(
-                this.getName(),
+                this.name(),
                 o!=null
-                    ? o.getName()
+                    ? o.name()
                     : null);
-        if(c!=0) {
-            return c;
-        }
+        if(c!=0) return c;
 
         return _Strings.compareNullsFirst(
-                this.getMimeType().getBaseType(),
+                this.mimeType().getBaseType(),
                 o!=null
-                    ? o.getMimeType().getBaseType()
+                    ? o.mimeType().getBaseType()
                     : null);
     }
 
@@ -68,7 +66,7 @@ extends
      *
      * @since 2.0
      */
-    public static enum CommonMimeType {
+    public enum CommonMimeType {
 
         // see
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
@@ -136,7 +134,7 @@ extends
         XUL("application/vnd.mozilla.xul+xml"),
         YAML("text/vnd.yaml", "yaml", "yml"),
         ZIP("application/zip"),
-        _7Z("application/x-7z-compressed"),
+        _7Z("application/x-7z-compressed", "7z"),
 
         // see
         // https://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
@@ -185,11 +183,11 @@ extends
                         : Can.ofSingleton(name().toLowerCase()); // default
         }
 
-        @Getter final MimeType mimeType;
-        @Getter final Can<String> proposedFileExtensions;
+        @Getter @Accessors(fluent=true) final MimeType mimeType;
+        @Getter @Accessors(fluent=true) final Can<String> proposedFileExtensions;
 
-        public String getBaseType() {
-            return getMimeType().getBaseType();
+        public String baseType() {
+            return mimeType().getBaseType();
         }
 
         static MimeType newMimeType(final String primaryType, final String subtype) {
@@ -213,15 +211,24 @@ extends
         }
 
         /**
+         * Tries to match mimeType with any {@link CommonMimeType}.
+         */
+        public static Optional<CommonMimeType> valueOf(final @Nullable MimeType mimeType) {
+            if(mimeType==null) return Optional.empty();
+            return Stream.of(CommonMimeType.values())
+                    .filter(mime->mime.matches(mimeType))
+                    .findFirst();
+        }
+
+        /**
          * Tries to match fileExt with any {@link CommonMimeType}.
          */
         public static Optional<CommonMimeType> valueOfFileExtension(final @Nullable String fileExt) {
-            if(_Strings.isNullOrEmpty(fileExt)) {
-                return Optional.empty();
-            }
-            val fileExtLower = fileExt.toLowerCase();
+            if(_Strings.isNullOrEmpty(fileExt)) return Optional.empty();
+
+            var fileExtLower = fileExt.toLowerCase();
             return Stream.of(CommonMimeType.values())
-                    .filter(mime->mime.getProposedFileExtensions().contains(fileExtLower))
+                    .filter(mime->mime.proposedFileExtensions().contains(fileExtLower))
                     .findFirst();
         }
 
@@ -229,17 +236,14 @@ extends
          * Parses fileName for its extension and tries to match with any {@link CommonMimeType}.
          */
         public static Optional<CommonMimeType> valueOfFileName(final @Nullable String fileName) {
-            if(_Strings.isNullOrEmpty(fileName)) {
-                return Optional.empty();
-            }
+            if(_Strings.isNullOrEmpty(fileName)) return Optional.empty();
+
             final int p = fileName.lastIndexOf('.');
-            if(p<0) {
-                return Optional.empty();
-            }
+            if(p<0) return Optional.empty();
+
             final int beginIndex = p + 1;
-            if ((fileName.length() - beginIndex) < 0) {
-                return Optional.empty();
-            }
+            if ((fileName.length() - beginIndex) < 0) return Optional.empty();
+
             return valueOfFileExtension(fileName.substring(beginIndex));
         }
 

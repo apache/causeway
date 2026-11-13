@@ -34,7 +34,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.userreg.UserDetails;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -42,8 +42,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGro
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.UsernameAvailableValidator;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
-
-import lombok.val;
 
 /**
  * A panel with a form for self-registration of a user
@@ -96,13 +94,12 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
     protected abstract MarkupContainer newExtraFieldsContainer(String id);
 
-
     private IFormValidator newEqualPasswordInputValidator(
             final MarkupContainer password,
             final MarkupContainer confirmPassword) {
 
-        val passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
-        val confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
+        var passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
+        var confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
         return new EqualPasswordInputValidator(passwordField, confirmPasswordField);
     }
 
@@ -203,6 +200,5 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
         usernameFormGroup.add(username);
         return usernameFormGroup;
     }
-
 
 }

@@ -41,11 +41,9 @@ public class ProperPrefixedMember {
         return null;
     }
 
-
     // should be allowed
     @Property
     @Getter @Setter
     private String disableProperty;
-
 
 }

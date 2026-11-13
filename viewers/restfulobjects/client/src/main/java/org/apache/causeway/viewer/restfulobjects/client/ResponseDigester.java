@@ -25,9 +25,7 @@ import java.util.Optional;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -37,7 +35,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
+
+import tools.jackson.databind.ObjectMapper;
 
 interface ResponseDigester {
 
@@ -84,8 +83,8 @@ interface ResponseDigester {
         public <T> T readSingle(final Class<T> entityType, final Response response) {
             if(reprType.isValue()
                     || reprType.isValues()) {
-                val jsonInput = response.readEntity(String.class);
-                val scalarValueDto = JsonUtils.tryRead(ScalarValueDtoV2.class, jsonInput)
+                var jsonInput = response.readEntity(String.class);
+                var scalarValueDto = JsonUtils.tryRead(ScalarValueDtoV2.class, jsonInput)
                         .valueAsNonNullElseFail();
                 return scalarValueDto.getValueAs(entityType);
             }
@@ -101,15 +100,15 @@ interface ResponseDigester {
         public <T> List<T> readList(final Class<T> entityType, final GenericType<List<T>> genericType, final Response response) {
             if(reprType.isValues()
                     || reprType.isValue()) {
-                val jsonInput = response.readEntity(String.class);
-                val mapper = new ObjectMapper();
+                var jsonInput = response.readEntity(String.class);
+                var mapper = new ObjectMapper();
                 final List<ScalarValueDtoV2> scalarValueDtoList =
                         mapper.readValue(
                                 jsonInput,
                                 mapper.getTypeFactory().constructCollectionType(List.class, ScalarValueDtoV2.class));
 
                 final List<T> resultList = new ArrayList<>(scalarValueDtoList.size());
-                for(val valueBody : scalarValueDtoList) {
+                for(var valueBody : scalarValueDtoList) {
                     // explicit loop, for simpler exception propagation
                     resultList.add(valueBody.getValueAs(entityType));
                 }

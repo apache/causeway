@@ -30,6 +30,7 @@ import graphql.schema.GraphQLInputObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static graphql.schema.GraphQLTypeReference.typeRef;
 
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -46,7 +47,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
@@ -88,7 +88,7 @@ public class CommonDomainObject
 
         addChildFieldFor(this.meta = schemaStrategy.newMeta(this, context));
 
-        val inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification, getSchemaType()));
+        var inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification, getSchemaType()));
         inputObjectTypeBuilder
                 .field(newInputObjectField()
                         .name("id")
@@ -116,7 +116,7 @@ public class CommonDomainObject
 
         addMembers();
 
-        val objectType = buildObjectType();
+        var objectType = buildObjectType();
 
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
@@ -133,10 +133,10 @@ public class CommonDomainObject
     public GraphQLFieldDefinition newField() {
 
         // add domain object lookup to top-level query
-        val fieldName = String.format("%s%s%s",
-                graphqlConfiguration.getLookup().getFieldNamePrefix(),  // eg "_gqlv_lookup__"
+        var fieldName = String.format("%s%s%s",
+                graphqlConfiguration.lookup().fieldNamePrefix(),  // eg "_gqlv_lookup__"
                 TypeNames.objectTypeFieldNameFor(objectSpecification),
-                graphqlConfiguration.getLookup().getFieldNameSuffix());
+                graphqlConfiguration.lookup().fieldNameSuffix());
 
         return buildFieldDefinition(fieldName, gqlInputObjectType);
     }
@@ -145,18 +145,17 @@ public class CommonDomainObject
             final String fieldName,
             final GraphQLInputObjectType gqlInputObjectType
     ) {
-        val objectSpec = getObjectSpecification();
+        var objectSpec = getObjectSpecification();
 
         return newFieldDefinition()
                 .name(fieldName)
-                .type(this.context.typeMapper.outputTypeFor(objectSpec, getSchemaType()))
+                .type(typeRef(TypeNames.objectTypeNameFor(objectSpec, getSchemaType())))
                 .argument(GraphQLArgument.newArgument()
-                        .name(graphqlConfiguration.getLookup().getArgName())   // eg "object"
+                        .name(graphqlConfiguration.lookup().argName())   // eg "object"
                         .type(gqlInputObjectType)
                         .build())
                 .build();
     }
-
 
     private void addMembers() {
         objectSpecification.streamProperties(MixedIn.INCLUDED)
@@ -167,17 +166,16 @@ public class CommonDomainObject
                 .forEach(coll -> collections.add(addChildFieldFor(schemaStrategy.newCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .filter((this::inApiScope))
-                .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.getApiVariant(), act))
+                .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.apiVariant(), act))
                 .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
     }
 
     @SuppressWarnings("unused")
     private ActionScope determineActionScope() {
-        return context.causewaySystemEnvironment.getDeploymentType().isProduction()
+        return context.causewaySystemEnvironment.deploymentType().isProduction()
                 ? ActionScope.PRODUCTION
                 : ActionScope.PROTOTYPE;
     }
-
 
     @Override
     protected void addDataFetchersForChildren() {
@@ -197,10 +195,9 @@ public class CommonDomainObject
                 .orElse(null);
     }
 
-
     @Override
     public String toString() {
-        return objectSpecification.getLogicalTypeName();
+        return objectSpecification.logicalTypeName();
     }
 
 }

@@ -31,8 +31,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.dto.IBook;
 
-import lombok.val;
-
 /**
  * Simply acts as wrapper of a book entity.
  * <p>
@@ -63,9 +61,9 @@ public interface BookView<T extends IBook> {
     public default String getEntityState() {
         return Optional.ofNullable(getBook())
                 .map(book->{
-                    val spec = specLoader().specForTypeElseFail(getBook().getClass());
-                    val entityFacet = spec.entityFacetElseFail();
-                    val entityState = entityFacet.getEntityState(book);
+                    var spec = specLoader().specForTypeElseFail(getBook().getClass());
+                    var entityFacet = spec.entityFacetElseFail();
+                    var entityState = entityFacet.getEntityState(book);
                     return entityState.name();
                 })
                 .orElse("no book referenced");

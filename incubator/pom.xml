@@ -23,10 +23,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-parent</artifactId>
+		<version>${revision}</version>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.incubator</groupId>
@@ -40,8 +40,6 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.incubator</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/incubator</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -129,8 +127,6 @@
                         <exclude>**/*.ucls</exclude>
                         <exclude>**/*.puml</exclude>
 
-                        <exclude>**/datanucleus.log</exclude>
-
                         <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                         <exclude>**/bootstrap-datetimepicker.css</exclude>
 
@@ -204,18 +200,18 @@
 			<dependency>
 				<groupId>org.apache.causeway.incubator.extensions</groupId>
 				<artifactId>causeway-extensions-commandreplay</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>${project.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.incubator.extensions</groupId>
 				<artifactId>causeway-extensions-commandreplay-primary</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.incubator.extensions</groupId>
 				<artifactId>causeway-extensions-commandreplay-secondary</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>${project.version}</version>
 			</dependency>
 
 			<!-- TESTING -->
@@ -223,7 +219,7 @@
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures-applib</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>${project.version}</version>
 			</dependency>
 
 		</dependencies>

@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an property, collection or action is to be called
+ * Indicates that a property, collection or action is to be called
  * programmatically and should be ignored from the metamodel.
  *
  * <p>

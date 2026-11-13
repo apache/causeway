@@ -50,7 +50,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 @Entity
 @Table(
@@ -62,7 +61,6 @@ import lombok.val;
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
 @DomainObjectLayout(describedAs = "University department specializing in a field of study")
 public class Department implements Comparable<Department> {
-
 
     public Department(String name, DeptHead deptHead) {
         this.name = name;
@@ -95,8 +93,6 @@ public class Department implements Comparable<Department> {
         }
     }
 
-
-
     @Getter @Setter
     @Property(editing = Editing.ENABLED) // yes, I know: this duplicates the functionality of changeDeptHead action
     @OneToOne(optional = true)
@@ -110,7 +106,6 @@ public class Department implements Comparable<Department> {
                 .filter(x -> x != getDeptHead())
                 .collect(Collectors.toList());
     }
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "deptHead")
@@ -130,7 +125,6 @@ public class Department implements Comparable<Department> {
         }
     }
 
-
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
 
@@ -145,7 +139,7 @@ public class Department implements Comparable<Department> {
     public class addStaffMember {
 
         public Department act(StaffMember staffMember) {
-            val department = Department.this;
+            var department = Department.this;
 
             department.staffMembers.add(staffMember);
             staffMember.setDepartment(department);
@@ -158,7 +152,7 @@ public class Department implements Comparable<Department> {
     public class addStaffMembers {
 
         public Department act(List<StaffMember> staffMembers) {
-            val department = Department.this;
+            var department = Department.this;
 
             staffMembers.forEach(sm -> sm.setDepartment(department));
             department.staffMembers.addAll(staffMembers);
@@ -166,7 +160,7 @@ public class Department implements Comparable<Department> {
             return department;
         }
         public List<StaffMember> choices0Act() {
-            val choices = new ArrayList<>(staffMemberRepository.findAll());
+            var choices = new ArrayList<>(staffMemberRepository.findAll());
             choices.removeAll(getStaffMembers());
             return choices;
         }
@@ -175,21 +169,20 @@ public class Department implements Comparable<Department> {
         StaffMemberRepository staffMemberRepository;
     }
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "staffMembers")
     @RequiredArgsConstructor
     public class removeStaffMember {
 
         public Department act(StaffMember staffMember) {
-            val department = Department.this;
+            var department = Department.this;
 
             department.getStaffMembers().add(staffMember);
             staffMember.setDepartment(department);
             return department;
         }
         public List<StaffMember> choices0Act() {
-            val department = Department.this;
+            var department = Department.this;
             return department.getStaffMembers()
                         .stream()
                         .sorted(Comparator.comparing(StaffMember::getName))

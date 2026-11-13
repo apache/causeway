@@ -38,10 +38,8 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.errors.JGrowlUtil;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
-
-import lombok.val;
 
 public class BreadcrumbPanel
 extends PanelAbstract<Void, IModel<Void>> {
@@ -60,10 +58,9 @@ extends PanelAbstract<Void, IModel<Void>> {
 
         final BreadcrumbModel breadcrumbModel = _Casts.castTo(BreadcrumbModelProvider.class, getSession())
                 .map(BreadcrumbModelProvider::getBreadcrumbModel)
-                .orElseGet(()->new BreadcrumbModel()); // for testing
+                .orElseGet(BreadcrumbModel::new); // for testing
 
-        final IModel<UiObjectWkt> entityModel = new Model<>();
-        ChoiceProvider<UiObjectWkt> choiceProvider = new ChoiceProvider<UiObjectWkt>() {
+        var choiceProvider = new ChoiceProvider<UiObjectWkt>() {
 
             private static final long serialVersionUID = 1L;
 
@@ -113,7 +110,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
         };
         final Select2Choice<UiObjectWkt> breadcrumbChoice =
-                new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
+                new Select2Choice<>(ID_BREADCRUMBS, new Model<>(), choiceProvider);
 
         breadcrumbChoice.add(
                 new AjaxFormComponentUpdatingBehavior("change"){
@@ -125,7 +122,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final UiObjectWkt selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            val configuration = getMetaModelContext().getConfiguration();
+                            var configuration = getMetaModelContext().getConfiguration();
 
                             getMetaModelContext().getMessageBroker()
                             .ifPresent(messageBroker->{
@@ -136,7 +133,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                             breadcrumbModel.remove(oidStr);
                             return;
                         }
-                        setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
+                        setResponsePage(DomainObjectPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
                     private MetaModelContext getMetaModelContext() {
@@ -156,7 +153,7 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
+        boolean shouldShow = getWicketViewerSettings().bookmarkedPages().showDropDownOnFooter();
         setVisible(shouldShow);
     }
 

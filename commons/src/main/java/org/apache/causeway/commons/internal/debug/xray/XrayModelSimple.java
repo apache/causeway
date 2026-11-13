@@ -21,22 +21,22 @@ package org.apache.causeway.commons.internal.debug.xray;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.jspecify.annotations.NonNull;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+record XrayModelSimple(
+        MutableTreeNode rootNode,
+        Map<String, MutableTreeNode> nodesById,
+        Map<String, Stack<MutableTreeNode>> nodeStacksById) implements XrayModel {
 
-@RequiredArgsConstructor
-final class XrayModelSimple implements XrayModel {
-
-    @Getter(onMethod_ = {@Override})
-    private final MutableTreeNode rootNode;
+    XrayModelSimple(
+            final MutableTreeNode rootNode){
+        this(rootNode, new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
+    }
 
     @Override
     public MutableTreeNode addContainerNode(
@@ -44,7 +44,7 @@ final class XrayModelSimple implements XrayModel {
             final @NonNull String name,
             final @NonNull String id,
             final @NonNull Stickiness stickiness) {
-        val newNode = new DefaultMutableTreeNode();
+        var newNode = new DefaultMutableTreeNode();
         newNode.setUserObject(new HasIdAndLabel() {
             @Override public String getId() { return id; }
             @Override public String getLabel() { return name; }
@@ -59,14 +59,12 @@ final class XrayModelSimple implements XrayModel {
     public <T extends XrayDataModel> T addDataNode(
             final @NonNull MutableTreeNode parent,
             final @NonNull T dataModel) {
-        val newNode = new DefaultMutableTreeNode();
+        var newNode = new DefaultMutableTreeNode();
         newNode.setUserObject(dataModel);
         ((DefaultMutableTreeNode)parent).add(newNode);
         nodesById.put(dataModel.getId(), newNode);
         return dataModel;
     }
-
-    private final Map<String, MutableTreeNode> nodesById = _Maps.newConcurrentHashMap();
 
     @Override
     public Optional<MutableTreeNode> lookupNode(final String id) {
@@ -75,17 +73,13 @@ final class XrayModelSimple implements XrayModel {
 
     @Override
     public void remove(final MutableTreeNode node) {
-        val hasId = (HasIdAndLabel) ((DefaultMutableTreeNode)node).getUserObject();
+        var hasId = (HasIdAndLabel) ((DefaultMutableTreeNode)node).getUserObject();
         nodesById.remove(hasId.getId());
     }
-
-    private final Map<String, Stack<MutableTreeNode>> nodeStacksById = _Maps.newConcurrentHashMap();
 
     @Override
     public Stack<MutableTreeNode> getNodeStack(final String id) {
         return nodeStacksById.computeIfAbsent(id, __->new Stack<MutableTreeNode>());
     }
-
-
 
 }

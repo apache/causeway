@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
@@ -35,7 +34,6 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Same as {@link org.apache.causeway.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String)},
@@ -55,7 +53,6 @@ import lombok.val;
         describedAs = "Switch to another user account with specified roles (for prototype/testing only)",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.2"
 )
 //mixin's don't need a logicalTypeName
@@ -89,7 +86,7 @@ public class Object_impersonateWithRoles {
 
     @MemberSupport public String default0Act() {
         if (holder instanceof HasUsername) {
-            val username = ((HasUsername) holder).getUsername();
+            var username = ((HasUsername) holder).getUsername();
             if (choices0Act().contains(username)) {
                 return username;
             }

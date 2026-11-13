@@ -36,8 +36,7 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides supporting functionality for querying {@link SessionLogEntry session log entry} entities.
@@ -53,20 +52,22 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
 
     private final Class<E> sessionLogEntryClass;
 
-    protected SessionLogEntryRepositoryAbstract(@NonNull Class<E> sessionLogEntryClass) {
+    protected SessionLogEntryRepositoryAbstract(@NonNull final Class<E> sessionLogEntryClass) {
         this.sessionLogEntryClass = sessionLogEntryClass;
     }
 
+    @Override
     public void logoutAllSessions(final Timestamp logoutTimestamp) {
-        val allSessions = repositoryService.allMatches(
+        var allSessions = repositoryService.allMatches(
                 Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_ACTIVE_SESSIONS));
-        for (val activeEntry : allSessions) {
+        for (var activeEntry : allSessions) {
             activeEntry.setCausedBy(SessionSubscriber.CausedBy.RESTART);
             activeEntry.setLogoutTimestamp(logoutTimestamp);
         }
         transactionService.flushTransaction();
     }
 
+    @Override
     public SessionLogEntry create(
             final String username,
             final UUID sessionGuid,
@@ -82,7 +83,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         return repositoryService.persistAndFlush(entry);
     }
 
-
+    @Override
     public Optional<SessionLogEntry> findBySessionGuid(final UUID sessionGuid) {
         return _Casts.uncheckedCast(
                 repositoryService.firstMatch(
@@ -91,7 +92,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
+    @Override
     public Optional<SessionLogEntry> findByHttpSessionId(final String httpSessionId) {
         return _Casts.uncheckedCast(
                 repositoryService.firstMatch(
@@ -100,7 +101,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
+    @Override
     public List<SessionLogEntry> findByUsername(final String username) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -109,13 +110,13 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
+    @Override
     public List<SessionLogEntry> findByUsernameAndFromAndTo(
             final String username,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -142,12 +143,12 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
-
+    @Override
     public List<SessionLogEntry> findByFromAndTo(
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -170,7 +171,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
-
+    @Override
     public List<SessionLogEntry> findByUsernameAndStrictlyBefore(
             final String username,
             final Timestamp from) {
@@ -183,7 +184,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
+    @Override
     public List<SessionLogEntry> findByUsernameAndStrictlyAfter(
             final String username,
             final Timestamp from) {
@@ -195,8 +196,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
-
+    @Override
     public List<SessionLogEntry> findActiveSessions() {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -204,8 +204,7 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
-
+    @Override
     public List<SessionLogEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -222,12 +221,12 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
                 : null;
     }
 
-
     /**
      * for testing purposes only
      */
+    @Override
     public List<SessionLogEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         return _Casts.uncheckedCast(repositoryService.allInstances(sessionLogEntryClass));
@@ -236,8 +235,9 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
     /**
      * for testing purposes only
      */
+    @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         repositoryService.removeAll(sessionLogEntryClass);

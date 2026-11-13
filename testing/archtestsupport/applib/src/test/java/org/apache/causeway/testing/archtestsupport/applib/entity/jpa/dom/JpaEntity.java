@@ -20,6 +20,11 @@ package org.apache.causeway.testing.archtestsupport.applib.entity.jpa.dom;
 
 import java.util.Comparator;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import jakarta.inject.Inject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,12 +35,6 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -56,7 +55,8 @@ public class JpaEntity implements Comparable<JpaEntity> {
     @Version
     private Long version;
 
-    private String name;
+    @SuppressWarnings("unused")
+	private String name;
 
     @Override public int compareTo(final JpaEntity o) {
         return Comparator.<JpaEntity,Long>comparing(x -> x.id).compare(this,o);

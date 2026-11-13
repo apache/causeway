@@ -45,5 +45,4 @@ public interface UserMementoProvider {
 
     UserMemento userMemento(ExecutionContext executionContext, ExecutionStrategyParameters parameters);
 
-
 }

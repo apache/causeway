@@ -18,16 +18,18 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback;
 
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+public record SelectedRange(
+	LocalDateTime start,
+	LocalDateTime end,
+	boolean allDay) {
 
-@Getter @Setter @AllArgsConstructor
-public class SelectedRange {
-	private DateTime start;
-	private DateTime end;
-	private boolean allDay;
-
+    SelectedRange(final long startEpochMillis, final long endEpochMillis, final boolean allDay) {
+        this(
+            LocalDateTime.ofEpochSecond(startEpochMillis/1000, 0, ZoneOffset.UTC),
+            LocalDateTime.ofEpochSecond(endEpochMillis/1000, 0, ZoneOffset.UTC),
+            allDay);
+    }
 }

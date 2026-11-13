@@ -20,44 +20,46 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
-import lombok.NonNull;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class LayoutGroupFacetForLayoutXml
-extends LayoutGroupFacetAbstract {
+extends LayoutGroupFacetAbstract
+implements QualifiedFacet {
 
     // -- FACTORIES
 
     public static Optional<LayoutGroupFacetForLayoutXml> create(
             final @Nullable GroupIdAndName groupIdAndName,
             final @NonNull  FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(groupIdAndName)
-                .map(gIdAndName->new LayoutGroupFacetForLayoutXml(gIdAndName, holder, precedence));
+                .map(gIdAndName->new LayoutGroupFacetForLayoutXml(gIdAndName, holder) {
+                	@Override final public Precedence precedence() { return precedence; }
+                	@Override final public @Nullable String qualifier() { return qualifier; }
+                });
     }
 
     public static Optional<LayoutGroupFacetForLayoutXml> create(
             final @NonNull FieldSet fieldSet,
             final @NonNull FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return GroupIdAndName
                 .forFieldSet(fieldSet)
-                .flatMap(groupIdAndName->create(groupIdAndName, holder, precedence));
+                .flatMap(groupIdAndName->create(groupIdAndName, holder, precedence, qualifier));
     }
 
-    // -- IMPLEMENTATION
+    // --
 
     private LayoutGroupFacetForLayoutXml(
             final GroupIdAndName groupIdAndName,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(groupIdAndName, holder, precedence);
+            final FacetHolder holder) {
+        super(groupIdAndName, holder);
     }
 
     @Override

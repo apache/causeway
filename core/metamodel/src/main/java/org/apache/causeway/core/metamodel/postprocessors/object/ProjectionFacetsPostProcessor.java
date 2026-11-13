@@ -18,13 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.object;
 
-import jakarta.inject.Inject;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
@@ -34,8 +29,9 @@ import org.apache.causeway.core.metamodel.facets.object.projection.ident.TitleFa
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.Nullable;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class ProjectionFacetsPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -47,34 +43,30 @@ extends MetaModelPostProcessorAbstract {
 
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
+        ProjectionFacetFromProjectingProperty.create(objectSpecification)
+	        .ifPresent(projectionFacet->{
 
-        FacetUtil.addFacetIfPresent(
-                ProjectionFacetFromProjectingProperty.create(objectSpecification))
-        .ifPresent(projectionFacet->{
-
-            val titleFacet = objectSpecification.getFacet(TitleFacet.class);
-            if(canOverwrite(titleFacet)) {
-                FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
-            }
-            val iconFacet = objectSpecification.getFacet(IconFacet.class);
-            if(canOverwrite(iconFacet)) {
-                FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
-            }
-            val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
-            if(canOverwrite(cssClassFacet)) {
-                FacetUtil.addFacet(new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification));
-            }
-
-        });
-
+	            var titleFacet = objectSpecification.lookupFacet(TitleFacet.class).orElse(null);
+	            if(canOverwrite(titleFacet)) {
+	                new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification);
+	            }
+	            var iconFacet = objectSpecification.lookupFacet(IconFacet.class).orElse(null);
+	            if(canOverwrite(iconFacet)) {
+	                new IconFacetFromProjectionFacet(projectionFacet, objectSpecification);
+	            }
+	            var cssClassFacet = objectSpecification.lookupFacet(CssClassFacet.class).orElse(null);
+	            if(canOverwrite(cssClassFacet)) {
+	                new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification);
+	            }
+	        });
     }
 
     // -- HELPER
 
     private static boolean canOverwrite(final @Nullable Facet existingFacet) {
         return existingFacet == null
-                || existingFacet.getPrecedence().isFallback()
-                || existingFacet.getPrecedence().isInferred();
+                || existingFacet.precedence().isFallback()
+                || existingFacet.precedence().isInferred();
     }
 
 }

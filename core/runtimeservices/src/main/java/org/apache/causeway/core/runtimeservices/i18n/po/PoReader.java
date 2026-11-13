@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.core.runtimeservices.i18n.po;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,21 +33,18 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class PoReader extends PoAbstract {
 
     public static final String DASH = "-";
     public static final String UNDERSCORE = "_";
 
-    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = _Maps.newHashMap();
-    private final Map<Locale, Boolean> usesFallbackByLocale = _Maps.newHashMap();
+    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = new HashMap<>();
+    private final Map<Locale, Boolean> usesFallbackByLocale = new HashMap<>();
 
     /**
      * The basename of the translations file, hard-coded to <tt>translations</tt>.
@@ -91,10 +90,9 @@ class PoReader extends PoAbstract {
 
     @Override
     public String translate(final TranslationContext context, final String msgId) {
-        if(translationsResolver == null) {
-            // already logged as WARN (in constructor) if null.
+        if(translationsResolver == null)
+			// already logged as WARN (in constructor) if null.
             return msgId;
-        }
         return translate(context, msgId, ContextAndMsgId.Type.REGULAR);
     }
 
@@ -126,31 +124,27 @@ class PoReader extends PoAbstract {
         try {
             targetLocale = languageProvider.getPreferredLanguage()
                     .orElse(null);
-            if(targetLocale == null) {
-                // eg if request from RO viewer and the (default) LocaleProviderWicket is being used.
+            if(targetLocale == null)
+				// eg if request from RO viewer and the (default) LocaleProviderWicket is being used.
                 return msgId;
-            }
         } catch(final RuntimeException ex){
             logInfoIfNotPreviously("Failed to obtain locale, returning the original msgId");
             return msgId;
         }
-
 
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         // search for translation with a context
         final ContextAndMsgId key = new ContextAndMsgId(context.getName(), msgId, type);
         final String translation = lookupTranslation(translationsByKey, key);
-        if (!_Strings.isNullOrEmpty(translation)) {
-            return translation;
-        }
+        if (!_Strings.isNullOrEmpty(translation))
+			return translation;
 
         // else search for translation without a context
         final ContextAndMsgId keyNoContext = new ContextAndMsgId("", msgId, type);
         final String translationNoContext = lookupTranslation(translationsByKey, keyNoContext);
-        if (!_Strings.isNullOrEmpty(translationNoContext)) {
-            return translationNoContext;
-        }
+        if (!_Strings.isNullOrEmpty(translationNoContext))
+			return translationNoContext;
 
         // to avoid chattiness in the log, we only log if there are ANY translations at all for the target locale.
         // the algorithm for searching for translations looks for:
@@ -166,7 +160,6 @@ class PoReader extends PoAbstract {
         return msgId;
     }
 
-
     private String lookupTranslation(final Map<ContextAndMsgId, String> translationsByKey, final ContextAndMsgId key) {
         final String s = translationsByKey.get(key);
         return s != null? s.trim(): null;
@@ -174,17 +167,15 @@ class PoReader extends PoAbstract {
 
     private Map<ContextAndMsgId, String> readAndCacheTranslationsIfRequired(final Locale locale) {
         Map<ContextAndMsgId, String> translationsByKey = translationByKeyByLocale.get(locale);
-        if(translationsByKey != null) {
-            return translationsByKey;
-        }
+        if(translationsByKey != null)
+			return translationsByKey;
 
-        translationsByKey = _Maps.newHashMap();
+        translationsByKey = new HashMap<>();
         read(locale, translationsByKey);
         translationByKeyByLocale.put(locale, translationsByKey);
 
         return translationsByKey;
     }
-
 
     /**
      * @param locale - the .po file to load
@@ -217,7 +208,7 @@ class PoReader extends PoAbstract {
         final String country = locale.getCountry().toUpperCase(Locale.ROOT);
         final String language = locale.getLanguage().toLowerCase(Locale.ROOT);
 
-        final List<String> candidates = _Lists.newArrayList();
+        final List<String> candidates = new ArrayList<>();
         if(!_Strings.isNullOrEmpty(language)) {
             if(!_Strings.isNullOrEmpty(country)) {
                 candidates.add(basename + DASH       + language + UNDERSCORE + country+ ".po");
@@ -230,10 +221,9 @@ class PoReader extends PoAbstract {
         }
 
         for (final String candidate : candidates) {
-            val lines = readUrl(candidate);
-            if(!lines.isEmpty()) {
-                return lines;
-            }
+            var lines = readUrl(candidate);
+            if(!lines.isEmpty())
+				return lines;
         }
         return null;
     }
@@ -245,7 +235,6 @@ class PoReader extends PoAbstract {
                 .collect(Collectors.toList());
     }
 
-
     // to avoid flooding the logs
     private void logInfoIfNotPreviously(final String infoMessage) {
         if(!loggedInfoMessages.contains(infoMessage)) {
@@ -255,6 +244,5 @@ class PoReader extends PoAbstract {
     }
 
     private final Set<String> loggedInfoMessages = _Sets.newConcurrentHashSet();
-
 
 }

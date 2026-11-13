@@ -23,30 +23,37 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.Nullable;
 
 public class HiddenFacetForPropertyLayoutXml
-extends HiddenFacetAbstract {
+extends HiddenFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<HiddenFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if (propertyLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if (propertyLayout == null)
             return Optional.empty();
-        }
         final Where where = propertyLayout.getHidden();
         return where != null
                 && where != Where.NOT_SPECIFIED
-                        ? Optional.of(new HiddenFacetForPropertyLayoutXml(where, holder, precedence))
-                        : Optional.empty();
+            ? Optional.of(new HiddenFacetForPropertyLayoutXml(where, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
     private HiddenFacetForPropertyLayoutXml(
-            final Where where, final FacetHolder holder, final Precedence precedence) {
-        super(where, holder, precedence);
+            final Where where,
+            final FacetHolder holder) {
+        super(where, holder);
     }
 
     @Override
@@ -56,10 +63,9 @@ extends HiddenFacetAbstract {
 
     @Override
     public String hiddenReason(final ManagedObject targetAdapter, final Where whereContext) {
-        if(!where().includes(whereContext)) {
+        if(!where().includes(whereContext))
             return null;
-        }
-        return "Hidden on " + where().getFriendlyName();
+        return "Hidden where " + where().getFriendlyName();
     }
 
 }

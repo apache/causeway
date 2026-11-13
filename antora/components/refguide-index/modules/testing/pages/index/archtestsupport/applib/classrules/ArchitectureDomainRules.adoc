@@ -88,12 +88,12 @@ This rule requires that classes named `XxxController` should also be annotated w
 <.> xref:#every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient_[every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()]
 +
 --
-This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
+This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _jakarta.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _jakarta.xml.bind.annotation.XmlTransient_ annotation.
 --
 <.> xref:#every_injected_field_of_serializable_view_model_must_be_transient_[every_injected_field_of_serializable_view_model_must_be_transient()]
 +
 --
-This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
+This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _jakarta.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _jakarta.xml.bind.annotation.XmlTransient_ annotation.
 --
 <.> xref:#every_finder_method_in_Repository_must_return_either_Collection_or_Optional_[every_finder_method_in_Repository_must_return_either_Collection_or_Optional()]
 +
@@ -177,14 +177,14 @@ The rationale is so that the pattern is easy to spot and to search for,
 [#every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient_]
 === every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()
 
-This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
+This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _jakarta.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _jakarta.xml.bind.annotation.XmlTransient_ annotation.
 
 The rationale here is that injected services are managed by the runtime and are not/cannot be serialized to XML.
 
 [#every_injected_field_of_serializable_view_model_must_be_transient_]
 === every_injected_field_of_serializable_view_model_must_be_transient()
 
-This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
+This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _jakarta.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _jakarta.xml.bind.annotation.XmlTransient_ annotation.
 
 The rationale here is that injected services are managed by the runtime and are not/cannot be serialized to XML.
 

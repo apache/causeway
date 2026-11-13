@@ -21,24 +21,24 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.boot.json.JsonParseException;
 
-import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapperUtil;
+
+import tools.jackson.databind.JsonNode;
 
 public class JsonFixture {
 
     private JsonFixture() {
     }
 
-    public static JsonNode readJson(final String resourceName) 
-            throws JsonParseException, JsonMappingException, IOException {
+    public static JsonNode readJson(final String resourceName)
+            throws JsonParseException, IOException {
 
-        String json = _Resources.loadAsString(JsonFixture.class, resourceName, StandardCharsets.UTF_8);
+        var json = _Strings.read(JsonFixture.class.getResourceAsStream(resourceName), StandardCharsets.UTF_8);
 
-        return JsonMapper.instance().read(json, JsonNode.class);
+        return JsonMapperUtil.instance().read(json, JsonNode.class);
     }
 
 }

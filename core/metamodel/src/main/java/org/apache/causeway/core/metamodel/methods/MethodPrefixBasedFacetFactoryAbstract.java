@@ -27,14 +27,12 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
@@ -66,9 +64,7 @@ implements MethodPrefixBasedFacetFactory {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
-            return;
-        }
+        if(orphanValidation == OrphanValidation.DONT_VALIDATE) return;
 
         programmingModel
         .addValidator(new MetaModelValidatorAbstract(getMetaModelContext(),
@@ -89,19 +85,16 @@ implements MethodPrefixBasedFacetFactory {
 
                 // ensure accepted actions do not have any of the reserved prefixes
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
+                .filter(objectAction -> !objectAction.isExplicitlyAnnotated()) // explicit annot. is always allowed, check next
                 .forEach(objectAction -> {
 
-                    if(((ObjectMemberAbstract)objectAction).isExplicitlyAnnotated()) {
-                        return; // thats always allowed, check next
-                    }
+                    var actionId = objectAction.getId();
 
-                    val actionId = objectAction.getId();
-
-                    for (val prefix : prefixes) {
+                    for (var prefix : prefixes) {
 
                         if (isPrefixed(actionId, prefix)) {
 
-                            val explanation =
+                            var explanation =
                                     objectAction.getParameterCount() > 0
                                             && (MemberSupportPrefix.HIDE.getMethodNamePrefixes().contains(prefix)
                                                     || MemberSupportPrefix.DISABLE.getMethodNamePrefixes().contains(prefix))
@@ -110,7 +103,7 @@ implements MethodPrefixBasedFacetFactory {
                                                 + "' config property)"
                                             : "";
 
-                            val messageFormat = "%s#%s: has prefix %s, is probably intended as a supporting method "
+                            var messageFormat = "%s#%s: has prefix %s, is probably intended as a supporting method "
                                     + "for a property, collection or action%s.  If the method is intended to "
                                     + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
                                     + "completely using @Programmatic";
@@ -119,7 +112,7 @@ implements MethodPrefixBasedFacetFactory {
                                     spec,
                                     String.format(
                                             messageFormat,
-                                            spec.getFeatureIdentifier().getClassName(),
+                                            spec.getFeatureIdentifier().className(),
                                             actionId,
                                             prefix,
                                             explanation));
@@ -133,14 +126,14 @@ implements MethodPrefixBasedFacetFactory {
 
     protected boolean isPropertyOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
-                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
-                        && processMethodContext.getFeatureType().isProperty());
+                || (processMethodContext.featureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.featureType().isProperty());
     }
 
     protected boolean isCollectionOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
-                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
-                        && processMethodContext.getFeatureType().isCollection());
+                || (processMethodContext.featureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.featureType().isCollection());
     }
 
     // -- HELPER
@@ -148,7 +141,5 @@ implements MethodPrefixBasedFacetFactory {
     private static boolean isPrefixed(final String actionId, final String prefix) {
         return actionId.startsWith(prefix) && actionId.length() > prefix.length();
     }
-
-
 
 }

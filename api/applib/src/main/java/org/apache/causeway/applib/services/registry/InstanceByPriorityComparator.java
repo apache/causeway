@@ -27,8 +27,6 @@ import org.springframework.context.annotation.Primary;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.val;
-
 /**
  * A comparator that orders objects according to their {@link Priority} annotation.
  *
@@ -57,15 +55,15 @@ public class InstanceByPriorityComparator implements Comparator<Object> {
             return 1; // o1 earlier (higher) priority than o2
         }
 
-        val primaryAnnot1 = _Reflect.getAnnotation(o1.getClass(), Primary.class);
-        val primaryAnnot2 = _Reflect.getAnnotation(o2.getClass(), Primary.class);
+        var primaryAnnot1 = _Reflect.getAnnotation(o1.getClass(), Primary.class);
+        var primaryAnnot2 = _Reflect.getAnnotation(o2.getClass(), Primary.class);
         if(primaryAnnot1 != null && primaryAnnot2 == null) { return +1; }
         if(primaryAnnot1 == null && primaryAnnot2 != null) { return -1; }
 
-        val prioAnnot1 = _Reflect.getAnnotation(o1.getClass(), Priority.class);
-        val prioAnnot2 = _Reflect.getAnnotation(o2.getClass(), Priority.class);
-        val prio1 = prioAnnot1 != null ? prioAnnot1.value() : PriorityPrecedence.LAST;
-        val prio2 = prioAnnot2 != null ? prioAnnot2.value() : PriorityPrecedence.LAST;
+        var prioAnnot1 = _Reflect.getAnnotation(o1.getClass(), Priority.class);
+        var prioAnnot2 = _Reflect.getAnnotation(o2.getClass(), Priority.class);
+        var prio1 = prioAnnot1 != null ? prioAnnot1.value() : PriorityPrecedence.LAST;
+        var prio2 = prioAnnot2 != null ? prioAnnot2.value() : PriorityPrecedence.LAST;
         return Integer.compare(prio2, prio1);
     }
 

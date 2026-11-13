@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.members;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
@@ -31,10 +31,18 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
+import jakarta.inject.Inject;
+
 /**
  * Mixed-in members use the domain-event type as specified with the mixee type,
  * <pre>@DomainObject()</pre>
  * unless overwritten by the mixin type.
+ * <p>
+ * When a single mixin is contributed to more than one mixee type, the domain-event type must be resolved
+ * <i>per mixee</i>. Rather than mutate the domain-event facet shared on the mixin's faceted method (which would
+ * let the last-processed mixee win for all of them), this post-processor installs an object-type-specific overlay
+ * facet on each mixed-in member's local facet holder, and — for actions — a mixee-specific
+ * {@link ActionInvocationFacetForAction} so that execution posts the mixee's own event type.
  */
 public class SynthesizeDomainEventsForMixinPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -50,7 +58,7 @@ extends MetaModelPostProcessorAbstract {
             objectAction
                 .lookupFacet(ActionDomainEventFacet.class)
                 .ifPresentOrElse(
-                        facet->facet.initWithMixee(objectSpecification),
+                        facet->initActionWithMixee(objectSpecification, objectAction, facet),
                         ()->reportMissing(objectAction));
         }
     }
@@ -61,7 +69,7 @@ extends MetaModelPostProcessorAbstract {
             property
                 .lookupFacet(PropertyDomainEventFacet.class)
                 .ifPresentOrElse(
-                        facet->facet.initWithMixee(objectSpecification),
+                        facet->initPropertyWithMixee(objectSpecification, property, facet),
                         ()->reportMissing(property));
         }
     }
@@ -72,12 +80,59 @@ extends MetaModelPostProcessorAbstract {
             collection
                 .lookupFacet(CollectionDomainEventFacet.class)
                 .ifPresentOrElse(
-                        facet->facet.initWithMixee(objectSpecification),
+                        facet->initCollectionWithMixee(objectSpecification, collection, facet),
                         ()->reportMissing(collection));
         }
     }
 
     // -- HELPER
+
+    private void initActionWithMixee(
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction,
+            final ActionDomainEventFacet actionDomainEventFacet) {
+        if (!actionDomainEventFacet.getEventTypeOrigin().isDefault())
+			return; // skip if already set explicitly on the action or mixin type
+        ActionDomainEventFacet
+            .createObjectTypeSpecificForMixin(objectSpecification, objectAction.facetHolder())
+            .ifPresent(mixeeSpecificActionDomainEventFacet -> {
+                installMixeeSpecificActionInvocationFacet(objectAction, mixeeSpecificActionDomainEventFacet);
+            });
+    }
+
+    private void installMixeeSpecificActionInvocationFacet(
+            final ObjectAction objectAction,
+            final ActionDomainEventFacet mixeeSpecificActionDomainEventFacet) {
+        var actionInvocationFacet = objectAction.lookupFacet(ActionInvocationFacet.class).orElse(null);
+        if (!(actionInvocationFacet instanceof ActionInvocationFacetForAction actionInvocationFacetForAction))
+			return;
+        ActionInvocationFacetForAction.createObjectTypeSpecific(
+                mixeeSpecificActionDomainEventFacet,
+                actionInvocationFacetForAction.getMethods().getFirstElseFail(),
+                actionInvocationFacetForAction.getDeclaringType(),
+                actionInvocationFacetForAction.getReturnType(),
+                objectAction.facetHolder());
+    }
+
+    private void initPropertyWithMixee(
+            final ObjectSpecification objectSpecification,
+            final OneToOneAssociation property,
+            final PropertyDomainEventFacet propertyDomainEventFacet) {
+        if (!propertyDomainEventFacet.getEventTypeOrigin().isDefault())
+			return; // skip if already set explicitly on the property or mixin type
+        PropertyDomainEventFacet
+            .createObjectTypeSpecificForMixin(objectSpecification, property.facetHolder());
+    }
+
+    private void initCollectionWithMixee(
+            final ObjectSpecification objectSpecification,
+            final OneToManyAssociation collection,
+            final CollectionDomainEventFacet collectionDomainEventFacet) {
+        if (!collectionDomainEventFacet.getEventTypeOrigin().isDefault())
+			return; // skip if already set explicitly on the collection or mixin type
+        CollectionDomainEventFacet
+            .createObjectTypeSpecificForMixin(objectSpecification, collection.facetHolder());
+    }
 
     private void reportMissing(final ObjectAction act) {
         ValidationFailure.raiseFormatted(act,

@@ -22,50 +22,36 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
-import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.schema.common.v2.OidDto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 /**
  * String representation of any persistable or re-creatable object managed by the framework.
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@Named(Bookmark.LOGICAL_TYPE_NAME)
 @org.apache.causeway.applib.annotation.Value
 @XmlJavaTypeAdapter(Bookmark.JaxbToStringAdapter.class) // for JAXB view model support
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Bookmark implements Oid {
-
-    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".Bookmark";
-
-    private static final long serialVersionUID = 3L;
-
-    @Getter(onMethod_ = {@Override}) private final String logicalTypeName;
-    @Getter(onMethod_ = {@Override}) private final String identifier;
-    @Getter private final @Nullable String hintId;
-    private final int hashCode;
+public record Bookmark(
+    @NonNull String logicalTypeName, 
+    @Nullable String identifier, 
+    @Nullable String hintId,
+    int precalculatedHashCode) implements Oid {
 
     // -- FACTORIES
 
     public static Bookmark empty(
             final @NonNull LogicalType logicalType) {
-        return emptyForLogicalTypeName(logicalType.getLogicalTypeName());
+        return emptyForLogicalTypeName(logicalType.logicalName());
     }
 
     public static Bookmark emptyForLogicalTypeName(
@@ -89,7 +75,7 @@ public final class Bookmark implements Oid {
             final @NonNull LogicalType logicalType,
             final @NonNull String urlSafeIdentifier) {
         return Bookmark.forLogicalTypeNameAndIdentifier(
-                logicalType.getLogicalTypeName(),
+                logicalType.logicalName(),
                 urlSafeIdentifier);
     }
 
@@ -99,20 +85,19 @@ public final class Bookmark implements Oid {
                 oidDto.getId());
     }
 
-    public Bookmark withHintId(final @Nullable String hintId) {
-        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId);
-    }
-
     // -- CONSTRUCTOR
 
     private Bookmark(
             final String logicalTypeName,
             final String urlSafeIdentifier,
             final String hintId) {
-        this.logicalTypeName = logicalTypeName;
-        this.identifier = urlSafeIdentifier;
-        this.hintId = hintId;
-        this.hashCode = Objects.hash(logicalTypeName, urlSafeIdentifier);
+        this(logicalTypeName, urlSafeIdentifier, hintId, Objects.hash(logicalTypeName, urlSafeIdentifier));
+    }
+    
+    // -- WITHERS
+    
+    public Bookmark withHintId(final @Nullable String hintId) {
+        return new Bookmark(this.logicalTypeName(), this.identifier(), hintId);
     }
 
     // -- PARSE
@@ -121,11 +106,9 @@ public final class Bookmark implements Oid {
      * Round-trip with {@link #stringify()} representation.
      */
     public static Optional<Bookmark> parse(final @Nullable String str) {
-
-        if(_Strings.isNullOrEmpty(str)) {
-            return Optional.empty();
-        }
-        val tokenizer = new StringTokenizer(str, SEPARATOR);
+        if(_Strings.isNullOrEmpty(str)) return Optional.empty();
+        
+        var tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
         if(tokenCount==1) {
             return str.endsWith(SEPARATOR)
@@ -147,7 +130,6 @@ public final class Bookmark implements Oid {
         return Optional.empty();
     }
 
-
     public static Bookmark parseElseFail(final @Nullable String input) {
         return parse(input)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot parse Bookmark '%s'", input));
@@ -156,7 +138,7 @@ public final class Bookmark implements Oid {
     /**
      * there is only one use-case, that is, if a bookmark itself needs to be encoded (eg. page params)
      */
-    public static Optional<Bookmark> parseUrlEncoded(@Nullable final String urlEncodedStr) {
+    public static Optional<Bookmark> parseUrlEncoded(final @Nullable String urlEncodedStr) {
         return _Strings.isEmpty(urlEncodedStr)
                 ? Optional.empty()
                 : parse(UrlUtils.urlDecodeUtf8(urlEncodedStr));
@@ -165,9 +147,9 @@ public final class Bookmark implements Oid {
     // -- TO DTO
 
     public OidDto toOidDto() {
-        val oidDto = new OidDto();
-        oidDto.setType(getLogicalTypeName());
-        oidDto.setId(getIdentifier());
+        var oidDto = new OidDto();
+        oidDto.setType(logicalTypeName());
+        oidDto.setId(identifier());
         return oidDto;
     }
 
@@ -195,13 +177,13 @@ public final class Bookmark implements Oid {
     }
 
     public boolean equals(final Bookmark other) {
-        return Objects.equals(logicalTypeName, other.getLogicalTypeName())
-                && Objects.equals(identifier, other.getIdentifier());
+        return Objects.equals(logicalTypeName, other.logicalTypeName())
+                && Objects.equals(identifier, other.identifier());
     }
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return precalculatedHashCode;
     }
 
     @Override

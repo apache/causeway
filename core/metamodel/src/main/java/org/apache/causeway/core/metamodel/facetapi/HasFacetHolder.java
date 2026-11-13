@@ -23,53 +23,48 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 
+@FunctionalInterface
 public interface HasFacetHolder extends FacetHolder {
 
     // -- INTERFACE
 
-    FacetHolder getFacetHolder();
+    FacetHolder facetHolder();
 
     // -- SHORTCUTS
 
     @Override
     default Identifier getFeatureIdentifier() {
-        return getFacetHolder().getFeatureIdentifier();
+        return facetHolder().getFeatureIdentifier();
     }
 
     @Override
     default int getFacetCount() {
-        return getFacetHolder().getFacetCount();
+        return facetHolder().getFacetCount();
     }
 
     @Override
-    default <T extends Facet> T getFacet(final Class<T> cls) {
-        return getFacetHolder().getFacet(cls);
+    default <T extends Facet> Optional<T> lookupFacet(final Class<T> cls) {
+        return facetHolder().lookupFacet(cls);
     }
 
     @Override
     default boolean containsFacet(final Class<? extends Facet> facetType) {
-        return getFacetHolder().containsFacet(facetType);
+        return facetHolder().containsFacet(facetType);
     }
 
     @Override
     default Stream<Facet> streamFacets() {
-        return getFacetHolder().streamFacets();
-    }
-
-    @Override
-    default void addFacet(final Facet facet) {
-        getFacetHolder().addFacet(facet);
+        return facetHolder().streamFacets();
     }
 
     @Override
     default Stream<FacetRanking> streamFacetRankings() {
-        return getFacetHolder().streamFacetRankings();
+        return facetHolder().streamFacetRankings();
     }
 
     @Override
-    default Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        return getFacetHolder().getFacetRanking(facetType);
+    default Optional<FacetRanking> lookupFacetRanking(final Class<? extends Facet> facetType) {
+        return facetHolder().lookupFacetRanking(facetType);
     }
-
 
 }

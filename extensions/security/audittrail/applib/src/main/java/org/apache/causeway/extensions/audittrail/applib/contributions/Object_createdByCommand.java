@@ -40,7 +40,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -66,7 +65,7 @@ public class Object_createdByCommand {
             extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<Object_createdByCommand> {}
 
     @MemberSupport public Object act() {
-        val commandIfAny = bookmarkService.bookmarksFor(domainObject)
+        var commandIfAny = bookmarkService.bookmarksFor(domainObject)
                 .stream()
                 .map(target -> auditTrailEntryRepository.findFirstByTarget(target))
                 .filter(Optional::isPresent)
@@ -82,7 +81,7 @@ public class Object_createdByCommand {
                     : domainObject;
     }
     @MemberSupport public boolean hideAct() {
-        val domainClass = domainObject.getClass();
+        var domainClass = domainObject.getClass();
         BeanSort beanSort = metaModelService.sortOf(domainClass, MetaModelService.Mode.RELAXED);
         return !beanSort.isEntity();
     }

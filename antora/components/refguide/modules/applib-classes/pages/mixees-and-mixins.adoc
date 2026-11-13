@@ -49,30 +49,6 @@ Two mixins contribute to this interface:
 
 These allow the view model/DTO to be seriailized, respectively, as XML and as the XSD schema for said XML.
 
-
-[[Persistable]]
-== Persistable
-
-
-All JDO domain entities implement the DataNucleus `Persistable` role interface as a result of the enhancer process (the fully qualified class name is `org.datanucleus.enhancement.Persistable`).
-
-Using this, the following mixins (actions and properties) are available for all JDO entities:
-
-* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
-
-* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong] (property)
-+
-only visible if the entity is annotated with `javax.jdo.annotations.Version` and the `version` field introduced by enhancing can be cast to `Long`.
-
-* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp] (property)
-+
-only visible if the entity is annotated with `javax.jdo.annotations.Version` and the `version` field introduced by enhancing can be cast to `java.sql.Timestamp`.
-
-As a developer you do not need to write any code to obtain the mixins that contribute to this interface.
-
-These mixin properties/actions are all associated with the "Metadata" fieldset.
-
-
 == Security
 
 Domain objects that are created, updated or otherwise associated with a user can implement the xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername] mixee interface.

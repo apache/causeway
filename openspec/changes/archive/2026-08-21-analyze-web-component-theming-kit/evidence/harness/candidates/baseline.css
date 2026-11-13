@@ -1,0 +1,23 @@
+body { background: var(--causeway-page-background); color: var(--causeway-text); font-family: var(--causeway-font-family); line-height: var(--causeway-line-height); }
+.fixture-header { background: var(--causeway-nav-background); color: var(--causeway-nav-text); box-shadow: var(--causeway-shadow-sm); }
+.fixture-mark { background: var(--causeway-link); color: Canvas; }
+.fixture-main { max-width: var(--causeway-content-width); }
+.fixture-card, .fixture-status, .fixture-menu-panel { background: var(--causeway-surface); border: var(--causeway-border); border-radius: var(--causeway-radius-md); box-shadow: var(--causeway-shadow-sm); }
+.fixture-card { margin-block-end: var(--causeway-space-4); }
+.fixture-menu-panel { background: var(--causeway-menu-panel-background); color: var(--causeway-menu-panel-color); box-shadow: var(--causeway-menu-panel-shadow); }
+button, .fixture-button { min-height: var(--causeway-control-height); border: var(--causeway-border); border-radius: var(--causeway-radius-sm); background: var(--causeway-action-background); color: var(--causeway-text); padding: var(--causeway-space-2) var(--causeway-space-3); }
+button:hover:not(:disabled) { background: var(--causeway-action-background-hover); }
+button[data-kind="primary"] { background: var(--causeway-link); border-color: var(--causeway-link); color: Canvas; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: .2rem solid var(--causeway-focus); outline-offset: .12rem; }
+input, select, textarea { inline-size: 100%; min-height: var(--causeway-control-height); border: var(--causeway-border); border-radius: var(--causeway-radius-sm); background: var(--causeway-surface); color: var(--causeway-text); padding: var(--causeway-space-2); }
+.fixture-eyebrow, .fixture-property-label { color: var(--causeway-muted); }
+.fixture-error { color: var(--causeway-danger); }
+.fixture-status[data-tone="success"] { border-inline-start: .35rem solid var(--causeway-success); }
+.fixture-status[data-tone="warning"] { border-inline-start: .35rem solid var(--causeway-warning); }
+.fixture-status[data-tone="danger"] { border-inline-start: .35rem solid var(--causeway-danger); }
+.fixture-tabs [role="tab"][aria-selected="true"] { border-color: var(--causeway-object-tab-accent); box-shadow: inset 0 -.2rem var(--causeway-object-tab-accent); }
+.fixture-table th { background: var(--causeway-surface-subtle); }
+.fixture-table th, .fixture-table td { border-block-end: var(--causeway-border); }
+dialog { background: var(--causeway-surface-raised); color: var(--causeway-text); border: var(--causeway-border-strong); border-radius: var(--causeway-radius-lg); box-shadow: var(--causeway-shadow-md); }
+dialog::backdrop { background: color-mix(in srgb, #000 55%, transparent); }
+.fixture-footer { background: var(--causeway-surface-subtle); color: var(--causeway-muted); }

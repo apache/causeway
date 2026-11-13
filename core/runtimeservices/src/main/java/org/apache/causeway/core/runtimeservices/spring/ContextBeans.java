@@ -28,36 +28,31 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import lombok.Data;
-
 /**
  * @since 2.0 {@index}
  */
-@Data
-public final class ContextBeans {
-
-    private final Map<String, BeanDescriptor> beans;
-    private final String parentId;
-    private final ConfigurableApplicationContext context;
+public record ContextBeans(
+    Map<String, BeanDescriptor> beans,
+    String parentId,
+    ConfigurableApplicationContext context) {
 
     static ContextBeans describing(final ConfigurableApplicationContext context) {
-        if (context == null) {
-            return null;
-        }
+        if (context == null) return null;
 
-        final ConfigurableApplicationContext parent = SpringBeansService.Util.getConfigurableParent(context);
+        final ConfigurableApplicationContext parent = SpringBeansService.getConfigurableParent(context);
         final Map<String, BeanDescriptor> beans = describeBeans(context);
-        final String parentId = parent != null ? parent.getId() : null;
+        final String parentId = parent != null 
+            ? parent.getId() 
+            : null;
         return new ContextBeans(beans, parentId, context);
     }
 
     private static Map<String, BeanDescriptor> describeBeans(final ConfigurableApplicationContext context) {
-
         final ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
 
         final Map<String, BeanDescriptor> beans = Arrays.stream(beanFactory.getBeanDefinitionNames())
                 .filter(beanName -> isBeanEligible(beanName, beanFactory))
-                .collect(Collectors.toMap(Function.identity(), beanName -> new BeanDescriptor(beanName, context)));
+                .collect(Collectors.toMap(Function.identity(), beanName -> BeanDescriptor.of(beanName, context)));
         return Collections.unmodifiableMap(beans);
     }
 
@@ -65,6 +60,7 @@ public final class ContextBeans {
             final String beanName,
             final ConfigurableListableBeanFactory bf) {
         final BeanDefinition bd = bf.getBeanDefinition(beanName);
-        return bd.getRole() != BeanDefinition.ROLE_INFRASTRUCTURE && (!bd.isLazyInit() || bf.containsSingleton(beanName));
+        return bd.getRole() != BeanDefinition.ROLE_INFRASTRUCTURE 
+            && (!bd.isLazyInit() || bf.containsSingleton(beanName));
     }
 }

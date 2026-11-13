@@ -19,20 +19,29 @@
 package org.apache.causeway.core.metamodel.facets.members.layout.order;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
+import org.jspecify.annotations.Nullable;
 
 public class LayoutOrderFacetForLayoutXml
-extends LayoutOrderFacetAbstract {
+extends LayoutOrderFacetAbstract
+implements QualifiedFacet {
 
     public static LayoutOrderFacetForLayoutXml create(
             final int sequenceAsInt,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, holder, precedence);
+            final FacetHolder facetHolder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+
+        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, facetHolder) {
+        	@Override final public Precedence precedence() { return precedence; }
+        	@Override final public @Nullable String qualifier() { return qualifier; }
+        };
     }
 
     private LayoutOrderFacetForLayoutXml(
-            final String sequence, final FacetHolder holder, final Precedence precedence) {
-        super(sequence, holder, precedence);
+            final String sequence,
+            final FacetHolder holder) {
+        super(sequence, holder);
     }
 
     @Override

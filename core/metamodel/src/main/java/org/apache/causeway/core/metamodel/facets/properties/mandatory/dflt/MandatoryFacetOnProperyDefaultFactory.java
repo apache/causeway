@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.mandatory.dflt;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
-import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+
+import jakarta.inject.Inject;
 
 /**
  * Simply installs a {@link MandatoryFacetDefault} onto all properties and
@@ -35,7 +34,7 @@ import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcess
  *
  * <p>
  * The idea is that this {@link FacetFactory} is included early on in the
- * {@link FacetProcessor}, but other {@link MandatoryFacet} implementations
+ * {@link ProgrammingModel}, but other {@link MandatoryFacet} implementations
  * which don't require mandatory semantics will potentially replace these where
  * the property or parameter is annotated or otherwise indicated as being
  * optional.
@@ -50,10 +49,8 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacet(
-                MandatoryFacetDefault
-                .required(processMethodContext.getFacetHolder()));
+        MandatoryFacetDefault
+            .required(processMethodContext.facetHolder());
     }
-
 
 }

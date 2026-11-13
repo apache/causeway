@@ -31,12 +31,11 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 final class _MenuItemBuilder {
 
     static interface Visitor {
@@ -57,28 +56,28 @@ final class _MenuItemBuilder {
             final BSMenuBar menuBar,
             final Visitor menuBuilder) {
 
-        val itemsPerSectionCounter = new LongAdder();
+        var itemsPerSectionCounter = new LongAdder();
 
-        val menuVisitor = MenuProcessor.of(mmc, menuBuilder);
+        var menuVisitor = MenuProcessor.of(mmc, menuBuilder);
 
-        for (val menu : menuBar.getMenus()) {
+        for (var menu : menuBar.getMenus()) {
 
             menuVisitor.addTopLevel(menu);
 
-            for (val menuSection : menu.getSections()) {
+            for (var menuSection : menu.getSections()) {
 
                 itemsPerSectionCounter.reset();
 
-                for (val actionLayoutData : menuSection.getServiceActions()) {
-                    val serviceBeanName = actionLayoutData.getLogicalTypeName();
+                for (var actionLayoutData : menuSection.getServiceActions()) {
+                    var serviceBeanName = actionLayoutData.getLogicalTypeName();
 
-                    val serviceAdapter = mmc.lookupServiceAdapterById(serviceBeanName);
+                    var serviceAdapter = mmc.lookupServiceAdapterById(serviceBeanName);
                     if(serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
                         continue;
                     }
 
-                    val managedAction = ManagedAction
+                    var managedAction = ManagedAction
                             .lookupAction(serviceAdapter, actionLayoutData.getId(), Where.EVERYWHERE)
                             .orElse(null);
                     if (managedAction == null) {
@@ -88,12 +87,12 @@ final class _MenuItemBuilder {
                         continue;
                     }
 
-                    val visibilityVeto = managedAction.checkVisibility();
+                    var visibilityVeto = managedAction.checkVisibility();
                     if (visibilityVeto.isPresent()) {
                         continue;
                     }
 
-                    val isFirstInSection = itemsPerSectionCounter.intValue()==0;
+                    var isFirstInSection = itemsPerSectionCounter.intValue()==0;
 
                     menuVisitor.addSubMenu(menuSection, managedAction, isFirstInSection, actionLayoutData);
                     itemsPerSectionCounter.increment();
@@ -121,13 +120,13 @@ final class _MenuItemBuilder {
         }
 
         public void addSubMenu(
-                @NonNull final BSMenuSection menuSection,
-                @NonNull final ManagedAction managedAction,
+                final @NonNull BSMenuSection menuSection,
+                final @NonNull ManagedAction managedAction,
                 final boolean isFirstInSection,
                 final ServiceActionLayoutData actionLayoutData) {
 
             if(!pushedCurrentTopLevel) {
-                val topLevelDto = topLevelDto(metaModelContext, currentTopLevel);
+                var topLevelDto = topLevelDto(metaModelContext, currentTopLevel);
 
                 menuVisitor.addTopLevel(topLevelDto);
                 pushedCurrentTopLevel = true;
@@ -150,7 +149,7 @@ final class _MenuItemBuilder {
                     }
                 }
             }
-            val menuDto = MenuItemDto.subMenu(
+            var menuDto = MenuItemDto.subMenu(
                     managedAction,
                     actionLayoutData.getNamed(),
                     actionLayoutData.getCssClassFa());
@@ -168,9 +167,9 @@ final class _MenuItemBuilder {
             final MetaModelContext mmc,
             final BSMenu menu) {
 
-        val menuItemIsUserProfile = _Strings.isNullOrEmpty(menu.getNamed()); // top level menu item name
+        var menuItemIsUserProfile = _Strings.isNullOrEmpty(menu.getNamed()); // top level menu item name
 
-        val menuItemName = menuItemIsUserProfile
+        var menuItemName = menuItemIsUserProfile
                 ? userProfileName(mmc)
                 : menu.getNamed();
 
@@ -182,14 +181,11 @@ final class _MenuItemBuilder {
 
     private static String userProfileName(
             final MetaModelContext mmc) {
-        val userProfile = mmc
+        var userProfile = mmc
                 .getServiceRegistry()
                 .lookupServiceElseFail(UserProfileUiServiceDefault.class)
                 .userProfile();
         return userProfile.getUserProfileName();
     }
-
-
-
 
 }

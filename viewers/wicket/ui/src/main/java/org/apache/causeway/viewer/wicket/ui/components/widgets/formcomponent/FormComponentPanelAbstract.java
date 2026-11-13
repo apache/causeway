@@ -86,7 +86,6 @@ extends FormComponentPanel<T> {
         WktComponents.permanentlyHide(container, ids);
     }
 
-
     // ///////////////////////////////////////////////////////////////////
     // Hint support
     // ///////////////////////////////////////////////////////////////////
@@ -115,7 +114,5 @@ extends FormComponentPanel<T> {
         final HasComponentFactoryRegistry cfra = (HasComponentFactoryRegistry) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
-
-
 
 }

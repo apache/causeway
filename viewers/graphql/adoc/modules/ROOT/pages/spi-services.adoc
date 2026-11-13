@@ -47,6 +47,12 @@ This configuration property define the format of such a string for a zoned date 
 The default for a zoned date time is "yyyy-MM-dd HH:mm:ss z".
 
 The default implementations can be overridden if necessary by providing an equivalent implementation with an earlier `@Priority`.
-Additional scalar datatypes can be supporting by providing additional implementations.
+Additional scalar datatypes can be supported by providing additional implementations.
+A scalar marshaller is output-only by default.
+A reversible implementation must explicitly return `true` from `supportsInput()`, or pass `true` to the corresponding `ScalarMarshallerAbstract` constructor, and must reconstruct its declared Java type deterministically.
+Existing compiled marshallers remain output-capable but do not implicitly gain input capability.
+Generated input for an output-only marshaller uses the rejecting `UnsupportedValue` scalar rather than passing through a raw string.
+Values without any explicit marshaller are redacted on output by default; the temporary `LEGACY_STRING` policy is available for migration only.
+See xref:gqlv:ROOT:rich-value-semantics.adoc[] for canonical formats, custom registration, and structured resource values.
 
 

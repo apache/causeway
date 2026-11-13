@@ -41,5 +41,4 @@ class EmailServiceDefaultTest_notEmpty {
         assertThat(EmailServiceDefault.notEmpty(new String[]{}), is(false));
     }
 
-
 }

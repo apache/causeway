@@ -20,12 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.components.layout.bs.col;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
-
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -34,25 +32,27 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory.CollectionOwnerAndLayout;
-import org.apache.causeway.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.collection.parented.ParentedCollectionPanelFactory.CollectionOwnerAndLayout;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.tabs.TabGroupPanel;
+import org.apache.causeway.viewer.wicket.ui.components.object.fieldset.PropertyGroup;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-
-import lombok.val;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 public class Col
 extends PanelAbstract<ManagedObject, UiObjectWkt>
@@ -61,26 +61,33 @@ implements HasDynamicallyVisibleContent {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_COL = "col";
-    private static final String ID_ENTITY_HEADER_PANEL = "entityHeaderPanel";
+    private static final String ID_OBJECT_HEADER_PANEL = "objectHeaderPanel";
     private static final String ID_ROWS = "rows";
     private static final String ID_TAB_GROUPS = "tabGroups";
     private static final String ID_FIELD_SETS = "fieldSets";
     private static final String ID_COLLECTIONS = "collections";
 
-    private final BSCol bsCol;
+    private boolean visible = false;
 
     public Col(
             final String id,
-            final UiObjectWkt entityModel, final BSCol bsCol) {
-
-        super(id, entityModel);
-
-        this.bsCol = bsCol;
-
-        buildGui();
+            final UiObjectWkt objectModel, final BSCol bsCol) {
+        super(id, objectModel);
+        buildGui(bsCol);
     }
 
-    private void buildGui() {
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return visible; //FIXME never reassessed, visibility needs assessment during onConfigure
+    }
+
+    private void buildGui(final BSCol bsCol) {
 
         setRenderBodyOnly(true);
 
@@ -100,43 +107,41 @@ implements HasDynamicallyVisibleContent {
         final String actionIdToUse;
         final String actionIdToHide;
         if(domainObject != null) {
-            final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer(ID_ENTITY_HEADER_PANEL);
+            var entityHeaderPanel = new WebMarkupContainer(ID_OBJECT_HEADER_PANEL);
             div.add(entityHeaderPanel);
-            final ComponentFactory componentFactory =
-                    getComponentFactoryRegistry().findComponentFactory(UiComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getModel());
-            final Component component = componentFactory.createComponent(getModel());
+            final Component component = getComponentFactoryRegistry()
+                .createComponent(UiComponentType.OBJECT_ICON_TITLE_AND_COPYLINK, getModel());
             entityHeaderPanel.addOrReplace(component);
 
             actionOwner = entityHeaderPanel;
-            actionIdToUse = "entityActions";
+            actionIdToUse = "objectActions";
             actionIdToHide = "actions";
 
-            visible = true;
+            this.visible = true;
         } else {
-            WktComponents.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
+            WktComponents.permanentlyHide(div, ID_OBJECT_HEADER_PANEL);
             actionOwner = div;
             actionIdToUse = "actions";
             actionIdToHide = null;
         }
 
-
         // actions
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDataList = bsCol.getActions();
 
-        val visibleActions = _NullSafe.stream(actionLayoutDataList)
+        var visibleActions = _NullSafe.stream(actionLayoutDataList)
         .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .map(actionLayoutData ->
             getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
         )
-        .filter(_NullSafe::isPresent)
-        .map(LinkAndLabelFactory.forEntity(getModel()))
+        .filter(Objects::nonNull)
+        .map(act->ActionModel.forEntity(act, getModel()))
         .collect(Can.toCan());
 
         if (!visibleActions.isEmpty()) {
-            AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, visibleActions, AdditionalLinksPanel.Style.INLINE_LIST);
-            visible = true;
+            ActionLinksPanel.addActionLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
+            this.visible = true;
         } else {
             WktComponents.permanentlyHide(actionOwner, actionIdToUse);
         }
@@ -144,25 +149,23 @@ implements HasDynamicallyVisibleContent {
             WktComponents.permanentlyHide(div, actionIdToHide);
         }
 
-
         // rows
-        final List<BSRow> rows = _Lists.newArrayList(this.bsCol.getRows());
+        final List<BSRow> rows = _Lists.newArrayList(bsCol.getRows());
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
-            visible = visible || rowsRv.isVisible();
+            this.visible = visible || rowsRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_ROWS);
         }
 
-
         // tab groups
         final List<BSTabGroup> tabGroupsWithNonEmptyTabs =
                 _NullSafe.stream(bsCol.getTabGroups())
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .filter(bsTabGroup ->
                         _NullSafe.stream(bsTabGroup.getTabs())
-                                .anyMatch(BSTab.Predicates.notEmpty())
+                                .anyMatch(BSUtil::hasContent)
                 )
                 .collect(Collectors.toList());
 
@@ -174,7 +177,7 @@ implements HasDynamicallyVisibleContent {
 
                 final String id = tabGroupRv.newChildId();
                 final List<BSTab> tabs = _NullSafe.stream(bsTabGroup.getTabs())
-                        .filter(BSTab.Predicates.notEmpty())
+                        .filter(BSUtil::hasContent)
                         .collect(Collectors.toList());
 
                 switch (tabs.size()) {
@@ -182,7 +185,7 @@ implements HasDynamicallyVisibleContent {
                     // shouldn't occur; previously have filtered these out
                     throw new IllegalStateException("Cannot render tabGroup with no tabs");
                 case 1:
-                    if(bsTabGroup.isCollapseIfOne() == null || bsTabGroup.isCollapseIfOne()) {
+                    if(bsTabGroup.isCollapseIfOne(true)) {
                         final BSTab bsTab = tabs.get(0);
                         // render the rows of the one-and-only tab of this tab group.
                         final List<BSRow> tabRows = bsTab.getRows();
@@ -200,17 +203,15 @@ implements HasDynamicallyVisibleContent {
 
             }
             div.add(tabGroupRv);
-            visible = visible || tabGroupRv.isVisible();
+            this.visible = visible || tabGroupRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_TAB_GROUPS);
         }
 
-
-
         // fieldsets
         final List<FieldSet> fieldSetsWithProperties =
                 _NullSafe.stream(bsCol.getFieldSets())
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .filter(fieldSet -> ! _NullSafe.isEmpty(fieldSet.getProperties()))
                 .collect(Collectors.toList());
 
@@ -226,17 +227,17 @@ implements HasDynamicallyVisibleContent {
                 fieldSetRv.add(propertyGroup);
             }
             div.add(fieldSetRv);
-            visible = visible || fieldSetRv.isVisible();
+            this.visible = visible || fieldSetRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_FIELD_SETS);
         }
 
-        final UiObjectWkt entityModel = getModel();
-        val ownerSpec = entityModel.getManagedObject().getSpecification();
+        final UiObjectWkt objectModel = getModel();
+        var ownerSpec = objectModel.getManagedObject().objSpec();
 
         // collection layout data by collection id (the collection's member-id)
         // preserving order, as order matters
-        val collectionLayoutById = new LinkedHashMap<String, CollectionLayoutData>();
+        var collectionLayoutById = new LinkedHashMap<String, CollectionLayoutData>();
         _NullSafe.stream(bsCol.getCollections())
             .filter(colLayoutData->colLayoutData.getMetadataError() == null)
             .filter(colLayoutData->!ownerSpec.getCollection(colLayoutData.getId()).isEmpty())
@@ -248,23 +249,22 @@ implements HasDynamicallyVisibleContent {
 
             collectionLayoutById.forEach((id, layout)->{
 
-                val helperModel = Model.of(new CollectionOwnerAndLayout(entityModel, layout));
+                var helperModel = Model.of(new CollectionOwnerAndLayout(objectModel, layout));
 
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(
-                                UiComponentType.ENTITY_COLLECTION, helperModel);
+                                UiComponentType.PARENTED_COLLECTION, helperModel);
 
                 final Component collectionPanel = componentFactory.createComponent(collectionRv.newChildId(), helperModel);
                 collectionRv.add(collectionPanel);
             });
 
             div.add(collectionRv);
-            visible = visible || collectionRv.isVisible();
+            this.visible = visible || collectionRv.isVisible();
 
         } else {
             WktComponents.permanentlyHide(div, ID_COLLECTIONS);
         }
-
 
         final WebMarkupContainer panel = this;
         if(visible) {
@@ -286,13 +286,5 @@ implements HasDynamicallyVisibleContent {
         }
         return rowRv;
     }
-
-
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
-    }
-
 
 }

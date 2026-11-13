@@ -21,31 +21,22 @@ package org.apache.causeway.core.metamodel.specloader;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import jakarta.inject.Named;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
-
-import static org.apache.causeway.core.metamodel.spec.IntrospectionState.FULLY_INTROSPECTED;
-import static org.apache.causeway.core.metamodel.spec.IntrospectionState.TYPE_INTROSPECTED;
-
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
@@ -99,7 +90,7 @@ public interface SpecificationLoader {
      *
      * @return snapshot of all the (currently) loaded specifications, a defensive-copy
      */
-    Can<ObjectSpecification> snapshotSpecifications();
+    Can<? extends ObjectSpecification> snapshotSpecifications();
 
     /**
      * Similar to {@link #snapshotSpecifications()}, but also handles concurrent additions that occur
@@ -111,17 +102,7 @@ public interface SpecificationLoader {
 
     void reloadSpecification(Class<?> domainType);
 
-    /**
-     * Return the specification for the specified class of object.
-     *
-     * <p>
-     * It is possible for this method to return <tt>null</tt>, for example if
-     * any of the configured {@link ClassSubstitutor}s has filtered out the class.
-     *
-     * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
-     */
-    @Nullable
-    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, @NonNull IntrospectionState upTo);
+    Optional<BeanSort> lookupBeanSort(final @Nullable LogicalType logicalType);
 
     /**
      * @param domainTypes
@@ -131,7 +112,7 @@ public interface SpecificationLoader {
 
     Optional<LogicalType> lookupLogicalType(@Nullable String logicalTypeName);
 
-    default LogicalType lookupLogicalTypeElseFail(@NonNull final String logicalTypeName) {
+    default LogicalType lookupLogicalTypeElseFail(final @NonNull String logicalTypeName) {
         return lookupLogicalType(logicalTypeName)
         .orElseThrow(()->_Exceptions.unrecoverable(
                 "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
@@ -141,62 +122,12 @@ public interface SpecificationLoader {
         );
     }
 
-    /**
-     * queue {@code objectSpec} for later validation
-     * @param objectSpec
-     */
-    void validateLater(ObjectSpecification objectSpec);
+    // -- LOOKUP API
 
-    // -- SUPPORT FOR LOOKUP BY LOGICAL TYPE NAME
-
-    /**
-     * The lookup may also fail (result with null), when there is no concrete or abstract resolvable type,
-     * that matches given {@code logicalTypeName}. Eg. when using {@link Named} on an interface,
-     * while overriding with a different logical-type-name on the concrete or abstract type.
-     */
-    @Nullable
-    default ObjectSpecification loadSpecification(
-            final @Nullable String logicalTypeName,
-            final @NonNull  IntrospectionState introspectionState) {
-
-        if(_Strings.isNullOrEmpty(logicalTypeName)) {
-            return null;
-        }
-        return lookupLogicalType(logicalTypeName)
-            .map(logicalType->
-                    loadSpecification(logicalType.getCorrespondingClass(), introspectionState))
-            .orElse(null);
-    }
-
-    // -- SHORTCUTS - 1
-
-    default Optional<ObjectSpecification> specForLogicalTypeName(
-            final @Nullable String logicalTypeName) {
-        return Optional.ofNullable(
-                loadSpecification(logicalTypeName, FULLY_INTROSPECTED));
-    }
-
-    default Optional<ObjectSpecification> specForLogicalType(
-            final @Nullable LogicalType logicalType) {
-        return Optional.ofNullable(logicalType)
-                .map(LogicalType::getCorrespondingClass)
-                .flatMap(this::specForType);
-    }
-
-    default Optional<ObjectSpecification> specForType(
-            final @Nullable Class<?> domainType) {
-        return Optional.ofNullable(
-                loadSpecification(domainType, FULLY_INTROSPECTED));
-    }
-
-    default Optional<ObjectSpecification> specForBookmark(
-            final @Nullable Bookmark bookmark) {
-        return Optional.ofNullable(bookmark)
-                .map(Bookmark::getLogicalTypeName)
-                .flatMap(this::specForLogicalTypeName);
-    }
-
-    // -- SHORTCUTS - 2
+    Optional<ObjectSpecification> specForLogicalTypeName(@Nullable String logicalTypeName);
+    Optional<ObjectSpecification> specForLogicalType(@Nullable LogicalType logicalType);
+    Optional<ObjectSpecification> specForType(@Nullable Class<?> domainType);
+    Optional<ObjectSpecification> specForBookmark(@Nullable Bookmark bookmark);
 
     default ObjectSpecification specForLogicalTypeNameElseFail(
             final @Nullable String logicalTypeName) {
@@ -230,31 +161,21 @@ public interface SpecificationLoader {
                         bookmark));
     }
 
-    // -- CAUTION! (use only during meta-model initialization)
-
-    default @Nullable ObjectSpecification loadSpecification(
-            final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, TYPE_INTROSPECTED);
-    }
-
     // -- FEATURE RECOVERY
 
     default Optional<ObjectFeature> loadFeature(final @Nullable Identifier featureIdentifier) {
-        if(featureIdentifier==null) {
+        if(featureIdentifier==null)
             return Optional.empty();
-        }
-        val typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
-        if(typeSpec==null) {
+        var typeSpec = specForLogicalType(featureIdentifier.logicalType()).orElse(null);
+        if(typeSpec==null)
             return Optional.empty();
-        }
-        val member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
-        if(member==null) {
+        var member = typeSpec.lookupMember(featureIdentifier.memberLogicalName()).orElse(null);
+        if(member==null)
             return Optional.empty();
-        }
 
-        final int paramIndex = featureIdentifier.getParameterIndex();
+        final int paramIndex = featureIdentifier.parameterIndex();
 
-        return featureIdentifier.getParameterIndex()<0
+        return featureIdentifier.parameterIndex()<0
                 ? Optional.of(member)
                 : Optional.of(((ObjectAction)member).getParameters().getElseFail(paramIndex));
     }
@@ -267,4 +188,9 @@ public interface SpecificationLoader {
     }
 
     boolean isMetamodelFullyIntrospected();
+
+    @Nullable ObjectSpecification loadSpecification(@Nullable Class<?> domainType);
+
+	boolean contains(@Nullable Class<?> cls);
+
 }

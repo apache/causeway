@@ -23,7 +23,7 @@ import java.util.Locale;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -35,8 +35,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Component
 @Named("causeway.metamodel.value.LocaleValueSemantics")
@@ -82,17 +80,13 @@ implements
     }
 
     private String localeToString(final ValueSemanticsProvider.Context context, final Locale value) {
-        val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
+        var userLanguageLocale = context.interactionContext().getLocale().languageLocale();
 
-        val language = value.getDisplayLanguage(userLanguageLocale);
-        if(_Strings.isEmpty(language)) {
-            return stringify(value);
-        }
+        var language = value.getDisplayLanguage(userLanguageLocale);
+        if(_Strings.isEmpty(language)) return stringify(value);
 
-        val country = value.getDisplayCountry(userLanguageLocale);
-        if(_Strings.isEmpty(country)) {
-            return language;
-        }
+        var country = value.getDisplayCountry(userLanguageLocale);
+        if(_Strings.isEmpty(country)) return language;
 
         return String.format("%s (%s)",
                 value.getDisplayLanguage(userLanguageLocale),
@@ -108,7 +102,7 @@ implements
 
     @Override
     public Locale parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? fromString(input)
                 : null;
@@ -144,6 +138,5 @@ implements
                 ? Locale.forLanguageTag(data)
                 : null;
     }
-
 
 }

@@ -36,9 +36,8 @@ import org.apache.causeway.commons.internal.debug.xray.graphics._Graphics.TextBl
 import org.apache.causeway.commons.internal.primitives._Ints;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public class SequenceDiagram {
 
@@ -56,14 +55,14 @@ public class SequenceDiagram {
     }
 
     public void enter(final @NonNull String from, final @NonNull String to, final String label) {
-        val p0 = participant(from);
-        val p1 = participant(to);
+        var p0 = participant(from);
+        var p1 = participant(to);
         connections.add(newConnection(p0, p1, label, false));
     }
 
     public void exit(final @NonNull String from, final @NonNull String to, final String label) {
-        val p1 = participant(to);
-        val p0 = participant(from);
+        var p1 = participant(to);
+        var p0 = participant(from);
         connections.add(newConnection(p0, p1, label, true));
     }
 
@@ -76,14 +75,14 @@ public class SequenceDiagram {
     }
 
     public void activate(final String participantId) {
-        val participant = participant(participantId);
-        val latestConnection = latestConnection();
+        var participant = participant(participantId);
+        var latestConnection = latestConnection();
         lifelines.add(new Lifeline(participant, latestConnection));
     }
 
     public void deactivate(final String participantId) {
-        val participant = participant(participantId);
-        val latestConnection = latestConnection();
+        var participant = participant(participantId);
+        var latestConnection = latestConnection();
         Can.ofCollection(lifelines).reverse().stream()
         .filter(lifeline->lifeline.getParticipant().equals(participant))
         .findFirst()
@@ -141,7 +140,6 @@ public class SequenceDiagram {
                 : CONNECTION_LABEL_COLOR;
     }
 
-
     // -- RENDERING
 
     private final static Color PARTICIPANT_BACKGROUND_COLOR = _Graphics.COLOR_LIGHTER_GREEN;
@@ -191,11 +189,11 @@ public class SequenceDiagram {
             x_from = from.getX_middle();
             x_to = to.getX_middle();
 
-            val fromConnectsLifeline = lifelines.stream()
+            var fromConnectsLifeline = lifelines.stream()
                     .filter(ll->ll.getParticipant().equals(from))
                     .anyMatch(ll->ll.overlaps(this));
 
-            val toConnectsLifeline = lifelines.stream()
+            var toConnectsLifeline = lifelines.stream()
                     .filter(ll->ll.getParticipant().equals(to))
                     .anyMatch(ll->ll.overlaps(this));
 
@@ -217,7 +215,7 @@ public class SequenceDiagram {
                     x_left,
                     y_top);
 
-            val dim = textBlock.layout(g.getFontMetrics(),
+            var dim = textBlock.layout(g.getFontMetrics(),
                     CONNECTION_LABEL_PADDING_H,
                     CONNECTION_LABEL_PADDING_V,
                     CONNECTION_LABEL_LINEGAP,
@@ -251,7 +249,7 @@ public class SequenceDiagram {
 
             textBlock = new TextBlock(label, x_left, y_top);
 
-            val dim = textBlock.layout(g.getFontMetrics(),
+            var dim = textBlock.layout(g.getFontMetrics(),
                     PARTICIPANT_PADDING_H,
                     PARTICIPANT_PADDING_V,
                     PARTICIPANT_LINEGAP,
@@ -299,23 +297,22 @@ public class SequenceDiagram {
         }
 
         public boolean overlaps(final Connection connection) {
-            val lowerBound = _Ints.Bound.inclusive(startAt != null
+            var lowerBound = _Ints.Bound.inclusive(startAt != null
                     ? startAt.index
                     : -1);
-            val upperBound = _Ints.Bound.inclusive(endAt !=null
+            var upperBound = _Ints.Bound.inclusive(endAt !=null
                     ? endAt.index
                     : Integer.MAX_VALUE);
             return _Ints.Range.of(lowerBound, upperBound).contains(connection.index);
         }
     }
 
-
     public Dimension layout(final Graphics2D g) {
 
         PARTICIPANT_FONT.ifPresent(g::setFont);
 
-        val x_offset = _Refs.intRef(PARTICIPANT_MARGIN_H);
-        val y_offset = _Refs.intRef(0);
+        var x_offset = _Refs.intRef(PARTICIPANT_MARGIN_H);
+        var y_offset = _Refs.intRef(0);
 
         participantsById.values().stream()
         .peek(p->p.layout(g, x_offset))
@@ -373,7 +370,6 @@ public class SequenceDiagram {
             g.setStroke(_Graphics.STROKE_DASHED);
             g.drawLine(p.getX_middle(), p.getY_bottom(), p.getX_middle(), size.height - PARTICIPANT_MARGIN_V);
         });
-
 
         g.setStroke(_Graphics.STROKE_DEFAULT);
 

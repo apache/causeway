@@ -22,12 +22,7 @@ import java.awt.Font;
 
 import javax.swing.JTextArea;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-public class CallStackDiagram {
-
-    private final String textContent;
+public record CallStackDiagram(String textContent) {
 
     public void render(final JTextArea textArea) {
         textArea.setFont(new Font("Consolas", Font.PLAIN, 13));

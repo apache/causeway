@@ -27,13 +27,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
@@ -42,17 +43,17 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Default implementation of {@link EntityPropertyChangePublisher}.
  *
  * @since 2.0 {@index}
  */
@@ -61,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class EntityPropertyChangePublisherDefault implements EntityPropertyChangePublisher {
 
     private final List<EntityPropertyChangeSubscriber> subscribers;
@@ -93,16 +94,16 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             return;
         }
 
-        val currentTime = clockService.getClock().nowAsJavaSqlTimestamp();
-        val currentUser = userService.currentUserNameElseNobody();
-        val currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
+        var currentTime = clockService.getClock().nowAsJavaSqlTimestamp();
+        var currentUser = userService.currentUserNameElseNobody();
+        var currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
 
-        val enlistedPropertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
+        var enlistedPropertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
                 currentTime,
                 currentUser,
                 currentTransactionId);
-        val duplicates = new ArrayList<EntityPropertyChange>();
-        val uniquePropertyChanges = enlistedPropertyChanges
+        var duplicates = new ArrayList<EntityPropertyChange>();
+        var uniquePropertyChanges = enlistedPropertyChanges
                 .toSet(duplicates::add) // ensure uniqueness
                 .stream()
                 .collect(Can.toCan());
@@ -119,14 +120,15 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                     () -> getCannotPublishReason(uniquePropertyChanges)
             );
 
-            if (uniquePropertyChanges.size() <= causewayConfiguration.getCore().getRuntimeServices().getEntityPropertyChangePublisher().getBulk().getThreshold()) {
+            if (uniquePropertyChanges.size() <= causewayConfiguration.core().runtimeServices()
+                .entityPropertyChangePublisher().bulk().threshold()) {
                 uniquePropertyChanges.forEach(propertyChange -> {
-                    for (val subscriber : enabledSubscribers) {
+                    for (var subscriber : enabledSubscribers) {
                         subscriber.onChanging(propertyChange);
                     }
                 });
             } else {
-                for (val subscriber : enabledSubscribers) {
+                for (var subscriber : enabledSubscribers) {
                     subscriber.onChanging(uniquePropertyChanges);
                 }
             }
@@ -134,7 +136,6 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             _Xray.exitPublishing(xrayHandle);
         }
     }
-
 
     // -- HELPER
 

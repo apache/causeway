@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscribe
 import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link EntityChangesSubscriber} that just logs out the {@link EntityChanges}'s
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(EntityChangesLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
-@Log4j2
+@Slf4j
 public class EntityChangesLogger implements EntityChangesSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".EntityChangesLogger";

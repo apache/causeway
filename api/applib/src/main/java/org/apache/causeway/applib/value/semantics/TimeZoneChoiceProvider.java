@@ -24,8 +24,6 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import lombok.val;
-
 /**
  * When implemented by a service {@link #getAvailableZoneIds()} 
  * can be customized to limit the time-zone choices 
@@ -49,7 +47,7 @@ public interface TimeZoneChoiceProvider {
      * For temporal value editing, provides the list of available offsets to choose from.
      */
     default List<ZoneOffset> getAvailableOffsets() {
-        val now = LocalDateTime.now();
+        var now = LocalDateTime.now();
         return getAvailableZoneIds().stream()
             .map(ZoneId::getRules)
             .flatMap(zoneIdRules->zoneIdRules.getValidOffsets(now).stream())

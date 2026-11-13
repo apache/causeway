@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts;
 
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.user.UserService;

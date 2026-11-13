@@ -28,17 +28,17 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status.Family;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import org.jspecify.annotations.NonNull;
 
-@Log4j2
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class ResponseDigest<T> {
 
     /**
@@ -75,7 +75,6 @@ class ResponseDigest<T> {
 
     private Can<T> entities;
     private Exception failureCause;
-
 
     protected ResponseDigest(
             final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
@@ -148,9 +147,9 @@ class ResponseDigest<T> {
         }
 
         // see if we can extract the returned representation type (repr-type) from the header
-        val contentTypeHeaderString = response.getHeaderString("Content-Type");
+        var contentTypeHeaderString = response.getHeaderString("Content-Type");
 
-        val digester = ResponseDigester.forContentTypeHeaderString(contentTypeHeaderString).orElse(null);
+        var digester = ResponseDigester.forContentTypeHeaderString(contentTypeHeaderString).orElse(null);
         if(digester==null) {
             entities = Can.empty();
             failureCause = _Exceptions.unrecoverable(String.format(
@@ -164,7 +163,7 @@ class ResponseDigest<T> {
             if(genericType==null) {
                 // when response is a singleton
                 log.debug("readSingle({})", digester);
-                val singleton = digester.readSingle(entityType, response);
+                var singleton = digester.readSingle(entityType, response);
                 entities = singleton==null
                         ? Can.empty()
                         : Can.ofSingleton(singleton);
@@ -211,8 +210,5 @@ class ResponseDigest<T> {
 
         return failureMessage;
     }
-
-
-
 
 }

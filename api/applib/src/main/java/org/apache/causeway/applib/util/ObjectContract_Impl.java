@@ -98,6 +98,4 @@ class ObjectContract_Impl<T> implements ObjectContract<T> {
         return contract;
     }
 
-
-
 }

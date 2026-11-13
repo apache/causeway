@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacetAbstract;
-
 
 /**
  * If the domain object has not been annotated with
@@ -32,7 +30,7 @@ public class EntityChangePublishingFacetFromConfiguration
 extends EntityChangePublishingFacetAbstract {
 
     public EntityChangePublishingFacetFromConfiguration(final FacetHolder facetHolder, final boolean enabled) {
-        super(facetHolder, enabled);
+        super(facetHolder, enabled, enabled, enabled, enabled);
     }
 
 }

@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class ValueTypeContractTestAbstract_ColorTest extends ValueTypeContractTestAbstract<Color> {
 
     @Override

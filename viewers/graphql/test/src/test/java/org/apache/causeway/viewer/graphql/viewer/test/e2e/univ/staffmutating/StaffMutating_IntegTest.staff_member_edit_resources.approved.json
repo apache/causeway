@@ -1,0 +1,31 @@
+{
+  "data" : {
+    "photo" : {
+      "photo" : {
+        "get" : {
+          "name" : "updated.pdf",
+          "mimeType" : "application/pdf",
+          "byteLength" : 8,
+          "fileAccept" : "application/pdf",
+          "inlineInputMaxBytes" : 1048576,
+          "transferMode" : "RESOURCE_LINK",
+          "bytes" : "/graphql/object/university.dept.StaffMember:NNN/photo/blobBytes"
+        }
+      }
+    },
+    "profile" : {
+      "profile" : {
+        "get" : {
+          "name" : "updated.txt",
+          "mimeType" : "text/plain",
+          "byteLength" : 15,
+          "characterLength" : 15,
+          "fileAccept" : "text/plain",
+          "inlineInputMaxBytes" : 1048576,
+          "transferMode" : "RESOURCE_LINK",
+          "chars" : "/graphql/object/university.dept.StaffMember:NNN/profile/clobChars"
+        }
+      }
+    }
+  }
+}

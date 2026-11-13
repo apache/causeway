@@ -21,6 +21,8 @@ package org.apache.causeway.applib.layout.menubars.bootstrap;
 import java.util.List;
 import java.util.function.Consumer;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
@@ -29,59 +31,39 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within {@link org.apache.causeway.applib.annotation.DomainServiceLayout}.
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "menuBars"
-        )
+@XmlRootElement(name = "menuBars")
 @XmlType(
-        name = "menuBars"
-        , propOrder = {
-                "primary",
-                "secondary",
-                "tertiary",
-                "metadataError"
-        }
-        )
+    name = "menuBars",
+    propOrder = {"primary", "secondary", "tertiary", "metadataError" } )
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BSMenuBars extends org.apache.causeway.applib.layout.menubars.MenuBarsAbstract {
-
     private static final long serialVersionUID = 1L;
 
-    public BSMenuBars() {
-    }
+    public BSMenuBars() {}
 
+    @Getter @Setter
     private BSMenuBar primary = new BSMenuBar();
 
-    public BSMenuBar getPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(final BSMenuBar primary) {
-        this.primary = primary;
-    }
-
+    @Getter @Setter
     private BSMenuBar secondary = new BSMenuBar();
 
-    public BSMenuBar getSecondary() {
-        return secondary;
-    }
-
-    public void setSecondary(final BSMenuBar secondary) {
-        this.secondary = secondary;
-    }
-
+    @Getter @Setter
     private BSMenuBar tertiary = new BSMenuBar();
 
-    public BSMenuBar getTertiary() {
-        return tertiary;
-    }
-
-    public void setTertiary(final BSMenuBar tertiary) {
-        this.tertiary = tertiary;
-    }
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String metadataError;
 
     @Override
     public BSMenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
@@ -209,20 +191,6 @@ public class BSMenuBars extends org.apache.causeway.applib.layout.menubars.MenuB
         if(bsVisitor != null) {
             bsVisitor.postVisit(section);
         }
-    }
-
-    private String metadataError;
-
-    /**
-     * For diagnostics; populated by the framework if and only if a metadata error.
-     */
-    @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
     }
 
 }

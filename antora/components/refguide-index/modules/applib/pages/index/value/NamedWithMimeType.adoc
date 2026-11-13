@@ -7,8 +7,8 @@
 .NamedWithMimeType.java
 ----
 interface NamedWithMimeType {
-  String getName()
-  MimeType getMimeType()
+  String name()
+  MimeType mimeType()
   int compareTo(NamedWithMimeType o)
 }
 ----

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import org.apache.causeway.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
+
+import tools.jackson.databind.JsonNode;
 
 /**
  * @since 1.x {@index}

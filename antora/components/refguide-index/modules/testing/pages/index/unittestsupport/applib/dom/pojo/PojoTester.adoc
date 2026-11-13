@@ -46,7 +46,7 @@ Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:in
 <.> xref:#usingData_Class[usingData(Class)]
 +
 --
-Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, also instantiatable as the runtime type (with a no-arg constructor).
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, also instantiable as the runtime type (with a no-arg constructor).
 --
 <.> xref:#exercise_Object[exercise(Object)]
 +
@@ -90,7 +90,7 @@ Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:in
 [#usingData_Class]
 === usingData(Class)
 
-Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, also instantiatable as the runtime type (with a no-arg constructor).
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, also instantiable as the runtime type (with a no-arg constructor).
 
 [#exercise_Object]
 === exercise(Object)

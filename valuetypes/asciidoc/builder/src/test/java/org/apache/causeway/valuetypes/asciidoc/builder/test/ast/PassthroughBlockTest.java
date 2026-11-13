@@ -55,5 +55,4 @@ class PassthroughBlockTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
 
-
 }

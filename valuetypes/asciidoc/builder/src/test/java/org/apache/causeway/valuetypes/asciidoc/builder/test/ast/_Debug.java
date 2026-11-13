@@ -30,8 +30,6 @@ import org.asciidoctor.ast.Table;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
-
 final class _Debug {
 
     static void debug(final Document node) {
@@ -40,7 +38,7 @@ final class _Debug {
 
     static void debug(final StructuralNode node, final int level) {
 
-        val simpleName = node.getClass().getSimpleName();
+        var simpleName = node.getClass().getSimpleName();
 
         print(level, "node type: %s", node.getClass());
         print(level, "%s title: %s", simpleName, node.getTitle());
@@ -57,7 +55,7 @@ final class _Debug {
             print(level, "%s child blocks: %d ...", simpleName, node.getBlocks().size());
         }
 
-        for(val subNode : node.getBlocks()) {
+        for(var subNode : node.getBlocks()) {
             debug(subNode, level+1);
         }
     }
@@ -121,11 +119,11 @@ final class _Debug {
     }
 
     private static void debug(final Table table, final int level) {
-        val refCol = table.getColumns().get(0);
-        val refRow = table.getBody().get(0);
-        val refCell = refRow.getCells().get(0);
+        var refCol = table.getColumns().get(0);
+        var refRow = table.getBody().get(0);
+        var refCell = refRow.getCells().get(0);
 
-        val refHead = table.getHeader().get(0);
+        var refHead = table.getHeader().get(0);
 
         print(level, "tab caption: " + table.getCaption());
 
@@ -148,7 +146,7 @@ final class _Debug {
     }
 
     private static void print(final int level, final String format, final Object... args) {
-        val indent = _Strings.of(level*2, ' ');
+        var indent = _Strings.of(level*2, ' ');
         System.out.println(String.format("%s%s", indent, String.format(format, args)));
     }
 

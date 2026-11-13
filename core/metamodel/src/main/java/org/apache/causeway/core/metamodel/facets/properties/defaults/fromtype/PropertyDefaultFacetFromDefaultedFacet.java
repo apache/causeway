@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyDefaultFacetFromDefaultedFacet
 extends FacetAbstract
@@ -44,7 +44,7 @@ implements PropertyDefaultFacet {
 
     @Override
     public ManagedObject getDefault(final ManagedObject inObject) {
-        if (getFacetHolder() == null) {
+        if (facetHolder() == null) {
             return null;
         }
         final Object typeFacetDefault = typeFacet.getDefault();

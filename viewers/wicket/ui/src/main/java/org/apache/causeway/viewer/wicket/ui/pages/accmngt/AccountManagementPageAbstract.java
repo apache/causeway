@@ -35,17 +35,15 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandName;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.WebPageBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
@@ -85,7 +83,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
         addApplicationName(signInLink);
 
         if(shouldDisplayException(exceptionModel)) {
-            val pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
+            var pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
             add(new ExceptionStackTracePanel(pageClassRegistry, ID_EXCEPTION_STACK_TRACE, exceptionModel));
         } else {
             add(new WebMarkupContainer(ID_EXCEPTION_STACK_TRACE).setVisible(false));
@@ -99,7 +97,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
         if (exceptionModel == null) {
             return false;
         }
-        val exceptionModelMainMessage = exceptionModel.getMainMessage();
+        var exceptionModelMainMessage = exceptionModel.getMainMessage();
         if (exceptionModelMainMessage == null) {
             return false;
         }
@@ -109,18 +107,17 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
     private final static List<String> suppressedExceptionMessages = Arrays.asList("Requested page is no longer available.");
 
-
     private void addPageTitle() {
-        val applicationName = getApplicationSettings().getName();
+        var applicationName = getApplicationSettings().name();
         Wkt.labelAdd(this, ID_PAGE_TITLE, applicationName);
     }
 
     private void addApplicationName(final MarkupContainer parent) {
-        val branding = super.getMetaModelContext()
+        var branding = super.getMetaModelContext()
                 .lookupServiceElseFail(BrandingUiService.class)
                 .getSignInBranding();
-        val brandLogo = new BrandLogo("brandLogo", branding);
-        val brandName = new BrandName(ID_APPLICATION_NAME, branding);
+        var brandLogo = new BrandLogo("brandLogo", branding);
+        var brandName = new BrandName(ID_APPLICATION_NAME, branding);
         parent.add(brandName, brandLogo);
     }
 
@@ -131,13 +128,11 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        getWicketViewerSettings().getCss()
+        getWicketViewerSettings().css()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
 
-        getWicketViewerSettings().getJs()
+        getWicketViewerSettings().js()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
-
-
 
 }

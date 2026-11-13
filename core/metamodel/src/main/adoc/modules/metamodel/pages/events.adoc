@@ -186,7 +186,7 @@ RS -u-> UED :emits
 RS -u-> RNG :emits
 
 note top of RNG
-JDO/Datanucleus
+JPA/Eclipselink
 does not support
 something like a
 "Removed Event".

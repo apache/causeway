@@ -68,5 +68,4 @@ public abstract class CausewayIntegrationTestAbstractWithFixtures extends Causew
 
     @Inject protected FixtureScripts fixtureScripts;
 
-
 }

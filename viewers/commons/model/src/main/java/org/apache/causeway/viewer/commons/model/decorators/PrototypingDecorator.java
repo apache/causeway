@@ -25,10 +25,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 /**
  *
  * When in PROTOTYPING mode adds additional UI aspects, which are otherwise (production mode) not visible.
@@ -43,22 +39,18 @@ public interface PrototypingDecorator<T, R> {
 
     // -- DECORATION MODEL
 
-    @Getter
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class PrototypingDecorationModel {
-
-        private final Class<?> featureType;
-        private final String featureFriendlyName;
-        private final String featureFriendlyIdentifier;
-        private final Supplier<Stream<Facet>> facetStreamProvider;
+    public record PrototypingDecorationModel(
+            Class<?> featureType,
+            String featureFriendlyName,
+            String featureFriendlyIdentifier,
+            Supplier<Stream<Facet>> facetStreamProvider) {
 
         public static PrototypingDecorationModel of(final ManagedAction managedAction) {
-            Class<?> featureType = managedAction.getAction().getReturnType().getCorrespondingClass();
+            Class<?> featureType = managedAction.getAction().getReturnType().correspondingClass();
             String featureShortLabel = managedAction.getFriendlyName();
             String featureFullLabel = String.format("%s: %s",
                     managedAction.getMemberType(),
                     managedAction.getId());
-
             return new PrototypingDecorationModel(featureType, featureShortLabel, featureFullLabel,
                     managedAction.getAction()::streamFacets);
         }
@@ -69,7 +61,6 @@ public interface PrototypingDecorator<T, R> {
             String featureFullLabel = String.format("%s: %s",
                     managedMember.getMemberType(),
                     managedMember.getId());
-
             return new PrototypingDecorationModel(featureType, featureShortLabel, featureFullLabel,
                     managedMember.getElementType()::streamFacets);
         }
@@ -77,8 +68,6 @@ public interface PrototypingDecorator<T, R> {
         public Stream<Facet> streamFeatureFacets() {
             return facetStreamProvider.get();
         }
-
-
 
     }
 

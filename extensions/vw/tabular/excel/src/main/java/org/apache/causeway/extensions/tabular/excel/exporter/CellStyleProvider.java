@@ -19,45 +19,171 @@
 package org.apache.causeway.extensions.tabular.excel.exporter;
 
 import java.awt.Color;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.val;
-import lombok.experimental.Accessors;
+import org.apache.causeway.commons.tabular.TabularModel.TabularRow;
+import org.apache.causeway.extensions.tabular.excel.exporter.ExcelFileWriter.Options.CustomCellStyle;
 
-//record candidate
-@Getter @Accessors(fluent=true)
-class CellStyleProvider {
+record CellStyleProvider(
+        Workbook workbook,
+        CellStyle primaryHeaderStyle,
+        CellStyle secondaryHeaderStyle,
+        CellStyle dateStyle,
+        CellStyle multilineStyle,
+        ColorPalette colorPalette,
+        ExcelFileWriter.Options options) {
 
-    public CellStyleProvider(final Workbook wb) {
-        this.workbook = wb;
-        this.primaryHeaderStyle = createPrimaryHeaderRowStyle(wb);
-        this.secondaryHeaderStyle = createSecondaryHeaderRowStyle(wb);
-        this.dateStyle = createDateFormatCellStyle(wb, "yyyy-mm-dd");
-        this.multilineStyle = createMultilineCellStyle(wb);
+    private record ColorPalette(
+        List<CellStyle[]> listOfStyles) {
+
+        static ColorPalette create(final Workbook wb, final StyleIndexList styleIndexList) {
+            return new ColorPalette(Stream.of(CustomCellStyle.values())
+                .skip(1) // skip DEFAULT style
+                .mapToInt(style->style.rgb)
+                .mapToObj(Color::new)
+                .map(color->createColoredStyles(wb, styleIndexList, color))
+                .toList());
+        }
+
+        CellStyle[] styles(final CustomCellStyle customCellStyle) {
+            return listOfStyles.get(customCellStyle.ordinal() - 1); // skip DEFAULT style
+        }
+
     }
 
-    final Workbook workbook;
-    final CellStyle primaryHeaderStyle;
-    final CellStyle secondaryHeaderStyle;
-    final CellStyle dateStyle;
-    final CellStyle multilineStyle;
+    static CellStyleProvider create(final Workbook wb, final ExcelFileWriter.@Nullable Options options) {
+        var styleIndexList = new StyleIndexList();
+        return new CellStyleProvider(wb,
+            createPrimaryHeaderRowStyle(wb),
+            createSecondaryHeaderRowStyle(wb),
+            createDateFormatCellStyle(wb, styleIndexList, "yyyy-mm-dd"),
+            createMultilineCellStyle(wb, styleIndexList),
+            ColorPalette.create(wb, styleIndexList),
+            options!=null
+                ? options
+                : ExcelFileWriter.Options.builder().build());
+    }
 
-    protected CellStyle createPrimaryHeaderRowStyle(final Workbook wb) {
-        val font = wb.createFont();
+    /**
+     * Applies a custom cell style to given {@link Cell}
+     * based on whether any of the cellStyleFunctions is available
+     * and if so, whether any of the cellStyleFunctions returns a non-null CellStyle.
+     * @implNote we are doing this distinction of cases for performance reasons,
+     *      that is, minimize the number of style function calls;
+     *      otherwise code could be simplified
+     */
+    void applyCustomStyle(final TabularRow tabularRow, final Iterable<Cell> cells) {
+        switch (StylePolicy.get(options)) {
+            case NONE: return;
+            case ROW_ONLY: {
+                var customRowStyle = CustomCellStyle.nullToDefault(
+                        options.rowStyleFunction().apply(tabularRow));
+                if(customRowStyle.isDefault()) return;
+                for(var cell : cells) {
+                    applyCustomCellStyle(cell, customRowStyle);
+                }
+                return;
+            }
+            case CELL_ONLY: {
+                int cellIndex = 0;
+                for(var cell : cells) {
+                    var customCellStyle = CustomCellStyle.nullToDefault(
+                            options.cellStyleFunction().apply(tabularRow.getCell(cellIndex++)));
+                    applyCustomCellStyle(cell, customCellStyle);
+                }
+                return;
+            }
+            case CELL_AND_ROW: {
+                CustomCellStyle customRowStyle = null; // only calculate if needed
+                int cellIndex = 0;
+                for(var cell : cells) {
+                    var customCellStyle = CustomCellStyle.nullToDefault(
+                            options.cellStyleFunction().apply(tabularRow.getCell(cellIndex++)));
+                    if(!customCellStyle.isDefault()) {
+                        applyCustomCellStyle(cell, customCellStyle);
+                    } else {
+                        if(customRowStyle==null) {
+                            customRowStyle = CustomCellStyle.nullToDefault(
+                                    options.rowStyleFunction().apply(tabularRow));
+                        }
+                        applyCustomCellStyle(cell, customRowStyle);
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    Cell applyDateStyle(final Cell cell) {
+        cell.setCellStyle(dateStyle());
+        return cell;
+    }
+
+    Cell applyMultilineStyle(final Cell cell) {
+        cell.setCellStyle(multilineStyle());
+        return cell;
+    }
+
+    private void applyCustomCellStyle(final Cell cell, final CustomCellStyle customCellStyle) {
+        if(customCellStyle==null
+                || customCellStyle.isDefault()) return;
+
+        cell.setCellStyle(colorPalette
+                .styles(customCellStyle)[valueKindOf(cell).ordinal()]);
+    }
+
+    private enum ValueKind {
+        DEFAULT,
+        DATE,
+        MULTILINE;
+    }
+    private ValueKind valueKindOf(final Cell cell) {
+        if(cell.getCellStyle().getIndex() == dateStyle.getIndex()) return ValueKind.DATE;
+        if(cell.getCellStyle().getIndex() == multilineStyle.getIndex()) return ValueKind.MULTILINE;
+        return ValueKind.DEFAULT;
+    }
+
+    /**
+     * Creates a colored variant for each {@link ValueKind}.
+     * @param styleIndexList
+     */
+    private static CellStyle[] createColoredStyles(final Workbook wb, final StyleIndexList styleIndexList, final Color color) {
+        var valueKinds = ValueKind.values();
+        var cellStyles = new CellStyle[valueKinds.length];
+        for(var valueKind : valueKinds) {
+
+            var cellStyle = cellStyles[valueKind.ordinal()] = wb.createCellStyle();
+
+            switch (valueKind) {
+                case DEFAULT -> {}
+                case DATE -> cellStyle.cloneStyleFrom(wb.getCellStyleAt(styleIndexList.dateStyleIndex));
+                case MULTILINE -> cellStyle.cloneStyleFrom(wb.getCellStyleAt(styleIndexList.multilineStyleIndex));
+            }
+
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.setFillForegroundColor(createColor(color));
+        }
+        return cellStyles;
+    }
+
+    private static CellStyle createPrimaryHeaderRowStyle(final Workbook wb) {
+        var font = wb.createFont();
         font.setBold(true);
-        val cellStyle = wb.createCellStyle();
+        var cellStyle = wb.createCellStyle();
         cellStyle.setFont(font);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setFillForegroundColor(createColor(new Color(0xc0c0c0)));
-        //cellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle.setBorderLeft(BorderStyle.THIN);
         cellStyle.setBorderRight(BorderStyle.THIN);
         cellStyle.setBorderTop(BorderStyle.THIN);
@@ -65,10 +191,10 @@ class CellStyleProvider {
         return cellStyle;
     }
 
-    protected CellStyle createSecondaryHeaderRowStyle(final Workbook wb) {
-        val font = wb.createFont();
+    private static CellStyle createSecondaryHeaderRowStyle(final Workbook wb) {
+        var font = wb.createFont();
         font.setFontHeightInPoints((short) 10);
-        val cellStyle = wb.createCellStyle();
+        var cellStyle = wb.createCellStyle();
         cellStyle.setFont(font);
         cellStyle.setWrapText(true);
         cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
@@ -78,25 +204,47 @@ class CellStyleProvider {
         cellStyle.setBorderRight(BorderStyle.THIN);
         cellStyle.setBorderTop(BorderStyle.NONE);
         cellStyle.setBorderBottom(BorderStyle.MEDIUM);
-        //cellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
         return cellStyle;
     }
 
-    protected CellStyle createDateFormatCellStyle(final Workbook wb, final String dateFormat) {
-        val cellStyle = wb.createCellStyle();
+    private static CellStyle createDateFormatCellStyle(final Workbook wb, final StyleIndexList styleIndexList, final String dateFormat) {
+        var cellStyle = wb.createCellStyle();
         cellStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat(dateFormat));
+        styleIndexList.dateStyleIndex = cellStyle.getIndex();
         return cellStyle;
     }
 
-    protected CellStyle createMultilineCellStyle(final Workbook wb) {
-        val cellStyle = wb.createCellStyle();
+    private static CellStyle createMultilineCellStyle(final Workbook wb, final StyleIndexList styleIndexList) {
+        var cellStyle = wb.createCellStyle();
         cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         cellStyle.setWrapText(true);
+        styleIndexList.multilineStyleIndex = cellStyle.getIndex();
         return cellStyle;
     }
 
-    static XSSFColor createColor(final Color color) {
+    private static XSSFColor createColor(final Color color) {
         return new XSSFColor(color, new DefaultIndexedColorMap());
+    }
+
+    private static class StyleIndexList {
+        short dateStyleIndex = -1;
+        short multilineStyleIndex = -1;
+    }
+
+    private enum StylePolicy {
+        NONE,
+        CELL_ONLY,
+        ROW_ONLY,
+        CELL_AND_ROW;
+        static StylePolicy get(final ExcelFileWriter.Options options) {
+            return options.rowStyleFunction()!=null
+                    ? options.cellStyleFunction()!=null
+                        ? StylePolicy.CELL_AND_ROW
+                        : StylePolicy.ROW_ONLY
+                    : options.cellStyleFunction()!=null
+                        ? StylePolicy.CELL_ONLY
+                        : StylePolicy.NONE;
+        }
     }
 
 }

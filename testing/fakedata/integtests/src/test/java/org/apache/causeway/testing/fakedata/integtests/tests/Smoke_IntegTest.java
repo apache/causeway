@@ -21,15 +21,17 @@ package org.apache.causeway.testing.fakedata.integtests.tests;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -76,7 +78,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -105,8 +106,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isNull();
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isNull();
@@ -147,7 +148,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
         @Test
         public void when_all_defaulted() throws Exception {
 
-
             //
             // when
             //
@@ -155,7 +155,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -182,8 +181,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isNotNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isNotNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isNotNull();
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isNotNull();
@@ -200,7 +199,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeBooleanWrapper()).isNull();
 
-
             //
             // when
             //
@@ -210,14 +208,12 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
             transactionService.flushTransaction();
 
-
             //
             // then
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
             Assertions.assertThat(fakeDataDemoObject.isSomeBoolean()).isTrue();
             Assertions.assertThat(fakeDataDemoObject.getSomeBooleanWrapper()).isTrue();
-
 
             //
             // when
@@ -228,7 +224,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -237,7 +232,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeBooleanWrapper()).isFalse();
 
         }
-
 
         @Test
         public void when_char() throws Exception {
@@ -249,7 +243,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final char theChar = 'x';
 
-
             //
             // when
             //
@@ -258,7 +251,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -279,7 +271,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final byte theByte = (byte) 123;
 
-
             //
             // when
             //
@@ -288,7 +279,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -310,7 +300,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final short theShort = (short) 32123;
 
-
             //
             // when
             //
@@ -319,7 +308,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -331,7 +319,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
         public void when_int() throws Exception {
 
@@ -342,7 +329,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final int theInt = 1234578;
 
-
             //
             // when
             //
@@ -351,7 +337,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -373,7 +358,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final long theLong = 123456789012345678L;
 
-
             //
             // when
             //
@@ -382,7 +366,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -403,7 +386,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final float theFloat = 123456.789F;
 
-
             //
             // when
             //
@@ -412,7 +394,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -424,7 +405,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
         public void when_double() throws Exception {
 
@@ -435,7 +415,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final double theDouble = 123456789.012345678;
 
-
             //
             // when
             //
@@ -445,7 +424,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -454,7 +432,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeDouble()).isEqualTo(theDouble);
             Assertions.assertThat(fakeDataDemoObject.getSomeDoubleWrapper()).isEqualTo(theDouble);
         }
-
 
         @Test
         public void when_string() throws Exception {
@@ -466,7 +443,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final String theString = "(c) Apache Software Foundation";
 
-
             //
             // when
             //
@@ -476,7 +452,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -484,7 +459,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             Assertions.assertThat(fakeDataDemoObject.getSomeString()).isEqualTo(theString);
         }
-
 
         @Test
         public void when_password() throws Exception {
@@ -496,7 +470,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final Password thePassword = new Password("abc!def$ghi");
 
-
             //
             // when
             //
@@ -506,7 +479,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -515,7 +487,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomePassword()).isEqualTo(thePassword);
 
         }
-
 
         @Test
         public void when_bigdecimal() throws Exception {
@@ -527,7 +498,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final BigDecimal theBigDecimal = new BigDecimal("9876543210.9876");
 
-
             //
             // when
             //
@@ -536,7 +506,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -557,7 +526,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final BigInteger theBigInteger = new BigInteger("123456789012345678");
 
-
             //
             // when
             //
@@ -566,7 +534,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -586,7 +553,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final Blob theBlob = fakeDataService.causewayBlobs().anyPdf();
 
-
             //
             // when
             //
@@ -597,14 +563,13 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
             Assertions.assertThat(fakeDataDemoObject.getSomeBlob()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeBlob().getMimeType().toString()).isEqualTo("application/pdf");
+            Assertions.assertThat(fakeDataDemoObject.getSomeBlob().mimeType().toString()).isEqualTo("application/pdf");
         }
 
         @Test
@@ -617,7 +582,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final Clob theClob = fakeDataService.causewayClobs().anyXml();
 
-
             //
             // when
             //
@@ -628,14 +592,13 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
             Assertions.assertThat(fakeDataDemoObject.getSomeClob()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeClob().getMimeType().toString()).isEqualTo("text/xml");
+            Assertions.assertThat(fakeDataDemoObject.getSomeClob().mimeType().toString()).isEqualTo("text/xml");
         }
 
         @Test
@@ -646,7 +609,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isNull();
 
-            final Date theDate = new DateTime(2015, 4, 8, 16, 22, 30).toDate();
+            var instant = LocalDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30)).toInstant(ZoneOffset.UTC);
+            var theDate = new java.util.Date(instant.toEpochMilli());
 
             //
             // when
@@ -658,7 +622,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -668,7 +631,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
         public void when_javaSqlDate() throws Exception {
 
@@ -677,7 +639,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isNull();
 
-            final java.sql.Date theDate = new java.sql.Date(new DateTime(2015, 4, 8, 16, 22, 30).withTimeAtStartOfDay().getMillis());
+            var instant = LocalDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30)).toInstant(ZoneOffset.UTC);
+            final java.sql.Date theDate = new java.sql.Date(instant.toEpochMilli());
 
             //
             // when
@@ -689,7 +652,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -699,7 +661,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
         public void when_javaSqlTimestampDateTime() throws Exception {
 
@@ -708,7 +669,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isNull();
 
-            final Timestamp theTimestamp = new Timestamp(new DateTime(2015, 4, 8, 16, 22, 30).getMillis());
+            var instant = LocalDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30)).toInstant(ZoneOffset.UTC);
+            final Timestamp theTimestamp = new Timestamp(instant.toEpochMilli());
 
             //
             // when
@@ -720,7 +682,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -730,67 +691,63 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
-        public void when_jodaDateTime() throws Exception {
+        public void when_zonedDateTime() throws Exception {
 
             //
             // given
             //
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isNull();
 
-            final DateTime theDate = new DateTime(2015, 4, 8, 16, 22, 30);
+            var theDate = ZonedDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30), ZoneOffset.UTC);
 
             //
             // when
             //
             updateScript.setFakeDataDemoObject(fakeDataDemoObject);
-            updateScript.setSomeJodaDateTime(theDate);
+            updateScript.setSomeZonedDateTime(theDate);
 
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isEqualTo(theDate);
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isEqualTo(theDate);
 
         }
 
         @Test
-        public void when_jodaLocalDate() throws Exception {
+        public void when_localDate() throws Exception {
 
             //
             // given
             //
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isNull();
 
-            final LocalDate theDate = new DateTime(2015, 4, 8, 16, 22, 30).toLocalDate();
+            var theDate = LocalDate.of(2015, 4, 8);
 
             //
             // when
             //
             updateScript.setFakeDataDemoObject(fakeDataDemoObject);
-            updateScript.setSomeJodaLocalDate(theDate);
+            updateScript.setSomeLocalDate(theDate);
 
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isEqualTo(theDate);
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isEqualTo(theDate);
 
         }
-
 
         @Test
         public void when_url() throws Exception {
@@ -800,7 +757,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
 
-            java.net.URL theUrl = new java.net.URL("https://causeway.apache.org");
+            java.net.URL theUrl = new java.net.URI("https://causeway.apache.org").toURL();
 
             //
             // when
@@ -812,7 +769,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -821,7 +777,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isEqualTo(theUrl);
 
         }
-
 
         @Test
         public void when_uuid() throws Exception {
@@ -842,7 +797,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -899,7 +853,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final EnumOf3 theEnumConstant = EnumOf3.AMEX;
 
-
             //
             // when
             //
@@ -909,7 +862,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -921,8 +873,5 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
         }
 
     }
-
-
-
 
 }

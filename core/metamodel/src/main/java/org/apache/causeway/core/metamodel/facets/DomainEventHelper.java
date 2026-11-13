@@ -23,8 +23,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.EventObjectBase;
@@ -53,21 +55,15 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFromValue;
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor(staticName = "ofEventService")
-@Log4j2
-public class DomainEventHelper {
+@Slf4j
+public record DomainEventHelper(
+    @NonNull MetamodelEventService metamodelEventService) {
 
     public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
-        val eventService = serviceRegistry.lookupServiceElseFail(MetamodelEventService.class);
-        return ofEventService(eventService);
+        return new DomainEventHelper(serviceRegistry.lookupServiceElseFail(MetamodelEventService.class));
     }
-
-    private final MetamodelEventService metamodelEventService;
 
     // -- postEventForAction
 
@@ -100,7 +96,7 @@ public class DomainEventHelper {
                 uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, facetHolder,
                 head, argumentAdapters, resultPojo);
     }
-
+    
     private @Nullable <S> ActionDomainEvent<S> postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends ActionDomainEvent<S>> eventType,
@@ -121,16 +117,16 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+                final S source = uncheckedCast(MmUnwrapUtils.single(head.target()));
                 final Object[] arguments = MmUnwrapUtils.multipleAsArray(argumentAdapters);
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
                 // copy over if mixee is present
                 if (event != null) {
-                    head.getMixee()
-                    .ifPresent(mixedInAdapter->
-                        event.setMixee(mixedInAdapter.getPojo()));
+                    mixee(head)
+                        .ifPresent(mixedInAdapter->
+                            event.setMixee(mixedInAdapter.getPojo()));
                 }
 
                 if(objectAction != null) {  // should always be the case...
@@ -139,15 +135,15 @@ public class DomainEventHelper {
                         event.setSemantics(objectAction.getSemantics());
                     }
 
-                    val parameters = objectAction.getParameters();
+                    var parameters = objectAction.getParameters();
 
-                    val parameterNames = parameters.stream()
+                    var parameterNames = parameters.stream()
                             .map(ObjectActionParameter::getCanonicalFriendlyName)
                             .collect(_Lists.toUnmodifiable());
 
                     final List<Class<?>> parameterTypes = parameters.stream()
                             .map(ObjectActionParameter::getElementType)
-                            .map(ObjectSpecification::getCorrespondingClass)
+                            .map(ObjectSpecification::correspondingClass)
                             .collect(_Lists.toUnmodifiable());
 
                     if (event != null) {
@@ -181,9 +177,9 @@ public class DomainEventHelper {
         throws IllegalArgumentException,
             SecurityException {
 
-        val constructors = _Reflect.getPublicConstructors(type);
+        var constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructor = constructors
+        var noArgConstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor!=null) {
@@ -193,7 +189,7 @@ public class DomainEventHelper {
             return ade;
         }
 
-        val oneArgConstructor = constructors
+        var oneArgConstructor = constructors
                 .filter(paramCount(1)
                         .and(paramAssignableFrom(0, source.getClass())))
                 .getFirst().orElse(null);
@@ -207,7 +203,7 @@ public class DomainEventHelper {
             return ade;
         }
 
-        val threeArgConstructor = constructors
+        var threeArgConstructor = constructors
                 .filter(paramCount(3)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
@@ -217,11 +213,11 @@ public class DomainEventHelper {
                 .orElse(null);
 
         if(threeArgConstructor!=null) {
-            val event = invokeConstructor(threeArgConstructor, source, identifier, arguments);
+            var event = invokeConstructor(threeArgConstructor, source, identifier, arguments);
             return uncheckedCast(event);
         }
 
-        log.error("Unable to locate constructor of ActionDomainEvent subclass.\n* event's class name : {}\n* source's class name: {}\n* identifier         : {}\n", type.getName(), source.getClass().getName(), identifier.getMemberLogicalName());
+        log.error("Unable to locate constructor of ActionDomainEvent subclass.\n* event's class name : {}\n* source's class name: {}\n* identifier         : {}\n", type.getName(), source.getClass().getName(), identifier.memberLogicalName());
 
         return null;
     }
@@ -232,7 +228,6 @@ public class DomainEventHelper {
                 ? Arrays.asList(arguments)
                         : Collections.emptyList();
     }
-
 
     // -- postEventForProperty, newPropertyInteraction
     public <S, T> PropertyDomainEvent<S, T> postEventForProperty(
@@ -255,15 +250,15 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
 
-                final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+                final S source = uncheckedCast(MmUnwrapUtils.single(head.target()));
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
                 // copy over if have
-                head.getMixee()
-                .ifPresent(mixeeAdapter->
-                    event.setMixee(mixeeAdapter.getPojo()));
+                mixee(head)
+                    .ifPresent(mixeeAdapter->
+                        event.setMixee(mixeeAdapter.getPojo()));
 
             }
 
@@ -290,10 +285,9 @@ public class DomainEventHelper {
             final T oldValue,
             final T newValue) throws NoSuchMethodException, SecurityException, IllegalArgumentException {
 
+        var constructors = _Reflect.getPublicConstructors(type);
 
-        val constructors = _Reflect.getPublicConstructors(type);
-
-        val noArgonstructor = constructors
+        var noArgonstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgonstructor != null) {
@@ -304,7 +298,7 @@ public class DomainEventHelper {
             return pde;
         }
 
-        val oneArgConstructor = constructors
+        var oneArgConstructor = constructors
                 .filter(paramCount(1)
                         .and(paramAssignableFrom(0, source.getClass())))
                 .getFirst().orElse(null);
@@ -318,7 +312,7 @@ public class DomainEventHelper {
         }
 
         // else
-        val fourArgConstructor = constructors
+        var fourArgConstructor = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
@@ -326,14 +320,13 @@ public class DomainEventHelper {
                         .and(paramAssignableFromValue(3, newValue))
                 ).getFirst().orElse(null);
         if(fourArgConstructor != null) {
-            val event = invokeConstructor(fourArgConstructor, source, identifier, oldValue, newValue);
+            var event = invokeConstructor(fourArgConstructor, source, identifier, oldValue, newValue);
             return uncheckedCast(event);
         }
 
         // else
         throw new NoSuchMethodException(type.getName()+".<init>(...)");
     }
-
 
     // -- postEventForCollection, newCollectionDomainEvent
 
@@ -348,14 +341,14 @@ public class DomainEventHelper {
         try {
             final CollectionDomainEvent<S, T> event;
 
-            final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+            final S source = uncheckedCast(MmUnwrapUtils.single(head.target()));
             final Identifier identifier = facetHolder.getFeatureIdentifier();
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 
             // copy over if have
-            head.getMixee()
-            .ifPresent(mixeeAdapter->
-                event.setMixee(mixeeAdapter.getPojo()));
+            mixee(head)
+                .ifPresent(mixeeAdapter->
+                    event.setMixee(mixeeAdapter.getPojo()));
 
             event.setEventPhase(phase);
 
@@ -374,18 +367,18 @@ public class DomainEventHelper {
             throws NoSuchMethodException, SecurityException,
             IllegalArgumentException {
 
-        val constructors = _Reflect.getPublicConstructors(type);
+        var constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructor = constructors
+        var noArgConstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor != null) {
-            final CollectionDomainEvent<S, T> cde = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();;
+            final CollectionDomainEvent<S, T> cde = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();
             cde.setIdentifier(identifier);
             return cde;
         }
 
-        val oneArgConstructor = constructors
+        var oneArgConstructor = constructors
                 .filter(paramCount(1)
                         .and(paramAssignableFrom(0, source.getClass())))
                 .getFirst().orElse(null);
@@ -399,14 +392,14 @@ public class DomainEventHelper {
 
         // else
         // search for constructor accepting source, identifier
-        val twoArgConstructor = constructors
+        var twoArgConstructor = constructors
                 .filter(paramCount(2)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
                         )
                 .getFirst().orElse(null);
         if(twoArgConstructor != null) {
-            val event = invokeConstructor(twoArgConstructor, source, identifier);
+            var event = invokeConstructor(twoArgConstructor, source, identifier);
             return uncheckedCast(event);
         }
 
@@ -426,6 +419,14 @@ public class DomainEventHelper {
                     "failed to invoke constructor %s", constructor);
         }
     }
-
+    
+    /**
+     * @return optionally the owner (mixee), based on whether the head corresponds to a mixin
+     */
+    private static Optional<ManagedObject> mixee(InteractionHead head) {
+        return head.isMixin()
+                ? Optional.of(head.owner())
+                : Optional.empty();
+    }
 
 }

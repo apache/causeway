@@ -22,7 +22,6 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,12 +38,15 @@ import lombok.NoArgsConstructor;
 public class OutboxClientConfig {
 
     @XmlElement(name="pendingUri")
+    @Builder.Default
     private String pendingUri = "services/causeway.ext.executionOutbox.OutboxRestApi/actions/pending/invoke";
 
     @XmlElement(name="deleteUri")
+    @Builder.Default
     private String deleteUri = "services/causeway.ext.executionOutbox.OutboxRestApi/actions/delete/invoke";
 
     @XmlElement(name="deleteManyUri")
+    @Builder.Default
     private String deleteManyUri = "services/causeway.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke";
 
 }

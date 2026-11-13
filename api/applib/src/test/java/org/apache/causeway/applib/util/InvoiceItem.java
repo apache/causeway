@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.applib.util;
 
-@SuppressWarnings("deprecation")
+import org.apache.causeway.applib.util.ObjectContracts.ObjectContract;
+
 class InvoiceItem implements Comparable<InvoiceItem> {
 
     static InvoiceItem newInvoiceItem(Invoice invoice, String productCode, Integer quantity, Boolean rush) {
@@ -63,13 +64,14 @@ class InvoiceItem implements Comparable<InvoiceItem> {
     }
 
     private static final String KEY_PROPERTIES = "invoice desc, productCode asc, quantity asc nullsLast, rush desc nullsLast";
+    private static final ObjectContract<InvoiceItem> objContract = ObjectContracts.parse(InvoiceItem.class, KEY_PROPERTIES);
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, KEY_PROPERTIES);
+        return objContract.toString(this);
     }
     @Override
     public int compareTo(InvoiceItem o) {
-        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
+        return objContract.compare(this, o);
     }
 }

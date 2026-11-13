@@ -23,8 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -43,36 +41,37 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
+import org.apache.causeway.applib.exceptions.unrecoverable.DigitalVerificationException;
+import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.causeway.viewer.wicket.ui.observation.WicketRenderObservationTracker;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.causeway.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import lombok.Setter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Causeway-specific implementation of the Wicket's {@link RequestCycle},
@@ -81,10 +80,15 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0
  */
-@Log4j2
-public class WebRequestCycleForCauseway
+@Slf4j
+public record WebRequestCycleForCauseway(
+        InteractionService interactionService,
+        PageClassRegistry pageClassRegistry,
+        ExceptionRecognizerService exceptionRecognizerService,
+        SpecificationLoader specificationLoader,
+        SessionAuthenticator sessionAuthenticator)
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     IRequestCycleListener {
 
     // introduced (CAUSEWAY-1922) to handle render 'session refreshed' messages after session was expired
@@ -108,7 +112,7 @@ implements
             Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.DONT_CARE);
         }
         static boolean isExpiryMessageTimeframeExpired() {
-            val sessionExpiryMessageTimeframe =
+            var sessionExpiryMessageTimeframe =
                     (LocalDateTime) Session.get().getAttribute("session-expiry-message-timeframe");
             return sessionExpiryMessageTimeframe==null
                     || LocalDateTime.now().isAfter(sessionExpiryMessageTimeframe);
@@ -117,79 +121,18 @@ implements
     }
 
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
-            new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
+            new MetaDataKey<>() { private static final long serialVersionUID = 1L; };
 
-    @Setter
-    private PageClassRegistry pageClassRegistry;
-
-    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
+    public WebRequestCycleForCauseway(final MetaModelContext mmc, final PageClassRegistry pageClassRegistry) {
+        this(mmc.getInteractionService(), pageClassRegistry, mmc.lookupServiceElseFail(ExceptionRecognizerService.class),
+                mmc.getSpecificationLoader(),
+                new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class)));
+    }
 
     @Override
-    public synchronized void onBeginRequest(final RequestCycle requestCycle) {
-
-        if(log.isTraceEnabled()) {
-            log.trace("onBeginRequest in");
-        }
-
-        if (!Session.exists()) {
-            // Track if session was created from an expired one to notify user of the refresh.
-            // If there is no remember me cookie, user will be redirected to sign in and no need to notify.
-            if (userHasSessionWithRememberMe(requestCycle)) {
-                requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.EXPIRED);
-                if(log.isTraceEnabled()) {
-                    log.trace("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
-                }
-            }
-            if(log.isTraceEnabled()) {
-                log.trace("onBeginRequest out - session was not opened (because no Session)");
-            }
-            return;
-        }
-
-
-        // participate if an InteractionContext was already provided through some other mechanism,
-        // but fail early if the current user is impersonating
-        // (seeing this if going back the browser history into a page, that was previously impersonated)
-        val interactionService = getInteractionService();
-        val authenticatedWebSession = AuthenticatedWebSessionForCauseway.get();
-
-        /*XXX for debugging delegated user ...
-        interactionService.openInteraction(InteractionContext
-                .ofUserWithSystemDefaults(
-                        UserMemento.ofName("delegated")
-                        .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
-                        .withAuthenticationSource(AuthenticationSource.EXTERNAL)));*/
-
-        val currentInteractionContext = interactionService.currentInteractionContext();
-        if(currentInteractionContext.isPresent()) {
-            if(currentInteractionContext.get().getUser().isImpersonating()) {
-                throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
-            }
-            authenticatedWebSession.setPrimedInteractionContext(currentInteractionContext.get());
-        }
-
-        val interactionContext0 = authenticatedWebSession.getInteractionContext();
-        if (interactionContext0 == null) {
-            log.warn("onBeginRequest out - session was not opened (because no authentication)");
-            return;
-        }
-
-        // impersonation support
-        val interactionContext1 = lookupServiceElseFail(UserService.class)
-                .lookupImpersonatedUser()
-                .map(sudoUser -> interactionContext0.withUser(sudoUser))
-                .orElse(interactionContext0);
-
-        // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
-        interactionService.openInteraction(interactionContext1);
-
-        if(log.isTraceEnabled()) {
-            log.trace("onBeginRequest out - session was opened");
-        }
-
-        if(log.isDebugEnabled()) {
-            timings.set(new Timing());
-        }
+    public void onBeginRequest(final RequestCycle requestCycle) {
+        sessionAuthenticator.determineInteractionContext()
+            .ifPresent(interactionService::openInteraction);
     }
 
     @Override
@@ -197,8 +140,8 @@ implements
 
         if(log.isTraceEnabled()) {
             log.trace("onRequestHandlerResolved in (handler: {}, hasSession: {})",
-                    ()->handler.getClass().getName(),
-                    ()->Session.exists() ? Session.get().hashCode() : "false");
+                    handler.getClass().getName(),
+                    Session.exists() ? Session.get().hashCode() : "false");
         }
 
         // this nested class is hidden; it seems it is always used to create a new session after one has expired
@@ -211,19 +154,17 @@ implements
             }
             SessionLifecyclePhase.transferExpiredFlagToSession();
 
-        } else if(handler instanceof RenderPageRequestHandler) {
+        } else if(handler instanceof RenderPageRequestHandler requestHandler) {
 
             // using side-effect free access to MM validation result
-            val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+            var validationResult = specificationLoader().getValidationResult()
             .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
 
             if(validationResult.hasFailures()) {
-                RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
                 final IRequestablePage nextPage = requestHandler.getPage();
-                if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
+                if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage)
                     // do nothing
                     return;
-                }
                 throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
             }
 
@@ -251,11 +192,7 @@ implements
             }
         }
 
-        if(log.isTraceEnabled()) {
-            log.trace("onRequestHandlerResolved out");
-        }
     }
-
 
     /**
      * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
@@ -273,58 +210,30 @@ implements
      */
     @Override
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
-
-        if(log.isDebugEnabled()) {
-            val metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
-            long took = timings.get().took();
-            if(took > 50) {  // avoid too much clutter
-                if(metricsServiceIfAny.isPresent()) {
-                    val metricsService = metricsServiceIfAny.get();
-                    int numberEntitiesLoaded = metricsService.numberEntitiesLoaded();
-                    int numberEntitiesDirtied = metricsService.numberEntitiesDirtied();
-                    if(numberEntitiesLoaded > 0 || numberEntitiesDirtied > 0) {
-                        log.debug("onEndRequest  took: {}ms  numberEntitiesLoaded: {}, numberEntitiesDirtied: {}", took, numberEntitiesLoaded, numberEntitiesDirtied);
-                    }
-                } else {
-                    log.debug("onEndRequest  took: {}ms", took);
-                }
-            }
+        try {
+            WicketRenderObservationTracker.cleanup(requestCycle, null);
+        } finally {
+            interactionService.closeInteractionLayers();
         }
-
-        getMetaModelContext().lookupService(InteractionService.class).ifPresent(
-            InteractionService::closeInteractionLayers
-        );
     }
-
-    @Override
-    public void onDetach(final RequestCycle requestCycle) {
-        // detach the current @RequestScope, if any
-        IRequestCycleListener.super.onDetach(requestCycle);
-    }
-
 
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
-
-        if(log.isDebugEnabled()) {
-            log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().took());
-        }
-
+        WicketRenderObservationTracker.cleanup(cycle, ex);
 
         // using side-effect free access to MM validation result
-        val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+        var validationResult = specificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
-            val mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
+            var mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
         try {
 
             // adapted from http://markmail.org/message/un7phzjbtmrrperc
-            if(ex instanceof ListenerInvocationNotAllowedException) {
-                final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
+            if(ex instanceof final ListenerInvocationNotAllowedException linaex) {
                 if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
                     // no message.
                     // this seems to occur when press ESC twice in rapid succession on a modal dialog.
@@ -336,8 +245,7 @@ implements
             }
 
             // handle recognized exceptions gracefully also
-            val exceptionRecognizerService = getExceptionRecognizerService();
-            val recognizedIfAny = exceptionRecognizerService.recognize(ex);
+            var recognizedIfAny = exceptionRecognizerService().recognize(ex);
             if(recognizedIfAny.isPresent()) {
                 addWarning(recognizedIfAny.get().toMessage(getMetaModelContext().getTranslationService()));
                 return respondGracefully(cycle);
@@ -416,17 +324,21 @@ implements
 
     // special case handling for PageExpiredException, otherwise infinite loop
     private static final ExceptionRecognizerForType pageExpiredExceptionRecognizer =
-            new ExceptionRecognizerForType(
-                    PageExpiredException.class,
-                    __->"Requested page is no longer available.");
+        new ExceptionRecognizerForType(
+            PageExpiredException.class, __->"Requested page is no longer available.");
+
+    private static final ExceptionRecognizerForType exceptionRecognizerForDigitalVerificationException =
+        new ExceptionRecognizerForType(Category.NOT_FOUND,
+            DigitalVerificationException.class, __->"Digital verification failed for this request. "
+                + "Perhaps bookmark is not (or no longer) valid.");
 
     private static final ExceptionRecognizerForType exceptionRecognizerForBookmarkNotFoundException =
-            new ExceptionRecognizerForType(
-                    BookmarkNotFoundException.class, __ -> "Bookmark is not found.");
+        new ExceptionRecognizerForType(Category.NOT_FOUND,
+            BookmarkNotFoundException.class, __->"Bookmark is not found.");
 
     protected IRequestablePage errorPageFor(final Exception ex) {
 
-        val mmc = getMetaModelContext();
+        var mmc = getMetaModelContext();
 
         if(mmc==null) {
             log.warn("Unable to obtain the MetaModelContext (no session?)");
@@ -434,25 +346,22 @@ implements
         }
 
         // using side-effect free access to MM validation result
-        val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+        var validationResult = specificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
-                && validationResult.hasFailures()) {
+                && validationResult.hasFailures())
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
-        }
 
-        val exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
-            .lookupServiceElseFail(ExceptionRecognizerService.class);
-
-        final Optional<Recognition> recognition = exceptionRecognizerService
+        final Optional<Recognition> recognition = exceptionRecognizerService()
                 .recognizeFromSelected(
                         Can.<ExceptionRecognizer>of(
                                         pageExpiredExceptionRecognizer,
+                                        exceptionRecognizerForDigitalVerificationException,
                                         exceptionRecognizerForBookmarkNotFoundException)
                                 .addAll(exceptionRecognizerService.getExceptionRecognizers()),
                         ex);
 
-        val exceptionModel = ExceptionModel.create(mmc, recognition, ex);
+        var exceptionModel = ExceptionModel.create(mmc, recognition, ex);
 
         return isSignedIn()
                 ? new ErrorPage(exceptionModel)
@@ -474,6 +383,8 @@ implements
             signInPageClass = WicketSignInPage.class;
         }
         final PageParameters parameters = new PageParameters();
+        if(signInPageClass == WicketSignInPage.class)
+            return new WicketSignInPage(parameters, exceptionModel);
         Page signInPage;
         try {
             Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
@@ -491,46 +402,12 @@ implements
 
     /**
      * TODO: this is very hacky...
-     *
-     * <p>
-     * Matters should improve once CAUSEWAY-299 gets implemented...
+     * <p>Matters should improve once CAUSEWAY-299 gets implemented...
      */
     protected boolean isSignedIn() {
-        if(!isInInteraction()) {
+        if(!interactionService.isInInteraction())
             return false;
-        }
-        return getWicketAuthenticatedWebSession().isSignedIn();
-    }
-
-    private boolean userHasSessionWithRememberMe(final RequestCycle requestCycle) {
-        val containerRequest = requestCycle.getRequest().getContainerRequest();
-
-        if (containerRequest instanceof HttpServletRequest) {
-            val cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
-            val cookieKey = _Strings.nullToEmpty(
-                    getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
-
-            for (val cookie : cookies) {
-                if (cookieKey.equals(cookie.getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    // -- DEPENDENCIES
-
-    private ExceptionRecognizerService getExceptionRecognizerService() {
-        return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
-    }
-
-    private boolean isInInteraction() {
-        return getMetaModelContext().getInteractionService().isInInteraction();
-    }
-
-    private AuthenticatedWebSession getWicketAuthenticatedWebSession() {
-        return AuthenticatedWebSession.get();
+        return AuthenticatedWebSession.get().isSignedIn();
     }
 
 }

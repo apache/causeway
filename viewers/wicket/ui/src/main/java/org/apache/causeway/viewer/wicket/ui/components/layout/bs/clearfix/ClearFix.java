@@ -37,10 +37,10 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     public ClearFix(
             final String id,
-            final UiObjectWkt entityModel,
+            final UiObjectWkt objectModel,
             final BSClearFix bsClearFix) {
 
-        super(id, entityModel);
+        super(id, objectModel);
         this.bsClearFix = bsClearFix;
 
         buildGui();
@@ -56,6 +56,5 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
         this.addOrReplace(div);
     }
-
 
 }

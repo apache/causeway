@@ -21,6 +21,7 @@ package org.apache.causeway.applib.mixins.system;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -35,7 +36,6 @@ import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.HasTarget;
 
-
 /**
  * Allows domain objects that represents some sort of recorded change to a
  * domain object (commands, executions, audit entries) to act
@@ -48,8 +48,6 @@ import org.apache.causeway.applib.services.bookmark.HasTarget;
         entityChangePublishing = Publishing.DISABLED
 )
 public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTarget {
-
-
 
     /**
      * Enumerates the different types of changes recognised.
@@ -65,7 +63,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
             return name().replace("_", " ");
         }
     }
-
 
     @Property(
             editing = Editing.DISABLED
@@ -85,8 +82,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Type
     ChangeType getType();
 
-
-
     @Property(
             editing = Editing.DISABLED
     )
@@ -105,8 +100,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Override
     @InteractionId
     UUID getInteractionId();
-
-
 
     @Property(
             editing = Editing.DISABLED,
@@ -130,7 +123,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Username
     String getUsername();
 
-
     @Property(
             editing = Editing.DISABLED
     )
@@ -146,7 +138,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Timestamp
     java.sql.Timestamp getTimestamp();
 
-
     @Property(
             editing = Editing.DISABLED,
             maxLength = TargetLogicalTypeName.MAX_LENGTH
@@ -161,8 +152,8 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Retention(RetentionPolicy.RUNTIME)
     @interface TargetLogicalTypeName {
         int MAX_LENGTH = 255;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = HasTarget.Target.NULLABLE;
+        String ALLOWS_NULL = HasTarget.Target.ALLOWS_NULL;
     }
 
     /**
@@ -170,9 +161,10 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      */
     @TargetLogicalTypeName
     default String getTargetLogicalTypeName() {
-        return getTarget().getLogicalTypeName();
+        return Optional.ofNullable(getTarget())
+                .map(Bookmark::logicalTypeName)
+                .orElse(null);
     }
-
 
     @Property(
             editing = Editing.DISABLED,
@@ -194,8 +186,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      */
     @Target
     Bookmark getTarget();
-
-
 
     /**
      * The (logical) member identifier (ie action id or property id) that caused the domain object to be changed.
@@ -225,7 +215,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     default boolean hideLogicalMemberIdentifier() {
         return getType() != ChangeType.COMMAND && getType() != ChangeType.EXECUTION;
     }
-
 
     /**
      * The property Id whose value has changed.
@@ -257,9 +246,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     default boolean hidePropertyId() {
         return getType() != ChangeType.AUDIT_ENTRY;
     }
-
-
-
 
     @Property(
             editing = Editing.DISABLED,
@@ -295,9 +281,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
         return getType() != ChangeType.AUDIT_ENTRY;
     }
 
-
-
-
     @Property(
             editing = Editing.DISABLED,
             optionality = Optionality.OPTIONAL,
@@ -330,6 +313,18 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     }
     default boolean hidePostValue() {
         return getType() != ChangeType.AUDIT_ENTRY;
+    }
+
+    /**
+     * A no-op implementation of {@link DomainChangeRecord} that can be used for testing.
+     */
+    class Empty implements DomainChangeRecord {
+        @Override public ChangeType getType() {return null;}
+        @Override public UUID getInteractionId() {return null;}
+        @Override public String getUsername() {return "";}
+        @Override public java.sql.Timestamp getTimestamp() {return null;}
+        @Override public Bookmark getTarget() {return null;}
+        @Override public String getLogicalMemberIdentifier() {return "";}
     }
 
 }

@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.disabled.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -35,8 +35,7 @@ import org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectF
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class DisabledObjectFacetViaMethod
 extends DisabledObjectFacetAbstract
@@ -69,7 +68,7 @@ implements HasImperativeAspect {
 
     @Override
     public Optional<VetoReason> disabledReason(final ManagedObject domainObject) {
-        val returnValue = imperativeAspect.eval(domainObject, null);
+        var returnValue = imperativeAspect.eval(domainObject, null);
 
         final String reasonString = returnValue instanceof String
                 ? (String) returnValue

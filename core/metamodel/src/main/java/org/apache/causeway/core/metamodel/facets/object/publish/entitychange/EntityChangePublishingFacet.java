@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.publish.entitychange;
 
+import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
-
 
 /**
  * Corresponds to annotating the entity class with
@@ -34,22 +32,41 @@ import lombok.val;
  */
 public interface EntityChangePublishingFacet extends Facet {
 
-    public static boolean isPublishingEnabled(final FacetHolder facetHolder) {
-        if(facetHolder==null) {
-            return false;
-        }
+    static boolean isPublishingEnabled(final FacetHolder facetHolder) {
+        return entityChangePublishingFacet(facetHolder)
+                .map(EntityChangePublishingFacet::isEnabled)
+                .orElse(false);
+    }
 
-        if(facetHolder instanceof ObjectSpecification) {
-            if(!((ObjectSpecification)facetHolder).isEntity()) {
-                return false;
-            }
-        }
+    static boolean isPublishingEnabledForCreate(final FacetHolder facetHolder) {
+        return entityChangePublishingFacet(facetHolder)
+                .map(EntityChangePublishingFacet::isEnabledForCreate)
+                .orElse(false);
+    }
 
-        val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-        return entityChangePublishingFacet != null
-                && entityChangePublishingFacet.isEnabled();
+    static boolean isPublishingEnabledForUpdate(final FacetHolder facetHolder) {
+        return entityChangePublishingFacet(facetHolder)
+                .map(EntityChangePublishingFacet::isEnabledForUpdate)
+                .orElse(false);
+    }
+
+    static boolean isPublishingEnabledForDelete(final FacetHolder facetHolder) {
+        return entityChangePublishingFacet(facetHolder)
+                .map(EntityChangePublishingFacet::isEnabledForDelete)
+                .orElse(false);
     }
 
     boolean isEnabled();
+    boolean isEnabledForCreate();
+    boolean isEnabledForUpdate();
+    boolean isEnabledForDelete();
 
+    private static Optional<EntityChangePublishingFacet> entityChangePublishingFacet(final FacetHolder facetHolder) {
+        if(facetHolder==null)
+            return Optional.empty();
+        if(facetHolder instanceof ObjectSpecification objSpepc
+                && !objSpepc.isEntity())
+            return Optional.empty(); // optimization
+        return facetHolder.lookupFacet(EntityChangePublishingFacet.class);
+    }
 }

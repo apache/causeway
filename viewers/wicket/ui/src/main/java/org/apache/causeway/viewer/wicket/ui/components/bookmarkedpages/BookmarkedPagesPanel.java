@@ -19,12 +19,11 @@
 package org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Consumer;
 
 import jakarta.inject.Inject;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
@@ -33,9 +32,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
+import org.apache.causeway.applib.services.render.ObjectIconFa;
+import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
+import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -45,9 +50,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.val;
-
-public class BookmarkedPagesPanel
+class BookmarkedPagesPanel
 extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
@@ -62,13 +65,11 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
     private static final String ID_BOOKMARKED_PAGE_ICON_FA = "bookmarkedPageFontAwesome";
 
-    private static final String CLEAR_BOOKMARKS = "clearBookmarks";
-
+    private static final String ID_CLEAR_ALL = "clearBookmarks";
 
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
-    @Inject
-    private PageClassRegistry pageClassRegistry;
+    @Inject private PageClassRegistry pageClassRegistry;
 
     public BookmarkedPagesPanel(final String id, final BookmarkedPagesModel bookmarkedPagesModel) {
         super(id, bookmarkedPagesModel);
@@ -80,12 +81,18 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         super.renderHead(response);
     }
 
+    private BookmarkedPagesModel bookmarkedPagesModel() {
+        return getModel();
+    }
+
     private void buildGui() {
 
-        final BookmarkedPagesModel bookmarkedPagesModel = getModel();
+        var bookmarkedPagesModel = bookmarkedPagesModel();
 
-        Component helpText = addHelpText(bookmarkedPagesModel);
-        addOrReplace(helpText);
+        addOrReplace(helpTextLabel(bookmarkedPagesModel
+            .map(x->bookmarkedPagesModel.isEmpty()
+                ? "You have no bookmarks!"
+                : "")));
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_BOOKMARK_LIST) {
             private static final long serialVersionUID = 1L;
@@ -100,7 +107,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         Wkt.ajaxEnable(container);
         add(container);
 
-        val clearAllBookmarksLink = Wkt.linkAdd(this, CLEAR_BOOKMARKS, target->{
+        var clearAllBookmarksLink = Wkt.linkAdd(this, ID_CLEAR_ALL, target->{
             BookmarkedPagesPanel.this.getModel().clear();
             setEnabled(false);
             target.add(container, this);
@@ -114,47 +121,55 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         Wkt.listViewAdd(container, ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel, item->{
             final BookmarkTreeNode bookmarkNode = item.getModelObject();
             try {
-                final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
-
-                val clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
+                var clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
                     bookmarkedPagesModel.remove(bookmarkNode);
-                    if(bookmarkedPagesModel.isEmpty()) {
-                        WktComponents.permanentlyHide(this, CLEAR_BOOKMARKS);
-                    }
+                    // [CAUSEWAY-3881] does not work, that is, it does not hide the "Clear all' link.
+                    // Instead, we keep the link and its associated behavior setup up, such that we don't
+                    // run into an exception later, where Wicket cannot find the behavior.
+                    // ...
+                    //if(bookmarkedPagesModel.isEmpty()) {
+                    //    WktComponents.permanentlyHide(BookmarkedPagesPanel.this, ID_CLEAR_ALL);
+                    //}
                     target.add(container, clearAllBookmarksLink);
                 });
 
-                if(bookmarkNode.getDepth() == 0) {
+                if(bookmarkNode.depth() == 0) {
                     Wkt.cssAppend(clearBookmarkLink, "clearBookmark");
                 } else {
                     clearBookmarkLink.setEnabled(true);
                 }
 
-                val link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
-                                bookmarkNode.getPageParameters(),
-                                pageClass));
+                var link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
+                                bookmarkNode.pageParameters(),
+                                pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT)));
 
-                bookmarkNode.eitherIconOrFaClass()
-                .accept(
+                visitIconVariantOrElse(bookmarkNode,
                         iconResourceRef->{
-                            Optional.ofNullable(iconResourceRef)
-                            .ifPresent(icon->
-                                Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, icon));
+                            Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, iconResourceRef);
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
+                        },
+                        embedded->{
+                            Wkt.markupAdd(link, ID_BOOKMARKED_PAGE_ICON, Markup.embeddedImage(embedded.dataUri()).html());
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
                         },
                         faLayers->{
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
                             Wkt.faIconLayersAdd(link, ID_BOOKMARKED_PAGE_ICON_FA, faLayers);
+                        },
+                        ()->{
+                            // on no match: hide all
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
                         });
 
-                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());
+                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.title());
 
 //XXX seems broken when there is only one bookmark entry;
 // an alternative idea would be to render the item differently eg. bold, but don't disable it
 //                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
 //                        item.add(new CssClassAppender("disabled"));
 //                    }
-                Wkt.cssAppend(item, "bookmarkDepth" + bookmarkNode.getDepth());
+                Wkt.cssAppend(item, "bookmarkDepth" + bookmarkNode.depth());
             } catch(ObjectNotFoundException ex) {
                 // ignore
                 // this is a partial fix for an infinite redirect loop.
@@ -163,30 +178,43 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         });
     }
 
-    protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {
-
-        IModel<String> helpTextModel = new IModel<String>() {
-            private static final long serialVersionUID = 1;
-
-            @Override
-            public String getObject() {
-                return bookmarkedPagesModel.isEmpty() ? "You have no bookmarks!" : "";
-            }
-        };
-
-        Label helpText = new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
+    protected Component helpTextLabel(final IModel<String> helpTextModel) {
+        return new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
             private static final long serialVersionUID = 1;
 
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-
                 setVisible(!Strings.isEmpty(getDefaultModelObjectAsString()));
+                this.setOutputMarkupPlaceholderTag(true);
             }
         };
-        helpText.setOutputMarkupPlaceholderTag(true);
-        return helpText;
     }
 
+    // -- HELPER
+
+    private void visitIconVariantOrElse(
+            BookmarkTreeNode treeNode,
+            Consumer<ResourceReference> a,
+            Consumer<ObjectIconEmbedded> b,
+            Consumer<FontAwesomeLayers> c,
+            Runnable onNoMatch) {
+
+        var objectIcon = treeNode.objectIcon();
+        if(objectIcon instanceof ObjectIconUrlBased urlBased) {
+            var rref = getIconResourceReferenceFactory().resourceReferenceForObjectIcon(urlBased);
+            if(rref!=null) {
+                a.accept(rref);
+            } else {
+                onNoMatch.run();
+            }
+        } else if(objectIcon instanceof ObjectIconEmbedded embedded) {
+            b.accept(embedded);
+        } else if(objectIcon instanceof ObjectIconFa fa) {
+            c.accept(fa.fontAwesomeLayers());
+        } else {
+            onNoMatch.run();
+        }
+    }
 
 }

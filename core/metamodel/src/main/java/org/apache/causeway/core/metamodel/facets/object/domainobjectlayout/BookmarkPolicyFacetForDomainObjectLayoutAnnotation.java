@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
-
 public class BookmarkPolicyFacetForDomainObjectLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
     public static Optional<BookmarkPolicyFacetForDomainObjectLayoutAnnotation> create(

@@ -1,0 +1,288 @@
+{
+  "bundles": {
+    "basic": {
+      "file": "vaadin-basic.js",
+      "rawBytes": 163339,
+      "gzipBytes": 42429,
+      "sha256": "879c4162cc0957c59d3f76f7c8b15ad7d4c7aca4763242a0100b5f487e6b9398"
+    },
+    "numeric": {
+      "file": "vaadin-numeric.js",
+      "rawBytes": 96131,
+      "gzipBytes": 25677,
+      "sha256": "c225135710434681739ea8fd6987130af692d1f2bb1be97a45cfd64a36e723ef"
+    },
+    "local-temporal": {
+      "file": "vaadin-local-temporal.js",
+      "rawBytes": 235777,
+      "gzipBytes": 61051,
+      "sha256": "05866b47c4fbba2fd56a71c94046c31cc13cb78d23c27b7b66cbce0de645325f"
+    }
+  },
+  "aggregateGzipBytes": 129157,
+  "aggregateMaximumGzipBytes": 204800,
+  "families": {
+    "basic": {
+      "entryPoints": [
+        "@vaadin/text-field",
+        "@vaadin/text-area",
+        "@vaadin/password-field",
+        "@vaadin/checkbox",
+        "@vaadin/select"
+      ],
+      "maximumGzipBytes": 81920,
+      "cspStyleHashes": [
+        "sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=",
+        "sha256-O1QX2gxOlzGqL6KzAmcekP8ficJnQCCVqetcFYUb5ss=",
+        "sha256-bpNhRhOAoAX1rQ5VBdLwe5ATkB9Cp6xAt67TmIjsL8c=",
+        "sha256-peTsiXSLpuSs7cD42trfTzmd120BSxFbCN5N2acsJGw=",
+        "sha256-rRcVg9KnRtadgAGRvS1IlkrlQsH3shuO3yHW7A2DZEk=",
+        "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+      ]
+    },
+    "numeric": {
+      "entryPoints": [
+        "@vaadin/text-field",
+        "@vaadin/integer-field",
+        "@vaadin/number-field"
+      ],
+      "maximumGzipBytes": 66560,
+      "cspStyleHashes": [
+        "sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=",
+        "sha256-YNq3C4skMjxorxPrwhiBBUB3WVp43O5zI8oMR56ES64=",
+        "sha256-rRcVg9KnRtadgAGRvS1IlkrlQsH3shuO3yHW7A2DZEk=",
+        "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+      ]
+    },
+    "local-temporal": {
+      "entryPoints": [
+        "@vaadin/date-picker",
+        "@vaadin/time-picker",
+        "@vaadin/date-time-picker"
+      ],
+      "maximumGzipBytes": 102400,
+      "cspStyleHashes": [
+        "sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=",
+        "sha256-EJ7xFeV2ubzFN71/RQAb1cN8ak1I1ZC/6W+5JllfWto=",
+        "sha256-Mi+i7Phh1UOjZ0x/qGAS342TU+vn7xG5xDIzcKxXhiU=",
+        "sha256-WVYjqCndm5Rg7tULwhGngT2GtzCD2oFrfyb9r6y+dZQ=",
+        "sha256-liOe7KQsCbiDStYZNHBXpf+AEetcU+X9G3OcPZBW0Ho=",
+        "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+      ]
+    }
+  },
+  "usageStatisticsAlias": "@vaadin/vaadin-usage-statistics/vaadin-usage-statistics-optout.js",
+  "packages": [
+    {
+      "name": "@lit-labs/ssr-dom-shim",
+      "version": "1.6.0",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-VHb0ALPMTlgKjM6yIxxoQNnpKyUKLD04VzeQdsiXkMqkvYlAHxq9glGLmgbb889/1GsohSOAjvQYoiBppXFqrQ==",
+      "repository": "git+https://github.com/lit/lit.git",
+      "licenseSource": "lit package from the same repository and BSD-3-Clause license"
+    },
+    {
+      "name": "@lit/reactive-element",
+      "version": "2.1.2",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==",
+      "repository": "git+https://github.com/lit/lit.git"
+    },
+    {
+      "name": "@open-wc/dedupe-mixin",
+      "version": "1.4.0",
+      "license": "MIT",
+      "integrity": "sha512-Sj7gKl1TLcDbF7B6KUhtvr+1UCxdhMbNY5KxdU5IfMFWqL8oy1ZeAcCANjoB1TL0AJTcPmcCFsCbHf8X2jGDUA==",
+      "repository": "https://github.com/open-wc/open-wc.git"
+    },
+    {
+      "name": "@types/trusted-types",
+      "version": "2.0.7",
+      "license": "MIT",
+      "integrity": "sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    {
+      "name": "@vaadin/a11y-base",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-0Qo/RjNykbv3RaIngI6acbj31JICNIaF1dRLxO+h1CBkkcEgV8d8/sg8AqoUN1LdtJj4fV4LlpLcAP0uxRs3Pg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/button",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-9uEdI9BrFoz8595C0MNeuc98NgleIfZW7rlcrfp6HxVXnHQ5sFKHuMAvBBrSrf3XCuK2xKIztlOB2Xo1pVlg8g==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/checkbox",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-JvpCGbfK46RRE1cYEIej4QFA7BeQjtLdzAQhKZz/sCF4QRt32Bz4fK/XrgFS5+hk2HGSkdJOGBOWi5X6Z/zTlg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/combo-box",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-8tiBo1Zq+70nr7OTzK4VPj92cerCdWdQXpTqiz+upUJOt/a5vzLoHaTqe1mmv7VTc+h2cK6qE7qJUQnapoI0wA==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/component-base",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-H/D8AfrObcp3i4tzfMkMlk3egq+e1PM0II7DlkR0aRb96mSThm2uhbN81XvVSM5Ji/69qVAvsphN5P7LQ6t7xw==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/date-picker",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-wJwhBmSAeRIFMGqHoiATvWqAmhsFRlejdMtfZNgDx9BoHOhJYLngFwexkzooBcePnJVKsnJg2Gy1Z9qKMC/5kw==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/date-time-picker",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-Qn4xsE4sIOMjhLWWKiCJRiwBpuT2ssX0idypnl72VQzzAIYjFxbZ0/aDzka0rtmgP7g5yYzNtMWdc/NBXTokGQ==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/field-base",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-foFZRFlPlsAhm4kIC8qZ0VmLcTF0uX4Z8fap9aa+6uO/DUCroorwZYXWlZbH22j3Rqfu5dMGCpZ+BDMq6cJarw==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/input-container",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-JD/048m28NRnOM662EwbHRWl05ANNmVTdjktm5pu4rmo+SWRClrnMQmDKAp4xQvbWp6aC3Yssl0eXjPOXTcMeQ==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/integer-field",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-z21MypSnbeNnak2hjRhTvHYqEH5L6l8b5Z/MSSQMogE2rhp4c0CCb2VAFAyPvP7mQqd+q+SB7mdVtP89mtTLyg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/item",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-ixkGcIJZ9jLDSBitcfa9pJmcqUHXstVI3uSxlOagqmkoCs9n/Xpj0pPV0DM+mIBT2zCW6bdVGOdzeZCFbSAhxg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/list-box",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-R0Bsd5c2llfE9jzg3/swAFWq9GjiwWUWoIpiMh1ibcoMVWe++SQO+dYtxjkjKhVSncjXHQOyWvhdPr3cSy0XIg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/lit-renderer",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-ILaSia9vTfBbsUr+xfH9toaV2IOwEIyve3oErz3aNJayrYfC9QnKDcPc9TFxXYo9D5BnqtmotQVBMLHZJ4lOFg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/number-field",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-FdOQnH8nhSLOZ2XtEPAecLOOy5h0ppid6tClaPaWTZ9rHLBDwBO3bnFp5hwuOHdim0MN/Knjiy1XaJlwZluUKQ==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/overlay",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-kZWyohXF7uKSrMBMTJMy5+rpq5cdvNwOCnWwvb1z+mN5DJ85nt8oBVEA3OnMGLVPhEKMK3AsTfeJ5AGKAVEC0Q==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/password-field",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-YJLzMc1ELwpj0O7EpMrpqTqXC/1CLBG0gHybt1Oq/7EBMz4TPIjgpwJPtA05Id67bMq7IlcNsKMFPtTcPUPpEA==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/select",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-I/pXuqSeBwqtIduabgcvjUzbjwBnrTUOBIg6Ov/mDq2rHzx9LukmnAjnK51pWivofiFJ8A9Qth9dZJSY2R1UxQ==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/text-area",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-v3jmksO6WLQMFznW//4Q9+DLkxwBFV5EBtAVOXoMHQjTVFhIe7kVK+nRL/xtMfu6C10VjM0Tnr9MPKexJGztyw==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/text-field",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-VFImNUSN0gmfRgUqWdW/XaijIkBMJjBtgS2hxwL1RlvHhCBb2O/TuUmGDYwWvimuWYaBlhcV2xZYnMRBVeLQCg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/time-picker",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-oFjYUyabUGkU9VGBWg20VuCPOaBVW12T60qPKYC++fVq1+ZP/ufuDVEn6W85LQLm06iLwTxfFXSMK2IEd/87BA==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/vaadin-development-mode-detector",
+      "version": "2.0.7",
+      "license": "Apache-2.0",
+      "integrity": "sha512-9FhVhr0ynSR3X2ao+vaIEttcNU5XfzCbxtmYOV8uIRnUCtNgbvMOIcyGBvntsX9I5kvIP2dV3cFAOG9SILJzEA==",
+      "repository": "vaadin/vaadin-development-mode-detector"
+    },
+    {
+      "name": "@vaadin/vaadin-themable-mixin",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-fFkAuPkL8f9KvIIVRAek2rEtovB2mxiCXyL5OUnCV1DJ/AZPPWjMzM0nGTWWOn6jYD53BU/6yqQX06/4k4ee9w==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/vaadin-usage-statistics",
+      "version": "2.1.3",
+      "license": "Apache-2.0",
+      "integrity": "sha512-8r4TNknD7OJQADe3VygeofFR7UNAXZ2/jjBFP5dgI8+2uMfnuGYgbuHivasKr9WSQ64sPej6m8rDoM1uSllXjQ==",
+      "repository": "vaadin/vaadin-usage-statistics"
+    },
+    {
+      "name": "lit",
+      "version": "3.3.3",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-fycuvZg/hkpozL00lm1pEJH5nN/lr9ZXd6mJI2HSN4+Bzc+LDNdEApJ6HFbPkdFNHLvOplIIuJvxkS4XUxqirw==",
+      "repository": "git+https://github.com/lit/lit.git"
+    },
+    {
+      "name": "lit-element",
+      "version": "4.2.2",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-aFKhNToWxoyhkNDmWZwEva2SlQia+jfG0fjIWV//YeTaWrVnOxD89dPKfigCUspXFmjzOEUQpOkejH5Ly6sG0w==",
+      "repository": "git+https://github.com/lit/lit.git"
+    },
+    {
+      "name": "lit-html",
+      "version": "3.3.3",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-el8M6jK2o3RXBnrSHX3ZKrsN8zEV63pSExTO1wYJz7QndGYZ8353e2a5PPX+qHe2aGayfnchQmkAojaWAREOIA==",
+      "repository": "git+https://github.com/lit/lit.git"
+    }
+  ]
+}

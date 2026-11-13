@@ -18,34 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
-import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
-
-import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
-import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
-
-import lombok.val;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -104,7 +90,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             ManagedObject object,
             InteractionInitiatedBy interactionInitiatedBy);
 
-
     /**
      * Whether there are any auto-complete provided (eg <tt>autoCompleteXxx</tt> supporting
      * method) for the association.
@@ -152,33 +137,26 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return assoc -> {
-                val b = assoc.streamFacets()
-                        .filter(facet -> facet instanceof HiddenFacet)
+                var b = assoc.streamFacets()
+                        .filter(HiddenFacet.class::isInstance)
                         .map(facet -> (WhereValueFacet) facet)
                         .anyMatch(wawF -> wawF.where().includes(where));
                 return !b;
             };
         }
 
-        static Where whereContextFor(final Identifier memberIdentifier) {
-            return memberIdentifier.getType().isAction()
-                    ? STANDALONE_TABLES
-                    : PARENTED_TABLES;
-        }
-
         /**
          * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
-         *
          * <p>
          * However, if it's a 1-to-Many, whereHidden={@link Where#ALL_TABLES} is used as default
          * when no {@link HiddenFacet} is found.
          *
+         * @see ObjectAction.Predicates#visibleAccordingToHiddenFacet(Where)
+         *
          * @apiNote an alternative would be to prime the meta-model with fallback facets,
          *      however the current approach is more heap friendly
          */
-        public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(
-                final Identifier memberIdentifier) {
-            val whereContext = whereContextFor(memberIdentifier);
+        public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(final Where whereContext) {
             return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)
@@ -190,25 +168,29 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static Predicate<ObjectAssociation> referencesParent(
                 final @Nullable ObjectSpecification parentSpec) {
-            if(parentSpec == null) {
-                return _Predicates.alwaysFalse();
-            }
+        	return parentSpec != null
+    			? referencesParent(parentSpec.correspondingClass())
+				: _Predicates.alwaysFalse();
+        }
+
+        public static Predicate<ObjectAssociation> referencesParent(
+                final @Nullable Class<?> parentType) {
+            if(parentType == null)
+				return _Predicates.alwaysFalse();
             return (final ObjectAssociation assoc) -> {
-                    if(assoc.isCollection()) {
-                        // this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
+                    if(assoc.isCollection())
+						// this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
                         return false;
-                    }
                 ObjectSpecification childSpec = assoc.getElementType();
                 return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
-                            && equivalent(parentSpec, childSpec);
+                            && equivalent(parentType, childSpec.correspondingClass());
             };
         }
 
         /**
          * We allow either to be assignable to the other.
          *
-         * <p>
-         * Because both of these are valid scenarios:
+         * <p> Because both of these are valid scenarios:
          * <ul>
          *     <li>
          *         a child refers to an interface of its parent
@@ -219,53 +201,12 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          *         (eg Invoice -> InvoiceItem, with OutgoingInvoice -> OutgoingInvoiceItem).
          *     </li>
          * </ul>
-         * </p>
          */
-        private static boolean equivalent(final ObjectSpecification parentSpec, final ObjectSpecification childSpec) {
-            return parentSpec.isOfType(childSpec) || childSpec.isOfType(parentSpec);
+        private static boolean equivalent(final Class<?> a, final Class<?> b) {
+        	return a == b
+        			|| a.isAssignableFrom(b)
+        			|| b.isAssignableFrom(a);
         }
     }
-
-    // -- UTIL
-
-    @Domain.Exclude
-    public static class Util {
-        private Util(){}
-
-        public static final String LAYOUT_DEFAULT_GROUP = "General";
-
-        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
-                final List<ObjectAssociation> associations) {
-            Map<String, List<ObjectAssociation>> associationsByGroup = _Maps.newHashMap();
-            for(ObjectAssociation association: associations) {
-                addAssociationIntoGroup(associationsByGroup, association);
-            }
-            for (Map.Entry<String, List<ObjectAssociation>> objectAssociations : associationsByGroup.entrySet()) {
-                objectAssociations.getValue().sort(new MemberOrderComparator(true));
-            }
-            return associationsByGroup;
-        }
-
-        private static void addAssociationIntoGroup(
-                final Map<String, List<ObjectAssociation>> associationsByGroup,
-                final ObjectAssociation association) {
-
-            val layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
-            if(layoutGroupFacet != null) {
-                val fieldSetId = layoutGroupFacet.getGroupId();
-                if(_Strings.isNotEmpty(fieldSetId)) {
-                    getFrom(associationsByGroup, fieldSetId).add(association);
-                    return;
-                }
-            }
-            getFrom(associationsByGroup, LAYOUT_DEFAULT_GROUP).add(association);
-        }
-
-        private static List<ObjectAssociation> getFrom(final Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
-            return associationsByGroup.computeIfAbsent(groupName, k -> _Lists.newArrayList());
-        }
-    }
-
-
 
 }

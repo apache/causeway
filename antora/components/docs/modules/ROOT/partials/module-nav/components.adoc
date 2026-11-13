@@ -7,18 +7,21 @@
 
 *** xref:security:bypass:about.adoc[Bypass]
 *** xref:security:simple:about.adoc[Simple]
-*** xref:security:shiro:about.adoc[Shiro]
 *** xref:security:spring:about.adoc[Spring]
 *** xref:security:keycloak:about.adoc[Keycloak]
 
 ** Viewers
 
-*** xref:vw:ROOT:about.adoc[Web UI (Wicket)]
-*** xref:gqlv:ROOT:about.adoc[GraphQL API]
-*** xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
+*** xref:vw:ROOT:about.adoc[]
+*** xref:gqlv:ROOT:about.adoc[]
+*** xref:webcomponents:ROOT:about.adoc[Web Component Viewers]
+**** xref:webcomponents:ROOT:htmx/getting-started.adoc[HTMX]
+**** xref:webcomponents:ROOT:vue/getting-started.adoc[Vue]
+*** xref:vro:ROOT:about.adoc[]
 
 ** Persistence
 
-*** xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
-*** xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
+*** xref:pjpa:ROOT:about.adoc[]
+*** xref:querydsl:ROOT:about.adoc[]
+
 

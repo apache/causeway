@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
-import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -31,22 +29,18 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
 
@@ -64,7 +58,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<ObjectAction>lookup(owner, Identifier.Type.ACTION, memberId)
+        return ManagedMember.<ObjectAction>lookup(owner.objSpec(), Identifier.Type.ACTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
 
@@ -74,7 +68,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull Where where,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        return ManagedMember.<ObjectAction>lookup(owner, Identifier.Type.ACTION, memberId)
+        return ManagedMember.<ObjectAction>lookup(owner.objSpec(), Identifier.Type.ACTION, memberId)
                 .map(objectAction -> new ManagedAction(owner, objectAction, where, multiselectChoices));
     }
 
@@ -94,7 +88,7 @@ public final class ManagedAction extends ManagedMember {
             may still want to provide an action result, that does not need the mixee instance to be produced;
             eg. delete ApplicationUser mixin that returns a collection of all remaining users
             after deleting the selected one */
-        if(!owner.getSpecialization().isEntity()) {
+        if(!owner.specialization().isEntity()) {
             _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(owner), ()->
                     String.format("cannot create managed-action for action %s with an empty owner %s",
                             action.getFeatureIdentifier(),
@@ -105,8 +99,12 @@ public final class ManagedAction extends ManagedMember {
     }
 
     //CAUSEWAY-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
-    ActionInteractionHead interactionHead() {
+    InteractionHead interactionHead() {
         return action.interactionHead(getOwner());
+    }
+    //CAUSEWAY-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
+    ActionInteractionHead actionInteractionHead() {
+        return action.actionInteractionHead(getOwner());
     }
 
     /**
@@ -114,7 +112,7 @@ public final class ManagedAction extends ManagedMember {
      * parameters if any are initialized with their defaults (taking into account any supporting methods)
      */
     public ParameterNegotiationModel startParameterNegotiation() {
-        return interactionHead().defaults(this);
+        return actionInteractionHead().defaults(this);
     }
 
     @Override
@@ -163,19 +161,18 @@ public final class ManagedAction extends ManagedMember {
 
     private ManagedObject route(final @Nullable ManagedObject actionResult) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult))
             return ManagedObject.empty(action.getReturnType());
-        }
 
-        val resultPojo = actionResult.getPojo();
-        val objManager = mmc().getObjectManager();
+        var resultPojo = actionResult.getPojo();
+        var objManager = mmc().getObjectManager();
 
-        val resultAdapter = getRoutingServices().stream()
+        var resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .map(objManager::adapt)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(actionResult);
 
@@ -201,36 +198,5 @@ public final class ManagedAction extends ManagedMember {
     private ServiceRegistry getServiceRegistry() {
         return mmc().getServiceRegistry();
     }
-
-    // -- MEMENTO FOR ARGUMENT LIST
-
-    public MementoForArgs getMementoForArgs(final Can<ManagedObject> args) {
-        return MementoForArgs.create(
-                getMetaModel().getMetaModelContext().getObjectManager(),
-                args);
-    }
-
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class MementoForArgs implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        static MementoForArgs create(
-                final ObjectManager objectManager,
-                final Can<ManagedObject> args) {
-            return new MementoForArgs(args.map(objectManager::mementifyElseFail));
-        }
-
-        private final Can<ObjectMemento> argsMementos;
-
-        public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
-            val argTypes = actionMeta.getParameterTypes();
-            val objectManager = actionMeta.getMetaModelContext().getObjectManager();
-            return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
-                objectManager.demementify(argMemento, argSpec));
-        }
-    }
-
-
-
 
 }

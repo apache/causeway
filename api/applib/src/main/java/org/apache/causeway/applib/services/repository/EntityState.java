@@ -38,6 +38,14 @@ public enum EntityState {
      */
     NOT_PERSISTABLE(false),
     /**
+     * Object with this state is an entity that has no session.
+     */
+    SNAPSHOT(true),
+    /**
+     * Object with this state is an entity that has no session and has no OID yet. On pre-store.
+     */
+    SNAPSHOT_NO_OID(false),
+    /**
      * Object with this state is an entity that is attached to a persistence
      * session, in other words changes to the entity will be flushed back to
      * the database.
@@ -49,26 +57,8 @@ public enum EntityState {
     ATTACHED_NO_OID(false),
     /**
      * Is detached, hence (per definition) has an OID.
-     * <p>
-     * Supported by both JDO and JPA. However, historically never used by the framework for JDO.
      */
     DETACHED(true),
-    /**
-     * <h1>JDO specific</h1>
-     * Object with this state is an entity that no longer attached to a
-     * persistence session and cannot be re-attached.
-     * In other words: changes to the entity will <i>not</i>
-     * be tracked nor flushed back to the database.
-     * <p>
-     * JDO distinguishes between DETACHED and HOLLOW,
-     * by virtue of {@code javax.jdo.option.detachAllOnCommit=false}.
-     * <p>
-     * (Unfortunately, we have not found a way to recover _OIDs_ from _hollow_ entities, as used for serialization post commit.
-     * We have instead implemented a workaround using the <code>DnStateManagerForHollow</code> class).
-     *
-     * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
-     */
-    HOLLOW(true),
     /**
      * Object with this state is an entity that is transient
      * or has been removed from the database.
@@ -76,11 +66,10 @@ public enum EntityState {
      */
     TRANSIENT_OR_REMOVED(false),
     /**
-     * <h1>JDO specific</h1>
-     * Not supported by JPA. (Cannot distinguish between TRANSIENT and REMOVED.)
+     * Set by the framework after entity removal.
+     * <p> However, detecting an entity's state in the JPA context will never yield {@link #REMOVED}.
      */
-    REMOVED(false)
-    ;
+    REMOVED(false);
 
     // -- PREDICATES
 
@@ -96,10 +85,6 @@ public enum EntityState {
     public boolean isAttachedNoOid() { return this == ATTACHED_NO_OID; }
     /** @see #DETACHED */
     public boolean isDetached() { return this == DETACHED; }
-    /** @see #HOLLOW */
-    public boolean isHollow() { return this == HOLLOW; }
-    /** @see #TRANSIENT_OR_REMOVED
-     *  @see #REMOVED */
     public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED
             || this == REMOVED; }
     /** @see #REMOVED */

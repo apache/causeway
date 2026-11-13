@@ -24,6 +24,8 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
@@ -39,7 +41,7 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Exce
 @DomainServiceLayout(
         named = "Excel"
 )
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@Order(PriorityPrecedence.EARLY)
 public class ExcelPivotByCategoryAndSubcategoryMenu {
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

@@ -28,10 +28,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionInvokeTarget
         extends Element {
 
@@ -43,12 +42,12 @@ public class RichActionInvokeTarget
         super(context);
         this.actionInteractor = actionInteractor;
 
-        val objectSpecification = actionInteractor.getObjectSpecification();
+        var objectSpecification = actionInteractor.getObjectSpecification();
 
-        val graphQLOutputType = context.typeMapper.outputTypeFor(objectSpecification, actionInteractor.getSchemaType());
+        var graphQLOutputType = context.typeMapper.outputTypeFor(objectSpecification, actionInteractor.getSchemaType());
 
         if (graphQLOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name("target")
                     .type(graphQLOutputType);
             setField(fieldBuilder.build());

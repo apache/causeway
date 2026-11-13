@@ -16,9 +16,9 @@ Let's start with the basics...
 
 === Sign-in
 
-Apache Causeway integrates with a variety of authentication mechanisms, including link:http://shiro.apache.org[Apache Shiro], link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
+Apache Causeway integrates with a variety of authentication mechanisms, including link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
 
-The xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Causeway metamodel.
+The xref:security:ROOT:about.adoc[SecMan extension] provides a well-featured subdomain of users, roles and permissions against features derived from the Apache Causeway metamodel.
 
 
 

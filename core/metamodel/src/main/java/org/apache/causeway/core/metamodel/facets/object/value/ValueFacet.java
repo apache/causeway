@@ -21,9 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
@@ -37,11 +34,10 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.schema.common.v2.ValueType;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Indicates that this class has value semantics.
@@ -78,86 +74,51 @@ extends
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider();
-    Optional<DefaultsProvider<T>> selectDefaultsProviderForParameter(final ObjectActionParameter param);
-    Optional<DefaultsProvider<T>> selectDefaultsProviderForProperty(final OneToOneAssociation prop);
+    Optional<DefaultsProvider<T>> selectDefaultsProviderForAttribute(final @Nullable ObjectFeature feature);
 
     // -- PARSER
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<Parser<T>> selectDefaultParser();
-    Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param);
-    Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop);
+    Optional<Parser<T>> selectParserForAttribute(@NonNull ObjectFeature feature);
 
     default Optional<Parser<T>> selectParserForFeature(final @Nullable ObjectFeature feature) {
-        if(feature==null) {
-            return selectDefaultParser();
-        }
-        switch(feature.getFeatureType()) {
-        case ACTION_PARAMETER_SINGULAR:
-            return selectParserForParameter((ObjectActionParameter)feature);
-        case PROPERTY:
-            return selectParserForProperty((OneToOneAssociation)feature);
-        default:
-            return selectDefaultParser();
-        }
+        return feature==null
+            ? selectDefaultParser()
+            : switch(feature.featureType()) {
+                case ACTION_PARAMETER_SINGULAR, PROPERTY->selectParserForAttribute(feature);
+                default->selectDefaultParser();
+            };
     }
 
-    Parser<T> fallbackParser(Identifier featureIdentifier);
+    Parser<T> fallbackParser(ObjectFeature objectFeature);
 
-    default Parser<T> selectParserForParameterElseFallback(final ObjectActionParameter param) {
-        return selectParserForParameter(param)
-                .orElseGet(()->fallbackParser(param.getFeatureIdentifier()));
-    }
-
-    default Parser<T> selectParserForPropertyElseFallback(final OneToOneAssociation prop) {
-        return selectParserForProperty(prop)
-                .orElseGet(()->fallbackParser(prop.getFeatureIdentifier()));
-    }
-
-    default Parser<T> selectParserForFeatureElseFallback(final ObjectFeature feature) {
-        return selectParserForFeature(feature)
-                .orElseGet(()->fallbackParser(feature.getFeatureIdentifier()));
+    default Parser<T> selectParserForAttributeOrElseFallback(final @NonNull ObjectFeature feature) {
+        return selectParserForAttribute(feature)
+                .orElseGet(()->fallbackParser(feature));
     }
 
     // -- RENDERER
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<Renderer<T>> selectDefaultRenderer();
-    Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param);
-    Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop);
-    Optional<Renderer<T>> selectRendererForCollection(final OneToManyAssociation coll);
+    Optional<Renderer<T>> selectRendererForParamOrPropOrColl(@NonNull ObjectFeature param);
 
-    Renderer<T> fallbackRenderer(Identifier featureIdentifier);
+    Renderer<T> fallbackRenderer(ObjectFeature objectFeature);
 
     default Optional<Renderer<T>> selectRendererForFeature(final @Nullable ObjectFeature feature) {
-        if(feature==null) {
-            return selectDefaultRenderer();
-        }
-        switch(feature.getFeatureType()) {
-        case ACTION_PARAMETER_SINGULAR:
-            return selectRendererForParameter((ObjectActionParameter)feature);
-        case PROPERTY:
-            return selectRendererForProperty((OneToOneAssociation)feature);
-        case COLLECTION:
-            return selectRendererForCollection((OneToManyAssociation)feature);
-        default:
-            return selectDefaultRenderer();
-        }
+        return feature==null
+            ? selectDefaultRenderer()
+            : switch(feature.featureType()) {
+                case ACTION_PARAMETER_SINGULAR, PROPERTY, COLLECTION->
+                    selectRendererForParamOrPropOrColl(feature);
+                default->selectDefaultRenderer();
+            };
     }
 
-    default Renderer<T> selectRendererForParameterElseFallback(final ObjectActionParameter param) {
-        return selectRendererForParameter(param)
-                .orElseGet(()->fallbackRenderer(param.getFeatureIdentifier()));
-    }
-
-    default Renderer<T> selectRendererForPropertyElseFallback(final OneToOneAssociation prop) {
-        return selectRendererForProperty(prop)
-                .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
-    }
-
-    default Renderer<T> selectRendererForCollectionElseFallback(final OneToManyAssociation coll) {
-        return selectRendererForCollection(coll)
-                .orElseGet(()->fallbackRenderer(coll.getFeatureIdentifier()));
+    default Renderer<T> selectRendererForParamOrPropOrCollOrElseFallback(final @NonNull ObjectFeature feature) {
+        return selectRendererForParamOrPropOrColl(feature)
+                .orElseGet(()->fallbackRenderer(feature));
     }
 
     // -- TEMPORAL SUPPORT

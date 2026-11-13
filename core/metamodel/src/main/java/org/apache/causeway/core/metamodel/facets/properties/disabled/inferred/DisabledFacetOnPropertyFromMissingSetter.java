@@ -30,5 +30,4 @@ extends DisabledFacetAbstract {
         super(Where.ANYWHERE, VetoReason.propertyHasNoSetter(), holder);
     }
 
-
 }

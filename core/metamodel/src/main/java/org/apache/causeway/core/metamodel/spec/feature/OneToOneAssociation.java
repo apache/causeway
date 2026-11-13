@@ -22,7 +22,6 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.memento.PropertyMemento;
 
 /**
  * Provides reflective access to a field on a domain object that is used to
@@ -69,16 +68,9 @@ extends
     }
 
     default String getCssClass(final String prefix) {
-        final String ownerObjectType = getDeclaringType().getLogicalTypeName().replace(".", "-");
-        final String memberId = getFeatureIdentifier().getMemberLogicalName();
+        final String ownerObjectType = getDeclaringType().logicalTypeName().replace(".", "-");
+        final String memberId = getFeatureIdentifier().memberLogicalName();
         return prefix + ownerObjectType + "-" + memberId;
-    }
-
-    /**
-     * Returns a serializable representation of this property.
-     */
-    default PropertyMemento getMemento() {
-        return PropertyMemento.forProperty(this);
     }
 
 }

@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -47,7 +46,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
@@ -56,11 +55,13 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.causeway.testdomain.model.bad.AmbiguousTitle;
 import org.apache.causeway.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.causeway.testdomain.model.bad.InvalidActionOverloading;
+import org.apache.causeway.testdomain.model.bad.InvalidAssociationAnnotation;
 import org.apache.causeway.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.causeway.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.causeway.testdomain.model.bad.InvalidElementTypes;
@@ -71,13 +72,10 @@ import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedPropertySupport;
-import org.apache.causeway.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 import org.apache.causeway.testdomain.model.bad.InvalidServiceWithAlias;
 import org.apache.causeway.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -111,7 +109,6 @@ class DomainModelTest_usingBadDomain {
         });
     }
 
-
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
         assertTrue(IntrospectionMode.isFullIntrospect(configuration, causewaySystemEnvironment));
@@ -132,12 +129,11 @@ class DomainModelTest_usingBadDomain {
                         "InvalidOrphanedActionSupport",
                         "hideOrphaned()"));
 
-        val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
     }
-
 
     @Test
     void orphanedPropertySupport_shouldFail() {
@@ -147,7 +143,7 @@ class DomainModelTest_usingBadDomain {
                         "InvalidOrphanedPropertySupport",
                         "hideMyProperty()"));
 
-        val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
@@ -161,7 +157,7 @@ class DomainModelTest_usingBadDomain {
                         "InvalidOrphanedCollectionSupport",
                         "hideMyCollection()"));
 
-        val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
@@ -226,11 +222,11 @@ class DomainModelTest_usingBadDomain {
     // since use of @Named annotation, entirely guarded by Spring ...
 //    private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
 //
-//        val typeLiteralList = types.stream()
+//        var typeLiteralList = types.stream()
 //                .map(t->t.getName())
 //                .collect(Collectors.joining(", "));
 //
-//        val classIdentifiers = types.stream()
+//        var classIdentifiers = types.stream()
 //                .map(t->Identifier.classIdentifier(LogicalType.fqcn(t)))
 //                .collect(Can.toCan());
 //
@@ -274,10 +270,23 @@ class DomainModelTest_usingBadDomain {
     }
 
     @Test
-    void invalidDomainObjectOnInterface_shouldFail() {
+    void invalidDomainObjectOnInterface1_shouldFail() {
         validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.class)),
-                "Cannot use @DomainObject on interface:");
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.BadlyInterfaced.class)),
+                "Cannot use @DomainObject on more than one interface, as inherited by:");
+    }
+
+    @Test
+    void invalidDomainObjectOnInterface2_shouldFail() {
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.BadlyMixed.class)),
+                "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by:");
+    }
+
+    @Test
+    void validDomainObjectOnInterface_shouldNotFail() {
+    	validator.assertValid(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.Good.class)));
     }
 
     @ParameterizedTest
@@ -288,7 +297,14 @@ class DomainModelTest_usingBadDomain {
             })
     void orphanedMemberSupportDiscovery(final Class<?> classUnderTest) {
 
-        val clsIdUnderTest = Identifier.classIdentifier(LogicalType.fqcn(classUnderTest));
+        var clsIdUnderTest = Identifier.classIdentifier(LogicalType.fqcn(classUnderTest));
+
+        if(classUnderTest == OrphanedMemberSupportDetection.WhenAnnotationRequired.class) {
+            // no orphans expected - non annotated methods are simply ignored (removed from the pool of candidates)
+            validator.assertValid(
+                    Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.Good.class)));
+            return;
+        }
 
         // namedPlaceOrder(): String = "my name"
         validator.assertAnyFailuresContaining(clsIdUnderTest, "namedPlaceOrder");
@@ -393,6 +409,39 @@ class DomainModelTest_usingBadDomain {
             validator.assertAnyFailuresContaining(InvalidMemberIdClash.class, expectedMessageChunk));
     }
 
+    // -- MEMBER-FEATURE-TYPE
+
+    @Test
+    void invalidPropertyAnnotationOnCollection_shouldFail() {
+        var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "plural");
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Property.class));
+    }
+    @Test
+    void invalidCollectionAnnotationOnProperty_shouldFail() {
+        var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "singular");
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"singularActionP", "pluralActionP"})
+    void invalidPropertyAnnotationOnAction_shouldFail(final String actionName) {
+        var origin = Identifier.actionIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), actionName);
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Property.class));
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"singularActionC", "pluralActionC"})
+    void invalidCollectionAnnotationOnAction_shouldFail(final String actionName) {
+        var origin = Identifier.actionIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), actionName);
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
+    }
+
     // -- ELEMENT-TYPE
 
     @ParameterizedTest
@@ -438,17 +487,10 @@ class DomainModelTest_usingBadDomain {
 
     // -- INCUBATING
 
-    @Test @Disabled("this case has no vaildation refiner yet")
-    void invalidPropertyAnnotationOnAction_shouldFail() {
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidPropertyAnnotationOnAction.class)),
-                "TODO");
-    }
-
 //    @Test
 //    void orphanedActionSupportNotEnforced_shouldFail() {
 //
-//        val validateDomainModel = new DomainModelValidator();
+//        var validateDomainModel = new DomainModelValidator();
 //
 //        assertThrows(DomainModelException.class, validateDomainModel::run);
 //        assertTrue(validateDomainModel.anyMatchesContaining(
@@ -461,10 +503,10 @@ class DomainModelTest_usingBadDomain {
     private String unsatisfiedDomainIncludeSemantics(
             final String className,
             final String memberName) {
-        return MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
-                .builder()
+        return MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS.builder()
                 .addVariable("type", className)
                 .addVariable("member", memberName)
+                .addVariable("unmetConstraints", "")
                 .buildMessage();
     }
 

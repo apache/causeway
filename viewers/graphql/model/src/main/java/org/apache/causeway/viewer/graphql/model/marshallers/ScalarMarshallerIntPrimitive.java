@@ -35,7 +35,7 @@ public class ScalarMarshallerIntPrimitive extends ScalarMarshallerAbstract<Integ
 
     @Inject
     public ScalarMarshallerIntPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(int.class, Scalars.GraphQLInt, causewayConfiguration);
+        super(int.class, Scalars.GraphQLInt, causewayConfiguration, true);
     }
 
     @Override

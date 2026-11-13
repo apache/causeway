@@ -30,7 +30,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 public abstract class ContentNodeAbstract implements ContentNode {
 
@@ -83,7 +82,7 @@ public abstract class ContentNodeAbstract implements ContentNode {
 
     @Override
     public boolean setAttribute(Object name, Object value, boolean overwrite) {
-        val key = (String)name;
+        var key = (String)name;
         return overwrite
                 ? attributes.put(key, value)==null
                 : attributes.get(key)!=null
@@ -150,6 +149,5 @@ public abstract class ContentNodeAbstract implements ContentNode {
     public String normalizeWebPath(String path, String start, boolean preserveUriTarget) {
         return String.format("[normalize_web_path %s %s %b]", path, start, preserveUriTarget);
     }
-
 
 }

@@ -25,17 +25,26 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmarkui.BookmarkUiService;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 
+/**
+ * Implementation of {@link BookmarkUiService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
-@Named("causeway.viewer.wicket.BookmarkUiServiceWicket")
+@Named(BookmarkUiServiceWicket.LOGICAL_TYPE_NAME)
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerWicketViewer.NAMESPACE + ".BookmarkUiServiceWicket";
+
     @Override
     public void clear() {
-        final AuthenticatedWebSessionForCauseway session = AuthenticatedWebSessionForCauseway.get();
+        var session = AuthenticatedWebSessionForCauseway.get();
         if (session == null) {
             return;
         }

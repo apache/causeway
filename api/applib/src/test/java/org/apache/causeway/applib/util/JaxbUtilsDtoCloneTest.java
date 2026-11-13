@@ -28,8 +28,6 @@ import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
-import lombok.val;
-
 class JaxbUtilsDtoCloneTest {
 
     @Test
@@ -37,7 +35,7 @@ class JaxbUtilsDtoCloneTest {
 
         // ActionInvocationDto hex dump
 
-        val dtoHexDump = "3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e "
+        var dtoHexDump = "3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e "
                 + "67 3d 22 55 54 46 2d 38 22 20 73 74 61 6e 64 61 6c 6f 6e 65 3d 22 79 65 73 22 3f 3e 3c 41 63 74 "
                 + "69 6f 6e 49 6e 76 6f 63 61 74 69 6f 6e 44 74 6f 20 78 6d 6c 6e 73 3a 69 78 6e 3d 22 68 74 74 70 "
                 + "3a 2f 2f 63 61 75 73 65 77 61 79 2e 61 70 61 63 68 65 2e 6f 72 67 2f 73 63 68 65 6d 61 2f 69 78 "
@@ -68,13 +66,13 @@ class JaxbUtilsDtoCloneTest {
                 + "6d 70 6c 65 4f 62 6a 65 63 74 22 20 69 64 3d 22 32 38 39 22 2f 3e 3c 2f 69 78 6e 3a 72 65 74 75 "
                 + "72 6e 65 64 3e 3c 2f 41 63 74 69 6f 6e 49 6e 76 6f 63 61 74 69 6f 6e 44 74 6f 3e";
 
-        val dtoAsBytes = _Bytes.ofHexDump(dtoHexDump);
+        var dtoAsBytes = _Bytes.ofHexDump(dtoHexDump);
 
         // verify that we can reproduce a byte array from its stringified representation
         assertEquals(dtoHexDump, _Bytes.hexDump(dtoAsBytes));
 
-        val mapper = MemberExecutionDtoUtils.dtoMapper(ActionInvocationDto.class);
-        val dto = mapper.read(DataSource.ofBytes(dtoAsBytes));
+        var mapper = MemberExecutionDtoUtils.dtoMapper(ActionInvocationDto.class);
+        var dto = mapper.read(DataSource.ofBytes(dtoAsBytes));
 
         assertNotNull(dto);
         assertEquals(ActionInvocationDto.class, dto.getClass());

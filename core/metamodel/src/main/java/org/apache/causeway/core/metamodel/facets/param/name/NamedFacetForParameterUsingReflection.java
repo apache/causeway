@@ -31,7 +31,13 @@ extends ParamNamedFacetAbstract {
     public NamedFacetForParameterUsingReflection(
             final String named,
             final FacetHolder holder) {
-        super(named, holder, Precedence.LOW); // allow facets inferred from annotations to override
+        super(named, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// allow facets inferred from annotations to override
+    	return Precedence.LOW;
     }
 
 }

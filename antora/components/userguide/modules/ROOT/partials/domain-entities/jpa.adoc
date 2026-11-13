@@ -12,28 +12,30 @@ See the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink object store] documentation fo
 
 == Class definition
 
-For the domain class itself, this will be the `@javax.persistence.Entity` annotation and probably the `@javax.persistence.Table` annotation, as well as others to define indices and queries.
+For the domain class itself, this will be the `@jakarta.persistence.Entity` annotation and probably the `@jakarta.persistence.Table` annotation, as well as others to define indices and queries.
 
 
 [source,java]
 ----
-@javax.persistence.Entity                                               // <.>
-@javax.persistence.Table(
-    schema= "simple"                                                    // <.>
+import jakarta.persistence.*;
+
+@Entity                                                         // <.>
+@Table(
+    schema= "simple"                                            // <.>
     // ...
 )
-@EntityListeners(CausewayEntityListener.class)                          // <.>
-@Named("simple.SimpleObject")                                           // <.>
-@DomainObject                                                           // <.>
+@EntityListeners(CausewayEntityListener.class)                  // <.>
+@Named("simple.SimpleObject")                                   // <.>
+@DomainObject                                                   // <.>
 public class SimpleObject {
 
-    @javax.persistence.Id                                               // <.>
-    @javax.persistence.GeneratedValue(strategy = GenerationType.AUTO)   // <3>
-    @javax.persistence.Column(name = "id", nullable = false)            // <.>
+    @Id                                                         // <.>
+    @GeneratedValue(strategy = GenerationType.AUTO)             // <3>
+    @Column(name = "id", nullable = false)                      // <.>
     private Long id;
 
-    @javax.persistence.Version                                          // <.>
-    @javax.persistence.Column(name = "version", nullable = false)       // <5>
+    @Version                                                    // <.>
+    @Column(name = "version", nullable = false)                 // <5>
     @PropertyLayout(fieldSetId = "metadata", sequence = "999")
     @Getter @Setter
     private long version;
@@ -65,30 +67,27 @@ This is often used in database unique indices, and in the `toString()` implement
 
 [source,java]
 ----
-import javax.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.ToString.Include;
+import jakarta.persistence.*;
+import lombok.*;
 
-@javax.persistence.Table(
+@Table(
     schema= SimpleModule.SCHEMA,
     uniqueConstraints = {
         @UniqueConstraint(name = "SimpleObject__name__UNQ",
-                          columnNames = {"name"})                   // <.>
+                          columnNames = {"name"})               // <.>
     }
 )
 public class SimpleObject
-             implements Comparable<SimpleObject> {                  // <.>
+             implements Comparable<SimpleObject> {              // <.>
 
     // ...
     public SimpleObject(String name) {
         setName(name);
     }
 
-    @Column(allowsNull="false", length=50)                          // <.>
-    @Getter @Setter                                                 // <.>
-    @ToString.Include                                               // <.>
+    @Column(nullable=false, length=50)                          // <.>
+    @Getter @Setter                                             // <.>
+    @ToString.Include                                           // <.>
     private String name;
 
     private final static Comparator<SimpleObject> comparator =
@@ -96,7 +95,7 @@ public class SimpleObject
 
     @Override
     public int compareTo(final SimpleObject other) {
-        return comparator.compare(this, other);                     // <.>
+        return comparator.compare(this, other);                 // <.>
     }
 }
 ----
@@ -125,29 +124,21 @@ These are used by repository domain services to query for instances of the entit
 
 [source,java]
 ----
-...
-@javax.persistence.NamedQueries({
-        @javax.persistence.NamedQuery(                                  // <.>
-                name = "findByNameLike",                                // <.>
-                query = "SELECT so " +                                  // <.>
-                        "FROM SimpleObject so " +
-                        "WHERE so.name LIKE :name"
-        )
-})
+import jakarta.persistence.*;
 
-@javax.jdo.annotations.Queries({
-    @javax.jdo.annotations.Query(                                     // <.>
-      name = "findByName",                                            // <.>
-      value = "SELECT "                                               // <.>
-            + "FROM domainapp.modules.simple.dom.impl.SimpleObject "  // <.>
-            + "WHERE name.indexOf(:name) >= 0 ")                      // <.>
+@NamedQueries({
+    @NamedQuery(                                  // <.>
+        name = "SimpleObject.findByNameLike",     // <.>
+        query = "SELECT so " +                    // <.>
+                "FROM SimpleObject so " +
+                "WHERE so.name LIKE :name"
+    )
 })
-...
 public class SimpleObject { /* ... */ }
 ----
 <.> There may be several `@NamedQuery` annotations, nested within a `@NamedQueries` annotation) defines queries using JPAQL.
 <.> Defines the name of the query.
-<.> The definition of the query, using JPAQL syntax.
+<.> The definition of the query, using JPQL syntax.
 
 To actually use the above definition, the framework provides the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService].
 This is a generic repository for any domain class.
@@ -157,10 +148,10 @@ The corresponding repository method for the above query is:
 [source,java]
 ----
 public List<SimpleObject> findByName(String name) {
-    return repositoryService.allMatches(            // <.>
-            Query.named(SimpleObject.class,         // <.>
-                        "findByNameLike")           // <.>
-                   .withParameter("name", name)     // <.>
+    return repositoryService.allMatches(                // <.>
+            Query.named(SimpleObject.class,             // <.>
+                        "SimpleObject.findByNameLike")  // <.>
+                   .withParameter("name", name)         // <.>
             );
 }
 
@@ -169,7 +160,7 @@ public List<SimpleObject> findByName(String name) {
 <.> find all instances that match the query
 <.> Specifies the class that is annotated with `@NamedQuery`
 <.> Corresponds to the `@NamedQuery#name` attribute
-<.> Corresponds to the `:name` parameter in the query JDOQL string
+<.> Corresponds to the `:name` parameter in the query JPQL string
 
 
 

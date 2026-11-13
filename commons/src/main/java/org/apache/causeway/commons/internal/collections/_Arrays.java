@@ -26,14 +26,15 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -85,7 +86,6 @@ public final class _Arrays {
         return false;
     }
 
-
     /**
      * Whether given {@code test} predicate evaluates 'true' for all given pairs of elements
      * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n}
@@ -103,7 +103,6 @@ public final class _Arrays {
             final @NonNull BiPredicate<T, T> test) {
         return !testAnyMatch(array1, array2, test.negate());
     }
-
 
     /**
      * @param cls
@@ -131,7 +130,7 @@ public final class _Arrays {
      * @param length
      */
     public static <T> Collector<T,?,T[]> toArray(final @NonNull Class<T> componentType, final int length){
-        return new _Arrays_Collector<T>(componentType, length);
+        return new _Arrays_Collector<T>(resolvePrimitiveIfNecessary(componentType), length);
     }
 
     /**
@@ -139,7 +138,12 @@ public final class _Arrays {
      * @param componentType
      */
     public static <T> Collector<T,?,T[]> toArray(final @NonNull Class<T> componentType){
-        return new _Arrays_CollectorUnknownSize<T>(componentType);
+        return new _Arrays_CollectorUnknownSize<T>(resolvePrimitiveIfNecessary(componentType));
+    }
+
+    private static <T> Class<T> resolvePrimitiveIfNecessary(final Class<T> componentType) {
+        var nonPrimitive = ClassUtils.resolvePrimitiveIfNecessary(componentType);
+        return _Casts.uncheckedCast(nonPrimitive);
     }
 
     // -- CONCATENATION
@@ -252,13 +256,13 @@ public final class _Arrays {
             throw new IllegalArgumentException("Array must be of lenght 1 or larger.");
         }
         if(index<0 || index>=array.length) {
-            val msg = String.format("Array index %d is out of bounds [0, %d]", index, array.length-1);
+            var msg = String.format("Array index %d is out of bounds [0, %d]", index, array.length-1);
             throw new IllegalArgumentException(msg);
         }
         final T[] result = Arrays.copyOf(array, array.length - 1);
         // copy the elements from index + 1 till end
         // from original array to the new array
-        val remaining = result.length - index;
+        var remaining = result.length - index;
         System.arraycopy(array, index+1, result, index, remaining);
         return result;
     }
@@ -309,8 +313,6 @@ public final class _Arrays {
         return Arrays.copyOfRange(array, beginIndex, endIndex);
     }
 
-
-
     // -- COMPONENT TYPE INFERENCE
 
     /**
@@ -335,12 +337,12 @@ public final class _Arrays {
      * @param index
      */
     public static <T> Optional<T> get(final @Nullable T[] array, final int index) {
-        val size = _NullSafe.size(array);
+        var size = _NullSafe.size(array);
         if(size==0) {
             return Optional.empty();
         }
-        val minIndex = 0;
-        val maxIndex = size - 1;
+        var minIndex = 0;
+        var maxIndex = size - 1;
         if(index < minIndex ||  index > maxIndex) {
             return Optional.empty();
         }
@@ -370,10 +372,10 @@ public final class _Arrays {
         if (array == null) {
             return null;
         }
-        val mappedArray = _Casts.<R[]>uncheckedCast(
+        var mappedArray = _Casts.<R[]>uncheckedCast(
                 Array.newInstance(resultElementType, array.length));
         int i = 0;
-        for (val element : array) {
+        for (var element : array) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
@@ -397,9 +399,9 @@ public final class _Arrays {
         if (array == null) {
             return null;
         }
-        val mappedArray = new Object[array.length];
+        var mappedArray = new Object[array.length];
         int i = 0;
-        for (val element : array) {
+        for (var element : array) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
@@ -426,10 +428,10 @@ public final class _Arrays {
         if (collection == null) {
             return null;
         }
-        val mappedArray = _Casts.<R[]>uncheckedCast(
+        var mappedArray = _Casts.<R[]>uncheckedCast(
                 Array.newInstance(resultElementType, collection.size()));
         int i = 0;
-        for (val element : collection) {
+        for (var element : collection) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
@@ -453,14 +455,13 @@ public final class _Arrays {
         if (collection == null) {
             return null;
         }
-        val mappedArray = new Object[collection.size()];
+        var mappedArray = new Object[collection.size()];
         int i = 0;
-        for (val element : collection) {
+        for (var element : collection) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
     }
-
 
     // --
 

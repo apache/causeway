@@ -23,7 +23,7 @@ package org.apache.causeway.extensions.executionoutbox.applib.spiimpl;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.springframework.stereotype.Service;
 
@@ -31,8 +31,6 @@ import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.restapi.OutboxEvents;
 import org.apache.causeway.schema.ixn.v2.InteractionsDto;
-
-import lombok.val;
 
 /**
  * Implementation of {@link ContentMappingService} that is responsible for serializing a list of
@@ -56,9 +54,9 @@ public class ContentMappingServiceForOutboxEvents implements ContentMappingServi
             return null;
         }
 
-        val outboxEvents = (OutboxEvents) object;
+        var outboxEvents = (OutboxEvents) object;
 
-        val dto = new InteractionsDto();
+        var dto = new InteractionsDto();
         outboxEvents.getExecutions().stream()
                 .map(ExecutionOutboxEntry::getInteractionDto)
                 .filter(Objects::nonNull)

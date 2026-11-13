@@ -22,6 +22,38 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.models.ActionPrompt;
+import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.causeway.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.causeway.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
+import org.apache.causeway.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
+import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
+import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
+import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicketViewerJsResourceReference;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -43,53 +75,13 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract;
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.ActionPrompt;
-import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.causeway.viewer.wicket.model.models.BookmarkableModel;
-import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.causeway.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelCssResourceReference;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.causeway.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
-import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
-import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
-import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicketViewerJsResourceReference;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
-
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link UiComponentType}s.
  */
-@Log4j2
+@Slf4j
 public abstract class PageAbstract
 extends WebPageBase
 implements ActionPromptProvider {
@@ -103,7 +95,6 @@ implements ActionPromptProvider {
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
     private static final String ID_PAGE_TITLE = "pageTitle";
-    public static final String ID_MENU_LINK = "menuLink";
     public static final String UIHINT_FOCUS = "focus";
 
     /**
@@ -143,7 +134,7 @@ implements ActionPromptProvider {
 
             themeDiv = Wkt.containerAdd(this, ID_THEME);
 
-            String applicationName = getApplicationSettings().getName();
+            String applicationName = getApplicationSettings().name();
             Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
@@ -167,12 +158,12 @@ implements ActionPromptProvider {
 
             log.error("Failed to construct page, going back to sign in page", ex);
 
-            val exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
+            var exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
                     .lookupServiceElseFail(ExceptionRecognizerService.class);
 
-            val recognition = exceptionRecognizerService.recognize(ex);
+            var recognition = exceptionRecognizerService.recognize(ex);
 
-            val exceptionModel = ExceptionModel.create(getMetaModelContext(), recognition, ex);
+            var exceptionModel = ExceptionModel.create(getMetaModelContext(), recognition, ex);
 
             getSession().invalidate();
             getSession().clear();
@@ -199,7 +190,6 @@ implements ActionPromptProvider {
         return debugBar;
     }
 
-
     /**
      * Creates the component that should be used as a page header/navigation bar
      *
@@ -222,11 +212,10 @@ implements ActionPromptProvider {
         return (MarkupContainer) footer;
     }
 
-
     protected void setTitle(final String title) {
         Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
                 ? title
-                : getApplicationSettings().getName());
+                : getApplicationSettings().name());
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -247,25 +236,22 @@ implements ActionPromptProvider {
             .contributeThemeSpecificOverrides(getApplication(), response);
 
         response.render(SidebarCssResourceReference.asHeaderItem());
-        response.render(JavaAwtImagePanelCssResourceReference.asHeaderItem());
-
-        response.render(LiveQueryJsResourceReference.asHeaderItem());
         response.render(CausewayWicketViewerJsResourceReference.asHeaderItem());
 
         new JGrowlBehaviour()
             .renderFeedbackMessages(response);
 
-        getWicketViewerSettings().getCss()
+        getWicketViewerSettings().css()
         .ifPresent(applicationCss -> {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         });
 
-        getWicketViewerSettings().getJs()
+        getWicketViewerSettings().js()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         });
 
-        getWicketViewerSettings().getLiveReloadUrl()
+        getWicketViewerSettings().liveReloadUrl()
         .ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
@@ -339,10 +325,7 @@ implements ActionPromptProvider {
         getComponentFactoryRegistry().addOrReplaceComponent(container, uiComponentType, model);
     }
 
-
-    ////////////////////////////////////////////////////////////////
-    // bookmarked pages
-    ////////////////////////////////////////////////////////////////
+    // -- BOOKMARKED PAGES
 
     /**
      * Convenience for subclasses
@@ -370,16 +353,16 @@ implements ActionPromptProvider {
     }
 
     private boolean isShowBookmarks() {
-        return getWicketViewerSettings().getBookmarkedPages().isShowChooser();
+        return getWicketViewerSettings().bookmarkedPages().showChooser();
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
+        return getWicketViewerSettings().bookmarkedPages().showDropDownOnFooter();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel model) {
         getBookmarkedPagesModel()
-        .ifPresent(bm->bm.bookmarkPage(model));
+        .ifPresent(bm->bm.add(model));
     }
 
     protected void removeAnyBookmark(final UiObjectWkt model) {
@@ -401,11 +384,7 @@ implements ActionPromptProvider {
                 : Optional.empty();
     }
 
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // ActionPromptModalWindowProvider
-    // ///////////////////////////////////////////////////////////////////
+    // -- ACTION PROMPT MODAL WINDOW PROVIDER
 
     private ActionPromptModalWindow actionPromptModalWindow;
     private ActionPromptSidebar actionPromptSidebar;
@@ -424,17 +403,15 @@ implements ActionPromptProvider {
             // fall through
         }
 
-        val dialogMode =
-                sort.isManagedBeanAny()
-                        ? getWicketViewerSettings().getDialogModeForMenu()
-                        : getWicketViewerSettings().getDialogMode();
-        switch (dialogMode) {
-        case SIDEBAR:
-            return actionPromptSidebar;
-        case MODAL:
-        default:
-            return actionPromptModalWindow;
-        }
+        var dialogMode =
+                sort.policy().isInjectable()
+                        ? getWicketViewerSettings().dialogModeForMenu()
+                        : getWicketViewerSettings().dialogMode();
+        return switch (dialogMode) {
+		case SIDEBAR -> actionPromptSidebar;
+		case MODAL -> actionPromptModalWindow;
+		default -> actionPromptModalWindow;
+		};
     }
 
     @Override
@@ -453,10 +430,7 @@ implements ActionPromptProvider {
         parent.addOrReplace(actionPromptSidebar);
     }
 
-
-    // ///////////////////////////////////////////////////////////////////
-    // UI Hint
-    // ///////////////////////////////////////////////////////////////////
+    // -- UI HINT
 
     /**
      * Propagates all {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract letter} events down to
@@ -469,7 +443,6 @@ implements ActionPromptProvider {
             send(PageAbstract.this, Broadcast.BREADTH, new CausewayEnvelopeEvent(letter)));
     }
 
-    // -- getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final HasComponentFactoryRegistry cfra = (HasComponentFactoryRegistry) getApplication();
         return cfra.getComponentFactoryRegistry();
@@ -479,30 +452,18 @@ implements ActionPromptProvider {
 
     @Override
     public void renderPage() {
-
-        val pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
+        var pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
                 .map(PageType::asApplibPageType)
                 .orElse(PageRenderSubscriber.PageType.OTHER);
 
-        val enabledPageRenderSubscribers = enabledPageRenderSubscriber();
+        var enabledPageRenderSubscribers = enabledPageRenderSubscriber();
 
         enabledPageRenderSubscribers
                 .forEach(subscriber -> subscriber.onRendering(pageType));
 
-
-        if(XrayUi.isXrayEnabled()){
-            _Debug.log("about to render %s ..", this.getClass().getSimpleName());
-            val stopWatch = _Timing.now();
-            onRendering(enabledPageRenderSubscribers);
-            onNewRequestCycle();
-            super.renderPage();
-            stopWatch.stop();
-            _Debug.log(".. rendering took %s", stopWatch.toString());
-        } else {
-            onRendering(enabledPageRenderSubscribers);
-            onNewRequestCycle();
-            super.renderPage();
-        }
+        onRendering(enabledPageRenderSubscribers);
+        onNewRequestCycle();
+        super.renderPage();
 
         onRendered(enabledPageRenderSubscribers);
     }
@@ -513,7 +474,7 @@ implements ActionPromptProvider {
      * this is a hack that came after re-designing the entity-model
      */
     public void onNewRequestCycle() {
-        // implemented only by EntityPage
+        // implemented only by DomainObjectPage
     }
 
     /**

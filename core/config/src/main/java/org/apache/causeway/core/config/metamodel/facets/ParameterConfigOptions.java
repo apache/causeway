@@ -20,7 +20,7 @@ package org.apache.causeway.core.config.metamodel.facets;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class ParameterConfigOptions {
 
@@ -47,13 +47,11 @@ public final class ParameterConfigOptions {
         }
     }
 
-
     // -- FACTORIES
 
     public static PrecedingParametersPolicy precedingParametersPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getParameter().getPrecedingParametersPolicy();
+        return configuration.applib().annotation().parameter().precedingParametersPolicy();
     }
-
 
 }

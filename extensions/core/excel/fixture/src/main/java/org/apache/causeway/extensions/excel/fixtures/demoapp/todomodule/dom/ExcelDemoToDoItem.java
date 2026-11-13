@@ -28,14 +28,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.VersionStrategy;
-
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -53,63 +45,24 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.applib.value.Blob;
+import org.jspecify.annotations.Nullable;
 
+import jakarta.inject.Inject;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType=IdentityType.DATASTORE,
+@Entity
+@Table(
         schema = "libExcelFixture"
 )
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="id")
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
-        column="version")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name="ToDoItem_description_must_be_unique",
-            members={"ownedBy","description"})
-})
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-            name = "todo_all", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy"),
-    @javax.jdo.annotations.Query(
-            name = "todo_notYetComplete", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "   && complete == false"),
-    @javax.jdo.annotations.Query(
-            name = "findByDescription", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "   && description == :description"),
-    @javax.jdo.annotations.Query(
-            name = "todo_complete", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "&& complete == true"),
-    @javax.jdo.annotations.Query(
-            name = "todo_similarTo", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "&& category == :category"),
-    @javax.jdo.annotations.Query(
-            name = "todo_autoComplete", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy && "
-                    + "description.indexOf(:description) >= 0")
-})
 @DomainObject(
         autoCompleteRepository = ExcelDemoToDoItemMenu.class
 )
@@ -128,11 +81,16 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     public static final String FQCN = "org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem";
 
-    @Inject private MessageService messageService;
-    @Inject private RepositoryService repositoryService;
-    @Inject private TitleService titleService;
-    @Inject private ExcelDemoToDoItemMenu toDoItems;
-    @Inject private ClockService clockService;
+    @Inject transient private MessageService messageService;
+    @Inject transient private RepositoryService repositoryService;
+    @Inject transient private TitleService titleService;
+    @Inject transient private ExcelDemoToDoItemMenu toDoItems;
+    @Inject transient private ClockService clockService;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
+    long id;
 
     //region > title, iconName
 
@@ -155,25 +113,23 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     //endregion
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=100)
+    @Column(nullable=false, length=100)
     @Property(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @Getter @Setter
     private String description;
 
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
-    @javax.jdo.annotations.Column(allowsNull="true")
     @Getter @Setter
     private LocalDate dueBy;
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @Getter @Setter
     private Category category;
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @Getter @Setter
     private Subcategory subcategory;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Getter @Setter
     private String ownedBy;
 
@@ -181,17 +137,12 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Getter @Setter
     private boolean complete;
 
-
-    @javax.jdo.annotations.Column(allowsNull="true", scale=2)
-    //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
-    //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
+    @Column(nullable=true, scale=2)
     @Property(editing = Editing.DISABLED, editingDisabledReason = "Update using action")
     @Getter @Setter
     private BigDecimal cost;
 
-    @javax.jdo.annotations.Column(allowsNull="true", scale=2)
-    //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
-    //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
+    @Column(nullable=true, scale=2)
     @Property(
             editing = Editing.DISABLED,
             editingDisabledReason = "Update using action"
@@ -199,41 +150,29 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Getter @Setter
     private BigDecimal previousCost;
 
-
     @Getter @Setter
-    @javax.jdo.annotations.Column(allowsNull="true", length=400)
+    @Column(nullable=true, length=400)
     @Property(editing = Editing.ENABLED)
-    // @SummernoteEditor(height = 100, maxHeight = 300)
     private String notes;
 
     @Getter @Setter
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
-    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="BLOB", sqlType="LONGBINARY")
     private Blob attachment;
 
     @Getter @Setter
-    @javax.jdo.annotations.Persistent(table="ExcelDemoToDoItemDependencies")
-    @javax.jdo.annotations.Join(column="dependingId")
-    @javax.jdo.annotations.Element(column="dependentId")
     @CollectionLayout(sortedBy = DependenciesComparator.class)
     private SortedSet<ExcelDemoToDoItem> dependencies = new TreeSet<>();
 
-
-
     // no getter/setter (therefore persisted but not part of Causeway' metamodel)
-    private Double locationLatitude;
-    private Double locationLongitude;
-
+    @SuppressWarnings("unused")
+	private Double locationLatitude;
+    @SuppressWarnings("unused")
+	private Double locationLongitude;
 
     public String validateDueBy(final LocalDate dueBy) {
-        if (dueBy == null) {
+        if (dueBy == null)
             return null;
-        }
         return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
     }
-
-
-
 
     //region > completed (action)
 
@@ -282,19 +221,15 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         return getPreviousCost();
     }
     public String validateUpdateCosts(final BigDecimal proposedCost, final BigDecimal proposedPreviousCost) {
-        if (proposedCost != null && proposedCost.compareTo(BigDecimal.ZERO) < 0) {
+        if (proposedCost != null && proposedCost.compareTo(BigDecimal.ZERO) < 0)
             return "Cost must be positive";
-        }
-        if (proposedPreviousCost != null && proposedPreviousCost.compareTo(BigDecimal.ZERO) < 0) {
+        if (proposedPreviousCost != null && proposedPreviousCost.compareTo(BigDecimal.ZERO) < 0)
             return "Previous cost must be positive";
-        }
         return null;
     }
     //endregion
 
-
     //region > add (action)
-
 
     public ExcelDemoToDoItem add(
             final ExcelDemoToDoItem toDoItem) {
@@ -309,19 +244,16 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     }
 
     public String disableAdd() {
-        if(isComplete()) {
+        if(isComplete())
             return "Cannot add dependencies for items that are complete";
-        }
         return null;
     }
     // validate the provided argument prior to invoking action
     public String validateAdd(final ExcelDemoToDoItem toDoItem) {
-        if(getDependencies().contains(toDoItem)) {
+        if(getDependencies().contains(toDoItem))
             return "Already a dependency";
-        }
-        if(toDoItem == this) {
+        if(toDoItem == this)
             return "Can't set up a dependency to self";
-        }
         return null;
     }
     //endregion
@@ -335,16 +267,14 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     }
     // disable action dependent on state of object
     public String disableRemove() {
-        if(isComplete()) {
+        if(isComplete())
             return "Cannot remove dependencies for items that are complete";
-        }
         return getDependencies().isEmpty()? "No dependencies to remove": null;
     }
     // validate the provided argument prior to invoking action
     public String validateRemove(final ExcelDemoToDoItem toDoItem) {
-        if(!getDependencies().contains(toDoItem)) {
+        if(!getDependencies().contains(toDoItem))
             return "Not a dependency";
-        }
         return null;
     }
     // provide a drop-down
@@ -414,7 +344,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
                 .thenComparing(ExcelDemoToDoItem::getDueBy)
                 .thenComparing(ExcelDemoToDoItem::getDescription);
 
-
     @Override
     public int compareTo(final ExcelDemoToDoItem other) {
         return comparator.compare(this, other);
@@ -437,7 +366,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //        return new CalendarEvent(getDueBy().toDateTimeAtStartOfDay(), getCalendarName(), container.titleOf(this));
 //    }
 
-
 //    @Property(
 //            optionality = Optionality.OPTIONAL,
 //            editing = Editing.DISABLED
@@ -457,6 +385,5 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //        locationLongitude = longitude;
 //        return this;
 //    }
-
 
 }

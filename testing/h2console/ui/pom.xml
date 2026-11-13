@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.testing</groupId>
 		<artifactId>causeway-testing-h2console</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-testing-h2console-ui</artifactId>
@@ -42,6 +42,10 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-webapp</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-jdbc</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>

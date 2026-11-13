@@ -22,8 +22,6 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
-import lombok.val;
-
 /**
  * Adapter to make it easy to write {@link Specification}s.
  *
@@ -54,11 +52,11 @@ public abstract class AbstractSpecification<T> implements Specification {
 
     private static Class<?> findExpectedType(final Class<?> fromClass) {
 
-        val classCache = _ClassCache.getInstance();
+        var classCache = _ClassCache.getInstance();
 
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
 
-            val methodFound = classCache
+            var methodFound = classCache
             .streamResolvedMethods(c)
             .filter(AbstractSpecification::isSatisfiesSafelyMethod)
             .findFirst()

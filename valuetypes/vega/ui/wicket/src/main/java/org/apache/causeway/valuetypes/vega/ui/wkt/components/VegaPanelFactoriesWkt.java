@@ -21,16 +21,14 @@ package org.apache.causeway.valuetypes.vega.ui.wkt.components;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupAttributePanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
- * {@link MarkupPanelFactories}, but specific to
+ * {@link MarkupAttributePanelFactories}, but specific to
  * the {@link Vega} value-type.
  */
 public class VegaPanelFactoriesWkt {
@@ -38,15 +36,15 @@ public class VegaPanelFactoriesWkt {
     // -- PARENTED
 
     @Component
-    public static class Parented extends MarkupPanelFactories.ParentedAbstract<Vega> {
+    public static class Parented extends MarkupAttributePanelFactories.ParentedAbstract<Vega> {
 
         public Parented() {
             super(Vega.class);
         }
 
         @Override
-        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
-            val markupComponent = new VegaComponentWkt(id, model);
+        protected MarkupComponent newMarkupComponent(final String id, final UiAttributeWkt model) {
+            var markupComponent = new VegaComponentWkt(id, model);
             markupComponent.setEnabled(false);
             return markupComponent;
         }
@@ -56,7 +54,7 @@ public class VegaPanelFactoriesWkt {
     // -- STANDALONE
 
     @Component
-    public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Vega> {
+    public static class Standalone extends MarkupAttributePanelFactories.StandaloneAbstract<Vega> {
 
         public Standalone() {
             super(Vega.class);
@@ -68,6 +66,5 @@ public class VegaPanelFactoriesWkt {
         }
 
     }
-
 
 }

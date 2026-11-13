@@ -34,8 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterValidationFacetViaMethod
 extends ActionParameterValidationFacetAbstract
@@ -68,7 +67,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs,
             final int paramIndex) {
 
-        val method = methods.getFirstElseFail();
+        var method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
                 // provides all pending args as a tuple (for validation)
                 ? MmInvokeUtils.invokeWithPAT(

@@ -10,17 +10,17 @@ Adds the xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu] with its aut
 ----
 class CausewayModuleExtLayoutLoadersGithub {
   public static final String NAMESPACE;
-  RestTemplate restTemplateForGithubSearch(CausewayConfiguration causewayConfiguration)     // <.>
-  RestTemplate restTemplateForGithubContent(CausewayConfiguration causewayConfiguration)     // <.>
+  RestClient restClientForGithubSearch(CausewayConfiguration causewayConfiguration)     // <.>
+  RestClient restClientForGithubContent(CausewayConfiguration causewayConfiguration)     // <.>
 }
 ----
 
-<.> xref:#restTemplateForGithubSearch_CausewayConfiguration[restTemplateForGithubSearch(CausewayConfiguration)]
+<.> xref:#restClientForGithubSearch_CausewayConfiguration[restClientForGithubSearch(CausewayConfiguration)]
 +
 --
 Returns a template configured to search for a file in the git repo.
 --
-<.> xref:#restTemplateForGithubContent_CausewayConfiguration[restTemplateForGithubContent(CausewayConfiguration)]
+<.> xref:#restClientForGithubContent_CausewayConfiguration[restClientForGithubContent(CausewayConfiguration)]
 +
 --
 Returns a template configured to obtain the content of a file in a repo (from the default branch).
@@ -28,8 +28,8 @@ Returns a template configured to obtain the content of a file in a repo (from th
 
 == Members
 
-[#restTemplateForGithubSearch_CausewayConfiguration]
-=== restTemplateForGithubSearch(CausewayConfiguration)
+[#restClientForGithubSearch_CausewayConfiguration]
+=== restClientForGithubSearch(CausewayConfiguration)
 
 Returns a template configured to search for a file in the git repo.
 
@@ -57,8 +57,8 @@ Returns for example:
 }
 ----
 
-[#restTemplateForGithubContent_CausewayConfiguration]
-=== restTemplateForGithubContent(CausewayConfiguration)
+[#restClientForGithubContent_CausewayConfiguration]
+=== restClientForGithubContent(CausewayConfiguration)
 
 Returns a template configured to obtain the content of a file in a repo (from the default branch).
 

@@ -28,24 +28,21 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
-
-import graphql.scalars.ExtendedScalars;
-
+import org.apache.causeway.viewer.graphql.model.types.GraphQLValueScalars;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8OffsetTime extends ScalarMarshallerAbstract<OffsetTime> {
 
-    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
-
     @Inject
     public ScalarMarshallerJdk8OffsetTime(final CausewayConfiguration causewayConfiguration) {
-        super(OffsetTime.class, ExtendedScalars.Time, causewayConfiguration);
-        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
+        super(OffsetTime.class, GraphQLValueScalars.OFFSET_TIME, causewayConfiguration, true);
     }
 
     @Override
     public OffsetTime unmarshal(Object graphValue, Class<?> targetType) {
-        return (OffsetTime) graphValue;
+        return graphValue instanceof OffsetTime offsetTime
+                ? offsetTime
+                : OffsetTime.parse((String) graphValue);
     }
 }

@@ -18,53 +18,39 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-
-import lombok.NonNull;
 
 /**
  * <i>Action Parameter Interaction</i> model bound to its owner {@link ActionInteractionWkt}.
  *
  * @see ActionInteractionWkt
  */
-public final class UiParameterWkt
-extends ChainingModel<ActionInteraction>
+public record UiParameterWkt(
+    ActionInteractionWkt actionInteractionModel,
+    int paramIndex)
 implements
-    HasCommonContext,
+    IModel<ActionInteraction>,
+    HasMetaModelContext,
     HasUiParentObject<UiObject>,
     UiParameter {
 
-    private static final long serialVersionUID = 1L;
-
-    final int paramIndex;
-
-    UiParameterWkt(
-            final ActionInteractionWkt model,
-            final int paramIndex) {
-        super(model);
-        this.paramIndex = paramIndex;
-    }
-
-    public final ActionInteraction actionInteraction() {
+    public ActionInteraction actionInteraction() {
         return getObject();
-    }
-
-    public final ActionInteractionWkt actionInteractionModel() {
-        return (ActionInteractionWkt) getChainedModel();
     }
 
     @Override
     public UiObject getParentUiModel() {
-        return ()->getOwner();
+        return this::getOwner;
     }
 
     @Override
@@ -74,7 +60,7 @@ implements
 
     @Override
     public ObjectActionParameter getMetaModel() {
-        return actionInteraction().getMetamodel().get().getParameters().getElseFail(paramIndex);
+        return actionInteraction().getObjectActionElseFail().getParameterByIndex(paramIndex);
     }
 
     @Override
@@ -90,6 +76,31 @@ implements
     @Override
     public ParameterNegotiationModel getParameterNegotiationModel() {
         return actionInteractionModel().parameterNegotiationModel();
+    }
+
+    // -- MODEL CHAINING
+
+    @Override
+    public void detach() {
+        actionInteractionModel.detach();
+    }
+
+    @Override
+    public void setObject(final ActionInteraction object) {
+        actionInteractionModel.setObject(object);
+    }
+
+    @Override
+    public ActionInteraction getObject() {
+        return actionInteractionModel.getObject();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Model:classname=[");
+        sb.append(getClass().getName()).append(']');
+        sb.append(":nestedModel=[").append(actionInteractionModel).append(']');
+        return sb.toString();
     }
 
 }

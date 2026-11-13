@@ -112,16 +112,17 @@ public class CompareCustomers {
 ----
 
 
-[[joda-datatypes]]
-== JODA Time Datatypes
+== JDK Time Datatypes
 
-If your JAXB view model contains fields using the JODA datatypes (`LocalDate` and so on), then `@XmlJavaTypeAdapter` additional annotations in order to "teach" JAXB how to serialize out the state.
+If your JAXB view model contains fields using the `java.time` datatypes (`LocalDate` and so on), then `@XmlJavaTypeAdapter` additional annotations in order to "teach" JAXB how to serialize out the state.
 
 The Apache Causeway applib provides a number of adapters to use out-of-the-box.
 For example:
 
 [source,java]
 ----
+import java.time.LocalDate;
+
 @XmlRootElement(name = "categorizeIncomingInvoice")
 @XmlType(
         propOrder = {
@@ -133,49 +134,52 @@ For example:
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IncomingInvoiceViewModel extends IncomingOrderAndInvoiceViewModel {
 
-    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     private LocalDate dateReceived;
 
     ...
 }
 ----
 
-The full list of adapter classes are:
+The full list of adapter classes are nested classes of the top-level `JavaTimeJaxbAdapters` class.
+They all marshall the value to/from a string representation.
 
 .JAXB adapters
 [cols="1a,2a",options="header"]
 |===
 
-| JODA datatype
+| Datatype
 | Adapter
 
-.2+| `org.joda.time.DateTime`
-| `JodaDateTimeStringAdapter.ForJaxb`
-| `JodaDateTimeXMLGregorianCalendarAdapter.ForJaxb`
-
-.2+| `org.joda.time.LocalDate`
-| `JodaLocalDateStringAdapter.ForJaxb`
-| `JodaLocalDateXMLGregorianCalendarAdapter.ForJaxb`
-
-.2+| `org.joda.time.LocalDateTime`
-| `JodaLocalDateTimeStringAdapter.ForJaxb`
-| `JodaLocalDateTimeXMLGregorianCalendarAdapter.ForJaxb`
+| `java.time.LocalTime`
+| `JavaTimeJaxbAdapters.LocalTimeToStringAdapter`
 
 
-.2+| `org.joda.time.LocalTime`
-| `JodaLocalTimeStringAdapter.ForJaxb`
-| `JodaLocalTimeXMLGregorianCalendarAdapter.ForJaxb`
+| `java.time.LocalDate`
+| `JavaTimeJaxbAdapters.LocalDateToStringAdapter`
 
-| `java.sql.Timestamp`
-| `JavaSqlTimestampXmlGregorianCalendarAdapter.ForJaxb`
 
+| `java.time.LocalDateTime`
+| `JavaTimeJaxbAdapters.LocalDateTimeToStringAdapter`
+
+
+| `java.time.OffsetTime`
+| `JavaTimeJaxbAdapters.OffsetTimeAdapter`
+
+| `java.time.OffsetDateTimeToStringAdapter`
+| `JavaTimeJaxbAdapters.OffsetDateTime`
+
+| `java.time.ZonedDateTimeAdapter`
+| `JavaTimeJaxbAdapters.ZonedDate`
+
+| `java.time.Duration`
+| `JavaTimeJaxbAdapters.DurationToStringAdapter`
+
+| `java.time.Period`
+| `JavaTimeJaxbAdapters.PeriodToStringAdapter`
 
 |===
 
-[TIP]
-====
-If you want use other Joda data types, check out link:http://blog.bdoughan.com/2011/05/jaxb-and-joda-time-dates-and-times.html[this blog post].
-====
 
 
 

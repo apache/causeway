@@ -16,20 +16,20 @@ The table below lists the JEE annotations currently recognized.
 |Purpose
 |Layer
 
-|xref:refguide:applib-ant:Digits.adoc[`@javax.validation.` +
+|xref:refguide:applib-ant:Digits.adoc[`@jakarta.validation.` +
 `constraints.` +
 `Digits`]
 |Precision/scale for BigDecimal values.
 |Domain
 
-|xref:refguide:applib-ant:Pattern.adoc[`@javax.validation.` +
+|xref:refguide:applib-ant:Pattern.adoc[`@jakarta.validation.` +
 `constraints.` +
 `Pattern`]
 |Regular expressions for strings
 |Domain
 
 
-|xref:refguide:applib-ant:Digits.adoc[`@javax.annotation.` +
+|xref:refguide:applib-ant:Digits.adoc[`@jakarta.annotation.` +
 `Nullable`]
 |Specify that a property/parameter is optional.
 |Domain

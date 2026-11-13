@@ -25,7 +25,7 @@ import java.util.List;
 
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.Try;
@@ -44,13 +44,12 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.x {@index}
  */
-@Log4j2
+@Slf4j
 public class OutboxClient {
 
     private final RestfulClient client;
@@ -120,7 +119,7 @@ public class OutboxClient {
     public List<InteractionDto> pending() {
 
         Invocation.Builder invocationBuilder = client.request(outboxClientConfig.getPendingUri())
-                .accept(RestfulClientMediaType.RO_XML.mediaTypeFor(InteractionsDto.class));
+                .accept(RestfulClientMediaType.RO_XML.mediaTypeFor(InteractionsDto.class).getType());
         var response = invocationBuilder.get();
 
         final Try<InteractionsDto> digest = client.digest(response, InteractionsDto.class);
@@ -137,7 +136,7 @@ public class OutboxClient {
     }
 
     public void deleteMany(final List<InteractionDto> interactionDtos) {
-        val interactionsDto = new InteractionsDto();
+        var interactionsDto = new InteractionsDto();
         interactionDtos.forEach(interactionDto -> {
             addTo(interactionsDto, interactionDto);
         });
@@ -148,20 +147,20 @@ public class OutboxClient {
     // -- HELPER
 
     private void addTo(final InteractionsDto interactionsDto, final InteractionDto orig) {
-        val copy = new InteractionDto();
+        var copy = new InteractionDto();
         copy.setInteractionId(orig.getInteractionId());
         setMemberExecution(copy, orig);
         interactionsDto.getInteractionDto().add(copy);
     }
 
     private void setMemberExecution(final InteractionDto copy, final InteractionDto orig) {
-        val memberExecutionDto = newMemberExecutionDto(orig);
+        var memberExecutionDto = newMemberExecutionDto(orig);
         memberExecutionDto.setSequence(orig.getExecution().getSequence());
         copy.setExecution(memberExecutionDto);
     }
 
     private MemberExecutionDto newMemberExecutionDto(final InteractionDto orig) {
-        val execution = orig.getExecution();
+        var execution = orig.getExecution();
         return execution.getInteractionType() == InteractionType.ACTION_INVOCATION
                 ? new ActionInvocationDto()
                 : new PropertyEditDto();
@@ -169,14 +168,14 @@ public class OutboxClient {
 
     private void invoke(final String path, final Object dto) {
 
-        val invocationBuilder = client.request(path);
+        var invocationBuilder = client.request(path);
 
-        val invocation = invocationBuilder.buildPut(
-                Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_TYPE));
+        var invocation = invocationBuilder.buildPut(
+                Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_VALUE));
 
-        val response = invocation.invoke();
+        var response = invocation.invoke();
 
-        val responseStatus = response.getStatus();
+        var responseStatus = response.getStatus();
         if (responseStatus != 200) {
             // if failed to log message via REST service, then fallback by logging to slf4j
             log.warn(dto.toString());

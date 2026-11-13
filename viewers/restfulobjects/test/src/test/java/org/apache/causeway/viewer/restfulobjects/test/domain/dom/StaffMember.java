@@ -85,11 +85,9 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     @JoinColumn(name = "department_id")
     private Department department;
 
-
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
     private Grade grade;
-
 
     @AttributeOverrides({
             @AttributeOverride(name="name",    column=@Column(name="photo_name")),
@@ -107,10 +105,6 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     public void setPhoto(final Blob photo) {
         this.photo = BlobJpaEmbeddable.fromBlob(photo);
     }
-
-
-
-
 
     @Override
     public int compareTo(final StaffMember o) {

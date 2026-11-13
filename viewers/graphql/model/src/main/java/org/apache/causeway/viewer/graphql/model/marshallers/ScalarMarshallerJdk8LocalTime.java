@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 import graphql.Scalars;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8LocalTime extends ScalarMarshallerAbstract<LocalTime> {
@@ -41,13 +40,13 @@ public class ScalarMarshallerJdk8LocalTime extends ScalarMarshallerAbstract<Loca
 
     @Inject
     public ScalarMarshallerJdk8LocalTime(final CausewayConfiguration causewayConfiguration) {
-        super(LocalTime.class, Scalars.GraphQLString, causewayConfiguration);
-        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
+        super(LocalTime.class, Scalars.GraphQLString, causewayConfiguration, true);
+        scalarMarshallerConfig = causewayConfiguration.viewer().graphql().scalarMarshaller();
     }
 
     @Override
     public LocalTime unmarshal(Object graphValue, Class<?> targetType) {
         String str = (String) graphValue;
-        return LocalTime.parse(str, DateTimeFormatter.ofPattern(scalarMarshallerConfig.getLocalTimeFormat()));
+        return LocalTime.parse(str, DateTimeFormatter.ofPattern(scalarMarshallerConfig.localTimeFormat()));
     }
 }

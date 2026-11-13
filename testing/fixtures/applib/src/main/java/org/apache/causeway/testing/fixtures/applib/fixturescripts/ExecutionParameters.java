@@ -22,9 +22,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Represents the execution parameters (as passed initially as a string)
@@ -73,7 +74,8 @@ public interface ExecutionParameters {
     void setParameter(String parameterName, BigDecimal parameterValue);
     void setParameter(String parameterName, LocalDate parameterValue);
     void setParameter(String parameterName, LocalDateTime parameterValue);
-    void setParameter(String parameterName, DateTime parameterValue);
+    void setParameter(String parameterName, ZonedDateTime parameterValue);
+    void setParameter(String parameterName, OffsetDateTime parameterValue);
     void setParameter(String parameterName, java.util.Date parameterValue);
     void setParameter(String parameterName, java.sql.Date parameterValue);
     void setParameter(String parameterName, Enum<?> parameterValue);

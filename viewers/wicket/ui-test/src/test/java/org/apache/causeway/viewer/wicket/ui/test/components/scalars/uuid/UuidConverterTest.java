@@ -24,6 +24,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -40,11 +42,11 @@ class UuidConverterTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<>(UUID.class, new UUIDValueSemantics());
+        converterTester = new ConverterTester<>(UUID.class, TestPropertyValues.empty(), new UUIDValueSemantics());
         converterTester.setScenario(
-                Locale.ENGLISH,
-                converterTester.converterForProperty(
-                        CustomerWithUuid.class, "value", ViewOrEditMode.EDITING));
+            Locale.ENGLISH,
+            converterTester.converterForProperty(
+                    CustomerWithUuid.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

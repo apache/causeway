@@ -21,13 +21,10 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
-
-import lombok.val;
 
 public class ObjectNamedFacetForDomainObjectLayoutAnnotation
 extends ObjectNamedFacetAbstract {
@@ -36,24 +33,15 @@ extends ObjectNamedFacetAbstract {
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
-        if(!domainObjectLayoutIfAny.isPresent()) {
-            return Optional.empty();
-        }
+        if(!domainObjectLayoutIfAny.isPresent()) return Optional.empty();
 
-        val domainObjectLayout = domainObjectLayoutIfAny.get();
+        var domainObjectLayout = domainObjectLayoutIfAny.get();
+        var noun = new Noun(domainObjectLayout.named());
 
-        val singular = _Strings.emptyToNull(domainObjectLayout.named());
-
-        val noun = Noun.singular(singular);
-
-        if(!noun.isLiteralPresent()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                new ObjectNamedFacetForDomainObjectLayoutAnnotation(
-                            noun,
-                            holder));
+        return noun.isEmpty()
+            ? Optional.empty()
+            : Optional.of(
+                new ObjectNamedFacetForDomainObjectLayoutAnnotation(noun, holder));
     }
 
     private ObjectNamedFacetForDomainObjectLayoutAnnotation(

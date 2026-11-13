@@ -27,8 +27,8 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.applib.services.userreg.UserDetails;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;

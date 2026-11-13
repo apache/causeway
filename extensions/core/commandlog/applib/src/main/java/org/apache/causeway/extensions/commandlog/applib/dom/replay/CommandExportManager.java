@@ -1,0 +1,305 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.extensions.commandlog.applib.dom.replay;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.chrono.ChronoZonedDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+
+import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
+
+@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
+@DomainObjectLayout(cssClassFa = "solid share-from-square")
+@Named(CommandExportManager.LOGICAL_TYPE_NAME)
+public record CommandExportManager(
+        @Property
+        @PropertyLayout(describedAs = "Only commands after this timestamp are available for export")
+        java.sql.Timestamp baseline,
+        ReplayContext replayContext) implements ViewModel, CommandRecordingSuppressed {
+
+	public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
+
+    public static abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+
+    @Inject
+    public CommandExportManager(
+            final String memento,
+            final ReplayContext replayContext) {
+        this(   fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),
+                replayContext);
+    }
+
+    @ObjectSupport public String title() {
+        return "Command Export Manager";
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = previousHour.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "baseline", sequence = "1",
+            named = "Previous",
+            position = ActionLayout.Position.PANEL,
+            describedAs = "Move back one hour")
+    public class previousHour {
+        public class DomainEvent extends ActionDomainEvent<previousHour> { }
+        @MemberSupport public CommandExportManager act() {
+            return new CommandExportManager(addSeconds(baseline, -3600), replayContext);
+        }
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = nextHour.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "baseline", sequence = "3",
+            named = "Next",
+            position = ActionLayout.Position.PANEL,
+            describedAs = "Move forward one hour")
+    public class nextHour {
+        public class DomainEvent extends ActionDomainEvent<nextHour> { }
+        @MemberSupport public CommandExportManager act() {
+            return new CommandExportManager(addSeconds(baseline, +3600), replayContext);
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = changeBaseline.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "baseline", sequence = "2",
+            named = "Change",
+            position = ActionLayout.Position.PANEL)
+    public class changeBaseline {
+        public class DomainEvent extends ActionDomainEvent<nextHour> { }
+        @MemberSupport public CommandExportManager act(final java.sql.Timestamp baseline) {
+            return new CommandExportManager(baseline, replayContext);
+        }
+        @MemberSupport public java.sql.Timestamp defaultBaseline() {
+            return CommandExportManager.this.baseline;
+        }
+    }
+
+    // -- NOT YET EXPORTED
+
+    @Collection
+    @CollectionLayout(
+            describedAs = "Commands that can be exported")
+    public List<ReplayableCommand> getNotYetExported() {
+        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(baseline).stream()
+            .filter(entry -> ReplayableCommandEligibility.isEligible(
+                    entry, replayContext.applicationFeatureRepository()))
+            .map(entry->new ReplayableCommand(
+                    entry.getInteractionId(),
+                    replayContext))
+            .collect(Collectors.toList());
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "notYetExported",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = exportSelected.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "notYetExported", sequence = "1.1",
+            cssClassFa = "solid share-from-square",
+            cssClass = "btn-primary",
+            describedAs = "Exports selected Commands as zipped DTOs for import later. "
+                        + "Refresh the page to see changed states.")
+    public class exportSelected {
+        public class DomainEvent extends ActionDomainEvent<exportSelected> { }
+        @MemberSupport public Clob act(
+                final List<ReplayableCommand> selected,
+                @ParameterLayout(describedAs = "File name for the exported file." )
+                final String filenamePrefix,
+                @ParameterLayout(describedAs = "Whether to add a timestamp suffix to the exported file's name." )
+                final boolean filenameTimestamp,
+                @ParameterLayout(describedAs = "Whether to use the multi-doc YAML format to represent a collection of "
+                        + "CommandDto entries. "
+                        + "If unchecked uses the YAML list format. "
+                        + "(Command Replay Manager's import understands both formats.)" )
+                final boolean multiDocFormat) {
+
+            var selectedCommandLogEntries = selected.stream()
+                .map(ReplayableCommand::commandLogEntry)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(entry->!ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
+                .sorted()
+                .toList();
+            var selectedCommandDtos = selectedCommandLogEntries.stream()
+                .map(CommandLogEntry::getCommandDto)
+                .toList();
+
+            var yaml = multiDocFormat
+                    ? CommandDtoUtils.toMultiDocYaml(selectedCommandDtos)
+                    : CommandDtoUtils.toYaml(selectedCommandDtos);
+
+            var replayableCommand = selected.get(0);  // validate ensures there is at least one command
+            var timestamp = filenameTimestamp
+                    ? replayableCommand.getTimestampIfAny()
+                        .map(ChronoZonedDateTime::toInstant)
+                        .map(Instant::toString)
+                        .map(x -> "." + x.replaceAll("[^A-Za-z0-9._-]", "_"))   // make safe within filename
+                        .orElse("")
+                    : "";
+            var filename = filenamePrefix + timestamp;
+
+            var clob = Clob.of(filename, CommonMimeType.YAML, yaml);
+
+            // do this last once we have successfully created the Clob
+            selectedCommandLogEntries.forEach(c->c.setReplayState(ReplayState.EXPORTED));
+
+            return clob;
+        }
+        @MemberSupport public String disableAct() {
+            return getNotYetExported().isEmpty() ? "No commands in collection" : null;
+        }
+        @MemberSupport public String defaultFilenamePrefix() {
+            return "commands";
+        }
+        @MemberSupport public boolean defaultFilenameTimestamp() {
+            return true;
+        }
+        @MemberSupport public boolean defaultMultiDocFormat() {
+            return true;
+        }
+        @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null
+                    && selected.isEmpty()
+                ? "Select at least one command to export"
+                : null;
+        }
+    }
+
+    // -- EXPORTED
+
+    @Collection
+    @CollectionLayout(describedAs = "Commands that have been exported")
+    public List<ReplayableCommand> getExported() {
+        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(baseline).stream()
+            .filter(entry -> ReplayableCommandEligibility.isEligible(
+                    entry, replayContext.applicationFeatureRepository()))
+            .map(entry->new ReplayableCommand(
+                    entry.getInteractionId(),
+                    replayContext))
+            .collect(Collectors.toList());
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = openCommandManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(sequence = "3", named = "Open Command Manager")
+    public class openCommandManager {
+        public class DomainEvent extends ActionDomainEvent<openCommandManager> { }
+
+        @MemberSupport public CommandManager act() {
+            return new CommandManager(baseline, CommandManager.DEFAULT_LIMIT, replayContext);
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "exported",
+            commandPublishing = Publishing.DISABLED,
+            semantics =  SemanticsOf.IDEMPOTENT,
+            domainEvent = makeSelectedExportable.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(
+            associateWith = "exported", sequence = "2.1",
+            describedAs = "Makes selected Commands exportable (again)")
+    public class makeSelectedExportable {
+        public class DomainEvent extends ActionDomainEvent<makeSelectedExportable> { }
+        @MemberSupport public CommandExportManager act(final List<ReplayableCommand> selected) {
+            selected.forEach(ReplayableCommand::makeExportable); // filtered on its own responsibility
+            return CommandExportManager.this;
+        }
+        @MemberSupport public String disableAct() {
+            return getExported().isEmpty()
+                ? "No commands in collection"
+                : null;
+        }
+        @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null
+                    && selected.isEmpty()
+                ? "Select at least one command"
+                : null;
+        }
+    }
+
+    // -- VM STATE
+
+    @Override
+    public String viewModelMemento() {
+        return TimestampMarshallUtil.toString(this.baseline);
+    }
+
+    // -- HELPER
+
+    private CommandLogEntryRepository commandLogEntryRepository() {
+        return replayContext.commandLogEntryRepository();
+    }
+
+    private static Timestamp addSeconds(final Timestamp ts, final int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
+    }
+}

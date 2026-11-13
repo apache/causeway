@@ -19,7 +19,6 @@
 package org.apache.causeway.core.webapp.webappctx;
 
 import java.util.EventListener;
-
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -33,14 +32,12 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -56,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
-@Log4j2
+@Slf4j
 public class CausewayWebAppContextInitializer implements ServletContextInitializer {
 
     private static final _Oneshot oneshot = new _Oneshot();
@@ -64,41 +61,47 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Causeway has been initialized/provisioned
     @Inject private CausewayConfiguration causewayConfiguration;
     @Inject private WebAppContextPath webAppContextPath;
+    @Inject private CausewaySystemEnvironment systemEnvironment;
 
     // -- INTERFACE IMPLEMENTATION
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
 
-        // onStartup(...) must be a one shot, otherwise ignore with warning
-        if(!oneshot.trigger()) {
-            log.warn("Spring tries to startup this initializer more than once."
-                    + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
-            return;
-        }
+        // does not play well with @DirtiesContext, hence we skip those guards for testing
+        if(!systemEnvironment.isUnitTesting()) {
 
-        if(!isCausewayProvisioned()) {
-            log.error("skipping initialization, Spring should already have provisioned all configured Beans");
-            return;
+            // onStartup(...) must be a one shot, otherwise ignore with warning
+            if(!oneshot.trigger()) {
+                log.warn("Spring tries to startup this initializer more than once."
+                        + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
+                return;
+            }
+
+            if(!isCausewayProvisioned()) {
+                log.error("skipping initialization, Spring should already have provisioned all configured Beans");
+                return;
+            }
+
         }
 
         // set the ServletContext initializing thread as preliminary default until overridden by
         // CausewayWicketApplication#init() or others, that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
 
-        val contextPath = servletContext.getContextPath();
+        var contextPath = servletContext.getContextPath();
 
         log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
 
         webAppContextPath.setContextPath(contextPath);
 
-        val webModuleContext = new WebModuleContext(servletContext, causewayConfiguration, serviceRegistry);
+        var webModuleContext = new WebModuleContext(servletContext, causewayConfiguration, serviceRegistry);
         webModuleContext.prepare();
 
         log.info("=== PHASE 2 === Initializing the ServletContext");
 
         webModuleContext.init();
-        servletContext.addListener(new ShutdownHook(webModuleContext));
+        servletContext.addListener(new ShutdownHook(this, webModuleContext));
 
         log.info("=== DONE === ServletContext initialized.");
 
@@ -115,20 +118,18 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
 
     // -- HELPER
 
-    @Value
-    private class ShutdownHook implements EventListener, ServletContextListener {
-        @NonNull WebModuleContext webModuleContext;
+    private record ShutdownHook(
+            CausewayWebAppContextInitializer self,
+            WebModuleContext webModuleContext) implements EventListener, ServletContextListener {
 
         @Override
         public void contextDestroyed(final ServletContextEvent sce) {
-            CausewayWebAppContextInitializer.this.contextDestroyed(webModuleContext, sce);
+            self.contextDestroyed(webModuleContext, sce);
         }
     }
 
     private boolean isCausewayProvisioned() {
         return serviceRegistry!=null;
     }
-
-
 
 }

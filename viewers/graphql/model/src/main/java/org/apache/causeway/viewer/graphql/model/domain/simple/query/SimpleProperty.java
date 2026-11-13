@@ -21,8 +21,11 @@ package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -33,6 +36,7 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -41,7 +45,6 @@ import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import lombok.Getter;
-import lombok.val;
 
 public class SimpleProperty
         extends Element
@@ -74,7 +77,7 @@ public class SimpleProperty
 
         final GraphQLOutputType gqlOutputType;
         if (isBlobOrClob(otoa)) {
-            val glqObjectTypeBuilder = newObject()
+            var glqObjectTypeBuilder = newObject()
                     .name(TypeNames.memberTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType()))
                     .description(otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()))
                     ;
@@ -83,10 +86,18 @@ public class SimpleProperty
             addChildFieldFor(glqObjectTypeBuilder, lobMimeType = new SimplePropertyLobMimeType(this, context));
 
             if(isBlob(getObjectMember())) {
-                addChildFieldFor(glqObjectTypeBuilder, lobBytes = new SimplePropertyLobBytes(this, context));
+                if (isValueContentEnabled(context)) {
+                    addChildFieldFor(glqObjectTypeBuilder, lobBytes = new SimplePropertyLobBytes(this, context));
+                } else {
+                    lobBytes = null;
+                }
                 lobChars = null;
             } else {
-                addChildFieldFor(glqObjectTypeBuilder, lobChars = new SimplePropertyLobChars(this, context));
+                if (isValueContentEnabled(context)) {
+                    addChildFieldFor(glqObjectTypeBuilder, lobChars = new SimplePropertyLobChars(this, context));
+                } else {
+                    lobChars = null;
+                }
                 lobBytes = null;
             }
 
@@ -101,7 +112,7 @@ public class SimpleProperty
         }
 
         if (gqlOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name(otoa.asciiId())
                     .type(gqlOutputType);
             setField(fieldBuilder.build());
@@ -116,13 +127,12 @@ public class SimpleProperty
             final Context context) {
 
         if(isBlobOrClob(otoa)) {
-            val typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
+            var typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
             return newObject()
                     .name(typeName)
                     .build();
-        } else {
-            return context.typeMapper.outputTypeFor(otoa, objectInteractor.getSchemaType());
-        }
+        } else
+			return context.typeMapper.outputTypeFor(otoa, objectInteractor.getSchemaType());
     }
 
     static <T extends Element> void addChildFieldFor(
@@ -150,42 +160,50 @@ public class SimpleProperty
         }
     }
 
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        if(isBlobOrClob(getObjectMember())) {
-            return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
-        } else {
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+    	var prop = getObjectMember();
 
-            val sourcePojoClass = sourcePojo.getClass();
-            val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-            if (objectSpecification == null) {
-                // not expected
+        if(isBlobOrClob(prop))
+			return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
+		else {
+            var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+            var sourcePojoClass = sourcePojo.getClass();
+            var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+            if (objectSpecification == null)
+				// not expected
                 return null;
-            }
 
-            val association = getObjectMember();
-            val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-            val resultManagedObject = association.get(managedObject);
+            var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
+            var visibleConsent = prop.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+            if (visibleConsent.isVetoed())
+    			throw new HiddenException(prop.getFeatureIdentifier());
+
+            var resultManagedObject = prop.get(managedObject);
             return resultManagedObject != null
                     ? resultManagedObject.getPojo()
                     : null;
         }
     }
 
-    private static boolean isBlobOrClob(OneToOneAssociation otota) {
+    private static boolean isValueContentEnabled(final Context context) {
+        return context.causewayConfiguration.viewer().graphql().resources().effectiveValueContentResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+    }
+
+    private static boolean isBlobOrClob(final OneToOneAssociation otota) {
         return isBlob(otota) || isClob(otota);
     }
 
-    private static boolean isBlob(OneToOneAssociation otoa) {
-        return otoa.getElementType().getCorrespondingClass() == Blob.class;
+    private static boolean isBlob(final OneToOneAssociation otoa) {
+        return otoa.getElementType().correspondingClass() == Blob.class;
     }
 
-    private static boolean isClob(OneToOneAssociation otoa) {
-        return otoa.getElementType().getCorrespondingClass() == Clob.class;
+    private static boolean isClob(final OneToOneAssociation otoa) {
+        return otoa.getElementType().correspondingClass() == Clob.class;
     }
 
     @Override
@@ -198,19 +216,19 @@ public class SimpleProperty
         return objectInteractor.getSchemaType();
     }
 
-    public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(
+    @Override
+	public final FieldCoordinates coordinatesFor(final GraphQLFieldDefinition field) {
+        if (gqlObjectType == null)
+			throw new IllegalStateException(
                     String.format("GQL Object Type for '%s' not yet built", getTypeName()));
-        }
         return FieldCoordinates.coordinates(gqlObjectType, field);
     }
 
-    public final FieldCoordinates coordinatesFor(final String fieldName) {
-        if (gqlObjectType == null) {
-            throw new IllegalStateException(
+    @Override
+	public final FieldCoordinates coordinatesFor(final String fieldName) {
+        if (gqlObjectType == null)
+			throw new IllegalStateException(
                     String.format("GQL Object Type for '%s' not yet built", getTypeName()));
-        }
         return FieldCoordinates.coordinates(gqlObjectType, fieldName);
     }
 

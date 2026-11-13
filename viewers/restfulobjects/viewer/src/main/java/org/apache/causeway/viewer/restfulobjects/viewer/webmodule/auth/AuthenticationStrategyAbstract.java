@@ -29,8 +29,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 
-import lombok.val;
-
 /**
  * Convenience abstract implementation.
  *
@@ -45,8 +43,8 @@ implements AuthenticationStrategy {
 
     protected AuthenticationManager getAuthenticationManager(ServletRequest servletRequest) {
         if(authenticationManager==null) {
-            val servletContext = getServletContext(servletRequest);
-            val webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            var servletContext = getServletContext(servletRequest);
+            var webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             if(webApplicationContext==null) {
                 throw _Exceptions.illegalState("Requires a WebApplicationContext (Spring).");
             }
@@ -56,14 +54,13 @@ implements AuthenticationStrategy {
     }
 
     protected HttpSession getHttpSession(ServletRequest servletRequest) {
-        val httpServletRequest = (HttpServletRequest) servletRequest;
+        var httpServletRequest = (HttpServletRequest) servletRequest;
         return httpServletRequest.getSession();
     }
 
     protected ServletContext getServletContext(ServletRequest servletRequest) {
         return servletRequest.getServletContext();
     }
-
 
     @Override
     public final void invalidate(

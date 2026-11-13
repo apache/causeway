@@ -40,5 +40,4 @@ public class PersistingLifecycleEventFacetForDomainObjectAnnotation extends Sing
         return _Casts.uncheckedCast(value());
     }
 
-
 }

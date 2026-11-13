@@ -20,30 +20,29 @@ package org.apache.causeway.core.runtimeservices;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
-
-import org.springframework.core.io.AbstractResource;
-
+import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.core.io.AbstractResource;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Prototypical test base for the RuntimeServices module.
@@ -63,7 +62,9 @@ implements HasMetaModelContext {
 
     @BeforeEach
     final void setUp() throws Exception {
-        val mmcBuilder = MetaModelContext_forTesting.builder()
+        var mmcBuilder = MetaModelContext_forTesting.builder()
+                .testPropertyValues(TestPropertyValues.of(
+                    "causeway.core.metaModel.introspector.lockAfterFullIntrospection=false"))
                 .memberExecutor(Mockito.mock(MemberExecutorService.class));
 
         // install runtime services into MMC (extend as needed)
@@ -71,30 +72,28 @@ implements HasMetaModelContext {
         onSetUp(mmcBuilder);
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsMarshallerService.class, ()->{
-                    val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+                    var jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     return new MenuBarsMarshallerServiceBootstrap(
                             jaxbService);
                 }));
 
+        mmcBuilder.singletonProvider(
+                SingletonBeanProvider
+                .forTestingLazy(MenuBarsLoaderService.class, () -> new MenuBarsLoaderServiceDefault(
+				        menubarsLayoutXmlResourceRef,
+				        CommonMimeType.XML)));
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
-                .forTestingLazy(MenuBarsLoaderService.class, ()->{
-                    return new MenuBarsLoaderServiceDefault(
-                            menubarsLayoutXmlResourceRef,
-                            CommonMimeType.XML); // format under test
-                }));
-
-        mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsService.class, ()->{
 
-                    val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
-                    val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
-                    val menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
-                    val menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
+                    var messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
+                    var jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+                    @SuppressWarnings("unchecked")
+                    MenuBarsMarshallerService<BSMenuBars> menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
+                    var menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
                     return new MenuBarsServiceBootstrap(
                             menuBarsLoaderService,
                             menuBarsMenuBarsMarshaller,
@@ -103,10 +102,7 @@ implements HasMetaModelContext {
                             metaModelContext);
                     }));
 
-
         metaModelContext = mmcBuilder.build();
-
-        getConfiguration().getCore().getMetaModel().getIntrospector().setLockAfterFullIntrospection(false);
 
         afterSetUp();
     }
@@ -114,7 +110,6 @@ implements HasMetaModelContext {
     @AfterEach
     final void tearDown() throws Exception {
         onTearDown();
-        metaModelContext.getSpecificationLoader().disposeMetaModel();
         metaModelContext = null;
     }
 

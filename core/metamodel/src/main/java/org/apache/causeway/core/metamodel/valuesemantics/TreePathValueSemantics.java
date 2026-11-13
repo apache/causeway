@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -36,8 +36,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 @Component
 @Named("causeway.metamodel.value.TreePathValueSemantics")
@@ -99,7 +98,7 @@ implements
 
     @Override
     public TreePath parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return canonicalDestringify(input);
     }
 

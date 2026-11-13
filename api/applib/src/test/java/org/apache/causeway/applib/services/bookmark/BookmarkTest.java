@@ -25,51 +25,41 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.val;
-
 class BookmarkTest {
 
     @Test
     void shouldParse_whenExactly2Token() {
+        var bookmark = Bookmark.parse("a:b").get();
 
-        val bookmark = Bookmark.parse("a:b").get();
-
-        assertEquals("a", bookmark.getLogicalTypeName());
-        assertEquals("b", bookmark.getIdentifier());
-
+        assertEquals("a", bookmark.logicalTypeName());
+        assertEquals("b", bookmark.identifier());
     }
 
     @Test
     void shouldNotParse_whenNotAtLeast1TokenOrInvalid() {
-
         assertEquals(Optional.empty(), Bookmark.parse(null));
         assertEquals(Optional.empty(), Bookmark.parse(""));
         //assertEquals(Optional.empty(), Bookmark.parse("a"));
         assertEquals(Optional.empty(), Bookmark.parse("a:"));
         assertEquals(Optional.empty(), Bookmark.parse(":"));
         assertEquals(Optional.empty(), Bookmark.parse(":b"));
-
     }
 
     @Test
     void shouldParse_when1Token() {
+        var bookmark = Bookmark.parse("a").get();
 
-        val bookmark = Bookmark.parse("a").get();
-
-        assertEquals("a", bookmark.getLogicalTypeName());
+        assertEquals("a", bookmark.logicalTypeName());
         assertTrue(bookmark.isEmpty());
-        assertEquals(null, bookmark.getIdentifier());
-
+        assertEquals(null, bookmark.identifier());
     }
 
     @Test
     void shouldParse_whenMoreThan2Token() {
+        var bookmark = Bookmark.parse("a:b:c").get();
 
-        val bookmark = Bookmark.parse("a:b:c").get();
-
-        assertEquals("a", bookmark.getLogicalTypeName());
-        assertEquals("b:c", bookmark.getIdentifier());
-
+        assertEquals("a", bookmark.logicalTypeName());
+        assertEquals("b:c", bookmark.identifier());
     }
 
 }

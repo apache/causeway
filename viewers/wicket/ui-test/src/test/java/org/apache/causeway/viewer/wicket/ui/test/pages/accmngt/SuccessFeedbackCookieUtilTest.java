@@ -38,9 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
-
-import lombok.val;
 
 class SuccessFeedbackCookieUtilTest {
 
@@ -62,10 +61,13 @@ class SuccessFeedbackCookieUtilTest {
                 mock(IExceptionMapper.class))));
     }
 
+    // unstable test, may fail with SuccessFeedbackCookieUtilTest.roundtrip:71
+    // » WicketRuntime The application attached to the current thread is not a WebApplication
+    @DisabledIfRunningWithSurefire
     @Test
     void roundtrip() {
 
-        val message = "Hallo x@abc.com what`s up 'dear'?!.";
+        var message = "Hallo x@abc.com what`s up 'dear'?!.";
 
         // store cookie with response
         SuccessFeedbackCookieManager.storeSuccessFeedback(message);
@@ -74,9 +76,8 @@ class SuccessFeedbackCookieUtilTest {
         when(mockHttpServletRequest.getCookies())
         .thenReturn(mockWebResponse.getCookies().toArray(new Cookie[] {}));
 
-
         // verify that we can read the message from the cookie
-        val resultRef = new AtomicReference<String>();
+        var resultRef = new AtomicReference<String>();
 
         SuccessFeedbackCookieManager.drainSuccessFeedback(feedback->{
             resultRef.set(feedback);

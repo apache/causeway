@@ -55,7 +55,6 @@ class ContextTest {
         assertNull(actual, "pre-condition: context is expected to be empty");
     }
 
-
     @Test
     void testPutSingleton() {
 
@@ -70,7 +69,6 @@ class ContextTest {
         assertThrows(IllegalStateException.class, 
                 ()->{_Context.putSingleton(type, singleton);},
                 "expected to throw: you cannot override a singleton that is already on the context");
-
 
         assertThrows(NullPointerException.class, 
                 ()->{_Context.putSingleton(type, null);},

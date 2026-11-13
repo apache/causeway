@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.value;
 
-import org.apache.wicket.Component;
+import java.util.function.BiFunction;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
@@ -26,15 +27,10 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
-
-import java.util.function.BiFunction;
 
 /**
  * Web page representing an action invocation.
@@ -47,14 +43,7 @@ public class ValuePage extends PageAbstract {
     private static final String ID_ACTION_NAME = "actionName";
     private final ValueModel valueModel;
 
-    /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
-     */
-    public ValuePage(final ValueModel valueModel) {
-        this(valueModel, actionNameFrom(valueModel));
-    }
-
-    private ValuePage(final ValueModel valueModel, final String actionName) {
+    public ValuePage(final ValueModel valueModel, final String actionName) {
         super(PageParameterUtils.newPageParameters(), actionName, UiComponentType.VALUE);
         this.valueModel = valueModel;
 
@@ -64,45 +53,33 @@ public class ValuePage extends PageAbstract {
         addBookmarkedPages(themeDiv);
     }
 
-    private static String actionNameFrom(final ValueModel valueModel) {
-        ActionModel actionModel = valueModel.getActionModelHint();
-        if(actionModel != null) {
-            return actionModel.getFriendlyName();
-        }
-        return "Results"; // fallback, probably not required because hint should always exist on the model.
-    }
-
     @Override
     public void onRendering(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
         onRenderingOrRendered(enabledObjectRenderSubscribers, (pageRenderSubscriber, value) -> {
-            pageRenderSubscriber.onRenderingValue(value);
-            return null;
-        });
+                pageRenderSubscriber.onRenderingValue(value);
+                return null;
+            });
     }
 
     @Override
     public void onRendered(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
         onRenderingOrRendered(enabledObjectRenderSubscribers, (pageRenderSubscriber, value) -> {
-            pageRenderSubscriber.onRenderedValue(value);
-            return null;
-        });
+                pageRenderSubscriber.onRenderedValue(value);
+                return null;
+            });
     }
 
     private void onRenderingOrRendered(
             final Can<PageRenderSubscriber> pageRenderSubscribers,
             final BiFunction<PageRenderSubscriber, Object, Void> handler) {
 
-        if(pageRenderSubscribers.isEmpty()) {
-            return;
-        }
+        if(pageRenderSubscribers.isEmpty()) return;
 
         // guard against unspecified
         ManagedObjects.asSpecified(valueModel.getObject())
-        .ifPresent(managedObject->{
-
-            val nullableValuePojo = managedObject.getPojo();
-
-            pageRenderSubscribers.forEach(subscriber -> handler.apply(subscriber, nullableValuePojo));
-        });
+            .ifPresent(managedObject->{
+                var nullableValuePojo = managedObject.getPojo();
+                pageRenderSubscribers.forEach(subscriber -> handler.apply(subscriber, nullableValuePojo));
+            });
     }
 }

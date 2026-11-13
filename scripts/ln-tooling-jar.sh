@@ -1,4 +1,5 @@
 mkdir -p tooling/cli/target
 pushd tooling/cli/target
-ln -s ../../../../../../apache-causeway-committers/causewaystuff/tooling/cli/target/causeway-tooling-cli-spring-boot.jar causewaystuff-tooling-cli.jar
+rm -f causewaystuff-tooling-cli.jar
+ln -s $HOME/.m2/repository/io/github/causewaystuff/causewaystuff-tooling-cli/1.0.0-SNAPSHOT/causewaystuff-tooling-cli-1.0.0-SNAPSHOT-spring-boot.jar causewaystuff-tooling-cli.jar
 popd

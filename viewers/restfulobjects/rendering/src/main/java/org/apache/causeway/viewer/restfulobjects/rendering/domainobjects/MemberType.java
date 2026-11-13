@@ -24,7 +24,6 @@ import java.util.Map;
 import org.apache.causeway.applib.util.Enums;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
@@ -42,7 +41,7 @@ public enum MemberType {
     PROPERTY("properties/", RepresentationType.OBJECT_PROPERTY,
             _Maps.unmodifiable(
                     "modify", MutatorSpec.of(Rel.MODIFY, PropertySetterFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
-                    "clear", MutatorSpec.of(Rel.CLEAR, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))),
+                    "clear", MutatorSpec.of(Rel.CLEAR, PropertySetterFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))),
     /**
      * {@link #getMutators()} are empty}
      */

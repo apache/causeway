@@ -7,7 +7,7 @@
 .CausewayModuleExtCors.java
 ----
 class CausewayModuleExtCors {
-  FilterRegistrationBean<Filter> createCorsFilterRegistration(CausewayConfiguration causewayConfiguration, RestEasyConfiguration restEasyConfiguration)
+  FilterRegistrationBean<Filter> createCorsFilterRegistration(CausewayConfiguration causewayConfiguration)
 }
 ----
 

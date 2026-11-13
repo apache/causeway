@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-graphql</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-graphql-test</artifactId>
@@ -39,18 +39,6 @@
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
-    <build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>false</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
 	<dependencies>
 
 		<!-- TESTING -->
@@ -91,5 +79,21 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!--
+                    Causeway's metamodel context is JVM-global, while these tests use
+                    multiple Spring application contexts.  Do not reuse a JVM after a
+                    test class has replaced or destroyed its metamodel context.
+                    -->
+                    <reuseForks>false</reuseForks>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

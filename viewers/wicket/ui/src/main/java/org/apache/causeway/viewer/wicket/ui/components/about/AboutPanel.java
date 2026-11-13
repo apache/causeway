@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.about;
 
-import java.io.InputStream;
-
 import jakarta.inject.Inject;
-import jakarta.inject.Provider;
 import jakarta.servlet.ServletContext;
 
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,7 +26,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.commons.model.about.JarManifestModel;
 import org.apache.causeway.viewer.wicket.model.models.AboutModel;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -38,7 +37,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
-public class AboutPanel
+class AboutPanel
 extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutModel> {
 
     private static final long serialVersionUID = 1L;
@@ -48,8 +47,28 @@ extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutMode
     private static final String ID_APPLICATION_VERSION = "applicationVersion";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
 
-    public static class LabelVisibleOnlyIfNonEmpty extends Label {
+    public AboutPanel(final String id, final AboutModel aboutModel) {
+        super(id);
 
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, LambdaModel.of(aboutModel::name)));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, LambdaModel.of(aboutModel::version)));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, LambdaModel.of(aboutModel::about)));
+        add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel()));
+    }
+
+    JarManifestModel jarManifestModel() {
+        return JAR_MANIFEST_MODEL_REF.orElseSet(this::createJarManifestModel);
+    }
+
+    // -- HELPER
+
+    private static final _StableValue<JarManifestModel> JAR_MANIFEST_MODEL_REF = new _StableValue<>();
+    @Inject private transient ServletContext servletContext;
+    private JarManifestModel createJarManifestModel() {
+        return JarManifestModel.of(()->servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
+    }
+
+    public static class LabelVisibleOnlyIfNonEmpty extends Label {
         private static final long serialVersionUID = 1L;
         private final IModel<String> label;
 
@@ -63,27 +82,5 @@ extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutMode
             setVisibilityAllowed(label != null && !_NullSafe.isEmpty(label.getObject()));
         }
     }
-
-    @Inject
-    private ServletContext servletContext;
-
-    private JarManifestModel jarManifestModel;
-
-    public AboutPanel(final String id, final AboutModel aboutModel) {
-        super(id);
-
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, LambdaModel.of(()->aboutModel.getObject().getName())));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, LambdaModel.of(()->aboutModel.getObject().getVersion())));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, LambdaModel.of(()->aboutModel.getObject().getAbout())));
-
-        if(jarManifestModel == null) {
-            Provider<InputStream> metaInfManifestProvider =
-                    () -> servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
-            jarManifestModel = new JarManifestModel(metaInfManifestProvider);
-        }
-
-        add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
-    }
-
 
 }

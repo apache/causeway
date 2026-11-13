@@ -22,14 +22,12 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
-public class UnknownModelPanel
+class UnknownModelPanel
 extends PanelAbstract<Object, IModel<Object>> {
 
     private static final long serialVersionUID = 1L;
@@ -56,19 +54,19 @@ extends PanelAbstract<Object, IModel<Object>> {
     private void buildMessageForModel(final StringBuilder buf, final IModel<?> model) {
         buf.append(model.getClass().getSimpleName()).append(" ");
         if(model instanceof UiObjectWkt) {
-            val entityModel = (UiObjectWkt) model;
-            val objectAdapter = entityModel.getObject();
+            var objectModel = (UiObjectWkt) model;
+            var objectAdapter = objectModel.getObject();
             if(objectAdapter != null) {
                 buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));
             } else {
                 buf.append("??? objectAdapter is NULL");
             }
-        } else if(model instanceof ScalarModel) {
-            val scalarModel = (ScalarModel) model;
-            val scalarAdapter = scalarModel.getObject();
-            if(ManagedObjects.isSpecified(scalarAdapter)) {
+        } else if(model instanceof UiAttributeWkt) {
+            var attributeModel = (UiAttributeWkt) model;
+            var attributeAdapter = attributeModel.getObject();
+            if(ManagedObjects.isSpecified(attributeAdapter)) {
                 buf.append(String.format("??? spec=%s, value='%s'",
-                        scalarAdapter.getSpecification(), scalarAdapter.getPojo()));
+                        attributeAdapter.objSpec(), attributeAdapter.getPojo()));
             } else {
                 buf.append("??? scalarAdapter is NULL or UNSPECIFIED");
             }

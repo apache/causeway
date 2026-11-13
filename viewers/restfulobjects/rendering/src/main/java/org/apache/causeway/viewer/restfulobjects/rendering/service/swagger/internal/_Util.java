@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -37,7 +36,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -85,13 +83,13 @@ final class _Util {
             return true;
         }
         if(specification.isPlural()) {
-            val elementSpec = Facets.elementSpec(specification).orElse(null);
+            var elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return isVisibleForPublic(elementSpec);
             }
         }
 
-        final Class<?> correspondingClass = specification.getCorrespondingClass();
+        final Class<?> correspondingClass = specification.correspondingClass();
         return Collection.class.isAssignableFrom(correspondingClass) ||
                 correspondingClass.isArray() ||
                 correspondingClass == void.class ||
@@ -128,7 +126,7 @@ final class _Util {
             final ObjectSpecification objectSpec,
             final Visibility visibility,
             final ClassExcluder classExcluder) {
-        val actionTypes = actionScopesFor(visibility);
+        var actionTypes = actionScopesFor(visibility);
 
         return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
@@ -139,14 +137,10 @@ final class _Util {
     }
 
     ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
-        switch (visibility) {
-        case PUBLIC:
-        case PRIVATE:
-            return ActionScope.PRODUCTION_ONLY;
-        case PRIVATE_WITH_PROTOTYPING:
-            return ActionScope.ANY;
-        }
-        throw _Exceptions.unmatchedCase(visibility);
+        return switch (visibility) {
+	        case PUBLIC, PRIVATE -> ActionScope.PRODUCTION_ONLY;
+	        case PRIVATE_WITH_PROTOTYPING -> ActionScope.ANY;
+    	};
     }
 
 }

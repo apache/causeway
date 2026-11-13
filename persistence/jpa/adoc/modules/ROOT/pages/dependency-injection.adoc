@@ -9,9 +9,9 @@ For JPA, this requires that the following boilerplate:
 
 [source,java]
 ----
-import javax.persistence.EntityListeners;
-import org.apache.causeway.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import jakarta.persistence.EntityListeners;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(CausewayEntityListener.class)
 public class SomeEntity ... { /* ... */ }
 ----

@@ -29,7 +29,6 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-@javax.jdo.annotations.Column(length = ChamberOfCommerceCode.MAX_LEN, allowsNull = "true")
 @Property(maxLength = ChamberOfCommerceCode.MAX_LEN, optionality = Optionality.OPTIONAL)
 @PropertyLayout(named = "Chamber of Commerce Code")
 @Parameter(maxLength = ChamberOfCommerceCode.MAX_LEN, optionality = Optionality.OPTIONAL)

@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2026-08-20T23:17:42.149Z",
+  "note": "Groups measure candidate-owned assets. Shared harness files are excluded. Complete distributions are not equivalent to browser-loaded selective assets.",
+  "measurements": {
+    "baseline": {
+      "fileCount": 43,
+      "rawBytes": 393535,
+      "gzipBytes": 107443,
+      "files": [
+        "viewers/webcomponents/foundation/src/action-element.mjs",
+        "viewers/webcomponents/foundation/src/application-operations.mjs",
+        "viewers/webcomponents/foundation/src/collection-column-element.mjs",
+        "viewers/webcomponents/foundation/src/collection-element.mjs",
+        "viewers/webcomponents/foundation/src/component-contracts.mjs",
+        "viewers/webcomponents/foundation/src/component-styles.css",
+        "viewers/webcomponents/foundation/src/component-styles.mjs",
+        "viewers/webcomponents/foundation/src/context-consumer-element.mjs",
+        "viewers/webcomponents/foundation/src/context-events.mjs",
+        "viewers/webcomponents/foundation/src/editor-registry.mjs",
+        "viewers/webcomponents/foundation/src/graphql-client-element.mjs",
+        "viewers/webcomponents/foundation/src/graphql-client.mjs",
+        "viewers/webcomponents/foundation/src/graphql-executor.mjs",
+        "viewers/webcomponents/foundation/src/index.mjs",
+        "viewers/webcomponents/foundation/src/interaction-controller-element.mjs",
+        "viewers/webcomponents/foundation/src/interaction-operations.mjs",
+        "viewers/webcomponents/foundation/src/introspection.mjs",
+        "viewers/webcomponents/foundation/src/menu-context-controller.mjs",
+        "viewers/webcomponents/foundation/src/menu-layout.mjs",
+        "viewers/webcomponents/foundation/src/menubar-element.mjs",
+        "viewers/webcomponents/foundation/src/menubars-element.mjs",
+        "viewers/webcomponents/foundation/src/object-context-controller.mjs",
+        "viewers/webcomponents/foundation/src/object-context-element.mjs",
+        "viewers/webcomponents/foundation/src/object-element.mjs",
+        "viewers/webcomponents/foundation/src/object-header-element.mjs",
+        "viewers/webcomponents/foundation/src/object-layout.mjs",
+        "viewers/webcomponents/foundation/src/object-link-element.mjs",
+        "viewers/webcomponents/foundation/src/property-element.mjs",
+        "viewers/webcomponents/foundation/src/register.mjs",
+        "viewers/webcomponents/foundation/src/rendering.mjs",
+        "viewers/webcomponents/foundation/src/schema-names.mjs",
+        "viewers/webcomponents/foundation/src/selection.mjs",
+        "viewers/webcomponents/foundation/src/service-action-context.mjs",
+        "viewers/webcomponents/foundation/src/structural-resource.mjs",
+        "viewers/webcomponents/foundation/src/structural-xml.mjs",
+        "viewers/webcomponents/foundation/src/theme.css",
+        "viewers/webcomponents/foundation/src/types.mjs",
+        "viewers/webcomponents/foundation/src/value-element.mjs",
+        "viewers/webcomponents/foundation/src/value-renderers.mjs",
+        "viewers/webcomponents/htmx/src/main/resources/META-INF/resources/causeway-htmx/causeway-htmx.css",
+        "viewers/webcomponents/htmx/src/main/resources/META-INF/resources/causeway-htmx/causeway-htmx.mjs",
+        "viewers/webcomponents/htmx/src/main/resources/META-INF/resources/causeway-htmx/route-policy.mjs",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/candidates/baseline.css"
+      ]
+    },
+    "bootstrapCss": {
+      "fileCount": 2,
+      "rawBytes": 233395,
+      "gzipBytes": 31084,
+      "files": [
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/candidates/bootstrap.css"
+      ]
+    },
+    "bootstrapOptionalJavascript": {
+      "fileCount": 1,
+      "rawBytes": 80496,
+      "gzipBytes": 23812,
+      "files": [
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+      ]
+    },
+    "webAwesomeEntry": {
+      "fileCount": 3,
+      "rawBytes": 3820,
+      "gzipBytes": 1325,
+      "files": [
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/styles/webawesome.css",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/webawesome.loader.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/candidates/web-awesome.css"
+      ]
+    },
+    "webAwesomeSelectiveBundle": {
+      "fileCount": 3,
+      "rawBytes": 378423,
+      "gzipBytes": 84848,
+      "files": [
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/generated/webawesome-selective.css",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/generated/webawesome-selective.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/candidates/web-awesome.css"
+      ]
+    },
+    "webAwesomeCompleteDistribution": {
+      "fileCount": 662,
+      "rawBytes": 2462791,
+      "gzipBytes": 675990,
+      "sampleFiles": [
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.26NNVZGF.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.26QE47KB.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2BXLTQVW.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2HGX567O.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2K2WWLRP.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2LXKNNNE.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2NOGQWD2.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2NV6QW6C.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2QMPIFI4.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2SO23SX3.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2VKZLNWX.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.2YEETXBR.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3A5U2WZZ.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3FDTCWBL.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3I2YK6WG.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3KVD5FFW.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3MALJW2P.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3MSWQ3RG.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3NKIHICW.js",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/@awesome.me/webawesome/dist-cdn/chunks/chunk.3OMDB7G7.js"
+      ]
+    },
+    "openProps": {
+      "fileCount": 4,
+      "rawBytes": 50947,
+      "gzipBytes": 12028,
+      "files": [
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/open-props/open-props.min.css",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/open-props/normalize.min.css",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/node_modules/open-props/buttons.min.css",
+        "openspec/changes/analyze-web-component-theming-kit/evidence/harness/candidates/open-props.css"
+      ]
+    }
+  }
+}

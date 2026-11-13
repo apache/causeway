@@ -25,9 +25,10 @@ import java.util.Optional;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.ResponseBuilder;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -46,10 +47,9 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
@@ -59,8 +59,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectC
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Returns representations according to the
@@ -75,132 +75,125 @@ import lombok.val;
 public class ContentNegotiationServiceForRestfulObjectsV1_0
 implements ContentNegotiationService {
 
-
     protected final CausewayConfiguration configuration;
     protected final SpecificationLoader specificationLoader;
 
     private final AcceptChecking acceptChecking;
+    private final ResponseFactory responseFactory;
 
     @Inject
     public ContentNegotiationServiceForRestfulObjectsV1_0(
             final CausewayConfiguration configuration,
-            final SpecificationLoader specificationLoader) {
+            final SpecificationLoader specificationLoader,
+            final ResponseFactory responseFactory) {
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
+        this.responseFactory = responseFactory;
         this.acceptChecking = AcceptChecking.fromConfig(configuration);
     }
 
     @Override
-    public ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
 
         ensureCompatibleAcceptHeader(RepresentationType.DOMAIN_OBJECT, resourceContext);
 
-        return responseBuilder(buildResponseTo(
-                resourceContext, objectAdapter, JsonRepresentation.newMap(), null));
+        return buildResponseTo(
+                resourceContext, objectAdapter, JsonRepresentation.newMap(), null, null);
     }
 
     /**
      * Not API
      */
-    ResponseBuilder buildResponseTo(
+    ResponseEntity<Object> buildResponseTo(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter,
             final JsonRepresentation representationIfAnyRequired,
-            final JsonRepresentation rootRepresentation) {
+            final JsonRepresentation rootRepresentation,
+            final @Nullable MediaType mediaTypeOverride) {
 
         final DomainObjectReprRenderer renderer =
                 new DomainObjectReprRenderer(resourceContext, null, representationIfAnyRequired)
                 .with(objectAdapter)
                 .includesSelf();
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
+        var status = resourceContext.intent() == RepresentationService.Intent.JUST_CREATED
+            ? HttpStatus.CREATED
+            : HttpStatus.OK;
 
-        if(resourceContext.getIntent() == RepresentationService.Intent.JUST_CREATED) {
-            responseBuilder.status(Response.Status.CREATED);
-        }
-
-        return responseBuilder;
+        return responseFactory.of(status, renderer, Caching.NONE, rootRepresentation, mediaTypeOverride);
     }
 
     @Override
-    public ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty) {
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, resourceContext);
 
-        val renderer =
-                new ObjectPropertyReprRenderer(resourceContext)
+        var renderer = new ObjectPropertyReprRenderer(resourceContext)
                 .with(objectAndProperty)
-                .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
+                .usingLinkTo(resourceContext.objectAdapterLinkTo())
+                .withMemberMode(objectAndProperty.getRepresentationMode());
 
-        val repMode = objectAndProperty.getRepresentationMode();
-        if(repMode.isExplicit()) {
-            renderer.withMemberMode(repMode);
-        }
-
-        return Responses.ofOk(renderer, Caching.NONE);
+        return responseFactory.ok(renderer, Caching.NONE, null, null);
     }
 
     @Override
-    public ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedCollection objectAndCollection) {
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_COLLECTION, resourceContext);
 
-        return responseBuilder(buildResponseTo(
-                resourceContext, objectAndCollection, JsonRepresentation.newMap(), null));
+        return buildResponseTo(
+                resourceContext, objectAndCollection, JsonRepresentation.newMap(), null, null);
     }
 
     /**
      * Not API
      */
-    ResponseBuilder buildResponseTo(
+    ResponseEntity<Object> buildResponseTo(
             final IResourceContext resourceContext,
             final ManagedCollection objectAndCollection,
             final JsonRepresentation representation,
-            final JsonRepresentation rootRepresentation) {
-        final ObjectCollectionReprRenderer renderer =
-                new ObjectCollectionReprRenderer(resourceContext, null, null, representation);
-        renderer.with(objectAndCollection)
-        .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
+            final JsonRepresentation rootRepresentation,
+            final @Nullable MediaType mediaTypeOverride) {
 
-        if(objectAndCollection.getRepresentationMode().isExplicit()) {
-            renderer.withMemberMode(objectAndCollection.getRepresentationMode());
-        }
+        var renderer = new ObjectCollectionReprRenderer(resourceContext, null, null, representation)
+            .with(objectAndCollection)
+            .usingLinkTo(resourceContext.objectAdapterLinkTo())
+            .withMemberMode(objectAndCollection.getRepresentationMode());
 
-        return Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
+        return responseFactory.ok(renderer, Caching.NONE, rootRepresentation, mediaTypeOverride);
     }
 
     @Override
-    public ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedAction objectAndAction) {
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, resourceContext);
 
-        val renderer =
-                new ObjectActionReprRenderer(resourceContext)
-                .with(objectAndAction)
-                .usingLinkTo(resourceContext.getObjectAdapterLinkTo())
-                .asStandalone();
+        var renderer = new ObjectActionReprRenderer(resourceContext)
+            .with(objectAndAction)
+            .usingLinkTo(resourceContext.objectAdapterLinkTo())
+            .asStandalone();
 
-        return responseBuilder(Responses.ofOk(renderer, Caching.NONE));
+        return responseFactory.ok(renderer, Caching.NONE, null, null);
     }
 
     @Override
-    public ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
 
-        val returnTypeCompileTimeSpecification = objectAndActionInvocation.getReturnTypeSpecification();
+        var returnTypeCompileTimeSpecification = objectAndActionInvocation.getReturnTypeSpecification();
 
-        val isDomainObjectOrCollection = returnTypeCompileTimeSpecification.isEntityOrViewModelOrAbstract()
+        var isDomainObjectOrCollection = returnTypeCompileTimeSpecification.isEntityOrViewModelOrAbstract()
                 || returnTypeCompileTimeSpecification.isPlural();
 
         if(isDomainObjectOrCollection
@@ -208,10 +201,9 @@ implements ContentNegotiationService {
 
             return objectAndActionInvocation.asEitherSingularOrPlural()
             .fold(singularActionResult->{
-                return responseBuilder(
-                        buildResponse(
+                return buildResponse(
                                 resourceContext,
-                                singularActionResult));
+                                singularActionResult);
             }, pluralActionResult->{
                 final ObjectSpecification elementSpec =
                         objectAndActionInvocation.getAction().getElementType();
@@ -221,40 +213,30 @@ implements ContentNegotiationService {
                 final DomainObjectList listAsViewmodel = domainObjectListFrom(
                         pluralActionResult, elementSpec, actionOwnerSpec, actionId, actionArguments);
 
-                val domainObjectListSpec = resourceContext.getMetaModelContext().getSpecificationLoader()
+                var domainObjectListSpec = resourceContext.getMetaModelContext().getSpecificationLoader()
                     .specForType(DomainObjectList.class)
                     .filter(ObjectSpecification::isViewModel)
                     .orElseThrow(()->_Exceptions.unrecoverable(
                             "framework bug: DomainObjectList should be recognized as viewmodel"));
 
-                val listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel, Optional.empty());
-                return responseBuilder(
-                        buildResponse(
+                var listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel, Optional.empty());
+                return buildResponse(
                                 resourceContext,
-                                listAdapter));
+                                listAdapter);
             });
 
         }
 
         if(isAccepted(RepresentationType.ACTION_RESULT, acceptableMediaTypes)) {
-
-            return responseBuilder(
-                    buildResponseTo(
-                            resourceContext,
-                            objectAndActionInvocation,
-                            JsonRepresentation.newMap(),
-                            /*rootRepr*/null));
+            return buildResponseTo(
+                resourceContext,
+                objectAndActionInvocation,
+                JsonRepresentation.newMap(),
+                /*rootRepr*/null, null);
         }
 
-        throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
+        throw RestfulObjectsApplicationException.create(HttpStatus.NOT_ACCEPTABLE);
 
-    }
-
-    /**
-     * For easy sub-classing to further customize, eg additional headers
-     */
-    protected ResponseBuilder responseBuilder(final ResponseBuilder responseBuilder) {
-        return responseBuilder;
     }
 
     // -- HELPER
@@ -269,22 +251,22 @@ implements ContentNegotiationService {
 
     private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final StringBuilder buf = new StringBuilder();
-        val parameters = objectAndActionInvocation.getAction().getParameters();
-        val argAdapters = objectAndActionInvocation.getArgAdapters();
+        var parameters = objectAndActionInvocation.getAction().getParameters();
+        var argAdapters = objectAndActionInvocation.getArgAdapters();
         if(parameters.size() == argAdapters.size()) {
             for (int i = 0; i < parameters.size(); i++) {
 
-                val paramIndex = i;
-                val param = parameters.getElseFail(paramIndex);
-                val argAdapter = argAdapters.getElseFail(paramIndex);
+                var paramIndex = i;
+                var param = parameters.getElseFail(paramIndex);
+                var argAdapter = argAdapters.getElseFail(paramIndex);
 
                 if(buf.length() > 0) {
                     buf.append(",");
                 }
                 buf
-                .append(param.getCanonicalFriendlyName())
-                .append("=")
-                .append(abbreviated(titleOf(argAdapter), 8));
+                    .append(param.getCanonicalFriendlyName())
+                    .append("=")
+                    .append(abbreviated(titleOf(argAdapter), 8));
             }
         }
 
@@ -310,7 +292,7 @@ implements ContentNegotiationService {
 
         final DomainObjectList list = new DomainObjectList(
                 title, elementSpec.fqcn(), actionOwnerSpec.fqcn(), actionId, actionArguments);
-        for (val adapter : collectionAdapters) {
+        for (var adapter : collectionAdapters) {
             list.getObjects().add(adapter.getPojo());
         }
         return list;
@@ -326,19 +308,17 @@ implements ContentNegotiationService {
     /**
      * Not API
      */
-    ResponseBuilder buildResponseTo(
+    ResponseEntity<Object> buildResponseTo(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation,
             final JsonRepresentation representation,
-            final JsonRepresentation rootRepresentation) {
-        final ActionResultReprRenderer renderer =
-                new ActionResultReprRenderer(resourceContext, null, objectAndActionInvocation.getSelfLink(), representation);
-        renderer.with(objectAndActionInvocation)
-        .using(resourceContext.getObjectAdapterLinkTo());
+            final JsonRepresentation rootRepresentation,
+            final @Nullable MediaType mediaTypeOverride) {
+        var renderer = new ActionResultReprRenderer(resourceContext, null, objectAndActionInvocation.getSelfLink(), representation)
+            .with(objectAndActionInvocation)
+            .using(resourceContext.objectAdapterLinkTo());
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
-
-        return responseBuilder;
+        return responseFactory.ok(renderer, Caching.NONE, rootRepresentation, mediaTypeOverride);
     }
 
     private static enum AcceptChecking {
@@ -348,7 +328,7 @@ implements ContentNegotiationService {
          */
         STRICT;
         static AcceptChecking fromConfig(final CausewayConfiguration configuration) {
-            return configuration.getViewer().getRestfulobjects().isStrictAcceptChecking()
+            return configuration.viewer().restfulobjects().strictAcceptChecking()
                     ? AcceptChecking.STRICT
                     : AcceptChecking.RELAXED;
         }
@@ -359,21 +339,16 @@ implements ContentNegotiationService {
     private void ensureCompatibleAcceptHeader(
             final RepresentationType representationType,
             final IResourceContext resourceContext) {
-        if(acceptChecking.isRelaxed()) {
-            return;
-        }
-        if (representationType == null) {
-            return;
-        }
+        if(acceptChecking.isRelaxed()) return;
+        if(representationType == null) return;
 
         // RestEasy will check the basic media types...
         // ... so we just need to check the profile parameter
         final String producedProfile = representationType.getMediaTypeProfile();
-        if (producedProfile == null) {
-            return;
-        }
-        if(!isAccepted(producedProfile, resourceContext.getAcceptableMediaTypes())) {
-            throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
+        if (producedProfile == null) return;
+
+        if(!isAccepted(producedProfile, resourceContext.acceptableMediaTypes())) {
+            throw RestfulObjectsApplicationException.create(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -407,6 +382,5 @@ implements ContentNegotiationService {
         }
         return true;
     }
-
 
 }

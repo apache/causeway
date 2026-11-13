@@ -52,7 +52,7 @@ public interface MetamodelListener {
      * <p>
      *     NOTE that this callback is called without any
      *     {@link org.apache.causeway.applib.services.iactnlayer.InteractionLayer interaction} (aka persistence session)
-     *     set up; use {@link org.apache.causeway.applib.services.iactnlayer.InteractionService} to create one if required.
+     *     set up; use {@link org.apache.causeway.applib.services.iactn.InteractionService} to create one if required.
      * </p>
      */
     void onMetamodelLoaded();
@@ -61,7 +61,7 @@ public interface MetamodelListener {
      * <p>
      *     NOTE that this callback is called without any
      *     {@link org.apache.causeway.applib.services.iactnlayer.InteractionLayer interaction} (aka persistence session)
-     *     set up; use {@link org.apache.causeway.applib.services.iactnlayer.InteractionService} to create one if required.
+     *     set up; use {@link org.apache.causeway.applib.services.iactn.InteractionService} to create one if required.
      * </p>
      */
     default void onMetamodelAboutToBeLoaded() {}

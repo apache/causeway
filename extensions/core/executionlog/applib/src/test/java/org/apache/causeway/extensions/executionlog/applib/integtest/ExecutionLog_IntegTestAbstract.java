@@ -18,31 +18,25 @@
  */
 package org.apache.causeway.extensions.executionlog.applib.integtest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import jakarta.inject.Inject;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter;
@@ -53,8 +47,11 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
@@ -66,7 +63,8 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
     Counter counter1;
     Counter counter2;
 
-    @BeforeEach
+    @SuppressWarnings("unchecked")
+	@BeforeEach
     void beforeEach() {
 
         counterRepository.removeAll();
@@ -84,7 +82,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
     }
 
     protected abstract Counter newCounter(String name);
-
 
     @Test
     void invoke_mixin() {
@@ -203,7 +200,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         assertThat(all).isEmpty();
     }
 
-
     @Test
     void roundtrip_ELE_bookmarks() {
 
@@ -221,7 +217,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(eleBookmarkIfAny).isPresent();
         Bookmark eleBookmark = eleBookmarkIfAny.get();
-        String identifier = eleBookmark.getIdentifier();
+        String identifier = eleBookmark.identifier();
 
         UUID.fromString(identifier.substring(0, identifier.indexOf("_"))); // should not fail, ie check the format is as we expect
         Integer.parseInt(identifier.substring(identifier.indexOf("_")+1)); // should not fail, ie check the format is as we expect
@@ -243,7 +239,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
     void test_all_the_repository_methods() {
 
         // given
-        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
 
@@ -253,13 +249,13 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(executionsForTarget1User1).hasSize(1);
         var executionTarget1User1 = executionsForTarget1User1.get(0);
-        val executionTarget1User1Id = executionTarget1User1.getInteractionId();
+        var executionTarget1User1Id = executionTarget1User1.getInteractionId();
 
         // given (different user, same target, same day)
         counter1 = counterRepository.findByName("counter-1");
         sudoService.run(
                 InteractionContext.switchUser(
-                        UserMemento.builder().name("user-2").build()),
+                        UserMemento.builder("user-2").build()),
                 () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
         );
         interactionService.nextInteraction();
@@ -270,17 +266,16 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(executionsForTarget1User2).hasSize(1);
         var executionTarget1User2 = executionsForTarget1User2.get(0);
-        val executionTarget1User2Id = executionTarget1User2.getInteractionId();
-
+        var executionTarget1User2Id = executionTarget1User2.getInteractionId();
 
         // given (same user, same target, yesterday)
         counter1 = counterRepository.findByName("counter-1");
         final UUID[] executionTarget1User1YesterdayIdHolder = new UUID[1];
         sudoService.run(
                 InteractionContext.switchUser(
-                        UserMemento.builder().name("user-1").build()),
+                        UserMemento.builder("user-1").build()),
                 () -> {
-                    val yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
                     sudoService.run(
                             InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
                             () -> {
@@ -297,7 +292,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
 
         // given (same user, different target, same day)
         counter2 = counterRepository.findByName("counter-2");
-        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
         });
         interactionService.nextInteraction();
@@ -308,7 +303,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(executionTarget2User1IfAny).hasSize(1);
         var executionTarget2User1 = executionTarget2User1IfAny.get(0);
-        val executionTarget2User1Id = executionTarget2User1.getInteractionId();
+        var executionTarget2User1Id = executionTarget2User1.getInteractionId();
 
         // when
         Optional<? extends ExecutionLogEntry> executionTarget1User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);
@@ -327,22 +322,22 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         counter1 = counterRepository.findByName("counter-1");
         executionTarget1User1 = executionTarget1User1ById.get();
         executionTarget1User2 = executionTarget1User2ById.get();
-        val executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
+        @SuppressWarnings("unused")
+		var executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
         executionTarget2User1 = executionTarget2User1ById.get();
 
-        val target1 = executionTarget1User1.getTarget();
-        val username1 = executionTarget1User1.getUsername();
+        @SuppressWarnings("unused")
+		var target1 = executionTarget1User1.getTarget();
+        var username1 = executionTarget1User1.getUsername();
         Timestamp from1 = executionTarget1User1.getStartedAt();
         Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));
-        val bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
-
+        var bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
 
         // when
         List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findRecentByTarget(bookmark1);
 
         // then
         assertThat(recentByTarget).hasSize(3);
-
 
         // when
         List<? extends ExecutionLogEntry> byTargetAndTimestampBefore = executionLogEntryRepository.findByTargetAndTimestampBefore(bookmark1, from1);
@@ -393,7 +388,8 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
     @Inject InteractionLayerTracker interactionLayerTracker;
-    @Inject CounterRepository counterRepository;
+    @SuppressWarnings("rawtypes")
+	@Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
 

@@ -33,15 +33,7 @@ Presents your domain objects in JSON representations, compliant either with link
 
 == Persistence
 
-The framework allows xref:userguide:ROOT:domain-entities.adoc[domain entities] to be persisted using either:
-
-* the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store
-+
-for use with JPA and link:https://spring.io/projects/spring-data-jpa[Spring Data JPA].
-
-* the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store]
-+
-for use with the JDO API.
+The framework allows xref:userguide:ROOT:domain-entities.adoc[domain entities] to be persisted using the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store, for use with JPA and link:https://spring.io/projects/spring-data-jpa[Spring Data JPA].
 
 Alternatively, you can "roll your own" (by implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface) and persist with any data persistence technology that is supported by Spring Boot.
 

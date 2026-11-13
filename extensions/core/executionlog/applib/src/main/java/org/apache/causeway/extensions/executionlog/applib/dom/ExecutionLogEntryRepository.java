@@ -24,11 +24,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Execution;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 
@@ -50,8 +49,8 @@ public interface ExecutionLogEntryRepository {
         }
     }
 
-
-    ExecutionLogEntry createEntryAndPersist(final Execution execution);
+    @SuppressWarnings("rawtypes")
+	ExecutionLogEntry createEntryAndPersist(final Execution execution);
 
     List<ExecutionLogEntry> findByInteractionId(final UUID interactionId);
 
@@ -83,12 +82,10 @@ public interface ExecutionLogEntryRepository {
 
     List<ExecutionLogEntry> findRecentByTarget(final Bookmark target);
 
-
     /**
      * intended for testing purposes only
      */
     List<ExecutionLogEntry> findAll();
-
 
     /**
      * intended for testing purposes only

@@ -18,12 +18,17 @@
  */
 package org.apache.causeway.applib.client;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @since 2.0 {@index}
@@ -58,16 +63,20 @@ public enum SuppressionType {
     /**
      * suppress all '$$...' entries
      */
-    ALL
+    ALL;
 
-    ;
-
-    public static EnumSet<SuppressionType> all() { return EnumSet.of(ALL); };
+    public static EnumSet<SuppressionType> all() { return EnumSet.of(ALL); }
 
     public static EnumSet<SuppressionType> setOf(final SuppressionType ... types){
         final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
         stream(types).forEach(set::add);
         return set;
+    }
+
+    public static Optional<String> toLiteral(final @Nullable EnumSet<SuppressionType> suppressionTypes) {
+        return _Strings.nonEmpty(_NullSafe.stream(suppressionTypes)
+                .map(SuppressionType::name)
+                .collect(Collectors.joining(",")));
     }
 
     public static class ParseUtil {
@@ -76,20 +85,18 @@ public enum SuppressionType {
             final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
             parameterList.stream()
             .map(SuppressionType.ParseUtil::parseOrElseNull)
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .forEach(set::add);
-            if(set.contains(ALL)) {
-                return EnumSet.allOf(SuppressionType.class);
-            }
+            if(set.contains(ALL))
+				return EnumSet.allOf(SuppressionType.class);
             return set;
         }
 
         private static SuppressionType parseOrElseNull(final String literal) {
 
             // honor pre v2 behavior
-            if("true".equalsIgnoreCase(literal)) {
-                return SuppressionType.RO;
-            }
+            if("true".equalsIgnoreCase(literal))
+				return SuppressionType.RO;
 
             try {
                 return SuppressionType.valueOf(literal.toUpperCase());

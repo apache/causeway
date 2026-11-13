@@ -1,0 +1,43 @@
+{
+  "data" : {
+    "__type" : {
+      "kind" : "INPUT_OBJECT",
+      "name" : "BlobInput",
+      "description" : "Bounded inline Causeway Blob input.",
+      "inputFields" : [ {
+        "name" : "name",
+        "description" : "Resource filename.",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "String"
+          }
+        }
+      }, {
+        "name" : "mimeType",
+        "description" : "IANA media type accepted by the target member.",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "String"
+          }
+        }
+      }, {
+        "name" : "base64",
+        "description" : "RFC 4648 base64 content, bounded after decoding.",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "String"
+          }
+        }
+      } ]
+    }
+  }
+}

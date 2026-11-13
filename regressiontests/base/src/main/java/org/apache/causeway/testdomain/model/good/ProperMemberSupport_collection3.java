@@ -51,5 +51,4 @@ public class ProperMemberSupport_collection3 {
         return "described-imperative[collection3]";
     }
 
-
 }

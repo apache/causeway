@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -28,7 +28,8 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-public interface ManagedFeature {
+sealed public interface ManagedFeature
+permits ManagedMember, ManagedParameter {
 
     Identifier getIdentifier();
 
@@ -48,13 +49,12 @@ public interface ManagedFeature {
      */
     ObjectSpecification getElementType();
 
-
     /**
      * @return The feature's underlying type.
      * For actions this is the action's return type.
      */
     default Class<?> getElementClass() {
-        return getElementType().getCorrespondingClass();
+        return getElementType().correspondingClass();
     }
 
     ObjectFeature getMetaModel();
@@ -66,7 +66,7 @@ public interface ManagedFeature {
      */
     default <T extends Facet> Optional<T> getFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
-                ? Optional.ofNullable(getMetaModel().getFacet(facetType))
+                ? Optional.ofNullable(getMetaModel().lookupFacet(facetType).orElse(null))
                 : Optional.empty();
     }
 
@@ -77,7 +77,7 @@ public interface ManagedFeature {
      */
     default <T extends Facet> boolean hasFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
-                ? getMetaModel().getFacet(facetType)!=null
+                ? getMetaModel().lookupFacet(facetType).orElse(null)!=null
                 : false;
     }
 

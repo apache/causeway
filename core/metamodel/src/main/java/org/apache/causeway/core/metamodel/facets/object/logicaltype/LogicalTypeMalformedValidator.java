@@ -26,12 +26,10 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  * DomainObjects must have a non-empty namespace,
- * eg. @DomainObject(logicalTypeName="Customer") is considered invalid,
- * whereas eg. @DomainObject(logicalTypeName="sales.Customer") is valid.
+ * eg. @Named("Customer") is considered invalid,
+ * whereas eg. @Named("sales.Customer") is valid.
  *
  * @since 2.0
  */
@@ -46,23 +44,23 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        val logicalType = spec.getLogicalType();
-        val logicalTypeName = logicalType.getLogicalTypeName();
+        var logicalType = spec.logicalType();
+        var logicalTypeName = logicalType.logicalName();
 
-        val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
+        var nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                 .collect(Can.toCan());
 
         if(!nameParts.getCardinality().isMultiple()
                 || nameParts.stream()
                     .anyMatch(String::isEmpty)) {
 
-            val validationResponse = spec.isInjectable()
+            var validationResponse = spec.isInjectable()
                     ? ProgrammingModelConstants.MessageTemplate.DOMAIN_SERVICE_MISSING_A_NAMESPACE
                     : ProgrammingModelConstants.MessageTemplate.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 
             ValidationFailure.raiseFormatted(spec,
                     validationResponse.builder()
-                        .addVariable("type", spec.getFullIdentifier())
+                        .addVariable("type", spec.fullIdentifier())
                         .addVariable("logicalTypeName", logicalTypeName)
                         .buildMessage());
         }

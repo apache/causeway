@@ -30,17 +30,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -58,8 +56,6 @@ import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClien
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 @SpringBootTest(
@@ -75,8 +71,8 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
                 //CausewayModuleViewerRestfulObjectsJaxrsResteasy.class, // replaced
                 SpringBeanProcessorRegressionWorkaround.class,
                 CausewayModuleViewerRestfulObjectsViewer.class,
-                WebModuleJaxrsResteasy.class,
-                RestfulObjectsJaxbWriterForXml.class,
+                //WebModuleJaxrsResteasy.class,
+                //RestfulObjectsJaxbWriterForXml.class,
                 // ---
 
                 CausewayModuleCoreWebapp.class,
@@ -91,9 +87,6 @@ public class OutboxRestClient_IntegTest  {
 
     @EnableAutoConfiguration
     @Configuration
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {TestManifest.class, Counter.class})
     public static class TestManifest {

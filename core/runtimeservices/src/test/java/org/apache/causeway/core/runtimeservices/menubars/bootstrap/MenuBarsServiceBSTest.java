@@ -18,30 +18,28 @@
  */
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
-import java.nio.charset.StandardCharsets;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.EnumSource.Mode;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.springframework.core.io.ByteArrayResource;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
-
-import lombok.val;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.core.io.ByteArrayResource;
 
 class MenuBarsServiceBSTest
 extends RuntimeServicesTestAbstract {
@@ -53,13 +51,14 @@ extends RuntimeServicesTestAbstract {
 
     @Override
     protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
-        mmcBuilder.singleton(new Bar()); // install the menu-entry contributing domain service
+        mmcBuilder
+            .testPropertyValues(TestPropertyValues.of(
+                "causeway.core.metaModel.introspector.validateIncrementally=false"))
+            .singleton(new Bar()); // install the menu-entry contributing domain service
     }
 
     @Override
     protected void afterSetUp() {
-
-        getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
 
         layoutService = getServiceRegistry()
                 .lookupServiceElseFail(LayoutService.class);
@@ -74,16 +73,16 @@ extends RuntimeServicesTestAbstract {
         assertNotNull(getSpecificationLoader().loadSpecification(Bar.class));
 
         assertTrue(getServiceRegistry().streamRegisteredBeans()
-                .anyMatch(bean->bean.getBeanClass().equals(Bar.class)));
+                .anyMatch(bean->bean.beanClass().equals(Bar.class)));
 
         assertTrue(getMetaModelContext().streamServiceAdapters()
-                .anyMatch(domainObject->domainObject.getSpecification().getCorrespondingClass().equals(Bar.class)));
+                .anyMatch(domainObject->domainObject.objSpec().correspondingClass().equals(Bar.class)));
     }
 
     @Test
     void actionNamedFacet() {
-        val serviceSpec = getSpecificationLoader().loadSpecification(Bar.class);
-        val objectAction = serviceSpec.getAction("createSimpleObject").orElse(null);
+        var serviceSpec = getSpecificationLoader().loadSpecification(Bar.class);
+        var objectAction = serviceSpec.getAction("createSimpleObject").orElse(null);
         assertNotNull(objectAction);
         assertEquals("Create Simple Object", objectAction.getStaticFriendlyName().orElse(null));
     }
@@ -91,39 +90,55 @@ extends RuntimeServicesTestAbstract {
     @ParameterizedTest
     @EnumSource(mode = Mode.INCLUDE, value = CommonMimeType.class, names = {"XML"})
     void roundtrip(final CommonMimeType format) {
-        val menuBars = menuBarsService.menuBars();
+        var menuBars = menuBarsService.menuBars();
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
 
-        val layoutData = menuBars.stream().findFirst().get();
+        var layoutData = menuBars.stream().findFirst().get();
         assertEquals("Create Simple Object", layoutData.getNamed());
         assertEquals(null, layoutData.getNamedEscaped()); // deprecated: always escape
 
-        val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, format);
+        var xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, format);
 
         // after round-trip
-        val menuBars2 = menuBarsMarshallerService.unmarshal(xml, format).getValue().orElse(null);
+        var menuBars2 = menuBarsMarshallerService.unmarshal(xml, format).getValue().orElse(null);
         assertNotNull(menuBars2);
         assertEquals(1L, menuBars2.stream().count());
 
-        val layoutData2 = menuBars2.stream().findFirst().get();
+        var layoutData2 = menuBars2.stream().findFirst().get();
         assertEquals("Create Simple Object", layoutData2.getNamed());
         assertEquals(null, layoutData2.getNamedEscaped()); // deprecated: always escape
     }
 
     @Test
+    void authoredLayoutWithoutUnreferencedActionMenuIsRetained() {
+        var customNamed = "Deliberately selected action";
+        var xml = sampleMenuBarsXmlWithCustomName(customNamed)
+                .replace(" unreferencedActions=\"true\"", "");
+        assertFalse(xml.contains("unreferencedActions=\"true\""));
+
+        getSpecificationLoader().disposeMetaModel();
+        super.menubarsLayoutXmlResourceRef.set(new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8)));
+        getSpecificationLoader().createMetaModel();
+
+        var menuBars = menuBarsService.menuBars();
+        assertEquals(1L, menuBars.stream().count());
+        assertEquals(customNamed, menuBars.stream().findFirst().orElseThrow().getNamed());
+    }
+
+    @Test
     void customNamed() {
 
-        val customNamed = "Hello";
-        val xml = sampleMenuBarsXmlWithCustomName(customNamed);
+        var customNamed = "Hello";
+        var xml = sampleMenuBarsXmlWithCustomName(customNamed);
 
         // create menubars-xml from scratch (annotations and fallback naming only)
-        val menuBars = menuBarsMarshallerService.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null);
+        var menuBars = menuBarsMarshallerService.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null);
 
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
 
-        val layoutData = menuBars.stream().findFirst().get();
+        var layoutData = menuBars.stream().findFirst().get();
         assertEquals(customNamed, layoutData.getNamed());
         assertEquals(null, layoutData.getNamedEscaped()); // deprecated: always escape
 
@@ -136,8 +151,8 @@ extends RuntimeServicesTestAbstract {
 
         // verify service-action's member named facet was installed when loading menubars from XML
 
-        val serviceSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
-        val objectAction = serviceSpec.getAction("createSimpleObject").orElse(null);
+        var serviceSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
+        var objectAction = serviceSpec.getAction("createSimpleObject").orElse(null);
         assertNotNull(objectAction);
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
@@ -149,11 +164,11 @@ extends RuntimeServicesTestAbstract {
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
 
-        val facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
+        var facetRanking = objectAction.lookupFacetRanking(MemberNamedFacet.class).orElse(null);
         assertNotNull(facetRanking);
 
         // XML layout facets are installed at precedence HIGH
-        val xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
+        var xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
 
         // verify rank did not grow with latest menubars.xml reload
         assertEquals(1, xmlFacetRank.size());
@@ -161,13 +176,12 @@ extends RuntimeServicesTestAbstract {
         // verify winning facet is the same object as the last one added from latest menubars.xml reload,
         // to make sure we are not feed the winner from an outdated cache
         assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastElseFail());
-
     }
 
     // -- HELPER
 
     private String sampleMenuBarsXmlWithCustomName(final String customNamed) {
-        val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, CommonMimeType.XML)
+        var xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, CommonMimeType.XML)
                     .replace(
                             "<cpt:named>Create Simple Object</cpt:named>",
                             "<cpt:named>"+customNamed+"</cpt:named>");

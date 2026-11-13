@@ -30,18 +30,28 @@ import org.apache.causeway.applib.services.swagger.Format;
 import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator;
 
-import lombok.val;
-
+/**
+ * Default implementation of {@link SwaggerService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".swaggerServiceDefault")
+@Named(SwaggerServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {
+
+    /**
+     * Beware this name uses camelCase rather than the usual PascalCase.
+     */
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".swaggerServiceDefault";
 
     private final OpenApiSpecGenerator swaggerSpecGenerator;
     private final String basePath;
@@ -49,13 +59,14 @@ public class SwaggerServiceDefault implements SwaggerService {
     @Inject
     public SwaggerServiceDefault(
             final OpenApiSpecGenerator swaggerSpecGenerator,
-            final RestEasyConfiguration restEasyConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final WebAppContextPath webAppContextPath) {
 
         this.swaggerSpecGenerator = swaggerSpecGenerator;
 
-        val restfulPath = restEasyConfiguration.getJaxrs().getDefaultPath();
-        val restfulBase = webAppContextPath.prependContextPath(restfulPath);
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+        var restfulPath = restfulPathProvider.getRestfulPath().orElse("");
+        var restfulBase = webAppContextPath.prependContextPath(restfulPath);
 
         this.basePath = _Strings.suffix(restfulBase, "/");
     }

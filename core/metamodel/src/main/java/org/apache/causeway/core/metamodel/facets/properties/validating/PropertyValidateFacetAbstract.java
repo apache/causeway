@@ -22,8 +22,8 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public abstract class PropertyValidateFacetAbstract extends FacetAbstract implements PropertyValidateFacet {
@@ -32,27 +32,21 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
         return PropertyValidateFacet.class;
     }
 
-    public PropertyValidateFacetAbstract(final FacetHolder holder) {
+    protected PropertyValidateFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
-    }
-
-    public PropertyValidateFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
     }
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof PropertyModifyContext)) {
-            return null;
-        }
-        final PropertyModifyContext propertyModifyContext = (PropertyModifyContext) context;
-        ManagedObject proposed = propertyModifyContext.getProposed();
-        if(proposed == null) {
-            // skip validation if null value and optional property.
-            if(MandatoryFacet.isMandatory(getFacetHolder())) {
-                return null;
-            }
-        }
-        return invalidReason(propertyModifyContext.getTarget(), proposed);
+        if (!(context instanceof PropertyModifyContext propertyModifyContext))
+        	return null;
+
+        ManagedObject proposed = propertyModifyContext.proposed();
+
+        // skip validation if null value and optional property.
+        if(proposed == null
+            && MandatoryFacet.isMandatory(facetHolder())) return null;
+
+        return invalidReason(propertyModifyContext.target(), proposed);
     }
 }

@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Obtain defaults for each of the parameters of the action.

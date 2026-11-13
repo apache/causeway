@@ -40,16 +40,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -71,7 +70,7 @@ public class FileUtils {
      */
     public <T> Try<T> tryReadAndApply(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
         return Try.call(()->{
-            try(val inputStream = new FileInputStream(existingFileElseFail(file))){
+            try(var inputStream = new FileInputStream(existingFileElseFail(file))){
                 return inputStreamMapper.apply(inputStream);
             }
         });
@@ -87,7 +86,7 @@ public class FileUtils {
      */
     public Try<Void> tryReadAndAccept(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
         return Try.run(()->{
-            try(val inputStream = new FileInputStream(existingFileElseFail(file))){
+            try(var inputStream = new FileInputStream(existingFileElseFail(file))){
                 inputStreamConsumer.accept(inputStream);
             }
         });
@@ -131,7 +130,7 @@ public class FileUtils {
         }
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir.toPath())) {
             for (Path path : stream) {
-                val file = path.toFile();
+                var file = path.toFile();
                 if (Files.isDirectory(path)) {
                     if(dirFilter.test(file)) {
                         // go deeper
@@ -153,7 +152,7 @@ public class FileUtils {
      * is not {@code null} and the 'file I/O system' can handle this call without
      * throwing an exception.
      */
-    public Optional<String> canonicalPath(@Nullable final File file) {
+    public Optional<String> canonicalPath(final @Nullable File file) {
         if(file==null) {
             return Optional.empty();
         }
@@ -171,7 +170,7 @@ public class FileUtils {
      * @return prefix removed from {@code absolutePath}, if {@code commonPath} appears to be a prefix
      * of {@code absolutePath}, otherwise returns the {@code absolutePath} unmodified.
      */
-    public String toRelativePath(@NonNull final String commonPath, @NonNull final String absolutePath) {
+    public String toRelativePath(final @NonNull String commonPath, final @NonNull String absolutePath) {
         if(absolutePath.startsWith(commonPath)) {
             return absolutePath.substring(commonPath.length());
         }
@@ -183,7 +182,7 @@ public class FileUtils {
      * @param file - the file to be deleted (null-able)
      */
     @SneakyThrows
-    public void deleteFile(@Nullable final File file) {
+    public void deleteFile(final @Nullable File file) {
         if(file==null
                 || !file.exists()
                 || file.isDirectory()) {
@@ -207,7 +206,7 @@ public class FileUtils {
      */
     @SneakyThrows
     public File tempDir(final String name) {
-        val tempDir =  Files.createTempDirectory(name).toFile();
+        var tempDir =  Files.createTempDirectory(name).toFile();
         tempDir.deleteOnExit();
         return tempDir;
     }

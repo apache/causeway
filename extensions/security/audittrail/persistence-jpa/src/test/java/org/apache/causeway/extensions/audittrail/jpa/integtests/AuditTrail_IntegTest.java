@@ -22,16 +22,13 @@ import jakarta.inject.Inject;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
@@ -49,7 +46,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
@@ -59,9 +55,6 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
 
             // entities, eager meta-model introspection
             Counter.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, AuditTrailTestDomainModel.class, CounterRepository.class})
     @EntityScan(basePackageClasses = {Counter.class})

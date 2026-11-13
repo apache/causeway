@@ -18,16 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
-import jakarta.inject.Named;
-
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.springframework.stereotype.Component;
+
+import jakarta.inject.Named;
+
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
-@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {
@@ -36,7 +34,6 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         ignoreApacheCausewayInternals();
         ignoreSpringFramework();
         ignoreJacksonAndGson();
-        skipDataNucleusProxy();
     }
 
     protected void ignoreCglib() {
@@ -64,10 +61,5 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         ignorePackage("com.fasterxml.jackson.");
         ignorePackage("com.google.gson.");
     }
-
-    protected void skipDataNucleusProxy() {
-        skipProxyPackage("org.datanucleus.");
-    }
-
 
 }

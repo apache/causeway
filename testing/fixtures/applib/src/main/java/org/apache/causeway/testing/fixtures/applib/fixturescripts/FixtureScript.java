@@ -22,20 +22,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import jakarta.inject.Inject;
-
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
-import org.springframework.lang.Nullable;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -48,18 +47,19 @@ import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Responsible for setting up the system (or more likely a part of the system)
@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@Log4j2
+@Slf4j
 public abstract class FixtureScript {
 
     public static final FixtureScript NOOP = new FixtureScript() {
@@ -108,18 +108,12 @@ public abstract class FixtureScript {
         return str != null ? str : _Strings.asNaturalName.apply(getClass().getSimpleName());
     }
 
-
-
     public String getQualifiedName() {
         return getParentPath() + getLocalName();
     }
 
-
-
     @Getter @Setter
     private String friendlyName;
-
-
 
     /**
      * Will always be populated, initially by the default name, but can be
@@ -128,16 +122,11 @@ public abstract class FixtureScript {
     @Getter( onMethod = @__(@Programmatic)) @Setter
     private String localName;
 
-
-
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
     @Getter( onMethod = @__(@Programmatic)) @Setter( onMethod = @__(@Programmatic))
     private String parentPath;
-
-
-
 
     // -- ExecutionContext
 
@@ -206,7 +195,7 @@ public abstract class FixtureScript {
                 final FixtureScripts fixtureScripts) {
             this.fixtureScripts = fixtureScripts;
             this.executionParameters = executionParameters;
-            this.fixtureResultList = new FixtureResultList(fixtureScripts, this);
+            this.fixtureResultList = new FixtureResultList(fixtureScripts);
         }
 
         @Override
@@ -397,7 +386,13 @@ public abstract class FixtureScript {
 
         @Override
         @Programmatic
-        public void setParameter(final String parameterName, final org.joda.time.DateTime parameterValue) {
+        public void setParameter(final String parameterName, final OffsetDateTime parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        @Override
+        @Programmatic
+        public void setParameter(final String parameterName, final ZonedDateTime parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
@@ -477,7 +472,9 @@ public abstract class FixtureScript {
                 final @Nullable PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
             if(personaWithBuilderScripts==null) return; // no-op
             for (PersonaWithBuilderScript<?,?> builder : personaWithBuilderScripts) {
-                if(builder==null) continue; // ignore
+                if(builder==null) {
+					continue; // ignore
+				}
                 BuilderScriptAbstract<?> childFixtureScript = builder.builder();
                 executeChild(callingFixtureScript, childFixtureScript);
             }
@@ -511,7 +508,9 @@ public abstract class FixtureScript {
                 final @Nullable Iterable<FixtureScript> fixtureScripts) {
             if(fixtureScripts==null) return; // no-op
             for (FixtureScript fixtureScript : fixtureScripts) {
-                if(fixtureScript==null) continue; // ignore
+                if(fixtureScript==null) {
+					continue; // ignore
+				}
                 executeChild(callingFixtureScript, fixtureScript);
             }
         }
@@ -525,7 +524,7 @@ public abstract class FixtureScript {
                 final @Nullable Stream<FixtureScript> fixtureScripts) {
             if(fixtureScripts==null) return; // no-op
             fixtureScripts
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .forEach(fixtureScript -> executeChild(callingFixtureScript, fixtureScript));
         }
 
@@ -552,9 +551,8 @@ public abstract class FixtureScript {
                 final String localNameOverride,
                 final FixtureScript childFixtureScript) {
 
-            if(childFixtureScript == null) {
-                return;
-            }
+            if(childFixtureScript == null)
+				return;
             executeChildT(callingFixtureScript, localNameOverride, childFixtureScript);
         }
 
@@ -588,9 +586,7 @@ public abstract class FixtureScript {
 
         }
 
-
         static enum As { EXEC, SKIP }
-
 
         private <T extends FixtureScript> T executeChildIfNotAlready(final T childFixtureScript) {
 
@@ -607,9 +603,8 @@ public abstract class FixtureScript {
                     this.previouslyExecuted.add(childFixtureScript);
                     fixtureScriptByClass.put(childFixtureScript.getClass(), childFixtureScript);
                     return childFixtureScript;
-                } else {
-                    return _Casts.uncheckedCast(previouslyExecutedScript);
-                }
+                } else
+					return _Casts.uncheckedCast(previouslyExecutedScript);
 
             case EXECUTE_ONCE_BY_VALUE:
                 return executeChildIfNotAlreadyWithValueSemantics(childFixtureScript);
@@ -627,9 +622,7 @@ public abstract class FixtureScript {
         private <T extends FixtureScript> FixtureScripts.MultipleExecutionStrategy determineExecutionStrategy(final T childFixtureScript) {
             final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 
-            if(childFixtureScript instanceof FixtureScriptWithExecutionStrategy) {
-                final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy =
-                        (FixtureScriptWithExecutionStrategy) childFixtureScript;
+            if(childFixtureScript instanceof final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy) {
                 executionStrategy = Optional.ofNullable(
                         fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy())
                         .orElseGet(fixtureScripts::getMultipleExecutionStrategy);
@@ -646,9 +639,8 @@ public abstract class FixtureScript {
                 this.previouslyExecuted.add(childFixtureScript);
                 fixtureScriptByValue.put(childFixtureScript, childFixtureScript);
                 return childFixtureScript;
-            } else {
-                return _Casts.uncheckedCast(previouslyExecutedScript);
-            }
+            } else
+				return _Casts.uncheckedCast(previouslyExecutedScript);
         }
 
         // -- previouslyExecuted
@@ -658,7 +650,7 @@ public abstract class FixtureScript {
          * but used only by {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} to determine whether
          * should execute or not.
          */
-        private final List<FixtureScript> previouslyExecuted = _Lists.newArrayList();
+        private final List<FixtureScript> previouslyExecuted = new ArrayList<>();
 
         /**
          * Returns a list of the {@link FixtureScript} instances that have already been executed.
@@ -674,37 +666,30 @@ public abstract class FixtureScript {
             return Collections.unmodifiableList(previouslyExecuted);
         }
 
-
-
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
          * strategy is in use.
          */
-        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = _Maps.newLinkedHashMap();
+        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = new LinkedHashMap<>();
 
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
          * strategy is in use.
          */
-        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = _Maps.newLinkedHashMap();
-
-
+        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = new LinkedHashMap<>();
 
         static int roundup(final int n, final int roundTo) {
             return ((n / roundTo) + 1) * roundTo;
         }
 
-
         @Getter @Setter
-        private Map<Class<?>, Object> userData = _Maps.newHashMap();
+        private Map<Class<?>, Object> userData = new HashMap<>();
         @Programmatic
         public <T> T clearUserData(final Class<T> cls) {
             return _Casts.uncheckedCast(userData.remove(cls));
         }
 
     }
-
-
 
     // -- defaultParam, checkParam
     protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
@@ -717,7 +702,8 @@ public abstract class FixtureScript {
         final Class<T> cls = _Casts.uncheckedCast(defaultValue.getClass());
 
         final T value = readParam(parameterName, ec, cls);
-        if(value != null) { return value; }
+        if(value != null)
+			return value;
 
         // else default value
         return defaultValue;
@@ -737,7 +723,8 @@ public abstract class FixtureScript {
 
         // read from ExecutionContext
         T value = ec.getParameterAsT(parameterName, cls);
-        if(value != null) { return value; }
+        if(value != null)
+			return value;
 
         // else from fixture script
         Method method;
@@ -747,7 +734,8 @@ public abstract class FixtureScript {
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
         }
-        if(value != null) { return value; }
+        if(value != null)
+			return value;
 
         if (cls == Boolean.class || cls == boolean.class) {
             try {
@@ -756,7 +744,8 @@ public abstract class FixtureScript {
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
             }
-            if(value != null) { return value; }
+            if(value != null)
+				return value;
         }
 
         return null;
@@ -779,7 +768,6 @@ public abstract class FixtureScript {
     private String uppercase(final String parameterName) {
         return parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1);
     }
-
 
     // -- run (entry point for FixtureScripts service to call)
 
@@ -809,8 +797,6 @@ public abstract class FixtureScript {
         }
     }
 
-
-
     /**
      * Optional hook to validate parameters.
      */
@@ -818,9 +804,6 @@ public abstract class FixtureScript {
     public String validateRun(final String parameters) {
         return null;
     }
-
-
-
 
     // -- execute (API for subclasses to implement)
 
@@ -835,7 +818,6 @@ public abstract class FixtureScript {
      */
     @Programmatic
     protected abstract void execute(final ExecutionContext executionContext);
-
 
     // -- helpers (for subclasses)
 
@@ -910,7 +892,6 @@ public abstract class FixtureScript {
         return new TransactionTemplate(txMan);
     }
 
-
     // -- helpers (local)
 
     @Programmatic
@@ -928,6 +909,5 @@ public abstract class FixtureScript {
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
     @Inject protected PlatformTransactionManager txMan;
-
 
 }

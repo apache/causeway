@@ -19,37 +19,47 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.DumperOptions.LineBreak;
-import org.yaml.snakeyaml.LoaderOptions;
-
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.snakeyaml.engine.v2.api.DumpSettings;
+import org.snakeyaml.engine.v2.api.DumpSettingsBuilder;
+import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.snakeyaml.engine.v2.api.LoadSettingsBuilder;
+import org.yaml.snakeyaml.DumperOptions;
 
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import tools.jackson.databind.MappingIterator;
+import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
+import tools.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 
 /**
  * Utilities to convert from and to YAML format.
  *
- * @since 2.0 {@index}
+ * @since 2.0 refined for 4.0 {@index}
  */
 @UtilityClass
 public class YamlUtils {
 
+	private static final String MULTI_DOC_DELIMITER = "---";
+
     @FunctionalInterface
-    public interface YamlDumpCustomizer extends UnaryOperator<DumperOptions> {}
+    public interface YamlDumpCustomizer extends Consumer<DumpSettingsBuilder> {}
     @FunctionalInterface
-    public interface YamlLoadCustomizer extends UnaryOperator<LoaderOptions> {}
+    public interface YamlLoadCustomizer extends Consumer<LoadSettingsBuilder> {}
 
     // -- READING
 
@@ -72,10 +82,21 @@ public class YamlUtils {
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createJacksonReader(Optional.empty(), customizers)
-                    .readValue(is, mappedType));
-        });
+        return source.tryReadAll((final InputStream is) -> Try.call(()->createJacksonReader(Optional.empty(), customizers)
+                .readValue(is, mappedType)));
+    }
+
+    /**
+     * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
+     * with given {@code elementType}.
+     *
+     * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
+     */
+    public <T> Try<List<T>> tryReadAsList(
+            final @NonNull Class<T> elementType,
+            final @NonNull DataSource source,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+    	return tryReadAsListCustomized(elementType, source, null, customizers);
     }
 
     /**
@@ -99,10 +120,62 @@ public class YamlUtils {
             final @NonNull DataSource source,
             final @NonNull YamlLoadCustomizer loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createJacksonReader(Optional.of(loadCustomizer), customizers)
-                    .readValue(is, mappedType));
-        });
+        return source.tryReadAll((final InputStream is) -> Try.call(()->createJacksonReader(Optional.of(loadCustomizer), customizers)
+                .readValue(is, mappedType)));
+    }
+
+    /**
+     * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
+     * with given {@code elementType}.
+     *
+     * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
+     */
+    public <T> Try<List<T>> tryReadAsListCustomized(
+            final @NonNull Class<T> elementType,
+            final @NonNull DataSource source,
+            final @Nullable YamlLoadCustomizer loadCustomizer,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return source.tryReadAll((final InputStream is) -> Try.call(()->{
+            var mapper = createJacksonReader(Optional.ofNullable(loadCustomizer), customizers);
+            final MappingIterator<T> documentReader = mapper.readerFor(elementType).readValues(is);
+            final List<T> elements = new ArrayList<>();
+            while (documentReader.hasNextValue()) {
+                final T next = documentReader.nextValue();
+                if (next != null) {
+                    elements.add(next);
+                }
+            }
+            return elements; // no need wrap unmodifiable, as callers can do what ever they want with the list
+//former code without support for multi-doc format...
+//            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+//            return mapper.readValue(is, collectionType);
+        }));
+    }
+
+    /**
+     * Returns a {@link Stream} of (arbitrary) YAML Document junks from provided {@link DataSource},
+     * where each junk typically needs further parsing individually.
+     */
+    public Try<Stream<String>> tryReadMultiDoc(final @Nullable DataSource source) {
+    	return source == null
+			? Try.success(Stream.empty())
+			: source.tryReadAsStringUtf8()
+	    		.mapSuccessAsNullable(TextUtils::readLines)
+	    		.mapSuccessAsNullable(YamlUtils::linesToDocs);
+    }
+    private static Stream<String> linesToDocs(final Can<String> lineStream) {
+    	var buffer = new ArrayList<StringBuilder>();
+    	buffer.add(new StringBuilder());
+    	for(var line : lineStream) {
+    		if(line.equals(MULTI_DOC_DELIMITER)) {
+    			buffer.add(new StringBuilder());
+    			continue;
+			}
+    		buffer.get(buffer.size()-1).append(line).append("\n");
+    	}
+		return buffer.stream()
+				.map(StringBuilder::toString)
+				.filter(str->!str.isEmpty());
     }
 
     // -- WRITING
@@ -114,7 +187,8 @@ public class YamlUtils {
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) return;
+        if(pojo==null)
+			return;
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.empty(), customizers).writeValue(os, pojo)));
     }
@@ -141,7 +215,8 @@ public class YamlUtils {
             final @NonNull DataSink sink,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) return;
+        if(pojo==null)
+			return;
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValue(os, pojo)));
     }
@@ -152,13 +227,28 @@ public class YamlUtils {
      */
     @SneakyThrows
     @Nullable
-    public static String toStringUtf8Customized(
+    public String toStringUtf8Customized(
             final @Nullable Object pojo,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
                 ? createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValueAsString(pojo)
                 : null;
+    }
+
+    /**
+     * Concatenates given {@link Iterable<String>} into a multi-doc YAML.
+     */
+    public String writeMultiDoc(@Nullable final Iterable<String> yamlDocuments) {
+    	return _NullSafe.stream(yamlDocuments)
+    		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
+    }
+    /**
+     * Concatenates given {@link Stream<String>} into a multi-doc YAML.
+     */
+    public String writeMultiDoc(@Nullable final Stream<String> yamlDocumentStream) {
+    	return _NullSafe.stream(yamlDocumentStream)
+    		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
     }
 
     // -- CUSTOMIZERS
@@ -178,68 +268,128 @@ public class YamlUtils {
      * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
      * @param loadCustomizer
      */
-    private ObjectMapper createJacksonReader(
+    private YAMLMapper createJacksonReader(
             final Optional<YamlLoadCustomizer> loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         var yamlFactory = YAMLFactory.builder()
-                .loaderOptions(loadCustomizer
-                        .map(YamlUtils::createLoaderOptions)
-                        .orElseGet(YamlUtils::createLoaderOptions))
+                .loadSettings(loadCustomizer
+                        .map(YamlUtils::createLoadSettings)
+                        .orElseGet(YamlUtils::createLoadSettings))
                 .build();
-        var mapper = new ObjectMapper(yamlFactory);
-        mapper = JsonUtils.jdk8Support(mapper);
-        mapper = JsonUtils.readingJavaTimeSupport(mapper);
-        mapper = JsonUtils.readingCanSupport(mapper);
+
+        var builder = YAMLMapper.builder(yamlFactory);
+        JsonUtils.readingJavaTimeSupport(builder);
+        JsonUtils.readingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	customizer.accept(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
     /**
      * Use Jackson to write YAML.
      */
-    private ObjectMapper createJacksonWriter(
+    private YAMLMapper createJacksonWriter(
             final Optional<YamlDumpCustomizer> dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         var yamlFactory = YAMLFactory.builder()
+        		.disable(YAMLWriteFeature.WRITE_DOC_START_MARKER)
                 .dumperOptions(dumpCustomizer
-                        .map(YamlUtils::createDumperOptions)
-                        .orElseGet(YamlUtils::createDumperOptions))
-                .build()
-                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
-        var mapper = new ObjectMapper(yamlFactory);
-        mapper = JsonUtils.jdk8Support(mapper);
-        mapper = JsonUtils.writingJavaTimeSupport(mapper);
-        mapper = JsonUtils.writingCanSupport(mapper);
+                        .map(YamlUtils::createDumpSettings)
+                        .orElseGet(YamlUtils::createDumpSettings))
+                .build();
+
+        var builder = YAMLMapper.builder(yamlFactory);
+        JsonUtils.writingJavaTimeSupport(builder);
+        JsonUtils.writingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	customizer.accept(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
-    private DumperOptions createDumperOptions(final YamlDumpCustomizer ... dumpCustomizers) {
-        var dumperOptions = new DumperOptions();
-        dumperOptions.setIndent(2);
-        dumperOptions.setLineBreak(LineBreak.UNIX); // fixated for consistency
-        //options.setPrettyFlow(true);
-        //options.setDefaultFlowStyle(FlowStyle.BLOCK);
+    /**
+     * @see YAMLFactoryBuilder#dumperOptions(DumpSettings)
+     */
+    private DumpSettings createDumpSettings(final YamlDumpCustomizer ... dumpCustomizers) {
+    	var builder = DumpSettings.builder()
+			.setIndent(2)
+			.setBestLineBreak("\n"); // fixated for consistency
         for(YamlUtils.YamlDumpCustomizer customizer : dumpCustomizers) {
-            dumperOptions = Optional.ofNullable(customizer.apply(dumperOptions))
-                    .orElse(dumperOptions);
+            customizer.accept(builder);
         }
-        return dumperOptions;
+        return builder.build();
     }
 
-    private LoaderOptions createLoaderOptions(final YamlLoadCustomizer ... loadCustomizers) {
-        var loaderOptions = new LoaderOptions();
+    private LoadSettings createLoadSettings(final YamlLoadCustomizer ... loadCustomizers) {
+        var builder = LoadSettings.builder();
         for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
-            loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
-                    .orElse(loaderOptions);
+            customizer.accept(builder);
         }
-        return loaderOptions;
+        return builder.build();
     }
+
+    // -- PROGRAMMATIC WRITER
+
+    /**
+     * Simple writer for programmatic YAML generation.
+     *
+     * @apiNote has no indentation tracking by design
+     */
+    public record YamlWriter(StringBuilder sb) {
+    	public YamlWriter() {
+    		this(new StringBuilder());
+    	}
+    	public YamlWriter {
+    		sb = sb != null
+    				? sb
+					: new StringBuilder();
+    	}
+    	/** write (multiple) strings */
+        public YamlWriter write(final String ...s) {
+            for(var str:s) {
+				sb.append(str);
+			}
+            return this;
+        }
+        /** multi indent */
+        public YamlWriter ind(final int indentCount) {
+            IntStream.range(0, indentCount).forEach(__->ind());
+            return this;
+        }
+        /** indent (2 spaces) */
+        public YamlWriter ind() {
+            sb.append("  ");
+            return this;
+        }
+        /** double quoted */
+        public YamlWriter dq(final String s) {
+        	write("\"", s, "\"");
+        	return this;
+        }
+        /** sequence */
+        public YamlWriter sq() {
+        	sb.append("- ");
+        	return this;
+        }
+        public YamlWriter multiline(
+        		final int indentCount, final String key, final List<String> multiline) {
+        	if(multiline==null)
+        		return this;
+        	ind(indentCount).write(key, ":").write(multiline.isEmpty() ? "" : " |").nl();
+        	multiline.forEach(line->
+        		ind(indentCount + 1).write(line).nl());
+        	return this;
+        }
+        /** new line */
+        public YamlWriter nl() {
+            sb.append('\n');
+            return this;
+        }
+        @Override public String toString() {
+        	return sb.toString();
+        }
+    }
+
 
 }

@@ -18,18 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.validate.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  * Sets up {@link ActionParameterValidationFacet}. */
@@ -48,12 +46,10 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val validateMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
-        addFacet(
-                new ActionParameterValidationFacetViaMethod(
-                        validateMethod, patConstructor, paramAsHolder));
+        var validateMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
+        new ActionParameterValidationFacetViaMethod(
+                validateMethod, patConstructor, paramAsHolder);
     }
-
 
 }

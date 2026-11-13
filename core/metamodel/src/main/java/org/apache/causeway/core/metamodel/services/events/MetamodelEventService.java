@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.services.events;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,49 +35,47 @@ import org.apache.causeway.applib.events.ui.LayoutUiEvent;
 import org.apache.causeway.applib.events.ui.TitleUiEvent;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
-import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 /**
- *
  * @since 2.0
- *
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetamodelEventService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Builder //for JUnit Test support
+@RequiredArgsConstructor
 public class MetamodelEventService {
 
-    @Inject private ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher publisher;
 
     // -- METAMODEL UI EVENTS
 
-    public void fireCssClassUiEvent(CssClassUiEvent<Object> event) {
+    public void fireCssClassUiEvent(final CssClassUiEvent<Object> event) {
         publisher.publishEvent(event);
     }
 
-    public void fireIconUiEvent(IconUiEvent<Object> event) {
+    public void fireIconUiEvent(final IconUiEvent<Object> event) {
         publisher.publishEvent(event);
     }
 
-    public void fireLayoutUiEvent(LayoutUiEvent<Object> event) {
+    public void fireLayoutUiEvent(final LayoutUiEvent<Object> event) {
         publisher.publishEvent(event);
     }
 
-    public void fireTitleUiEvent(TitleUiEvent<Object> event) {
+    public void fireTitleUiEvent(final TitleUiEvent<Object> event) {
         publisher.publishEvent(event);
     }
 
-    public void fireActionDomainEvent(ActionDomainEvent<?> event) {
+    public void fireActionDomainEvent(final ActionDomainEvent<?> event) {
         publisher.publishEvent(event);
     }
 
-    public void firePropertyDomainEvent(PropertyDomainEvent<?, ?> event) {
+    public void firePropertyDomainEvent(final PropertyDomainEvent<?, ?> event) {
         publisher.publishEvent(event);
     }
 
-    public void fireCollectionDomainEvent(CollectionDomainEvent<?, ?> event) {
+    public void fireCollectionDomainEvent(final CollectionDomainEvent<?, ?> event) {
         publisher.publishEvent(event);
     }
 

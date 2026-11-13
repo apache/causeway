@@ -18,21 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.internal.reflection._ClassCache.Attribute;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.Attributes;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
 
-import lombok.NonNull;
-import lombok.val;
+import jakarta.inject.Inject;
 
 public class RemoveAnnotatedMethodsFacetFactory
 extends FacetFactoryAbstract {
@@ -44,48 +43,56 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-
-        val policy = getMetaModelContext().getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy();
-        switch (policy) {
-            case ENCAPSULATION_ENABLED:
-                getClassCache()
-                        .streamResolvedMethods(processClassContext.getCls())
-                        /* honor exclude markers (always) */
-                        .filter(method->{
-                            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
-                                processClassContext.removeMethod(method);
-                                return false; // stop processing
-                            }
-                            return true; // continue processing
-                        })
-                        /* don't throw away mixin main methods,
-                         * those we keep irrespective of IntrospectionPolicy */
-                        .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
-                        .forEach(method -> {
-                            if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
-                                processClassContext.removeMethod(method);
-                            }
-                        });
-                break;
-
-            case ANNOTATION_REQUIRED:
-                // TODO: this could probably be more precise and insist on @Domain.Include for members.
-
-            case ANNOTATION_OPTIONAL:
-
-                getClassCache()
-                        .streamPublicMethods(processClassContext.getCls())
-                        .forEach(method->{
-                            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
-                                processClassContext.removeMethod(method);
-                            }
-                        });
-
-                break;
-        }
+        switch (processClassContext.introspectionPolicy()) {
+            case ENCAPSULATION_ENABLED -> getClassCache()
+                .streamResolvedMethods(processClassContext.cls())
+                /* honor exclude markers (always) */
+                .filter(filterAndRemoveExclusions(processClassContext))
+                /* don't throw away mixin main methods,
+                 * those we keep irrespective of IntrospectionPolicy */
+                .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
+                .forEach(removeNonInclusions(processClassContext));
+            case ANNOTATION_REQUIRED -> getClassCache()
+                .streamPublicMethods(processClassContext.cls())
+                /* honor exclude markers (always) */
+                .filter(filterAndRemoveExclusions(processClassContext))
+                /* don't throw away mixin main methods,
+                 * those we keep irrespective of IntrospectionPolicy */
+                .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
+                .forEach(removeNonInclusions(processClassContext));
+            case ANNOTATION_OPTIONAL -> getClassCache()
+                .streamPublicMethods(processClassContext.cls())
+                .forEach(removeExclusions(processClassContext));
+            }
     }
 
     // -- HELPER
+
+    private Predicate<? super ResolvedMethod> filterAndRemoveExclusions(final ProcessClassContext processClassContext) {
+        return method->{
+            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
+                processClassContext.removeMethod(method);
+                return false; // stop processing
+            }
+            return true; // continue processing
+        };
+    }
+
+    private Consumer<? super ResolvedMethod> removeExclusions(final ProcessClassContext processClassContext) {
+        return method->{
+            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
+                processClassContext.removeMethod(method);
+            }
+        };
+    }
+
+    private Consumer<? super ResolvedMethod> removeNonInclusions(final ProcessClassContext processClassContext) {
+        return method->{
+            if(!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
+                processClassContext.removeMethod(method);
+            }
+        };
+    }
 
     /**
      * We have no MixinFacet yet, so we need to revert to low level introspection tactics.
@@ -93,16 +100,15 @@ extends FacetFactoryAbstract {
     private Predicate<ResolvedMethod> isMixinMainMethod(final @NonNull ProcessClassContext processClassContext) {
 
         // shortcut, when we already know the class is not a mixin
-        if(processClassContext.getFacetHolder() instanceof ObjectSpecification) {
-            val spec = (ObjectSpecification) processClassContext.getFacetHolder();
-            if(!spec.getBeanSort().isMixin()) {
+        if(processClassContext.facetHolder() instanceof ObjectSpecification) {
+            var spec = (ObjectSpecification) processClassContext.facetHolder();
+            if(!spec.beanSort().isMixin())
                 return method->false;
-            }
         }
         // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier
-        val cls = processClassContext.getCls();
-        val mixinMainMethodName = Attributes.MIXIN_MAIN_METHOD_NAME.lookup(getClassCache(), cls)
-            .orElse(null);
+        var cls = processClassContext.cls();
+        var mixinMainMethodName = getClassCache().head(cls).getAttribute(Attribute.MIXIN_MAIN_METHOD_NAME)
+                .orElse(null);
         return method->method.name().equals(mixinMainMethodName);
     }
 

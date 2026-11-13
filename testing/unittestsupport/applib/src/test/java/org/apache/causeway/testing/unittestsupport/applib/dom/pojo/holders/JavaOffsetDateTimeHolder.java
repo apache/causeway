@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders;
 
-
 import java.time.OffsetDateTime;
 
 import lombok.Getter;

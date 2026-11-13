@@ -24,8 +24,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -36,14 +36,12 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -55,7 +53,6 @@ import lombok.val;
         })
 @TestPropertySource({
     CausewayPresets.IntrospectFully,
-    CausewayPresets.UseLog4j2Test,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
@@ -63,7 +60,6 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
 
     @Inject private WrapperFactory wrapper;
     @Inject private SpecificationLoader specificationLoader;
-
 
     // -------------------------------------------------------
     // type:ENABLED + property:NOT_SPECIFIED -> effective ENABLED
@@ -81,14 +77,12 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenEnabling_shouldSetTheDefault() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerEna.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerEna.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should not fail
         wrapper.wrap(new CustomerEna()).setName("Bob");
     }
-
 
     // -------------------------------------------------------
     // type:DISABLED + property:NOT_SPECIFIED -> effective DISABLED
@@ -107,12 +101,11 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenDisabling_shouldSetTheDefault() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerDis.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerDis.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
-        val disabledException = assertThrows(DisabledException.class,
+        var disabledException = assertThrows(DisabledException.class,
                 ()->wrapper.wrap(new CustomerDis()).setName("Bob"));
 
         assertTrue(disabledException.getMessage()
@@ -139,12 +132,11 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenEnabling_shouldBeOverridable() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerEnaDis.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerEnaDis.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
-        val disabledException = assertThrows(DisabledException.class,
+        var disabledException = assertThrows(DisabledException.class,
                 ()->wrapper.wrap(new CustomerEnaDis()).setName("Bob"));
 
         String message = disabledException.getMessage();
@@ -167,18 +159,14 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
         @Getter @Setter private String name;
     }
 
-
     @Test
     void classLevelAnnotation_whenDisabling_shouldBeOverridable() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerDisEna.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerDisEna.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should not fail
         wrapper.wrap(new CustomerDisEna()).setName("Bob");
     }
-
-
 
 }

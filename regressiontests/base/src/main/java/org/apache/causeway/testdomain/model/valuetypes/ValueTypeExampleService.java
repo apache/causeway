@@ -23,8 +23,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
 import org.junit.jupiter.params.provider.Arguments;
 
 import org.springframework.stereotype.Service;
@@ -32,26 +30,22 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.Value;
-import lombok.val;
-
 @Service
-public class ValueTypeExampleService {
+public record ValueTypeExampleService(
+    ValueSemanticsResolver valueSemanticsResolver,
+    List<ValueTypeExample<?>> examples) {
 
-    @Inject ValueSemanticsResolver valueSemanticsResolver;
-    @Inject List<ValueTypeExample<?>> examples;
-
-    @Value(staticConstructor = "of")
-    public static class Scenario implements Comparable<Scenario> {
+    public record Scenario(
+            String name,
+            Arguments arguments) implements Comparable<Scenario> {
         static Scenario of(final ValueTypeExample<?> example) {
-            val name = example.getName();
-            return Scenario.of(name, Arguments.of(
+            var name = example.getName();
+            return new Scenario(name, Arguments.of(
                     name,
                     example.getValueType(),
                     example));
         }
-        String name;
-        Arguments arguments;
+
         @Override public int compareTo(final Scenario other) {
             return _Strings.compareNullsFirst(this.name, other.name);
         }
@@ -62,7 +56,7 @@ public class ValueTypeExampleService {
     }
 
     public Stream<Scenario> streamScenarios() {
-        val sortedScenarios = streamExamples()
+        var sortedScenarios = streamExamples()
             .map(Scenario::of)
             .collect(Collectors.toCollection(TreeSet::new));
         return sortedScenarios.stream();

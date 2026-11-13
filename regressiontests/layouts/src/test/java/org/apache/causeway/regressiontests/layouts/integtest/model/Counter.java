@@ -86,7 +86,6 @@ public class Counter implements Comparable<Counter> {
         return doUpdateName(newName);
     }
 
-
     // with details fieldset (which contains at least one property) + sequence
 
     @Action()
@@ -112,7 +111,6 @@ public class Counter implements Comparable<Counter> {
     public Counter actionDetailsFieldSetPositionPanelDropdown(String newName) {
         return doUpdateName(newName);
     }
-
 
     // with empty fieldset (that has no properties) + sequence
 
@@ -140,7 +138,6 @@ public class Counter implements Comparable<Counter> {
         return doUpdateName(newName);
     }
 
-
     // with associateWith
 
     @Action()
@@ -166,7 +163,6 @@ public class Counter implements Comparable<Counter> {
     public Counter actionAssociatedWithNamePropertyPanelDropdown(String newName) {
         return doUpdateName(newName);
     }
-
 
     // with associateWith + correct fieldSet for the associated property
 
@@ -194,7 +190,6 @@ public class Counter implements Comparable<Counter> {
         return doUpdateName(newName);
     }
 
-
     // with associateWith + incorrect fieldSet for the associated property
 
     @Action()
@@ -203,7 +198,6 @@ public class Counter implements Comparable<Counter> {
         return doUpdateName(newName);
     }
 
-
     // associateWith + only the sequence
 
     @Action()
@@ -211,8 +205,6 @@ public class Counter implements Comparable<Counter> {
     public Counter actionAssociatedWithNamePropertyAndSequenceNoPosition(String newName) {
         return doUpdateName(newName);
     }
-
-
 
     Counter doUpdateName(String newName) {
         setName(newName);

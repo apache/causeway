@@ -26,8 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>- internal use only -</h1>
@@ -47,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  * @since 2.0
  */
-@Log4j2
+@Slf4j
 public class _Probe {
 
     public static enum MaxCallsReachedAction {
@@ -123,7 +122,7 @@ public class _Probe {
 
     // -- INDENTING
 
-    private int currentIndent = 0;
+    private final int currentIndent = 0;
 
     // -- PRINTING
 
@@ -167,8 +166,8 @@ public class _Probe {
     }
 
     public void warnNotImplementedYet(final String format, final Object... args) {
-        val warnMsg = String.format(format, args);
-        val restore_out = out;
+        var warnMsg = String.format(format, args);
+        var restore_out = out;
         out=System.err;
         println("WARN NotImplementedYet %s", warnMsg);
         errOut("-------------------------------------");
@@ -178,9 +177,9 @@ public class _Probe {
     }
 
     public void run(final Runnable runnable) {
-        val t0 = System.nanoTime();
+        var t0 = System.nanoTime();
         runnable.run();
-        val nanos = System.nanoTime() - t0;
+        var nanos = System.nanoTime() - t0;
         nanoCounter.add(nanos);
         println("total runtime %d ms", nanoCounter.longValue()/1000_000);
     }
@@ -201,8 +200,8 @@ public class _Probe {
     // -- CONVENIENT DEBUG TOOLS (STATIC)
 
     public static String currentThreadId() {
-        val ct = Thread.currentThread();
-        return String.format("Thread[%s (%d)])", ct.getName(), ct.getId());
+        var ct = Thread.currentThread();
+        return String.format("Thread[%s (%d)])", ct.getName(), ct.threadId());
     }
 
     public static void sysOut(final String format, final Object... args) {

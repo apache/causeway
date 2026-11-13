@@ -26,8 +26,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 
-import lombok.val;
-
 /**
  * @since 1.x {@index}
  */
@@ -36,6 +34,7 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @XmlTransient
     private String tnsAndSchemaLocation;
 
     @Override
@@ -56,7 +55,7 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
     @XmlTransient
     public LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId() {
 
-        val serviceActionsByObjectTypeAndId =
+        var serviceActionsByObjectTypeAndId =
                 new LinkedHashMap<String, ServiceActionLayoutData>();
 
         visit(serviceActionLayoutData -> {
@@ -66,6 +65,5 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
         return serviceActionsByObjectTypeAndId;
     }
-
 
 }

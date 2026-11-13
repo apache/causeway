@@ -32,83 +32,80 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.ActionInteractionProbe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
-    
+
     final @NonNull String name;
     final @NonNull Class<T> valueType;
     final @NonNull ValueTypeExample<T> example;
     final @NonNull ValueSemanticsTester<T> tester;
-    
+
     @Inject private SchemaValueMarshaller valueMarshaller;
-    
+
     @Override
     public void testCommandWithNonEmptyArg(
             final ValueSemanticsProvider.Context context,
             final Command command) {
 
         assertNotNull(command.getCommandDto());
-        
+
         //debug
         //System.err.printf("CommandDto %s %s%n", name,
         //      CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
-        
-        val actionDto = (ActionDto)command.getCommandDto().getMember();
-        
+
+        var actionDto = (ActionDto)command.getCommandDto().getMember();
+
         assertNotNull(actionDto.getParameters());
         assertNotNull(actionDto.getParameters().getParameter());
-        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
-        
-        val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
+        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action
+
+        var parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
-        
-        final Identifier paramId = context.getFeatureIdentifier();
-        val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
+
+        final Identifier paramId = context.featureIdentifier();
+        var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
-        assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
+        assertEquals(valueType, parameterRecorded.objSpec().correspondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(parameterRecordedDto)));
 
         tester.assertValueEquals(example.getUpdateValue(), parameterRecorded.getPojo(), "command failed");
 
     }
-    
+
     @Override
     public void testCommandWithEmptyArg(
             final ValueSemanticsProvider.Context context,
             final Command command) {
 
         assertNotNull(command.getCommandDto());
-        
+
         //debug
 //        System.err.printf("CommandDto %s %s%n", name,
 //              CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
-        
-        val actionDto = (ActionDto)command.getCommandDto().getMember();
-        
+
+        var actionDto = (ActionDto)command.getCommandDto().getMember();
+
         assertNotNull(actionDto.getParameters());
         assertNotNull(actionDto.getParameters().getParameter());
-        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
-        
-        val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
+        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action
+
+        var parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
-        
-        final Identifier paramId = context.getFeatureIdentifier();
-        val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
+
+        final Identifier paramId = context.featureIdentifier();
+        var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
-        assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
+        assertEquals(valueType, parameterRecorded.objSpec().correspondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(parameterRecordedDto)));
 
         assertNull(parameterRecorded.getPojo());
     }
-    
-    
-}
 
+}

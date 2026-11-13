@@ -162,7 +162,7 @@ public class MyEntity ... {
 <.> the property as it is understood by Apache Causeway.
 
 
-TIP: if you have multiple instancs of an `@Embedded` type, the `@javax.persistence.AttributeOverrides` and `@javax.persistence.AttributeOverride` provide a standardised way of fine-tuning the column definitions.
+TIP: if you have multiple instancs of an `@Embedded` type, the `@jakarta.persistence.AttributeOverrides` and `@jakarta.persistence.AttributeOverride` provide a standardised way of fine-tuning the column definitions.
 
 ==== Clobs
 
@@ -191,4 +191,4 @@ public class MyEntity ... {
 <.> the property as it is understood by Apache Causeway.
 
 
-TIP: if you have multiple instances of an `@Embedded` type, the `@javax.persistence.AttributeOverrides` and `@javax.persistence.AttributeOverride` provide a standardised way of fine-tuning the column definitions.
+TIP: if you have multiple instances of an `@Embedded` type, the `@jakarta.persistence.AttributeOverrides` and `@jakarta.persistence.AttributeOverride` provide a standardised way of fine-tuning the column definitions.

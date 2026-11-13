@@ -18,15 +18,9 @@
  */
 package org.apache.causeway.core.transaction.changetracking.events;
 
-import lombok.Value;
-
 /**
- *
  * @since 2.0
- *
  */
-@Value(staticConstructor = "of")
-public class PreStoreEvent {
+public record PreStoreEvent(Object persistableObject) {
 
-    private final Object persistableObject;
 }

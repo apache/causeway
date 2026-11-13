@@ -27,20 +27,21 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.render.ObjectRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -48,19 +49,19 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.Getter;
-import lombok.val;
 
+class MetaModelContext_usingSpring implements MetaModelContext {
 
-class MetaModelContext_usingSpring extends MetaModelContext {
-
-    private final _IocContainer iocContainer;
-    public MetaModelContext_usingSpring(final _IocContainer iocContainer) {
-        this.iocContainer = iocContainer;
+    private final SpringContextHolder springContextHolder;
+    public MetaModelContext_usingSpring(final SpringContextHolder springContextHolder) {
+        this.springContextHolder = springContextHolder;
     }
 
     /**
@@ -68,7 +69,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
      * {@link MetaModelContextFactory#metaModelContext(CausewaySystemEnvironment)}.
      */
     void onDestroy() {
-        MetaModelContext.clear();
+        MetaModelContextSingletonHolder.clear();
     }
 
     @Getter(lazy=true)
@@ -78,6 +79,10 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     @Getter(lazy=true)
     private final CausewayConfiguration configuration =
     getSingletonElseFail(CausewayConfiguration.class);
+
+    @Getter(lazy=true)
+    private final ProgrammingModel programmingModel =
+    getSingletonElseFail(ProgrammingModel.class);
 
     @Getter(lazy=true)
     private final ServiceInjector serviceInjector =
@@ -110,6 +115,11 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     @Getter(lazy=true)
     private final ObjectIconService objectIconService =
     getSingletonElseFail(ObjectIconService.class);
+
+    @Getter(lazy=true)
+    private final ObjectRenderService objectRenderService =
+            getDefault(ObjectRenderService.class)
+            .orElseGet(ObjectRenderService::fallback);
 
     @Getter(lazy=true)
     private final PlaceholderRenderService placeholderRenderService =
@@ -160,6 +170,10 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     private final InteractionService interactionService =
     getSingletonElseFail(InteractionService.class);
 
+    @Getter(lazy = true)
+    private final CommandDtoFactory commandDtoFactory =
+    getSingletonElseFail(CommandDtoFactory.class);
+
     @Override
     public final ManagedObject getHomePageAdapter() {
         final Object pojo = getHomePageResolverService().getHomePage();
@@ -181,36 +195,35 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     // -- HELPER
 
     private <T> T getSingletonElseFail(final Class<T> type) {
-        return iocContainer.getSingletonElseFail(type);
+        return springContextHolder.getSingletonElseFail(type);
     }
 
     private <T> Optional<T> getDefault(final Class<T> type) {
-        return iocContainer.select(type).getFirst();
+        return springContextHolder.select(type).getFirst();
     }
 
     private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
     private Map<String, ManagedObject> collectBeansOfKnownSort() {
-
         return getServiceRegistry()
                 .streamRegisteredBeans()
                 .map(this::toManagedObject)
                 .collect(Collectors.toMap(
-                        service->service.getSpecification().getLogicalTypeName(),
+                        service->service.objSpec().logicalTypeName(),
                         v->v,
                         (o,n)->n,
                         LinkedHashMap::new));
     }
 
-    private ManagedObject toManagedObject(final _SingletonBeanProvider managedBeanAdapter) {
-        val servicePojo = managedBeanAdapter.getInstanceElseFail();
+    private ManagedObject toManagedObject(final SingletonBeanProvider managedBeanAdapter) {
+        var servicePojo = managedBeanAdapter.getInstanceElseFail();
         return getSpecificationLoader()
                 .specForType(servicePojo.getClass())
                 .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo))
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot wrap vetoed service of type '%s'",
-                        managedBeanAdapter.getBeanClass()));
+                        managedBeanAdapter.beanClass()));
     }
 
 }

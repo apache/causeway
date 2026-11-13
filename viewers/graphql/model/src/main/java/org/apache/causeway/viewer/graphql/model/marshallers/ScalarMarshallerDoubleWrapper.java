@@ -35,7 +35,7 @@ public class ScalarMarshallerDoubleWrapper extends ScalarMarshallerAbstract<Doub
 
     @Inject
     public ScalarMarshallerDoubleWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Double.class, Scalars.GraphQLFloat, causewayConfiguration);
+        super(Double.class, Scalars.GraphQLFloat, causewayConfiguration, true);
     }
 
     @Override

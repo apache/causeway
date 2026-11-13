@@ -29,7 +29,7 @@ import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.causeway.applib.query.Query;
@@ -48,8 +48,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationU
 import org.apache.causeway.extensions.secman.applib.user.events.UserCreatedEvent;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  *
@@ -67,7 +66,6 @@ implements ApplicationUserRepository {
 
     // empty if no candidate is available
     @Autowired(required = false) @Qualifier("Secman") PasswordEncoder passwordEncoder;
-
 
     private final Class<U> applicationUserClass;
 
@@ -133,13 +131,12 @@ implements ApplicationUserRepository {
 
     @Override
     public Collection<ApplicationUser> find(final @Nullable String _search) {
-        val regex = regexReplacer.asRegex(_search);
+        var regex = regexReplacer.asRegex(_search);
         return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.Nq.FIND)
                 .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
 
     // -- allUsers
 
@@ -204,17 +201,17 @@ implements ApplicationUserRepository {
     @Override
     public boolean isAdminUser(final ApplicationUser user) {
         return Objects.equals(
-                config.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
+                config.extensions().secman().seed().admin().userName(),
                 user.getName());
     }
 
     @Override
     public ApplicationUser newUser(
-            @NonNull final String username,
-            @Nullable final AccountType accountType,
+            final @NonNull String username,
+            final @Nullable AccountType accountType,
             final Consumer<ApplicationUser> beforePersist) {
 
-        val user = newApplicationUser();
+        var user = newApplicationUser();
         user.setUsername(username);
         user.setAccountType(accountType);
         beforePersist.accept(user);
@@ -224,7 +221,7 @@ implements ApplicationUserRepository {
 			user.setStatus(ApplicationUserStatus.LOCKED);
         }
         repository.persistAndFlush(user);
-        eventBusService.post(UserCreatedEvent.of(user));
+        eventBusService.post(new UserCreatedEvent(user));
         return user;
     }
 
@@ -246,6 +243,5 @@ implements ApplicationUserRepository {
         return user.isLocalAccount()
                 && passwordEncoder != null;
     }
-
 
 }

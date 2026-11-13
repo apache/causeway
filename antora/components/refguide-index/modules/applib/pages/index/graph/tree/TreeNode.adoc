@@ -1,38 +1,42 @@
-= TreeNode
+= TreeNode _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Fundamental building block of Tree structures.
+Fundamental building block for tree structures.
+
+Wraps a node value and holds references to related nodes.
 
 == API
 
 [source,java]
 .TreeNode.java
 ----
-class TreeNode<T> {
-  TreeNode<T> root(T value, TreeAdapter<T> treeAdapter, TreeState sharedState)
-  TreeNode<T> root(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState, FactoryService factoryService)
-  T getRootValue()
-  T getValue()
-  int getIncomingCount()
-  int getOutgoingCount()
+record TreeNode<T> {
+  TreeNode<T> root(T rootValue, TreeAdapter<T> treeAdapter)     // <.>
+  TreeNode<T> root(T rootValue, Class<? extends TreeAdapter<T>> treeAdapterClass, FactoryService factoryService)     // <.>
+  TreeNode<T> root(T rootValue, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState, FactoryService factoryService)
+  TreeNode<T> root(T rootValue, TreeAdapter<T> treeAdapter, TreeState sharedState)
+  String toString()
+  boolean equals(Object obj)
+  int hashCode()
+  TreeNode<T> rootNode()
+  T rootValue()
+  int incomingCount()
+  int outgoingCount()
   Stream<Edge<T>> streamIncoming()
   Stream<Edge<T>> streamOutgoing()
   Optional<TreeNode<T>> resolve(TreePath absolutePath)     // <.>
   Optional<TreeNode<T>> lookupParent()
-  int getChildCount()
+  int childCount()
   Stream<TreeNode<T>> streamChildren()
+  boolean isRoot()
   boolean isLeaf()
-  TreePath getPositionAsPath()
-  TreeState getTreeState()     // <.>
   boolean isExpanded(TreePath treePath)
-  void expand(TreePath... treePaths)     // <.>
-  void expand()     // <.>
-  void collapse(TreePath... treePaths)     // <.>
-  void clearSelection()     // <.>
+  TreeNode<T> expand(TreePath... treePaths)     // <.>
+  TreeNode<T> expand()     // <.>
+  TreeNode<T> collapse(TreePath... treePaths)     // <.>
+  TreeNode<T> clearSelection()     // <.>
   boolean isSelected(TreePath treePath)     // <.>
-  void select(TreePath... treePaths)     // <.>
-  TreeNode<T> root(T rootNode, TreeAdapter<T> treeAdapter)     // <.>
-  TreeNode<T> root(T rootNode, Class<? extends TreeAdapter<T>> treeAdapterClass, FactoryService factoryService)     // <.>
+  TreeNode<T> select(TreePath... treePaths)     // <.>
   Iterator<TreeNode<T>> iteratorHierarchyUp()
   Stream<TreeNode<T>> streamHierarchyUp()
   Iterator<TreeNode<T>> iteratorDepthFirst()
@@ -42,12 +46,21 @@ class TreeNode<T> {
 }
 ----
 
+<.> xref:#root_T_TreeAdapter[root(T, TreeAdapter)]
++
+--
+Creates the root node of a tree structure as inferred from given treeAdapter.
+--
+<.> xref:#root_T_Class_FactoryService[root(T, Class, FactoryService)]
++
+--
+Creates the root node of a tree structure as inferred from given treeAdapter.
+--
 <.> xref:#resolve_TreePath[resolve(TreePath)]
 +
 --
 Resolves given path relative to the root of this tree.
 --
-<.> xref:#getTreeState_[getTreeState()]
 <.> xref:#expand_TreePath[expand(TreePath)]
 +
 --
@@ -78,26 +91,23 @@ Whether node that corresponds to given xref:refguide:applib:index/graph/tree/Tre
 --
 Select nodes by their corresponding xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] , that is, activate their selection marker.
 --
-<.> xref:#root_T_TreeAdapter[root(T, TreeAdapter)]
-+
---
-Creates the root node of a tree structure as inferred from given treeAdapter.
---
-<.> xref:#root_T_Class_FactoryService[root(T, Class, FactoryService)]
-+
---
-Creates the root node of a tree structure as inferred from given treeAdapter.
---
 
 == Members
+
+[#root_T_TreeAdapter]
+=== root(T, TreeAdapter)
+
+Creates the root node of a tree structure as inferred from given treeAdapter.
+
+[#root_T_Class_FactoryService]
+=== root(T, Class, FactoryService)
+
+Creates the root node of a tree structure as inferred from given treeAdapter.
 
 [#resolve_TreePath]
 === resolve(TreePath)
 
 Resolves given path relative to the root of this tree.
-
-[#getTreeState_]
-=== getTreeState()
 
 [#expand_TreePath]
 === expand(TreePath)
@@ -136,13 +146,3 @@ With the _Wicket Viewer_ corresponds to expressing CSS class _tree-node-selected
     background-color: var(--tree-node-selected-bg-color, lightgrey);
 }
 ----
-
-[#root_T_TreeAdapter]
-=== root(T, TreeAdapter)
-
-Creates the root node of a tree structure as inferred from given treeAdapter.
-
-[#root_T_Class_FactoryService]
-=== root(T, Class, FactoryService)
-
-Creates the root node of a tree structure as inferred from given treeAdapter.

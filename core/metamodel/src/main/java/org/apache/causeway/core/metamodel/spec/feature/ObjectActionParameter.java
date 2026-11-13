@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -30,18 +28,17 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -61,11 +58,11 @@ extends ObjectFeature, CurrentHolder {
     int getParameterIndex();
 
     default boolean isSingular() {
-        return getFeatureType()==FeatureType.ACTION_PARAMETER_SINGULAR;
+        return featureType()==FeatureType.ACTION_PARAMETER_SINGULAR;
     }
 
     default boolean isPlural() {
-        return getFeatureType()==FeatureType.ACTION_PARAMETER_PLURAL;
+        return featureType()==FeatureType.ACTION_PARAMETER_PLURAL;
     }
 
     /**
@@ -107,12 +104,11 @@ extends ObjectFeature, CurrentHolder {
     String getCanonicalFriendlyName();
 
     // internal API
-    ActionArgValidityContext createProposedArgumentInteractionContext(
+    ParamValidityContext createProposedArgumentInteractionContext(
             InteractionHead head,
             Can<ManagedObject> args,
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
-
 
     /**
      * Whether there is an autoComplete provided (eg <tt>autoCompleteXxx</tt> supporting
@@ -134,8 +130,6 @@ extends ObjectFeature, CurrentHolder {
             ParameterNegotiationModel pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
-
-
 
     int getAutoCompleteMinLength();
     /**
@@ -176,14 +170,14 @@ extends ObjectFeature, CurrentHolder {
      * Reassessment can be switch off by means of {@link org.apache.causeway.applib.annotation.Parameter#precedingParamsPolicy()}.
      */
     default boolean reassessDefault(final ParameterNegotiationModel pendingArgs) {
-        val changed = _Refs.booleanRef(false);
-        val paramIndex = getParameterIndex();
-        val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
+        var changed = _Refs.booleanRef(false);
+        var paramIndex = getParameterIndex();
+        var bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
         if(Facets.precedingParametersPolicy(this).isReset()
                 // always allow when not dirtied by the user (UI)
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics
-            val paramDefaultValue = this.getDefault(pendingArgs);
+            var paramDefaultValue = this.getDefault(pendingArgs);
             pendingArgs.updateParamValue(paramIndex, paramOldValue->{
                 if(!ManagedObjects.pojoEquals(paramOldValue, paramDefaultValue)) {
                     changed.setValue(true);
@@ -288,10 +282,4 @@ extends ObjectFeature, CurrentHolder {
         return getAction().getCssClass(prefix) + "-" + getId();
     }
 
-    /**
-     * Returns a serializable representation of this parameter.
-     */
-    default ActionParameterMemento getMemento() {
-        return ActionParameterMemento.forActionParameter(this);
-    }
 }

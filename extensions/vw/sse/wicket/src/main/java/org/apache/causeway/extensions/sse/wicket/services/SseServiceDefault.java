@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.sse.wicket.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,27 +32,23 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Server-sent events.
@@ -64,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(SseServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class SseServiceDefault implements SseService {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSseWicket.NAMESPACE + ".SseServiceDefault";
@@ -75,17 +72,17 @@ public class SseServiceDefault implements SseService {
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
     @Override
-    public Optional<SseChannel> lookupByType(Class<?> sourceType) {
+    public Optional<SseChannel> lookupByType(final Class<?> sourceType) {
         return eventStreamPool.lookupByType(sourceType);
     }
 
     @Override
-    public void submit(SseSource task, ExecutionBehavior executionBehavior) {
+    public void submit(final SseSource task, final ExecutionBehavior executionBehavior) {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
 
-        val executor = ForkJoinPool.commonPool();
+        var executor = ForkJoinPool.commonPool();
 
         switch(executionBehavior) {
         case SIMPLE:
@@ -108,15 +105,15 @@ public class SseServiceDefault implements SseService {
 
     // -- HELPER
 
-    private void run(SseSource task) {
+    private void run(final SseSource task) {
 
-        val sourceType = task.getClass();
+        var sourceType = task.getClass();
 
         // 'acquires' a possibly new EventStreamLifecycle and increments its running-task-counter
-        val eventStreamLifecycle = eventStreamPool.acquireLifecycleForType(sourceType);
-        val eventStream = eventStreamLifecycle.getEventStream();
+        var eventStreamLifecycle = eventStreamPool.acquireLifecycleForType(sourceType);
+        var eventStream = eventStreamLifecycle.getEventStream();
 
-        log.debug("submitting task type='{}' -> stream='{}'", sourceType, eventStream.getId());
+        log.debug("submitting task type='{}' -> stream='{}'", sourceType, eventStream.uuid());
 
         try {
 
@@ -138,21 +135,19 @@ public class SseServiceDefault implements SseService {
 
         private final Map<Class<?>,  EventStreamLifecycle> eventStreamsByType = new ConcurrentHashMap<>();
 
-        public Optional<SseChannel> lookupByType(Class<?> sourceType) {
+        public Optional<SseChannel> lookupByType(final Class<?> sourceType) {
             return Optional.ofNullable(eventStreamsByType.get(sourceType))
                     .map(EventStreamLifecycle::getEventStream);
         }
 
-        public synchronized EventStreamLifecycle acquireLifecycleForType(Class<?> sourceType) {
-            val eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
+        public synchronized EventStreamLifecycle acquireLifecycleForType(final Class<?> sourceType) {
+            var eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
                     __->EventStreamLifecycle.of(
                             new EventStreamDefault(UUID.randomUUID(), sourceType),
                             this));
             eventStreamLifecycle.acquire();
             return eventStreamLifecycle;
         }
-
-
 
     }
 
@@ -178,7 +173,7 @@ public class SseServiceDefault implements SseService {
             synchronized ($LOCK) {
                 remaining = --runningTasksCounter;
                 if(remaining<1) {
-                    eventStreamPool.eventStreamsByType.remove(eventStream.getSourceType());
+                    eventStreamPool.eventStreamsByType.remove(eventStream.sourceType());
                 }
             }
 
@@ -189,59 +184,57 @@ public class SseServiceDefault implements SseService {
             }
         }
 
-
     }
-
 
     // -- EVENT STREAM DEFAULT IMPLEMENTATION
 
-    @Value @Log4j2
-    private static class EventStreamDefault implements SseChannel {
+    @Slf4j
+    private record EventStreamDefault(
+            UUID uuid,
+            Class<?> sourceType,
+            CountDownLatch latch,
+            Queue<Predicate<SseSource>> listeners
+            ) implements SseChannel {
 
         private static final Object $LOCK = new Object[0]; //see https://projectlombok.org/features/Synchronized
 
-        @Getter final UUID id;
-        @Getter final Class<?> sourceType;
-
-        private final CountDownLatch latch = new CountDownLatch(1);
-        private final Queue<Predicate<SseSource>> listeners = new ConcurrentLinkedQueue<>();
+        public EventStreamDefault(final UUID uuid, final Class<?> sourceType) {
+            this(uuid, sourceType, new CountDownLatch(1), new ConcurrentLinkedQueue<>());
+        }
 
         @Override
-        public void fire(SseSource source) {
+        public void fire(final SseSource source) {
 
             final List<Predicate<SseSource>> defensiveCopyOfListeners;
 
             synchronized ($LOCK) {
-                if(!isActive()) {
-                    return;
-                }
+                if(!isActive()) return;
                 defensiveCopyOfListeners = _Lists.newArrayList(listeners);
 
             }
 
-            log.debug("about to fire events to {} listeners", ()->defensiveCopyOfListeners.size());
+            if(log.isDebugEnabled()) {
+                log.debug("about to fire events to {} listeners", defensiveCopyOfListeners.size());
+            }
 
-            final List<Predicate<SseSource>> markedForRemoval = _Lists.newArrayList();
+            final List<Predicate<SseSource>> markedForRemoval = new ArrayList<>();
 
             defensiveCopyOfListeners.forEach(listener->{
-                val retain = listener.test(source);
+                var retain = listener.test(source);
                 if(!retain) {
                     markedForRemoval.add(listener);
                 }
             });
 
             synchronized ($LOCK) {
-                if(!isActive()) {
-                    return;
-                }
+                if(!isActive()) return;
                 listeners.removeAll(markedForRemoval);
             }
-
 
         }
 
         @Override
-        public void listenWhile(Predicate<SseSource> listener) {
+        public void listenWhile(final Predicate<SseSource> listener) {
             synchronized ($LOCK) {
                 if(isActive()) {
                     listeners.add(listener);
@@ -267,7 +260,5 @@ public class SseServiceDefault implements SseService {
         }
 
     }
-
-
 
 }

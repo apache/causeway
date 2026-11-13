@@ -32,8 +32,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 /**
  *
@@ -46,7 +45,6 @@ implements ApplicationTenancyRepository {
     @Inject private RepositoryService repository;
     @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
-
 
     private final Class<T> applicationTenancyClass;
 
@@ -73,7 +71,7 @@ implements ApplicationTenancyRepository {
         if (search == null) {
             return Collections.emptySortedSet();
         }
-        val regex = regexReplacer.asRegex(search);
+        var regex = regexReplacer.asRegex(search);
         return repository.allMatches(Query.named(this.applicationTenancyClass, ApplicationTenancy.Nq.FIND_BY_NAME_OR_PATH_MATCHING)
                 .withParameter("regex", regex))
                 .stream()
@@ -94,7 +92,6 @@ implements ApplicationTenancyRepository {
                 .withParameter("name", name)).orElse(null);
     }
 
-
     // -- findByPath
 
     public ApplicationTenancy findByPathCached(final String path) {
@@ -113,7 +110,6 @@ implements ApplicationTenancyRepository {
                 .withParameter("path", path))
                 .orElse(null);
     }
-
 
     // -- autoComplete
     @Override
@@ -197,6 +193,10 @@ implements ApplicationTenancyRepository {
     public void setParentOnTenancy(
             final @NonNull ApplicationTenancy tenancy,
             final @NonNull ApplicationTenancy parent) {
+        var previousParent = tenancy.getParent();
+        if(previousParent != null && !previousParent.equals(parent)) {
+            previousParent.getChildren().remove(tenancy);
+        }
         tenancy.setParent(parent);
         parent.getChildren().add(tenancy);
     }
@@ -204,7 +204,7 @@ implements ApplicationTenancyRepository {
     @Override
     public void clearParentOnTenancy(
             final @NonNull ApplicationTenancy tenancy) {
-        val parent = tenancy.getParent();
+        var parent = tenancy.getParent();
         if(parent != null) {
             parent.getChildren().remove(tenancy);
             tenancy.setParent(null);

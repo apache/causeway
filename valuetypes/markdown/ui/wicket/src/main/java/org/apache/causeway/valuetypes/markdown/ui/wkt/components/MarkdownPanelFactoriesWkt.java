@@ -21,16 +21,14 @@ package org.apache.causeway.valuetypes.markdown.ui.wkt.components;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupAttributePanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
- * {@link MarkupPanelFactories}, but specific to
+ * {@link MarkupAttributePanelFactories}, but specific to
  * the {@link Markdown} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
@@ -39,15 +37,15 @@ public class MarkdownPanelFactoriesWkt {
     // -- PARENTED
 
     @Component
-    public static class Parented extends MarkupPanelFactories.ParentedAbstract<Markdown> {
+    public static class Parented extends MarkupAttributePanelFactories.ParentedAbstract<Markdown> {
 
         public Parented() {
             super(Markdown.class);
         }
 
         @Override
-        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
-            val markupComponent = new MarkdownComponentWkt(id, model);
+        protected MarkupComponent newMarkupComponent(final String id, final UiAttributeWkt model) {
+            var markupComponent = new MarkdownComponentWkt(id, model);
             markupComponent.setEnabled(false);
             return markupComponent;
         }
@@ -57,7 +55,7 @@ public class MarkdownPanelFactoriesWkt {
     // -- STANDALONE
 
     @Component
-    public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Markdown> {
+    public static class Standalone extends MarkupAttributePanelFactories.StandaloneAbstract<Markdown> {
 
         public Standalone() {
             super(Markdown.class);
@@ -69,6 +67,5 @@ public class MarkdownPanelFactoriesWkt {
         }
 
     }
-
 
 }

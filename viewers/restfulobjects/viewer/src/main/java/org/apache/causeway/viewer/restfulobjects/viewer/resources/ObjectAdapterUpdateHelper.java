@@ -27,9 +27,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-
-import lombok.val;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 
 /**
  * Utility class that encapsulates the logic for updating an
@@ -52,7 +50,6 @@ public class ObjectAdapterUpdateHelper {
         this.resourceContext = resourceContext;
     }
 
-
     enum Intent {
         UPDATE_EXISTING,
         PERSISTING_NEW;
@@ -65,9 +62,9 @@ public class ObjectAdapterUpdateHelper {
             final JsonRepresentation propertiesMap,
             final Intent intent) {
 
-        val allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
+        var allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
 
-        objectAdapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+        objectAdapter.objSpec().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only
         .forEach(association->{
 
@@ -90,12 +87,12 @@ public class ObjectAdapterUpdateHelper {
         final JsonRepresentation propertyRepr = propertiesMap.getRepresentation(id);
         final Consent visibility = property.isVisible(
                 objectAdapter,
-                resourceContext.getInteractionInitiatedBy(),
-                resourceContext.getWhere());
+                resourceContext.interactionInitiatedBy(),
+                resourceContext.where());
         final Consent usability = property.isUsable(
                 objectAdapter,
-                resourceContext.getInteractionInitiatedBy(),
-                resourceContext.getWhere()
+                resourceContext.interactionInitiatedBy(),
+                resourceContext.where()
                 );
 
         final boolean invisible = visibility.isVetoed();
@@ -106,22 +103,20 @@ public class ObjectAdapterUpdateHelper {
 
             // no value provided
             if(intent.shouldValidate()) {
-                if(invisible || disabled) {
+                if(invisible || disabled)
                     // that's ok, indeed expected
                     return allOk;
-                }
             }
-            if (!property.isMandatory()) {
+            if (!property.isMandatory())
                 // optional, so also not a problem
                 return allOk;
-            }
 
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
             if(invalidReason != null) {
-                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asSupplier()));
+                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter));
             } else {
-                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asSupplier()));
+                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter));
             }
             allOk = false;
             return allOk;
@@ -130,14 +125,13 @@ public class ObjectAdapterUpdateHelper {
 
             if(intent.shouldValidate()) {
                 // value has been provided
-                if (invisible) {
+                if (invisible)
                     // silently ignore; don't want to acknowledge the
                     // existence of this property to the caller
                     return allOk;
-                }
                 if (disabled) {
                     // not allowed to update
-                    propertyRepr.mapPutString("invalidReason", usability.getReasonAsString().orElse(null));
+                    propertyRepr.mapPutString("invalidReason", usability.reasonAsString().orElse(null));
                     allOk = false;
                     return allOk;
                 }
@@ -160,18 +154,17 @@ public class ObjectAdapterUpdateHelper {
                 try {
                     property.set(
                             objectAdapter, valueAdapter,
-                            resourceContext.getInteractionInitiatedBy());
+                            resourceContext.interactionInitiatedBy());
                 } catch (final IllegalArgumentException ex) {
                     propertyRepr.mapPutString("invalidReason", ex.getMessage());
                     allOk = false;
                 }
             } else {
-                propertyRepr.mapPutString("invalidReason", validity.getReasonAsString().orElse(null));
+                propertyRepr.mapPutString("invalidReason", validity.reasonAsString().orElse(null));
                 allOk = false;
             }
         }
         return allOk;
     }
-
 
 }

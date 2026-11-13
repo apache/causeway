@@ -3,8 +3,18 @@
 
 
 
-== Implementation
+== Implementations
 
-This is an SPI, but the framework provides a simple implementation, `o.a.c.applib.services.publishing.log.EntityPropertyChangeLogger`, that just logs events as they are received.
+This is an SPI, and the framework provides several implementations.
 
+NOTE: If multiple implementations of this service are registered, all will be called.
+
+=== Applib (Log4j2)
+
+The applib provides a simple implementation, xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[], that just logs events as they are received.
+
+=== Audit Trail
+
+The xref:security:audittrail:about.adoc[] module also provides an implementation, xref:refguide:extensions:index/audittrail/applib/spiimpl/EntityPropertyChangeSubscriberForAuditTrail.adoc[].
+This implementation persists an instance of the xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntry.adoc[] entity for each event.
 

@@ -24,6 +24,7 @@ import jakarta.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -33,8 +34,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Component
 @Named("causeway.metamodel.value.ApplicationFeatureIdValueSemantics")
@@ -74,6 +73,22 @@ implements
         return value == null ? "" : value.stringify();
     }
 
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final ApplicationFeatureId value) {
+        return renderHtml(value, this::iconify);
+    }
+
+    // uses font-awesome
+    private String iconify(final ApplicationFeatureId featureId) {
+        var faQuickNotation = switch (featureId.getSort()) {
+            case NAMESPACE -> "solid border-all .col-chocolate"; // resembling the package symbol from Eclipse IDE
+            case TYPE -> "solid copyright .col-green"; // resembling the class symbol from Eclipse IDE
+            case MEMBER -> "solid cube .col-gold"; // resembling member symbol as used in Eclipse Theia
+        };
+        var faLayers = FontAwesomeLayers.fromQuickNotation(faQuickNotation);
+        return faIconAndTitle(faLayers, toMonospace(featureId.stringify()));
+    }
+
     // -- PARSER
 
     @Override
@@ -83,7 +98,7 @@ implements
 
     @Override
     public ApplicationFeatureId parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? ApplicationFeatureId.parse(input)
                 : null;

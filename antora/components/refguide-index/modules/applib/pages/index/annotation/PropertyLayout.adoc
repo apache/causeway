@@ -18,6 +18,7 @@ Collects together all layout hints for a property of a domain object.
   int multiLine() default -1;     // <.>
   String named() default "";     // <.>
   Navigable navigable() default Navigable.NOT_SPECIFIED;     // <.>
+  String navigableSubtree() default "";     // <.>
   PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;     // <.>
   Repainting repainting() default Repainting.NOT_SPECIFIED;     // <.>
   String sequence() default "";     // <.>
@@ -69,6 +70,11 @@ Name of this property (overriding the name derived from its name in code).
 +
 --
 Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.
+--
+<.> xref:#navigableSubtree[navigableSubtree]
++
+--
+When set, identifies a logical child, that is navigable via the UI.
 --
 <.> xref:#promptStyle[promptStyle]
 +
@@ -161,6 +167,13 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.
 
 Only one property can be annotated as such per domain class.
+
+[#navigableSubtree]
+=== navigableSubtree
+
+When set, identifies a logical child, that is navigable via the UI.
+
+The order of appearance of this tree branch in the UI relative to other branches of the same tree node, is given in _Dewey-decimal_ notation.
 
 [#promptStyle]
 === promptStyle

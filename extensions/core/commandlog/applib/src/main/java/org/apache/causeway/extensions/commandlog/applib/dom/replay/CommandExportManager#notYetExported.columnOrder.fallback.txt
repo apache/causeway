@@ -1,0 +1,6 @@
+#interactionId
+timestamp
+targetType
+targetId
+member
+replayState

@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link EntityPropertyChangeSubscriber} that just logs out the {@link EntityPropertyChange}
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(EntityPropertyChangeLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
-@Log4j2
+@Slf4j
 public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscriber {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".EntityPropertyChangeLogger";
@@ -58,7 +58,7 @@ public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscribe
     }
 
     @Override
-    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+    public void onChanging(final Can<EntityPropertyChange> entityPropertyChanges) {
         entityPropertyChanges.stream().map(EntityPropertyChange::toString).forEach(log::debug);
     }
 }

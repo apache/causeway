@@ -25,13 +25,11 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-
-import lombok.val;
+import org.springframework.http.HttpStatus;
 
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
@@ -53,7 +51,6 @@ public class JsonParserHelper {
                 .lookupServiceElseFail(JsonValueEncoderService.class);
     }
 
-
     /**
      * @param bodyAsString
      *            - as per {@link org.apache.causeway.viewer.restfulobjects.rendering.util.Util#asStringUtf8(java.io.InputStream)}
@@ -66,9 +63,9 @@ public class JsonParserHelper {
 
     ManagedObject parseAsMapWithSingleValue(final JsonRepresentation arguments) {
         final JsonRepresentation representation = arguments.getRepresentation("value");
-        if (arguments.size() != 1 || representation == null) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
-        }
+        if (arguments.size() != 1 || representation == null)
+			throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST,
+                "Body should be a map with a single key 'value' whose value represents an instance of type '%s'".formatted(resourceFor(objectSpec)));
 
         return objectAdapterFor(arguments);
     }
@@ -81,9 +78,8 @@ public class JsonParserHelper {
      */
     ManagedObject objectAdapterFor(final JsonRepresentation argRepr) {
 
-        if (argRepr == null) {
-            return null;
-        }
+        if (argRepr == null)
+			return null;
 
         if(!argRepr.mapHas("value")) {
             String reason = "No 'value' key";
@@ -113,7 +109,7 @@ public class JsonParserHelper {
                     buf.append("'").append(reprStr).append("' ");
                 } catch(Exception ex2) {
                 }
-                buf.append("as value of type '").append(objectSpec.getShortIdentifier()).append("'");
+                buf.append("as value of type '").append(objectSpec.shortIdentifier()).append("'");
                 String reason = buf.toString();
                 argRepr.mapPutString("invalidReason", reason);
                 throw new IllegalArgumentException(reason);
@@ -133,9 +129,9 @@ public class JsonParserHelper {
             throw new IllegalArgumentException(reason);
         }
 
-        val objectAdapter = resourceContext.getObjectAdapterForOidFromHref(oidFromHref)
+        var objectAdapter = resourceContext.objectAdapterForOidFromHref(oidFromHref)
                 .orElseThrow(()->{
-                    val reason = "'href' does not reference a known entity";
+                    var reason = "'href' does not reference a known entity";
                     argRepr.mapPutString("invalidReason", reason);
                     return new IllegalArgumentException(reason);
                 });
@@ -146,9 +142,8 @@ public class JsonParserHelper {
         final String href = link.getString("href");
 
         final Matcher matcher = OBJECT_OID.matcher(href);
-        if (!matcher.matches()) {
-            return null;
-        }
+        if (!matcher.matches())
+			return null;
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
 
@@ -158,8 +153,7 @@ public class JsonParserHelper {
     private static String resourceFor(final ObjectSpecification objectSpec) {
         // TODO: should return a string in the form
         // http://localhost:8080/types/xxx
-        return objectSpec.getFullIdentifier();
+        return objectSpec.fullIdentifier();
     }
-
 
 }

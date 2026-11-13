@@ -25,3 +25,5 @@ Notifies _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChang
 === publishChangedProperties()
 
 Notifies _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s that a property of an entity has changed using the _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber#onChanging(EntityPropertyChange)_ callback.
+
+include::hooks/EntityPropertyChangePublisher_010-implementation.adoc[]

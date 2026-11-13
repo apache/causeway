@@ -24,25 +24,21 @@ import java.time.ZoneOffset;
 import java.time.temporal.Temporal;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Either;
-
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 /**
  * Decomposes arbitrary time representing values of type T into a canonical representation.
  */
 public interface TemporalSupport<T> extends TemporalCharacteristicsProvider {
 
-    @Value @Accessors(fluent=true) // record candidate
-    public static class TemporalDecomposition implements Serializable {
-        private static final long serialVersionUID = 1L;
-        private final Temporal localTemporal;
-        private final Optional<Either<ZoneId, ZoneOffset>> zoneOrOffset;
-        TemporalCharacteristic temporalCharacteristic;
-        OffsetCharacteristic offsetCharacteristic;
+    public record TemporalDecomposition(
+            Temporal localTemporal,
+            Optional<Either<ZoneId, ZoneOffset>> zoneOrOffset,
+            TemporalCharacteristic temporalCharacteristic,
+            OffsetCharacteristic offsetCharacteristic
+            ) implements Serializable {
     }
 
     /**

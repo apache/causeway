@@ -1,0 +1,38 @@
+[[r3.5.0]]
+= 3.5.0
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+This is primarily a security release to address CVE-2025-64408, which was a Java deserialization vulnerability to authenticated attackers.
+
+The vulnerability applied to view models, not entities.
+The fix involves encrypting the view model memento using HMAC 256 encryption key.
+By default, a new key is created each time the application is restarted, which means that any bookmark of a view model will become invalid in subsequent runs.
+
+If you require stable (but still secure) bookmarks across runs, then this can be done by providing a custom implementation of the `HmacAuthority` bean (to override the default provided by the framework).
+
+See the xref:2025/3.5.0/mignotes.adoc[Migration notes] for further details.
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3942[CAUSEWAY-3942] - Support EclipseLink static weaving automatically.
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3939[CAUSEWAY-3939] - Viewmodel Bookmark Overhaul (CVE-2025-64408).
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3938[CAUSEWAY-3938] - [Wicket Viewer] Editing uninitialized mandatory property causes exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3899[CAUSEWAY-3899] - NPE guard for DomainChangeRecord
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3941[CAUSEWAY-3941] - Release activities, r3.5.0
+

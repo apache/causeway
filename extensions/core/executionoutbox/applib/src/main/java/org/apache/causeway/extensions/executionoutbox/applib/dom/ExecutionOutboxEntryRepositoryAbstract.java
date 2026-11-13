@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.query.Query;
@@ -40,6 +37,8 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import lombok.Getter;
 
 /**
@@ -78,7 +77,6 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         return executionOutboxEntryClass;
     }
 
-
     /**
      * for testing only.
      */
@@ -88,6 +86,8 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         this.factoryService = factoryService;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
     public E createEntryAndPersist(final Execution execution) {
         E e = factoryService.detachedEntity(executionOutboxEntryClass);
         e.init(execution);
@@ -95,6 +95,7 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         return e;
     }
 
+    @Override
     public Optional<ExecutionOutboxEntry> findByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
         return _Casts.uncheckedCast(
                 repositoryService().firstMatch(
@@ -105,15 +106,17 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         );
     }
 
+    @Override
     public List<ExecutionOutboxEntry> findOldest() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
                 Query.named(executionOutboxEntryClass, ExecutionOutboxEntry.Nq.FIND_OLDEST)
-                        .withLimit(causewayConfiguration.getExtensions().getExecutionOutbox().getRestApi().getMaxPending())
+                        .withLimit(causewayConfiguration.extensions().executionOutbox().restApi().maxPending())
                 )
         );
     }
 
+    @Override
     public ExecutionOutboxEntry upsert(
             final UUID interactionId,
             final int sequence,
@@ -127,6 +130,7 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
                 InteractionDtoUtils.dtoMapper().read(xml));
     }
 
+    @Override
     public ExecutionOutboxEntry upsert(
             final UUID interactionId,
             final int sequence,
@@ -161,15 +165,15 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
 
     protected abstract E newExecutionOutboxEntry();
 
+    @Override
     @Programmatic
     public boolean deleteByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
         Optional<ExecutionOutboxEntry> outboxEventIfAny = findByInteractionIdAndSequence(interactionId, sequence);
         if(outboxEventIfAny.isPresent()) {
             repositoryService().removeAndFlush(outboxEventIfAny.get());
             return true;
-        } else {
-            return false;
-        }
+        } else
+			return false;
     }
 
     private void persist(final E commandLogEntry) {
@@ -180,25 +184,23 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         return repositoryServiceProvider.get();
     }
 
-
-
     /**
      * for testing purposes only
      */
+    @Override
     public List<ExecutionOutboxEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot removeAll in production systems");
         return _Casts.uncheckedCast(repositoryService().allInstances(executionOutboxEntryClass));
     }
 
     /**
      * for testing purposes only
      */
+    @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot removeAll in production systems");
         repositoryService().removeAll(executionOutboxEntryClass);
     }
 

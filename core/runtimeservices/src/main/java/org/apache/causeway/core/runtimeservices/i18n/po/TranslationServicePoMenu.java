@@ -56,7 +56,6 @@ public class TranslationServicePoMenu {
 
     final TranslationServicePo translationService;
 
-
     public static class DownloadPotFileDomainEvent extends ActionDomainEvent {}
 
     @Action(
@@ -85,8 +84,6 @@ public class TranslationServicePoMenu {
                 : null;
     }
 
-
-
     public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent { }
 
     @Action(
@@ -107,8 +104,6 @@ public class TranslationServicePoMenu {
                 : null;
     }
 
-
-
     public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {}
 
     @Action(
@@ -127,9 +122,6 @@ public class TranslationServicePoMenu {
                 ? notAvailableForCurrentMode()
                 : null;
     }
-
-
-
 
     public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {}
 

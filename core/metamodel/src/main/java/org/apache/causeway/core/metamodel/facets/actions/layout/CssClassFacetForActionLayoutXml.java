@@ -23,30 +23,35 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
+import org.jspecify.annotations.Nullable;
 
 public class CssClassFacetForActionLayoutXml
-extends CssClassFacetSimple {
+extends CssClassFacetSimple
+implements QualifiedFacet {
 
     public static Optional<CssClassFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(actionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(actionLayout == null)
             return Optional.empty();
-        }
         final String cssClass = _Strings.emptyToNull(actionLayout.getCssClass());
         return cssClass != null
-                ? Optional.of(new CssClassFacetForActionLayoutXml(cssClass, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new CssClassFacetForActionLayoutXml(cssClass, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
+            : Optional.empty();
     }
 
     private CssClassFacetForActionLayoutXml(
             final String value,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(value, holder, precedence);
+            final FacetHolder holder) {
+        super(value, holder);
     }
 
     @Override

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.testing.fixtures.applib.setup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -57,7 +57,7 @@ public class PersonaEnumPersistAll<T, E extends Enum<E> & PersonaWithBuilderScri
     /**
      * The objects created by this fixture (output).
      */
-    private final List<T> objects = _Lists.newArrayList();
+    private final List<T> objects = new ArrayList<>();
     public List<T> getObjects() {
         return objects;
     }
@@ -72,9 +72,8 @@ public class PersonaEnumPersistAll<T, E extends Enum<E> & PersonaWithBuilderScri
         final int number = defaultParam("number", ec, max);
 
         // validate
-        if(number < 0 || number > max) {
-            throw new IllegalArgumentException(String.format("number must be in range [0,%d)", max));
-        }
+        if(number < 0 || number > max)
+			throw new IllegalArgumentException(String.format("number must be in range [0,%d)", max));
 
         for (int i = 0; i < number; i++) {
             final BuilderScriptAbstract<T> enumFixture = enumConstants[i].builder();

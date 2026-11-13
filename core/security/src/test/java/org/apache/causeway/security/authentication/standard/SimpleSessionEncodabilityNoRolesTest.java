@@ -20,7 +20,7 @@ package org.apache.causeway.security.authentication.standard;
 
 import java.io.Serializable;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 
 class SimpleSessionEncodabilityNoRolesTest

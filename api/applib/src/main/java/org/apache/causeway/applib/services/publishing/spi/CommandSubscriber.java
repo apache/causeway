@@ -49,7 +49,6 @@ public interface CommandSubscriber extends HasEnabling {
      */
     void onStarted(Command command);
 
-
     /**
      * Notifies that the command has completed and has transitioned to {@link org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#COMPLETED}
      *

@@ -23,10 +23,8 @@ import java.util.Optional;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
-import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 
 public interface Facet
 extends
@@ -111,24 +109,24 @@ extends
         public boolean isEvent() {
             return this == EVENT;
         }
-
     }
 
     /**
      * The {@link FacetHolder holder} of this facet.
      */
-    FacetHolder getFacetHolder();
+    FacetHolder facetHolder();
+    //@Deprecated default FacetHolder getFacetHolder() { return facetHolder(); }
 
     /**
      * Identifier of the feature this facet is associated with.
      * @see FacetHolder#getFeatureIdentifier()
      */
     default Identifier getFeatureIdentifier() {
-        return getFacetHolder().getFeatureIdentifier();
+        return facetHolder().getFeatureIdentifier();
     }
 
     default Optional<FacetRanking> getSharedFacetRanking() {
-        return getFacetHolder().getFacetRanking(facetType());
+        return facetHolder().lookupFacetRanking(facetType());
     }
 
     default FacetRanking getSharedFacetRankingElseFail() {
@@ -170,7 +168,7 @@ extends
      * Facets with higher precedence override facets with lower precedence.
      * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
-    public Precedence getPrecedence();
+    Precedence precedence();
 
     /**
      * Whether this {@link Facet} acts in a domain-object-type specific manner,
@@ -180,9 +178,10 @@ extends
      * and hence is effectively shared among multiple (target) <i>Mixee</i> types.
      * <p>
      * <ul>
-     * <li>type specific facets: probably only ever installed via {@link PostProcessor}(s)</li>
+     * <li>type specific facets: probably only ever installed via
+     * {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor}(s)</li>
      * <li>type agnostic facets: probably installed by both regular {@link FacetFactory}(s)
-     * and {@link PostProcessor}(s)</li>
+     * and {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor}(s)</li>
      * </ul>
      * <p>
      * Regularly {@link Facet}s for <i>Members</i> are installed on the <i>Member's</i> {@link FacetedMethod}.
@@ -193,7 +192,7 @@ extends
      * for the associated <i>Mixee</i>.
      * @see FacetHolderLayered
      */
-    public default boolean isObjectTypeSpecific() {
+    default boolean isObjectTypeSpecific() {
         return false;
     }
 

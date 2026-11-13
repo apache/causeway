@@ -21,10 +21,17 @@ package org.apache.causeway.core.metamodel.tabular;
 import java.io.Serializable;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 public interface DataTableMemento extends Serializable {
 
-    DataTableInteractive getDataTableModel(ManagedObject bookmarkedOwner);
+    /**
+     * @param bookmarkedOwner must be specified (that is, it must have an {@link ObjectSpecification}),
+     *      but is allowed to be empty, because owner (if entity) might have been deleted,
+     *      while an owner's action result is still semantically valid
+     *      (e.g. SecMan's {@code ApplicationUser_delete} returning a list of all remaining users)
+     */
+    DataTableInteractive recreateDataTableModel(ManagedObject bookmarkedOwner);
     void setupBindings(DataTableInteractive tableInteractive);
 
 }

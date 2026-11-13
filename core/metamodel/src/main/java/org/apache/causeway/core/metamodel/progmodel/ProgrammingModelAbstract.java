@@ -18,41 +18,34 @@
  */
 package org.apache.causeway.core.metamodel.progmodel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Value;
-import lombok.val;
-
 public abstract class ProgrammingModelAbstract
 implements
-        ProgrammingModel,
-        HasMetaModelContext {
+    ProgrammingModel {
 
-    @Getter(onMethod_ = {@Override})
-    private final MetaModelContext metaModelContext;
+    private final ServiceInjector serviceInjector;
 
     private List<FacetFactory> unmodifiableFactories;
     private List<MetaModelValidator> unmodifiableValidators;
     private List<MetaModelPostProcessor> unmodifiablePostProcessors;
 
-    protected ProgrammingModelAbstract(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
+    protected ProgrammingModelAbstract(final ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
     }
 
     /**
@@ -60,26 +53,21 @@ implements
      * @param filter - the final programming model will only contain factories accepted by this filter
      */
     public void init(final ProgrammingModelInitFilter filter) {
-
-        //assertNotInitialized();
         if(isInitialized()) return;
 
         // for all registered facet-factories that also implement MetaModelRefiner
-        for (val facetFactory : snapshotFactories(filter, metaModelContext)) {
-
-            if(facetFactory instanceof MetaModelRefiner) {
-                val metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
-                metaModelValidatorRefiner.refineProgrammingModel(this);
+        for (var facetFactory : snapshotFactories(filter)) {
+            if(facetFactory instanceof MetaModelRefiner metaModelRefiner) {
+                metaModelRefiner.refineProgrammingModel(this);
             }
         }
 
         this.unmodifiableFactories =
-                Collections.unmodifiableList(snapshotFactories(filter, metaModelContext));
+                Collections.unmodifiableList(snapshotFactories(filter));
         this.unmodifiableValidators =
-                Collections.unmodifiableList(snapshotValidators(filter, metaModelContext));
+                Collections.unmodifiableList(snapshotValidators(filter));
         this.unmodifiablePostProcessors =
-                Collections.unmodifiableList(snapshotPostProcessors(filter, metaModelContext));
-
+                Collections.unmodifiableList(snapshotPostProcessors(filter));
     }
 
     // -- SETUP
@@ -91,8 +79,8 @@ implements
             final Marker ... markers) {
 
         assertNotInitialized();
-        metaModelContext.getServiceInjector().injectServicesInto(instance);
-        val factoryEntry = ProgrammingModelEntry.of(instance, markers);
+        serviceInjector.injectServicesInto(instance);
+        var factoryEntry = new ProgrammingModelEntry<>(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
@@ -103,8 +91,8 @@ implements
             final Marker... markers) {
 
         assertNotInitialized();
-        metaModelContext.getServiceInjector().injectServicesInto(instance);
-        val validatorEntry = ProgrammingModelEntry.of(instance, markers);
+        serviceInjector.injectServicesInto(instance);
+        var validatorEntry = new ProgrammingModelEntry<>(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }
 
@@ -115,8 +103,8 @@ implements
             final Marker... markers) {
 
         assertNotInitialized();
-        metaModelContext.getServiceInjector().injectServicesInto(instance);
-        val postProcessorEntry = ProgrammingModelEntry.of(instance, markers);
+        serviceInjector.injectServicesInto(instance);
+        var postProcessorEntry = new ProgrammingModelEntry<>(instance, markers);
         postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
     }
 
@@ -142,10 +130,19 @@ implements
 
     // -- VALUE TYPE
 
-    @Value(staticConstructor = "of") @EqualsAndHashCode(of = "instance")
-    static final class ProgrammingModelEntry<T> {
-        T instance;
-        Marker[] markers;
+    record ProgrammingModelEntry<T>(
+            T instance,
+            Marker[] markers) {
+        @Override
+        public final boolean equals(final Object obj) {
+            return obj instanceof ProgrammingModelEntry other
+                    ? Objects.equals(this.instance(), other.instance())
+                    : false;
+        }
+        @Override
+        public final int hashCode() {
+            return Objects.hash(instance);
+        }
     }
 
     // -- SNAPSHOT HELPER
@@ -154,18 +151,17 @@ implements
         factoryEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<FacetFactory> snapshotFactories(
-            final ProgrammingModelInitFilter filter,
-            final MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter) {
 
-        val factories = _Lists.<FacetFactory>newArrayList();
-        for(val order : FacetProcessingOrder.values()) {
-            val factoryEntrySet = factoryEntriesByOrder.get(order);
+        var factories = new ArrayList<FacetFactory>();
+        for(var order : FacetProcessingOrder.values()) {
+            var factoryEntrySet = factoryEntriesByOrder.get(order);
             if(factoryEntrySet==null) {
-                continue;
-            }
-            for(val factoryEntry : factoryEntrySet) {
-                if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
-                    factories.add(factoryEntry.getInstance());
+				continue;
+			}
+            for(var factoryEntry : factoryEntrySet) {
+                if(filter.acceptFactoryType(factoryEntry.instance().getClass(), factoryEntry.markers())) {
+                    factories.add(factoryEntry.instance());
                 }
             }
         }
@@ -176,18 +172,18 @@ implements
         validatorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<MetaModelValidator> snapshotValidators(
-            final ProgrammingModelInitFilter filter,
-            final MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter) {
 
-        val validators = _Lists.<MetaModelValidator>newArrayList();
-        for(val order : ValidationOrder.values()) {
-            val validatorEntrySet = validatorEntriesByOrder.get(order);
+        var validators = new ArrayList<MetaModelValidator>();
+        for(var order : ValidationOrder.values()) {
+            var validatorEntrySet = validatorEntriesByOrder.get(order);
             if(validatorEntrySet==null) {
-                continue;
-            }
-            for(val validatorEntry : validatorEntrySet) {
-                if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
-                    validators.add(validatorEntry.getInstance());
+				continue;
+			}
+
+            for(var validatorEntry : validatorEntrySet) {
+                if(filter.acceptValidator(validatorEntry.instance().getClass(), validatorEntry.markers())) {
+                    validators.add(validatorEntry.instance());
                 }
             }
         }
@@ -198,20 +194,20 @@ implements
         postProcessorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<MetaModelPostProcessor> snapshotPostProcessors(
-            final ProgrammingModelInitFilter filter,
-            final MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter) {
 
-        val postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
-        for(val order : PostProcessingOrder.values()) {
-            val postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
+        var postProcessors = new ArrayList<MetaModelPostProcessor>();
+        for(var order : PostProcessingOrder.values()) {
+            var postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
             if(postProcessorEntrySet==null) {
-                continue;
-            }
-            for(val postProcessorEntry : postProcessorEntrySet) {
+				continue;
+			}
+
+            for(var postProcessorEntry : postProcessorEntrySet) {
                 if(filter.acceptPostProcessor(
-                        postProcessorEntry.getInstance().getClass(),
-                        postProcessorEntry.getMarkers())) {
-                    postProcessors.add(postProcessorEntry.getInstance());
+                        postProcessorEntry.instance().getClass(),
+                        postProcessorEntry.markers())) {
+                    postProcessors.add(postProcessorEntry.instance());
                 }
             }
         }
@@ -225,18 +221,15 @@ implements
     }
 
     protected void assertNotInitialized() {
-        if(isInitialized()) {
-            throw _Exceptions.unrecoverable(
+        if(isInitialized())
+			throw _Exceptions.unrecoverable(
                     "The programming-model was already initialized, it cannot be altered.");
-        }
     }
 
     private void assertInitialized() {
-        if(!isInitialized()) {
-            throw _Exceptions.unrecoverable(
+        if(!isInitialized())
+			throw _Exceptions.unrecoverable(
                     "The programming-model was not initialized yet.");
-        }
     }
-
 
 }

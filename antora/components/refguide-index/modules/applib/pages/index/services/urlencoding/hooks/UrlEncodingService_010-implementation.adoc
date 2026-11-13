@@ -6,5 +6,6 @@
 == Implementation
 
 
-The framework provides a default implementation, `o.a.c.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression`, that first (gzip) compresses the state and then uses `base-64` encoding of the resulting bytes.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation, xref:refguide:core:index/runtimeservices/urlencoding/UrlEncodingServiceWithCompression.adoc[].
+This first (gzip) compresses the state and then uses `base-64` encoding of the resulting bytes.
 

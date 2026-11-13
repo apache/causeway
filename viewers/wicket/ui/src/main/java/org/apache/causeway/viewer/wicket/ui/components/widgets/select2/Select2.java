@@ -19,174 +19,104 @@
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
-import java.util.List;
 
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Select2MultiChoice;
 
-import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithMultiChoice;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoice;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
+import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.wicket.model.models.MultiChoiceModel;
+import org.apache.causeway.viewer.wicket.model.models.SingleChoiceModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 
-import lombok.NonNull;
-import lombok.val;
+public sealed interface Select2 extends Serializable
+permits SingleChoice, MultiChoice {
 
-/**
- * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
- */
-public class Select2
-implements
-    Serializable,
-    HasCommonContext {
+    static Select2 create(
+        final String id,
+        final UiAttributeWkt attributeModel,
+        final AttributeModelChangeDispatcher select2ChangeDispatcher) {
+        var choiceProvider = new ChoiceProvider(attributeModel);
+        var select2 = attributeModel.isSingular()
+                ? new SingleChoice(id,
+                                new SingleChoiceModel(attributeModel),
+                                attributeModel,
+                                choiceProvider)
+                : new MultiChoice(id,
+                                _Casts.uncheckedCast(new MultiChoiceModel(attributeModel)),
+                                attributeModel,
+                                choiceProvider);
+        var component = select2.component();
+        var settings = component.getSettings();
+        settings.setCloseOnSelect(true);
+        settings.setDropdownAutoWidth(true);
+        settings.setWidth("100%");
+        settings.setPlaceholder(attributeModel.getFriendlyName());
+        // the id string is url-safe base64 encoded JSON coming from ChoiceProvider using ObjectDisplayDto as JSON
+        var template = """
+            function(opt) {
+                if(!opt) return "undefined";
+                var dto = decodeBase64ToJson(opt.id);
+                if(!dto) return "undefined";
+                if(!dto.title) return "undefined";
+                if(!dto.html) return "undefined";
+                return $(dto.html);
+            }""";
 
-    private static final long serialVersionUID = 1L;
+        settings.setTemplateResult(template);
+        settings.setTemplateSelection(template);
 
-    final Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice;
+        switch(attributeModel.getChoiceProviderSort()) {
+            case AUTO_COMPLETE->settings.setMinimumInputLength(attributeModel.getAutoCompleteMinLength());
+            case OBJECT_AUTO_COMPLETE->Facets.autoCompleteMinLength(attributeModel.getElementType())
+                .ifPresent(settings::setMinimumInputLength);
+            case CHOICES, NO_CHOICES->{}
+        }
 
-    public static Select2 createSelect2(
-            final String id,
-            final ScalarModel scalarModel,
-            final ChoiceProviderAbstract choiceProvider,
-            final ScalarModelChangeDispatcher select2ChangeDispatcher) {
-        val select2 = new Select2(scalarModel.isSingular()
-                ? Either.left(
-                        Select2ChoiceExt.create(id,
-                                ScalarModelWithSingleChoice.chain(scalarModel),
-                                scalarModel,
-                                choiceProvider))
-                : Either.right(
-                        Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiChoice.chain(scalarModel),
-                                scalarModel,
-                                choiceProvider)));
+        component.setRequired(attributeModel.isRequired());
+        // time to wait for the user to stop typing before issuing the ajax request.
+        component.getSettings().getAjax(true)
+            .setDelay(Math.toIntExact(attributeModel.getConfiguration().viewer().wicket().select2AjaxDelay().toMillis()));
 
-        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
-        select2.getSettings().setWidth("100%");
+        component.setOutputMarkupPlaceholderTag(true);
+        component.setLabel(Model.of(attributeModel.getFriendlyName()));
 
         // listen on select2:select/unselect events (client-side)
-        select2.add(new Select2OnSelect(scalarModel, select2ChangeDispatcher));
+        component.add(new OnSelectBehavior(attributeModel, select2ChangeDispatcher));
 
         return select2;
     }
 
-    private Select2(final @NonNull Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
-        this.select2Choice = select2Choice;
-        asComponent().setOutputMarkupId(true);
-    }
+    AbstractSelect2Choice<ObjectMemento, ?> component();
+    ManagedObject convertedInputValue();
+    ObjectMemento objectMemento();
 
-    public org.wicketstuff.select2.Settings getSettings() {
-        return select2Choice.fold(
-                Select2ChoiceExt::getSettings,
-                Select2MultiChoiceExt::getSettings);
-    }
-
-    public AbstractSelect2Choice<ObjectMemento, ?> asComponent() {
-        return select2Choice.fold(
-                single->single,
-                multi->multi);
-    }
-
-    public void clearInput() {
-        asComponent().clearInput();
-    }
-
-    public void setEnabled(final boolean mutability) {
-        asComponent().setEnabled(mutability);
-    }
-
-    public void setRequired(final boolean required) {
-        // previously this was commented out because causing more severe issues with the select2 drop-down;
-        // but recent changes (possibly that setOutputMarkupId(true) is called) now seem to have resolved the issue.
-        asComponent().setRequired(required);
-    }
-    public boolean checkRequired() {
-        return asComponent().checkRequired();
-    }
-
-    public ManagedObject getConvertedInputValue() {
-        return getObjectManager().demementify(convertedInput());
-    }
-
-    public void setLabel(final Model<String> model) {
-        asComponent().setLabel(model);
-    }
-
-    public void add(final Behavior behavior) {
-        asComponent().add(behavior);
-    }
-
-    public final Select2 add(final IValidator<Object> validator) {
-        asComponent().add(validator);
-        return this;
-    }
-
-    public <M extends Behavior> List<M> getBehaviors(final Class<M> behaviorClass) {
-        return asComponent().getBehaviors(behaviorClass);
-    }
-
-    public void remove(final Behavior behavior) {
-        asComponent().remove(behavior);
-    }
-
-    public void syncIfNull(final ScalarModel model) {
-        if(!model.isPlural()) {
-            if(memento() == null) {
-                this.mementoModel().setObject(null);
-                model.setObject(null);
-            }
-        }
-    }
-
-    public boolean isEmpty() {
-        return memento() == null;
-    }
-
-    public void clear() {
-        mementoModel().setObject(null);
-    }
-
-    public IModel<String> obtainOutputFormatModel() {
+    default IModel<String> obtainOutputFormatModel() {
         return LambdaModel.<String>of(()->{
-            val memento = memento();
+            var memento = objectMemento();
             return memento!=null
-                    ? memento.getTitle()
+                    ? memento.title()
                     : null;
         });
     }
 
+    // -- SHORTCUTS
 
-    // -- HELPER
-
-    private ObjectMemento memento() {
-        return select2Choice.fold(
-                single->single.getModelObject(),
-                multi->multi.getPackedModelObject());
+    default void clearInput() {
+        component().clearInput();
     }
 
-    private IModel<ObjectMemento> mementoModel() {
-        return select2Choice.fold(
-                single->single.getModel(),
-                multi->multi.getPackingAdapterModel());
+    default boolean checkRequired() {
+        return component().checkRequired();
     }
 
-    private ObjectMemento convertedInput() {
-        final ObjectMemento convertedInput = select2Choice.fold(
-                single->single.getConvertedInput(),
-                multi->multi.getPackedConvertedInput());
-        this.mementoModel().setObject(convertedInput);
-        return convertedInput;
+    default void setMutable(final boolean mutability) {
+        component().setEnabled(mutability);
     }
 
 }

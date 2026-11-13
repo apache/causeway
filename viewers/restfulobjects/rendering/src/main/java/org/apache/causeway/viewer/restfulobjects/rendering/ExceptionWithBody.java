@@ -22,5 +22,5 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 public interface ExceptionWithBody {
 
-    JsonRepresentation getBody();
+    JsonRepresentation body();
 }

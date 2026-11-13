@@ -85,15 +85,17 @@ The package should also have a `package-info.java`; it is this that declares the
 
 [source,java]
 ----
-@javax.xml.bind.annotation.XmlSchema(
+import jakarta.xml.bind.annotation.*;
+
+@XmlSchema(
     namespace = "http://viewmodels.app.todoapp/todoitem/v1/Dto.xsd",    // <.>
     xmlns = {
-        @javax.xml.bind.annotation.XmlNs(
+        @XmlNs(
             namespaceURI = "https://causeway.apache.org/schema/common",
             prefix = "com"
         )
     },
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
+    elementFormDefault = XmlNsForm.QUALIFIED
 )
 package todoapp.app.viewmodels.todoitem.v1;                             // <.>
 ----

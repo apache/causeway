@@ -38,8 +38,7 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterAutoCompleteFacetViaMethod
 extends ActionParameterAutoCompleteFacetAbstract
@@ -81,13 +80,13 @@ implements ImperativeFacet {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail();
+        var method = methods.getFirstElseFail();
         final Object collectionOrArray = MmInvokeUtils
                 .invokeWithSearchArg(patConstructor, method, owningAdapter, pendingArgs, searchArg);
         if (collectionOrArray == null) {
             return Can.empty();
         }
-        val visibleChoices = ManagedObjects
+        var visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         elementSpec, collectionOrArray, interactionInitiatedBy);
 

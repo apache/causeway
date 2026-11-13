@@ -36,21 +36,20 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.ByteArrayResource;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.components.PdfJsPanel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-
-import lombok.NonNull;
-import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -80,8 +79,8 @@ implements IRequestListener {
     AbstractDefaultAjaxBehavior updateScale;
     AbstractDefaultAjaxBehavior updateHeight;
 
-    PdfJsViewerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    PdfJsViewerPanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
     interface Updater{
@@ -151,7 +150,7 @@ implements IRequestListener {
     }
 
     private void updateAdvisors(final Updater updater) {
-        val instanceKey = buildKey();
+        var instanceKey = buildKey();
         getServiceRegistry().select(PdfJsViewerAdvisor.class)
         .forEach(advisor -> updater.update(advisor, instanceKey));
     }
@@ -166,46 +165,50 @@ implements IRequestListener {
     private PdfJsViewerAdvisor.InstanceKey toInstanceKey(final UserService userService) {
         String userName = userService.currentUserNameElseNobody();
 
-        val scalarModel = getModel();
-        val propertyId = scalarModel.getIdentifier();
-        val bookmark = scalarModel.getParentUiModel().getOwnerBookmark();
-        val logicalTypeName = bookmark.getLogicalTypeName();
-        val identifier = bookmark.getIdentifier();
+        var attributeModel = getModel();
+        var propertyId = attributeModel.getIdentifier();
+        var bookmark = attributeModel.getParentUiModel().getOwnerBookmark();
+        var logicalTypeName = bookmark.logicalTypeName();
+        var identifier = bookmark.identifier();
 
         return new PdfJsViewerAdvisor.InstanceKey(logicalTypeName, identifier, propertyId, userName);
     }
 
     @Override
     protected MarkupContainer createRegularFrame() {
-        val blob = getBlob();
-        if (blob == null) {
+        var blob = getBlob();
+        if (blob == null
+                || _NullSafe.isEmpty(blob.bytes())) { 
             return createShallowRegularFrame();
         }
 
-        val scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
+        var regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
-        val pdfJsConfig =
-                scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
+        var documentUrl = urlFor(
+                new ListenerRequestHandler(
+                        new PageAndComponentProvider(getPage(), this)))
+                // adds a hash to the URL, such that browser caching works as desired 
+                + "&md5=" + blob.md5Hex();
+        var pdfJsConfig =
+                attributeModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
-                .withDocumentUrl(urlFor(
-                        new ListenerRequestHandler(
-                                new PageAndComponentProvider(getPage(), this))));
+                .withDocumentUrl(documentUrl);
 
-        val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
+        var pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
-        val prevPageButton = createToolbarComponent("prevPage", pdfJsPanel);
-        val nextPageButton = createToolbarComponent("nextPage", pdfJsPanel);
-        val currentZoomSelect = createToolbarComponent("currentZoom", pdfJsPanel);
-        val currentPageLabel = createToolbarComponent("currentPage", pdfJsPanel);
-        val totalPagesLabel = createToolbarComponent("totalPages", pdfJsPanel);
+        var prevPageButton = createToolbarComponent("prevPage", pdfJsPanel);
+        var nextPageButton = createToolbarComponent("nextPage", pdfJsPanel);
+        var currentZoomSelect = createToolbarComponent("currentZoom", pdfJsPanel);
+        var currentPageLabel = createToolbarComponent("currentPage", pdfJsPanel);
+        var totalPagesLabel = createToolbarComponent("totalPages", pdfJsPanel);
 
-        val currentHeightSelect = createToolbarComponent("currentHeight", pdfJsPanel);
-        val printButton = createToolbarComponent("print", pdfJsPanel);
+        var currentHeightSelect = createToolbarComponent("currentHeight", pdfJsPanel);
+        var printButton = createToolbarComponent("print", pdfJsPanel);
 
-        val downloadResourceLink = Wkt.downloadLinkNoCache(ID_DOWNLOAD, asBlobResource(blob));
+        var downloadResourceLink = Wkt.downloadLinkNoCache(ID_DOWNLOAD, asBlobResource(blob));
 
         regularFrame.addOrReplace(
                 pdfJsPanel, prevPageButton, nextPageButton, currentPageLabel, totalPagesLabel,
@@ -214,13 +217,12 @@ implements IRequestListener {
                         pdfJsPanel,
                         new ComponentFeedbackMessageFilter(pdfJsPanel)));
 
-
         return regularFrame;
     }
 
     @Override
     protected MarkupContainer createShallowRegularFrame() {
-        val shallowRegularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
+        var shallowRegularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
         WktComponents.permanentlyHide(shallowRegularFrame,
                 ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK, ID_DOWNLOAD);
         return shallowRegularFrame;
@@ -228,19 +230,19 @@ implements IRequestListener {
 
     @Override
     protected Component createCompactFrame() {
-        val blob = getBlob();
+        var blob = getBlob();
         if (blob == null) {
             return createShallowCompactFrame();
         }
-        val compactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        val downloadLink = Wkt.add(compactFrame, Wkt.downloadLinkNoCache(ID_DOWNLOAD_IF_COMPACT, asBlobResource(blob)));
-        Wkt.labelAdd(downloadLink, ID_FILE_NAME_IF_COMPACT, blob.getName());
+        var compactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+        var downloadLink = Wkt.add(compactFrame, Wkt.downloadLinkNoCache(ID_DOWNLOAD_IF_COMPACT, asBlobResource(blob)));
+        Wkt.labelAdd(downloadLink, ID_FILE_NAME_IF_COMPACT, blob.name());
         return compactFrame;
     }
 
     @Override
     protected Component createShallowCompactFrame() {
-        val shallowCompactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+        var shallowCompactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         WktComponents.permanentlyHide(shallowCompactFrame,
                 ID_DOWNLOAD_IF_COMPACT, ID_FILE_NAME_IF_COMPACT);
         return shallowCompactFrame;
@@ -253,7 +255,7 @@ implements IRequestListener {
         response.render(PdfJsViewerCssReference.asHeaderItem());
         response.render(PdfJsViewerJsReference.asHeaderItem());
 
-        val script = PdfJsViewerCallbacksReference.instance().asString(Map.of(
+        var script = PdfJsViewerCallbacksReference.instance().asString(Map.of(
                 "pageNumCallbackUrl", updatePageNum.getCallbackUrl(),
                 "scaleCallbackUrl", updateScale.getCallbackUrl(),
                 "heightCallbackUrl", updateHeight.getCallbackUrl()));
@@ -276,7 +278,7 @@ implements IRequestListener {
      */
     @Override
     public void onRequest() {
-        val blob = getBlob();
+        var blob = getBlob();
         if (blob == null) {
             throw new AbortWithHttpErrorCodeException(404);
         }
@@ -284,28 +286,18 @@ implements IRequestListener {
                 new ResourceRequestHandler(asBlobResourceNoCache(blob), null));
     }
 
-//    @Override
-//    protected void setupInlinePrompt() {
-//        // not used
-//    }
-//
-//    @Override
-//    protected Component getValidationFeedbackReceiver() {
-//        return null; // not used
-//    }
-
     // -- HELPER
-
+    
     private Blob getBlob() {
-        return (Blob) MmUnwrapUtils.single(scalarModel().getObject());
+        return (Blob) MmUnwrapUtils.single(attributeModel().getObject());
     }
 
     private static ByteArrayResource asBlobResource(final @NonNull Blob blob) {
-        return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+        return new ByteArrayResource(blob.mimeType().getBaseType(), blob.bytes(), blob.name());
     }
 
     private static ByteArrayResource asBlobResourceNoCache(final @NonNull Blob blob) {
-        final byte[] bytes = blob.getBytes();
+        final byte[] bytes = blob.bytes();
         return new ByteArrayResource("application/pdf", bytes) {
             private static final long serialVersionUID = 1L;
             @Override protected void configureResponse(

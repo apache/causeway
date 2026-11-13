@@ -70,5 +70,4 @@ public class Counter extends org.apache.causeway.extensions.audittrail.applib.in
     @Getter @Setter
     private Long num2;
 
-
 }

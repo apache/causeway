@@ -71,7 +71,7 @@ public @interface DomainObjectLayout {
      * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class that
      * is used as icon for the annotated domain object.
      * <p>
-     * Use the {@code FontAwesomeLayers iconFaLayers()} object support method for more advanced icons.
+     * Use the {@code icon(..)} object support method for more advanced icons.
      * @see ActionLayout#cssClassFa()
      */
     String cssClassFa()
@@ -136,7 +136,6 @@ public @interface DomainObjectLayout {
         tableDecorator()
         default TableDecorator.Default.class;
 
-
     /**
      * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
      *
@@ -198,7 +197,6 @@ public @interface DomainObjectLayout {
     Class<? extends TitleUiEvent<?>>
             titleUiEvent()
             default TitleUiEvent.Default.class;
-
 
     // ...
 }

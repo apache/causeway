@@ -92,7 +92,7 @@ Thereafter, you can push subsequent commits using simply:
 git push
 ----
 
-Doing this also allows others to collaborate on this branch, just as they would for `master`.
+Doing this also allows others to collaborate on this branch, just as they would for `main`.
 
 When, eventually, you have reintegrated this branch, you can delete the remote branch using:
 
@@ -139,18 +139,18 @@ See also:
 
 === If accidentally push to remote
 
-Suppose you committed to `master`, and then pushed the change, and then decided that you didn't intend to do that:
+Suppose you committed to `main`, and then pushed the change, and then decided that you didn't intend to do that:
 
 [source,bash]
 ----
 C1  -  C2  -  C3  -  C4  -  C5  -  C6  -  C7
                                           ^
-                                          master
+                                          main
                                           ^
-                                          origin/master
+                                          origin/main
 ----
 
-To go back to an earlier commit, first we wind back the local `master`:
+To go back to an earlier commit, first we wind back the local `main`:
 
 [source,bash]
 ----
@@ -165,27 +165,27 @@ This gets us to:
 ----
 C1  -  C2  -  C3  -  C4  -  C5  -  C6  -  C7
                             ^
-                            master
+                            main
                                           ^
-                                          origin/master
+                                          origin/main
 ----
 
 Then, do a force push:
 
 [source,bash]
 ----
-git push origin master --force
+git push origin main --force
 ----
 
 If this doesn't work, it may be that the remote repo has disabled this feature.
 There are other hacks to get around this, see for example link:http://stackoverflow.com/questions/1377845/git-reset-hard-and-a-remote-repository[here].
 
-== If you've accidentally worked on `master` branch
+== If you've accidentally worked on `main` branch
 
-If at any time the `git pull` from your upstream fails, it most likely means that you must have made commits on the `master` branch.
-You can use `gitk --all` to confirm; at some point in time both `master` and `origin\master` will have a common ancestor.
+If at any time the `git pull` from your upstream fails, it most likely means that you must have made commits on the `main` branch.
+You can use `gitk --all` to confirm; at some point in time both `main` and `origin\main` will have a common ancestor.
 
-You can retrospectively create a topic branch for the work you've accidentally done on `master`.
+You can retrospectively create a topic branch for the work you've accidentally done on `main`.
 
 First, create a branch for your current commit:
 
@@ -202,14 +202,14 @@ If you do, you should commit them or stash them:
 git stash
 ----
 
-Finally, locate the shaId of the commit you want to roll back to (easily obtained in `gitk -all`), and wind `master` branch back to that commit:
+Finally, locate the shaId of the commit you want to roll back to (easily obtained in `gitk -all`), and wind `main` branch back to that commit:
 
 [source,bash,subs=+quotes]
 ----
-git checkout master
+git checkout main
 git reset --hard _shaId_ <1>
 ----
-<1> move master branch shaId of common ancestor
+<1> move `main` branch shaId of common ancestor
 
 
 

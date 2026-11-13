@@ -31,16 +31,16 @@ public interface Oid extends Serializable {
      * Logical-type-name of the domain object this Oid is representing.
      * (aka. object-type)
      */
-    String getLogicalTypeName();
+    String logicalTypeName();
 
     /**
      * Stringified version of the ID of the domain object instance this Oid is representing.
      */
-    String getIdentifier();
+    String identifier();
 
     /**
      * The canonical form of the {@link Bookmark}, that is
-     * {@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier() identifier}.
+     * {@link #logicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #identifier() identifier}.
      */
     String stringify();
 

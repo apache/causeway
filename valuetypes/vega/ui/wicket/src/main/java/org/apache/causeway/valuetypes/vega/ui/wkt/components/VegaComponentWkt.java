@@ -31,21 +31,19 @@ import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaEmbedJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaLiteJsReference;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class VegaComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
     public VegaComponentWkt(final String id, final IModel<?> model){
         super(id, model,
-                org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options.builder()
-                .syntaxHighlighter(SyntaxHighlighter.NONE)
-                .build());
+                new org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent
+                    .Options(SyntaxHighlighter.NONE));
     }
 
     @Override
@@ -69,16 +67,15 @@ public class VegaComponentWkt extends MarkupComponent {
     // -- HELPER
 
     private Optional<Vega.Schema> vegaSchema() {
-        val modelObject = getDefaultModelObject();
-        if(modelObject==null) {
-            return Optional.empty();
-        }
+        var modelObject = getDefaultModelObject();
+        if(modelObject==null)
+			return Optional.empty();
         if(!(modelObject instanceof ManagedObject)) {
             log.error("framework bug: unexpected type {}", modelObject.getClass().getName());
             return Optional.empty();
         }
         return _Casts.castTo(Vega.class, MmUnwrapUtils.single((ManagedObject)modelObject))
-                .map(Vega::getSchema);
+                .map(Vega::schema);
     }
 
 }

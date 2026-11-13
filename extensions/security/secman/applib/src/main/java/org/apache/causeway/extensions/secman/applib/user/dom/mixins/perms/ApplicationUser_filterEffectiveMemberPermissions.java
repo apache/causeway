@@ -89,5 +89,4 @@ public class ApplicationUser_filterEffectiveMemberPermissions {
         return applicationFeatureChoices.autoCompleteFeature(search);
     }
 
-
 }

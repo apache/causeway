@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -37,8 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ListReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
-
-import lombok.val;
 
 public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
@@ -67,7 +65,7 @@ extends ReprRendererAbstract<Void> {
             addLinkToSelf();
         }
 
-        val metaModelContext = super.getResourceContext().getMetaModelContext();
+        var metaModelContext = super.getResourceContext().getMetaModelContext();
 
         addLinkToUser(getResourceContext().getInteractionService().currentInteractionContextElseFail());
         addLinksToApplicationLogos();
@@ -207,7 +205,7 @@ extends ReprRendererAbstract<Void> {
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToDomainTypes(final Can<ObjectSpecification> specifications) {
+    private void addLinkToDomainTypes(final Can<? extends ObjectSpecification> specifications) {
 
         final JsonRepresentation link =
                 LinkBuilder.newBuilder(

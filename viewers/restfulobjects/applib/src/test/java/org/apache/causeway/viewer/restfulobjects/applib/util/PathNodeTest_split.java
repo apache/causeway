@@ -52,5 +52,4 @@ class PathNodeTest_split {
         assertThat(parts.get(0), is("links[rel=urn.restfulobjects:rels/user]"));
     }
 
-
 }

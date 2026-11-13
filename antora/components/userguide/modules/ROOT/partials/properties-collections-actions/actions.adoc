@@ -82,7 +82,7 @@ public List<Product> autoComplete0AddToBasket(              // <.>
     String searchTerm) {
     return productRepository.find(searchTerm);              // <.>
 }
-@javax.inject.Inject
+@jakarta.inject.Inject
 ProductRepository productRepository;
 ----
 
@@ -178,23 +178,23 @@ For example:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 @Action(semantics=SemanticsOf.IDEMPOTENT)
 public Order invoice(
                 PaymentMethodType paymentMethodType,
-                @Nullable                                      // <.>
+                @Nullable                                       // <.>
                 @ParameterLayout(named="Ship no later than")
                 LocalDate shipBy) {
-    ...
-    setShipBy(shipBy)
+    // ...
+    setShipBy(shipBy);
     return this;
 }
 
-@Column(allowsNull="true")                                     // <.>
+@Column(nullable=true)                                          // <.>
 @Property
 @Getter @Setter
 private LocalDate shipBy;
@@ -202,9 +202,8 @@ private LocalDate shipBy;
 <.> Specifies the parameter is optional.
 <.> Specifies the corresponding property is optional.
 +
-Note that this uses an ORM-specific mechanism to specify the same semantics (in this case, using JDO/DataNucleus' `@Column#allowsNull()`.)
+Note that this uses an ORM-specific mechanism to specify the same semantics (in this case, using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink]' `@Column#nullable()`.)
 
-See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``String`` Parameters (Length)
 
@@ -214,7 +213,7 @@ For example:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -254,34 +253,30 @@ See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[prop
 
 == ``BigDecimal``s (Precision)
 
-The xref:refguide:applib-ant:Digits.adoc[@javax.validation.constraints.Digits#fraction] annotation/attribute is used to specify the scale/precision of decimals.
+The xref:refguide:applib-ant:Digits.adoc[@jakarta.validation.constraints.Digits#fraction] annotation/attribute is used to specify the scale/precision of decimals.
 
 For example:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Digits;
 import lombok.Getter;
 import lombok.Setter;
 
 public Order updateDiscount(
-                @javax.validation.constraints.Digits(fraction=2)    // <.>
+                @Digits(fraction=2)                         // <.>
                 @ParameterLayout(named="Discount rate")
                 String discountRate) {
     setDiscountRate(discountRate);
     return this;
 }
 
-@Column(scale=2)                                                    // <.>
+@Column(scale=2)                                            // <.>
 @Getter @Setter
 private BigDecimal discountRate;
 ----
 <.> Specifies the parameter precision using xref:refguide:applib-ant:Digits.adoc[@Digits#fraction].
-<.> Specifies the corresponding property precision.
-+
-Note that this uses an ORM-specific annotation (in this case,  xref:refguide:applib-ant:Column.adoc#lengthscale-for-bigdecimals[@Column#scale]
-
-See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
-
+<.> Specifies the corresponding property precision for the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store.
 
 

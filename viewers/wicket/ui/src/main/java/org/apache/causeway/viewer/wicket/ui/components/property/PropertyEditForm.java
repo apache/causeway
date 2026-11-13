@@ -25,50 +25,48 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 final class PropertyEditForm
-extends PromptFormAbstract<ScalarPropertyModel> {
+extends PromptFormAbstract<PropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
     public PropertyEditForm(
             final String id,
             final Component parentPanel,
-            final ScalarPropertyModel propertyModel) {
+            final PropertyModel propertyModel) {
         super(id, parentPanel, propertyModel);
     }
 
-    private ScalarPropertyModel scalarPropertyModel() {
-        return (ScalarPropertyModel) super.getModel();
+    private PropertyModel propertyModel() {
+        return (PropertyModel) super.getModel();
     }
 
     @Override
     protected void addParameters() {
-        val scalarModel = scalarPropertyModel();
-        val container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
+        var propertyModel = propertyModel();
+        var container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
-        val component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+        var component = getComponentFactoryRegistry()
+                .addOrReplaceComponent(container, UiComponentType.ATTRIBUTE_NAME_AND_VALUE, propertyModel);
 
-        _Casts.castTo(ScalarPanelAbstract.class, component)
-        .ifPresent(scalarModelSubscriber->
-            scalarModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
+        _Casts.castTo(AttributePanel.class, component)
+        .ifPresent(propertyModelSubscriber->
+            propertyModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
     }
 
     @Override
     public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+            final AjaxRequestTarget target, final AttributePanel scalarPanel) {
     }
 
     @Override
-    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
-        return Either.right(scalarPropertyModel());
+    protected Either<ActionModel, PropertyModel> getMemberModel() {
+        return Either.right(propertyModel());
     }
 
 }

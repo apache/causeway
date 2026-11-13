@@ -18,20 +18,18 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.resource.CssResourceReference;
-
-import org.springframework.context.annotation.Configuration;
-
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.string.StringAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
@@ -59,7 +57,7 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
     private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
         // TODO mgrigorov: CAUSEWAY-537 temporary disabled to not mess up with Bootstrap styles
         //        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
-        return _Sets.newLinkedHashSet(
+        return new LinkedHashSet<>(
                 //                Iterables.concat(
                 //                        Iterables.transform(
                 //                                componentFactories,
@@ -90,10 +88,10 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
         // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
 
         // components without factories
-        references.add(PanelUtil.cssResourceReferenceFor(AdditionalLinksPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(ActionLinksPanel.class));
 
         // non-conforming component factories
-        references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));
+        references.add(StringAttributePanelFactory.cssResourceReferenceForMultiLineString());
     }
 
 }

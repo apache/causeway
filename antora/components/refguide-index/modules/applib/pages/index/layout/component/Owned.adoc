@@ -7,7 +7,7 @@
 .Owned.java
 ----
 interface Owned<T> {
-  T getOwner()
+  T owner()
 }
 ----
 

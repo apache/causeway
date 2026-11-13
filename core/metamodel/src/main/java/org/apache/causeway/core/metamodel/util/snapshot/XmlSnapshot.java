@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.util.snapshot;
 
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,18 +33,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.causeway.applib.snapshot.SnapshottableWithInclusions;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
@@ -55,9 +51,12 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Traverses object graph from specified root, so that an XML representation of
@@ -96,7 +95,7 @@ import lombok.extern.log4j.Log4j2;
  *      Element customerAsXml = snapshot.toXml();
  * </pre>
  */
-@Log4j2
+@Slf4j
 public class XmlSnapshot implements Snapshot {
 
     private final CausewaySchema causewayMetaModel;
@@ -172,13 +171,11 @@ public class XmlSnapshot implements Snapshot {
     }
 
     private List<String> getPathsFor(final Object object) {
-        if (!(object instanceof SnapshottableWithInclusions)) {
-            return Collections.emptyList();
-        }
+        if (!(object instanceof SnapshottableWithInclusions))
+			return Collections.emptyList();
         final List<String> paths = ((SnapshottableWithInclusions) object).snapshotInclusions();
-        if (paths == null) {
-            return Collections.emptyList();
-        }
+        if (paths == null)
+			return Collections.emptyList();
         return paths;
     }
 
@@ -206,7 +203,7 @@ public class XmlSnapshot implements Snapshot {
             log.debug("appendXml({})", log("obj", object));
         }
 
-        final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
+        final String fullyQualifiedClassName = object.objSpec().fullIdentifier();
 
         schema.setUri(fullyQualifiedClassName); // derive URI from fully qualified name
 
@@ -270,9 +267,8 @@ public class XmlSnapshot implements Snapshot {
         final Element parentElement = parentPlace.getXmlElement();
         final Element parentXsElement = parentPlace.getXsdElement();
 
-        if (parentElement.getOwnerDocument() != getXmlDocument()) {
-            throw new IllegalArgumentException("parent XML Element must have snapshot's XML document as its owner");
-        }
+        if (parentElement.getOwnerDocument() != getXmlDocument())
+			throw new IllegalArgumentException("parent XML Element must have snapshot's XML document as its owner");
 
         if (log.isDebugEnabled()) {
             log.debug("appendXml(Pl, NO): invoking objectToElement() for {}", log("childObj", childObject));
@@ -323,10 +319,9 @@ public class XmlSnapshot implements Snapshot {
         final NodeList existingNodes = parentElement.getChildNodes();
         for (int i = 0; i < existingNodes.getLength(); i++) {
             final Node node = existingNodes.item(i);
-            if (!(node instanceof Element)) {
+            if (!(node instanceof final Element element)) {
                 continue;
             }
-            final Element element = (Element) node;
             if (localName.equals("*") || element.getLocalName().equals(localName)) {
                 v.addElement(element);
             }
@@ -432,9 +427,8 @@ public class XmlSnapshot implements Snapshot {
         }
 
         // see if we have any fields to process
-        if (names.size() == 0) {
-            return true;
-        }
+        if (names.size() == 0)
+			return true;
 
         // take the first field name from the list, and remove
         final String fieldName = names.elementAt(0);
@@ -446,10 +440,10 @@ public class XmlSnapshot implements Snapshot {
         }
 
         // locate the field in the object's class
-        final ObjectSpecification nos = object.getSpecification();
+        final ObjectSpecification nos = object.objSpec();
         // HACK: really want a ObjectSpecification.hasField method to
         // check first.
-        val field = nos.getAssociation(fieldName).orElse(null);
+        var field = nos.getAssociation(fieldName).orElse(null);
         if (field == null) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate field, skipping");
@@ -463,7 +457,7 @@ public class XmlSnapshot implements Snapshot {
         if (log.isDebugEnabled()) {
             log.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
         }
-        val xmlFieldElements = elementsUnder(xmlElement, field.getId());
+        var xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate {}",
@@ -480,7 +474,7 @@ public class XmlSnapshot implements Snapshot {
 
         final Place fieldPlace = new Place(object, xmlFieldElement);
 
-        if (field instanceof OneToOneAssociation) {
+        if (field instanceof final OneToOneAssociation oneToOneAssociation) {
 
             if (field.getElementType().streamAssociations(MixedIn.INCLUDED).limit(1).count() == 0L) {
                 if (log.isDebugEnabled()) {
@@ -493,17 +487,13 @@ public class XmlSnapshot implements Snapshot {
                 log.debug("includeField(Pl, Vec, Str): field is 1->1");
             }
 
-            final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-
-            if(oneToOneAssociation.isExcludedFromSnapshots()) {
-                return false;
-            }
+            if(oneToOneAssociation.isExcludedFromSnapshots())
+				return false;
             final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
                     InteractionInitiatedBy.PASS_THROUGH);
 
-            if (referencedObject == null) {
-                return true; // not a failure if the reference was null
-            }
+            if (referencedObject == null)
+				return true; // not a failure if the reference was null
 
             final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
             if (log.isDebugEnabled()) {
@@ -513,12 +503,11 @@ public class XmlSnapshot implements Snapshot {
 
             return appendedXml;
 
-        } else if (field instanceof OneToManyAssociation) {
+        } else if (field instanceof final OneToManyAssociation oneToManyAssociation) {
             if (log.isDebugEnabled()) {
                 log.debug("includeField(Pl, Vec, Str): field is 1->M");
             }
 
-            final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
             final ManagedObject collection = oneToManyAssociation.get(fieldPlace.getObject(),
                     InteractionInitiatedBy.PASS_THROUGH);
 
@@ -538,7 +527,6 @@ public class XmlSnapshot implements Snapshot {
                     return appendedXml;
                 })
                 .allMatch(appendedXml->appendedXml);
-
 
             log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
             return allFieldsNavigated;
@@ -629,13 +617,13 @@ public class XmlSnapshot implements Snapshot {
             log.debug("objectToElement({})", log("object", adapter));
         }
 
-        final ObjectSpecification spec = adapter.getSpecification();
+        final ObjectSpecification spec = adapter.objSpec();
 
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): create element and causeway:title");
         }
-        final Element element = schema.createElement(getXmlDocument(), spec.getShortIdentifier(),
-                spec.getFullIdentifier(), spec.getSingularName());
+        final Element element = schema.createElement(getXmlDocument(), spec.shortIdentifier(),
+                spec.fullIdentifier(), spec.getSingularName());
         causewayMetaModel.appendCausewayTitle(element, adapter.getTitle());
 
         if (log.isDebugEnabled()) {
@@ -667,7 +655,7 @@ public class XmlSnapshot implements Snapshot {
 
             // Skip field if we have seen the name already
             for (int j = 0; j < i; j++) {
-                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asSupplier()))) {
+                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter))) {
                     log.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }
@@ -689,7 +677,7 @@ public class XmlSnapshot implements Snapshot {
                 if (fieldSpec == null) {
                     continue eachField;
                 }
-                if (fieldSpec.getFullIdentifier() != null && fieldSpec.getFullIdentifier().endsWith("XmlValue")) {
+                if (fieldSpec.fullIdentifier() != null && fieldSpec.fullIdentifier().endsWith("XmlValue")) {
                     continue eachField;
                 }
 
@@ -703,15 +691,14 @@ public class XmlSnapshot implements Snapshot {
                 try {
                     value = valueAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
-                    val valueSpec = value.getSpecification();
+                    var valueSpec = value.objSpec();
 
                     // XML
-                    causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
+                    causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.shortIdentifier());
 
                     // value as JSON
-                    @SuppressWarnings("unchecked")
-                    val valueStr = fieldSpec.valueFacetElseFail()
-                            .enstring(Format.JSON, value.getPojo());
+                    var valueStr = fieldSpec.valueFacetElseFail()
+                            .enstring(Format.JSON, _Casts.uncheckedCast(value.getPojo()));
 
                     if (_Strings.isNotEmpty(valueStr)) {
                         xmlValueElement.appendChild(getXmlDocument().createTextNode(valueStr));
@@ -728,14 +715,13 @@ public class XmlSnapshot implements Snapshot {
                 xsdFieldElement = schema.createXsElementForNofValue(xsElement, xmlValueElement,
                         FacetUtil.getFacetsByType(valueAssociation));
 
-            } else if (field instanceof OneToOneAssociation) {
+            } else if (field instanceof final OneToOneAssociation oneToOneAssociation) {
 
                 if (log.isDebugEnabled()) {
                     log.debug("objectToElement(NO): {} is OneToOneAssociation", log("field", fieldName));
                 }
 
-                final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-                final String fullyQualifiedClassName = spec.getFullIdentifier();
+                final String fullyQualifiedClassName = spec.fullIdentifier();
                 final Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject referencedObjectAdapter;
@@ -760,23 +746,22 @@ public class XmlSnapshot implements Snapshot {
 
                 // XSD
                 xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement,
-                        oneToOneAssociation.getElementType().getFullIdentifier(),
+                        oneToOneAssociation.getElementType().fullIdentifier(),
                         FacetUtil.getFacetsByType(oneToOneAssociation));
 
-            } else if (field instanceof OneToManyAssociation) {
+            } else if (field instanceof final OneToManyAssociation oneToManyAssociation) {
 
                 if (log.isDebugEnabled()) {
                     log.debug("objectToElement(NO): {} is OneToManyAssociation", log("field", fieldName));
                 }
 
-                final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
                 final Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject collection;
                 try {
                     collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getElementType();
-                    final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
+                    final String fullyQualifiedClassName = referencedTypeNos.fullIdentifier();
 
                     // XML
                     causewayMetaModel.setCausewayCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName,
@@ -788,7 +773,7 @@ public class XmlSnapshot implements Snapshot {
 
                 // XSD
                 xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement,
-                        oneToManyAssociation.getElementType().getFullIdentifier(),
+                        oneToManyAssociation.getElementType().fullIdentifier(),
                         FacetUtil.getFacetsByType(oneToManyAssociation));
 
             } else {
@@ -816,7 +801,7 @@ public class XmlSnapshot implements Snapshot {
         return place;
     }
 
-    private final Map<ManagedObject, String> viewModelFakeOids = _Maps.newHashMap();
+    private final Map<ManagedObject, String> viewModelFakeOids = new HashMap<>();
 
     private String oidAsString(final ManagedObject adapter) {
         if (adapter.getPojo() instanceof ViewModel) {
@@ -828,9 +813,8 @@ public class XmlSnapshot implements Snapshot {
                 viewModelFakeOids.put(adapter, fakeOid);
             }
             return fakeOid;
-        } else {
-            return ManagedObjects.stringifyElseFail(adapter);
-        }
+        } else
+			return ManagedObjects.stringifyElseFail(adapter);
     }
 
     /**
@@ -846,6 +830,5 @@ public class XmlSnapshot implements Snapshot {
     private void setXmlElement(final Element xmlElement) {
         this.xmlElement = xmlElement;
     }
-
 
 }

@@ -39,10 +39,8 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.Configuration_usingInvalidDomain;
-import org.apache.causeway.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.causeway.testdomain.model.bad.InvalidAssociationAnnotation;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -67,11 +65,11 @@ class AnnotationSyntesizerTest {
     @Test
     void propertyAnnotationOnAction_shouldNotContributeToSynthesizedAction() {
 
-        val actionMethod = ReflectionUtils.findMethod(InvalidPropertyAnnotationOnAction.class, "exportToJson");
+        var actionMethod = ReflectionUtils.findMethod(InvalidAssociationAnnotation.class, "exportToJson");
         assertNotNull(actionMethod);
 
-        val action = _Annotations.synthesize(actionMethod, Action.class).get();
-        val domainEvent = action.domainEvent();
+        var action = _Annotations.synthesize(actionMethod, Action.class).get();
+        var domainEvent = action.domainEvent();
 
         if(!ActionDomainEvent.class.isAssignableFrom(domainEvent)) {
             fail(String.format("wrong event type resolved on %s -> %s", actionMethod, domainEvent));
@@ -82,19 +80,19 @@ class AnnotationSyntesizerTest {
     //@Test
     void debug() {
 
-        val config = Config.builder().build()
+        var config = Config.builder().build()
                 .withNamespacePrefix("org.apache.causeway.testdomain.model.");
 
         System.out.println("!!! listing MM");
-        val metamodelDto = metaModelService.exportMetaModel(config);
+        var metamodelDto = metaModelService.exportMetaModel(config);
         for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
             System.out.println("dc: " + domainClass.getId());
-            val xmlString = jaxbService.toXml(domainClass);
+            var xmlString = jaxbService.toXml(domainClass);
             System.out.println(xmlString);
         }
         System.out.println("!!! ---");
 
-//        val validateDomainModel = new DomainModelValidator();
+//        var validateDomainModel = new DomainModelValidator();
 //        validateDomainModel.run(); // should not throw
 
     }

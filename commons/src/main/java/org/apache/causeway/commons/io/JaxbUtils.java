@@ -24,9 +24,9 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -39,6 +39,19 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.codec._DocumentFactories;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.functions._Functions;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.glassfish.jaxb.core.v2.runtime.IllegalAnnotationException;
+import org.glassfish.jaxb.runtime.v2.runtime.IllegalAnnotationsException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBContextFactory;
 import jakarta.xml.bind.JAXBElement;
@@ -46,25 +59,10 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.SchemaOutputResolver;
 import jakarta.xml.bind.Unmarshaller;
-
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
-
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.Singular;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -101,7 +99,7 @@ public class JaxbUtils {
         private boolean shouldMissingXmlRootElementBeHandledOn(final Class<?> mappedType) {
             return isAllowMissingRootElement()
                     // looking for presence of XmlRootElement annotation
-                    && !_ClassCache.getInstance().hasJaxbRootElementSemantics(mappedType);
+                    && !_ClassCache.getInstance().head(mappedType).hasJaxbRootElementSemantics();
         }
         @SneakyThrows
         private JAXBContext jaxbContext(final Class<?> mappedType) {
@@ -111,9 +109,9 @@ public class JaxbUtils {
         }
         @SneakyThrows
         private Marshaller marshaller(final JAXBContext jaxbContext, final Class<?> mappedType) {
-            val marshaller = jaxbContext.createMarshaller();
+            var marshaller = jaxbContext.createMarshaller();
             if(properties!=null) {
-                for(val entry : properties.entrySet()) {
+                for(var entry : properties.entrySet()) {
                     marshaller.setProperty(entry.getKey(), entry.getValue());
                 }
             }
@@ -124,9 +122,9 @@ public class JaxbUtils {
         }
         @SneakyThrows
         private Unmarshaller unmarshaller(final JAXBContext jaxbContext, final Class<?> mappedType) {
-            val unmarshaller = jaxbContext.createUnmarshaller();
+            var unmarshaller = jaxbContext.createUnmarshaller();
             if(properties!=null) {
-                for(val entry : properties.entrySet()) {
+                for(var entry : properties.entrySet()) {
                     unmarshaller.setProperty(entry.getKey(), entry.getValue());
                 }
             }
@@ -142,7 +140,7 @@ public class JaxbUtils {
         }
         @SneakyThrows
         private <T> T unmarshalTypesafe(final Unmarshaller unmarshaller, final Class<T> mappedType, final InputStream is) {
-            val xsr = _DocumentFactories.xmlInputFactory().createXMLStreamReader(is);
+            var xsr = _DocumentFactories.xmlInputFactory().createXMLStreamReader(is);
             final JAXBElement<T> userElement = unmarshaller.unmarshal(xsr, mappedType);
             return userElement.getValue();
         }
@@ -150,10 +148,10 @@ public class JaxbUtils {
         private <T> void marshal(final Marshaller marshaller, final T pojo, final OutputStream os) {
             marshallerConfigurer.accept(marshaller);
             @SuppressWarnings("unchecked")
-            val mappedType = (Class<T>)pojo.getClass();
+            var mappedType = (Class<T>)pojo.getClass();
             if(shouldMissingXmlRootElementBeHandledOn(mappedType)) {
-                val qName = new QName("", mappedType.getSimpleName());
-                val jaxbElement = new JAXBElement<T>(qName, mappedType, null, pojo);
+                var qName = new QName("", mappedType.getSimpleName());
+                var jaxbElement = new JAXBElement<T>(qName, mappedType, null, pojo);
                 marshaller.marshal(jaxbElement, os);
             } else {
                 marshaller.marshal(pojo, os);
@@ -164,7 +162,7 @@ public class JaxbUtils {
         }
         private <T> void marshal(final JAXBContext jaxbContext, final T pojo, final OutputStream os) {
             @SuppressWarnings("unchecked")
-            val mappedType = (Class<T>)pojo.getClass();
+            var mappedType = (Class<T>)pojo.getClass();
             marshal(marshaller(jaxbContext, mappedType), pojo, os);
         }
         private <T> T unmarshal(final Class<T> mappedType, final InputStream is) {
@@ -172,7 +170,7 @@ public class JaxbUtils {
         }
         private <T> void marshal(final T pojo, final OutputStream os) {
             @SuppressWarnings("unchecked")
-            val mappedType = (Class<T>)pojo.getClass();
+            var mappedType = (Class<T>)pojo.getClass();
             marshal(jaxbContext(mappedType), pojo, os);
         }
     }
@@ -198,16 +196,14 @@ public class JaxbUtils {
 
     public <T> DtoMapper<T> mapperFor(final @NonNull Class<T> mappedType, final JaxbUtils.JaxbCustomizer ... customizers) {
 
-        val opts = createOptions(customizers);
-        val jaxbContext = opts.jaxbContext(mappedType); // cached with this instance of DtoMapper
+        var opts = createOptions(customizers);
+        var jaxbContext = opts.jaxbContext(mappedType); // cached with this instance of DtoMapper
 
         return new DtoMapper<T>() {
 
             @Override
             public T read(final DataSource source) {
-                return source.tryReadAll((final InputStream is)->{
-                    return Try.call(()->opts.unmarshal(jaxbContext, mappedType, is));
-                })
+                return source.tryReadAll((final InputStream is) -> Try.call(()->opts.unmarshal(jaxbContext, mappedType, is)))
                 .ifFailureFail()
                 .getValue().orElseThrow();
             }
@@ -220,7 +216,6 @@ public class JaxbUtils {
 
         };
     }
-
 
     // -- READING
 
@@ -244,7 +239,7 @@ public class JaxbUtils {
             final @NonNull DataSource source,
             final JaxbUtils.JaxbCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            val opts = createOptions(customizers);
+            var opts = createOptions(customizers);
             return Try.call(()->opts.unmarshal(mappedType, is))
                     .mapFailure(cause->verboseException("unmarshalling XML", mappedType, cause));
         });
@@ -260,7 +255,7 @@ public class JaxbUtils {
             final @NonNull DataSink sink,
             final JaxbUtils.JaxbCustomizer ... customizers) {
         if(pojo==null) return;
-        val opts = createOptions(customizers);
+        var opts = createOptions(customizers);
         try {
             sink.writeAll(os->opts.marshal(pojo, os));
         } catch (Exception cause) {
@@ -277,13 +272,12 @@ public class JaxbUtils {
             final @Nullable T pojo,
             final JaxbUtils.JaxbCustomizer ... customizers) {
         if(pojo==null) return null;
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         write(pojo, DataSink.ofStringUtf8Consumer(sb), customizers);
 
         var xml = sb.toString();
-        if (isFormattedOutput(customizers)) {
-            return prettyPrint(customizers, xml);
-        }
+        if (isFormattedOutput(customizers))
+			return prettyPrint(customizers, xml);
 
         return xml;
     }
@@ -313,8 +307,7 @@ public class JaxbUtils {
 
     private static void apply(final JaxbCustomizer[] customizers, final TransformerFactory transformerFactory) {
         for (var customizer : customizers) {
-            if (customizer instanceof  TransformerFactoryCustomizer) {
-                var transformerFactoryCustomizer = (TransformerFactoryCustomizer) customizer;
+            if (customizer instanceof TransformerFactoryCustomizer transformerFactoryCustomizer) {
                 transformerFactoryCustomizer.apply(transformerFactory);
             }
         }
@@ -329,7 +322,6 @@ public class JaxbUtils {
         boolean formattedOutput = jaxbOptions.formattedOutput;
         return formattedOutput;
     }
-
 
     // -- MAPPER FACTORY
 
@@ -351,7 +343,7 @@ public class JaxbUtils {
      */
     public void generateSchema(final @NonNull JAXBContext jaxbContext, final DataSink dataSink) {
         dataSink.writeAll(os->{
-            val schemaOutputResolver = new SchemaOutputResolver() {
+            var schemaOutputResolver = new SchemaOutputResolver() {
                 @Override
                 public Result createOutput(final String namespaceURI, final String suggestedFileName) {
                     return new StreamResult(os);
@@ -368,7 +360,7 @@ public class JaxbUtils {
         return contextOf(_Arrays.combine(primaryClass, additionalClassesToBeBound));
     }
 
-    private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new ConcurrentHashMap<>();
 
     public static JAXBContext jaxbContextFor(final Class<?> dtoClass, final boolean useCache)  {
         return useCache
@@ -381,9 +373,10 @@ public class JaxbUtils {
         try {
             return JAXB_CONTEXT_FACTORY.createContext(open(classesToBeBound), JAXB_CONTEXT_FACTORY_PROPS);
         } catch (Exception e) {
-            val msg = String.format("obtaining JAXBContext for classes (to be bound) {%s}", _NullSafe.stream(classesToBeBound)
-                    .map(Class::getName)
-                    .collect(Collectors.joining(", ")));
+            var msg = "obtaining JAXBContext for classes (to be bound) {%s}"
+                    .formatted(_NullSafe.stream(classesToBeBound)
+                        .map(Class::getName)
+                        .collect(Collectors.joining(", ")));
             throw verboseException(msg, classesToBeBound[0], e); // assuming we have at least one argument
         }
     }
@@ -396,10 +389,9 @@ public class JaxbUtils {
     private static Class<?>[] open(final Class<?>[] classes) throws JAXBException {
         final Module coreModule = JAXB_CONTEXT_FACTORY.getClass().getModule();
         final Module rtModule = JAXBContextFactory.class.getModule();
-        if (rtModule == coreModule || !rtModule.isNamed()) {
-            //we're either in a bundle or on the classpath
+        if (rtModule == coreModule || !rtModule.isNamed())
+			//we're either in a bundle or on the classpath
             return classes;
-        }
         for (Class<?> cls : classes) {
             Class<?> jaxbClass = cls.isArray() ? cls.getComponentType() : cls;
             final Module classModule = jaxbClass.getModule();
@@ -411,56 +403,38 @@ public class JaxbUtils {
 
             if (classModule.isOpen(packageName, rtModule)) {
                 classModule.addOpens(packageName, coreModule);
-            } else {
-                throw new JAXBException(java.text.MessageFormat.format(
+            } else
+				throw new JAXBException(java.text.MessageFormat.format(
                         "Package {0} with class {1} defined in a module {2} must be open to at least {3} module.",
                         packageName, jaxbClass.getName(), classModule.getName(), rtModule.getName()));
-            }
         }
         return classes;
     }
 
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
 
-    private static RuntimeException verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Throwable cause) {
+    private static RuntimeException verboseException(final String doingWhat, final @Nullable Class<?> dtoClass, final Throwable cause) {
 
-        val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
+        var dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
 
-        if(isIllegalAnnotationsException(cause)) {
+        if(cause instanceof IllegalAnnotationsException annotEx) {
             // report a better error if possible
-            // this is done reflectively because on JDK 8 this exception type is only provided by Oracle JDK
-            try {
-
-                val errors = _Casts.<List<? extends Exception>>uncheckedCast(
-                        cause.getClass().getMethod("getErrors").invoke(cause));
-
-                if(_NullSafe.size(errors)>0) {
-
-                    return _Exceptions.unrecoverable(cause,
-                            "Error %s, "
-                            + "due to illegal annotations on object class '%s'; "
-                            + "%d error(s) reported: %s",
-                            doingWhat,
-                            dtoClassName,
-                            errors.size(),
-                            errors.stream()
-                                .map(Exception::getMessage)
-                                .collect(Collectors.joining("; ")));
-                }
-
-            } catch (Exception ex) {
-                // just fall through if we hit any issues
-            }
+            var errors = annotEx.getErrors();
+            if(_NullSafe.size(errors)>0)
+				return _Exceptions.unrecoverable(cause,
+                    "Error %s, "
+                    + "due to illegal annotations on object class '%s'; "
+                    + "%d error(s) reported: %s",
+                    doingWhat,
+                    dtoClassName,
+                    errors.size(),
+                    errors.stream()
+                        .map(IllegalAnnotationException::toString)
+                        .collect(Collectors.joining("; ")));
         }
 
         return _Exceptions.unrecoverable(cause,
                 "Error %s; object class is '%s'", doingWhat, dtoClassName);
-    }
-
-    private static boolean isIllegalAnnotationsException(final Throwable cause) {
-        /*sonar-ignore-on*/
-        return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(cause.getClass().getName());
-        /*sonar-ignore-off*/
     }
 
 }

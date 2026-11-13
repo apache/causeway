@@ -21,40 +21,48 @@ package org.apache.causeway.viewer.wicket.ui.components.tree;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
 /**
- * {@link ComponentFactory} for {@link ParentedTreePanel}.
+ * {@link ComponentFactory} for {@link TreeAttributePanel}.
  */
 public class TreePanelFactories {
 
+    // -- FACTORIES
+
+    public static ComponentFactory parented() {
+        return new Parented();
+    }
+
+    public static ComponentFactory standalone() {
+        return new Standalone();
+    }
+
     // -- PARENTED
 
-    static class Parented extends ComponentFactoryScalarAbstract {
+    static class Parented extends AttributeComponentFactory {
 
         public Parented() {
-            super(ParentedTreePanel.class);
+            super(TreeAttributePanel.class);
         }
 
         @Override
-        protected Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new ParentedTreePanel(id, scalarModel);
+        protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
+            return appliesIf(attributeModel.isElementTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)
+                    && !attributeModel.hasChoices());
         }
 
         @Override
-        protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
-            return appliesIf( !scalarModel.hasChoices() );
+        protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new TreeAttributePanel(id, attributeModel);
         }
+
     }
 
     // -- STANDALONE
@@ -67,33 +75,17 @@ public class TreePanelFactories {
 
         @Override
         public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if (!(model instanceof ValueModel)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
-
-            final ValueModel valueModel = (ValueModel) model;
-            val adapter = valueModel.getObject();
-            if(adapter==null || adapter.getPojo()==null) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
-
-            return appliesIf( adapter.getPojo() instanceof org.apache.causeway.applib.graph.tree.TreeNode );
+            return model instanceof ValueModel valueModel
+                ? appliesIf(ManagedObjects.correspondingClass(valueModel.getObject())
+                    .map(org.apache.causeway.applib.graph.tree.TreeNode.class::isAssignableFrom)
+                    .orElse(false))
+                : ApplicationAdvice.DOES_NOT_APPLY;
         }
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
             return new StandaloneTreePanel(id, (ValueModel) model);
         }
-    }
-
-    // -- CONSTRUCTION
-
-    public static ComponentFactory parented() {
-        return new Parented();
-    }
-
-    public static ComponentFactory standalone() {
-        return new Standalone();
     }
 
 }

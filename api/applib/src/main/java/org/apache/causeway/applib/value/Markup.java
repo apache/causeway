@@ -27,13 +27,14 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.io.TextUtils;
-
-import lombok.EqualsAndHashCode;
+import org.apache.causeway.commons.net.DataUri;
 
 /**
  * Intended to be used as a read-only property, to render plain HTML.
@@ -43,16 +44,21 @@ import lombok.EqualsAndHashCode;
 @Named(CausewayModuleApplib.NAMESPACE + ".value.Markup")
 @Value
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
-@EqualsAndHashCode
-public final class Markup implements Serializable {
+public record Markup(String html) implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    // -- FACTORIES
 
-    private final String html;
-
-    public static Markup valueOf(final String html) {
+    public static Markup valueOf(final @Nullable String html) {
         return new Markup(html);
     }
+
+    public static Markup embeddedImage(final @Nullable DataUri dataUri) {
+        return dataUri!=null
+                ? new Markup("<img src=\"" + dataUri.toExternalForm() + "\"/>")
+                : new Markup(null);
+    }
+
+    // -- CONSTRUCTION
 
     public Markup() {
         this(null);
@@ -60,10 +66,6 @@ public final class Markup implements Serializable {
 
     public Markup(final String html) {
         this.html = html!=null ? html : "";
-    }
-
-    public String asHtml() {
-        return html;
     }
 
     @Override
@@ -100,11 +102,9 @@ public final class Markup implements Serializable {
         @Override
         public String marshal(final Markup v) throws Exception {
             return v != null
-                    ? encoder.encodeToString(_Strings.toBytes(v.asHtml(), StandardCharsets.UTF_8))
+                    ? encoder.encodeToString(_Strings.toBytes(v.html(), StandardCharsets.UTF_8))
                     : null;
         }
     }
-
-
 
 }
