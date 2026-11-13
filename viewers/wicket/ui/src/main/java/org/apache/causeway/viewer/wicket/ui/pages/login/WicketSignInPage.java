@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.pages.login;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -48,8 +49,34 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         super(parameters, exceptionModel);
 
         if (AuthenticatedWebSession.exists() && AuthenticatedWebSession.get().isSignedIn()) {
+            continueToOriginalDestinationIfAllowed(
+                    this,
+                    exceptionModel != null,
+                    getWicketViewerSettings().isClearOriginalDestination());
             pageNavigationService.restartAt(PageType.HOME);
         }
+    }
+
+    /**
+     * With external authentication (eg Spring Security), the first request for a protected page
+     * (eg a deep link) is intercepted to this sign-in page, because the Wicket session is only
+     * signed in once it exists. By the time this page is constructed the session is signed in,
+     * so continue to that original destination, if any.
+     * <p>
+     * Not if reporting an exception, as the original destination may be the failing page
+     * (and with external authentication the session remains signed in), causing a redirect loop.
+     * <p>
+     * Throws a restart exception if continuing; otherwise returns normally.
+     */
+    static void continueToOriginalDestinationIfAllowed(
+            final Component component,
+            final boolean reportingException,
+            final boolean clearOriginalDestination) {
+        if (reportingException
+                || clearOriginalDestination) {
+            return;
+        }
+        component.continueToOriginalDestination();
     }
 
     @Override
