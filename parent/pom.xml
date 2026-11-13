@@ -71,7 +71,7 @@
         <maven-surefire-report-plugin.version>3.6.1</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.16.0</maven.plugin.tools.version>
-        <maven-timeline.version>2.1.0</maven-timeline.version>
+        <maven-timeline.version>2.2.0</maven-timeline.version>
 
         <maven.jar.phase>package</maven.jar.phase> <!-- override with 'none' for
         artifacts that need to skip the maven-jar-plugin-->
