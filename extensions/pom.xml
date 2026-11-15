@@ -95,6 +95,7 @@
 		<module>vw/sse</module>
 		<module>vw/fullcalendar</module>
 		<module>vw/pdfjs</module>
+		<module>vw/d3</module>
 		<module>vw/tabular</module>
 
 	</modules>

@@ -163,6 +163,9 @@ content:
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: [2.0.0, 2.1.0, 3.0.0, 3.1.0, 3.2.0, 3.3.0, 3.4.0, 4.0.0-SNAPSHOT]
     - url: .
+      start_path: extensions/vw/d3/adoc # vw
+      branches: [2.0.0, 2.1.0, 3.0.0, 3.1.0, 3.2.0, 3.3.0, 3.4.0, 4.0.0-SNAPSHOT]
+    - url: .
       start_path: extensions/vw/sse/adoc # vw
       branches: [2.0.0, 2.1.0, 3.0.0, 3.1.0, 3.2.0, 3.3.0, 3.4.0, 4.0.0-SNAPSHOT]
 

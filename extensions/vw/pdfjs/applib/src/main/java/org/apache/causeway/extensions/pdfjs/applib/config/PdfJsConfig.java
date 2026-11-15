@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.pdfjs.applib.config;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.springframework.util.Assert;
@@ -36,6 +37,7 @@ import lombok.With;
 @Getter @AllArgsConstructor @NoArgsConstructor @Builder
 public class PdfJsConfig implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Builder.Default
@@ -53,6 +55,8 @@ public class PdfJsConfig implements Serializable {
     private CharSequence workerUrl;
     @With
     private CharSequence cmapsUrl;
+    @With
+    private CharSequence pdfUrl;
     @With
     private CharSequence canvasId;
 
@@ -77,7 +81,8 @@ public class PdfJsConfig implements Serializable {
                 .initialPage(getInitialPage())
                 .initialScale(getInitialScale())
                 .workerUrl(getWorkerUrl())
-                .cmapsUrl(getCmapsUrl());
+                .cmapsUrl(getCmapsUrl())
+                .pdfUrl(getPdfUrl());
     }
 
     public String toJsonString() {
