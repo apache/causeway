@@ -18,7 +18,7 @@ Then
 * FW test coverage should increase
 
 .Record and Replay
-[plantuml,file="regression-test.png"]
+[plantuml,regression-test]
 ----
 @startuml
 

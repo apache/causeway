@@ -1,5 +1,5 @@
 .Collection Layout Aggregation
-[plantuml,file="layout_aggregation.png"]
+[plantuml,layout_aggregation]
 ----
 allowmixing
 

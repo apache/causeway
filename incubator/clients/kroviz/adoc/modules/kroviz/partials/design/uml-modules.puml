@@ -1,0 +1,134 @@
+@startuml
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment left
+skinparam noteBackgroundColor #FFFFF0
+skinparam noteBorderColor #A0A0A0
+skinparam ArrowColor #606060
+skinparam ArrowFontSize 11
+
+' =====================================================================
+'  Remote
+' =====================================================================
+node "RESTful Objects server" as SRV #F2F2F2 {
+    component "Apache Causeway\nNaked Objects .NET" as RO #F79646
+}
+
+' =====================================================================
+'  Front end A - the KVision client, exists today
+'
+'  Read from left to right: the response travels from the transport
+'  over the handler chain and the aggregators up into the display
+'  models, which the UI finally renders.
+' =====================================================================
+package ":kroviz   (root)   -   Kotlin/JS + KVision      [ exists ]" as JS #FDE9D9 {
+    component "core/event/**\nResourceProxy - EventStore\nRoXmlHttpRequest (XHR)\nLogEntry - Replay" as EVT #F79646
+    component "handler/**   (17)\nResponseHandler chain\nsniff JSON - pick handler\nparse TO - assign aggregator" as HND #F79646
+    component "core/aggregator/**   (13)\nTO  ->  display model" as AGG #F79646
+    component "core/model/**\ndisplay models\nDM - Layout - Exposer" as DM #F79646
+    component "ui/**   (64)\nKVision widgets\nmenu - panel - dialog\nbuilder - diagram" as UI #F79646
+    component "App.kt\nbootstrap" as APP #F79646
+    component "utils/**   (21)\nImageUtils - UrlUtils\nDomUtil - js/** interop" as UTIL #F79646
+    component "to/bs/**\nlayout.xml binding\n(browser only)" as BS #F79646
+
+    EVT --> HND
+    HND --> AGG
+    AGG --> DM
+    DM --> UI
+    UI --> APP
+    APP -[hidden]- UTIL
+    UTIL -[hidden]- BS
+
+    note left of UTIL
+        delegates case conversion to <b>model/Strings</b>,
+        XML sniffing to <b>model/Xml</b>, and wraps icon
+        blobs as <b>Icon(imageUrl)</b>.
+        ----
+        Packaged as a webjar:
+        <i>public/kroviz/main.bundle.js</i>
+    end note
+}
+
+' =====================================================================
+'  Front end B - the planned Vaadin client, JVM only
+' =====================================================================
+package ":ui-vaadin   -   JVM + Vaadin Flow      [ planned ]" as VAADIN #FFF2CC {
+    component "Vaadin Flow views\nreplaces ui/**" as VUI #BF9000
+    component "JVM transport\nreplaces RoXmlHttpRequest" as VTR #BF9000
+    VUI --> VTR
+}
+
+' =====================================================================
+'  Shared, platform independent
+' =====================================================================
+package ":model   -   multiplatform:  js(IR) + jvm      [ exists ]" as MODEL #DCE6F1 {
+    component "to/**   (22 files)\nRESTful Objects DTOs\nTObject - Property - Collection\nAction - Argument - Link - Icon\nValue - DomainType - TypeMapper\nExtensions - WithLinks/WithMembers" as TO #4F81BD
+    component "to/mb/**\nMenubars - Menu\nMenuEntry - Section\nServiceAction" as MB #4F81BD
+    component "model/Strings\nenCamel / capitalize\n/ deCamel" as ST #4F81BD
+    component "model/Xml\nisXml()" as XM #4F81BD
+    component "model/Log\nexpect fun debugLog()" as LG #4F81BD
+    component "model/LogJs\nactual for js\nconsole.log" as LGJS #4F81BD
+    component "model/LogJvm\nactual for jvm\nprintln" as LGJVM #4F81BD
+
+    TO -[hidden]- MB
+    MB -[hidden]- ST
+    ST -[hidden]- XM
+    XM -[hidden]- LG
+    LG -[hidden]- LGJS
+    LGJS -[hidden]- LGJVM
+}
+
+package ":snapshots   -   multiplatform      [ exists ]" as SNAP #E2EFDA {
+    component "Response.kt\npure base class" as RESP #9BBB59
+    component "65 recorded RESTful Objects\nresponses, as Kotlin string\nconstants\ndemo2_0_0 - simpleapp1_16_0 - knife" as FIX #9BBB59
+    RESP -[hidden]- FIX
+}
+
+' =====================================================================
+'  Compile time dependencies
+' =====================================================================
+JS .> MODEL : "compile (jsMain)"
+VAADIN ..> MODEL : "compile (jvm)"
+MODEL ..> SNAP : "compile (commonTest)"
+
+' =====================================================================
+'  Runtime interaction
+' =====================================================================
+RO --> EVT : "(1) HTTP request\n(2) JSON / blob response"
+HND .> TO : "(3) parse JSON"
+AGG .> TO : "(4) read DTOs"
+
+note top of MODEL
+    The <b>only</b> place where the RESTful Objects wire
+    format is understood.  No KVision, no DOM, no XHR:
+    depends on <i>kotlinx-serialization-json</i> alone.
+    ----
+    Tests run twice, on both targets:
+    <b>:model:jvmTest</b> and <b>:model:jsNodeTest</b>
+    ----
+    Mutation testing: <b>:model:pitest</b>
+    (PIT CLI, against the JVM bytecode)
+end note
+
+note top of VAADIN
+    A JVM artifact with a different packaging, so it does
+    <b>not</b> belong in the kroviz webjar: it lives in its own
+    Maven module and consumes :model as a JVM dependency.
+    ----
+    Prerequisites (step 4 of the split): a transport
+    abstraction replacing <b>RoXmlHttpRequest</b>,
+    <b>XmlHelper</b> as expect/actual, and a <b>BaseHandler</b> /
+    <b>BaseAggregator</b> layer free of KVision
+    ( today <b>handler/**</b> and <b>core/aggregator/**</b>
+    already import <i>io.kvision</i> zero times )
+    moved into a <b>:client</b> project.
+end note
+
+note right of SNAP
+    Test fixtures only, shared by <b>:model:commonTest</b>
+    and by the <b>jsTest</b> source set of the root project.
+end note
+
+@enduml

@@ -97,6 +97,53 @@ In the following section you'll find information that likely helps understanding
 include::partial$design/uml-overview.adoc[]
 
 
+=== Modules
+
+The client is split by concern, not by target, into three Gradle projects, all built from this single Maven module.
+
+include::partial$design/uml-modules.adoc[]
+
+==== The Multiplatform Part
+
+`:model` and `:snapshots` are Kotlin Multiplatform projects, compiled for `js(IR)` and for `jvm`.
+
+* `:model` holds the RESTful Objects transfer objects (`org.apache.causeway.client.kroviz.to`) together with the
+  platform independent helpers that previously lived in the KVision module: `Strings` (`enCamel`, `capitalize`,
+  `deCamel`), `Xml` (`isXml`) and `Log` (an `expect fun debugLog()`, with `console.log` and `println` as its
+  actuals). It is free of KVision, DOM and XHR dependencies; `kotlinx-serialization-json` is its only
+  dependency. It is the only place where the RESTful Objects wire format is understood, and therefore the seam
+  through which another front end can be attached.
+* `:snapshots` holds recorded RESTful Objects responses as Kotlin string constants. Being plain strings they
+  compile for both targets, so the JVM tests of `:model` can reuse the fixtures of the KVision test suite.
+
+This is also where the automated verification lives: `:model:jvmTest` and `:model:jsNodeTest` run the same tests
+on both targets, and `:model:pitest` runs PIT mutation testing against the JVM bytecode.
+
+==== The Kotlin/JS Part
+
+The root project holds the KVision based user interface and is compiled for JavaScript only.
+It is packaged as a webjar, `public/kroviz/main.bundle.js`.
+
+* `core/event` - `ResourceProxy` and `EventStore` implement the event sourcing cache, `RoXmlHttpRequest`
+  performs the XHR calls.
+* `handler` - the `ResponseHandler` chain of responsibility sniffs a response, picks the matching handler and
+  has it parse the payload into a transfer object. This is the one place where `:model` is called.
+* `core/aggregator`, `core/model` - aggregators turn transfer objects into display models, which the builders
+  in `ui` render as KVision widgets.
+* `utils` - browser and npm interop, e.g. `ImageUtils` turns an icon blob into the `imageUrl` that `Icon`
+  expects.
+
+==== Where a Vaadin Client Goes
+
+A Vaadin client is a JVM artifact with a different packaging, so it does not belong in the kroviz webjar.
+It goes into its own Maven module beside this one, consuming `:model` as a JVM dependency.
+
+Inside the Gradle build it would be a further project - say `:ui-vaadin` - sitting next to the root project:
+same `:model`, a different `ui` and a different transport. Reusing more than `:model` requires extracting the
+platform independent remainder of the current KVision module into a `:client` project first, that is the
+handler chain, the aggregators and a transport abstraction replacing `RoXmlHttpRequest`, so that neither front
+end owns them.
+
 === Patterns Applied
 
 ==== Redux
