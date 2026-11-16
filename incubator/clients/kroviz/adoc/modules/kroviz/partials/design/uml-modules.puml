@@ -8,6 +8,8 @@ skinparam noteBackgroundColor #FFFFF0
 skinparam noteBorderColor #A0A0A0
 skinparam ArrowColor #606060
 skinparam ArrowFontSize 11
+skinparam ranksep 1
+skinparam nodesep 1
 
 ' =====================================================================
 '  Remote
