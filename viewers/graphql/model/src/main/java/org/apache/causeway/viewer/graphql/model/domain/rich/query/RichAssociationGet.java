@@ -23,12 +23,10 @@ import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public abstract class RichAssociationGet<T extends ObjectAssociation> extends Element {
 
@@ -56,18 +54,11 @@ public abstract class RichAssociationGet<T extends ObjectAssociation> extends El
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {
 
-        // TODO: introduce evaluator
-        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
-
-        var sourcePojoClass = sourcePojo.getClass();
-        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
+        var association = memberInteractor.getObjectMember();
+        var managedObject = RichMemberAccess.visibleSource(environment, association, context);
+        if (managedObject == null) {
             return null;
         }
-
-        var association = memberInteractor.getObjectMember();
-        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         var resultManagedObject = association.get(managedObject);
 
         return resultManagedObject != null

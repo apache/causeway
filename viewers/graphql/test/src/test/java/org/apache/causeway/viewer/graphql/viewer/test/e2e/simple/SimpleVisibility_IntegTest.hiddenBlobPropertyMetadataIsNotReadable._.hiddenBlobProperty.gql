@@ -1,0 +1,12 @@
+{
+  simple {
+    university_dept_Staff {
+      findStaffMemberByName(name: "Gerry Jones") {
+        hiddenPhoto {
+          name
+          mimeType
+        }
+      }
+    }
+  }
+}

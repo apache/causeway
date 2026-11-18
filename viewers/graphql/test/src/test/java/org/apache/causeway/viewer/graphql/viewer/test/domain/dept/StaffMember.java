@@ -100,6 +100,7 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id")
+    @Setter
     private Department department;
 
     @Property
@@ -107,10 +108,6 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     public Department getDepartment() {
         DEPARTMENT_READ_COUNT.incrementAndGet();
         return department;
-    }
-
-    public void setDepartment(final Department department) {
-        this.department = department;
     }
 
     public static void resetDepartmentReadCount() {
@@ -146,6 +143,7 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     }
 
     @Transient
+    @Setter
     private Clob profile;
 
     @Property(editing = Editing.ENABLED, fileAccept = "text/plain")
@@ -155,9 +153,6 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
                 ? profile
                 : new Clob("profile.txt", "text/plain", "Profile for " + name);
     }
-    public void setProfile(final Clob profile) {
-        this.profile = profile;
-    }
 
     @Property
     public String getWindowProbe() {
@@ -165,6 +160,20 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
             throw new IllegalStateException("Window probe unavailable");
         }
         return name;
+    }
+
+    /**
+     * A regular (non-LOB) property hidden imperatively via {@code hideXxx()}.
+     * Used to verify that the simple schema's property read resolver honours
+     * the framework's {@code isVisible()} consent (CAUSEWAY-4050).
+     */
+    @Property
+    public String getHiddenName() {
+        return "CONFIDENTIAL_MEMBER_NAME";
+    }
+
+    public boolean hideHiddenName() {
+        return true;
     }
 
     @Property

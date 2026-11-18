@@ -14,7 +14,7 @@
                   "hasPrevious" : true,
                   "hasNext" : true,
                   "ordering" : "REQUESTED",
-                  "sortableMembers" : [ "department", "name", "grade", "windowProbe", "photo", "profile" ],
+                  "sortableMembers" : [ "department", "name", "grade", "hiddenName", "windowProbe", "photo", "profile" ],
                   "searchSupported" : true,
                   "searchPrompt" : "Search staff member",
                   "rows" : [ {

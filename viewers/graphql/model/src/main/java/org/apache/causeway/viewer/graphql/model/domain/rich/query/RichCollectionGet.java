@@ -42,7 +42,7 @@ public class RichCollectionGet extends RichAssociationGet<OneToManyAssociation> 
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {
         var association = memberInteractor.getObjectMember();
-        var managedObject = RichCollectionAccess.visibleSource(environment, association, context);
+        var managedObject = RichMemberAccess.visibleSource(environment, association, context);
         if (managedObject == null) {
             return null;
         }

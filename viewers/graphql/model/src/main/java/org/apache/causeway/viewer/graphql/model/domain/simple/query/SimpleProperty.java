@@ -165,28 +165,27 @@ public class SimpleProperty
 
     	var prop = getObjectMember();
 
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        if (objectSpecification == null)
+			// not expected
+            return null;
+
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+
+        var visibleConsent = prop.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(prop.getFeatureIdentifier());
+
         if(isBlobOrClob(prop))
 			return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
-		else {
-            var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-            var sourcePojoClass = sourcePojo.getClass();
-            var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-            if (objectSpecification == null)
-				// not expected
-                return null;
-
-            var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-
-            var visibleConsent = prop.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-            if (visibleConsent.isVetoed())
-    			throw new HiddenException(prop.getFeatureIdentifier());
-
-            var resultManagedObject = prop.get(managedObject);
-            return resultManagedObject != null
-                    ? resultManagedObject.getPojo()
-                    : null;
-        }
+        var resultManagedObject = prop.get(managedObject);
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
 
     private static boolean isValueContentEnabled(final Context context) {
