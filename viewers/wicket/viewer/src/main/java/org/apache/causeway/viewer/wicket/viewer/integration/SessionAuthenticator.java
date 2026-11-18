@@ -22,31 +22,33 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionService;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-record SessionAuthenticator(
-        InteractionService interactionService,
-        UserService userService) {
+record SessionAuthenticator() {
 
-    public Optional<InteractionContext> determineInteractionContext() {
+    @Deprecated
+	static Optional<InteractionContext> determineInteractionContext(
+            final InteractionService interactionService,
+            final UserService userService,
+            final SessionManager sessionManager) {
         // participate if an InteractionContext was already provided through some other mechanism,
         // but fail early if the current user is impersonating
         // (seeing this if going back the browser history into a page, that was previously impersonated)
-        var session = AuthenticatedWebSessionForCauseway.get();
 
         interactionService.currentInteractionContext()
             .ifPresent(ic->{
                 if(ic.getUser().isImpersonating())
                     throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
-                session.setPrimedInteractionContext(ic);
+                sessionManager.put(SessionManager.USER_AUTHENTICATION, ic);
             });
 
-        var interactionContext = session.getInteractionContext();
-        if (interactionContext == null) {
+        var ic = sessionManager.lookup(SessionManager.USER_AUTHENTICATION).orElse(null);
+        if (ic == null) {
             log.warn("session was not opened (because not authenticated)");
             return Optional.empty();
         }
@@ -55,8 +57,8 @@ record SessionAuthenticator(
         return Optional.of(
                 userService
                     .lookupImpersonatedUser()
-                    .map(interactionContext::withUser)
-                    .orElse(interactionContext));
+                    .map(ic::withUser)
+                    .orElse(ic));
     }
 
 }

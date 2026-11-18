@@ -36,6 +36,7 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
@@ -51,6 +52,8 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
             CausewayModuleSecurityBypass.class,
             CausewayModuleCoreRuntimeServices.class,
             CausewayModulePersistenceCommons.class,
+
+            SessionManager.InMemory.class
     })
     public static class AppManifestBase {
 

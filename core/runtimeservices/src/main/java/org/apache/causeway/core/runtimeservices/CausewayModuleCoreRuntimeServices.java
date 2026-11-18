@@ -73,7 +73,6 @@ import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.causeway.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
-import org.apache.causeway.core.runtimeservices.user.UserCurrentSessionTimeZoneHolderDefault;
 import org.apache.causeway.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
@@ -125,7 +124,6 @@ import lombok.extern.slf4j.Slf4j;
         TransactionServiceSpring.class,
         TranslationServicePo.class,
         UrlEncodingServiceWithCompression.class,
-        UserCurrentSessionTimeZoneHolderDefault.class,
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,

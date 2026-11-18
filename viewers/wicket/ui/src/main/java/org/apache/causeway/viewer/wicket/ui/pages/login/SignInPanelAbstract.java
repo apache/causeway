@@ -37,19 +37,16 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.cookies.CookieUtils;
-import org.jspecify.annotations.NonNull;
 
-import org.springframework.util.StringUtils;
-
-import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.value.semantics.TimeZoneChoiceProvider;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Signin.RememberMe;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.viewer.commons.model.session.LoginFormModel;
+import org.apache.causeway.viewer.commons.services.session.CookieHandler;
+import org.apache.causeway.viewer.commons.services.session.LoginService;
+import org.apache.causeway.viewer.commons.services.session.LoginSuccessCallback;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Cloned from {@link org.apache.wicket.authroles.authentication.panel.SignInPanel},
@@ -65,24 +62,12 @@ implements HasMetaModelContext {
     private static final String SIGN_IN_FORM = "signInForm";
     private static final String TIME_ZONE_SELECT = "timezone-select";
 
-    /**
-     * True if the username and timezone should be remembered via form persistence (cookies).
-     * This does not include any secrets.
-     */
-    @Getter @Setter
-    private boolean rememberMe = true;
+    private final _StableValue<LoginService> loginServiceRef = new _StableValue<>();
+    protected final LoginService loginService() {
+    	return loginServiceRef.orElseSet(()->lookupServiceElseFail(LoginService.class));
+    }
 
-    /** Password. */
-    @Getter @Setter
-    private String password;
-
-    /** User name. */
-    @Getter @Setter
-    private String username;
-
-    /** Timezone id. */
-    @Getter @Setter
-    private ZoneId timezone;
+    private final SignInFormWithTimeZone signInForm;
 
     /**
      * @param id
@@ -99,8 +84,13 @@ implements HasMetaModelContext {
 
         // Add sign-in form to page, passing feedback panel as
         // validation error handler
-        add(new SignInFormWithTimeZone(SIGN_IN_FORM));
+        add(this.signInForm = new SignInFormWithTimeZone(SIGN_IN_FORM, this));
     }
+
+    protected LoginFormModel loginFormModel() {
+    	return signInForm.loginFormModel;
+    }
+
 
     /**
      * @return signin form
@@ -118,27 +108,30 @@ implements HasMetaModelContext {
     protected void onConfigure() {
         // logged in already?
         if (isSignedIn() == false) {
-            // get username and zoneID from cookies (if available)
-        	username = usernameCookie().recoverUsername()
-            		.orElse(null);
-        	timezone = timezoneCookie().recoverTimezone()
-            		.orElse(null);
+        	loginService().initModel(loginFormModel(), new CookieHandlerWkt());
         }
-
         super.onConfigure();
     }
 
-    /**
-     * Sign in user if possible.
-     *
-     * @param username
-     *            The username
-     * @param password
-     *            The password
-     * @return True if signin was successful
-     */
-    private boolean signIn(final String username, final String password) {
-        return AuthenticatedWebSession.get().signIn(username, password);
+    public void onSubmit(final LoginFormModel loginFormModel) {
+    	var success = loginService().login(loginFormModel, new CookieHandlerWkt(), (rq, ic)->{
+    		if(AuthenticatedWebSession.get() instanceof LoginSuccessCallback loginSuccessCallback) {
+    			loginSuccessCallback.onLoginSuccess(rq, ic);
+    		}
+    	});
+    	if(success) {
+	        if(getWicketViewerSettings().clearOriginalDestination()) {
+	            clearOriginalDestination();
+	        }
+            // If login has been called because the user was not yet logged in, than continue to the
+            // original destination, otherwise to the Home page
+            continueToOriginalDestination();
+            setResponsePage(getApplication().getHomePage());
+    	} else {
+            // Try the component based localizer first. If not found try the
+            // application localizer. Else use the default
+            error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
+    	}
     }
 
     /**
@@ -148,28 +141,6 @@ implements HasMetaModelContext {
         return AuthenticatedWebSession.get().isSignedIn();
     }
 
-    /**
-     * Called when sign in failed
-     */
-    protected void onSignInFailed() {
-        clearUserTimeZoneFromSession();
-        // Try the component based localizer first. If not found try the
-        // application localizer. Else use the default
-        error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-    }
-
-    /**
-     * Called when sign in was successful
-     */
-    protected void onSignInSucceeded() {
-        Optional.ofNullable(getTimezone())
-            .ifPresent(this::storeUserTimeZoneToSession);
-        // If login has been called because the user was not yet logged in, than continue to the
-        // original destination, otherwise to the Home page
-        continueToOriginalDestination();
-        setResponsePage(getApplication().getHomePage());
-    }
-
     @Getter(lazy = true) private static final ResourceReference jsForTimezoneSelectDefault =
             new JavaScriptResourceReference(SignInPanelAbstract.class,
                     "js/client-side-timezone-select.js");
@@ -177,29 +148,27 @@ implements HasMetaModelContext {
     /**
      * Sign in form.
      */
-    public final class SignInFormWithTimeZone extends StatelessForm<SignInPanelAbstract> {
+    final static class SignInFormWithTimeZone extends StatelessForm<LoginFormModel> {
         private static final long serialVersionUID = 1L;
 
-        /**
-         * Constructor.
-         *
-         * @param id
-         *            id of the form component
-         */
-        public SignInFormWithTimeZone(final String id) {
+        private final SignInPanelAbstract parentPanel;
+        private final LoginFormModel loginFormModel = new LoginFormModel();
+
+        SignInFormWithTimeZone(final String id, final SignInPanelAbstract parentPanel) {
             super(id);
 
-            var propertyModel = new CompoundPropertyModel<>(SignInPanelAbstract.this);
+            this.parentPanel = parentPanel;
 
-            setModel(propertyModel);
+            var loginService = parentPanel.loginService();
+            setModel(new CompoundPropertyModel<>(loginFormModel));
 
             // Attach textfields for username and password
             add(new TextField<>("username").setRequired(true));
             add(new PasswordTextField("password"));
 
             add(Wkt.dropDownChoice("timezone",
-                    new PropertyModel<ZoneId>(SignInPanelAbstract.this, "timezone"),
-                    getTimeZoneChoiceProvider().getAvailableZoneIds())
+                    new PropertyModel<ZoneId>(loginFormModel, "timezone"),
+                    loginService.timeZoneChoiceProvider().getAvailableZoneIds())
                 .setRequired(true)
                 .setMarkupId(TIME_ZONE_SELECT));
 
@@ -209,16 +178,10 @@ implements HasMetaModelContext {
 
             // Add rememberMe checkbox
             rememberMeContainer.add(new CheckBox("rememberMe"));
-
-            var signinConf = getConfiguration().viewer().common().signin();
-
-            rememberMeContainer.add(new Label("rememberMeDescription",
-            		getTranslationService().translate(
-            				TranslationContext.named("Login"),
-            				signinConf.rememberMe().description())));
+            rememberMeContainer.add(new Label("rememberMeDescription", loginService.rememberMeDescription()));
 
             // Show remember me checkbox?
-            rememberMeContainer.setVisible(!signinConf.rememberMe().suppress());
+            rememberMeContainer.setVisible(!loginService.signinConf().rememberMe().suppress());
         }
 
         /**
@@ -226,86 +189,22 @@ implements HasMetaModelContext {
          */
         @Override
         public final void onSubmit() {
-            if (signIn(username, password)) {
-                if (isRememberMe()
-                		&& StringUtils.hasLength(username)) {
-                	// remember latest username
-                	usernameCookie()
-                		.rememberUsername(username);
-                }
-                if (isRememberMe()
-                		&& timezone!=null) {
-                	// remember time-zone selection
-
-                	timezoneCookie()
-                		.rememberTimezone(timezone);
-                }
-                onSignInSucceeded();
-            } else {
-                onSignInFailed();
-            }
-        }
-
-        private TimeZoneChoiceProvider getTimeZoneChoiceProvider() {
-            return getMetaModelContext().getServiceRegistry().lookupService(TimeZoneChoiceProvider.class)
-                    .orElseGet(TimeZoneChoiceProvider::fallback);
+        	parentPanel.onSubmit(loginFormModel);
         }
 
     }
 
-    /**
-     * Stores user's {@link ZoneId} to their session.
-     */
-    protected abstract void storeUserTimeZoneToSession(@NonNull ZoneId zoneId);
+    // -- COOKIE HANDLER
 
-    /**
-     * Clears user's {@link ZoneId} from their session.
-     */
-    protected abstract void clearUserTimeZoneFromSession();
-
-    // -- USER NAME COOKIES
-
-    private record UsernameCookie(String cookieName) {
-    	UsernameCookie(final RememberMe conf) {
-    		this(conf.cookieKey() + "_usr");
-    	}
-    	void rememberUsername(final String username) {
-    		new CookieUtils().save(cookieName, username);
-    	}
-    	Optional<String> recoverUsername() {
-    		return Optional.ofNullable(new CookieUtils().getCookie(cookieName))
-					.map(Cookie::getValue)
-					.map(_Strings::emptyToNull);
-    	}
+    private record CookieHandlerWkt() implements CookieHandler {
+		@Override public void put(final String cookieName, final String value) {
+			new CookieUtils().save(cookieName, value);
+		}
+		@Override public Optional<String> lookup(final String cookieName) {
+			return Optional.ofNullable(new CookieUtils().getCookie(cookieName))
+					.map(Cookie::getValue);
+		}
     }
 
-    private UsernameCookie usernameCookie() {
-    	return new UsernameCookie(getConfiguration().viewer().common().signin().rememberMe());
-    }
 
-    // -- TIME ZONE COOKIES
-
-    private record TimezoneCookie(String cookieName) {
-    	TimezoneCookie(final RememberMe conf) {
-    		this(conf.cookieKey() + "_tz");
-    	}
-    	void rememberTimezone(final ZoneId zoneId) {
-    		new CookieUtils().save(cookieName, zoneId.getId());
-    	}
-    	Optional<ZoneId> recoverTimezone() {
-    		try {
-    			return Optional.ofNullable(new CookieUtils().getCookie(cookieName))
-    					.map(Cookie::getValue)
-    					.map(_Strings::emptyToNull)
-    					.map(ZoneId::of);
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    			return Optional.empty();
-    		}
-    	}
-    }
-
-    private TimezoneCookie timezoneCookie() {
-    	return new TimezoneCookie(getConfiguration().viewer().common().signin().rememberMe());
-    }
 }

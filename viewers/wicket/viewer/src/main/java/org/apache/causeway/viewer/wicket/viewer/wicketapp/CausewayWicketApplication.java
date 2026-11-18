@@ -64,7 +64,6 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegi
 import org.apache.causeway.viewer.wicket.ui.pages.HasPageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
-import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
@@ -293,7 +292,7 @@ implements
         mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
         mountPage("/password/reset", PageType.PASSWORD_RESET);
         mountPage("/object/#{objectOid}", PageType.DOMAIN_OBJECT);
-        mountPage("/logout", WicketLogoutPage.class);
+//        mountPage("/logout", WicketLogoutPage.class);
     }
 
     protected void mountPage(final String mountPath, final PageType pageType) {

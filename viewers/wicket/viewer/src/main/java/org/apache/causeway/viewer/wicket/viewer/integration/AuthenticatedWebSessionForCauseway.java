@@ -33,16 +33,20 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+import org.apache.causeway.core.webapp.session.SessionManagerDefault;
+import org.apache.causeway.viewer.commons.services.session.LoginSuccessCallback;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -59,13 +63,19 @@ import lombok.extern.slf4j.Slf4j;
  * associated with the same session).
  */
 @Slf4j
-public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession implements BreadcrumbModelProvider,
-        BookmarkedPagesModelProvider, HasMetaModelContext, HasAmendableInteractionContext {
+public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession
+implements BreadcrumbModelProvider,
+        BookmarkedPagesModelProvider, HasMetaModelContext, HasAmendableInteractionContext, LoginSuccessCallback {
 
     private static final long serialVersionUID = 1L;
 
     public static AuthenticatedWebSessionForCauseway get() {
         return (AuthenticatedWebSessionForCauseway) Session.get();
+    }
+
+    protected final _StableValue<SessionManager> sessionManagerRef = new _StableValue<>();
+    protected SessionManager sessionManager() {
+    	return sessionManagerRef.orElseSet(SessionManagerDefault::new);
     }
 
     /**
@@ -89,15 +99,10 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
                 : (bookmarkedPagesModel = new BookmarkedPagesModel());
     }
 
-    /**
-     * As populated in {@link #signIn(String, String)}.
-     */
-    private InteractionContext interactionContext;
-
     private void setInteractionContext(final @Nullable InteractionContext interactionContext) {
         _Assert.assertFalse(interactionContext != null && interactionContext.getUser().isImpersonating(),
                 () -> "framework bug: cannot signin with an impersonated user");
-        this.interactionContext = interactionContext;
+        sessionManager().put(SessionManager.USER_AUTHENTICATION, interactionContext);
     }
 
     /**
@@ -113,12 +118,12 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
      * <p>
      * Called by {@link WebRequestCycleForCauseway}.
      */
-    public void setPrimedInteractionContext(final @NonNull InteractionContext authentication) {
-        this.interactionContext = authentication;
+    public void setPrimedInteractionContext(final @NonNull InteractionContext interactionContext) {
+    	sessionManager().put(SessionManager.USER_AUTHENTICATION, interactionContext);
     }
 
     @Getter
-    private UUID sessionGuid;
+    private final UUID sessionGuid;
     private String cachedSessionId;
 
     /**
@@ -140,17 +145,31 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
         sessionGuid = UUID.randomUUID();
     }
 
-    @Override
+    @Override @Deprecated //TODO remove this code path, as we want logins handled by the viewer agnostic LoginService
     public synchronized boolean authenticate(final String username, final String password) {
-        var authenticationRequest = new AuthenticationRequestPassword(username, password);
-        authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
-        setInteractionContext(interactionContext);
-        if (interactionContext != null) {
-            log(SessionSubscriber.Type.LOGIN, username, null);
-            return true;
-        } else
-            return false;
+    	throw new UnsupportedOperationException();
+//        var authenticationRequest = new AuthenticationRequestPassword(username, password);
+//        authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
+//        InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
+//        setInteractionContext(interactionContext);
+//        if (interactionContext != null) {
+//            log(SessionSubscriber.Type.LOGIN, username, null);
+//            return true;
+//        } else
+//            return false;
+    }
+
+    @Override
+    public void onLoginSuccess(final AuthenticationRequest authenticationRequest, final InteractionContext interactionContext) {
+    	if(interactionContext == null)
+    		return;
+    	setInteractionContext(interactionContext);
+    	signIn(true);
+		changeSessionId();
+		bind();
+		Optional.ofNullable(interactionContext.getUser().languageLocale())
+			.ifPresent(this::setLocale);
+    	log(SessionSubscriber.Type.LOGIN, authenticationRequest.getName(), null);
     }
 
     @Override
@@ -165,10 +184,9 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
         //
 
         getAuthenticationManager()
-                .closeSession(Optional.ofNullable(interactionContext).map(InteractionContext::getUser).orElse(null));
+                .closeSession(Optional.ofNullable(getInteractionContext()).map(InteractionContext::getUser).orElse(null));
 
         super.invalidateNow();
-
     }
 
     @Override
@@ -190,7 +208,7 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
 
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        setInteractionContext(updater.apply(interactionContext));
+        setInteractionContext(updater.apply(getInteractionContext()));
     }
 
     /**
@@ -204,9 +222,10 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
      * though note that this will always be true for externally authenticated users.
      */
     synchronized InteractionContext getInteractionContext() {
+    	var interactionContext = sessionManager().lookup(SessionManager.USER_AUTHENTICATION).orElse(null);
         if (interactionContext == null)
             return null;
-        if (Optional.ofNullable(getMetaModelContext()).map(MetaModelContext::getAuthenticationManager)
+        if (lookupAuthenticationManager()
                 .filter(x -> x.isSessionValid(interactionContext)).isEmpty())
             return null;
         signIn(true);
@@ -216,7 +235,12 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
 
     @Override
     public AuthenticationManager getAuthenticationManager() {
-        return Optional.ofNullable(getMetaModelContext()).map(MetaModelContext::getAuthenticationManager).orElse(null);
+        return lookupAuthenticationManager().orElse(null);
+    }
+
+
+    private Optional<AuthenticationManager> lookupAuthenticationManager() {
+        return Optional.ofNullable(getMetaModelContext()).map(MetaModelContext::getAuthenticationManager);
     }
 
     /**
@@ -226,6 +250,7 @@ public class AuthenticatedWebSessionForCauseway extends AuthenticatedWebSession 
      */
     @Override
     public void invalidate() {
+    	var interactionContext = sessionManager().lookup(SessionManager.USER_AUTHENTICATION).orElse(null);
         if (interactionContext != null && interactionContext.getUser().authenticationSource().isExternal())
             return;
         // otherwise

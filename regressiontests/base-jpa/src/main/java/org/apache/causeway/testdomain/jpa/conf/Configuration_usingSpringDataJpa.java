@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
@@ -40,11 +41,14 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
     MyService.class, // testing injection into entities
 
-    CausewayModuleCoreRuntimeServices.class
-    ,CausewayModuleSecurityBypass.class
-    ,CausewayModulePersistenceJpaEclipselink.class
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModuleSecurityBypass.class,
+    CausewayModulePersistenceJpaEclipselink.class,
+
+    SessionManager.InMemory.class,
+
     //,CausewayModuleTestingFixturesApplib.class
-    ,KVStoreForTesting.class, // Helper for JUnit Tests
+    KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @PropertySources({
     @PropertySource(CausewayPresets.NoTranslations),

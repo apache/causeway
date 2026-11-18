@@ -26,6 +26,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.ExecutionOutbox_IntegTestAbstract;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.ExecutionOutboxTestDomainModel;
@@ -45,6 +46,7 @@ public class ExecutionOutbox_IntegTest extends ExecutionOutbox_IntegTestAbstract
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+            SessionManager.InMemory.class
     })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, ExecutionOutboxTestDomainModel.class})

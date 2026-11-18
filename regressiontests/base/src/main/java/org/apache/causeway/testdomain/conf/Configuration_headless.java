@@ -31,6 +31,7 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
+import org.apache.causeway.applib.services.session.SessionManager;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
@@ -43,6 +44,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
     CausewayModuleCoreRuntimeServices.class,
     CausewayModulePersistenceCommons.class,
     CausewayModuleSecurityBypass.class,
+    SessionManager.InMemory.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
     DomainObjectTesterFactory.class // Helper for JUnit Tests
 })

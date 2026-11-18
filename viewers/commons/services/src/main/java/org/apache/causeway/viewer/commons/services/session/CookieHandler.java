@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.causeway.viewer.commons.services.session;
 
-/**
- *
- * @see <a href="">Reference guide</a>
- */
-package org.apache.causeway.applib.services.session;
+import java.util.Optional;
+
+public interface CookieHandler {
+	void put(String cookieName, String value);
+	Optional<String> lookup(String cookieName);
+}
