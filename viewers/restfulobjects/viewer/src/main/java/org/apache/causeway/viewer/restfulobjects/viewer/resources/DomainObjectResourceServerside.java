@@ -105,7 +105,7 @@ implements DomainObjectResource {
                     RestfulObjectsApplicationException
                     .createWithMessage(HttpStatus.BAD_REQUEST, "Could not find members map; got %s".formatted(objectRepr)));
 
-        if (!updateHelper.copyOverProperties(membersMap, ObjectAdapterUpdateHelper.Intent.PERSISTING_NEW))
+        if (!updateHelper.copyOverProperties(membersMap))
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
                     .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, "Illegal property value"));
@@ -164,7 +164,7 @@ implements DomainObjectResource {
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId, roEx));
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(resourceContext, objectAdapter);
 
-        if (!updateHelper.copyOverProperties(argRepr, ObjectAdapterUpdateHelper.Intent.UPDATE_EXISTING))
+        if (!updateHelper.copyOverProperties(argRepr))
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
