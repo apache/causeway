@@ -74,7 +74,7 @@ identified
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.22.0</commons-io.version>
 
-        <cucumber.version>8.0.4</cucumber.version>
+        <cucumber.version>8.1.0</cucumber.version>
         <!--        fixes convergence issue in cucumber 8.0.4; remove when no longer needed-->
 	    <cucumber-messages-ndjson.version>0.5.2</cucumber-messages-ndjson.version>
 
