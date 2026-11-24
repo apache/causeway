@@ -31,9 +31,27 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.EntityChangeKind;
@@ -48,9 +66,9 @@ import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.proxy.Proxyable;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
@@ -73,20 +91,7 @@ import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 import org.apache.causeway.schema.chg.v2.ObjectsDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,6 +116,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EntityChangeTrackerDefault
 implements
+    Proxyable,
     MetricsService,
     EntityChangeTracker,
     HasEnlistedEntityPropertyChanges,
@@ -121,26 +127,94 @@ implements
     static final String ENTITY_CHANGE_EVALUATION_OBSERVATION_NAME = "causeway.entitychange.evaluate";
     static final String ENTITY_CHANGE_EVALUATION_CONTEXTUAL_NAME = "evaluate property changes";
 
+    // for debug logging
     static AtomicInteger transactionCounter = new AtomicInteger(0);
+
+    EntityPropertyChangePublisher entityPropertyChangePublisher;
+    EntityChangesPublisher entityChangesPublisher;
+    Provider<InteractionLayerTracker> interactionTrackerProvider;
+    PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
+    CausewayObservationIntegration observationIntegration;
+    Configuration configuration;
+    CausewayConfiguration causewayConfiguration;
+    DeadlockRecognizer deadlockRecognizer;
+    InternalState internalState;
+
+    private final static class InternalState {
+
+        /**
+         * Contains a record for every objectId/propertyId that was changed.
+         * @implNote access to this {@link Map} must be thread-safe and the map also should preserve insertion order. We
+         *           cannot use <code>newConcurrentHashMap</code> as this doesn't preserve insertion order; instead we
+         *           make sure that it is only ever accessed within a <code>synchronized</code> block.
+         */
+        private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = new LinkedHashMap<>();
+        /**
+         * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot.
+         */
+        private final AtomicReference<Changes> changesRef = new AtomicReference<>();
+        /**
+         * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
+         */
+        private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = new HashMap<>();
+
+        private final LongAdder numberEntitiesLoaded = new LongAdder();
+        private final LongAdder entityChangeEventCount = new LongAdder();
+        private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
+
+        public Changes changes(final Supplier<Changes> supplier) {
+            return changesRef.updateAndGet(old->old!=null ? old : supplier.get());
+        }
+
+    }
 
     @Inject
     public EntityChangeTrackerDefault(
             final EntityPropertyChangePublisher entityPropertyChangePublisher,
             final EntityChangesPublisher entityChangesPublisher,
-            final Provider<InteractionLayerTracker> interactionProviderProvider,
+            final Provider<InteractionLayerTracker> interactionTrackerProvider,
             final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService,
-            final CausewayObservationIntegration observationIntegration) {
+            final CausewayObservationIntegration observationIntegration,
+            final Configuration configuration,
+            final CausewayConfiguration causewayConfiguration,
+            final DeadlockRecognizer deadlockRecognizer) {
+
+        this(entityPropertyChangePublisher, entityChangesPublisher, interactionTrackerProvider,
+                preAndPostValueEvaluatorService, observationIntegration, configuration,
+                causewayConfiguration, deadlockRecognizer, new InternalState());
 
         if(log.isDebugEnabled()) {
-            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
-            log.debug("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
+            var interactionId = interactionTrackerProvider.get().currentInteraction()
+                .map(Interaction::getInteractionId)
+                .orElse(null);
+            log.debug("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}",
+                    transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
         }
+    }
 
+    private EntityChangeTrackerDefault(
+            final EntityPropertyChangePublisher entityPropertyChangePublisher,
+            final EntityChangesPublisher entityChangesPublisher,
+            final Provider<InteractionLayerTracker> interactionTrackerProvider,
+            final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService,
+            final CausewayObservationIntegration observationIntegration,
+            final Configuration configuration,
+            final CausewayConfiguration causewayConfiguration,
+            final DeadlockRecognizer deadlockRecognizer,
+            final InternalState internalState) {
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
         this.entityChangesPublisher = entityChangesPublisher;
-        this.interactionTrackerProvider = interactionProviderProvider;
+        this.interactionTrackerProvider = interactionTrackerProvider;
         this.preAndPostValueEvaluatorService = preAndPostValueEvaluatorService;
         this.observationIntegration = observationIntegration;
+        this.configuration = configuration;
+        this.causewayConfiguration = causewayConfiguration;
+        this.deadlockRecognizer = deadlockRecognizer;
+        this.internalState = internalState;
+    }
+
+    // Needed only for CGLIB proxy instantiation; never used at runtime
+    protected EntityChangeTrackerDefault() {
     }
 
     @Programmatic
@@ -149,31 +223,17 @@ implements
         return PriorityPrecedence.EARLY;
     }
 
-    private final EntityPropertyChangePublisher entityPropertyChangePublisher;
-    private final EntityChangesPublisher entityChangesPublisher;
-    private final Provider<InteractionLayerTracker> interactionTrackerProvider;
-    private final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
-    private final CausewayObservationIntegration observationIntegration;
-
-    /**
-     * Contains a record for every objectId/propertyId that was changed.
-     * @implNote access to this {@link Map} must be thread-safe and the map also should preserve insertion order. We
-     *           cannot use <code>newConcurrentHashMap</code> as this doesn't preserve insertion order; instead we
-     *           make sure that it is only ever accessed within a <code>synchronized</code> block.
-     */
-    private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = new LinkedHashMap<>();
-
     /**
      * As used when {@link #enlistCreated(ManagedObject)} or {@link #enlistUpdating(ManagedObject, Function)}
      */
     private void addPropertyChangeRecordIfAbsent(final PropertyChangeRecordId pcrId, final PropertyChangeRecord pcr) {
-        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> pcr);
+        internalState.enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> pcr);
     }
     /**
      * As used when {@link #enlistDeleting(ManagedObject)}.
      */
     private void addPropertyChangeRecordIfAbsent(final PropertyChangeRecordId pcrId, final Function<PropertyChangeRecordId, PropertyChangeRecord> func) {
-        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
+        internalState.enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
     }
 
     private Changes evaluateChanges() {
@@ -182,7 +242,7 @@ implements
         var isCountersAndDetail = causewayConfiguration.applib().service().metricsService().level().isCountersAndDetail();
         Set<Bookmark> loadedBookmarks =
                 isCountersAndDetail
-                        ? enlistedPropertyChangeRecordsById.keySet()
+                        ? internalState.enlistedPropertyChangeRecordsById.keySet()
                                 .stream()
                                 .map(PropertyChangeRecordId::getBookmark)
                                 .collect(Collectors.<Bookmark>toSet())
@@ -196,15 +256,14 @@ implements
                                 .collect(Collectors.<Bookmark>toSet())
                         :  Collections.emptySet();
 
-        enlistedPropertyChangeRecordsById.clear();
+        internalState.enlistedPropertyChangeRecordsById.clear();
 
         return new Changes(changedProperties, loadedBookmarks, dirtiedBookmarks);
     }
 
     private Set<PropertyChangeRecord> evaluateChangedProperties() {
-        if (enlistedPropertyChangeRecordsById.isEmpty()) {
+        if (internalState.enlistedPropertyChangeRecordsById.isEmpty())
             return evaluateChangedPropertiesUnobserved();
-        }
         return observationIntegration.provider(EntityChangeTrackerDefault.class,
                 CausewayObservationIntegration.withModuleName(CausewayModulePersistenceCommons.NAMESPACE))
                 .get(ENTITY_CHANGE_EVALUATION_OBSERVATION_NAME)
@@ -215,17 +274,17 @@ implements
     private Set<PropertyChangeRecord> evaluateChangedPropertiesUnobserved() {
         Set<PropertyChangeRecord> dirtiedProperties;
         try {
-            dirtiedProperties = changedRecords(enlistedPropertyChangeRecordsById.values());
+            dirtiedProperties = changedRecords(internalState.enlistedPropertyChangeRecordsById.values());
         } catch (ConcurrentModificationException ex) {
             log.warn(
                     "A concurrent modification exception, one of these properties seemed to change as we looked at it :\n" +
-                            enlistedPropertyChangeRecordsById.keySet()
+                            internalState.enlistedPropertyChangeRecordsById.keySet()
                                     .stream()
                                     .map(PropertyChangeRecordId::toString)
                                     .collect(Collectors.joining("\n"))
             );
             // instead, we take a copy
-            dirtiedProperties = changedRecords(new ArrayList<>(enlistedPropertyChangeRecordsById.values()));
+            dirtiedProperties = changedRecords(new ArrayList<>(internalState.enlistedPropertyChangeRecordsById.values()));
         }
         return dirtiedProperties;
     }
@@ -236,11 +295,6 @@ implements
         @Getter private final Set<Bookmark> loadedBookmarks;
         @Getter private final Set<Bookmark> dirtiedBookmarks;
     }
-
-    /**
-     * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot.
-     */
-    private final _Lazy<Changes> changes = _Lazy.of(this::evaluateChanges);
 
     /**
      * when iterating over the original value set, if any of the properties causes the entity to change state as it is
@@ -262,17 +316,8 @@ implements
     }
 
     private Changes memoizeChangesIfRequired() {
-        return changes.get();
+        return internalState.changes(this::evaluateChanges);
     }
-
-    /**
-     * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
-     */
-    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = new HashMap<>();
-
-    private final LongAdder numberEntitiesLoaded = new LongAdder();
-    private final LongAdder entityChangeEventCount = new LongAdder();
-    private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
     @Override
     public void destroy() {
@@ -286,14 +331,14 @@ implements
     }
 
     private void clearAndReset() {
-        enlistedPropertyChangeRecordsById.clear();
-        changes.clear();
+        internalState.enlistedPropertyChangeRecordsById.clear();
+        internalState.changesRef.set(null);
 
-        changeKindByEnlistedAdapter.clear();
-        numberEntitiesLoaded.reset();
-        entityChangeEventCount.reset();
+        internalState.changeKindByEnlistedAdapter.clear();
+        internalState.numberEntitiesLoaded.reset();
+        internalState.entityChangeEventCount.reset();
 
-        persistentChangesEncountered.set(false);
+        internalState.persistentChangesEncountered.set(false);
     }
 
     /**
@@ -329,7 +374,7 @@ implements
         if(ManagedObjects.bookmark(entity).isEmpty())
 			return true;
 
-        if(changes.isMemoized())
+        if(internalState.changesRef.get()!=null)
 			throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
 
@@ -374,7 +419,7 @@ implements
     }
 
     private void enableCommandPublishing() {
-        persistentChangesEncountered.getAndSet(true);
+        internalState.persistentChangesEncountered.getAndSet(true);
     }
 
     @Override
@@ -383,7 +428,7 @@ implements
             final String userName) {
 
         // a defensive copy of
-        var changeKindByEnlistedAdapter = new HashMap<>(this.changeKindByEnlistedAdapter);
+        var changeKindByEnlistedAdapter = new HashMap<>(this.internalState.changeKindByEnlistedAdapter);
         if(changeKindByEnlistedAdapter.isEmpty())
 			return Optional.empty();
 
@@ -493,28 +538,28 @@ implements
             final @NonNull ManagedObject entity,
             final @NonNull EntityChangeKind changeKind) {
 
-        entityChangeEventCount.increment();
+        internalState.entityChangeEventCount.increment();
         enableCommandPublishing();
 
         var bookmark = ManagedObjects.bookmarkElseFail(entity);
 
-        var previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
+        var previousChangeKind = internalState.changeKindByEnlistedAdapter.get(bookmark);
         if(previousChangeKind == null) {
-            changeKindByEnlistedAdapter.put(bookmark, changeKind);
+            internalState.changeKindByEnlistedAdapter.put(bookmark, changeKind);
             return true;
         }
         return switch (previousChangeKind) {
 	        case CREATE ->
 	            switch (changeKind) {
 		            case DELETE -> {
-		            	changeKindByEnlistedAdapter.remove(bookmark);
+		                internalState.changeKindByEnlistedAdapter.remove(bookmark);
 		                yield false;
 		            }
 		            case CREATE, UPDATE -> false;
 	            };
 	        case UPDATE -> switch (changeKind) {
 		            case DELETE -> {
-		                changeKindByEnlistedAdapter.put(bookmark, changeKind);
+		                internalState.changeKindByEnlistedAdapter.put(bookmark, changeKind);
 		                yield true;
 		            }
 		            case CREATE, UPDATE -> false;
@@ -525,7 +570,7 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return enlistedPropertyChangeRecordsById.size();
+        return internalState.enlistedPropertyChangeRecordsById.size();
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -619,19 +664,19 @@ implements
     @Override
     public void incrementLoaded(final ManagedObject entity) {
         _Xray.recognizeLoaded(entity, interactionTrackerProvider);
-        numberEntitiesLoaded.increment();
+        internalState.numberEntitiesLoaded.increment();
     }
 
     // -- METRICS SERVICE
 
     @Override
     public int numberEntitiesLoaded() {
-        return Math.toIntExact(numberEntitiesLoaded.longValue());
+        return Math.toIntExact(internalState.numberEntitiesLoaded.longValue());
     }
 
     @Override
     public int numberEntitiesDirtied() {
-        return changeKindByEnlistedAdapter.size();
+        return internalState.changeKindByEnlistedAdapter.size();
     }
 
     @Override
@@ -674,8 +719,14 @@ implements
         }
     }
 
-    @Inject private Configuration configuration;
-    @Inject private CausewayConfiguration causewayConfiguration;
-    @Inject private DeadlockRecognizer deadlockRecognizer;
+    // -- JUNIT TESTING
+
+    record InternalStateView(
+            Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById) {
+    }
+
+    InternalStateView internalStateViewForTesting() {
+        return new InternalStateView(internalState.enlistedPropertyChangeRecordsById);
+    }
 
 }

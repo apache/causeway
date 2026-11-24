@@ -22,7 +22,11 @@ import java.sql.DriverManager;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
@@ -55,7 +59,7 @@ public final class EntityChangeEvaluationTracingFixture {
             return null;
         }).when(publisher).publishChangedProperties();
         var tracker = new EntityChangeTrackerDefault(publisher, mock(EntityChangesPublisher.class),
-                () -> mock(InteractionLayerTracker.class), evaluator, integration);
+                () -> mock(InteractionLayerTracker.class), evaluator, integration, null, null, null);
         var deadlocks = mock(DeadlockRecognizer.class);
         doAnswer(call -> { throw call.getArgument(0, RuntimeException.class); })
                 .when(deadlocks).rethrowIfDeadlock(any(RuntimeException.class));
@@ -68,9 +72,12 @@ public final class EntityChangeEvaluationTracingFixture {
         if (!empty) {
             for (String id : new String[] { "sentinel-first", "sentinel-second" }) {
                 add(tracker, id, () -> {
-                    if (agent) executeSql();
-                    else integration.createNotStarted(EntityChangeEvaluationTracingFixture.class, "fixture.evaluation.jdbc")
-                            .observe(EntityChangeEvaluationTracingFixture::executeSql);
+                    if (agent) {
+                        executeSql();
+                    } else {
+                        integration.createNotStarted(EntityChangeEvaluationTracingFixture.class, "fixture.evaluation.jdbc")
+                                .observe(EntityChangeEvaluationTracingFixture::executeSql);
+                    }
                     if (fail) throw failure;
                 });
             }

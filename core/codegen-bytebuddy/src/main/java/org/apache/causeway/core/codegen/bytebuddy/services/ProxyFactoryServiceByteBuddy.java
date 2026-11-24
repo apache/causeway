@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.jspecify.annotations.Nullable;
 
-import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.internal._Constants;
@@ -48,18 +47,16 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
     private record ProxyFactoryByteBuddy<T>(
             Class<T> proxyClass,
             Class<?>[] constructorArgTypes,
-            ObjenesisStd objenesis) implements ProxyFactory<T> {
+            ConstructorSkippingClassInstantiator constructorSkippingClassInstantiator) implements ProxyFactory<T> {
 
         @Override public T createInstance(final boolean initialize) {
 
             try {
-
                 if(initialize) {
                     ensureSameSize(constructorArgTypes, null);
                     return _Casts.uncheckedCast( createUsingConstructor(null) );
-                } else {
-                    return _Casts.uncheckedCast( createNotUsingConstructor() );
-                }
+                } else
+                    return _Casts.uncheckedCast( constructorSkippingClassInstantiator().instantiate(proxyClass) );
 
             } catch (NoSuchMethodException | IllegalArgumentException | InstantiationException |
                     IllegalAccessException | InvocationTargetException e) {
@@ -81,13 +78,6 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
             }
         }
 
-        // -- HELPER (create w/o initialize)
-
-        private Object createNotUsingConstructor() {
-            final Object object = objenesis.newInstance(proxyClass);
-            return object;
-        }
-
         // -- HELPER (create with initialize)
 
         private Object createUsingConstructor(final @Nullable Object[] constructorArgs)
@@ -97,14 +87,14 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
                     .newInstance(constructorArgs==null ? _Constants.emptyObjects : constructorArgs);
         }
 
-    };
+    }
 
     @Override
     public <T> Class<? extends T> createProxyClass(
             final InvocationHandler handler,
             final Class<T> base,
             final Class<?>[] interfaces,
-            @Nullable List<AdditionalField> additionalFields) {
+            @Nullable final List<AdditionalField> additionalFields) {
 
         return proxyDef(base, interfaces, additionalFields)
                 .intercept(InvocationHandlerAdapter.of(handler))
@@ -118,7 +108,12 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
     public <T> ProxyFactory<T> createFactory(
             final Class<T> proxyClass,
             final Class<?>[] constructorArgTypes) {
-        return new ProxyFactoryByteBuddy<T>(proxyClass, constructorArgTypes, new ObjenesisStd());
+
+        final var instantiator = Runtime.version().feature()>=28
+                ? ConstructorSkippingClassInstantiator.unsafe()
+                : ConstructorSkippingClassInstantiator.objenesis();
+
+        return new ProxyFactoryByteBuddy<>(proxyClass, constructorArgTypes, instantiator);
     }
 
     // -- HELPER
@@ -132,7 +127,7 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
     private static <T> ImplementationDefinition<T> proxyDef(
             final Class<T> base,
             final Class<?>[] interfaces,
-            @Nullable List<AdditionalField> additionalFields) {
+            @Nullable final List<AdditionalField> additionalFields) {
 
         var prolog = new ByteBuddy()
                 .with(new NamingStrategy.SuffixingRandom("bb"))
@@ -140,10 +135,9 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
                 .implement(interfaces);
 
         int additionalFieldCount = _NullSafe.size(additionalFields);
-        if(additionalFieldCount==0) {
+        if(additionalFieldCount==0)
             return prolog
                 .method(ElementMatchers.any());
-        }
         if(additionalFieldCount==1) {
             var additionalField = additionalFields.get(0);
             return prolog
@@ -164,17 +158,15 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
     }
 
     private static void ensureSameSize(final Class<?>[] a, final Object[] b) {
-        if(_NullSafe.size(a) != _NullSafe.size(b)) {
+        if(_NullSafe.size(a) != _NullSafe.size(b))
             throw new IllegalArgumentException(String.format("Constructor arg count expected %d, got %d.",
                     _NullSafe.size(a), _NullSafe.size(b) ));
-        }
     }
 
     private static void ensureNonEmtpy(final Object[] a) {
-        if(_NullSafe.isEmpty(a)) {
+        if(_NullSafe.isEmpty(a))
             throw new IllegalArgumentException(String.format("Contructor args count expected > 0, got %d.",
                     _NullSafe.size(a) ));
-        }
     }
 
 }

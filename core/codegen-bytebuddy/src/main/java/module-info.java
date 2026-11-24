@@ -25,4 +25,5 @@ module org.apache.causeway.core.codegen.bytebuddy {
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;
+    requires jdk.unsupported;
 }

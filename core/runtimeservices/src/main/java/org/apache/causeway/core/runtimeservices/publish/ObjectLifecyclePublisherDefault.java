@@ -26,8 +26,9 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -35,13 +36,14 @@ import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.proxy.Proxyable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 /**
  * Default implementation of {@link ObjectLifecyclePublisher}.
@@ -55,13 +57,17 @@ import lombok.RequiredArgsConstructor;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@AllArgsConstructor(onConstructor_ = {@Inject})
 //@Slf4j
-public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher {
+public class ObjectLifecyclePublisherDefault implements Proxyable, ObjectLifecyclePublisher {
 
-    private final Provider<EntityChangeTracker> entityChangeTrackerProvider;
-    private final Provider<LifecycleCallbackNotifier> lifecycleCallbackNotifierProvider;
-    private final Provider<InteractionService> interactionServiceProvider;
+    private /*final*/ Provider<EntityChangeTracker> entityChangeTrackerProvider;
+    private /*final*/ Provider<LifecycleCallbackNotifier> lifecycleCallbackNotifierProvider;
+    private /*final*/ Provider<InteractionService> interactionServiceProvider;
+
+    // Needed only for CGLIB proxy instantiation; never used at runtime
+    protected ObjectLifecyclePublisherDefault() {
+    }
 
     @Override
     public void onPostCreate(final ManagedObject entity) {

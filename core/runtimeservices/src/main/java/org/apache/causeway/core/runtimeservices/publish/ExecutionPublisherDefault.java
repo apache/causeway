@@ -37,6 +37,7 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
+import org.apache.causeway.commons.internal.proxy.Proxyable;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
@@ -54,11 +55,11 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 @Qualifier("Default")
 @InteractionScope
 public class ExecutionPublisherDefault
-implements ExecutionPublisher {
+implements Proxyable, ExecutionPublisher {
 
-    private final Can<ExecutionSubscriber> enabledSubscribers;
-    private final InteractionLayerTracker iaTracker;
-    private final ObservationProvider observationProvider;
+    private /*final*/ Can<ExecutionSubscriber> enabledSubscribers;
+    private /*final*/ InteractionLayerTracker iaTracker;
+    private /*final*/ ObservationProvider observationProvider;
 
     /**
      * this is the reason that this service is @InteractionScope'd
@@ -75,6 +76,10 @@ implements ExecutionPublisher {
                 .filter(HasEnabling::isEnabled);
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
+    }
+
+    // Needed only for CGLIB proxy instantiation; never used at runtime
+    protected ExecutionPublisherDefault() {
     }
 
     @Override

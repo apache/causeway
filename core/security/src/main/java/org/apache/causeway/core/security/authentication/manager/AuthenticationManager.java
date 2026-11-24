@@ -23,6 +23,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
@@ -32,38 +43,31 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.proxy.Proxyable;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.security.authentication.standard.Registrar;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import lombok.Getter;
 
 @Service
 @Named(AuthenticationManager.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class AuthenticationManager {
+public class AuthenticationManager implements Proxyable {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreSecurity.NAMESPACE + ".AuthenticationManager";
 
-    @Getter private final @NonNull Can<Authenticator> authenticators;
+    @Getter private /*final*/ @NonNull Can<Authenticator> authenticators;
 
     private final Map<String, String> userByValidationCode = new ConcurrentHashMap<>();
-    private final @NonNull InteractionService interactionService;
-    private final @NonNull RandomCodeGenerator randomCodeGenerator;
-    private final @NonNull Can<Registrar> registrars;
-    private final @NonNull List<UserMementoRefiner> userMementoRefiners;
-    private final @NonNull Optional<UserCurrentSessionTimeZoneHolder> userCurrentSessionTimeZoneHolder;
+    private /*final*/ @NonNull InteractionService interactionService;
+    private /*final*/ @NonNull RandomCodeGenerator randomCodeGenerator;
+    private /*final*/ @NonNull Can<Registrar> registrars;
+    private /*final*/ @NonNull List<UserMementoRefiner> userMementoRefiners;
+    private /*final*/ @NonNull Optional<UserCurrentSessionTimeZoneHolder> userCurrentSessionTimeZoneHolder;
 
     @Inject
     public AuthenticationManager(
@@ -82,6 +86,10 @@ public class AuthenticationManager {
         this.registrars = this.authenticators
                 .filter(Registrar.class::isInstance)
                 .map(Registrar.class::cast);
+    }
+
+    // Needed only for CGLIB proxy instantiation; never used at runtime
+    protected AuthenticationManager() {
     }
 
     // -- SESSION MANAGEMENT (including authenticate)

@@ -29,8 +29,18 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
@@ -38,13 +48,13 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
@@ -93,7 +103,9 @@ class EntityChangeTrackerDefaultObservationTest {
         var second = f.add("second", "after");
         var once = new AtomicBoolean(true);
         when(first.property.get(first.entity, InteractionInitiatedBy.PASS_THROUGH)).thenAnswer(call -> {
-            if (once.getAndSet(false)) f.add("added", "after");
+            if (once.getAndSet(false)) {
+                f.add("added", "after");
+            }
             assertEquals(NAME, f.registry.getCurrentObservation().getContextView().getName());
             return first.value;
         });
@@ -205,10 +217,12 @@ class EntityChangeTrackerDefaultObservationTest {
         Fixture() { this(ObservationRegistry.create()); }
         Fixture(final ObservationRegistry registry) {
             this.registry = registry;
-            if (registry != ObservationRegistry.NOOP) registry.observationConfig().observationHandler(handler);
+            if (registry != ObservationRegistry.NOOP) {
+                registry.observationConfig().observationHandler(handler);
+            }
             when(evaluator.differ(any())).thenReturn(true);
             tracker = new EntityChangeTrackerDefault(publisher, entityPublisher,
-                    () -> mock(InteractionLayerTracker.class), evaluator, new CausewayObservationIntegration(registry));
+                    () -> mock(InteractionLayerTracker.class), evaluator, new CausewayObservationIntegration(registry), null, null, deadlocks);
             set(tracker, "deadlockRecognizer", deadlocks);
             var config = mock(CausewayConfiguration.class, RETURNS_DEEP_STUBS);
             when(config.applib().service().metricsService().level()).thenReturn(
@@ -244,13 +258,8 @@ class EntityChangeTrackerDefaultObservationTest {
         return spec;
     }
 
-    @SuppressWarnings("unchecked")
     private static Map<PropertyChangeRecordId, PropertyChangeRecord> records(final EntityChangeTrackerDefault tracker) {
-        try {
-            var field = EntityChangeTrackerDefault.class.getDeclaredField("enlistedPropertyChangeRecordsById");
-            field.setAccessible(true);
-            return (Map<PropertyChangeRecordId, PropertyChangeRecord>) field.get(tracker);
-        } catch (ReflectiveOperationException ex) { throw new IllegalStateException(ex); }
+        return tracker.internalStateViewForTesting().enlistedPropertyChangeRecordsById();
     }
 
     @SuppressWarnings("unchecked")
