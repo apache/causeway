@@ -56,7 +56,7 @@ public class ProxyFactoryServiceByteBuddy extends CachingProxyFactoryService {
                     ensureSameSize(constructorArgTypes, null);
                     return _Casts.uncheckedCast( createUsingConstructor(null) );
                 } else
-                    return _Casts.uncheckedCast( constructorSkippingClassInstantiator().instantiate(proxyClass) );
+                    return constructorSkippingClassInstantiator().instantiate(proxyClass);
 
             } catch (NoSuchMethodException | IllegalArgumentException | InstantiationException |
                     IllegalAccessException | InvocationTargetException e) {

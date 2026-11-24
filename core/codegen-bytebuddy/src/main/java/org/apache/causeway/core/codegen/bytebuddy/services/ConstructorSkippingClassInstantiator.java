@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.codegen.bytebuddy.services;
 
+import org.springframework.objenesis.Objenesis;
 import org.springframework.objenesis.ObjenesisStd;
 
 interface ConstructorSkippingClassInstantiator {
@@ -36,7 +37,7 @@ interface ConstructorSkippingClassInstantiator {
 
     // -- IMPLEMENTATIONS
 
-    /** known to work for JVM 28-ea */
+    /** known to work for JVM 28-ea; but might not for newer builds or versions */
     record UnsafeConstructorSkippingClassInstantiator(sun.misc.Unsafe delegate)
     implements ConstructorSkippingClassInstantiator {
         @SuppressWarnings("unchecked")
@@ -45,8 +46,9 @@ interface ConstructorSkippingClassInstantiator {
         }
     }
 
-    /** known to work up to JVM 27 max; might change with newer versions */
-    record ObjenesoisConstructorSkippingClassInstantiator(ObjenesisStd delegate)
+    /** known to work up to JVM 27 max;
+     * might change with newer Spring versions (Objenesis is incorporated into Spring) */
+    record ObjenesoisConstructorSkippingClassInstantiator(Objenesis delegate)
     implements ConstructorSkippingClassInstantiator {
         @Override public <T> T instantiate(final Class<T> proxyClass) {
             return delegate.newInstance(proxyClass);
