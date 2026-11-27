@@ -21,13 +21,12 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 import jakarta.inject.Inject;
 
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.resource.JQueryResourceReference;
 
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 @Configuration
 public class JQueryInitWkt implements WicketApplicationInitializer {
@@ -35,15 +34,13 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
     @Inject CausewayConfiguration configuration;
 
     /**
-     * We are upgrading Wicket's jquery 3.6.0 -> 3.6.1+ because of:
-     *
-     * https://github.com/select2/select2/issues/5993
+     * Overriding defaults (f. debugging and testing)
      */
     @Override
     public void init(final WebApplication webApplication) {
         var settings = webApplication.getJavaScriptLibrarySettings();
-        // settings.setJQueryReference(JQueryResourceReference.getV3());
-        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.7.1/jquery.js"));
+        settings.setJQueryReference(JQueryResourceReference.getV4());
+        //settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.7.1/jquery.js"));
     }
 
 }
