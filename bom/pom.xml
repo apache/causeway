@@ -142,7 +142,6 @@ identified
         <quartz-scheduler.version>2.5.2</quartz-scheduler.version>
         <querydsl.version>5.1.0</querydsl.version>
 
-        <select2.version>4.0.13</select2.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.20</slf4j-api.version> <!-- also provided by
         spring-boot-starter-logging, needed to solve convergence issues -->
@@ -167,11 +166,11 @@ identified
         de.agilecoders.wicket.webjars:wicket-webjars -->
         <wicket-viewer-jquery.version>4.1.0</wicket-viewer-jquery.version> <!--
         as served by wicket via webjars -->
-        <wicketstuff.version>10.9.2</wicketstuff.version><!-- 
-            10.10.0 is broken because the dependence on select 4.1.0 is broken, see
-            https://github.com/select2/select2/pull/6439
-            Already fixed, but no release yet. 
+        <wicketstuff.version>11.0.0</wicketstuff.version><!-- 
+            we need to override the dependence on select 4.1.0, it is broken, see
+            https://github.com/select2/select2/pull/6439, was fixed in 4.2.0 .. 
         -->
+        <select2.version>4.2.0</select2.version>
         <vega.version>6.4.0</vega.version>
         <vega-embed.version>7.4.0</vega-embed.version>
         <vega-lite.version>6.5.0</vega-lite.version>

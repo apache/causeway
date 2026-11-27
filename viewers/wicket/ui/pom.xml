@@ -133,13 +133,22 @@
 					<groupId>org.apache.wicket</groupId>
 					<artifactId>wicket-core</artifactId>
 				</exclusion>
+				<exclusion>
+                    <groupId>org.webjars</groupId>
+                    <artifactId>select2</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.webjars.npm</groupId>
+                    <artifactId>select2</artifactId>
+                </exclusion>
 			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>select2</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>select2</artifactId>
+            <version>4.2.0</version>
+        </dependency>
 
 		<dependency>
 			<groupId>org.webjars</groupId>
