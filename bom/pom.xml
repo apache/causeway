@@ -173,7 +173,7 @@ identified
             Already fixed, but no release yet. 
         -->
         <vega.version>6.4.0</vega.version>
-        <vega-embed.version>7.3.0</vega-embed.version>
+        <vega-embed.version>7.4.0</vega-embed.version>
         <vega-lite.version>6.5.0</vega-lite.version>
         <!-- OTHER -->
 
